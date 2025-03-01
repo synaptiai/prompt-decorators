@@ -105,6 +105,12 @@ class CodeGenerator:
         description = decorator.get("description", "")
         file_name = self._convert_to_snake_case(name)
         
+        # Determine if we need regex validation
+        needs_regex = any(
+            'validation' in param and 'pattern' in param['validation']
+            for param in decorator.get("parameters", [])
+        )
+        
         # Start with imports
         code = [
             '"""',
@@ -114,8 +120,13 @@ class CodeGenerator:
             '"""',
             '',
             'from typing import Dict, List, Optional, Any, Union, Literal',
-            'from ..core.base import BaseDecorator',
         ]
+        
+        # Add re import if needed for regex validation
+        if needs_regex:
+            code.append('import re')
+            
+        code.append('from ....core.base import BaseDecorator')
         
         # Add enum imports if needed
         enums_to_import = self._get_enums_for_decorator(decorator)
@@ -134,16 +145,28 @@ class CodeGenerator:
         code.append('    def __init__(')
         code.append('        self,')
         
+        # Python reserved keywords
+        python_keywords = {
+            'False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 
+            'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 
+            'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 
+            'try', 'while', 'with', 'yield'
+        }
+        
         # Add parameters to __init__ signature
         params = decorator.get("parameters", [])
         for param in params:
             param_name = param["name"]
-            param_type = self._get_python_type(param)
+            # Check if the parameter name is a Python keyword
+            if param_name in python_keywords:
+                param_name = f"{param_name}_param"
+            
+            param_type = self._get_python_type(param, decorator)
             
             if param.get("required", False):
                 code.append(f'        {param_name}: {param_type},')
             else:
-                default_value = self._get_default_value_str(param)
+                default_value = self._get_default_value_str(param, decorator)
                 if param_type.startswith('Optional['):
                     # Already Optional type
                     code.append(f'        {param_name}: {param_type} = {default_value},')
@@ -160,7 +183,10 @@ class CodeGenerator:
         code.append('')
         code.append('        Args:')
         for param in params:
-            param_name = param["name"]
+            orig_param_name = param["name"]
+            param_name = orig_param_name
+            if param_name in python_keywords:
+                param_name = f"{param_name}_param"
             param_desc = param.get("description", "")
             code.append(f'            {param_name}: {param_desc}')
         code.append('        """')
@@ -173,8 +199,11 @@ class CodeGenerator:
         # Add parameters to super call
         code.append('            parameters={')
         for param in params:
-            param_name = param["name"]
-            code.append(f'                "{param_name}": {param_name},')
+            orig_param_name = param["name"]
+            param_name = orig_param_name
+            if param_name in python_keywords:
+                param_name = f"{param_name}_param"
+            code.append(f'                "{orig_param_name}": {param_name},')
         code.append('            },')
         
         # Add metadata
@@ -196,15 +225,19 @@ class CodeGenerator:
         
         # Add property getters for parameters
         for param in params:
-            param_name = param["name"]
-            param_type = self._get_python_type(param)
+            orig_param_name = param["name"]
+            param_name = orig_param_name
+            if param_name in python_keywords:
+                param_name = f"{param_name}_param"
+            
+            param_type = self._get_python_type(param, decorator)
             param_desc = param.get("description", "")
             
             code.append('')
             code.append('    @property')
             code.append(f'    def {param_name}(self) -> {param_type}:')
             code.append(f'        """{param_desc}"""')
-            code.append(f'        return self.parameters.get("{param_name}")')
+            code.append(f'        return self.parameters.get("{orig_param_name}")')
         
         # Add validation if needed
         has_validation = any('validation' in param for param in params)
@@ -217,21 +250,56 @@ class CodeGenerator:
             
             for param in params:
                 if 'validation' in param:
-                    param_name = param["name"]
+                    orig_param_name = param["name"]
+                    param_name = orig_param_name
+                    if param_name in python_keywords:
+                        param_name = f"{param_name}_param"
                     validation = param["validation"]
                     
                     if 'minimum' in validation:
                         code.append(f'        if self.{param_name} is not None and self.{param_name} < {validation["minimum"]}:')
-                        code.append(f'            raise ValueError(f"{param_name} must be at least {validation["minimum"]}, got {{self.{param_name}}}")')
+                        code.append(f'            raise ValueError(f"{orig_param_name} must be at least {validation["minimum"]}, got {{self.{param_name}}}")')
                     
                     if 'maximum' in validation:
                         code.append(f'        if self.{param_name} is not None and self.{param_name} > {validation["maximum"]}:')
-                        code.append(f'            raise ValueError(f"{param_name} must be at most {validation["maximum"]}, got {{self.{param_name}}}")')
+                        code.append(f'            raise ValueError(f"{orig_param_name} must be at most {validation["maximum"]}, got {{self.{param_name}}}")')
                     
                     if 'pattern' in validation:
                         pattern = validation["pattern"].replace('"', '\\"')
                         code.append(f'        if self.{param_name} is not None and not re.match(r"{pattern}", str(self.{param_name})):')
-                        code.append(f'            raise ValueError(f"{param_name} must match pattern {pattern}, got {{self.{param_name}}}")')
+                        code.append(f'            raise ValueError(f"{orig_param_name} must match pattern {pattern}, got {{self.{param_name}}}")')
+        
+        # Add apply method
+        code.append('')
+        code.append('    def apply(self, prompt: str) -> str:')
+        code.append('        """')
+        code.append('        Apply the decorator to a prompt.')
+        code.append('        ')
+        code.append('        Args:')
+        code.append('            prompt: The original prompt')
+        code.append('            ')
+        code.append('        Returns:')
+        code.append('            The modified prompt with the decorator applied')
+        code.append('        """')
+        
+        # Generate a generic apply implementation based on the decorator's description
+        short_desc = description.split('.')[0].strip() if '.' in description else description.strip()
+        code.append(f'        # Apply the decorator: {short_desc}')
+        code.append('        instruction = f"Instructions for {self.name} decorator: "')
+        
+        # Add parameter-specific instructions
+        for param in params:
+            orig_param_name = param["name"]
+            param_name = orig_param_name
+            if param_name in python_keywords:
+                param_name = f"{param_name}_param"
+            
+            # For non-default parameters, include their values in the instruction
+            code.append(f'        if self.{param_name} is not None:')
+            code.append(f'            instruction += f"{orig_param_name}={{self.{param_name}}}, "')
+        
+        code.append('        # Combine with original prompt')
+        code.append('        return f"{instruction}\\n\\n{prompt}"')
         
         return '\n'.join(code)
     
@@ -313,12 +381,13 @@ class CodeGenerator:
         
         return result
     
-    def _get_python_type(self, param: Dict[str, Any]) -> str:
+    def _get_python_type(self, param: Dict[str, Any], current_decorator: Optional[DecoratorData] = None) -> str:
         """
         Convert parameter type to Python type annotation.
         
         Args:
             param: Parameter definition
+            current_decorator: The decorator this parameter belongs to (optional)
             
         Returns:
             Python type annotation as string
@@ -335,13 +404,19 @@ class CodeGenerator:
             return "bool"
         elif param_type == "enum":
             # For enum types, reference the appropriate Enum class
-            decorator_name = None
             param_name = param["name"]
             
-            # Try to find the decorator this parameter belongs to
+            # If we know which decorator this parameter belongs to, use that directly
+            if current_decorator is not None:
+                decorator_name = current_decorator["decoratorName"]
+                enum_name = f"{decorator_name}{param_name.capitalize()}Enum"
+                return enum_name
+            
+            # Otherwise try to find the decorator this parameter belongs to
+            decorator_name = None
             for decorator in self.decorators:
                 for p in decorator.get("parameters", []):
-                    if p.get("name") == param_name and p.get("type") == "enum":
+                    if p.get("name") == param_name and p.get("type") == "enum" and p == param:
                         decorator_name = decorator["decoratorName"]
                         break
                 if decorator_name:
@@ -379,16 +454,18 @@ class CodeGenerator:
         if isinstance(value, str):
             return f'"{value}"'
         elif isinstance(value, bool):
-            return str(value).lower()
+            # Use Python's True/False instead of JavaScript's true/false
+            return str(value)
         else:
             return str(value)
     
-    def _get_default_value_str(self, param: Dict[str, Any]) -> str:
+    def _get_default_value_str(self, param: Dict[str, Any], current_decorator: Optional[DecoratorData] = None) -> str:
         """
         Get string representation of default value for a parameter.
         
         Args:
             param: Parameter definition
+            current_decorator: The decorator this parameter belongs to (optional)
             
         Returns:
             String representation of default value
@@ -402,7 +479,13 @@ class CodeGenerator:
         if param_type == "string":
             return f'"{default}"'
         elif param_type == "boolean":
-            return str(default).lower()
+            # Use Python's True/False instead of JavaScript's true/false
+            if isinstance(default, bool):
+                return str(default)
+            # Handle string representations from JSON
+            if default in ("true", "false"):
+                return "True" if default == "true" else "False"
+            return str(default)
         elif param_type == "array":
             if not default:
                 return "[]"
@@ -411,13 +494,20 @@ class CodeGenerator:
             return f"[{', '.join(items)}]"
         elif param_type == "enum":
             # For enum types, reference the enum constant
-            decorator_name = None
             param_name = param["name"]
             
-            # Try to find the decorator this parameter belongs to
+            # If we know which decorator this parameter belongs to, use that directly
+            if current_decorator is not None:
+                decorator_name = current_decorator["decoratorName"]
+                enum_name = f"{decorator_name}{param_name.capitalize()}Enum"
+                constant_name = self._convert_to_enum_constant(default)
+                return f"{enum_name}.{constant_name}"
+            
+            # Otherwise try to find the decorator this parameter belongs to
+            decorator_name = None
             for decorator in self.decorators:
                 for p in decorator.get("parameters", []):
-                    if p.get("name") == param_name and p.get("type") == "enum":
+                    if p.get("name") == param_name and p.get("type") == "enum" and p == param:
                         decorator_name = decorator["decoratorName"]
                         break
                 if decorator_name:

@@ -1,112 +1,162 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Prompt Decorator Schema",
-  "description": "Schema for defining a single prompt decorator with its parameters and metadata",
+  "description": "Schema for prompt decorator definitions",
   "type": "object",
-  "required": ["name", "version"],
-  "additionalProperties": false,
+  "required": ["decoratorName", "version"],
   "properties": {
-    "name": {
+    "decoratorName": {
       "type": "string",
-      "description": "The name of the decorator. Must start with a letter and contain only alphanumeric characters.",
-      "pattern": "^[A-Za-z][A-Za-z0-9]*$",
-      "examples": ["Reasoning", "StepByStep", "OutputFormat"]
+      "description": "Name of the decorator"
     },
     "version": {
       "type": "string",
-      "description": "Semantic version of the decorator implementation",
-      "pattern": "^\\d+\\.\\d+\\.\\d+$",
-      "examples": ["1.0.0", "2.1.3"]
+      "description": "Semantic version of the decorator (e.g., 1.0.0)",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the decorator's purpose and behavior"
+    },
+    "author": {
+      "type": "object",
+      "description": "Information about the decorator's author",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Author's name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Author's email address",
+          "format": "email"
+        },
+        "url": {
+          "type": "string",
+          "description": "Author's URL",
+          "format": "uri"
+        }
+      }
     },
     "parameters": {
-      "type": "object",
-      "description": "Optional parameters that modify the decorator's behavior",
-      "additionalProperties": {
-        "oneOf": [
-          {
+      "type": "array",
+      "description": "List of parameters accepted by the decorator",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
             "type": "string",
-            "description": "String parameter value"
+            "description": "Parameter name"
           },
-          {
-            "type": "number",
-            "description": "Numeric parameter value"
+          "type": {
+            "type": "string",
+            "description": "Parameter data type",
+            "enum": ["string", "number", "boolean", "array", "object", "enum"]
           },
-          {
+          "description": {
+            "type": "string",
+            "description": "Parameter description"
+          },
+          "required": {
             "type": "boolean",
-            "description": "Boolean parameter value"
+            "description": "Whether the parameter is required",
+            "default": false
           },
-          {
+          "default": {
+            "description": "Default value for the parameter"
+          },
+          "enum": {
             "type": "array",
-            "description": "Array of string values",
+            "description": "Possible values for enum parameters",
             "items": {
               "type": "string"
             }
+          },
+          "min": {
+            "type": "number",
+            "description": "Minimum value for numeric parameters"
+          },
+          "max": {
+            "type": "number",
+            "description": "Maximum value for numeric parameters"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "Regular expression pattern for string parameters"
           }
-        ]
-      },
-      "examples": [
-        {
-          "depth": "comprehensive",
-          "format": "markdown",
-          "numbered": true,
-          "options": ["option1", "option2"]
         }
-      ]
+      }
     },
-    "metadata": {
+    "examples": {
+      "type": "array",
+      "description": "Examples of using the decorator",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Example description"
+          },
+          "usage": {
+            "type": "string",
+            "description": "Example usage"
+          },
+          "result": {
+            "type": "string",
+            "description": "Expected result"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Sample prompt for the example"
+          },
+          "parameters": {
+            "type": "object",
+            "description": "Parameter values for the example"
+          }
+        }
+      }
+    },
+    "compatibility": {
       "type": "object",
-      "description": "Optional metadata about the decorator usage",
-      "additionalProperties": false,
+      "description": "Compatibility information",
       "properties": {
-        "description": {
+        "requires": {
+          "type": "array",
+          "description": "Decorators that this decorator requires",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "description": "Decorators that conflict with this decorator",
+          "items": {
+            "type": "string"
+          }
+        },
+        "minStandardVersion": {
           "type": "string",
-          "description": "Brief description of what the decorator does"
+          "description": "Minimum standard version required",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
         },
-        "category": {
+        "maxStandardVersion": {
           "type": "string",
-          "description": "Category of the decorator (e.g., 'reasoning', 'output', 'verification')",
-          "enum": [
-            "reasoning",
-            "output",
-            "verification",
-            "tone",
-            "meta"
-          ]
+          "description": "Maximum standard version supported",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
         },
-        "deprecated": {
-          "type": "boolean",
-          "description": "Whether this decorator version is deprecated",
-          "default": false
-        },
-        "deprecationMessage": {
-          "type": ["string", "null"],
-          "description": "Message explaining why the decorator is deprecated and what to use instead"
+        "models": {
+          "type": "array",
+          "description": "Models that support this decorator",
+          "items": {
+            "type": "string"
+          }
         }
       }
-    }
-  },
-  "examples": [
-    {
-      "name": "Reasoning",
-      "version": "1.0.0",
-      "parameters": {
-        "depth": "comprehensive"
-      },
-      "metadata": {
-        "description": "Provides detailed reasoning before conclusions",
-        "category": "reasoning"
-      }
     },
-    {
-      "name": "StepByStep",
-      "version": "1.0.0",
-      "parameters": {
-        "numbered": true
-      },
-      "metadata": {
-        "description": "Breaks down response into sequential steps",
-        "category": "output"
-      }
+    "category": {
+      "type": "string",
+      "description": "Category of the decorator"
     }
-  ]
+  }
 } 

@@ -1,238 +1,188 @@
+#!/usr/bin/env python
 """
-Command-Line Interface for the Prompt Decorators Generator
+CLI for the prompt decorators generator.
 
-This module provides a CLI for generating Python code from decorator definitions.
+This module provides a command-line interface for:
+1. Scanning the registry for decorator definitions
+2. Generating Python code for the decorators
+3. Generating tests for the decorators
 """
 
-import argparse
-import logging
+import os
 import sys
+import argparse
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional, Dict, Any
+import json
 
-from .registry import scan_registry
-from .code_gen import generate_code
+from .registry import RegistryScanner
+from .code_gen import CodeGenerator
+from .test_gen import TestGenerator
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-
-def parse_args(args: Optional[List[str]] = None) -> argparse.Namespace:
+def scan_registry(args: argparse.Namespace) -> None:
     """
-    Parse command-line arguments.
+    Scan the registry and report on found decorators.
     
     Args:
-        args: Command-line arguments (defaults to sys.argv[1:])
-        
-    Returns:
-        Parsed arguments
+        args: Command-line arguments
+    """
+    scanner = RegistryScanner(args.registry_dir)
+    decorator_files = scanner.scan()
+    
+    print(f"Found {len(decorator_files)} decorator files:")
+    for file in decorator_files:
+        print(f"  - {file}")
+
+def generate_code(args: argparse.Namespace) -> None:
+    """
+    Generate Python code for decorators in the registry.
+    
+    Args:
+        args: Command-line arguments
+    """
+    scanner = RegistryScanner(args.registry_dir)
+    decorator_files = scanner.scan()
+    
+    # Load decorator data
+    decorators = []
+    for file_path in decorator_files:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+            data['_source_file'] = str(file_path)
+            decorators.append(data)
+    
+    # Create generator
+    generator = CodeGenerator(decorators)
+    
+    # Generate code
+    generated_files = generator.generate_all()
+    
+    # Write to files
+    output_dir = Path(args.output_dir)
+    os.makedirs(output_dir, exist_ok=True)
+    
+    file_count = 0
+    for rel_path, content in generated_files.items():
+        file_path = output_dir / rel_path
+        os.makedirs(file_path.parent, exist_ok=True)
+        with open(file_path, 'w') as f:
+            f.write(content)
+        file_count += 1
+    
+    if args.verbose:
+        print(f"Generated {file_count} files:")
+        for rel_path in generated_files.keys():
+            print(f"  - {output_dir / rel_path}")
+    else:
+        print(f"Generated {file_count} files.")
+
+def generate_tests(args: argparse.Namespace) -> None:
+    """
+    Generate tests for decorators in the registry.
+    
+    Args:
+        args: Command-line arguments
+    """
+    generator = TestGenerator(
+        registry_dir=args.registry_dir,
+        output_dir=args.output_dir,
+        template_dir=args.template_dir
+    )
+    
+    generated_files = generator.generate_all_tests()
+    
+    if args.verbose:
+        print(f"Generated {len(generated_files)} test files:")
+        for file in generated_files:
+            print(f"  - {file}")
+    else:
+        print(f"Generated {len(generated_files)} test files.")
+
+def main() -> None:
+    """
+    Main entry point for the CLI.
     """
     parser = argparse.ArgumentParser(
-        description='Generate Python code from Prompt Decorators registry',
+        description="Generator tool for prompt decorators",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     
-    parser.add_argument(
-        '--registry', '-r',
-        type=str,
+    subparsers = parser.add_subparsers(dest="command", help="Command to execute")
+    
+    # Scan command
+    scan_parser = subparsers.add_parser(
+        "scan", 
+        help="Scan the registry for decorator definitions"
+    )
+    scan_parser.add_argument(
+        "--registry-dir", "-r",
+        default="registry",
+        help="Path to the decorator registry directory"
+    )
+    
+    # Generate code command
+    generate_parser = subparsers.add_parser(
+        "generate", 
+        help="Generate Python code for decorators"
+    )
+    generate_parser.add_argument(
+        "--registry-dir", "-r",
+        default="registry",
+        help="Path to the decorator registry directory"
+    )
+    generate_parser.add_argument(
+        "--output-dir", "-o",
+        default="prompt_decorators/decorators/generated",
+        help="Path to the output directory for generated code"
+    )
+    generate_parser.add_argument(
+        "--template-dir", "-t",
         default=None,
-        help='Path to the registry directory'
+        help="Path to the template directory (optional)"
+    )
+    generate_parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="Enable verbose output"
     )
     
-    parser.add_argument(
-        '--output', '-o',
-        type=str,
+    # Generate tests command
+    tests_parser = subparsers.add_parser(
+        "tests", 
+        help="Generate tests for decorators"
+    )
+    tests_parser.add_argument(
+        "--registry-dir", "-r",
+        default="registry",
+        help="Path to the decorator registry directory"
+    )
+    tests_parser.add_argument(
+        "--output-dir", "-o",
+        default="tests/auto",
+        help="Path to the output directory for generated tests"
+    )
+    tests_parser.add_argument(
+        "--template-dir", "-t",
         default=None,
-        help='Output directory for generated code'
+        help="Path to the template directory (optional)"
+    )
+    tests_parser.add_argument(
+        "--verbose", "-v",
+        action="store_true",
+        help="Enable verbose output"
     )
     
-    parser.add_argument(
-        '--category', '-c',
-        type=str,
-        nargs='+',
-        help='Only process specific categories'
-    )
+    args = parser.parse_args()
     
-    parser.add_argument(
-        '--list-categories',
-        action='store_true',
-        help='List available categories and exit'
-    )
-    
-    parser.add_argument(
-        '--verbose', '-v',
-        action='count',
-        default=0,
-        help='Increase verbosity (can be used multiple times)'
-    )
-    
-    parser.add_argument(
-        '--quiet', '-q',
-        action='store_true',
-        help='Suppress all output except errors'
-    )
-    
-    parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Scan and validate but do not generate code'
-    )
-    
-    return parser.parse_args(args)
-
-
-def configure_logging(args: argparse.Namespace) -> None:
-    """
-    Configure logging based on command-line arguments.
-    
-    Args:
-        args: Parsed command-line arguments
-    """
-    if args.quiet:
-        logging.basicConfig(level=logging.ERROR)
-    elif args.verbose == 0:
-        logging.basicConfig(level=logging.INFO)
-    elif args.verbose == 1:
-        logging.basicConfig(level=logging.DEBUG)
+    if args.command == "scan":
+        scan_registry(args)
+    elif args.command == "generate":
+        generate_code(args)
+    elif args.command == "tests":
+        generate_tests(args)
     else:
-        # Extra verbose
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s'
-        )
-
-
-def find_registry_path(specified_path: Optional[str] = None) -> Path:
-    """
-    Find the registry directory.
-    
-    Args:
-        specified_path: User-specified path (if any)
-        
-    Returns:
-        Path to the registry directory
-    """
-    if specified_path:
-        path = Path(specified_path)
-        if path.exists() and path.is_dir():
-            return path
-        raise FileNotFoundError(f"Registry path '{specified_path}' not found or not a directory")
-    
-    # Try to locate the registry relative to this script
-    script_dir = Path(__file__).parent.parent.parent
-    possible_paths = [
-        script_dir / "registry",
-        script_dir.parent / "registry",
-    ]
-    
-    for path in possible_paths:
-        if path.exists() and path.is_dir():
-            return path
-    
-    raise FileNotFoundError(
-        "Could not locate registry directory. Please specify with --registry option."
-    )
-
-
-def find_output_path(specified_path: Optional[str] = None) -> Path:
-    """
-    Find or create the output directory.
-    
-    Args:
-        specified_path: User-specified path (if any)
-        
-    Returns:
-        Path to the output directory
-    """
-    if specified_path:
-        path = Path(specified_path)
-    else:
-        # Default to decorators/generated in the current package
-        path = Path(__file__).parent.parent / "decorators" / "generated"
-    
-    # Create the directory if it doesn't exist
-    path.mkdir(parents=True, exist_ok=True)
-    
-    return path
-
-
-def main(args: Optional[List[str]] = None) -> int:
-    """
-    Main entry point for the CLI.
-    
-    Args:
-        args: Command-line arguments (defaults to sys.argv[1:])
-        
-    Returns:
-        Exit code (0 for success, non-zero for failure)
-    """
-    parsed_args = parse_args(args)
-    
-    # Configure logging
-    configure_logging(parsed_args)
-    
-    try:
-        # Find registry path
-        registry_path = find_registry_path(parsed_args.registry)
-        logger.info(f"Using registry at: {registry_path}")
-        
-        # Scan registry
-        decorators = scan_registry(registry_path)
-        logger.info(f"Found {len(decorators)} decorators")
-        
-        # Filter by category if specified
-        if parsed_args.category:
-            original_count = len(decorators)
-            decorators = [
-                d for d in decorators 
-                if any(
-                    cat in (Path(d.get("_source_file", "")).parts[0] if "_source_file" in d else "") 
-                    for cat in parsed_args.category
-                )
-            ]
-            logger.info(
-                f"Filtered to {len(decorators)} decorators in categories: {', '.join(parsed_args.category)} "
-                f"(from {original_count} total)"
-            )
-        
-        # If just listing categories, do that and exit
-        if parsed_args.list_categories:
-            categories = set()
-            for d in decorators:
-                if "_source_file" in d:
-                    source_file = Path(d["_source_file"])
-                    if len(source_file.parts) > 0:
-                        categories.add(source_file.parts[0])
-            
-            print("Available categories:")
-            for category in sorted(categories):
-                count = sum(1 for d in decorators if "_source_file" in d and Path(d["_source_file"]).parts[0] == category)
-                print(f"  {category} ({count} decorators)")
-            
-            return 0
-        
-        # If doing a dry run, exit here
-        if parsed_args.dry_run:
-            logger.info("Dry run complete. No code generated.")
-            return 0
-        
-        # Generate code
-        output_path = find_output_path(parsed_args.output)
-        logger.info(f"Generating code to: {output_path}")
-        
-        generated_files = generate_code(decorators, output_path)
-        logger.info(f"Generated {len(generated_files)} files")
-        
-        return 0
-    
-    except Exception as e:
-        logger.error(f"Error: {e}")
-        if parsed_args.verbose > 0:
-            import traceback
-            traceback.print_exc()
-        return 1
-
+        parser.print_help()
+        sys.exit(1)
 
 if __name__ == "__main__":
-    sys.exit(main()) 
+    main() 

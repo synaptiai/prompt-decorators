@@ -1,0 +1,36 @@
+include LICENSE
+include README.md
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include CHANGELOG.md
+include pyproject.toml
+include setup.py
+include setup.cfg
+
+recursive-include prompt_decorators *.py
+recursive-include prompt_decorators *.json
+recursive-include prompt_decorators/registry *.json
+recursive-include prompt_decorators/templates *.j2
+recursive-include prompt_decorators/schemas *.json
+
+recursive-include tests *.py
+recursive-include examples *.py
+recursive-include examples/interactive *.ipynb
+recursive-include examples/providers *.py
+recursive-include examples/data *.json
+
+recursive-include docs *.md
+recursive-include docs *.yml
+recursive-include docs *.yaml
+
+prune */__pycache__
+prune */*.pyc
+prune */*.pyo
+prune */*.pyd
+prune .git
+prune .github
+prune .vscode
+prune .idea
+prune dist
+prune build
+prune *.egg-info 

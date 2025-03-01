@@ -1,157 +1,197 @@
-# Prompt Decorators: A Standard for Enhanced AI Interactions
+# Prompt Decorators
 
-
-[![Standard Status: Proposed](https://img.shields.io/badge/Standard%20Status-Proposed-yellow.svg)](https://github.com/prompt-decorators/spec)
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache-blue.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-
-A standardized framework for enhancing AI interactions through simple, composable prompt modifiers.
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Key Features](#key-features)
-- [Quick Examples](#quick-examples)
-- [Specification](#specification)
-- [Implementation Guide](#implementation-guide)
-- [Demo & Test Suite](#demo--test-suite)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+A Python framework for defining, managing, and applying prompt decorators to enhance interactions with Large Language Models (LLMs).
 
 ## Overview
 
-Prompt Decorators provide a standardized syntax for modifying how AI models process and respond to prompts. Inspired by function decorators in programming languages, this specification creates a consistent way to guide AI behavior across different models and platforms.
+Prompt Decorators is a powerful and flexible framework that enables systematic modification of prompts to achieve specific behaviors in LLM responses. It provides a structured way to define decorators that can be combined, validated, and applied to prompts.
 
-Instead of writing lengthy instructions in each prompt, users can simply add decorator prefixes like `+++Reasoning` or `+++StepByStep` to achieve specific response patterns.
+Key features include:
+- Registry-based decorator management
+- Parameter validation and type checking
+- Decorator versioning with semantic version support
+- Compatibility checking between decorators
+- Serialization and deserialization support
+- Runtime decorator discovery
 
-## Key Features
+## Architecture
 
-- **Simple Syntax**: Easy-to-learn `+++Decorator(parameter=value)` format
-- **Composable Behavior**: Stack multiple decorators to create complex interactions
-- **Cross-Platform**: Designed to work across compatible LLM implementations
-- **Extensible**: Framework for creating specialized decorators for different domains
-- **Implementation Agnostic**: Can be applied at different integration levels (API, UI, middleware)
+The framework is organized into several key components:
 
-## Quick Examples
+1. **Core** (`prompt_decorators/core/`):
+   - `BaseDecorator`: The foundation for all decorators with parameter validation and versioning support
+   - `Request`: Handles API requests decorated with multiple prompt decorators
 
-### Basic Example
+2. **Generator** (`prompt_decorators/generator/`):
+   - `Registry`: Scans and parses decorator registry files
+   - `CodeGen`: Generates Python code for decorator classes
+   - `CLI`: Command-line interface for code generation
 
-```
-+++Reasoning
-What are the ethical implications of autonomous vehicles?
-```
+3. **Utils** (`prompt_decorators/utils/`):
+   - `Discovery`: Runtime decorator discovery and registration
+   - `Compatibility`: Checks compatibility between decorators
 
-The AI will provide detailed reasoning before reaching conclusions.
+4. **Decorators** (`prompt_decorators/decorators/`):
+   - Implementation of specific decorator types
 
-### Multiple Decorators
+## Decorator Types
 
-```
-+++StepByStep(numbered=true)
-+++OutputFormat(format=markdown)
-How do I build a simple React component?
-```
+The framework includes various decorator types, such as:
 
-The AI will provide numbered steps in Markdown format.
+1. **Reasoning**: Instructs the model to use explicit reasoning in its response
+2. **OutputFormat**: Controls the format of the model's output (markdown, JSON, etc.)
+3. **Many more** (to be implemented based on the registry)
 
-### Complex Example
+## Example Usage
 
-```
-+++Debate(perspectives=3)
-+++DecisionMatrix(criteria=cost,feasibility,timeline,risks)
-+++FactCheck
-Should our startup migrate to a cloud-native architecture?
-```
-
-The AI will provide a balanced debate with multiple perspectives, structured as a decision matrix, with factual claims verified.
-
-## Specification
-
-The full specification is available in [prompt-decorators-specification-v1.0.md](prompt-decorators-specification-v1.0.md). 
-
-Key sections include:
-
-- [Core Syntax](docs/prompt-decorators-specification-v1.0.md#3-syntax-specification)
-- [Standard Decorators](docs/prompt-decorators-specification-v1.0.md#4-categories-of-prompt-decorators)
-- [Implementation Guidelines](docs/prompt-decorators-specification-v1.0.md#5-implementation-considerations)
-- [Security & Privacy Considerations](docs/prompt-decorators-specification-v1.0.md#11-security-and-privacy-considerations)
-
-### Core Decorators
-
-| Decorator | Description | Example |
-|-----------|-------------|---------|
-| `+++Reasoning` | Show reasoning process | `+++Reasoning(depth=comprehensive)` |
-| `+++StepByStep` | Break into sequential steps | `+++StepByStep(numbered=true)` |
-| `+++OutputFormat` | Control response format | `+++OutputFormat(format=json)` |
-| `+++Tone` | Adjust writing style | `+++Tone(style=technical)` |
-| `+++Version` | Specify standard version | `+++Version(standard=1.0.0)` |
-
-## Implementation Guide
-
-Prompt Decorators can be implemented at various levels:
-
-### For LLM Providers
+### Creating and Using Decorators
 
 ```python
-# Example implementation in a provider API
-def process_decorators(user_prompt):
-    # Extract decorators
-    decorators = extract_decorators(user_prompt)
-    cleaned_prompt = remove_decorators(user_prompt)
-    
-    # Generate system prompt from decorators
-    system_prompt = generate_system_prompt(decorators)
-    
-    # Send to model
-    response = query_model(system_prompt, cleaned_prompt)
-    return response
+from prompt_decorators.decorators import Reasoning, OutputFormat
+from prompt_decorators.decorators.reasoning import ReasoningStyle
+from prompt_decorators.decorators.format import FormatType
+
+# Create a Reasoning decorator
+reasoning = Reasoning(
+    style=ReasoningStyle.DETAILED.value,
+    show_working=True,
+    consider_alternatives=True
+)
+
+# Create an OutputFormat decorator
+output_format = OutputFormat(
+    format_type=FormatType.MARKDOWN.value,
+    pretty_print=True
+)
+
+# Apply decorators to a prompt
+prompt = "Explain quantum entanglement."
+decorated_prompt = output_format.apply(reasoning.apply(prompt))
+
+# Use the decorated prompt with an LLM API
+# ...
 ```
 
-### For Application Developers
+### Using the Decorator Registry
 
-```javascript
-// Client-side decorator implementation example
-const promptWithDecorators = decoratorManager
-  .add("Reasoning", { depth: "comprehensive" })
-  .add("OutputFormat", { format: "markdown" })
-  .applyToPrompt(userInput);
+```python
+from prompt_decorators.utils.discovery import DecoratorRegistry
 
-// Send to API
-const response = await api.sendPrompt(promptWithDecorators);
+# Get the registry instance
+registry = DecoratorRegistry()
+
+# Register decorators (this is typically done automatically)
+from prompt_decorators.decorators.generated.decorators.concise import Concise
+from prompt_decorators.decorators.generated.decorators.eli5 import ELI5
+registry.register_decorator(Concise)
+registry.register_decorator(ELI5)
+
+# Get a decorator by name
+concise = registry.get_decorator("Concise")
+
+# Create an instance with parameters
+concise_instance = concise(maxWords=100, bulletPoints=True, level=2)
+
+# Apply to a prompt
+prompt = "Explain quantum computing in detail."
+decorated_prompt = concise_instance.apply(prompt)
+
+# Find decorators by category
+tone_decorators = registry.find_decorators_by_category("tone")
 ```
 
-### For End Users
+For more examples of using the decorator registry, see the example scripts in the `examples/` directory:
+- `register_all_decorators.py`: Demonstrates how to register all decorators from the generated directory
+- `use_registered_decorators.py`: Shows how to use registered decorators to modify prompts
 
-Add the following system prompt to instruct the model about decorators:
+### Using Decorated Requests
 
+```python
+from prompt_decorators.core.request import DecoratedRequest
+
+# Create a decorated request
+request = DecoratedRequest(
+    prompt="Explain quantum mechanics.",
+    decorators=[reasoning, output_format],
+    model="gpt-4",
+    api_params={"temperature": 0.7}
+)
+
+# Apply all decorators
+decorated_prompt = request.apply_decorators()
+
+# Serialize for storage or transmission
+request_json = request.to_json()
 ```
-A "Prompt Decorator" is an instruction starting with +++ that modifies how you generate responses.
-When you see +++Reasoning, begin your response with detailed reasoning before conclusions.
-When you see +++StepByStep, structure your response as numbered steps.
-[etc...]
+
+### Compatibility Checking
+
+```python
+from prompt_decorators.utils import get_compatibility_checker
+
+checker = get_compatibility_checker()
+issues = checker.check_compatibility(reasoning, output_format)
+
+if issues:
+    for issue in issues:
+        print(f"Warning: {issue}")
 ```
+
 ## Getting Started
 
-- [Read the full specification](docs/prompt-decorators-specification-v1.0.md)
-- [Test suite](tests/)
-- [Decorator registry](registry/)
+### Installation
 
-## Acknowledgements
+```bash
+# Not yet available on PyPI
+git clone https://github.com/yourusername/prompt-decorators.git
+cd prompt-decorators
+pip install -e .
+```
 
-- Inspired by [Mostapha Kalami Heris](https://kalami.medium.com) article on [Prompt Decorators](https://kalami.medium.com/prompt-decorators-a-simple-way-to-improve-ai-responses-c3f3c2579a8c)
-- Based on own research on prompt engineering and collection of curated prompt libraries
-- Thanks to all contributors and community members who have provided feedback
+### Running the Demo
 
-## Current Status
+```bash
+python examples/decorator_demo.py
+```
 
-This specification is currently a formal proposal. We invite implementations, feedback, and contributions from the AI community to help refine and improve the standard.
-Any indudtry or domain specific decorators should be added to the [registry](registry/) for easy discovery and reuse.
+### Generating Decorator Code
 
+```bash
+./generate_decorators.py
+```
 
-## Contributing
+## Development
 
-We welcome contributions to the Prompt Decorators standard! Please see our [contribution guidelines](CONTRIBUTING.md) for details on how to participate.
+### Decorator Registry
+
+The registry defines all available decorators and their parameters. It uses JSON files in the `registry/` directory to specify:
+
+- Decorator name and category
+- Parameters with types and constraints
+- Compatibility with other decorators
+- Description and usage examples
+
+The `DecoratorRegistry` class provides runtime discovery and management of decorators. See [DECORATOR_REGISTRY.md](docs/DECORATOR_REGISTRY.md) for detailed documentation on how to use the decorator registry.
+
+### Adding a New Decorator
+
+1. Define the decorator in the registry
+2. Generate the code with `generate_decorators.py`
+3. Customize the generated code if needed
+4. Add tests
 
 ## License
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
+[MIT License](LICENSE)
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Roadmap
+
+See [REGISTRY_IMPLEMENTATION_PLAN.md](REGISTRY_IMPLEMENTATION_PLAN.md) for the development roadmap.
+
+## Acknowledgments
+
+This project was inspired by the need for more structured prompt engineering techniques when working with LLMs.

@@ -1,133 +1,247 @@
+# Contributing to Prompt Decorators
 
-# Contributor Covenant Code of Conduct
+Thank you for your interest in contributing to the Prompt Decorators project! This document provides guidelines and instructions for contributing to the project.
 
-## Our Pledge
+## Table of Contents
 
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone, regardless of age, body
-size, visible or invisible disability, ethnicity, sex characteristics, gender
-identity and expression, level of experience, education, socio-economic status,
-nationality, personal appearance, race, caste, color, religion, or sexual
-identity and orientation.
+1. [Code of Conduct](#code-of-conduct)
+2. [Getting Started](#getting-started)
+3. [Development Environment](#development-environment)
+4. [Project Structure](#project-structure)
+5. [Coding Standards](#coding-standards)
+6. [Testing](#testing)
+7. [Documentation](#documentation)
+8. [Pull Request Process](#pull-request-process)
+9. [Registry Contributions](#registry-contributions)
+10. [Community](#community)
 
-We pledge to act and interact in ways that contribute to an open, welcoming,
-diverse, inclusive, and healthy community.
+## Code of Conduct
 
-## Our Standards
+This project and everyone participating in it is governed by our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project maintainers.
 
-Examples of behavior that contributes to a positive environment for our
-community include:
+## Getting Started
 
-* Demonstrating empathy and kindness toward other people
-* Being respectful of differing opinions, viewpoints, and experiences
-* Giving and gracefully accepting constructive feedback
-* Accepting responsibility and apologizing to those affected by our mistakes,
-  and learning from the experience
-* Focusing on what is best not just for us as individuals, but for the overall
-  community
+1. **Fork the repository** on GitHub.
+2. **Clone your fork** locally:
+   ```bash
+   git clone https://github.com/your-username/prompt-decorators.git
+   cd prompt-decorators
+   ```
+3. **Set up the upstream remote**:
+   ```bash
+   git remote add upstream https://github.com/original-owner/prompt-decorators.git
+   ```
+4. **Create a feature branch**:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-Examples of unacceptable behavior include:
+## Development Environment
 
-* The use of sexualized language or imagery, and sexual attention or advances of
-  any kind
-* Trolling, insulting or derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or email address,
-  without their explicit permission
-* Other conduct which could reasonably be considered inappropriate in a
-  professional setting
+We recommend using a virtual environment for development:
 
-## Enforcement Responsibilities
+### Using venv
+```bash
+# Create virtual environment
+python -m venv venv
 
-Community leaders are responsible for clarifying and enforcing our standards of
-acceptable behavior and will take appropriate and fair corrective action in
-response to any behavior that they deem inappropriate, threatening, offensive,
-or harmful.
+# Activate on Windows
+venv\Scripts\activate.bat
 
-Community leaders have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct, and will communicate reasons for moderation
-decisions when appropriate.
+# Activate on Unix/MacOS
+source venv/bin/activate
 
-## Scope
+# Install in development mode with all extras
+pip install -e ".[dev,docs,all]"
+```
 
-This Code of Conduct applies within all community spaces, and also applies when
-an individual is officially representing the community in public spaces.
-Examples of representing our community include using an official email address,
-posting via an official social media account, or acting as an appointed
-representative at an online or offline event.
+### Using conda
+```bash
+# Create conda environment
+conda create -n prompt-decorators python=3.10
+conda activate prompt-decorators
 
-## Enforcement
+# Install in development mode with all extras
+pip install -e ".[dev,docs,all]"
+```
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-[INSERT CONTACT METHOD].
-All complaints will be reviewed and investigated promptly and fairly.
+## Project Structure
 
-All community leaders are obligated to respect the privacy and security of the
-reporter of any incident.
+The project follows this structure:
 
-## Enforcement Guidelines
+```
+prompt-decorators/
+├── docs/                       # Documentation files
+├── examples/                   # Example scripts and notebooks
+├── prompt_decorators/          # Main package
+│   ├── core/                   # Core functionality
+│   ├── decorators/             # Decorator implementations
+│   │   └── generated/          # Generated decorators from registry
+│   ├── generator/              # Code generation utilities
+│   ├── registry/               # Decorator registry
+│   └── utils/                  # Utility functions
+├── tests/                      # Test suite
+├── .github/                    # GitHub workflows and config
+├── pyproject.toml              # Project configuration
+├── setup.py                    # Setup script
+└── README.md                   # Project overview
+```
 
-Community leaders will follow these Community Impact Guidelines in determining
-the consequences for any action they deem in violation of this Code of Conduct:
+## Coding Standards
 
-### 1. Correction
+We follow these coding standards:
 
-**Community Impact**: Use of inappropriate language or other behavior deemed
-unprofessional or unwelcome in the community.
+1. **Type Hints**: All functions and methods must have type annotations.
+2. **Docstrings**: All functions, methods, and classes should have Google-style docstrings.
+3. **Code Formatting**: We use `ruff` for code formatting, which encompasses the functionality of tools like `black` and `isort`.
+4. **Linting**: We use `ruff` for linting to ensure code quality.
+5. **Imports**: Use absolute imports for all imports.
 
-**Consequence**: A private, written warning from community leaders, providing
-clarity around the nature of the violation and an explanation of why the
-behavior was inappropriate. A public apology may be requested.
+Run our code quality tools:
 
-### 2. Warning
+```bash
+# Format your code
+ruff format .
 
-**Community Impact**: A violation through a single incident or series of
-actions.
+# Check your code
+ruff check .
 
-**Consequence**: A warning with consequences for continued behavior. No
-interaction with the people involved, including unsolicited interaction with
-those enforcing the Code of Conduct, for a specified period of time. This
-includes avoiding interactions in community spaces as well as external channels
-like social media. Violating these terms may lead to a temporary or permanent
-ban.
+# Run type checking
+mypy prompt_decorators
+```
 
-### 3. Temporary Ban
+## Testing
 
-**Community Impact**: A serious violation of community standards, including
-sustained inappropriate behavior.
+We use `pytest` for testing. All tests should be placed in the `tests/` directory:
 
-**Consequence**: A temporary ban from any sort of interaction or public
-communication with the community for a specified period of time. No public or
-private interaction with the people involved, including unsolicited interaction
-with those enforcing the Code of Conduct, is allowed during this period.
-Violating these terms may lead to a permanent ban.
+```bash
+# Run all tests
+pytest
 
-### 4. Permanent Ban
+# Run tests with coverage
+pytest --cov=prompt_decorators
 
-**Community Impact**: Demonstrating a pattern of violation of community
-standards, including sustained inappropriate behavior, harassment of an
-individual, or aggression toward or disparagement of classes of individuals.
+# Run a specific test file
+pytest tests/test_specific_module.py
+```
 
-**Consequence**: A permanent ban from any sort of public interaction within the
-community.
+### Testing Guidelines
 
-## Attribution
+1. All new features should include tests.
+2. Tests should be independent of each other.
+3. Use fixtures and parameterization where appropriate.
+4. Mock external APIs in tests.
 
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
-version 2.1, available at
-[https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].
+## Documentation
 
-Community Impact Guidelines were inspired by
-[Mozilla's code of conduct enforcement ladder][Mozilla CoC].
+We use MkDocs with the Material theme for documentation:
 
-For answers to common questions about this code of conduct, see the FAQ at
-[https://www.contributor-covenant.org/faq][FAQ]. Translations are available at
-[https://www.contributor-covenant.org/translations][translations].
+```bash
+# Install documentation dependencies
+pip install -e ".[docs]"
 
-[homepage]: https://www.contributor-covenant.org
-[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
-[Mozilla CoC]: https://github.com/mozilla/diversity
-[FAQ]: https://www.contributor-covenant.org/faq
-[translations]: https://www.contributor-covenant.org/translations
+# Build documentation
+mkdocs build
+
+# Serve documentation locally
+mkdocs serve
+```
+
+### Documentation Guidelines
+
+1. Update or add documentation for any changes or additions.
+2. Include docstrings for all public classes, methods, and functions.
+3. Document parameters, return values, and exceptions.
+4. Include examples where helpful.
+
+## Pull Request Process
+
+1. **Update your fork** with the latest changes from upstream:
+   ```bash
+   git fetch upstream
+   git rebase upstream/main
+   ```
+
+2. **Commit your changes** with clear, descriptive messages following [conventional commits](https://www.conventionalcommits.org/):
+   ```bash
+   git add .
+   git commit -m "feat: add new feature X"
+   ```
+   Common types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+
+3. **Push your branch** to your fork:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+4. **Create a Pull Request** against the main repository's `main` branch.
+
+5. **Complete the PR template** with details about your changes.
+
+### PR Requirements
+
+- **Tests**: All tests must pass.
+- **Code Quality**: PR should pass all code quality checks.
+- **Documentation**: Include documentation updates if applicable.
+- **Single Purpose**: PR should address a single concern.
+- **Reviews**: PR requires at least one maintainer review.
+
+## Registry Contributions
+
+When adding new decorators to the registry:
+
+1. Create a JSON file in the `registry/` directory following the schema.
+2. Include comprehensive parameters, documentation, and examples.
+3. Ensure compatibility information is accurate.
+4. Run the code generator to create the Python class.
+5. Add tests for the new decorator.
+
+## Community
+
+- **Issues**: Use GitHub issues for bug reports and feature requests.
+- **Discussions**: Use GitHub discussions for questions and general discussion.
+- **Code Review**: Be respectful and constructive in code reviews.
+
+## Specific Contribution Areas
+
+### 1. Adding New Decorators
+
+To add a new decorator:
+
+1. Create a JSON file in `registry/` following the naming convention: `decorator-name.json`.
+2. Run the code generator to create the Python class.
+3. Add tests for the new decorator in `tests/decorators/`.
+4. Add example usage in the `examples/` directory.
+5. Update documentation to include the new decorator.
+
+### 2. Improving Documentation
+
+Documentation improvements are always welcome:
+
+1. Update API documentation.
+2. Add or improve tutorials and guides.
+3. Fix typos or clarify existing documentation.
+4. Add examples of real-world usage.
+
+### 3. Bug Fixes
+
+When fixing bugs:
+
+1. Add a test that reproduces the bug.
+2. Fix the bug.
+3. Ensure all tests pass.
+4. Update documentation if necessary.
+
+### 4. Feature Requests
+
+For feature requests:
+
+1. Open an issue describing the feature.
+2. Discuss the feature with maintainers.
+3. Implement the feature after approval.
+
+## License
+
+By contributing to this project, you agree that your contributions will be licensed under the same [MIT License](LICENSE) that covers the project.
+
+Thank you for contributing to Prompt Decorators!

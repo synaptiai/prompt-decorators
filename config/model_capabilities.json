@@ -1,0 +1,136 @@
+{
+  "models": [
+    {
+      "model_id": "gpt-4",
+      "model_family": "gpt",
+      "version": "4.0",
+      "capabilities": {
+        "reasoning": true,
+        "step_by_step": true,
+        "code_generation": true,
+        "json_output": true,
+        "markdown_output": true,
+        "max_tokens": 8192,
+        "streaming": true,
+        "function_calling": true,
+        "multi_tool_use": true,
+        "supported_decorators": [
+          "Reasoning",
+          "StepByStep",
+          "Socratic",
+          "Debate",
+          "TreeOfThought",
+          "OutputFormat",
+          "TableFormat",
+          "Bullet",
+          "CiteSources",
+          "FactCheck",
+          "Confidence",
+          "Detailed",
+          "ELI5",
+          "Professional"
+        ]
+      }
+    },
+    {
+      "model_id": "gpt-3.5-turbo",
+      "model_family": "gpt",
+      "version": "3.5",
+      "capabilities": {
+        "reasoning": true,
+        "step_by_step": true,
+        "code_generation": true,
+        "json_output": true,
+        "markdown_output": true,
+        "max_tokens": 4096,
+        "streaming": true,
+        "function_calling": true,
+        "multi_tool_use": false,
+        "supported_decorators": [
+          "Reasoning",
+          "StepByStep",
+          "OutputFormat",
+          "Bullet",
+          "Detailed",
+          "ELI5",
+          "Professional"
+        ]
+      }
+    },
+    {
+      "model_id": "claude-2",
+      "model_family": "claude",
+      "version": "2.0",
+      "capabilities": {
+        "reasoning": true,
+        "step_by_step": true,
+        "code_generation": true,
+        "json_output": true,
+        "markdown_output": true,
+        "max_tokens": 100000,
+        "streaming": true,
+        "function_calling": false,
+        "multi_tool_use": false,
+        "supported_decorators": [
+          "Reasoning",
+          "StepByStep",
+          "Socratic",
+          "Debate",
+          "OutputFormat",
+          "TableFormat",
+          "Bullet",
+          "CiteSources",
+          "Detailed",
+          "ELI5",
+          "Professional"
+        ]
+      }
+    },
+    {
+      "model_id": "llama-2-70b-chat",
+      "model_family": "llama",
+      "version": "2.0",
+      "capabilities": {
+        "reasoning": true,
+        "step_by_step": true,
+        "code_generation": true,
+        "json_output": true,
+        "markdown_output": true,
+        "max_tokens": 4096,
+        "streaming": true,
+        "function_calling": false,
+        "multi_tool_use": false,
+        "supported_decorators": [
+          "Reasoning",
+          "StepByStep",
+          "OutputFormat",
+          "Bullet",
+          "ELI5",
+          "Professional"
+        ]
+      }
+    },
+    {
+      "model_id": "mistral-7b-instruct",
+      "model_family": "mistral",
+      "version": "1.0",
+      "capabilities": {
+        "reasoning": true,
+        "step_by_step": true,
+        "code_generation": true,
+        "json_output": true,
+        "markdown_output": true,
+        "max_tokens": 4096,
+        "streaming": true,
+        "function_calling": false,
+        "multi_tool_use": false,
+        "supported_decorators": [
+          "Reasoning",
+          "StepByStep",
+          "OutputFormat",
+          "ELI5"
+        ]
+      }
+    }
+  ]
+} 
