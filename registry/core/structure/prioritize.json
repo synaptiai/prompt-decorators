@@ -1,0 +1,59 @@
+{
+  "decoratorName": "Prioritize",
+  "version": "1.0.0",
+  "description": "Structures the response by ranking information according to importance, urgency, or impact. This decorator helps identify the most critical aspects of a topic and presents information in a hierarchical manner from most to least important.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "criteria",
+      "type": "string",
+      "description": "The specific criterion to use for prioritization (e.g., importance, urgency, ROI)",
+      "default": "importance",
+      "required": false
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "description": "Number of prioritized items to include",
+      "default": 5,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 10
+      }
+    },
+    {
+      "name": "showRationale",
+      "type": "boolean",
+      "description": "Whether to explain the reasoning behind each priority ranking",
+      "default": false,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic prioritization of key factors",
+      "usage": "+++Prioritize\nWhat factors should be considered when designing a mobile app?",
+      "result": "Presents the top 5 factors for mobile app design, ranked by importance from most to least critical"
+    },
+    {
+      "description": "Detailed prioritization with custom criteria and rationale",
+      "usage": "+++Prioritize(criteria=ROI, count=7, showRationale=true)\nWhat marketing strategies should our startup focus on?",
+      "result": "Provides 7 marketing strategies ranked by return on investment, with explanations for each ranking position"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

@@ -1,0 +1,58 @@
+{
+  "decoratorName": "Limitations",
+  "version": "1.0.0",
+  "description": "Adds an explicit statement of limitations, caveats, or uncertainties related to the provided information. This decorator promotes intellectual honesty by acknowledging the boundaries of current knowledge, potential biases, or contextual constraints.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "The level of detail in the limitations statement",
+      "enum": ["brief", "moderate", "comprehensive"],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "position",
+      "type": "enum",
+      "description": "Where to place the limitations statement in the response",
+      "enum": ["beginning", "end"],
+      "default": "end",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "The primary aspect to focus on in the limitations",
+      "enum": ["knowledge", "methodology", "context", "biases", "all"],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Brief limitations statement at the end focused on methodology",
+      "usage": "+++Limitations(detail=brief, focus=methodology)\nExplain how personality tests predict career success.",
+      "result": "Explains personality tests and career success, concluding with a brief statement of methodological limitations"
+    },
+    {
+      "description": "Comprehensive limitations at the beginning covering all aspects",
+      "usage": "+++Limitations(detail=comprehensive, position=beginning, focus=all)\nDescribe the current understanding of consciousness.",
+      "result": "Begins with a thorough discussion of the limitations in our understanding of consciousness before presenting the current state of knowledge"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

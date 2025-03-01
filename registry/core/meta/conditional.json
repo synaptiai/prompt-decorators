@@ -1,0 +1,51 @@
+{
+  "decoratorName": "Conditional",
+  "version": "1.0.0",
+  "description": "A meta-decorator that applies different decorators based on specified conditions. This enables dynamic behavior where the response formatting and approach changes depending on the content, context, or user-specified parameters.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "if",
+      "type": "string",
+      "description": "The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}')",
+      "required": true
+    },
+    {
+      "name": "then",
+      "type": "string",
+      "description": "The decorator to apply if the condition is true (can be a specific decorator with parameters)",
+      "required": true
+    },
+    {
+      "name": "else",
+      "type": "string",
+      "description": "The decorator to apply if the condition is false (can be a specific decorator with parameters)",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic conditional application based on content complexity",
+      "usage": "+++Conditional(if=complex, then=StepByStep, else=Concise)\nExplain how quantum computing works.",
+      "result": "Evaluates if the topic is complex, which quantum computing is, so it applies the StepByStep decorator"
+    },
+    {
+      "description": "Conditional application with parameterized decorators",
+      "usage": "+++Conditional(if=controversial, then=Debate(perspectives=3), else=Reasoning(depth=moderate))\nDiscuss the ethical implications of gene editing in humans.",
+      "result": "Determines that gene editing ethics is controversial, so it applies the Debate decorator with 3 perspectives rather than the Reasoning decorator"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4"
+    ]
+  }
+} 

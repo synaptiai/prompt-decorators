@@ -1,0 +1,61 @@
+{
+  "decoratorName": "Layered",
+  "version": "1.0.0",
+  "description": "Presents content at multiple levels of explanation depth, allowing readers to engage with information at their preferred level of detail. This decorator structures responses with progressive disclosure, from high-level summaries to increasingly detailed explanations.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "levels",
+      "type": "enum",
+      "description": "The granularity of explanation levels to include",
+      "enum": ["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"],
+      "default": "summary-detail-technical",
+      "required": false
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "description": "Number of distinct explanation layers to provide",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "progression",
+      "type": "enum",
+      "description": "How to structure the progression between layers",
+      "enum": ["separate", "nested", "incremental"],
+      "default": "separate",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic three-level explanation of a complex concept",
+      "usage": "+++Layered\nExplain how blockchain technology works.",
+      "result": "Provides a summary-level explanation of blockchain, followed by a detailed explanation, and finally a technical deep dive with implementation details"
+    },
+    {
+      "description": "Multi-layered nested progression with custom levels",
+      "usage": "+++Layered(levels=basic-intermediate-advanced, count=4, progression=nested)\nDescribe the principles of quantum computing.",
+      "result": "Delivers a nested explanation of quantum computing with four progressive layers of understanding, each building on the previous and increasing in complexity from basic to advanced"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

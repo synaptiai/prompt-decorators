@@ -1,0 +1,56 @@
+{
+  "decoratorName": "Extremes",
+  "version": "1.0.0",
+  "description": "Presents content at the extreme ends of a spectrum, showing both a radical, ambitious, or maximalist version alongside a minimal, conservative, or basic version. This decorator helps explore the range of possibilities from the simplest implementation to the most expansive vision.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "versions",
+      "type": "enum",
+      "description": "Which extreme versions to include",
+      "enum": ["radical", "minimal", "both"],
+      "default": "both",
+      "required": false
+    },
+    {
+      "name": "dimension",
+      "type": "string",
+      "description": "The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity')",
+      "default": "ambition",
+      "required": false
+    },
+    {
+      "name": "compare",
+      "type": "boolean",
+      "description": "Whether to include a comparative analysis of the extreme versions",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic exploration of minimal and radical approaches",
+      "usage": "+++Extremes\nDescribe a strategy for reducing carbon emissions.",
+      "result": "Presents both a minimal, immediately achievable carbon reduction strategy and a radical, transformative approach, with a comparison of their respective impacts, feasibility, and trade-offs"
+    },
+    {
+      "description": "Only radical version along a specific dimension",
+      "usage": "+++Extremes(versions=radical, dimension=technological innovation, compare=false)\nOutline the future of transportation.",
+      "result": "Provides only a technologically radical vision of transportation's future, focusing on the most innovative and disruptive possibilities without comparison to other approaches"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

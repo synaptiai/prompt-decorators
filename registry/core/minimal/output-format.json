@@ -1,0 +1,42 @@
+{
+  "decoratorName": "OutputFormat",
+  "version": "1.0.0",
+  "description": "Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The format to use for the response",
+      "enum": ["json", "markdown", "yaml", "xml", "plaintext"],
+      "default": "markdown",
+      "required": true
+    }
+  ],
+  "examples": [
+    {
+      "description": "JSON output for structured data",
+      "usage": "+++OutputFormat(format=json)\nList the top 5 programming languages and their key features.",
+      "result": "Returns a JSON object with programming languages and their features"
+    },
+    {
+      "description": "Markdown output for formatted text",
+      "usage": "+++OutputFormat(format=markdown)\nWrite a tutorial on setting up a React project.",
+      "result": "Returns a nicely formatted markdown document with headings, code blocks, and lists"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Schema", "TableFormat", "Bullet"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

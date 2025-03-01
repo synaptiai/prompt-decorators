@@ -1,0 +1,58 @@
+{
+  "decoratorName": "RootCause",
+  "version": "1.0.0",
+  "description": "Structures the response to systematically analyze underlying causes of problems or situations. This decorator applies formal root cause analysis methodologies to identify fundamental factors rather than just symptoms or immediate causes.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "method",
+      "type": "enum",
+      "description": "The specific root cause analysis methodology to apply",
+      "enum": ["5whys", "fishbone", "pareto"],
+      "default": "5whys",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Level of detail in the analysis (for 5whys, represents number of 'why' iterations)",
+      "default": 5,
+      "required": false,
+      "validation": {
+        "minimum": 3,
+        "maximum": 7
+      }
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic 5 Whys analysis of a business problem",
+      "usage": "+++RootCause\nWhy is our website's bounce rate increasing?",
+      "result": "Performs a systematic 5 Whys analysis to trace the increasing bounce rate back to its fundamental causes"
+    },
+    {
+      "description": "Fishbone diagram approach to a technical issue",
+      "usage": "+++RootCause(method=fishbone)\nWhy do our application servers crash under moderate load?",
+      "result": "Analyzes the server crashes using the fishbone (Ishikawa) methodology, categorizing potential causes into major categories like People, Process, Equipment, etc."
+    },
+    {
+      "description": "Pareto analysis with deeper investigation",
+      "usage": "+++RootCause(method=pareto, depth=7)\nWhat factors are causing our manufacturing defects?",
+      "result": "Uses Pareto principle to identify the vital few causes responsible for most manufacturing defects, with an exceptionally thorough analysis"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

@@ -1,0 +1,56 @@
+{
+  "decoratorName": "Context",
+  "version": "1.0.0",
+  "description": "A meta-decorator that adapts standard decorators for domain-specific contexts. This provides specialized interpretations of decorators based on particular fields, industries, or subject matter to ensure appropriate adaptation to contextual requirements.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education')",
+      "required": true
+    },
+    {
+      "name": "scope",
+      "type": "enum",
+      "description": "Which aspects of decorators to contextualize",
+      "enum": ["terminology", "examples", "structure", "all"],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The expertise level to target within the domain",
+      "enum": ["beginner", "intermediate", "expert", "mixed"],
+      "default": "mixed",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic domain-specific adaptation of decorators",
+      "usage": "+++Context(domain=medicine)\n+++StepByStep\n+++Detailed\nExplain how vaccines are developed.",
+      "result": "Applies the StepByStep and Detailed decorators with medical context-awareness, using appropriate medical terminology, examples, and structures for explaining vaccine development"
+    },
+    {
+      "description": "Targeted contextualization for specific expertise level",
+      "usage": "+++Context(domain=programming, scope=examples, level=beginner)\n+++Reasoning\n+++ELI5\nExplain how databases work.",
+      "result": "Uses the Reasoning and ELI5 decorators with programming-appropriate examples specifically tailored for beginners, while keeping general terminology and structure accessible"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Prompt Decorator API Request Schema",
+  "description": "Schema for making API requests with prompt decorators to LLM providers",
+  "type": "object",
+  "required": ["prompt"],
+  "additionalProperties": false,
+  "properties": {
+    "prompt": {
+      "type": "string",
+      "description": "The main prompt text to be processed",
+      "minLength": 1
+    },
+    "decorators": {
+      "type": "array",
+      "description": "List of decorators to apply to the prompt",
+      "items": {
+        "$ref": "decorator.schema.json"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata about the API request",
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "type": "string",
+          "description": "The LLM model identifier to use"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the prompt decorators standard being used",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "temperature": {
+          "type": "number",
+          "description": "Optional temperature setting for the model response",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "max_tokens": {
+          "type": "integer",
+          "description": "Maximum number of tokens in the response",
+          "minimum": 1
+        },
+        "stream": {
+          "type": "boolean",
+          "description": "Whether to stream the response",
+          "default": false
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "description": "Optional context information for the prompt",
+      "additionalProperties": false,
+      "properties": {
+        "conversation_id": {
+          "type": "string",
+          "description": "ID of the conversation this prompt is part of"
+        },
+        "system_prompt": {
+          "type": "string",
+          "description": "Optional system prompt to use"
+        },
+        "previous_messages": {
+          "type": "array",
+          "description": "Previous messages in the conversation",
+          "items": {
+            "type": "object",
+            "required": ["role", "content"],
+            "properties": {
+              "role": {
+                "type": "string",
+                "enum": ["system", "user", "assistant"]
+              },
+              "content": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "prompt": "What are the ethical implications of autonomous vehicles?",
+      "decorators": [
+        {
+          "name": "Reasoning",
+          "version": "1.0.0",
+          "parameters": {
+            "depth": "comprehensive"
+          }
+        },
+        {
+          "name": "StepByStep",
+          "version": "1.0.0",
+          "parameters": {
+            "numbered": true
+          }
+        }
+      ],
+      "metadata": {
+        "model": "gpt-4",
+        "version": "1.0.0",
+        "temperature": 0.7
+      }
+    }
+  ]
+} 

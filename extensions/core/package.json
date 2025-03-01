@@ -1,0 +1,142 @@
+{
+  "name": "prompt-decorators-core",
+  "version": "1.0.0",
+  "description": "Core decorators for the Prompt Decorators standard",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "spec@promptdecorators.ai",
+    "url": "https://promptdecorators.ai"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["reasoning", "output", "tone", "formatting", "core"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prompt-decorators/spec"
+  },
+  "decorators": [
+    {
+      "decoratorName": "Reasoning",
+      "version": "1.0.0",
+      "description": "Modifies the AI's response to provide explicit reasoning paths before reaching conclusions. This decorator encourages the model to show its thought process, making responses more transparent and trustworthy.",
+      "author": {
+        "name": "Prompt Decorators Working Group",
+        "email": "spec@promptdecorators.ai",
+        "url": "https://promptdecorators.ai"
+      },
+      "parameters": [
+        {
+          "name": "depth",
+          "type": "enum",
+          "description": "The level of detail in the reasoning process",
+          "enum": ["basic", "moderate", "comprehensive"],
+          "default": "moderate",
+          "required": false
+        }
+      ]
+    },
+    {
+      "decoratorName": "StepByStep",
+      "version": "1.0.0",
+      "description": "Structures the AI's response as a sequence of clearly labeled steps. This decorator helps break down complex processes, explanations, or solutions into manageable, sequential parts for better understanding.",
+      "author": {
+        "name": "Prompt Decorators Working Group",
+        "email": "spec@promptdecorators.ai",
+        "url": "https://promptdecorators.ai"
+      },
+      "parameters": [
+        {
+          "name": "numbered",
+          "type": "boolean",
+          "description": "Whether to number the steps or use bullet points",
+          "default": true,
+          "required": false
+        }
+      ]
+    },
+    {
+      "decoratorName": "OutputFormat",
+      "version": "1.0.0",
+      "description": "Controls the format of the AI's response output. This decorator ensures consistent formatting across different use cases, making responses more predictable and easier to process programmatically when needed.",
+      "author": {
+        "name": "Prompt Decorators Working Group",
+        "email": "spec@promptdecorators.ai",
+        "url": "https://promptdecorators.ai"
+      },
+      "parameters": [
+        {
+          "name": "format",
+          "type": "enum",
+          "description": "The desired output format for the response",
+          "enum": ["json", "markdown", "yaml", "xml", "plaintext"],
+          "default": "plaintext",
+          "required": true
+        }
+      ]
+    },
+    {
+      "decoratorName": "Tone",
+      "version": "1.0.0",
+      "description": "Adjusts the writing style and tone of the AI's response. This decorator helps ensure that responses are appropriately styled for different audiences and contexts, from formal technical documentation to casual explanations.",
+      "author": {
+        "name": "Prompt Decorators Working Group",
+        "email": "spec@promptdecorators.ai",
+        "url": "https://promptdecorators.ai"
+      },
+      "parameters": [
+        {
+          "name": "style",
+          "type": "enum",
+          "description": "The desired tone and style for the response",
+          "enum": ["formal", "casual", "friendly", "technical", "humorous"],
+          "default": "formal",
+          "required": true
+        }
+      ]
+    },
+    {
+      "decoratorName": "Version",
+      "version": "1.0.0",
+      "description": "Specifies the version of the Prompt Decorators standard to use. This decorator must be the first in any sequence when used, ensuring proper interpretation of decorators according to the specified standard version.",
+      "author": {
+        "name": "Prompt Decorators Working Group",
+        "email": "spec@promptdecorators.ai",
+        "url": "https://promptdecorators.ai"
+      },
+      "parameters": [
+        {
+          "name": "standard",
+          "type": "string",
+          "description": "The semantic version of the Prompt Decorators standard to use",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "default": "1.0.0",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "standard": {
+      "version": "1.0.0"
+    },
+    "extensions": []
+  },
+  "configuration": {
+    "defaults": {
+      "Reasoning": {
+        "depth": "moderate"
+      },
+      "StepByStep": {
+        "numbered": true
+      },
+      "OutputFormat": {
+        "format": "plaintext"
+      },
+      "Tone": {
+        "style": "formal"
+      },
+      "Version": {
+        "standard": "1.0.0"
+      }
+    }
+  }
+} 

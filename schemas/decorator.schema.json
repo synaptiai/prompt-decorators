@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Prompt Decorator Schema",
+  "description": "Schema for defining a single prompt decorator with its parameters and metadata",
+  "type": "object",
+  "required": ["name", "version"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the decorator. Must start with a letter and contain only alphanumeric characters.",
+      "pattern": "^[A-Za-z][A-Za-z0-9]*$",
+      "examples": ["Reasoning", "StepByStep", "OutputFormat"]
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the decorator implementation",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.0.0", "2.1.3"]
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Optional parameters that modify the decorator's behavior",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "description": "String parameter value"
+          },
+          {
+            "type": "number",
+            "description": "Numeric parameter value"
+          },
+          {
+            "type": "boolean",
+            "description": "Boolean parameter value"
+          },
+          {
+            "type": "array",
+            "description": "Array of string values",
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
+      },
+      "examples": [
+        {
+          "depth": "comprehensive",
+          "format": "markdown",
+          "numbered": true,
+          "options": ["option1", "option2"]
+        }
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata about the decorator usage",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Brief description of what the decorator does"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the decorator (e.g., 'reasoning', 'output', 'verification')",
+          "enum": [
+            "reasoning",
+            "output",
+            "verification",
+            "tone",
+            "meta"
+          ]
+        },
+        "deprecated": {
+          "type": "boolean",
+          "description": "Whether this decorator version is deprecated",
+          "default": false
+        },
+        "deprecationMessage": {
+          "type": ["string", "null"],
+          "description": "Message explaining why the decorator is deprecated and what to use instead"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "Reasoning",
+      "version": "1.0.0",
+      "parameters": {
+        "depth": "comprehensive"
+      },
+      "metadata": {
+        "description": "Provides detailed reasoning before conclusions",
+        "category": "reasoning"
+      }
+    },
+    {
+      "name": "StepByStep",
+      "version": "1.0.0",
+      "parameters": {
+        "numbered": true
+      },
+      "metadata": {
+        "description": "Breaks down response into sequential steps",
+        "category": "output"
+      }
+    }
+  ]
+} 

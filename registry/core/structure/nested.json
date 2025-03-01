@@ -1,0 +1,60 @@
+{
+  "decoratorName": "Nested",
+  "version": "1.0.0",
+  "description": "Organizes information in a deeply hierarchical structure with multiple levels of nesting. This decorator is ideal for complex topics with many subcategories, helping to maintain clarity through consistent organization patterns.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Maximum nesting level of the hierarchy",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Visual style for hierarchical levels",
+      "enum": ["bullet", "numbered", "mixed"],
+      "default": "mixed",
+      "required": false
+    },
+    {
+      "name": "collapsible",
+      "type": "boolean",
+      "description": "Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)",
+      "default": false,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Deep hierarchical organization of a complex domain",
+      "usage": "+++Nested\nExplain the classification of living organisms.",
+      "result": "Presents taxonomy in a nested hierarchy with domains, kingdoms, phyla, etc., using mixed notation styles for different levels"
+    },
+    {
+      "description": "Maximum depth collapsible structure for reference material",
+      "usage": "+++Nested(depth=5, style=bullet, collapsible=true)\nProvide a comprehensive overview of programming paradigms.",
+      "result": "Creates a 5-level deep bullet-point hierarchy of programming paradigms, designed to be rendered as collapsible sections"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

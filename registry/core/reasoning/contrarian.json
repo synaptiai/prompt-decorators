@@ -1,0 +1,55 @@
+{
+  "decoratorName": "Contrarian",
+  "version": "1.0.0",
+  "description": "Generates responses that deliberately challenge conventional wisdom or mainstream perspectives. This decorator encourages critical thinking by presenting counterarguments, alternative interpretations, or challenging established positions on a topic.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "The specific contrarian approach to take",
+      "enum": ["outsider", "skeptic", "devil's-advocate"],
+      "default": "devil's-advocate",
+      "required": false
+    },
+    {
+      "name": "maintain",
+      "type": "boolean",
+      "description": "Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "string",
+      "description": "Optional specific aspect of the topic to focus contrarian analysis on",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic devil's advocate approach with balanced conclusion",
+      "usage": "+++Contrarian\nWhy is renewable energy considered the future of power generation?",
+      "result": "Challenges conventional thinking about renewable energy's dominance, presenting counterarguments and limitations, followed by a balanced perspective"
+    },
+    {
+      "description": "Maintained skeptical contrarian stance focused on a specific aspect",
+      "usage": "+++Contrarian(approach=skeptic, maintain=true, focus=methodology)\nDiscuss the reliability of climate models in predicting future global temperatures.",
+      "result": "Provides a consistently skeptical analysis of climate model methodologies, questioning assumptions, limitations, and historical accuracy throughout the response"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

@@ -1,0 +1,45 @@
+{
+  "decoratorName": "Socratic",
+  "version": "1.0.0",
+  "description": "Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "iterations",
+      "type": "number",
+      "description": "Number of question-answer cycles to include",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic socratic exploration of a philosophical concept",
+      "usage": "+++Socratic\nWhat is justice?",
+      "result": "Explores the concept of justice through a series of guiding questions"
+    },
+    {
+      "description": "Deep socratic analysis with 5 iterations",
+      "usage": "+++Socratic(iterations=5)\nHow do we know what we know?",
+      "result": "Provides an extended series of 5 question-answer cycles to explore epistemology"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

@@ -1,0 +1,59 @@
+{
+  "decoratorName": "Concise",
+  "version": "1.0.0",
+  "description": "Optimizes the response for brevity and directness, eliminating unnecessary details and verbose language. This decorator is ideal for obtaining quick answers, executive summaries, or essential information when time or space is limited.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "maxWords",
+      "type": "number",
+      "description": "Maximum word count for the entire response",
+      "required": false,
+      "validation": {
+        "minimum": 10,
+        "maximum": 500
+      }
+    },
+    {
+      "name": "bulletPoints",
+      "type": "boolean",
+      "description": "Whether to use bullet points for maximum brevity",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The degree of conciseness to apply",
+      "enum": ["moderate", "high", "extreme"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic concise explanation of a complex topic",
+      "usage": "+++Concise\nExplain how blockchain technology works.",
+      "result": "Provides a brief, to-the-point explanation of blockchain technology focusing only on essential concepts"
+    },
+    {
+      "description": "Extremely concise bulleted answer with word limit",
+      "usage": "+++Concise(maxWords=50, bulletPoints=true, level=extreme)\nWhat are the key factors in successful project management?",
+      "result": "Delivers a set of extremely concise bullet points covering only the most critical project management factors, totaling under 50 words"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Detailed"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

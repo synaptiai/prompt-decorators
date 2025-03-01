@@ -171,6 +171,66 @@ Example:
 3. Implementations MUST proceed with processing the rest of the prompt when encountering errors
 4. Implementations SHOULD document their error handling behavior
 
+### 3.6 JSON Schema Definitions
+
+The standard provides formal JSON Schema definitions for validating decorator implementations. These schemas are available in the `/schemas` directory:
+
+1. **Base Decorator Schema** (`decorator.schema.json`):
+   - Defines the structure of individual decorators
+   - Validates decorator names, versions, and parameters
+   - Includes metadata for documentation and deprecation
+   - Required for all decorator implementations
+
+2. **API Request Schema** (`api-request.schema.json`):
+   - Defines the structure of API requests using decorators
+   - Includes prompt text, decorator list, and metadata
+   - References the base decorator schema for validation
+   - Used by LLM providers implementing the standard
+
+3. **Registry Entry Schema** (`registry-entry.schema.json`):
+   - Defines how decorators are registered in the central registry
+   - Includes detailed metadata, documentation, and compatibility info
+   - Used for publishing decorators to the registry
+   - Ensures consistent documentation and versioning
+
+4. **Extension Package Schema** (`extension-package.schema.json`):
+   - Defines how decorator extensions are packaged
+   - Includes dependency management and configuration
+   - References the registry entry schema for decorator definitions
+   - Used for distributing collections of related decorators
+
+#### 3.6.1 Schema Usage
+
+Implementations MUST validate their decorator implementations against these schemas:
+
+```bash
+# Using ajv-cli
+npx ajv-cli validate -s decorator.schema.json -d your-decorator.json
+
+# Using python-jsonschema
+jsonschema -i your-decorator.json decorator.schema.json
+```
+
+#### 3.6.2 Schema Versioning
+
+The JSON schemas follow semantic versioning:
+- Major version changes indicate breaking changes
+- Minor version changes add features in a backward-compatible manner
+- Patch version changes fix issues in a backward-compatible manner
+
+#### 3.6.3 Schema References
+
+JSON files can reference these schemas using the `$schema` property:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/prompt-decorators/spec/main/schemas/decorator.schema.json",
+  "name": "YourDecorator",
+  "version": "1.0.0",
+  ...
+}
+```
+
 ## 4. Categories of Prompt Decorators
 
 Based on an analysis of common interaction patterns and effective prompt techniques, the following comprehensive set of decorators has been organized into functional categories.
@@ -536,35 +596,49 @@ When a model doesn't support a decorator behavior:
 
 ### 5.5 Alternative Syntax Options
 
-While the `+++Decorator` syntax is recommended for its visibility and compatibility, implementation may support alternative forms:
+While the `+++Decorator` syntax is recommended for its visibility and compatibility, implementations MUST support the JSON format and MAY support additional formats:
 
-#### 5.5.1 JSON Format
+#### 5.5.1 JSON Format (Required)
 
-For API-centric applications or when working with structured data:
+For API-centric applications or when working with structured data, implementations MUST support the JSON format as defined in `api-request.schema.json`:
 
 ```json
 {
+  "$schema": "https://raw.githubusercontent.com/prompt-decorators/spec/main/schemas/api-request.schema.json",
   "prompt": "Explain how nuclear fusion works",
   "decorators": [
     {
-      "type": "Reasoning",
+      "name": "Reasoning",
+      "version": "1.0.0",
       "parameters": {
         "depth": "comprehensive"
+      },
+      "metadata": {
+        "description": "Provides detailed reasoning before conclusions",
+        "category": "reasoning"
       }
     },
     {
-      "type": "StepByStep",
+      "name": "StepByStep",
+      "version": "1.0.0",
       "parameters": {
         "numbered": true
       }
     }
-  ]
+  ],
+  "metadata": {
+    "model": "gpt-4",
+    "version": "1.0.0",
+    "temperature": 0.7
+  }
 }
 ```
 
-#### 5.5.2 Markdown-Style Format
+The JSON format MUST be validated against the provided schemas to ensure compatibility.
 
-For documentation or text-heavy environments:
+#### 5.5.2 Markdown-Style Format (Optional)
+
+For documentation or text-heavy environments, implementations MAY support a Markdown-style format:
 
 ```markdown
 <!-- @Reasoning depth=comprehensive -->
@@ -573,18 +647,42 @@ For documentation or text-heavy environments:
 Explain how nuclear fusion works
 ```
 
-#### 5.5.3 YAML Configuration
+When using the Markdown format, implementations MUST convert it to the canonical JSON format internally for processing.
 
-For configuration-based systems:
+#### 5.5.3 YAML Configuration (Optional)
+
+For configuration-based systems, implementations MAY support YAML format:
 
 ```yaml
 prompt: Explain how nuclear fusion works
 decorators:
-  - type: Reasoning
-    depth: comprehensive
-  - type: StepByStep
-    numbered: true
+  - name: Reasoning
+    version: 1.0.0
+    parameters:
+      depth: comprehensive
+    metadata:
+      description: Provides detailed reasoning before conclusions
+      category: reasoning
+  - name: StepByStep
+    version: 1.0.0
+    parameters:
+      numbered: true
+metadata:
+  model: gpt-4
+  version: 1.0.0
+  temperature: 0.7
 ```
+
+When using YAML format, implementations MUST convert it to the canonical JSON format and validate against the provided schemas.
+
+#### 5.5.4 Format Conversion
+
+Implementations that support multiple formats MUST:
+
+1. Convert all formats to the canonical JSON format internally
+2. Validate the converted format against the appropriate JSON schema
+3. Handle conversion errors gracefully with appropriate error messages
+4. Preserve all metadata and parameters during conversion
 
 ## 6. Use Cases and Examples
 
@@ -695,50 +793,124 @@ This allows applications to programmatically determine which decorators a partic
 
 #### 7.2.1 Registry and Discovery
 
-A central registry for standard and community decorators facilitates discovery and adoption:
+A central registry for standard and community decorators facilitates discovery and adoption. All registry entries MUST conform to the `registry-entry.schema.json` schema:
 
 ```json
 {
+  "$schema": "https://raw.githubusercontent.com/prompt-decorators/spec/main/schemas/registry-entry.schema.json",
   "decoratorName": "ScientificReasoning",
   "version": "1.0.0",
   "description": "Applies scientific method reasoning process",
-  "author": "Scientific AI Consortium",
+  "author": {
+    "name": "Scientific AI Consortium",
+    "email": "contact@example.org",
+    "url": "https://example.org"
+  },
   "parameters": [
     {
       "name": "discipline",
-      "type": "string",
+      "type": "enum",
+      "description": "Scientific discipline context",
       "enum": ["physics", "biology", "chemistry", "general"],
       "default": "general",
-      "description": "Scientific discipline context"
+      "required": false
     },
     {
       "name": "rigor",
-      "type": "string",
+      "type": "enum",
+      "description": "Level of scientific rigor",
       "enum": ["academic", "educational", "popular"],
       "default": "educational",
-      "description": "Level of scientific rigor"
+      "required": false
     }
   ],
-  "exampleUsage": "+++ScientificReasoning(discipline=physics, rigor=academic)",
+  "examples": [
+    {
+      "description": "Basic scientific analysis of a physics problem",
+      "usage": "+++ScientificReasoning(discipline=physics, rigor=academic)",
+      "result": "Analyzes the problem using formal physics methodology and academic rigor"
+    }
+  ],
   "compatibility": {
     "requires": ["Reasoning"],
-    "conflicts": ["ELI5"]
+    "conflicts": ["ELI5"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
   }
 }
 ```
 
 #### 7.2.2 Extension Mechanism
 
-The `+++Extension` decorator enables loading of community-defined decorators:
+The `+++Extension` decorator enables loading of community-defined decorators. Extension packages MUST conform to the `extension-package.schema.json` schema:
 
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/prompt-decorators/spec/main/schemas/extension-package.schema.json",
+  "name": "scientific-reasoning-pack",
+  "version": "1.0.0",
+  "description": "A collection of decorators for scientific reasoning and analysis",
+  "author": {
+    "name": "Scientific AI Consortium",
+    "email": "contact@example.org",
+    "url": "https://example.org"
+  },
+  "license": "Apache 2.0",
+  "keywords": ["science", "reasoning", "analysis"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/scientific-reasoning-pack"
+  },
+  "decorators": [
+    {
+      "decoratorName": "ScientificReasoning",
+      "version": "1.0.0",
+      "description": "Applies scientific method reasoning process",
+      "parameters": [
+        {
+          "name": "discipline",
+          "type": "enum",
+          "description": "Scientific discipline context",
+          "enum": ["physics", "biology", "chemistry", "general"],
+          "default": "general"
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "standard": {
+      "version": "1.0.0"
+    },
+    "extensions": [
+      {
+        "name": "core-reasoning",
+        "version": "1.0.0"
+      }
+    ]
+  }
+}
+```
+
+Usage example:
 ```
 +++Extension(source=https://decorator-registry.ai/scientific-pack.json)
 +++ScientificReasoning(discipline=physics)
 ```
 
-This allows for extensibility while maintaining a core standard.
+#### 7.2.3 Schema Evolution
 
-#### 7.2.3 Governance Model
+The JSON schemas for the registry and extensions follow these principles:
+
+1. **Backward Compatibility**: Schema changes MUST maintain backward compatibility within major versions
+2. **Version Alignment**: Schema versions MUST align with the standard version
+3. **Migration Support**: Major version changes MUST include migration guides
+4. **Validation Tools**: The community MUST maintain tools for schema validation
+
+#### 7.2.4 Governance Model
 
 The governance of the Prompt Decorator standard includes:
 

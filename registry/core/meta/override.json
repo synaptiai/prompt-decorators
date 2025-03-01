@@ -1,0 +1,51 @@
+{
+  "decoratorName": "Override",
+  "version": "1.0.0",
+  "description": "A meta-decorator that overrides the default parameters or behaviors of other decorators. This enables customization of standard decorators without modifying their definitions, allowing for reuse of established patterns with specific adjustments.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "decorator",
+      "type": "string",
+      "description": "The specific decorator whose behavior to override",
+      "required": true
+    },
+    {
+      "name": "parameters",
+      "type": "string",
+      "description": "JSON string specifying the parameters to override (e.g., '{\"depth\": \"comprehensive\", \"focus\": \"methodology\"}')",
+      "required": false
+    },
+    {
+      "name": "behavior",
+      "type": "string",
+      "description": "Optional custom behavior modification instructions that override the standard decorator interpretation",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic parameter override for a standard decorator",
+      "usage": "+++Override(decorator=StepByStep, parameters={\"numbered\": true, \"steps\": 7})\nExplain how to bake bread.",
+      "result": "Applies the StepByStep decorator to explain bread baking, but overrides its default parameters to ensure exactly 7 numbered steps"
+    },
+    {
+      "description": "Complex behavior override with custom instructions",
+      "usage": "+++Override(decorator=Debate, parameters={\"perspectives\": 2}, behavior=instead of presenting neutral perspectives, adopt strongly opposing viewpoints with clear advocacy for each position)\nDiscuss the ethics of gene editing.",
+      "result": "Uses the Debate decorator structure for discussing gene editing ethics, but modifies its standard neutral approach to present strongly advocated opposing positions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4"
+    ]
+  }
+} 

@@ -1,0 +1,59 @@
+{
+  "decoratorName": "ForcedAnalogy",
+  "version": "1.0.0",
+  "description": "Explains concepts by specifically comparing them to a particular domain or field. This decorator forces analogies from a specified source domain to make complex or unfamiliar topics more relatable and understandable.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "source",
+      "type": "string",
+      "description": "The specific domain, field, or context to draw analogies from",
+      "required": true
+    },
+    {
+      "name": "comprehensiveness",
+      "type": "enum",
+      "description": "How comprehensively to map concepts between domains",
+      "enum": ["basic", "comprehensive", "detailed"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "mappings",
+      "type": "number",
+      "description": "Number of distinct concept mappings to create between domains",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 7
+      }
+    }
+  ],
+  "examples": [
+    {
+      "description": "Explaining a technical concept using sports analogies",
+      "usage": "+++ForcedAnalogy(source=sports)\nExplain how blockchain technology works.",
+      "result": "Explains blockchain technology by mapping concepts to sports analogies (e.g., ledger as scoreboard, miners as referees, consensus as rulebook)"
+    },
+    {
+      "description": "Detailed cooking analogy for complex scientific process",
+      "usage": "+++ForcedAnalogy(source=cooking, comprehensiveness=detailed, mappings=5)\nDescribe how CRISPR gene editing works.",
+      "result": "Provides a detailed explanation of CRISPR through cooking analogies, with 5 distinct concept mappings (e.g., DNA as recipe, Cas9 as kitchen knife, guide RNA as cooking instructions)"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

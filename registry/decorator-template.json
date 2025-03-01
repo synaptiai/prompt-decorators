@@ -1,0 +1,42 @@
+{
+  "decoratorName": "DecoratorName",
+  "version": "1.0.0",
+  "description": "A detailed description of what the decorator does, its purpose, and how it modifies AI behavior.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "parameterName",
+      "type": "string|number|boolean|enum",
+      "description": "Description of what this parameter does",
+      "enum": ["option1", "option2", "option3"],
+      "default": "defaultValue",
+      "required": false,
+      "validation": {
+        "minimum": 0,
+        "maximum": 10,
+        "pattern": "^[A-Za-z0-9]+$"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "description": "Example of how to use this decorator with specific parameters",
+      "usage": "+++DecoratorName(parameterName=value)\nUser prompt text goes here",
+      "result": "Expected behavior or output pattern from this decorator"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

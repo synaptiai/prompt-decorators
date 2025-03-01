@@ -1,0 +1,60 @@
+{
+  "decoratorName": "Analogical",
+  "version": "1.0.0",
+  "description": "Enhances explanations through the use of analogies and metaphors. This decorator helps make complex or abstract concepts more accessible by systematically comparing them to more familiar domains or experiences.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "Specific domain or context to draw analogies from (if not specified, will choose appropriate domains)",
+      "default": "general",
+      "required": false
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "description": "Number of distinct analogies to provide",
+      "default": 1,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "Level of detail in developing the analogy",
+      "enum": ["brief", "moderate", "extended"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Single analogy from a specific domain",
+      "usage": "+++Analogical(domain=sports)\nExplain how the immune system works.",
+      "result": "Explains the immune system using extended sports analogies, comparing immune cells to players, pathogens to opponents, etc."
+    },
+    {
+      "description": "Multiple brief analogies from different domains",
+      "usage": "+++Analogical(count=3, depth=brief)\nDescribe how blockchain technology functions.",
+      "result": "Provides three different brief analogies for blockchain from different domains (perhaps physical ledgers, chain of custody, and distributed networks)"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

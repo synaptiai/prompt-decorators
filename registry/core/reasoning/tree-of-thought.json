@@ -1,0 +1,63 @@
+{
+  "decoratorName": "TreeOfThought",
+  "version": "1.0.0",
+  "description": "Organizes the response as a branching exploration of multiple reasoning paths. This decorator enables the AI to consider several possible approaches or hypotheses simultaneously, exploring the implications of each before reaching conclusions.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "branches",
+      "type": "number",
+      "description": "Number of different reasoning branches to explore",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Maximum depth of reasoning in each branch",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "pruning",
+      "type": "boolean",
+      "description": "Whether to eliminate less promising branches early",
+      "default": false,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Multi-branch problem solving for a complex question",
+      "usage": "+++TreeOfThought\nWhat might explain the Fermi Paradox?",
+      "result": "Explores three different reasoning branches about potential explanations for the Fermi Paradox, developing each path to moderate depth"
+    },
+    {
+      "description": "Deep, focused exploration with pruning",
+      "usage": "+++TreeOfThought(branches=5, depth=5, pruning=true)\nHow might we solve the climate change crisis?",
+      "result": "Starts with five different approaches to climate change, explores each in depth, and eliminates less promising branches to focus on the most viable solutions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

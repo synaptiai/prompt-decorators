@@ -1,0 +1,43 @@
+{
+  "decoratorName": "Version",
+  "version": "1.0.0",
+  "description": "Specifies the version of the Prompt Decorators standard to use. This decorator must be the first in any sequence when used, ensuring proper interpretation of decorators according to the specified standard version.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "spec@promptdecorators.ai",
+    "url": "https://promptdecorators.ai"
+  },
+  "parameters": [
+    {
+      "name": "standard",
+      "type": "string",
+      "description": "The semantic version of the Prompt Decorators standard to use",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "default": "1.0.0",
+      "required": true
+    }
+  ],
+  "examples": [
+    {
+      "description": "Specify standard version for compatibility",
+      "usage": "+++Version(standard=1.0.0)\n+++Reasoning(depth=comprehensive)\nExplain quantum entanglement",
+      "result": "Ensures decorators are interpreted according to version 1.0.0 of the standard"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      {
+        "name": "gpt-4",
+        "versions": ["1.0.0"]
+      },
+      {
+        "name": "gpt-3.5-turbo",
+        "versions": ["1.0.0"]
+      }
+    ]
+  }
+} 

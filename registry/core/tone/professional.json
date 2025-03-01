@@ -1,0 +1,49 @@
+{
+  "decoratorName": "Professional",
+  "version": "1.0.0",
+  "description": "Adapts the response to use business-oriented language appropriate for professional contexts. This decorator generates content using formal business terminology, clear and concise phrasing, and industry-appropriate jargon when relevant.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "industry",
+      "type": "string",
+      "description": "The specific industry context to adapt the language for",
+      "default": "general",
+      "required": false
+    },
+    {
+      "name": "formality",
+      "type": "enum",
+      "description": "The level of formality to maintain in the response",
+      "enum": ["standard", "high", "executive"],
+      "default": "standard",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Standard professional business communication",
+      "usage": "+++Professional\nExplain the benefits of implementing a CRM system.",
+      "result": "Delivers a clear, professional explanation of CRM benefits using business-appropriate language and structure"
+    },
+    {
+      "description": "Industry-specific executive-level communication",
+      "usage": "+++Professional(industry=healthcare, formality=executive)\nSummarize the impact of telehealth adoption on patient outcomes.",
+      "result": "Produces an executive-level analysis of telehealth impacts using healthcare industry terminology and highly formal business language"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5", "Creative"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Decorator Registry Entry Schema",
+  "description": "Schema for registering a decorator in the central registry",
+  "type": "object",
+  "required": ["decoratorName", "version", "description", "parameters"],
+  "additionalProperties": false,
+  "properties": {
+    "decoratorName": {
+      "type": "string",
+      "description": "The name of the decorator. Must start with a letter and contain only alphanumeric characters.",
+      "pattern": "^[A-Za-z][A-Za-z0-9]*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the decorator",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of what the decorator does"
+    },
+    "author": {
+      "type": "object",
+      "description": "Information about the decorator's author",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the author or organization"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact email for the author"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for the author or organization"
+        }
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "description": "List of parameters that the decorator accepts",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "description"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the parameter"
+          },
+          "type": {
+            "type": "string",
+            "description": "Data type of the parameter",
+            "enum": ["string", "number", "boolean", "array", "enum"]
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of what the parameter does"
+          },
+          "enum": {
+            "type": "array",
+            "description": "List of allowed values for enum type parameters",
+            "items": {
+              "type": "string"
+            }
+          },
+          "default": {
+            "description": "Default value for the parameter"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether the parameter is required",
+            "default": false
+          },
+          "validation": {
+            "type": "object",
+            "description": "Additional validation rules for the parameter",
+            "properties": {
+              "minimum": {
+                "type": "number",
+                "description": "Minimum value for numeric parameters"
+              },
+              "maximum": {
+                "type": "number",
+                "description": "Maximum value for numeric parameters"
+              },
+              "minLength": {
+                "type": "integer",
+                "description": "Minimum length for string parameters"
+              },
+              "maxLength": {
+                "type": "integer",
+                "description": "Maximum length for string parameters"
+              },
+              "pattern": {
+                "type": "string",
+                "description": "Regex pattern for string validation"
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "description": "Example usages of the decorator",
+      "items": {
+        "type": "object",
+        "required": ["description", "usage", "result"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Description of what the example demonstrates"
+          },
+          "usage": {
+            "type": "string",
+            "description": "Example usage of the decorator"
+          },
+          "result": {
+            "type": "string",
+            "description": "Expected result or behavior"
+          }
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "description": "Compatibility information for the decorator",
+      "properties": {
+        "requires": {
+          "type": "array",
+          "description": "Other decorators that must be present",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "description": "Decorators that cannot be used with this one",
+          "items": {
+            "type": "string"
+          }
+        },
+        "minStandardVersion": {
+          "type": "string",
+          "description": "Minimum version of the decorator standard required",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "maxStandardVersion": {
+          "type": "string",
+          "description": "Maximum version of the decorator standard supported",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "models": {
+          "type": "array",
+          "description": "LLM models this decorator is tested with",
+          "items": {
+            "type": "string",
+            "description": "Name of the LLM model"
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "decoratorName": "ScientificReasoning",
+      "version": "1.0.0",
+      "description": "Applies scientific method reasoning process to analyze problems and generate solutions",
+      "author": {
+        "name": "Scientific AI Consortium",
+        "email": "contact@example.org",
+        "url": "https://example.org"
+      },
+      "parameters": [
+        {
+          "name": "discipline",
+          "type": "enum",
+          "description": "Scientific discipline context to use",
+          "enum": ["physics", "biology", "chemistry", "general"],
+          "default": "general",
+          "required": false
+        },
+        {
+          "name": "rigor",
+          "type": "enum",
+          "description": "Level of scientific rigor to apply",
+          "enum": ["academic", "educational", "popular"],
+          "default": "educational",
+          "required": false
+        }
+      ],
+      "examples": [
+        {
+          "description": "Basic scientific analysis of a physics problem",
+          "usage": "+++ScientificReasoning(discipline=physics, rigor=academic)",
+          "result": "Analyzes the problem using formal physics methodology and academic rigor"
+        }
+      ],
+      "compatibility": {
+        "requires": ["Reasoning"],
+        "conflicts": ["ELI5"],
+        "minStandardVersion": "1.0.0",
+        "maxStandardVersion": "2.0.0",
+        "models": [
+          "gpt-4"
+        ]
+      }
+    }
+  ]
+} 

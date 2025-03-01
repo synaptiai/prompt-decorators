@@ -1,0 +1,50 @@
+{
+  "decoratorName": "Academic",
+  "version": "1.0.0",
+  "description": "Adapts the response to follow scholarly writing conventions appropriate for academic publications. This decorator generates responses with formal language, structured argumentation, and proper citations following established academic citation styles.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The academic discipline style to follow",
+      "enum": ["humanities", "scientific", "legal"],
+      "default": "scientific",
+      "required": false
+    },
+    {
+      "name": "citationStyle",
+      "type": "enum",
+      "description": "The citation format to use for references",
+      "enum": ["APA", "MLA", "Chicago", "Harvard", "IEEE"],
+      "default": "APA",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Scientific academic response with APA citations",
+      "usage": "+++Academic\nDiscuss the evidence for climate change.",
+      "result": "Produces a scholarly analysis of climate change evidence using formal scientific language and proper APA citations"
+    },
+    {
+      "description": "Humanities-focused academic response with MLA citations",
+      "usage": "+++Academic(style=humanities, citationStyle=MLA)\nAnalyze the themes in Shakespeare's Hamlet.",
+      "result": "Provides a literary analysis of Hamlet using humanities-appropriate terminology and MLA citation format"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5", "Creative", "Motivational"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

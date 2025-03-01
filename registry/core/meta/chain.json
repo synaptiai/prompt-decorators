@@ -1,0 +1,54 @@
+{
+  "decoratorName": "Chain",
+  "version": "1.0.0",
+  "description": "A meta-decorator that applies multiple decorators in sequence, with each decorator processing the output of the previous one. This enables complex transformations by combining multiple simpler decorators in a pipeline.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "decorators",
+      "type": "array",
+      "description": "Ordered list of decorators to apply in sequence",
+      "required": true
+    },
+    {
+      "name": "showSteps",
+      "type": "boolean",
+      "description": "Whether to show intermediate outputs after each decorator in the chain",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "stopOnFailure",
+      "type": "boolean",
+      "description": "Whether to stop the chain if a decorator fails to apply correctly",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic sequential application of decorators",
+      "usage": "+++Chain(decorators=[StepByStep,Concise])\nExplain how neural networks learn.",
+      "result": "First generates a step-by-step explanation of neural network learning, then applies conciseness to that output"
+    },
+    {
+      "description": "Complex decorator chain with visible intermediate steps",
+      "usage": "+++Chain(decorators=[Socratic,Academic,TreeOfThought], showSteps=true, stopOnFailure=false)\nDiscuss the ethics of autonomous weapons.",
+      "result": "Shows the progression of applying Socratic questioning, then academic tone, then tree-of-thought reasoning to discuss autonomous weapons ethics"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

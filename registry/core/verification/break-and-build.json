@@ -1,0 +1,61 @@
+{
+  "decoratorName": "BreakAndBuild",
+  "version": "1.0.0",
+  "description": "Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "breakdown",
+      "type": "enum",
+      "description": "Primary approach for the critical breakdown phase",
+      "enum": ["weaknesses", "assumptions", "risks", "comprehensive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "intensity",
+      "type": "enum",
+      "description": "How thorough and challenging the breakdown phase should be",
+      "enum": ["mild", "thorough", "intense"],
+      "default": "thorough",
+      "required": false
+    },
+    {
+      "name": "buildRatio",
+      "type": "number",
+      "description": "Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)",
+      "default": 1,
+      "required": false,
+      "validation": {
+        "minimum": 0.5,
+        "maximum": 3
+      }
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic break and build analysis of a business concept",
+      "usage": "+++BreakAndBuild\nEvaluate this startup idea: a subscription service for plant care.",
+      "result": "First thoroughly critiques the plant care subscription concept by identifying weaknesses and risks, then reconstructs it with improvements and solutions of equal depth"
+    },
+    {
+      "description": "Intense breakdown of assumptions with substantial rebuilding",
+      "usage": "+++BreakAndBuild(breakdown=assumptions, intensity=intense, buildRatio=2)\nAnalyze this public policy proposal for reducing urban congestion.",
+      "result": "Delivers an intense critique focused specifically on the assumptions underlying the urban congestion proposal, followed by twice as much content reconstructing it with stronger foundations and improvements"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

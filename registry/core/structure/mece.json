@@ -1,0 +1,64 @@
+{
+  "decoratorName": "MECE",
+  "version": "1.0.0",
+  "description": "Structures the response using the Mutually Exclusive, Collectively Exhaustive framework - a principle where categories have no overlaps and cover all possibilities. This decorator ensures comprehensive analysis with clear categorization for decision-making and problem-solving.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "dimensions",
+      "type": "number",
+      "description": "Number of top-level MECE dimensions to use for categorization",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Maximum level of hierarchical breakdown within each dimension",
+      "default": 2,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 3
+      }
+    },
+    {
+      "name": "framework",
+      "type": "enum",
+      "description": "Optional predefined MECE framework to apply",
+      "enum": ["issue tree", "value chain", "business segments", "stakeholders", "custom"],
+      "default": "custom",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic MECE analysis of a business problem",
+      "usage": "+++MECE\nWhat factors should we consider when expanding to a new market?",
+      "result": "Organizes market expansion factors into 3 mutually exclusive, collectively exhaustive categories with no overlaps and full coverage of all considerations"
+    },
+    {
+      "description": "Detailed MECE framework with stakeholder focus",
+      "usage": "+++MECE(dimensions=4, depth=3, framework=stakeholders)\nAnalyze the implications of implementing a four-day work week.",
+      "result": "Provides a 4-dimension MECE analysis of a four-day work week using a stakeholder framework, with up to 3 levels of hierarchical breakdown within each stakeholder category"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

@@ -1,0 +1,58 @@
+{
+  "decoratorName": "Timeline",
+  "version": "1.0.0",
+  "description": "Organizes information in chronological order, highlighting key events or developments over time. This decorator is ideal for historical accounts, project planning, process evolution, or any topic with a temporal dimension.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "granularity",
+      "type": "enum",
+      "description": "The level of time detail to include in the timeline",
+      "enum": ["day", "month", "year", "decade", "century", "era"],
+      "default": "year",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The presentation format for the timeline",
+      "enum": ["list", "narrative", "table"],
+      "default": "list",
+      "required": false
+    },
+    {
+      "name": "details",
+      "type": "enum",
+      "description": "The level of detail to include for each timeline event",
+      "enum": ["minimal", "moderate", "comprehensive"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic chronological timeline of major events",
+      "usage": "+++Timeline\nDescribe the key developments in artificial intelligence.",
+      "result": "Presents a year-by-year list of important AI milestones and breakthroughs from earliest developments to present day"
+    },
+    {
+      "description": "Detailed narrative timeline with specific date granularity",
+      "usage": "+++Timeline(granularity=month, format=narrative, details=comprehensive)\nWhat were the major events of the Apollo 11 mission?",
+      "result": "Provides a flowing narrative account of the Apollo 11 mission with month/day dates and comprehensive details of each significant event"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

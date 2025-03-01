@@ -1,0 +1,57 @@
+{
+  "decoratorName": "Uncertainty",
+  "version": "1.0.0",
+  "description": "Explicitly highlights areas of uncertainty in the response. This decorator promotes intellectual honesty by clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "How to format uncertainty indications in the response",
+      "enum": ["inline", "section", "confidence"],
+      "default": "inline",
+      "required": false
+    },
+    {
+      "name": "threshold",
+      "type": "enum",
+      "description": "The threshold for flagging uncertain content",
+      "enum": ["low", "medium", "high"],
+      "default": "medium",
+      "required": false
+    },
+    {
+      "name": "reason",
+      "type": "boolean",
+      "description": "Whether to explain the reason for uncertainty",
+      "default": false,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Inline uncertainty markers in a technical explanation",
+      "usage": "+++Uncertainty\nExplain the potential timeline for achieving artificial general intelligence.",
+      "result": "Explains AGI timelines with inline uncertainty markers highlighting speculative predictions, areas of expert disagreement, and knowledge gaps"
+    },
+    {
+      "description": "Dedicated uncertainty section with detailed reasoning",
+      "usage": "+++Uncertainty(format=section, reason=true, threshold=low)\nWhat are the environmental impacts of fusion energy?",
+      "result": "Provides information about fusion energy's environmental impacts followed by a dedicated section discussing all points of uncertainty with explanations for why each point is uncertain"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

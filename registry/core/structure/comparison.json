@@ -1,0 +1,55 @@
+{
+  "decoratorName": "Comparison",
+  "version": "1.0.0",
+  "description": "Structures the response as a direct comparison between multiple items, concepts, or approaches. This decorator is ideal for highlighting similarities and differences across specific dimensions or criteria.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "aspects",
+      "type": "array",
+      "description": "Specific aspects or dimensions to compare",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The presentation format for the comparison",
+      "enum": ["table", "prose", "bullets"],
+      "default": "table",
+      "required": false
+    },
+    {
+      "name": "highlight",
+      "type": "boolean",
+      "description": "Whether to explicitly emphasize key differences",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic tabular comparison of specific aspects",
+      "usage": "+++Comparison(aspects=[performance,cost,ease of use,ecosystem])\nCompare React, Angular, and Vue for front-end development.",
+      "result": "Creates a table comparing React, Angular, and Vue across the specified aspects, with key differences highlighted"
+    },
+    {
+      "description": "Prose-based comparison without specific aspects",
+      "usage": "+++Comparison(format=prose, highlight=false)\nCompare democracy and authoritarianism as political systems.",
+      "result": "Delivers a flowing prose comparison between democracy and authoritarianism, covering key differences and similarities in paragraph form"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

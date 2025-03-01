@@ -1,0 +1,45 @@
+{
+  "decoratorName": "FirstPrinciples",
+  "version": "1.0.0",
+  "description": "Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there. This decorator promotes a deeper understanding by examining the most basic elements of a concept before constructing more complex ideas.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Level of detail in breaking down to fundamental principles",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic first principles analysis of a concept",
+      "usage": "+++FirstPrinciples\nHow do electric vehicles work?",
+      "result": "Breaks down electric vehicles into fundamental principles of electricity, motors, and energy storage before explaining the complete system"
+    },
+    {
+      "description": "Deep first principles analysis with maximum depth",
+      "usage": "+++FirstPrinciples(depth=5)\nWhat makes machine learning effective?",
+      "result": "Provides an extensive breakdown of machine learning starting from mathematical foundations and progressively building up to complex algorithms"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

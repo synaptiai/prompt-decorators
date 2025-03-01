@@ -1,0 +1,57 @@
+{
+  "decoratorName": "FindGaps",
+  "version": "1.0.0",
+  "description": "Identifies missing elements, unanswered questions, or overlooked considerations in an idea, plan, or argument. This decorator helps improve completeness by systematically discovering and highlighting gaps that need addressing.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "aspects",
+      "type": "enum",
+      "description": "The specific types of gaps to focus on finding",
+      "enum": ["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "How thoroughly to analyze for gaps",
+      "enum": ["basic", "thorough", "exhaustive"],
+      "default": "thorough",
+      "required": false
+    },
+    {
+      "name": "solutions",
+      "type": "boolean",
+      "description": "Whether to suggest solutions or approaches for addressing the identified gaps",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic comprehensive gap analysis of a business plan",
+      "usage": "+++FindGaps\nWe plan to launch our SaaS product with these features and marketing channels...",
+      "result": "First identifies gaps across various aspects of the SaaS product launch plan, then suggests solutions for addressing each gap"
+    },
+    {
+      "description": "Exhaustive stakeholder-focused gap analysis without solutions",
+      "usage": "+++FindGaps(aspects=stakeholders, depth=exhaustive, solutions=false)\nHere's our urban redevelopment proposal...",
+      "result": "Provides an exhaustive analysis of overlooked or inadequately considered stakeholders in the urban redevelopment proposal, without suggesting solutions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

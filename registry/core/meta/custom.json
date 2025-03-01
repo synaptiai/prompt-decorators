@@ -1,0 +1,53 @@
+{
+  "decoratorName": "Custom",
+  "version": "1.0.0",
+  "description": "A meta-decorator that enables user-defined decorator behaviors through explicit rules or instructions. This provides maximum flexibility for creating specialized behaviors not covered by standard decorators.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "rules",
+      "type": "string",
+      "description": "Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items')",
+      "required": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Optional name for the custom decorator to reference in documentation or explanations",
+      "required": false
+    },
+    {
+      "name": "priority",
+      "type": "enum",
+      "description": "How to prioritize custom rules relative to other decorators",
+      "enum": ["override", "supplement", "fallback"],
+      "default": "override",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic custom formatting rule",
+      "usage": "+++Custom(rules=every paragraph must start with a word that begins with the letter A)\nExplain how search engines work.",
+      "result": "Provides an explanation of search engines where every paragraph begins with a word starting with the letter A"
+    },
+    {
+      "description": "Complex custom behavior with named reference",
+      "usage": "+++Custom(name=DualPerspective, rules=present two contrasting viewpoints on each main point, label them as 'Perspective A' and 'Perspective B', and then provide a synthesis, priority=supplement)\nAnalyze the impact of social media on politics.",
+      "result": "Analyzes social media's impact on politics using dual contrasting perspectives for each point, labeled as specified, with synthesis after each point, while still respecting other decorators"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4"
+    ]
+  }
+} 

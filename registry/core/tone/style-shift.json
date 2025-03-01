@@ -1,0 +1,58 @@
+{
+  "decoratorName": "StyleShift",
+  "version": "1.0.0",
+  "description": "Modifies specific style characteristics of responses such as formality, persuasiveness, or urgency. This decorator enables fine-tuned control over particular aspects of communication style without changing the overall tone.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "aspect",
+      "type": "enum",
+      "description": "The specific style aspect to modify",
+      "enum": ["formality", "persuasion", "urgency", "confidence", "complexity"],
+      "required": true
+    },
+    {
+      "name": "level",
+      "type": "number",
+      "description": "The intensity level of the style aspect (1-5, where 1 is minimal and 5 is maximal)",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "maintain",
+      "type": "array",
+      "description": "Style aspects to explicitly maintain while modifying the target aspect",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Highly formal style while maintaining normal complexity",
+      "usage": "+++StyleShift(aspect=formality, level=5, maintain=[complexity])\nExplain the process of photosynthesis.",
+      "result": "Provides a highly formal explanation of photosynthesis with elevated language and structure, while keeping the complexity at a moderate level"
+    },
+    {
+      "description": "Increased urgency for a business communication",
+      "usage": "+++StyleShift(aspect=urgency, level=4)\nDescribe the steps needed to prepare for the upcoming product launch.",
+      "result": "Delivers a description of product launch preparation steps with heightened sense of urgency and time-sensitivity in the language and framing"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

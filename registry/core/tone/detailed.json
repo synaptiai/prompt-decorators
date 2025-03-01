@@ -1,0 +1,55 @@
+{
+  "decoratorName": "Detailed",
+  "version": "1.0.0",
+  "description": "Enhances the response with comprehensive information, thorough explanations, and rich context. This decorator is ideal for in-depth learning, complex topics requiring nuance, or when completeness is valued over brevity.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "The level of detail and comprehensiveness",
+      "enum": ["moderate", "comprehensive", "exhaustive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "aspects",
+      "type": "array",
+      "description": "Specific aspects or dimensions to explore in detail",
+      "required": false
+    },
+    {
+      "name": "examples",
+      "type": "boolean",
+      "description": "Whether to include detailed examples to illustrate points",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Comprehensive detailed explanation of a concept",
+      "usage": "+++Detailed\nExplain how the human immune system works.",
+      "result": "Provides a thorough, in-depth explanation of the immune system covering all major components, processes, and functions with illustrative examples"
+    },
+    {
+      "description": "Exhaustive detailed analysis of specific aspects",
+      "usage": "+++Detailed(depth=exhaustive, aspects=[economic,environmental,social,technological], examples=true)\nAnalyze the implications of transitioning to renewable energy.",
+      "result": "Delivers an extremely detailed analysis of renewable energy transition, exhaustively covering all four specified aspects with comprehensive examples"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Concise", "Summary"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

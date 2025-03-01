@@ -1,0 +1,53 @@
+{
+  "decoratorName": "Debate",
+  "version": "1.0.0",
+  "description": "Structures the response as a debate between multiple perspectives on a topic. This decorator encourages balanced representation of different viewpoints and helps explore complex issues from various angles.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "spec@promptdecorators.ai",
+    "url": "https://promptdecorators.ai"
+  },
+  "parameters": [
+    {
+      "name": "perspectives",
+      "type": "number",
+      "description": "Number of different perspectives to include in the debate",
+      "default": 2,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "balanced",
+      "type": "boolean",
+      "description": "Whether to ensure equal representation and strength of arguments for each perspective",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Two-perspective debate on an ethical issue",
+      "usage": "+++Debate\nIs it ethical to use AI-generated content without disclosure?",
+      "result": "Presents balanced arguments for and against disclosure of AI-generated content"
+    },
+    {
+      "description": "Three-perspective debate on a policy issue with balanced representation",
+      "usage": "+++Debate(perspectives=3, balanced=true)\nShould universal basic income be implemented nationally?",
+      "result": "Presents three balanced perspectives on UBI in a debate format, ensuring equal representation of each viewpoint"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo",
+      "claude-3"
+    ]
+  }
+} 

@@ -1,0 +1,52 @@
+{
+  "decoratorName": "Compatibility",
+  "version": "1.0.0",
+  "description": "A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "models",
+      "type": "array",
+      "description": "List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.)",
+      "required": true
+    },
+    {
+      "name": "fallback",
+      "type": "string",
+      "description": "Decorator to apply if the current model doesn't match any in the models list",
+      "required": false
+    },
+    {
+      "name": "behaviors",
+      "type": "string",
+      "description": "JSON string mapping model names to specific adaptations (e.g., '{\"gpt-3.5-turbo\": \"simplify complex reasoning\", \"gpt-4\": \"maximize detailed analysis\"}')",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic model-specific adaptation",
+      "usage": "+++Compatibility(models=[gpt-4], fallback=StepByStep)\n+++TreeOfThought(branches=3, depth=3)\nSolve this complex optimization problem.",
+      "result": "If using GPT-4, applies the TreeOfThought decorator with full functionality; if using any other model, falls back to the simpler StepByStep decorator"
+    },
+    {
+      "description": "Detailed model-specific behavior adaptations",
+      "usage": "+++Compatibility(models=[gpt-4,gpt-3.5-turbo], behaviors={\"gpt-4\":\"use full mathematical notation and derivations\", \"gpt-3.5-turbo\":\"use simplified equations and more intuitive explanations\"})\n+++Academic(style=scientific)\nExplain quantum field theory.",
+      "result": "Applies the Academic decorator but adapts how quantum field theory is explained based on the specific model capabilities, with full mathematical rigor for GPT-4 or simplified explanations for GPT-3.5-turbo"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

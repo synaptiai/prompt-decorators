@@ -1,0 +1,57 @@
+{
+  "decoratorName": "Motivational",
+  "version": "1.0.0",
+  "description": "Enhances responses with encouraging, inspiring, and empowering language. This decorator is designed to motivate action, build confidence, and create a positive emotional impact while still delivering substantive content.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "intensity",
+      "type": "enum",
+      "description": "The level of motivational energy and enthusiasm",
+      "enum": ["mild", "moderate", "high"],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "The primary motivational approach to emphasize",
+      "enum": ["achievement", "growth", "resilience", "purpose", "balanced"],
+      "default": "balanced",
+      "required": false
+    },
+    {
+      "name": "actionable",
+      "type": "boolean",
+      "description": "Whether to include specific actionable steps or only inspirational content",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic moderately motivational response",
+      "usage": "+++Motivational\nWhat are some strategies for building healthy habits?",
+      "result": "Provides strategies for building healthy habits with moderate motivational language, encouraging tone, and confidence-building framing"
+    },
+    {
+      "description": "High-intensity resilience-focused motivational content",
+      "usage": "+++Motivational(intensity=high, focus=resilience, actionable=true)\nHow can I overcome setbacks in my professional life?",
+      "result": "Delivers highly energetic and inspiring advice for professional resilience, emphasizing overcoming adversity with specific actionable steps, using powerful language and empowering framing"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Academic"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

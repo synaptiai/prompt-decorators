@@ -1,0 +1,57 @@
+{
+  "decoratorName": "BuildOn",
+  "version": "1.0.0",
+  "description": "A meta-decorator that builds upon previous context or responses rather than starting from scratch. This enables continuity across interactions, allowing refinement, extension, or alteration of previous outputs in a coherent manner.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "reference",
+      "type": "enum",
+      "description": "What to build upon from the previous context",
+      "enum": ["last", "specific", "all"],
+      "default": "last",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "How to build upon the referenced content",
+      "enum": ["extend", "refine", "contrast", "synthesize"],
+      "default": "extend",
+      "required": false
+    },
+    {
+      "name": "preserveStructure",
+      "type": "boolean",
+      "description": "Whether to maintain the structure of the referenced content",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic extension of the previous response",
+      "usage": "+++BuildOn\nAdd more detail about implementation challenges.",
+      "result": "Extends the previous response by adding more detailed information about implementation challenges while maintaining continuity"
+    },
+    {
+      "description": "Specific refinement with structural changes",
+      "usage": "+++BuildOn(reference=specific, approach=refine, preserveStructure=false)\nImprove the section on risk analysis with more quantitative measures.",
+      "result": "Refines specifically the risk analysis section from the previous content with more quantitative measures, potentially restructuring it"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

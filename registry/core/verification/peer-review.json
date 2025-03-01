@@ -1,0 +1,58 @@
+{
+  "decoratorName": "PeerReview",
+  "version": "1.0.0",
+  "description": "Augments the response with a simulated peer review of the content. This decorator enhances critical thinking by evaluating the response's strengths, weaknesses, methodological soundness, and potential improvements as an academic reviewer would.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "criteria",
+      "type": "enum",
+      "description": "Primary criteria to focus on in the review",
+      "enum": ["accuracy", "methodology", "limitations", "completeness", "all"],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The tone and approach of the peer review",
+      "enum": ["constructive", "critical", "balanced"],
+      "default": "balanced",
+      "required": false
+    },
+    {
+      "name": "position",
+      "type": "enum",
+      "description": "Where to place the peer review relative to the main content",
+      "enum": ["after", "before", "alongside"],
+      "default": "after",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic peer review of content accuracy",
+      "usage": "+++PeerReview(criteria=accuracy)\nExplain the current understanding of dark matter in astrophysics.",
+      "result": "Provides an explanation of dark matter, followed by a balanced peer review focusing on the accuracy of the information presented"
+    },
+    {
+      "description": "Critical peer review of multiple aspects, shown alongside content",
+      "usage": "+++PeerReview(criteria=all, style=critical, position=alongside)\nAnalyze the methodology used in Stanford's prison experiment.",
+      "result": "Delivers an analysis of the Stanford prison experiment methodology with a parallel critical peer review addressing accuracy, methodology, limitations, and completeness"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

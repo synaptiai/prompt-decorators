@@ -1,0 +1,63 @@
+{
+  "decoratorName": "Constraints",
+  "version": "1.0.0",
+  "description": "Applies specific limitations to the output format, length, or content. This decorator enforces creative constraints that can enhance focus, brevity, or precision by requiring the response to work within defined boundaries.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "wordCount",
+      "type": "number",
+      "description": "Maximum number of words allowed in the response",
+      "required": false,
+      "validation": {
+        "minimum": 10,
+        "maximum": 1000
+      }
+    },
+    {
+      "name": "timeframe",
+      "type": "string",
+      "description": "Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week')",
+      "required": false
+    },
+    {
+      "name": "vocabulary",
+      "type": "enum",
+      "description": "Constraints on vocabulary usage",
+      "enum": ["simple", "technical", "domain-specific", "creative"],
+      "required": false
+    },
+    {
+      "name": "custom",
+      "type": "string",
+      "description": "Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet')",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Word count constraint for a complex topic",
+      "usage": "+++Constraints(wordCount=100)\nExplain quantum computing principles.",
+      "result": "Provides a concise explanation of quantum computing, carefully limiting the response to exactly 100 words"
+    },
+    {
+      "description": "Multiple constraints for a creative response",
+      "usage": "+++Constraints(wordCount=200, vocabulary=creative, custom=each paragraph must contain exactly three sentences)\nDescribe a futuristic city.",
+      "result": "Delivers a 200-word description of a futuristic city using creative vocabulary, with each paragraph containing exactly three sentences"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

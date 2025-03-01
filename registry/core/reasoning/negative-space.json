@@ -1,0 +1,58 @@
+{
+  "decoratorName": "NegativeSpace",
+  "version": "1.0.0",
+  "description": "Focuses on analyzing what is not explicitly stated, implied, or missing from a topic or question. This decorator explores the 'negative space' by identifying unexplored angles, implicit assumptions, unasked questions, and contextual elements that may have been overlooked.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "The specific aspect of negative space to emphasize",
+      "enum": ["implications", "missing", "unstated", "comprehensive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "How deeply to explore the negative space",
+      "enum": ["surface", "moderate", "deep"],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "structure",
+      "type": "enum",
+      "description": "How to present the negative space analysis",
+      "enum": ["before", "after", "integrated", "separate"],
+      "default": "integrated",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic comprehensive negative space analysis",
+      "usage": "+++NegativeSpace\nDiscuss the impact of social media on society.",
+      "result": "Provides a discussion of social media's societal impact while integrating analysis of unstated assumptions, overlooked factors, and typically unaddressed implications"
+    },
+    {
+      "description": "Deep negative space analysis focused on missing elements",
+      "usage": "+++NegativeSpace(focus=missing, depth=deep, structure=after)\nExplain the current approaches to artificial intelligence safety.",
+      "result": "First explains current AI safety approaches, then provides a separate deep analysis of missing elements in the discussion, such as unstudied risks, overlooked stakeholders, and neglected scenarios"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

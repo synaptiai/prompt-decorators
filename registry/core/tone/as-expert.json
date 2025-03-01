@@ -1,0 +1,55 @@
+{
+  "decoratorName": "AsExpert",
+  "version": "1.0.0",
+  "description": "Generates responses from the perspective of a specified domain expert or specialist. This decorator provides authoritative content that reflects the knowledge, terminology, and analytical approach of an expert in the specified field.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "The specific field or discipline the expert specializes in",
+      "required": true
+    },
+    {
+      "name": "experience",
+      "type": "enum",
+      "description": "The experience level of the expert",
+      "enum": ["junior", "senior", "leading", "pioneering"],
+      "default": "senior",
+      "required": false
+    },
+    {
+      "name": "technical",
+      "type": "boolean",
+      "description": "Whether to use highly technical language and domain-specific terminology",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic response as a domain expert",
+      "usage": "+++AsExpert(domain=neuroscience)\nExplain how memories are formed in the brain.",
+      "result": "Provides an explanation of memory formation from the perspective of a senior neuroscientist, using appropriate terminology and references to relevant research"
+    },
+    {
+      "description": "Highly technical response as pioneering expert",
+      "usage": "+++AsExpert(domain=cryptography, experience=pioneering, technical=true)\nAssess the security implications of quantum computing for current encryption standards.",
+      "result": "Delivers a technically sophisticated assessment of quantum computing's encryption impacts from the perspective of a pioneering cryptography expert, using advanced terminology and nuanced analysis"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

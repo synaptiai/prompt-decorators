@@ -1,0 +1,56 @@
+{
+  "decoratorName": "BlindSpots",
+  "version": "1.0.0",
+  "description": "Identifies potential cognitive blind spots, unstated assumptions, and overlooked perspectives in the response. This decorator helps mitigate bias by explicitly acknowledging the limitations of one's thinking and analysis.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "categories",
+      "type": "array",
+      "description": "Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias)",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "How thoroughly to analyze for blind spots",
+      "enum": ["basic", "thorough", "comprehensive"],
+      "default": "thorough",
+      "required": false
+    },
+    {
+      "name": "position",
+      "type": "enum",
+      "description": "Where to place the blind spots analysis",
+      "enum": ["after", "before", "integrated"],
+      "default": "after",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic blind spots analysis after a response",
+      "usage": "+++BlindSpots\nWhat factors drive economic growth?",
+      "result": "Provides an analysis of economic growth factors, followed by identification of unstated assumptions and potential blind spots in the analysis"
+    },
+    {
+      "description": "Comprehensive blind spots analysis integrated throughout",
+      "usage": "+++BlindSpots(categories=[cultural,historical,methodological], depth=comprehensive, position=integrated)\nEvaluate the impact of social media on society.",
+      "result": "Delivers an evaluation of social media's societal impact with comprehensive blind spot analysis woven throughout, specifically addressing cultural, historical, and methodological blind spots"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

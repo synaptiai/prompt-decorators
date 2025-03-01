@@ -1,0 +1,54 @@
+{
+  "decoratorName": "Priority",
+  "version": "1.0.0",
+  "description": "A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "decorators",
+      "type": "array",
+      "description": "Ordered list of decorators by priority (highest priority first)",
+      "required": true
+    },
+    {
+      "name": "explicit",
+      "type": "boolean",
+      "description": "Whether to explicitly mention overridden behaviors in the response",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "mode",
+      "type": "enum",
+      "description": "How to handle conflicts between decorators",
+      "enum": ["override", "merge", "cascade"],
+      "default": "override",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic priority ordering between potentially conflicting decorators",
+      "usage": "+++Priority(decorators=[Concise,Detailed])\nExplain quantum computing.",
+      "result": "Applies both decorators, but when conflicts arise, Concise takes precedence over Detailed, resulting in a more concise explanation of quantum computing"
+    },
+    {
+      "description": "Complex priority with explicit conflict resolution",
+      "usage": "+++Priority(decorators=[Academic,Creative,StepByStep], explicit=true, mode=cascade)\nExplain the water cycle.",
+      "result": "Implements a cascading priority where Academic style dominates, with Creative elements where they don't conflict with Academic style, and StepByStep structure throughout, explicitly noting where decorator behaviors were modified due to conflicts"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4"
+    ]
+  }
+} 

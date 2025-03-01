@@ -1,0 +1,55 @@
+{
+  "decoratorName": "RedTeam",
+  "version": "1.0.0",
+  "description": "Applies adversarial analysis to test assumptions, identify vulnerabilities, and strengthen proposals by actively looking for flaws. This decorator simulates how an opponent or critic would evaluate and attack ideas, plans, or arguments.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "strength",
+      "type": "enum",
+      "description": "How aggressive or challenging the red team analysis should be",
+      "enum": ["moderate", "aggressive", "steelman"],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "array",
+      "description": "Specific aspects to focus the red team analysis on",
+      "required": false
+    },
+    {
+      "name": "constructive",
+      "type": "boolean",
+      "description": "Whether to include constructive suggestions for improvement after critiques",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic red team analysis of a business proposal",
+      "usage": "+++RedTeam\nHere's our plan to launch a new subscription service...",
+      "result": "Analyzes the subscription service plan from an adversarial perspective, identifying potential weaknesses, oversights, and challenges"
+    },
+    {
+      "description": "Aggressive red team analysis with specific focus areas",
+      "usage": "+++RedTeam(strength=aggressive, focus=[security,scalability,market-fit], constructive=true)\nReview our new authentication system design.",
+      "result": "Aggressively challenges the authentication system design, specifically targeting security, scalability, and market-fit concerns, followed by constructive improvement suggestions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

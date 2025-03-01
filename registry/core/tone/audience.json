@@ -1,0 +1,56 @@
+{
+  "decoratorName": "Audience",
+  "version": "1.0.0",
+  "description": "Adapts the response for a specific audience expertise level. This decorator ensures content is appropriately tailored to the knowledge, vocabulary, and needs of different audience types, from beginners to technical experts.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The expertise level of the target audience",
+      "enum": ["beginner", "intermediate", "expert", "technical"],
+      "default": "intermediate",
+      "required": false
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "Specific knowledge domain or field for domain-specific terminology adaptation",
+      "default": "general",
+      "required": false
+    },
+    {
+      "name": "examples",
+      "type": "boolean",
+      "description": "Whether to include additional examples for clarity",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Technical explanation for experts in a specific field",
+      "usage": "+++Audience(level=technical, domain=cybersecurity)\nExplain zero-knowledge proofs.",
+      "result": "Provides an in-depth technical explanation of zero-knowledge proofs using cybersecurity-specific terminology and concepts"
+    },
+    {
+      "description": "Beginner-friendly explanation with examples",
+      "usage": "+++Audience(level=beginner, examples=true)\nHow does machine learning work?",
+      "result": "Explains machine learning concepts in simple terms with multiple illustrative examples suitable for complete beginners"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

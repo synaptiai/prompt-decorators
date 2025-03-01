@@ -2,7 +2,7 @@
 
 
 [![Standard Status: Proposed](https://img.shields.io/badge/Standard%20Status-Proposed-yellow.svg)](https://github.com/prompt-decorators/spec)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 A standardized framework for enhancing AI interactions through simple, composable prompt modifiers.

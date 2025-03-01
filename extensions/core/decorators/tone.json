@@ -1,0 +1,48 @@
+{
+  "decoratorName": "Tone",
+  "version": "1.0.0",
+  "description": "Adjusts the writing style and tone of the AI's response. This decorator helps ensure that responses are appropriately styled for different audiences and contexts, from formal technical documentation to casual explanations.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "spec@promptdecorators.ai",
+    "url": "https://promptdecorators.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The desired tone and style for the response",
+      "enum": ["formal", "casual", "friendly", "technical", "humorous"],
+      "default": "formal",
+      "required": true
+    }
+  ],
+  "examples": [
+    {
+      "description": "Technical documentation tone",
+      "usage": "+++Tone(style=technical)\nExplain how garbage collection works in Python",
+      "result": "Provides a technically precise explanation using appropriate terminology"
+    },
+    {
+      "description": "Casual explanation",
+      "usage": "+++Tone(style=casual)\nWhy is the sky blue?",
+      "result": "Delivers a relaxed, conversational explanation of atmospheric optics"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      {
+        "name": "gpt-4",
+        "versions": ["1.0.0"]
+      },
+      {
+        "name": "gpt-3.5-turbo",
+        "versions": ["1.0.0"]
+      }
+    ]
+  }
+} 

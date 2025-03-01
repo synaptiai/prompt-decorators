@@ -1,0 +1,55 @@
+{
+  "decoratorName": "QualityMetrics",
+  "version": "1.0.0",
+  "description": "Applies specific quality measurements to evaluate content against defined criteria. This decorator enhances verification by providing quantifiable assessments of aspects like accuracy, completeness, clarity, or other custom metrics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "metrics",
+      "type": "array",
+      "description": "Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness)",
+      "required": false
+    },
+    {
+      "name": "scale",
+      "type": "enum",
+      "description": "Rating scale to use for evaluations",
+      "enum": ["1-5", "1-10", "percentage", "qualitative"],
+      "default": "1-5",
+      "required": false
+    },
+    {
+      "name": "explanation",
+      "type": "boolean",
+      "description": "Whether to provide detailed explanations for each metric score",
+      "default": true,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic quality assessment of an analysis",
+      "usage": "+++QualityMetrics\nMy analysis of the financial market trends is as follows...",
+      "result": "Provides the analysis of financial market trends, followed by 1-5 ratings across standard quality metrics with explanations for each score"
+    },
+    {
+      "description": "Specific custom metrics with detailed qualitative assessment",
+      "usage": "+++QualityMetrics(metrics=[factual accuracy,predictive value,consideration of alternatives,logical flow], scale=qualitative, explanation=true)\nHere's my policy proposal for urban housing...",
+      "result": "Delivers the policy proposal, followed by qualitative assessments (poor/fair/good/excellent) of the four specified metrics, with detailed explanations for each evaluation"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

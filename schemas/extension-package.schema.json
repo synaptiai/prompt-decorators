@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Decorator Extension Package Schema",
+  "description": "Schema for packaging and distributing decorator extensions",
+  "type": "object",
+  "required": ["name", "version", "decorators"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the extension package",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the extension package",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the extension package"
+    },
+    "author": {
+      "type": "object",
+      "description": "Information about the extension package author",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the author or organization"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact email for the author"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for the author or organization"
+        }
+      }
+    },
+    "license": {
+      "type": "string",
+      "description": "License under which the extension package is distributed"
+    },
+    "keywords": {
+      "type": "array",
+      "description": "Keywords to help discover the extension package",
+      "items": {
+        "type": "string"
+      }
+    },
+    "repository": {
+      "type": "object",
+      "description": "Source code repository information",
+      "required": ["type", "url"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of repository (e.g., git)",
+          "enum": ["git", "svn", "mercurial"]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the repository"
+        }
+      }
+    },
+    "decorators": {
+      "type": "array",
+      "description": "List of decorators included in this extension package",
+      "minItems": 1,
+      "items": {
+        "$ref": "registry-entry.schema.json"
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Dependencies required by this extension package",
+      "properties": {
+        "standard": {
+          "type": "object",
+          "description": "Required version range of the prompt decorators standard",
+          "required": ["version"],
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Semantic version range",
+              "pattern": "^\\d+\\.\\d+\\.\\d+$"
+            }
+          }
+        },
+        "extensions": {
+          "type": "array",
+          "description": "Other extension packages this one depends on",
+          "items": {
+            "type": "object",
+            "required": ["name", "version"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of the required extension package"
+              },
+              "version": {
+                "type": "string",
+                "description": "Required version range",
+                "pattern": "^\\d+\\.\\d+\\.\\d+$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "description": "Configuration options for the extension package",
+      "properties": {
+        "defaults": {
+          "type": "object",
+          "description": "Default parameter values for decorators"
+        },
+        "validation": {
+          "type": "object",
+          "description": "Additional validation rules"
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "name": "scientific-reasoning-pack",
+      "version": "1.0.0",
+      "description": "A collection of decorators for scientific reasoning and analysis",
+      "author": {
+        "name": "Scientific AI Consortium",
+        "email": "contact@example.org",
+        "url": "https://example.org"
+      },
+      "license": "Apache 2.0",
+      "keywords": ["science", "reasoning", "analysis"],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/example/scientific-reasoning-pack"
+      },
+      "decorators": [
+        {
+          "decoratorName": "ScientificReasoning",
+          "version": "1.0.0",
+          "description": "Applies scientific method reasoning process",
+          "parameters": [
+            {
+              "name": "discipline",
+              "type": "enum",
+              "description": "Scientific discipline context",
+              "enum": ["physics", "biology", "chemistry", "general"],
+              "default": "general"
+            }
+          ]
+        }
+      ],
+      "dependencies": {
+        "standard": {
+          "version": "1.0.0"
+        },
+        "extensions": [
+          {
+            "name": "core-reasoning",
+            "version": "1.0.0"
+          }
+        ]
+      }
+    }
+  ]
+} 

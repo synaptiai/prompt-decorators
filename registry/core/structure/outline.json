@@ -1,0 +1,61 @@
+{
+  "decoratorName": "Outline",
+  "version": "1.0.0",
+  "description": "Structures the response as a hierarchical outline with headings and subheadings. This decorator organizes information in a clear, logical structure that highlights relationships between main topics and subtopics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Maximum nesting level of the outline",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Numbering or bullet style for the outline",
+      "enum": ["numeric", "bullet", "roman", "alpha", "mixed"],
+      "default": "numeric",
+      "required": false
+    },
+    {
+      "name": "detailed",
+      "type": "boolean",
+      "description": "Whether to include brief explanations under each outline point",
+      "default": false,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Simple numeric outline of a complex topic",
+      "usage": "+++Outline\nExplain the structure of the United States government.",
+      "result": "Presents the US government structure as a numbered outline with up to 3 levels of hierarchy"
+    },
+    {
+      "description": "Detailed outline with mixed notation and deep hierarchy",
+      "usage": "+++Outline(style=mixed, depth=5, detailed=true)\nProvide a comprehensive overview of machine learning techniques.",
+      "result": "Creates a 5-level deep outline using mixed notation (numbers, letters, roman numerals) with brief explanations under each point, covering machine learning techniques"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+}
+ 

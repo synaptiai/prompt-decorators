@@ -1,0 +1,59 @@
+{
+  "decoratorName": "StressTest",
+  "version": "1.0.0",
+  "description": "Tests the robustness of ideas, theories, plans, or systems by applying extreme conditions, edge cases, and unlikely scenarios. This decorator helps identify vulnerabilities, limitations, and breaking points that might not be apparent under normal circumstances.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "scenarios",
+      "type": "number",
+      "description": "Number of stress test scenarios to apply",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "severity",
+      "type": "enum",
+      "description": "The intensity level of the stress conditions",
+      "enum": ["moderate", "severe", "extreme"],
+      "default": "severe",
+      "required": false
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "Optional specific domain or dimension to stress test (e.g., financial, ethical, scalability)",
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic stress test of a business model",
+      "usage": "+++StressTest\nEvaluate this subscription-based SaaS business model.",
+      "result": "Provides an analysis of the business model followed by three severe stress test scenarios that challenge its core assumptions and viability"
+    },
+    {
+      "description": "Extreme stress test focused on a specific domain",
+      "usage": "+++StressTest(scenarios=5, severity=extreme, domain=security)\nAssess our new authentication protocol design.",
+      "result": "Delivers an assessment of the authentication protocol followed by five extreme security-focused stress test scenarios that identify potential vulnerabilities and breaking points"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 

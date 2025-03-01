@@ -1,0 +1,57 @@
+{
+  "decoratorName": "CiteSources",
+  "version": "1.0.0",
+  "description": "Structures the response to include citations for claims and information. This decorator enhances credibility by providing references to source material, enabling fact verification and further exploration of topics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The placement and format of citations within the response",
+      "enum": ["inline", "footnote", "endnote"],
+      "default": "inline",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The citation format to use",
+      "enum": ["APA", "MLA", "Chicago", "Harvard", "IEEE"],
+      "default": "APA",
+      "required": false
+    },
+    {
+      "name": "comprehensive",
+      "type": "boolean",
+      "description": "Whether to cite every claim (true) or only major claims (false)",
+      "default": false,
+      "required": false
+    }
+  ],
+  "examples": [
+    {
+      "description": "Basic inline citations for a scientific topic",
+      "usage": "+++CiteSources\nExplain the evidence for climate change.",
+      "result": "Explains climate change with inline citations to scientific sources in APA format"
+    },
+    {
+      "description": "Comprehensive footnote citations in Chicago style",
+      "usage": "+++CiteSources(style=footnote, format=Chicago, comprehensive=true)\nDescribe the major events of World War II.",
+      "result": "Delivers a detailed account of WWII with comprehensive footnote citations in Chicago style for all factual claims"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4",
+      "gpt-3.5-turbo"
+    ]
+  }
+} 
