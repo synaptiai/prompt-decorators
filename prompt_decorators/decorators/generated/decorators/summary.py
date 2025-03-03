@@ -25,6 +25,7 @@ class Summary(BaseDecorator):
         position: Where to position the summary in relation to any full content. (Literal["beginning", "end", "standalone"])
     """
 
+    name = "summary"  # Class-level name for serialization
     decorator_name = "summary"
     version = "1.0.0"  # Initial version
 

@@ -24,6 +24,7 @@ class QualityMetrics(BaseDecorator):
         explanation: Whether to provide detailed explanations for each metric score. (bool)
     """
 
+    name = "quality_metrics"  # Class-level name for serialization
     decorator_name = "quality_metrics"
     version = "1.0.0"  # Initial version
 

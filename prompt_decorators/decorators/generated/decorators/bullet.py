@@ -22,6 +22,7 @@ class Bullet(BaseDecorator):
         compact: Whether to keep bullet points short and concise (true) or allow longer, more detailed points (false). (bool)
     """
 
+    name = "bullet"  # Class-level name for serialization
     decorator_name = "bullet"
     version = "1.0.0"  # Initial version
 

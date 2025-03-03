@@ -25,6 +25,7 @@ class FindGaps(BaseDecorator):
         solutions: Whether to suggest solutions or approaches for addressing the identified gaps. (bool)
     """
 
+    name = "find_gaps"  # Class-level name for serialization
     decorator_name = "find_gaps"
     version = "1.0.0"  # Initial version
 

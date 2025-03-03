@@ -19,6 +19,7 @@ class Socratic(BaseDecorator):
         iterations: Number of question-answer cycles to include. (Any)
     """
 
+    name = "socratic"  # Class-level name for serialization
     decorator_name = "socratic"
     version = "1.0.0"  # Initial version
 

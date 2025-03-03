@@ -25,6 +25,7 @@ class TableFormat(BaseDecorator):
         alignment: Text alignment within table cells. (Literal["left", "center", "right"])
     """
 
+    name = "table_format"  # Class-level name for serialization
     decorator_name = "table_format"
     version = "1.0.0"  # Initial version
 

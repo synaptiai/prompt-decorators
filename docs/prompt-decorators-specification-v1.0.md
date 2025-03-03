@@ -258,7 +258,7 @@ These decorators modify how the AI approaches reasoning about a problem.
 | `+++Socratic` | Question-based exploration of the topic | `iterations=[1-5]` |
 | `+++Debate` | Multiple viewpoint analysis | `perspectives=[2-5]` |
 | `+++FirstPrinciples` | Break down to fundamental truths | `depth=[1-5]` |
-| `+++RootCause` | Systematic analysis to identify underlying causes | `method=[5whys\|fishbone\|pareto]` |
+| `+++RootCause` | Systematic analysis to identify underlying causes | `method=[fivewhys\|fishbone\|pareto]` |
 | `+++TreeOfThought` | Explore multiple reasoning branches | `branches=[2-5]`, `depth=[1-5]` |
 | `+++Analogical` | Use analogies for reasoning and explanation | `domain=[general\|specified]` |
 | `+++ForcedAnalogy` | Compare concepts through specific analogical domains | `source=[sports\|nature\|cooking\|etc]` |
@@ -320,7 +320,7 @@ These decorators modify the linguistic style and tone of the AI's response.
 | `+++Tone` | Overall tone adjustment | `style=[formal\|casual\|friendly\|technical\|humorous]` |
 | `+++Audience` | Adjust for audience expertise | `level=[beginner\|intermediate\|expert\|technical]` |
 | `+++ELI5` | Explain like I'm 5 years old | `strictness=[true\|false]` |
-| `+++Academic` | Scholarly style | `style=[humanities\|scientific\|legal]`, `citationStyle=[APA\|MLA\|Chicago]` |
+| `+++Academic` | Scholarly style | `style=[humanities\|scientific\|legal]`, `format=[APA\|MLA\|Chicago]` |
 | `+++Professional` | Business-oriented language | `industry=[general\|industry]` |
 | `+++Creative` | Creative writing style | `genre=[narrative\|poetry\|dialogic]` |
 | `+++Concise` | Brief and to-the-point | `maxWords=[number]` |

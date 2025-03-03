@@ -25,6 +25,7 @@ class DecisionMatrix(BaseDecorator):
         scale: Rating scale to use for evaluations. (Literal["1-5", "1-10", "qualitative", "percentage"])
     """
 
+    name = "decision_matrix"  # Class-level name for serialization
     decorator_name = "decision_matrix"
     version = "1.0.0"  # Initial version
 

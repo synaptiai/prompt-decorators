@@ -22,6 +22,7 @@ class Custom(BaseDecorator):
         priority: How to prioritize custom rules relative to other decorators. (Literal["override", "supplement", "fallback"])
     """
 
+    name = "custom"  # Class-level name for serialization
     decorator_name = "custom"
     version = "1.0.0"  # Initial version
 

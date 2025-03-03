@@ -19,7 +19,7 @@ class TestRootCause(unittest.TestCase):
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
-            "method": "5whys",
+            "method": "fivewhys",
             "depth": 5,
         }
 
@@ -53,7 +53,7 @@ class TestRootCause(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test valid enum values
-        params["method"] = "5whys"
+        params["method"] = "fivewhys"
         # This should not raise an exception
         RootCause(**params)
         params["method"] = "fishbone"

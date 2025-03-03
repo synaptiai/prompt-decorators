@@ -22,6 +22,7 @@ class Analogical(BaseDecorator):
         depth: Level of detail in developing the analogy. (Literal["brief", "moderate", "extended"])
     """
 
+    name = "analogical"  # Class-level name for serialization
     decorator_name = "analogical"
     version = "1.0.0"  # Initial version
 

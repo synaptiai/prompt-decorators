@@ -25,6 +25,7 @@ class Narrative(BaseDecorator):
         length: The relative length of the narrative. (Literal["brief", "moderate", "extended"])
     """
 
+    name = "narrative"  # Class-level name for serialization
     decorator_name = "narrative"
     version = "1.0.0"  # Initial version
 

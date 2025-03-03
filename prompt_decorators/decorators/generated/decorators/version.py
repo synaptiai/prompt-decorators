@@ -19,6 +19,7 @@ class Version(BaseDecorator):
         standard: The semantic version of the Prompt Decorators standard to use. (str)
     """
 
+    name = "version"  # Class-level name for serialization
     decorator_name = "version"
     version = "1.0.0"  # Initial version
 

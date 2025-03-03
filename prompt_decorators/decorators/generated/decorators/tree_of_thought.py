@@ -21,6 +21,7 @@ class TreeOfThought(BaseDecorator):
         pruning: Whether to eliminate less promising branches early. (bool)
     """
 
+    name = "tree_of_thought"  # Class-level name for serialization
     decorator_name = "tree_of_thought"
     version = "1.0.0"  # Initial version
 

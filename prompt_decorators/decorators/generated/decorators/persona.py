@@ -21,6 +21,7 @@ class Persona(BaseDecorator):
         goals: Primary goals or concerns of the persona. (List[Any])
     """
 
+    name = "persona"  # Class-level name for serialization
     decorator_name = "persona"
     version = "1.0.0"  # Initial version
 

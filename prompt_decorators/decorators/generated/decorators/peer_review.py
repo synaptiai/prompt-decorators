@@ -26,6 +26,7 @@ class PeerReview(BaseDecorator):
         position: Where to place the peer review relative to the main content. (Literal["after", "before", "alongside"])
     """
 
+    name = "peer_review"  # Class-level name for serialization
     decorator_name = "peer_review"
     version = "1.0.0"  # Initial version
 

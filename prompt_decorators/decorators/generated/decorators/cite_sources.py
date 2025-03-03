@@ -25,6 +25,7 @@ class CiteSources(BaseDecorator):
         comprehensive: Whether to cite every claim (true) or only major claims (false). (bool)
     """
 
+    name = "cite_sources"  # Class-level name for serialization
     decorator_name = "cite_sources"
     version = "1.0.0"  # Initial version
 

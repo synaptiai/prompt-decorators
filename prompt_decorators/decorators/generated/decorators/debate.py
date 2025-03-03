@@ -20,6 +20,7 @@ class Debate(BaseDecorator):
         balanced: Whether to ensure equal representation and strength of arguments for each perspective. (bool)
     """
 
+    name = "debate"  # Class-level name for serialization
     decorator_name = "debate"
     version = "1.0.0"  # Initial version
 

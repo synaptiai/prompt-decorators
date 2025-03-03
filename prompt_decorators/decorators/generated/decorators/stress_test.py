@@ -24,6 +24,7 @@ class StressTest(BaseDecorator):
         domain: Optional specific domain or dimension to stress test (e.g., financial, ethical, scalability). (str)
     """
 
+    name = "stress_test"  # Class-level name for serialization
     decorator_name = "stress_test"
     version = "1.0.0"  # Initial version
 

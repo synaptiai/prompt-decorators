@@ -25,6 +25,7 @@ class Motivational(BaseDecorator):
         actionable: Whether to include specific actionable steps or only inspirational content. (bool)
     """
 
+    name = "motivational"  # Class-level name for serialization
     decorator_name = "motivational"
     version = "1.0.0"  # Initial version
 

@@ -19,6 +19,7 @@ class FirstPrinciples(BaseDecorator):
         depth: Level of detail in breaking down to fundamental principles. (Any)
     """
 
+    name = "first_principles"  # Class-level name for serialization
     decorator_name = "first_principles"
     version = "1.0.0"  # Initial version
 

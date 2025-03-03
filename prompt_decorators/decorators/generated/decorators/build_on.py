@@ -25,6 +25,7 @@ class BuildOn(BaseDecorator):
         preserveStructure: Whether to maintain the structure of the referenced content. (bool)
     """
 
+    name = "build_on"  # Class-level name for serialization
     decorator_name = "build_on"
     version = "1.0.0"  # Initial version
 

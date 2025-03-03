@@ -21,6 +21,7 @@ class Abductive(BaseDecorator):
         rank: Whether to explicitly rank hypotheses by likelihood. (bool)
     """
 
+    name = "abductive"  # Class-level name for serialization
     decorator_name = "abductive"
     version = "1.0.0"  # Initial version
 

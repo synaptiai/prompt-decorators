@@ -21,6 +21,7 @@ class Conditional(BaseDecorator):
         else_param: The decorator to apply if the condition is false (can be a specific decorator with parameters). (str)
     """
 
+    name = "conditional"  # Class-level name for serialization
     decorator_name = "conditional"
     version = "1.0.0"  # Initial version
 

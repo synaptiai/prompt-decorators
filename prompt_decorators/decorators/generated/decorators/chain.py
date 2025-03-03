@@ -21,6 +21,7 @@ class Chain(BaseDecorator):
         stopOnFailure: Whether to stop the chain if a decorator fails to apply correctly. (bool)
     """
 
+    name = "chain"  # Class-level name for serialization
     decorator_name = "chain"
     version = "1.0.0"  # Initial version
 

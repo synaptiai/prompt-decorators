@@ -21,6 +21,7 @@ class Compatibility(BaseDecorator):
         behaviors: JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}'). (str)
     """
 
+    name = "compatibility"  # Class-level name for serialization
     decorator_name = "compatibility"
     version = "1.0.0"  # Initial version
 

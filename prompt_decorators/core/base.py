@@ -186,7 +186,7 @@ class BaseDecorator:
 
         # Get the expected name from the decorator_name class attribute
         # This is more reliable than trying to access the name property on the class
-        expected_name = getattr(cls, 'decorator_name', cls.__name__.lower())
+        expected_name = getattr(cls, "decorator_name", cls.__name__.lower())
 
         if decorator_name != expected_name:
             raise ValidationError(

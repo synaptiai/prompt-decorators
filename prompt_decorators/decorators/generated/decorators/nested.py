@@ -22,6 +22,7 @@ class Nested(BaseDecorator):
         collapsible: Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations). (bool)
     """
 
+    name = "nested"  # Class-level name for serialization
     decorator_name = "nested"
     version = "1.0.0"  # Initial version
 

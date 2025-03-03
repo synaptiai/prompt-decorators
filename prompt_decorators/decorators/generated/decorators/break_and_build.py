@@ -25,6 +25,7 @@ class BreakAndBuild(BaseDecorator):
         buildRatio: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique). (Any)
     """
 
+    name = "break_and_build"  # Class-level name for serialization
     decorator_name = "break_and_build"
     version = "1.0.0"  # Initial version
 

@@ -24,6 +24,7 @@ class Balanced(BaseDecorator):
         equal: Whether to strictly enforce equal word count for each perspective. (bool)
     """
 
+    name = "balanced"  # Class-level name for serialization
     decorator_name = "balanced"
     version = "1.0.0"  # Initial version
 

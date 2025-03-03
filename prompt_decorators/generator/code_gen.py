@@ -23,13 +23,13 @@ def camel_to_snake(name: str) -> str:
 
 def snake_to_camel(name: str) -> str:
     """Convert snake_case to CamelCase.
-    
+
     If the input is already in camelCase, it will be properly converted to CamelCase
     with the first letter capitalized.
     """
     # First ensure the name is in snake_case
     snake_name = camel_to_snake(name)
-    
+
     # Then convert to CamelCase
     components = snake_name.split("_")
     # Ensure each component starts with an uppercase letter
@@ -981,7 +981,7 @@ class CodeGenerator:
                     param_name_snake = camel_to_snake(param_name)
                     param_name_camel = snake_to_camel(param_name_snake)
                     # Ensure decorator name is properly capitalized
-                    decorator_name = decorator['decoratorName']
+                    decorator_name = decorator["decoratorName"]
                     enum_name = f"{decorator_name}{param_name_camel}Enum"
                     description = param.get(
                         "description", f"Options for {decorator_name}.{param_name}"
@@ -1024,7 +1024,7 @@ class CodeGenerator:
                 param_name_snake = camel_to_snake(param_name)
                 param_name_camel = snake_to_camel(param_name_snake)
                 # Ensure decorator name is properly capitalized
-                decorator_name = decorator['decoratorName']
+                decorator_name = decorator["decoratorName"]
                 enum_name = f"{decorator_name}{param_name_camel}Enum"
                 if enum_name in self.enum_definitions:
                     enums.append(enum_name)
@@ -1206,11 +1206,11 @@ class CodeGenerator:
         """
         # Replace any non-alphanumeric characters with underscores
         result = re.sub(r"[^a-zA-Z0-9]", "_", name)
-        
+
         # If the name starts with a digit, prefix it with an underscore
         if result and result[0].isdigit():
             result = "_" + result
-        
+
         # Ensure consistent capitalization for compound words
         # This is important for names like "citationStyle" to become "CitationStyle"
         # in enum class names like "AcademicCitationStyleEnum"

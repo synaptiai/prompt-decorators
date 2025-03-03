@@ -25,6 +25,7 @@ class Layered(BaseDecorator):
         progression: How to structure the progression between layers. (Literal["separate", "nested", "incremental"])
     """
 
+    name = "layered"  # Class-level name for serialization
     decorator_name = "layered"
     version = "1.0.0"  # Initial version
 

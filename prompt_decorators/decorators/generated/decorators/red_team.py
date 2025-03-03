@@ -22,6 +22,7 @@ class RedTeam(BaseDecorator):
         constructive: Whether to include constructive suggestions for improvement after critiques. (bool)
     """
 
+    name = "red_team"  # Class-level name for serialization
     decorator_name = "red_team"
     version = "1.0.0"  # Initial version
 

@@ -22,6 +22,7 @@ class Extremes(BaseDecorator):
         compare: Whether to include a comparative analysis of the extreme versions. (bool)
     """
 
+    name = "extremes"  # Class-level name for serialization
     decorator_name = "extremes"
     version = "1.0.0"  # Initial version
 

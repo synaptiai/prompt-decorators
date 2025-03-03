@@ -22,6 +22,7 @@ class Concise(BaseDecorator):
         level: The degree of conciseness to apply. (Literal["moderate", "high", "extreme"])
     """
 
+    name = "concise"  # Class-level name for serialization
     decorator_name = "concise"
     version = "1.0.0"  # Initial version
 

@@ -19,6 +19,7 @@ class StepByStep(BaseDecorator):
         numbered: Whether to number the steps or use bullet points. (bool)
     """
 
+    name = "step_by_step"  # Class-level name for serialization
     decorator_name = "step_by_step"
     version = "1.0.0"  # Initial version
 

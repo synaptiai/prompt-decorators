@@ -22,6 +22,7 @@ class Priority(BaseDecorator):
         mode: How to handle conflicts between decorators. (Literal["override", "merge", "cascade"])
     """
 
+    name = "priority"  # Class-level name for serialization
     decorator_name = "priority"
     version = "1.0.0"  # Initial version
 

@@ -21,6 +21,7 @@ class Steelman(BaseDecorator):
         separation: Whether to clearly separate the steel-manned presentations from any analysis. (bool)
     """
 
+    name = "steelman"  # Class-level name for serialization
     decorator_name = "steelman"
     version = "1.0.0"  # Initial version
 

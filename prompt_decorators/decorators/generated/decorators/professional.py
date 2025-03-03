@@ -23,6 +23,7 @@ class Professional(BaseDecorator):
         formality: The level of formality to maintain in the response. (Literal["standard", "high", "executive"])
     """
 
+    name = "professional"  # Class-level name for serialization
     decorator_name = "professional"
     version = "1.0.0"  # Initial version
 

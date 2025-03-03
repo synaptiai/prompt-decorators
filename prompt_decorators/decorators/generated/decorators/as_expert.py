@@ -24,6 +24,7 @@ class AsExpert(BaseDecorator):
         technical: Whether to use highly technical language and domain-specific terminology. (bool)
     """
 
+    name = "as_expert"  # Class-level name for serialization
     decorator_name = "as_expert"
     version = "1.0.0"  # Initial version
 

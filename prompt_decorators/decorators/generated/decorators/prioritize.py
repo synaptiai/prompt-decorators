@@ -21,6 +21,7 @@ class Prioritize(BaseDecorator):
         showRationale: Whether to explain the reasoning behind each priority ranking. (bool)
     """
 
+    name = "prioritize"  # Class-level name for serialization
     decorator_name = "prioritize"
     version = "1.0.0"  # Initial version
 

@@ -22,6 +22,7 @@ class Comparison(BaseDecorator):
         highlight: Whether to explicitly emphasize key differences. (bool)
     """
 
+    name = "comparison"  # Class-level name for serialization
     decorator_name = "comparison"
     version = "1.0.0"  # Initial version
 

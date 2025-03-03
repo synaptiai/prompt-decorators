@@ -21,6 +21,7 @@ class Override(BaseDecorator):
         behavior: Optional custom behavior modification instructions that override the standard decorator interpretation. (str)
     """
 
+    name = "override"  # Class-level name for serialization
     decorator_name = "override"
     version = "1.0.0"  # Initial version
 

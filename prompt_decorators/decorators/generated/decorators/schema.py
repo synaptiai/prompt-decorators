@@ -20,6 +20,7 @@ class Schema(BaseDecorator):
         strict: Whether to enforce strict schema compliance or allow flexibility. (bool)
     """
 
+    name = "schema"  # Class-level name for serialization
     decorator_name = "schema"
     version = "1.0.0"  # Initial version
 

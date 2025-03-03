@@ -22,6 +22,7 @@ class Precision(BaseDecorator):
         definitions: Whether to include precise definitions for key terms. (bool)
     """
 
+    name = "precision"  # Class-level name for serialization
     decorator_name = "precision"
     version = "1.0.0"  # Initial version
 

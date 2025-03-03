@@ -22,6 +22,7 @@ class Outline(BaseDecorator):
         detailed: Whether to include brief explanations under each outline point. (bool)
     """
 
+    name = "outline"  # Class-level name for serialization
     decorator_name = "outline"
     version = "1.0.0"  # Initial version
 

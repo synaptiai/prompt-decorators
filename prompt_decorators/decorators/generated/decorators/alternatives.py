@@ -24,6 +24,7 @@ class Alternatives(BaseDecorator):
         comparison: Whether to include a comparative analysis of the alternatives. (bool)
     """
 
+    name = "alternatives"  # Class-level name for serialization
     decorator_name = "alternatives"
     version = "1.0.0"  # Initial version
 

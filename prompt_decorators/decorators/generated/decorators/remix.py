@@ -22,6 +22,7 @@ class Remix(BaseDecorator):
         contrast: Whether to highlight differences between the original framing and the remixed version. (bool)
     """
 
+    name = "remix"  # Class-level name for serialization
     decorator_name = "remix"
     version = "1.0.0"  # Initial version
 

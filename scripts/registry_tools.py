@@ -142,8 +142,17 @@ def _run_formatters(directory: str, verbose: bool = False) -> bool:
     logger = logging.getLogger(__name__)
 
     try:
-        import black
-        import isort.api
+        # Try to import formatters
+        try:
+            import black
+            import isort.api
+        except ImportError as e:
+            logger.warning(f"Formatter dependency not available: {e}")
+            logger.info(
+                "To enable automatic formatting, install the required packages:"
+            )
+            logger.info("  pip install black isort")
+            return True
 
         # Get Python files in the directory
         directory_path = Path(directory)
@@ -189,9 +198,6 @@ def _run_formatters(directory: str, verbose: bool = False) -> bool:
             except Exception as e:
                 logger.warning(f"Error formatting {file_path} with isort: {e}")
 
-        return True
-    except ImportError as e:
-        logger.warning(f"Formatter not available: {e}. Skipping formatting.")
         return True
     except Exception as e:
         logger.error(f"Error running formatters: {e}", exc_info=True)
@@ -262,7 +268,13 @@ def generate_code(
         logger.info(f"✓ Successfully generated {file_count} files in {output_dir}")
 
         # Format the generated files
-        _run_formatters(output_dir, verbose)
+        format_success = _run_formatters(output_dir, verbose)
+        if not format_success:
+            logger.warning(
+                "Formatting may have failed. Files may need manual formatting."
+            )
+            logger.warning("To ensure proper formatting, install black and isort:")
+            logger.warning("  pip install black isort")
 
         return True
     except Exception as e:
@@ -322,7 +334,13 @@ def generate_tests(
         logger.info(f"  python -m pytest {output_dir} -v")
 
         # Format the generated files
-        _run_formatters(output_dir, verbose)
+        format_success = _run_formatters(output_dir, verbose)
+        if not format_success:
+            logger.warning(
+                "Formatting may have failed. Files may need manual formatting."
+            )
+            logger.warning("To ensure proper formatting, install black and isort:")
+            logger.warning("  pip install black isort")
 
         return True
     except Exception as e:

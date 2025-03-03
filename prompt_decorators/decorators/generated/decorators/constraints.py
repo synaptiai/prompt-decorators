@@ -25,6 +25,7 @@ class Constraints(BaseDecorator):
         custom: Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet'). (str)
     """
 
+    name = "constraints"  # Class-level name for serialization
     decorator_name = "constraints"
     version = "1.0.0"  # Initial version
 

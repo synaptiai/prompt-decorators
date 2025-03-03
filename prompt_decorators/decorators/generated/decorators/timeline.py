@@ -26,6 +26,7 @@ class Timeline(BaseDecorator):
         details: The level of detail to include for each timeline event. (Literal["minimal", "moderate", "comprehensive"])
     """
 
+    name = "timeline"  # Class-level name for serialization
     decorator_name = "timeline"
     version = "1.0.0"  # Initial version
 

@@ -22,6 +22,7 @@ class StyleShift(BaseDecorator):
         maintain: Style aspects to explicitly maintain while modifying the target aspect. (List[Any])
     """
 
+    name = "style_shift"  # Class-level name for serialization
     decorator_name = "style_shift"
     version = "1.0.0"  # Initial version
 

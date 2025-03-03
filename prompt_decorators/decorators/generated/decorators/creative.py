@@ -22,6 +22,7 @@ class Creative(BaseDecorator):
         constraints: Optional creative constraints to work within. (List[Any])
     """
 
+    name = "creative"  # Class-level name for serialization
     decorator_name = "creative"
     version = "1.0.0"  # Initial version
 

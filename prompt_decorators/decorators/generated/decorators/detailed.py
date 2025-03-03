@@ -22,6 +22,7 @@ class Detailed(BaseDecorator):
         examples: Whether to include detailed examples to illustrate points. (bool)
     """
 
+    name = "detailed"  # Class-level name for serialization
     decorator_name = "detailed"
     version = "1.0.0"  # Initial version
 

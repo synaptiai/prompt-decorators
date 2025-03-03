@@ -22,6 +22,7 @@ class Confidence(BaseDecorator):
         detailed: Whether to provide explanations for confidence assessments. (bool)
     """
 
+    name = "confidence"  # Class-level name for serialization
     decorator_name = "confidence"
     version = "1.0.0"  # Initial version
 

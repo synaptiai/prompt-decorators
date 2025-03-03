@@ -21,6 +21,7 @@ class Deductive(BaseDecorator):
         steps: Number of logical steps to include in the deductive process. (Any)
     """
 
+    name = "deductive"  # Class-level name for serialization
     decorator_name = "deductive"
     version = "1.0.0"  # Initial version
 

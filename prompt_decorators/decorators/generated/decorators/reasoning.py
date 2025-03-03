@@ -20,6 +20,7 @@ class Reasoning(BaseDecorator):
         depth: The level of detail in the reasoning process. (Literal["basic", "moderate", "comprehensive"])
     """
 
+    name = "reasoning"  # Class-level name for serialization
     decorator_name = "reasoning"
     version = "1.0.0"  # Initial version
 

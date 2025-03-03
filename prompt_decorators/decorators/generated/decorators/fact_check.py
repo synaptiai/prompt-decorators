@@ -25,6 +25,7 @@ class FactCheck(BaseDecorator):
         strictness: The threshold for considering information verified. (Literal["low", "moderate", "high"])
     """
 
+    name = "fact_check"  # Class-level name for serialization
     decorator_name = "fact_check"
     version = "1.0.0"  # Initial version
 

@@ -26,6 +26,7 @@ class Limitations(BaseDecorator):
         focus: The primary aspect to focus on in the limitations. (Literal["knowledge", "methodology", "context", "biases", "all"])
     """
 
+    name = "limitations"  # Class-level name for serialization
     decorator_name = "limitations"
     version = "1.0.0"  # Initial version
 

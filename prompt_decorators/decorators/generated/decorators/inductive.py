@@ -24,6 +24,7 @@ class Inductive(BaseDecorator):
         structure: The pattern of inductive reasoning to follow. (Literal["generalization", "causal", "statistical", "analogical"])
     """
 
+    name = "inductive"  # Class-level name for serialization
     decorator_name = "inductive"
     version = "1.0.0"  # Initial version
 

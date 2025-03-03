@@ -17,10 +17,11 @@ class RootCause(BaseDecorator):
     """Structures the response to systematically analyze underlying causes of problems or situations. This decorator applies formal root cause analysis methodologies to identify fundamental factors rather than just symptoms or immediate causes.
 
     Attributes:
-        method: The specific root cause analysis methodology to apply. (Literal["5whys", "fishbone", "pareto"])
-        depth: Level of detail in the analysis (for 5whys, represents number of 'why' iterations). (Any)
+        method: The specific root cause analysis methodology to apply. (Literal["fivewhys", "fishbone", "pareto"])
+        depth: Level of detail in the analysis (for fivewhys, represents number of 'why' iterations). (Any)
     """
 
+    name = "root_cause"  # Class-level name for serialization
     decorator_name = "root_cause"
     version = "1.0.0"  # Initial version
 
@@ -36,14 +37,14 @@ class RootCause(BaseDecorator):
 
     def __init__(
         self,
-        method: Literal["5whys", "fishbone", "pareto"] = "5whys",
+        method: Literal["fivewhys", "fishbone", "pareto"] = "fivewhys",
         depth: Any = 5,
     ) -> None:
         """Initialize the RootCause decorator.
 
         Args:
             method: The specific root cause analysis methodology to apply
-            depth: Level of detail in the analysis (for 5whys, represents number of 'why' iterations)
+            depth: Level of detail in the analysis (for fivewhys, represents number of 'why' iterations)
 
         """
         # Initialize with base values
@@ -67,9 +68,9 @@ class RootCause(BaseDecorator):
                 raise ValidationError(
                     "The parameter 'method' must be a string type value."
                 )
-            if self._method not in ["5whys", "fishbone", "pareto"]:
+            if self._method not in ["fivewhys", "fishbone", "pareto"]:
                 raise ValidationError(
-                    f"The parameter 'method' must be one of the allowed enum values: ['5whys', 'fishbone', 'pareto']. Got {self._method}"
+                    f"The parameter 'method' must be one of the allowed enum values: ['fivewhys', 'fishbone', 'pareto']. Got {self._method}"
                 )
         if self._depth is not None:
             if not isinstance(self._depth, (int, float)):
@@ -86,7 +87,7 @@ class RootCause(BaseDecorator):
                 )
 
     @property
-    def method(self) -> Literal["5whys", "fishbone", "pareto"]:
+    def method(self) -> Literal["fivewhys", "fishbone", "pareto"]:
         """Get the method parameter value.
 
         Args:

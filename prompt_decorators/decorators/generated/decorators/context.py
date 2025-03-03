@@ -25,6 +25,7 @@ class Context(BaseDecorator):
         level: The expertise level to target within the domain. (Literal["beginner", "intermediate", "expert", "mixed"])
     """
 
+    name = "context"  # Class-level name for serialization
     decorator_name = "context"
     version = "1.0.0"  # Initial version
 

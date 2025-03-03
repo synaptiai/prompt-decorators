@@ -25,6 +25,7 @@ class BlindSpots(BaseDecorator):
         position: Where to place the blind spots analysis. (Literal["after", "before", "integrated"])
     """
 
+    name = "blind_spots"  # Class-level name for serialization
     decorator_name = "blind_spots"
     version = "1.0.0"  # Initial version
 

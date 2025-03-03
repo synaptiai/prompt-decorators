@@ -25,6 +25,7 @@ class Uncertainty(BaseDecorator):
         reason: Whether to explain the reason for uncertainty. (bool)
     """
 
+    name = "uncertainty"  # Class-level name for serialization
     decorator_name = "uncertainty"
     version = "1.0.0"  # Initial version
 

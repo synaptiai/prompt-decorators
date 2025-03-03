@@ -21,6 +21,7 @@ class Refine(BaseDecorator):
         showProcess: Whether to show the intermediate steps in the refinement process. (bool)
     """
 
+    name = "refine"  # Class-level name for serialization
     decorator_name = "refine"
     version = "1.0.0"  # Initial version
 

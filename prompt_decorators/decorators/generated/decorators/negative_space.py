@@ -26,6 +26,7 @@ class NegativeSpace(BaseDecorator):
         structure: How to present the negative space analysis. (Literal["before", "after", "integrated", "separate"])
     """
 
+    name = "negative_space"  # Class-level name for serialization
     decorator_name = "negative_space"
     version = "1.0.0"  # Initial version
 

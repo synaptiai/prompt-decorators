@@ -22,6 +22,7 @@ class Audience(BaseDecorator):
         examples: Whether to include additional examples for clarity. (bool)
     """
 
+    name = "audience"  # Class-level name for serialization
     decorator_name = "audience"
     version = "1.0.0"  # Initial version
 

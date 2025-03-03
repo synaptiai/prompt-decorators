@@ -19,6 +19,7 @@ class ELI5(BaseDecorator):
         strictness: Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary. (bool)
     """
 
+    name = "eli5"  # Class-level name for serialization
     decorator_name = "eli5"
     version = "1.0.0"  # Initial version
 

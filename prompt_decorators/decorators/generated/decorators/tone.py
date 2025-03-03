@@ -20,6 +20,7 @@ class Tone(BaseDecorator):
         style: The desired tone and style for the response. (Literal["formal", "casual", "friendly", "technical", "humorous"])
     """
 
+    name = "tone"  # Class-level name for serialization
     decorator_name = "tone"
     version = "1.0.0"  # Initial version
 

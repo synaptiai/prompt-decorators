@@ -22,6 +22,7 @@ class MECE(BaseDecorator):
         framework: Optional predefined MECE framework to apply. (Literal["issue tree", "value chain", "business segments", "stakeholders", "custom"])
     """
 
+    name = "mece"  # Class-level name for serialization
     decorator_name = "mece"
     version = "1.0.0"  # Initial version
 

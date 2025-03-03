@@ -22,6 +22,7 @@ class OutputFormat(BaseDecorator):
         format: The format to use for the response. (Literal["json", "markdown", "yaml", "xml", "plaintext"])
     """
 
+    name = "output_format"  # Class-level name for serialization
     decorator_name = "output_format"
     version = "1.0.0"  # Initial version
 

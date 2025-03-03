@@ -24,6 +24,7 @@ class Contrarian(BaseDecorator):
         focus: Optional specific aspect of the topic to focus contrarian analysis on. (str)
     """
 
+    name = "contrarian"  # Class-level name for serialization
     decorator_name = "contrarian"
     version = "1.0.0"  # Initial version
 

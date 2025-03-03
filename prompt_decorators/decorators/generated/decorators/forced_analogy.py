@@ -24,6 +24,7 @@ class ForcedAnalogy(BaseDecorator):
         mappings: Number of distinct concept mappings to create between domains. (Any)
     """
 
+    name = "forced_analogy"  # Class-level name for serialization
     decorator_name = "forced_analogy"
     version = "1.0.0"  # Initial version
 

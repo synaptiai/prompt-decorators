@@ -21,6 +21,7 @@ class Extension(BaseDecorator):
         decorators: Specific decorators to load from the extension (if empty, loads all decorators from the package). (List[Any])
     """
 
+    name = "extension"  # Class-level name for serialization
     decorator_name = "extension"
     version = "1.0.0"  # Initial version
 
