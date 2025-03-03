@@ -21,4 +21,3 @@ files, or directories, and validating them against a schema.
 - `load_from_directory(directory_path, validate=True) -> typing.List[typing.Dict[str, typing.Any]]`
 - `load_from_file(file_path, validate=True) -> typing.Dict[str, typing.Any]`
 - `load_from_string(json_string, validate=True) -> typing.Dict[str, typing.Any]`
-

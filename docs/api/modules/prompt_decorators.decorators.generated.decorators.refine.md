@@ -31,4 +31,3 @@ A meta-decorator that iteratively improves the output based on specified criteri
 - `focus`: Specific aspects to focus on during refinement (e.g., clarity, conciseness, evidence)
 - `iterations`: Number of refinement cycles to perform
 - `showProcess`: Whether to show the intermediate steps in the refinement process
-

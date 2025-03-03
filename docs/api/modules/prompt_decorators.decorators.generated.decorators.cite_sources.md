@@ -31,4 +31,3 @@ Structures the response to include citations for claims and information. This de
 - `comprehensive`: Whether to cite every claim (true) or only major claims (false)
 - `format`: The citation format to use
 - `style`: The placement and format of citations within the response
-

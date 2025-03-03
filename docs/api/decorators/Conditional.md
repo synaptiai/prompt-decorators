@@ -8,22 +8,22 @@ A meta-decorator that applies different decorators based on specified conditions
 
 ### `if`
 
-**Type:** string  
-**Required:** Yes  
+**Type:** string
+**Required:** Yes
 
 The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}')
 
 ### `then`
 
-**Type:** string  
-**Required:** Yes  
+**Type:** string
+**Required:** Yes
 
 The decorator to apply if the condition is true (can be a specific decorator with parameters)
 
 ### `else`
 
-**Type:** string  
-**Required:** No  
+**Type:** string
+**Required:** No
 
 The decorator to apply if the condition is false (can be a specific decorator with parameters)
 
@@ -82,7 +82,7 @@ Apply the decorator to a prompt.
 
 Args:
     prompt: The original prompt
-    
+
 Returns:
     The modified prompt with the decorator applied
 
@@ -94,10 +94,10 @@ Create a decorator from a dictionary.
 
 Args:
     data: Dictionary representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the data is invalid or incompatible with this class
     IncompatibleVersionError: If the version is incompatible
@@ -110,10 +110,10 @@ Create a decorator from a JSON string.
 
 Args:
     json_str: JSON string representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the JSON is invalid or incompatible with this class
     json.JSONDecodeError: If the JSON is malformed
@@ -145,7 +145,7 @@ Check if this decorator is compatible with the specified version.
 
 Args:
     version_str: Version string to check compatibility with
-    
+
 Returns:
     True if compatible, False otherwise
 
@@ -166,7 +166,7 @@ Convert decorator to a JSON string.
 
 Args:
     indent: Optional indentation for pretty-printing
-    
+
 Returns:
     JSON string representation of the decorator
 
@@ -181,4 +181,3 @@ Subclasses should override for specific validation.
 
 Raises:
     ValidationError: If any parameter fails validation
-

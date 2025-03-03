@@ -31,4 +31,3 @@ A meta-decorator that establishes a precedence hierarchy among multiple decorato
 - `decorators`: Ordered list of decorators by priority (highest priority first)
 - `explicit`: Whether to explicitly mention overridden behaviors in the response
 - `mode`: How to handle conflicts between decorators
-

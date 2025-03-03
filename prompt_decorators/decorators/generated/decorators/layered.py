@@ -1,87 +1,147 @@
 """
-Layered Decorator
+Implementation of the Layered decorator.
+
+This module provides the Layered decorator class for use in prompt engineering.
 
 Presents content at multiple levels of explanation depth, allowing readers to engage with information at their preferred level of detail. This decorator structures responses with progressive disclosure, from high-level summaries to increasingly detailed explanations.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import LayeredLevelsEnum, LayeredProgressionEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    LayeredLevelsEnum,
+    LayeredProgressionEnum,
+)
 
 
 class Layered(BaseDecorator):
-    """Presents content at multiple levels of explanation depth, allowing readers to engage with information at their preferred level of detail. This decorator structures responses with progressive disclosure, from high-level summaries to increasingly detailed explanations."""
+    """
+    Presents content at multiple levels of explanation depth, allowing
+    readers to engage with information at their preferred level of detail.
+    This decorator structures responses with progressive disclosure, from
+    high-level summaries to increasingly detailed explanations.
+
+    Attributes:
+        levels: The granularity of explanation levels to include
+        count: Number of distinct explanation layers to provide
+        progression: How to structure the progression between layers
+    """
+
+    decorator_name = "layered"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        levels: Optional[LayeredLevelsEnum] = LayeredLevelsEnum.SUMMARY_DETAIL_TECHNICAL,
-        count: Optional[float] = 3,
-        progression: Optional[LayeredProgressionEnum] = LayeredProgressionEnum.SEPARATE,
-    ):
+        levels: Literal["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"] = "summary-detail-technical",
+        count: Any = 3,
+        progression: Literal["separate", "nested", "incremental"] = "separate",
+    ) -> None:
         """
-        Initialize Layered decorator.
+        Initialize the Layered decorator.
 
         Args:
             levels: The granularity of explanation levels to include
             count: Number of distinct explanation layers to provide
             progression: How to structure the progression between layers
-        """
-        super().__init__(
-            name="Layered",
-            version="1.0.0",
-            parameters={
-                "levels": levels,
-                "count": count,
-                "progression": progression,
-            },
-            metadata={
-                "description": "Presents content at multiple levels of explanation depth, allowing readers to engage with information at their preferred level of detail. This decorator structures responses with progressive disclosure, from high-level summaries to increasingly detailed explanations.",
-                "author": "Prompt Decorators Working Group",
-                "category": "structure",
-            },
-        )
 
-    @property
-    def levels(self) -> LayeredLevelsEnum:
-        """The granularity of explanation levels to include"""
-        return self.parameters.get("levels")
-
-    @property
-    def count(self) -> float:
-        """Number of distinct explanation layers to provide"""
-        return self.parameters.get("count")
-
-    @property
-    def progression(self) -> LayeredProgressionEnum:
-        """How to structure the progression between layers"""
-        return self.parameters.get("progression")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.count is not None and self.count < 2:
-            raise ValueError(f"count must be at least 2, got {self.count}")
-        if self.count is not None and self.count > 5:
-            raise ValueError(f"count must be at most 5, got {self.count}")
-
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
-        Args:
-            prompt: The original prompt
-            
         Returns:
-            The modified prompt with the decorator applied
+            None
         """
-        # Apply the decorator: Presents content at multiple levels of explanation depth, allowing readers to engage with information at their preferred level of detail
-        instruction = f"Instructions for {self.name} decorator: "
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._levels = levels
+        self._count = count
+        self._progression = progression
+
+        # Validate parameters
+        if self._levels is not None:
+            valid_values = ["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"]
+            if self._levels not in valid_values:
+                raise ValidationError("The parameter 'levels' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._count is not None:
+            if not isinstance(self._count, (int, float)) or isinstance(self._count, bool):
+                raise ValidationError("The parameter 'count' must be a numeric value.")
+
+        if self._progression is not None:
+            valid_values = ["separate", "nested", "incremental"]
+            if self._progression not in valid_values:
+                raise ValidationError("The parameter 'progression' must be one of the following values: " + ", ".join(valid_values))
+
+
+    @property
+    def levels(self) -> Literal["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"]:
+        """
+        Get the levels parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The levels parameter value
+        """
+        return self._levels
+
+    @property
+    def count(self) -> Any:
+        """
+        Get the count parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The count parameter value
+        """
+        return self._count
+
+    @property
+    def progression(self) -> Literal["separate", "nested", "incremental"]:
+        """
+        Get the progression parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The progression parameter value
+        """
+        return self._progression
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "layered",
+            "levels": self.levels,
+            "count": self.count,
+            "progression": self.progression,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.levels is not None:
-            instruction += f"levels={self.levels}, "
+            params.append(f"levels={self.levels}")
         if self.count is not None:
-            instruction += f"count={self.count}, "
+            params.append(f"count={self.count}")
         if self.progression is not None:
-            instruction += f"progression={self.progression}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"progression={self.progression}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

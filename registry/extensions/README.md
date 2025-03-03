@@ -16,4 +16,4 @@ To contribute a new decorator to the extensions registry:
 3. Submit a pull request with your extension
 4. Ensure your decorator does not conflict with existing core or extension decorators
 
-Please follow the naming conventions and structure of existing decorators to maintain consistency across the registry. 
+Please follow the naming conventions and structure of existing decorators to maintain consistency across the registry.

@@ -37,4 +37,3 @@ Generator for decorator unit tests.
 **Signature:** `main()`
 
 Main entry point for the test generator.
-

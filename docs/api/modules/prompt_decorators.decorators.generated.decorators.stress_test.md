@@ -31,4 +31,3 @@ Tests the robustness of ideas, theories, plans, or systems by applying extreme c
 - `domain`: Optional specific domain or dimension to stress test (e.g., financial, ethical, scalability)
 - `scenarios`: Number of stress test scenarios to apply
 - `severity`: The intensity level of the stress conditions
-

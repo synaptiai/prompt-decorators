@@ -30,4 +30,3 @@ Structures the response as a debate between multiple perspectives on a topic. Th
 
 - `balanced`: Whether to ensure equal representation and strength of arguments for each perspective
 - `perspectives`: Number of different perspectives to include in the debate
-

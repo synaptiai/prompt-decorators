@@ -1,20 +1,14 @@
 [build-system]
-requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
+[tool.poetry]
 name = "prompt-decorators"
-description = "A framework for defining, managing, and applying prompt decorators to enhance interactions with LLMs"
+version = "0.1.0"
+description = "A framework for managing prompt decorators to enhance interactions with language models"
+authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
-authors = [
-    {name = "Daniel Bentes", email = "your.email@example.com"},
-]
-maintainers = [
-    {name = "Daniel Bentes", email = "your.email@example.com"},
-]
-keywords = ["llm", "prompt engineering", "nlp", "ai", "language models", "decorators"]
+license = "MIT"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -24,60 +18,42 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
-dynamic = ["version"]
-
-dependencies = [
-    "pydantic>=2.0.0",
-    "typing_extensions>=4.0.0",
-    "jsonschema>=4.0.0",
-    "importlib-metadata>=4.0.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "black>=23.0.0",
-    "isort>=5.0.0",
-    "mypy>=1.0.0",
-    "ruff>=0.0.267",
-]
-docs = [
-    "mkdocs>=1.4.0",
-    "mkdocs-material>=9.0.0",
-    "mkdocstrings>=0.22.0",
-    "mkdocstrings-python>=1.0.0",
-]
-langchain = [
-    "langchain>=0.0.200",
-]
-openai = [
-    "openai>=1.0.0",
-]
-anthropic = [
-    "anthropic>=0.5.0",
-]
-all = [
-    "prompt-decorators[dev,docs,langchain,openai,anthropic]",
-]
+[tool.poetry.urls]
+Documentation = "https://github.com/synaptiai/prompt-decorators/docs"
+Source = "https://github.com/synaptiai/prompt-decorators"
+"Issue Tracker" = "https://github.com/synaptiai/prompt-decorators/issues"
 
-[project.urls]
-"Documentation" = "https://yourusername.github.io/prompt-decorators/"
-"Source" = "https://github.com/yourusername/prompt-decorators"
-"Issue Tracker" = "https://github.com/yourusername/prompt-decorators/issues"
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+pydantic = "^2.0.0"
+jsonschema = "^4.0.0"
+importlib-metadata = "^6.0.0"
+markdown = "^3.7"
 
-[tool.setuptools]
-packages = ["prompt_decorators"]
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+black = "^23.0.0"
+isort = "^5.0.0"
+mypy = "^1.0.0"
+pytest-cov = "^4.0.0"
+ruff = "^0.1.0"
+pre-commit = "^4.1.0"
 
-[tool.setuptools.package-data]
-"prompt_decorators" = ["py.typed"]
-"prompt_decorators.registry" = ["*.json"]
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.0.0"
+sphinx-rtd-theme = "^1.0.0"
+myst-parser = "^2.0.0"
 
-[tool.setuptools_scm]
-write_to = "prompt_decorators/_version.py"
+[tool.poetry.group.langchain.dependencies]
+langchain = ">=0.0.200"
+
+[tool.poetry.group.openai.dependencies]
+openai = ">=0.27.0"
+
+[tool.poetry.group.anthropic.dependencies]
+anthropic = ">=0.3.0"
 
 [tool.black]
 line-length = 88
@@ -96,24 +72,14 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 
-[[tool.mypy.overrides]]
-module = "tests.*"
-disallow_untyped_defs = false
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
-python_classes = "Test*"
 python_functions = "test_*"
+python_classes = "Test*"
 
 [tool.ruff]
 line-length = 88
 target-version = "py38"
-select = ["E", "F", "B", "W", "I", "N", "D", "UP", "ANN", "C4", "SIM", "ARG"]
-ignore = ["B905", "ANN101", "ANN102"]
-
-[tool.ruff.per-file-ignores]
-"tests/*" = ["ANN", "D"]
-
-[tool.ruff.pydocstyle]
-convention = "google"
+select = ["E", "F", "B", "I"]
+ignore = []

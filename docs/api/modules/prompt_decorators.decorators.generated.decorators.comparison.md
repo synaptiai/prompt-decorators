@@ -31,4 +31,3 @@ Structures the response as a direct comparison between multiple items, concepts,
 - `aspects`: Specific aspects or dimensions to compare
 - `format`: The presentation format for the comparison
 - `highlight`: Whether to explicitly emphasize key differences
-

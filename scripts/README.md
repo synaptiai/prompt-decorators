@@ -1,52 +1,71 @@
-# Prompt Decorators Scripts
+# Prompt Decorators Script Tools
 
-This directory contains utility scripts for the Prompt Decorators project.
+This directory contains utility scripts for working with the prompt decorators registry and codebase. The scripts help with validation, code generation, and test generation.
 
-## Available Scripts
+## Recommended Scripts
 
-### Release Script (`release.py`)
+### 📌 `registry_tools.py` (Unified Tool)
 
-Automates the release process for the Prompt Decorators library.
+This is the **recommended** tool for all registry-related operations. It provides a unified interface for validation, code generation, and test generation.
 
-**Features:**
-- Updates version numbers in relevant files
-- Updates the changelog with release details
-- Creates a git tag
-- Builds the distribution packages
-- Uploads to PyPI (with optional confirmation)
-
-**Usage:**
 ```bash
-# Make the script executable (if not already)
-chmod +x scripts/release.py
+# Show available commands
+python scripts/registry_tools.py --help
 
-# Run the script
-./scripts/release.py [--dry-run] [--no-confirm] [major|minor|patch]
+# Validate the registry
+python scripts/registry_tools.py validate
+
+# Generate Python code
+python scripts/registry_tools.py generate-code
+
+# Generate tests
+python scripts/registry_tools.py generate-tests
+
+# Run all operations in sequence (validate, generate code, generate tests)
+python scripts/registry_tools.py all
 ```
 
-**Arguments:**
-- `major|minor|patch`: The part of the version to increment
-- `--dry-run`: Run without making actual changes
-- `--no-confirm`: Don't ask for confirmation before publishing to PyPI
+### 📌 `generate_all_tests.py`
 
-**Example:**
+For test generation only, this script provides a focused interface.
+
 ```bash
-# Increment the patch version (e.g., 0.1.0 -> 0.1.1)
-./scripts/release.py patch
+# Generate tests with default settings
+python scripts/generate_all_tests.py
 
-# Increment the minor version with a dry run (e.g., 0.1.0 -> 0.2.0)
-./scripts/release.py --dry-run minor
-
-# Increment the major version without confirmation (e.g., 0.1.0 -> 1.0.0)
-./scripts/release.py --no-confirm major
+# Generate tests with custom paths
+python scripts/generate_all_tests.py --registry-dir registry --output-dir tests/custom
 ```
 
-## Adding New Scripts
+## Deprecated Scripts
 
-When adding new scripts to this directory:
+The following scripts are **deprecated** and should not be used directly. Their functionality has been incorporated into the unified `registry_tools.py` script:
 
-1. Make sure to add proper documentation in the script itself
-2. Update this README with information about the script
-3. Ensure the script is executable (`chmod +x scripts/your_script.py`)
-4. Include proper error handling and logging
-5. Add type annotations and follow the project's coding standards 
+- ❌ `generate_tests.py` - Use `registry_tools.py generate-tests` instead
+
+## Development Scripts
+
+These scripts may be useful for development purposes:
+
+- `run_tests.py` - Helper script for running tests
+
+## Contributing
+
+When adding new functionality:
+
+1. Consider adding it to the unified `registry_tools.py` script rather than creating new scripts
+2. Ensure the new functionality is well-documented with docstrings and command-line help
+3. Add appropriate error handling and logging
+4. Follow the existing code style and patterns
+
+## Workflow
+
+The typical workflow for working with the prompt decorators registry is:
+
+1. Make changes to JSON files in the `registry/` directory
+2. Run `python scripts/registry_tools.py validate` to validate the registry
+3. Run `python scripts/registry_tools.py generate-code` to generate Python code
+4. Run `python scripts/registry_tools.py generate-tests` to generate tests
+5. Run tests to ensure everything works correctly: `python -m pytest tests/auto -v`
+
+For convenience, you can run all the steps at once with `python scripts/registry_tools.py all`.

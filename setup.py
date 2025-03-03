@@ -3,7 +3,8 @@ Setup script for the Prompt Decorators package.
 """
 
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 
 # Read the contents of README.md
 this_directory = os.path.abspath(os.path.dirname(__file__))
@@ -18,8 +19,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Daniel Bentes",
-    author_email="your.email@example.com",
-    url="https://github.com/yourusername/prompt-decorators",
+    author_email="promptdecorators@synapti.ai",
+    url="https://github.com/synaptiai/prompt-decorators",
     packages=find_packages(exclude=["tests", "tests.*", "examples", "examples.*"]),
     package_data={
         "prompt_decorators": ["py.typed"],  # For PEP 561 compliance
@@ -72,8 +73,8 @@ setup(
     ],
     keywords="llm, prompt engineering, nlp, ai, language models, decorators",
     project_urls={
-        "Documentation": "https://yourusername.github.io/prompt-decorators/",
-        "Source": "https://github.com/yourusername/prompt-decorators",
-        "Issue Tracker": "https://github.com/yourusername/prompt-decorators/issues",
+        "Documentation": "https://synaptiai.github.io/prompt-decorators/",
+        "Source": "https://github.com/synaptiai/prompt-decorators",
+        "Issue Tracker": "https://github.com/synaptiai/prompt-decorators/issues",
     },
-) 
+)

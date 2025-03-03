@@ -25,4 +25,3 @@ either by using existing decorator classes or by dynamically generating new ones
 - `create_from_json_string(json_string) -> typing.Optional[prompt_decorators.core.base.BaseDecorator]`
 - `extract_parameters(decorator_data) -> typing.Dict[str, typing.Any]`
 - `find_decorator_class(decorator_name) -> typing.Optional[typing.Type[prompt_decorators.core.base.BaseDecorator]]`
-

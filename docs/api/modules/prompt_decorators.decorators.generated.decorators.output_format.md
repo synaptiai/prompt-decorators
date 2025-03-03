@@ -29,4 +29,3 @@ Specifies the format of the AI's response. This decorator ensures the output fol
 #### Properties
 
 - `format`: The format to use for the response
-

@@ -20,4 +20,4 @@ These decorators modify how the AI approaches reasoning about a problem. They in
 - **NegativeSpace** - Uncover what isn't explicitly stated
 - **DeepDive** - Multi-layered, progressively deeper analysis
 
-Note: The **Reasoning** and **StepByStep** decorators from this category are part of the minimal core set and can be found in the minimal directory. 
+Note: The **Reasoning** and **StepByStep** decorators from this category are part of the minimal core set and can be found in the minimal directory.

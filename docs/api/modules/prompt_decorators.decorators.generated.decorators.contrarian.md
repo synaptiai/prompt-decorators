@@ -31,4 +31,3 @@ Generates responses that deliberately challenge conventional wisdom or mainstrea
 - `approach`: The specific contrarian approach to take
 - `focus`: Optional specific aspect of the topic to focus contrarian analysis on
 - `maintain`: Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)
-

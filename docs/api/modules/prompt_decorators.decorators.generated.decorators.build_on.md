@@ -31,4 +31,3 @@ A meta-decorator that builds upon previous context or responses rather than star
 - `approach`: How to build upon the referenced content
 - `preserveStructure`: Whether to maintain the structure of the referenced content
 - `reference`: What to build upon from the previous context
-

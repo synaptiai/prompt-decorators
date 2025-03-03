@@ -8,9 +8,9 @@ A detailed description of what the decorator does, its purpose, and how it modif
 
 ### `parameterName`
 
-**Type:** string|number|boolean|enum  
-**Required:** No  
-**Default:** `defaultValue`  
+**Type:** string|number|boolean|enum
+**Required:** No
+**Default:** `defaultValue`
 
 Description of what this parameter does
 
@@ -33,4 +33,3 @@ Expected behavior or output pattern from this decorator
 
 - `gpt-4`
 - `gpt-3.5-turbo`
-

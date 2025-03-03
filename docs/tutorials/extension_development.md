@@ -58,19 +58,19 @@ from prompt_decorators.base import BaseDecorator
 
 class ColorHighlight(BaseDecorator):
     """Decorator that highlights text with specific colors.
-    
+
     This decorator adds HTML-like color tags to highlight specific words or
     phrases in the prompt text.
-    
+
     Args:
         highlight_words: Words or phrases to highlight
         color: Color to use for highlighting (default: "yellow")
         case_sensitive: Whether matching should be case-sensitive (default: False)
     """
-    
+
     def __init__(
-        self, 
-        highlight_words: Union[str, List[str]], 
+        self,
+        highlight_words: Union[str, List[str]],
         color: str = "yellow",
         case_sensitive: bool = False
     ) -> None:
@@ -79,24 +79,24 @@ class ColorHighlight(BaseDecorator):
         self.highlight_words = [highlight_words] if isinstance(highlight_words, str) else highlight_words
         self.color = color
         self.case_sensitive = case_sensitive
-        
+
     def __call__(self, text: str) -> str:
         """Apply the color highlighting to the text.
-        
+
         Args:
             text: The input text to be highlighted
-            
+
         Returns:
             The text with color highlighting applied
         """
         if not self.highlight_words:
             return text
-            
+
         result = text
         for word in self.highlight_words:
             if self.case_sensitive:
                 result = result.replace(
-                    word, 
+                    word,
                     f"<span style='background-color: {self.color}'>{word}</span>"
                 )
             else:
@@ -104,12 +104,12 @@ class ColorHighlight(BaseDecorator):
                 import re
                 pattern = re.compile(re.escape(word), re.IGNORECASE)
                 result = pattern.sub(
-                    lambda m: f"<span style='background-color: {self.color}'>{m.group(0)}</span>", 
+                    lambda m: f"<span style='background-color: {self.color}'>{m.group(0)}</span>",
                     result
                 )
-                
+
         return result
-    
+
     @property
     def metadata(self) -> Dict[str, Any]:
         """Return metadata about this decorator instance."""
@@ -128,35 +128,35 @@ Let's enhance our decorator with more functionality:
 ```python
 class ColorHighlight(BaseDecorator):
     # ... existing code ...
-    
+
     def add_highlight_word(self, word: str) -> 'ColorHighlight':
         """Add a new word to highlight.
-        
+
         Args:
             word: The new word to highlight
-            
+
         Returns:
             Self for method chaining
         """
         if word not in self.highlight_words:
             self.highlight_words.append(word)
         return self
-    
+
     def change_color(self, new_color: str) -> 'ColorHighlight':
         """Change the highlight color.
-        
+
         Args:
             new_color: The new color to use
-            
+
         Returns:
             Self for method chaining
         """
         self.color = new_color
         return self
-    
+
     def toggle_case_sensitivity(self) -> 'ColorHighlight':
         """Toggle case sensitivity.
-        
+
         Returns:
             Self for method chaining
         """
@@ -172,10 +172,10 @@ Factory methods make it easier to create common variants of your decorator:
 @classmethod
 def important(cls, highlight_words: Union[str, List[str]]) -> 'ColorHighlight':
     """Factory method for highlighting important information in red.
-    
+
     Args:
         highlight_words: Words to highlight as important
-        
+
     Returns:
         ColorHighlight instance configured for important highlighting
     """
@@ -184,10 +184,10 @@ def important(cls, highlight_words: Union[str, List[str]]) -> 'ColorHighlight':
 @classmethod
 def casual(cls, highlight_words: Union[str, List[str]]) -> 'ColorHighlight':
     """Factory method for casual highlighting in light yellow.
-    
+
     Args:
         highlight_words: Words to highlight casually
-        
+
     Returns:
         ColorHighlight instance configured for casual highlighting
     """
@@ -299,23 +299,23 @@ import json
 
 def register_extensions(registry: DecoratorRegistry) -> None:
     """Register extensions with the decorator registry.
-    
+
     Args:
         registry: The decorator registry instance
     """
     # Register the ColorHighlight decorator
     registry.register_decorator_class(ColorHighlight)
-    
+
     # Load registry metadata from JSON
     current_dir = os.path.dirname(os.path.abspath(__file__))
     json_path = os.path.join(current_dir, "registry_extensions", "color_highlight.json")
-    
+
     with open(json_path, 'r') as f:
         metadata = json.load(f)
-    
+
     # Update registry with metadata
     registry.update_decorator_metadata("ColorHighlight", metadata)
-    
+
     print(f"Registered ColorHighlight decorator with the registry")
 ```
 
@@ -371,7 +371,7 @@ def test_case_sensitivity():
     result = highlighter("This is an Important message, not important.")
     expected = "This is an <span style='background-color: yellow'>Important</span> message, not important."
     assert result == expected
-    
+
     # Case insensitive
     highlighter = ColorHighlight(["Important"], color="yellow", case_sensitive=False)
     result = highlighter("This is an Important message, also important.")
@@ -385,7 +385,7 @@ def test_factory_methods():
     result = highlighter("This is a warning message.")
     expected = "This is a <span style='background-color: red'>warning</span> message."
     assert result == expected
-    
+
     # Casual factory
     highlighter = ColorHighlight.casual(["note"])
     result = highlighter("Please note this information.")
@@ -400,7 +400,7 @@ def test_method_chaining():
                .change_color("green")
                .toggle_case_sensitivity()
                ("This has an initial word and an ADDED emphasis."))
-    
+
     # With case sensitivity toggled to True
     expected = "This has an <span style='background-color: green'>initial</span> word and an <span style='background-color: green'>added</span> emphasis."
     assert result == expected
@@ -457,14 +457,14 @@ from typing import Any, Dict, Optional, Type
 
 class ExtendedRegistry(DecoratorRegistry):
     """Extended registry with additional features."""
-    
+
     def register_with_dependencies(
-        self, 
+        self,
         decorator_class: Type[BaseDecorator],
         dependencies: Dict[str, Any]
     ) -> None:
         """Register a decorator with its dependencies.
-        
+
         Args:
             decorator_class: The decorator class to register
             dependencies: Dependencies required by the decorator
@@ -472,23 +472,23 @@ class ExtendedRegistry(DecoratorRegistry):
         self.register_decorator_class(decorator_class)
         # Store dependencies for later use
         self._dependencies[decorator_class.__name__] = dependencies
-    
+
     def get_decorator_with_dependencies(
         self,
         decorator_name: str
     ) -> Optional[BaseDecorator]:
         """Get a decorator instance with its dependencies injected.
-        
+
         Args:
             decorator_name: Name of the decorator to get
-            
+
         Returns:
             Decorator instance with dependencies or None if not found
         """
         factory = self.get_decorator_factory(decorator_name)
         if not factory:
             return None
-            
+
         dependencies = self._dependencies.get(decorator_name, {})
         return factory(**dependencies)
 ```
@@ -500,21 +500,21 @@ For complex extensions, break functionality into smaller components:
 ```python
 class MarkerComponent:
     """Component for marking text."""
-    
+
     def mark_text(self, text, marker, pattern):
         # Implementation
         pass
 
 class HighlightComponent:
     """Component for highlighting text."""
-    
+
     def highlight_text(self, text, color):
         # Implementation
         pass
 
 class AdvancedHighlighter(BaseDecorator, MarkerComponent, HighlightComponent):
     """Advanced highlighter using composition of components."""
-    
+
     def __call__(self, text):
         # Use components to implement functionality
         marked_text = self.mark_text(text, marker="*", pattern=self.pattern)
@@ -595,4 +595,4 @@ Remember that the power of the Prompt Decorators framework comes from its extens
 - Develop domain-specific decorator libraries
 - Contribute to the core framework development
 
-Happy decorating! 
+Happy decorating!

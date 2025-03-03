@@ -10,4 +10,4 @@ These five decorators form the minimal conforming implementation and **MUST** be
 4. **Tone** - Overall tone adjustment
 5. **Version** - Specify standard version compatibility
 
-According to the specification (Section 1.3 Conformance), implementations claiming conformance to this standard MUST implement at least these five decorators. 
+According to the specification (Section 1.3 Conformance), implementations claiming conformance to this standard MUST implement at least these five decorators.

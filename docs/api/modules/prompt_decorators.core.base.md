@@ -61,4 +61,3 @@ Class representing a semantic version.
 
 - `__init__(version_str)`
 - `is_compatible_with(other) -> <class 'bool'>`
-

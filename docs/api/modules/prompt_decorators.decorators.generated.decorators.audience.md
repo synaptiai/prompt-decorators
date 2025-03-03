@@ -31,4 +31,3 @@ Adapts the response for a specific audience expertise level. This decorator ensu
 - `domain`: Specific knowledge domain or field for domain-specific terminology adaptation
 - `examples`: Whether to include additional examples for clarity
 - `level`: The expertise level of the target audience
-

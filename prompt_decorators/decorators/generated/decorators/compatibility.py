@@ -1,77 +1,148 @@
 """
-Compatibility Decorator
+Implementation of the Compatibility decorator.
+
+This module provides the Compatibility decorator class for use in prompt engineering.
 
 A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
+import re
+from typing import Any, Dict, List, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
 
 
 class Compatibility(BaseDecorator):
-    """A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants."""
+    """
+    A meta-decorator that specifies model-specific adaptations or fall-
+    back behaviors. This enables graceful degradation of decorator
+    functionalities across different LLM capabilities and ensures optimal
+    performance across model variants.
+
+    Attributes:
+        models: List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.)
+        fallback: Decorator to apply if the current model doesn't match any in the models list
+        behaviors: JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}')
+    """
+
+    decorator_name = "compatibility"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
         models: List[Any],
-        fallback: Optional[str] = None,
-        behaviors: Optional[str] = None,
-    ):
+        fallback: str = None,
+        behaviors: str = None,
+    ) -> None:
         """
-        Initialize Compatibility decorator.
+        Initialize the Compatibility decorator.
 
         Args:
-            models: List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.)
-            fallback: Decorator to apply if the current model doesn't match any in the models list
-            behaviors: JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}')
+            models: List of specific models to adapt for (e.g., gpt-3.5-turbo,
+                gpt-4, etc.)
+            fallback: Decorator to apply if the current model doesn't match any in
+                the models list
+            behaviors: JSON string mapping model names to specific adaptations
+                (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning",
+                "gpt-4": "maximize detailed analysis"}')
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Compatibility",
-            version="1.0.0",
-            parameters={
-                "models": models,
-                "fallback": fallback,
-                "behaviors": behaviors,
-            },
-            metadata={
-                "description": "A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.",
-                "author": "Prompt Decorators Working Group",
-                "category": "meta",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._models = models
+        self._fallback = fallback
+        self._behaviors = behaviors
+
+        # Validate parameters
+        if self._models is None:
+            raise ValidationError("The parameter 'models' is required for Compatibility decorator.")
+
+        if self._models is not None:
+            if not isinstance(self._models, (list, tuple)):
+                raise ValidationError("The parameter 'models' must be an array.")
+
+        if self._fallback is not None:
+            if not isinstance(self._fallback, str):
+                raise ValidationError("The parameter 'fallback' must be a string value.")
+
+        if self._behaviors is not None:
+            if not isinstance(self._behaviors, str):
+                raise ValidationError("The parameter 'behaviors' must be a string value.")
+
 
     @property
     def models(self) -> List[Any]:
-        """List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.)"""
-        return self.parameters.get("models")
+        """
+        Get the models parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The models parameter value
+        """
+        return self._models
 
     @property
     def fallback(self) -> str:
-        """Decorator to apply if the current model doesn't match any in the models list"""
-        return self.parameters.get("fallback")
+        """
+        Get the fallback parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The fallback parameter value
+        """
+        return self._fallback
 
     @property
     def behaviors(self) -> str:
-        """JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}')"""
-        return self.parameters.get("behaviors")
+        """
+        Get the behaviors parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The behaviors parameter value
         """
-        # Apply the decorator: A meta-decorator that specifies model-specific adaptations or fall-back behaviors
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._behaviors
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "compatibility",
+            "models": self.models,
+            "fallback": self.fallback,
+            "behaviors": self.behaviors,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.models is not None:
-            instruction += f"models={self.models}, "
+            params.append(f"models={self.models}")
         if self.fallback is not None:
-            instruction += f"fallback={self.fallback}, "
+            params.append(f"fallback={self.fallback}")
         if self.behaviors is not None:
-            instruction += f"behaviors={self.behaviors}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"behaviors={self.behaviors}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

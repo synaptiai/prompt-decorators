@@ -31,4 +31,3 @@ Structures the response by ranking information according to importance, urgency,
 - `count`: Number of prioritized items to include
 - `criteria`: The specific criterion to use for prioritization (e.g., importance, urgency, ROI)
 - `showRationale`: Whether to explain the reasoning behind each priority ranking
-

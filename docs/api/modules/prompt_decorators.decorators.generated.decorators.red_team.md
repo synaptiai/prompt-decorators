@@ -31,4 +31,3 @@ Applies adversarial analysis to test assumptions, identify vulnerabilities, and 
 - `constructive`: Whether to include constructive suggestions for improvement after critiques
 - `focus`: Specific aspects to focus the red team analysis on
 - `strength`: How aggressive or challenging the red team analysis should be
-

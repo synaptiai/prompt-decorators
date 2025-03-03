@@ -37,25 +37,25 @@ class PolitenessLevel(Enum):
 class PoliteDecorator(BaseDecorator):
     """
     A decorator that makes responses more polite and courteous.
-    
+
     This decorator adds instructions to generate responses with appropriate
     levels of politeness, optionally using honorifics and following
     specific cultural norms of courtesy.
     """
-    
+
     name = "Polite"
     version = "1.0.0"
     category = "tone"
-    
+
     def __init__(
-        self, 
-        politeness_level: int = 1, 
+        self,
+        politeness_level: int = 1,
         use_honorifics: bool = False,
         culture: Optional[str] = None
     ):
         """
         Initialize the polite decorator.
-        
+
         Args:
             politeness_level: Level of politeness (1-3), higher means more formal
             use_honorifics: Whether to use formal honorifics in the response
@@ -66,16 +66,16 @@ class PoliteDecorator(BaseDecorator):
         self.politeness_level = max(1, min(3, politeness_level))  # Clamp between 1-3
         self.use_honorifics = use_honorifics
         self.culture = culture
-    
+
     def apply(self, prompt: str) -> str:
         """
         Apply the decorator to a prompt.
-        
+
         This method adds instructions for politeness to the prompt.
-        
+
         Args:
             prompt: The prompt to decorate
-            
+
         Returns:
             The decorated prompt with politeness instructions
         """
@@ -86,15 +86,15 @@ class PoliteDecorator(BaseDecorator):
             instruction = "Please respond in a very polite and respectful manner."
         else:  # level == 3
             instruction = "Please respond with extreme formality and the utmost courtesy."
-        
+
         # Add honorific instruction if requested
         if self.use_honorifics:
             instruction += " Use appropriate honorifics and formal address."
-        
+
         # Add cultural context if specified
         if self.culture:
             instruction += f" Follow the politeness norms typical in {self.culture} culture."
-        
+
         # Return the decorated prompt
         return f"{instruction}\n\n{prompt}"
 ```
@@ -193,18 +193,18 @@ from prompt_decorators.core import ModelSpecificDecorator
 class ModelSpecificPoliteDecorator(ModelSpecificDecorator):
     """
     A model-specific version of the polite decorator.
-    
+
     This decorator adapts the politeness instructions based on the model's
     capabilities and characteristics.
     """
-    
+
     name = "PoliteModelSpecific"
     version = "1.0.0"
-    
+
     def __init__(
-        self, 
+        self,
         model_id: str,
-        politeness_level: int = 1, 
+        politeness_level: int = 1,
         use_honorifics: bool = False,
         culture: Optional[str] = None
     ):
@@ -213,7 +213,7 @@ class ModelSpecificPoliteDecorator(ModelSpecificDecorator):
         self.politeness_level = max(1, min(3, politeness_level))
         self.use_honorifics = use_honorifics
         self.culture = culture
-    
+
     def apply_for_model(self, prompt: str) -> str:
         """Apply model-specific politeness instructions."""
         # Adapt based on model capabilities
@@ -225,18 +225,18 @@ class ModelSpecificPoliteDecorator(ModelSpecificDecorator):
                 instruction = "Please respond in a very polite and respectful manner."
             else:  # level == 3
                 instruction = "Please respond with extreme formality and the utmost courtesy."
-            
+
             if self.use_honorifics:
                 instruction += " Use appropriate honorifics and formal address."
-            
+
             if self.culture:
                 instruction += f" Follow the politeness norms typical in {self.culture} culture."
         else:
             # For simpler models, use a more basic instruction
             instruction = "Please be polite and respectful in your response."
-        
+
         return f"{instruction}\n\n{prompt}"
-    
+
     def apply_fallback(self, prompt: str) -> str:
         """Fallback for unknown models."""
         return f"Please be polite in your response.\n\n{prompt}"
@@ -266,19 +266,19 @@ def main():
     # Create a sample prompt
     prompt = "Explain the concept of quantum computing."
     print(f"Original prompt: \"{prompt}\"\n")
-    
+
     # Test with basic politeness
     basic = PoliteDecorator()
     decorated_prompt = basic.apply(prompt)
     print("Basic politeness:")
     print(f"\"{decorated_prompt}\"\n")
-    
+
     # Test with higher politeness level
     formal = PoliteDecorator(politeness_level=3, use_honorifics=True)
     decorated_prompt = formal.apply(prompt)
     print("Formal with honorifics:")
     print(f"\"{decorated_prompt}\"\n")
-    
+
     # Test with cultural context
     cultural = PoliteDecorator(politeness_level=2, culture="British")
     decorated_prompt = cultural.apply(prompt)
@@ -376,4 +376,4 @@ To further enhance your decorator:
 4. Consider edge cases and parameter validation
 5. Define compatibility with other decorators
 
-The Prompt Decorators framework makes it easy to create and share custom decorators that enhance LLM interactions in specific ways, allowing for more controlled and consistent prompting across applications. 
+The Prompt Decorators framework makes it easy to create and share custom decorators that enhance LLM interactions in specific ways, allowing for more controlled and consistent prompting across applications.

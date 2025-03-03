@@ -1,58 +1,96 @@
 """
-Reasoning Decorator
+Implementation of the Reasoning decorator.
+
+This module provides the Reasoning decorator class for use in prompt engineering.
 
 Modifies the AI's response to provide explicit reasoning paths before reaching conclusions. This decorator encourages the model to show its thought process, making responses more transparent and trustworthy.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import ReasoningDepthEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    ReasoningDepthEnum,
+)
 
 
 class Reasoning(BaseDecorator):
-    """Modifies the AI's response to provide explicit reasoning paths before reaching conclusions. This decorator encourages the model to show its thought process, making responses more transparent and trustworthy."""
+    """
+    Modifies the AI's response to provide explicit reasoning paths before
+    reaching conclusions. This decorator encourages the model to show its
+    thought process, making responses more transparent and trustworthy.
+
+    Attributes:
+        depth: The level of detail in the reasoning process
+    """
+
+    decorator_name = "reasoning"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        depth: Optional[ReasoningDepthEnum] = ReasoningDepthEnum.MODERATE,
-    ):
+        depth: Literal["basic", "moderate", "comprehensive"] = "moderate",
+    ) -> None:
         """
-        Initialize Reasoning decorator.
+        Initialize the Reasoning decorator.
 
         Args:
             depth: The level of detail in the reasoning process
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Reasoning",
-            version="1.0.0",
-            parameters={
-                "depth": depth,
-            },
-            metadata={
-                "description": "Modifies the AI's response to provide explicit reasoning paths before reaching conclusions. This decorator encourages the model to show its thought process, making responses more transparent and trustworthy.",
-                "author": "Prompt Decorators Working Group",
-                "category": "minimal",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+
+        # Validate parameters
+        if self._depth is not None:
+            valid_values = ["basic", "moderate", "comprehensive"]
+            if self._depth not in valid_values:
+                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
+
 
     @property
-    def depth(self) -> ReasoningDepthEnum:
-        """The level of detail in the reasoning process"""
-        return self.parameters.get("depth")
+    def depth(self) -> Literal["basic", "moderate", "comprehensive"]:
+        """
+        Get the depth parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The depth parameter value
         """
-        # Apply the decorator: Modifies the AI's response to provide explicit reasoning paths before reaching conclusions
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._depth
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "reasoning",
+            "depth": self.depth,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.depth is not None:
-            instruction += f"depth={self.depth}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"depth={self.depth}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

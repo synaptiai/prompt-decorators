@@ -1,109 +1,111 @@
-# Prompt Decorators Documentation
+# Prompt Decorators
 
-Welcome to the official documentation for the Prompt Decorators framework. This documentation will help you understand, use, and extend the framework for enhancing your interactions with Large Language Models (LLMs).
+Welcome to the Prompt Decorators documentation! This framework provides a structured way to enhance prompts for Large Language Models (LLMs) through the application of modular, reusable "decorators."
 
-## What are Prompt Decorators?
+## What is Prompt Decorators?
 
-Prompt Decorators is a Python framework that provides a structured way to modify prompts sent to LLMs. Inspired by the decorator pattern in object-oriented programming, prompt decorators encapsulate specific modifications to prompts that can be combined, validated, and applied systematically.
+Prompt Decorators is a Python framework that allows you to apply various "decorators" to your prompts, each adding specific functionality or behavior. This approach makes prompt engineering more modular, reusable, and maintainable.
 
 Key features include:
-- Registry-based decorator management
-- Parameter validation and type checking
-- Decorator versioning with semantic version support
-- Compatibility checking between decorators
-- Serialization and deserialization support
-- Runtime decorator discovery
 
-## Getting Started
+- **Modular Prompt Engineering**: Apply specific prompt techniques independently
+- **Decorator Registry**: Discover and use decorators dynamically
+- **Compatibility Checking**: Ensure decorators work well together
+- **Serialization**: Store and retrieve decorated prompts
+- **API Integration**: Work with multiple LLM providers
+- **CLI Tools**: Apply decorators from the command line
 
-If you're new to Prompt Decorators, these resources will help you get started quickly:
+## Quick Start
 
-- [Installation Guide](/installation.html): How to install the framework
-- [Quickstart Tutorial](/tutorials/quickstart.html): A quick introduction to using the framework
-- [Key Concepts](/concepts.html): Understanding the core concepts behind Prompt Decorators
+### Installation
 
-## Documentation Sections
+```bash
+pip install prompt-decorators
+```
 
-### Core Documentation
-Learn about the fundamental components that make up the Prompt Decorators framework.
+### Basic Usage
 
-- [Architecture Overview](/architecture.html)
-- [BaseDecorator](/api/modules/prompt_decorators.core.base.html)
-- [Request System](/api/modules/prompt_decorators.core.request.html)
-- [Version Support](/api/modules/prompt_decorators.core.version.html)
+```python
+from prompt_decorators.decorators import Reasoning, OutputFormat
 
-### Decorator Registry
-Understand how to use the decorator registry system for discovering and managing decorators.
+# Create decorators
+reasoning = Reasoning(style="detailed", show_working=True)
+output_format = OutputFormat(format_type="markdown", pretty_print=True)
 
-- [Registry Overview](/registry/overview.html)
-- [Using the Registry](/registry/usage.html)
-- [Registry API](/api/modules/prompt_decorators.utils.discovery.html)
-- [Available Decorators](/registry/decorators.html)
+# Apply decorators to a prompt
+prompt = "Explain quantum entanglement."
+decorated_prompt = output_format.apply(reasoning.apply(prompt))
 
-### Built-in Decorators
-Explore the various decorators included with the framework.
+# Use the decorated prompt with your favorite LLM API
+# ...
+```
 
-- [Reasoning Decorators](/decorators/reasoning.html)
-- [Format Decorators](/decorators/format.html)
-- [Style Decorators](/decorators/style.html)
-- [Verification Decorators](/decorators/verification.html)
-- [Meta Decorators](/decorators/meta.html)
+## Documentation
 
-### Tutorials
-Step-by-step guides to help you accomplish common tasks.
+### Guides
 
-- [Quickstart](/tutorials/quickstart.html)
-- [Creating Custom Decorators](/tutorials/creating_custom_decorator.html)
-- [Combining Decorators](/tutorials/combining_decorators.html)
-- [Integration with LLM APIs](/tutorials/llm_integration.html)
-- [Working with the Registry](/tutorials/registry_usage.html)
-
-### Advanced Topics
-Dive deeper into more complex aspects of the framework.
-
-- [Compatibility Matrix](/compatibility.html)
-- [Extension Development](/advanced/extensions.html)
-- [Model-Specific Adaptations](/advanced/model_specific.html)
-- [Performance Optimization](/advanced/performance.html)
-- [Security Considerations](/advanced/security.html)
+- [Installation](installation.md) - How to install the framework
+- [Quickstart](quickstart.md) - Get up and running quickly
+- [Basic Usage](guide/basic-usage.md) - Learn the basics of using decorators
+- [Advanced Usage](guide/advanced-usage.md) - Explore advanced features
+- [API Integration](guide/api-integration.md) - Integrate with LLM APIs
+- [CLI Usage](guide/cli-usage.md) - Use the command-line interface
+- [Troubleshooting](guide/troubleshooting.md) - Solve common issues
 
 ### API Reference
-Complete API documentation for the framework.
 
-- [Core API](/api/modules/prompt_decorators.core.html)
-- [Utility API](/api/modules/prompt_decorators.utils.html)
-- [Generator API](/api/modules/prompt_decorators.generator.html)
-- [Decorators API](/api/modules/prompt_decorators.decorators.html)
+- [Core](api/core.md) - Core classes and functions
+- [Decorators](api/decorators.md) - Built-in decorators
+- [Registry](api/registry.md) - Decorator registry system
+- [Utilities](api/utilities.md) - Utility functions
+- [Generator](api/generator.md) - Code generation tools
 
 ### Examples
-Practical examples demonstrating how to use the framework in various scenarios.
 
-- [Basic Examples](/examples/basic.html)
-- [Advanced Usage](/examples/advanced.html)
-- [Domain-Specific Examples](/examples/domains.html)
-- [LLM Provider Examples](/examples/providers.html)
+- [Basic Examples](examples/basic.md) - Simple usage examples
+- [Advanced Examples](examples/advanced.md) - Complex usage patterns
+- [Provider Examples](examples/providers.md) - Examples with different LLM providers
 
-### Community & Support
-Get involved with the Prompt Decorators community.
+### Project Information
 
-- [Contributing](/community/contributing.html)
-- [Code of Conduct](/community/code_of_conduct.html)
-- [Roadmap](/community/roadmap.html)
-- [Changelog](/community/changelog.html)
+- [Contributing](contributing.md) - How to contribute to the project
+- [Development](development.md) - Setting up the development environment
+- [Project Summaries](project_summaries/index.md) - Documentation of modernization and standardization efforts
+- [FAQ](faq.md) - Frequently asked questions
+- [Glossary](glossary.md) - Definitions of key terms
+- [Roadmap](roadmap.md) - Future development plans
 
-## Search Documentation
+## Why Use Prompt Decorators?
 
-Use the search box at the top of any page to find specific information throughout the documentation.
+### Modularity
 
-## Need Help?
+Each decorator focuses on a specific prompt engineering technique, allowing you to mix and match them as needed.
 
-If you can't find what you're looking for, consider:
+### Reusability
 
-1. Opening an issue on the [GitHub repository](https://github.com/yourusername/prompt-decorators/issues)
-2. Joining our community discussions
-3. Checking the examples directory for code samples
+Create a library of prompt techniques that can be reused across different projects and applications.
 
-## Latest Updates
+### Standardization
 
-- **v0.1.0** (Upcoming): Initial release with core functionality
-- **Documentation**: Last updated on March 2023 
+Establish consistent prompt patterns across your organization or project.
+
+### Experimentation
+
+Easily test different prompt engineering approaches by swapping decorators.
+
+### Compatibility
+
+Work with multiple LLM providers using the same decorator patterns.
+
+## Getting Help
+
+If you need help with Prompt Decorators, you can:
+
+- Check the [FAQ](faq.md) for answers to common questions
+- Read the [Troubleshooting](guide/troubleshooting.md) guide
+- Open an issue on our [GitHub repository](https://github.com/yourusername/prompt-decorators)
+- Join our community discussions
+
+## License
+
+Prompt Decorators is released under the MIT License. See the LICENSE file for details.

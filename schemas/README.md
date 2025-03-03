@@ -86,4 +86,4 @@ Test your changes against the provided examples:
 
 # Test a specific schema
 ./test-schemas.sh decorator.schema.json
-``` 
+```

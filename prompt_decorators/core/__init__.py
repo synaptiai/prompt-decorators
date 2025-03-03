@@ -1,16 +1,21 @@
 """
-Core package for prompt decorators.
+Core components of the prompt decorators system.
 
-This package provides the core classes and functionality for the prompt decorators framework.
+This package contains the core components and functionality that power the
+prompt decorators system, including the base decorator classes, validation logic,
+request handling, and model-specific adaptations.
 """
 
-__version__ = "0.1.0"
-
-from .base import BaseDecorator
-from .model_specific import ModelSpecificDecorator, ModelSpecificDecoratorFactory
+from prompt_decorators.core.base import (
+    BaseDecorator,
+    Parameter,
+    ValidationError,
+    ParameterType,
+)
 
 __all__ = [
-    'BaseDecorator',
-    'ModelSpecificDecorator',
-    'ModelSpecificDecoratorFactory'
-] 
+    "BaseDecorator",
+    "Parameter",
+    "ValidationError",
+    "ParameterType",
+]

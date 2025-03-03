@@ -31,4 +31,3 @@ Presents content at the extreme ends of a spectrum, showing both a radical, ambi
 - `compare`: Whether to include a comparative analysis of the extreme versions
 - `dimension`: The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity')
 - `versions`: Which extreme versions to include
-

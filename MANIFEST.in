@@ -33,4 +33,4 @@ prune .vscode
 prune .idea
 prune dist
 prune build
-prune *.egg-info 
+prune *.egg-info

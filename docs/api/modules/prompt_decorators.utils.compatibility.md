@@ -48,4 +48,3 @@ Returns:
 **Signature:** `setup_core_compatibility_rules() -> <class 'NoneType'>`
 
 Set up compatibility rules for core decorators.
-

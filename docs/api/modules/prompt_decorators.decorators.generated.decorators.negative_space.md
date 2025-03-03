@@ -31,4 +31,3 @@ Focuses on analyzing what is not explicitly stated, implied, or missing from a t
 - `depth`: How deeply to explore the negative space
 - `focus`: The specific aspect of negative space to emphasize
 - `structure`: How to present the negative space analysis
-

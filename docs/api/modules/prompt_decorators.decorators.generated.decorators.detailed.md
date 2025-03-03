@@ -13,7 +13,7 @@ This module defines the Detailed decorator which enhances responses with compreh
 
 Enhances the response with comprehensive information, thorough explanations, and rich context.
 
-This decorator is ideal for in-depth learning, complex topics requiring nuance, 
+This decorator is ideal for in-depth learning, complex topics requiring nuance,
 or when completeness is valued over brevity.
 
 **Inherits from:** `BaseDecorator`
@@ -36,5 +36,3 @@ or when completeness is valued over brevity.
 Enumeration of detail levels for the Detailed decorator.
 
 **Inherits from:** `Enum`
-
-

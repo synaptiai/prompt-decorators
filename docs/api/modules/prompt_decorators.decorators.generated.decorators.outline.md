@@ -31,4 +31,3 @@ Structures the response as a hierarchical outline with headings and subheadings.
 - `depth`: Maximum nesting level of the outline
 - `detailed`: Whether to include brief explanations under each outline point
 - `style`: Numbering or bullet style for the outline
-

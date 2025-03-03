@@ -31,4 +31,3 @@ Structures the response using deductive reasoning, moving from general principle
 - `formal`: Whether to use formal logical structures with explicit syllogisms
 - `premises`: Number of main premises to include before deducing conclusions
 - `steps`: Number of logical steps to include in the deductive process
-

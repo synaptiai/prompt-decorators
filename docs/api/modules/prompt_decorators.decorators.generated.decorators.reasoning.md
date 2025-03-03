@@ -29,4 +29,3 @@ Modifies the AI's response to provide explicit reasoning paths before reaching c
 #### Properties
 
 - `depth`: The level of detail in the reasoning process
-

@@ -29,4 +29,3 @@ Adjusts the writing style and tone of the AI's response. This decorator helps en
 #### Properties
 
 - `style`: The desired tone and style for the response
-

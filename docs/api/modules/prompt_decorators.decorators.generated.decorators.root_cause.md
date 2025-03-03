@@ -30,4 +30,3 @@ Structures the response to systematically analyze underlying causes of problems 
 
 - `depth`: Level of detail in the analysis (for 5whys, represents number of 'why' iterations)
 - `method`: The specific root cause analysis methodology to apply
-

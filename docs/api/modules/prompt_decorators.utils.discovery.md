@@ -44,4 +44,3 @@ Get the global decorator registry.
 
 Returns:
     The global decorator registry instance
-

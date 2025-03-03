@@ -31,4 +31,3 @@ Structures the response using abductive reasoning, developing the most likely ex
 - `criteria`: Specific criteria to evaluate hypotheses against (e.g., simplicity, explanatory power)
 - `hypotheses`: Number of alternative hypotheses or explanations to generate
 - `rank`: Whether to explicitly rank hypotheses by likelihood
-

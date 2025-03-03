@@ -53,4 +53,3 @@ Get the global plugin manager.
 
 Returns:
     The global plugin manager instance
-

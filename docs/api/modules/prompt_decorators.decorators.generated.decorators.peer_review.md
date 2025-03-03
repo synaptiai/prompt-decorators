@@ -31,4 +31,3 @@ Augments the response with a simulated peer review of the content. This decorato
 - `criteria`: Primary criteria to focus on in the review
 - `position`: Where to place the peer review relative to the main content
 - `style`: The tone and approach of the peer review
-

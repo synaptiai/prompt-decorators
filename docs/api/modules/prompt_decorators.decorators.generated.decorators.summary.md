@@ -31,4 +31,3 @@ Provides a condensed summary of information that would otherwise be presented in
 - `length`: Relative length of the summary
 - `position`: Where to position the summary in relation to any full content
 - `wordCount`: Approximate target word count for the summary
-

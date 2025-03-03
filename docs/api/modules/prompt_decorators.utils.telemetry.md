@@ -38,4 +38,3 @@ Get the global telemetry manager.
 
 Returns:
     The global telemetry manager instance
-

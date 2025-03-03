@@ -42,4 +42,3 @@ Get the global decorator cache.
 
 Returns:
     The global decorator cache instance
-

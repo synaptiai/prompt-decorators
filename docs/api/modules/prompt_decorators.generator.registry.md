@@ -30,7 +30,6 @@ Scan the registry at the given path and return all decorator definitions.
 
 Args:
     registry_path: Path to the decorator registry
-    
+
 Returns:
     List of decorator definitions
-

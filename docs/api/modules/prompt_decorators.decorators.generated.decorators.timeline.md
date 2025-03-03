@@ -31,4 +31,3 @@ Organizes information in chronological order, highlighting key events or develop
 - `details`: The level of detail to include for each timeline event
 - `format`: The presentation format for the timeline
 - `granularity`: The level of time detail to include in the timeline
-

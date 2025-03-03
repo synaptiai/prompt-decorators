@@ -31,4 +31,3 @@ Presents the strongest possible version of an argument or position, even those t
 - `critique`: Whether to include critique after presenting the steel-manned arguments
 - `separation`: Whether to clearly separate the steel-manned presentations from any analysis
 - `sides`: Number of different viewpoints to steel-man
-

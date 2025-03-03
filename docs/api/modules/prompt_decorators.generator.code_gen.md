@@ -30,7 +30,6 @@ Generate Python code from decorator definitions.
 Args:
     decorators: List of decorator definitions
     output_dir: Optional output directory to write files to
-    
+
 Returns:
     Dictionary mapping file paths to generated code
-

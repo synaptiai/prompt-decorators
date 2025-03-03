@@ -8,16 +8,16 @@ Identifies potential cognitive blind spots, unstated assumptions, and overlooked
 
 ### `categories`
 
-**Type:** array  
-**Required:** No  
+**Type:** array
+**Required:** No
 
 Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias)
 
 ### `depth`
 
-**Type:** enum  
-**Required:** No  
-**Default:** `thorough`  
+**Type:** enum
+**Required:** No
+**Default:** `thorough`
 
 How thoroughly to analyze for blind spots
 
@@ -29,9 +29,9 @@ How thoroughly to analyze for blind spots
 
 ### `position`
 
-**Type:** enum  
-**Required:** No  
-**Default:** `after`  
+**Type:** enum
+**Required:** No
+**Default:** `after`
 
 Where to place the blind spots analysis
 
@@ -97,7 +97,7 @@ Apply the decorator to a prompt.
 
 Args:
     prompt: The original prompt
-    
+
 Returns:
     The modified prompt with the decorator applied
 
@@ -109,10 +109,10 @@ Create a decorator from a dictionary.
 
 Args:
     data: Dictionary representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the data is invalid or incompatible with this class
     IncompatibleVersionError: If the version is incompatible
@@ -125,10 +125,10 @@ Create a decorator from a JSON string.
 
 Args:
     json_str: JSON string representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the JSON is invalid or incompatible with this class
     json.JSONDecodeError: If the JSON is malformed
@@ -160,7 +160,7 @@ Check if this decorator is compatible with the specified version.
 
 Args:
     version_str: Version string to check compatibility with
-    
+
 Returns:
     True if compatible, False otherwise
 
@@ -181,7 +181,7 @@ Convert decorator to a JSON string.
 
 Args:
     indent: Optional indentation for pretty-printing
-    
+
 Returns:
     JSON string representation of the decorator
 
@@ -196,4 +196,3 @@ Subclasses should override for specific validation.
 
 Raises:
     ValidationError: If any parameter fails validation
-

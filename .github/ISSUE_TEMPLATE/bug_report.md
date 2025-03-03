@@ -60,4 +60,4 @@ If you have any suggestions on how to fix the issue, please describe them here.
 
 ## Screenshots
 
-If applicable, add screenshots to help explain your problem. 
+If applicable, add screenshots to help explain your problem.

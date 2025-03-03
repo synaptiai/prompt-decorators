@@ -23,4 +23,3 @@ Class representing a request decorated with prompt decorators.
 - `remove_decorator(decorator_name) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
 - `to_json(indent) -> <class 'str'>`
-

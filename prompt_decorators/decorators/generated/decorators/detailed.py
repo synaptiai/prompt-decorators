@@ -1,97 +1,145 @@
 """
-Detailed Decorator
+Implementation of the Detailed decorator.
 
-This module defines the Detailed decorator which enhances responses with comprehensive information.
+This module provides the Detailed decorator class for use in prompt engineering.
+
+Enhances the response with comprehensive information, thorough explanations, and rich context. This decorator is ideal for in-depth learning, complex topics requiring nuance, or when completeness is valued over brevity.
 """
 
-from enum import Enum
-from typing import List, Optional, Dict, Any
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
-from prompt_decorators.core.base import BaseDecorator
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    DetailedDepthEnum,
+)
 
-class DetailedDepthEnum(Enum):
-    """Enumeration of detail levels for the Detailed decorator."""
-    MODERATE = "moderate"
-    COMPREHENSIVE = "comprehensive" 
-    EXHAUSTIVE = "exhaustive"
 
 class Detailed(BaseDecorator):
     """
-    Enhances the response with comprehensive information, thorough explanations, and rich context.
-    
-    This decorator is ideal for in-depth learning, complex topics requiring nuance, 
-    or when completeness is valued over brevity.
+    Enhances the response with comprehensive information, thorough
+    explanations, and rich context. This decorator is ideal for in-depth
+    learning, complex topics requiring nuance, or when completeness is
+    valued over brevity.
+
+    Attributes:
+        depth: The level of detail and comprehensiveness
+        aspects: Specific aspects or dimensions to explore in detail
+        examples: Whether to include detailed examples to illustrate points
     """
-    
-    name = "Detailed"
-    version = "1.0.0"
-    category = "tone"
-    
+
+    decorator_name = "detailed"
+    version = "1.0.0"  # Initial version
+
     def __init__(
         self,
-        depth: str = "comprehensive",
-        aspects: Optional[List[str]] = None,
-        examples: bool = True
-    ):
+        depth: Literal["moderate", "comprehensive", "exhaustive"] = "comprehensive",
+        aspects: List[Any] = None,
+        examples: bool = True,
+    ) -> None:
         """
         Initialize the Detailed decorator.
-        
+
         Args:
-            depth: The level of detail and comprehensiveness (moderate, comprehensive, exhaustive)
+            depth: The level of detail and comprehensiveness
             aspects: Specific aspects or dimensions to explore in detail
             examples: Whether to include detailed examples to illustrate points
-        """
-        super().__init__()
-        self.depth = depth
-        self.aspects = aspects or []
-        self.examples = examples
-        
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the Detailed decorator to a prompt.
-        
-        Args:
-            prompt: The original prompt to decorate
-            
+
         Returns:
-            The decorated prompt
+            None
         """
-        # Build the decoration
-        decoration = "Please provide a detailed response with thorough explanations and rich context. "
-        
-        # Add depth-specific instructions
-        if self.depth == DetailedDepthEnum.MODERATE.value:
-            decoration += "Include moderate detail, covering the main points thoroughly. "
-        elif self.depth == DetailedDepthEnum.COMPREHENSIVE.value:
-            decoration += "Be comprehensive, exploring multiple dimensions and providing complete explanations. "
-        elif self.depth == DetailedDepthEnum.EXHAUSTIVE.value:
-            decoration += "Be exhaustive, leaving no relevant detail unexplored and covering all possible aspects. "
-        
-        # Add aspect-specific instructions
-        if self.aspects:
-            aspects_str = ", ".join(self.aspects)
-            decoration += f"Focus on these specific aspects in detail: {aspects_str}. "
-        
-        # Add example-specific instructions
-        if self.examples:
-            decoration += "Include detailed examples to illustrate your points. "
-            
-        # Return the decorated prompt
-        return f"{decoration}\n\n{prompt}"
-    
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+        self._aspects = aspects
+        self._examples = examples
+
+        # Validate parameters
+        if self._depth is not None:
+            valid_values = ["moderate", "comprehensive", "exhaustive"]
+            if self._depth not in valid_values:
+                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._aspects is not None:
+            if not isinstance(self._aspects, (list, tuple)):
+                raise ValidationError("The parameter 'aspects' must be an array.")
+
+        if self._examples is not None:
+            if not isinstance(self._examples, bool):
+                raise ValidationError("The parameter 'examples' must be a boolean value.")
+
+
+    @property
+    def depth(self) -> Literal["moderate", "comprehensive", "exhaustive"]:
+        """
+        Get the depth parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The depth parameter value
+        """
+        return self._depth
+
+    @property
+    def aspects(self) -> List[Any]:
+        """
+        Get the aspects parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The aspects parameter value
+        """
+        return self._aspects
+
+    @property
+    def examples(self) -> bool:
+        """
+        Get the examples parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The examples parameter value
+        """
+        return self._examples
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert the decorator to a dictionary.
-        
+
         Returns:
             Dictionary representation of the decorator
         """
         return {
-            "name": self.name,
-            "version": self.version,
-            "parameters": {
-                "depth": self.depth,
-                "aspects": self.aspects,
-                "examples": self.examples
-            }
+            "name": "detailed",
+            "depth": self.depth,
+            "aspects": self.aspects,
+            "examples": self.examples,
         }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
+        if self.depth is not None:
+            params.append(f"depth={self.depth}")
+        if self.aspects is not None:
+            params.append(f"aspects={self.aspects}")
+        if self.examples is not None:
+            params.append(f"examples={self.examples}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

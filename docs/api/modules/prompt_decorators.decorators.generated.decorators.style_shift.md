@@ -31,4 +31,3 @@ Modifies specific style characteristics of responses such as formality, persuasi
 - `aspect`: The specific style aspect to modify
 - `level`: The intensity level of the style aspect (1-5, where 1 is minimal and 5 is maximal)
 - `maintain`: Style aspects to explicitly maintain while modifying the target aspect
-

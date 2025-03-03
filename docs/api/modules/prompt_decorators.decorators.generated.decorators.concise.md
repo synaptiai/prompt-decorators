@@ -31,4 +31,3 @@ Optimizes the response for brevity and directness, eliminating unnecessary detai
 - `bulletPoints`: Whether to use bullet points for maximum brevity
 - `level`: The degree of conciseness to apply
 - `maxWords`: Maximum word count for the entire response
-

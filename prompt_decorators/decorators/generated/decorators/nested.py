@@ -1,87 +1,146 @@
 """
-Nested Decorator
+Implementation of the Nested decorator.
+
+This module provides the Nested decorator class for use in prompt engineering.
 
 Organizes information in a deeply hierarchical structure with multiple levels of nesting. This decorator is ideal for complex topics with many subcategories, helping to maintain clarity through consistent organization patterns.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import NestedStyleEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    NestedStyleEnum,
+)
 
 
 class Nested(BaseDecorator):
-    """Organizes information in a deeply hierarchical structure with multiple levels of nesting. This decorator is ideal for complex topics with many subcategories, helping to maintain clarity through consistent organization patterns."""
+    """
+    Organizes information in a deeply hierarchical structure with multiple
+    levels of nesting. This decorator is ideal for complex topics with
+    many subcategories, helping to maintain clarity through consistent
+    organization patterns.
+
+    Attributes:
+        depth: Maximum nesting level of the hierarchy
+        style: Visual style for hierarchical levels
+        collapsible: Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)
+    """
+
+    decorator_name = "nested"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        depth: Optional[float] = 3,
-        style: Optional[NestedStyleEnum] = NestedStyleEnum.MIXED,
-        collapsible: Optional[bool] = False,
-    ):
+        depth: Any = 3,
+        style: Literal["bullet", "numbered", "mixed"] = "mixed",
+        collapsible: bool = False,
+    ) -> None:
         """
-        Initialize Nested decorator.
+        Initialize the Nested decorator.
 
         Args:
             depth: Maximum nesting level of the hierarchy
             style: Visual style for hierarchical levels
-            collapsible: Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)
+            collapsible: Whether to suggest the hierarchy could be rendered as
+                collapsible sections (for UI implementations)
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Nested",
-            version="1.0.0",
-            parameters={
-                "depth": depth,
-                "style": style,
-                "collapsible": collapsible,
-            },
-            metadata={
-                "description": "Organizes information in a deeply hierarchical structure with multiple levels of nesting. This decorator is ideal for complex topics with many subcategories, helping to maintain clarity through consistent organization patterns.",
-                "author": "Prompt Decorators Working Group",
-                "category": "structure",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+        self._style = style
+        self._collapsible = collapsible
+
+        # Validate parameters
+        if self._depth is not None:
+            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+                raise ValidationError("The parameter 'depth' must be a numeric value.")
+
+        if self._style is not None:
+            valid_values = ["bullet", "numbered", "mixed"]
+            if self._style not in valid_values:
+                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._collapsible is not None:
+            if not isinstance(self._collapsible, bool):
+                raise ValidationError("The parameter 'collapsible' must be a boolean value.")
+
 
     @property
-    def depth(self) -> float:
-        """Maximum nesting level of the hierarchy"""
-        return self.parameters.get("depth")
+    def depth(self) -> Any:
+        """
+        Get the depth parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The depth parameter value
+        """
+        return self._depth
 
     @property
-    def style(self) -> NestedStyleEnum:
-        """Visual style for hierarchical levels"""
-        return self.parameters.get("style")
+    def style(self) -> Literal["bullet", "numbered", "mixed"]:
+        """
+        Get the style parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The style parameter value
+        """
+        return self._style
 
     @property
     def collapsible(self) -> bool:
-        """Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)"""
-        return self.parameters.get("collapsible")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.depth is not None and self.depth < 2:
-            raise ValueError(f"depth must be at least 2, got {self.depth}")
-        if self.depth is not None and self.depth > 5:
-            raise ValueError(f"depth must be at most 5, got {self.depth}")
-
-    def apply(self, prompt: str) -> str:
         """
-        Apply the decorator to a prompt.
-        
+        Get the collapsible parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The collapsible parameter value
         """
-        # Apply the decorator: Organizes information in a deeply hierarchical structure with multiple levels of nesting
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._collapsible
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "nested",
+            "depth": self.depth,
+            "style": self.style,
+            "collapsible": self.collapsible,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.depth is not None:
-            instruction += f"depth={self.depth}, "
+            params.append(f"depth={self.depth}")
         if self.style is not None:
-            instruction += f"style={self.style}, "
+            params.append(f"style={self.style}")
         if self.collapsible is not None:
-            instruction += f"collapsible={self.collapsible}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"collapsible={self.collapsible}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

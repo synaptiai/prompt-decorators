@@ -31,4 +31,3 @@ Presents content at multiple levels of explanation depth, allowing readers to en
 - `count`: Number of distinct explanation layers to provide
 - `levels`: The granularity of explanation levels to include
 - `progression`: How to structure the progression between layers
-

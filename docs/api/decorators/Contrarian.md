@@ -8,9 +8,9 @@ Generates responses that deliberately challenge conventional wisdom or mainstrea
 
 ### `approach`
 
-**Type:** enum  
-**Required:** No  
-**Default:** `devil's-advocate`  
+**Type:** enum
+**Required:** No
+**Default:** `devil's-advocate`
 
 The specific contrarian approach to take
 
@@ -22,15 +22,15 @@ The specific contrarian approach to take
 
 ### `maintain`
 
-**Type:** boolean  
-**Required:** No  
+**Type:** boolean
+**Required:** No
 
 Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)
 
 ### `focus`
 
-**Type:** string  
-**Required:** No  
+**Type:** string
+**Required:** No
 
 Optional specific aspect of the topic to focus contrarian analysis on
 
@@ -90,7 +90,7 @@ Apply the decorator to a prompt.
 
 Args:
     prompt: The original prompt
-    
+
 Returns:
     The modified prompt with the decorator applied
 
@@ -102,10 +102,10 @@ Create a decorator from a dictionary.
 
 Args:
     data: Dictionary representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the data is invalid or incompatible with this class
     IncompatibleVersionError: If the version is incompatible
@@ -118,10 +118,10 @@ Create a decorator from a JSON string.
 
 Args:
     json_str: JSON string representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the JSON is invalid or incompatible with this class
     json.JSONDecodeError: If the JSON is malformed
@@ -153,7 +153,7 @@ Check if this decorator is compatible with the specified version.
 
 Args:
     version_str: Version string to check compatibility with
-    
+
 Returns:
     True if compatible, False otherwise
 
@@ -174,7 +174,7 @@ Convert decorator to a JSON string.
 
 Args:
     indent: Optional indentation for pretty-printing
-    
+
 Returns:
     JSON string representation of the decorator
 
@@ -189,4 +189,3 @@ Subclasses should override for specific validation.
 
 Raises:
     ValidationError: If any parameter fails validation
-

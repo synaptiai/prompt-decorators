@@ -152,7 +152,7 @@ if context == "research":
     safety_filter = ContentFilter(categories=["pii"], threshold=0.9)
 elif context == "public_forum":
     safety_filter = ContentFilter(
-        categories=["profanity", "hate_speech", "pii"], 
+        categories=["profanity", "hate_speech", "pii"],
         threshold=0.5
     )
 
@@ -259,4 +259,4 @@ By following this guide, AI safety researchers and developers can leverage promp
 - [Prompt Decorators Documentation](../index.md)
 - [Extension Development Tutorial](../tutorials/extension_development.md)
 - [Custom Safety Decorator Development](../tutorials/custom_safety_decorators.md)
-- [Safety Registry Documentation](../api/registry_safety.md) 
+- [Safety Registry Documentation](../api/registry_safety.md)

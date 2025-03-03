@@ -29,4 +29,3 @@ Structures the response by breaking down complex topics into their fundamental t
 #### Properties
 
 - `depth`: Level of detail in breaking down to fundamental principles
-

@@ -1,57 +1,92 @@
 """
-StepByStep Decorator
+Implementation of the StepByStep decorator.
+
+This module provides the StepByStep decorator class for use in prompt engineering.
 
 Structures the AI's response as a sequence of clearly labeled steps. This decorator helps break down complex processes, explanations, or solutions into manageable, sequential parts for better understanding.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
+import re
+from typing import Any, Dict, List, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
 
 
 class StepByStep(BaseDecorator):
-    """Structures the AI's response as a sequence of clearly labeled steps. This decorator helps break down complex processes, explanations, or solutions into manageable, sequential parts for better understanding."""
+    """
+    Structures the AI's response as a sequence of clearly labeled steps.
+    This decorator helps break down complex processes, explanations, or
+    solutions into manageable, sequential parts for better understanding.
+
+    Attributes:
+        numbered: Whether to number the steps or use bullet points
+    """
+
+    decorator_name = "step_by_step"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        numbered: Optional[bool] = True,
-    ):
+        numbered: bool = True,
+    ) -> None:
         """
-        Initialize StepByStep decorator.
+        Initialize the StepByStep decorator.
 
         Args:
             numbered: Whether to number the steps or use bullet points
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="StepByStep",
-            version="1.0.0",
-            parameters={
-                "numbered": numbered,
-            },
-            metadata={
-                "description": "Structures the AI's response as a sequence of clearly labeled steps. This decorator helps break down complex processes, explanations, or solutions into manageable, sequential parts for better understanding.",
-                "author": "Prompt Decorators Working Group",
-                "category": "minimal",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._numbered = numbered
+
+        # Validate parameters
+        if self._numbered is not None:
+            if not isinstance(self._numbered, bool):
+                raise ValidationError("The parameter 'numbered' must be a boolean value.")
+
 
     @property
     def numbered(self) -> bool:
-        """Whether to number the steps or use bullet points"""
-        return self.parameters.get("numbered")
+        """
+        Get the numbered parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The numbered parameter value
         """
-        # Apply the decorator: Structures the AI's response as a sequence of clearly labeled steps
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._numbered
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "step_by_step",
+            "numbered": self.numbered,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.numbered is not None:
-            instruction += f"numbered={self.numbered}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"numbered={self.numbered}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

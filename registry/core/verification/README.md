@@ -16,4 +16,4 @@ These decorators focus on ensuring the accuracy, balance, and quality of the AI'
 - **QualityMetrics** - Apply specific quality metrics
 - **StressTest** - Identify potential failure points
 - **BreakAndBuild** - Criticize then reconstruct an idea
-- **FindGaps** - Identify missing elements in an idea 
+- **FindGaps** - Identify missing elements in an idea

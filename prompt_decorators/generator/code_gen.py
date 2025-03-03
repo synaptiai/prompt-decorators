@@ -1,435 +1,778 @@
-"""
-Code Generator Module
+"""Code Generator Module.
 
 This module generates Python code from decorator definitions in the registry.
 """
 
-import json
 import logging
 import re
+import textwrap
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Union, Set, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from .registry import DecoratorData
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+def camel_to_snake(name: str) -> str:
+    """Convert CamelCase to snake_case."""
+    name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
+
+
+def snake_to_camel(name: str) -> str:
+    """Convert snake_case to CamelCase."""
+    components = name.split("_")
+    return "".join(x.title() for x in components)
 
 
 class CodeGenerator:
     """Generator for Python code from decorator definitions."""
-    
+
+    # Python keywords that can't be used as variable names
+    python_keywords = [
+        "False",
+        "None",
+        "True",
+        "and",
+        "as",
+        "assert",
+        "async",
+        "await",
+        "break",
+        "class",
+        "continue",
+        "def",
+        "del",
+        "elif",
+        "else",
+        "except",
+        "finally",
+        "for",
+        "from",
+        "global",
+        "if",
+        "import",
+        "in",
+        "is",
+        "lambda",
+        "nonlocal",
+        "not",
+        "or",
+        "pass",
+        "raise",
+        "return",
+        "try",
+        "while",
+        "with",
+        "yield",
+    ]
+
     def __init__(self, decorators: List[DecoratorData]):
         """
         Initialize the code generator.
-        
+
         Args:
             decorators: List of decorator data dictionaries from the registry
         """
         self.decorators = decorators
-        self.enum_definitions: Dict[str, Tuple[str, List[str]]] = {}  # Maps enum name to (description, values)
-    
-    def generate_all(self) -> Dict[str, str]:
+        self.enum_definitions: Dict[
+            str, Tuple[str, List[str]]
+        ] = {}  # Maps enum name to (description, values)
+
+    def _split_text_into_chunks(self, text: str, max_length: int = 70) -> List[str]:
+        """
+        Split text into chunks that don't exceed the maximum length.
+
+        Args:
+            text: The text to split
+            max_length: Maximum length of each chunk
+
+        Returns:
+            List of text chunks
+        """
+        if not text:
+            return []
+
+        # Use textwrap for better line wrapping
+        return textwrap.wrap(text, width=max_length)
+
+    def _format_long_string(
+        self,
+        text: str,
+        indent: str = "",
+        max_line_length: int = 70,
+        quote_style: str = '"',
+        line_continuation: bool = False,
+    ) -> List[str]:
+        """
+        Format a long string into multiple lines.
+
+        Args:
+            text: The text to format
+            indent: Indentation to add to each line
+            max_line_length: Maximum length of each line
+            quote_style: Quote style to use (single or double)
+            line_continuation: Whether to use line continuation with parentheses
+
+        Returns:
+            List of formatted lines
+        """
+        if not text:
+            return [f"{indent}{quote_style}{quote_style}"]
+
+        # Split the text into chunks
+        chunks = self._split_text_into_chunks(text, max_line_length)
+
+        # Format the chunks
+        lines = []
+
+        if line_continuation:
+            lines.append(f"{indent}{quote_style}{chunks[0]}{quote_style}")
+            for chunk in chunks[1:]:
+                lines.append(f"{indent}    {quote_style}{chunk}{quote_style}")
+        else:
+            for i, chunk in enumerate(chunks):
+                if i == 0:
+                    lines.append(f"{indent}{quote_style}{chunk}{quote_style}")
+                else:
+                    lines.append(f"{indent}{quote_style}{chunk}{quote_style}")
+
+        return lines
+
+    def _has_validation_rules(self, param: Dict[str, Any]) -> bool:
+        """Check if the parameter has any validation rules.
+
+        Args:
+            param: The parameter definition dictionary
+
+        Returns:
+            bool: True if the parameter has validation rules, False otherwise
+        """
+        # Check for various validation rules
+        validation_attrs = [
+            "required",
+            "pattern",
+            "minimum",
+            "maximum",
+            "minItems",
+            "maxItems",
+            "items",
+            "enum",
+        ]
+
+        for attr in validation_attrs:
+            if attr in param:
+                return True
+
+        # Check if items has type validation
+        if (
+            "items" in param
+            and isinstance(param["items"], dict)
+            and "type" in param["items"]
+        ):
+            return True
+
+        return False
+
+    def generate_all(self) -> dict[str, str]:
         """
         Generate all Python files for the decorator package.
-        
+
+        Args:
+            self: The CodeGenerator instance.
+
         Returns:
-            Dictionary mapping file paths to generated code
+            A dictionary mapping file paths to generated code.
         """
-        result = {}
-        
+        result = {}  # type: dict[str, str]
+
         # Generate decorator classes
         decorators_init = self._generate_decorators_init()
         result["decorators/__init__.py"] = decorators_init
-        
+
         # Generate individual decorator files
         for decorator in self.decorators:
             file_name = self._get_decorator_file_name(decorator)
             code = self._generate_decorator_code(decorator)
             result[f"decorators/{file_name}"] = code
-        
+
         # Generate enums module
         enums_code = self._generate_enums_module()
         result["decorators/enums.py"] = enums_code
-        
+
         return result
-    
+
     def _generate_decorators_init(self) -> str:
         """
         Generate the __init__.py file for the decorators package.
-        
+
+        Args:
+            self: The CodeGenerator instance.
+
         Returns:
             Generated code as a string
         """
         code = [
             '"""',
-            'Decorator Classes',
-            '',
-            'This package provides classes for all decorators in the Prompt Decorators specification.',
+            "Decorator Classes",
+            "",
+            "This package provides classes for all decorators in the Prompt Decorators specification.",
             '"""',
-            '',
-            '# Import all decorators',
+            "",
+            "# Import all decorators",
         ]
-        
+
         # Import statements for all decorators
         imports = []
         for decorator in self.decorators:
             name = decorator["decoratorName"]
             file_name = self._convert_to_snake_case(name)
             imports.append(f"from .{file_name} import {name}")
-        
+
         code.extend(sorted(imports))
-        
+
         # Export all decorators
         decorator_names = [decorator["decoratorName"] for decorator in self.decorators]
-        code.append('')
-        code.append('__all__ = [')
+        code.append("")
+        code.append("__all__ = [")
         for name in sorted(decorator_names):
             code.append(f'    "{name}",')
-        code.append(']')
-        
-        return '\n'.join(code)
-    
-    def _generate_decorator_code(self, decorator: DecoratorData) -> str:
+        code.append("]")
+
+        return "\n".join(code)
+
+    def _generate_decorator_code(self, decorator: Union[DecoratorData, Dict]) -> str:
         """
-        Generate Python code for a decorator class.
-        
+        Generate Python code for a single decorator.
+
         Args:
-            decorator: Decorator data dictionary
-            
+            decorator: The decorator data
+
         Returns:
-            Generated code as a string
+            Generated Python code for the decorator
         """
+        if not isinstance(decorator, dict):
+            decorator = decorator.to_dict()
+
         name = decorator["decoratorName"]
         description = decorator.get("description", "")
-        file_name = self._convert_to_snake_case(name)
-        
-        # Determine if we need regex validation
-        needs_regex = any(
-            'validation' in param and 'pattern' in param['validation']
-            for param in decorator.get("parameters", [])
-        )
-        
-        # Start with imports
-        code = [
-            '"""',
-            f'{name} Decorator',
-            '',
-            f'{description}',
-            '"""',
-            '',
-            'from typing import Dict, List, Optional, Any, Union, Literal',
-        ]
-        
-        # Add re import if needed for regex validation
-        if needs_regex:
-            code.append('import re')
-            
-        code.append('from ....core.base import BaseDecorator')
-        
-        # Add enum imports if needed
-        enums_to_import = self._get_enums_for_decorator(decorator)
-        if enums_to_import:
-            code.append('from .enums import ' + ', '.join(enums_to_import))
-        
-        code.append('')
-        code.append('')
-        
-        # Generate class definition
-        code.append(f'class {name}(BaseDecorator):')
-        code.append(f'    """{description}"""')
-        code.append('')
-        
-        # Generate __init__ method
-        code.append('    def __init__(')
-        code.append('        self,')
-        
-        # Python reserved keywords
-        python_keywords = {
-            'False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class', 
-            'continue', 'def', 'del', 'elif', 'else', 'except', 'finally', 'for', 'from', 'global', 
-            'if', 'import', 'in', 'is', 'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 
-            'try', 'while', 'with', 'yield'
-        }
-        
-        # Add parameters to __init__ signature
         params = decorator.get("parameters", [])
+        snake_name = self._convert_to_snake_case(name)
+
+        # Check if we need to import Literal for enum types
+        needs_literal_import = any(param.get("type") == "enum" for param in params)
+
+        # Generate imports
+        imports = [
+            '"""',
+            f"Implementation of the {name} decorator.",
+            "",
+            f"This module provides the {name} decorator class for use in prompt engineering.",
+            "",
+            description,
+            '"""',
+            "",
+            "import re",
+            "from typing import Any, Dict, List, Optional, Union, cast",
+        ]
+
+        # Add Literal import if needed
+        if needs_literal_import:
+            imports[
+                -1
+            ] = "from typing import Any, Dict, List, Literal, Optional, Union, cast"
+
+        # Add import for BaseDecorator
+        imports.extend(
+            [
+                "",
+                "from prompt_decorators.core.base import BaseDecorator, ValidationError",
+            ]
+        )
+
+        # Check if we need to import any enums
+        enum_imports = self._get_enums_for_decorator(decorator)
+        if enum_imports:
+            imports.append(
+                "from prompt_decorators.decorators.generated.decorators.enums import ("
+            )
+            for enum in enum_imports:
+                imports.append(f"    {enum},")
+            imports.append(")")
+
+        # Generate class header
+        code = []
+        code.append("")
+        code.append("")
+        code.append(f"class {name}(BaseDecorator):")
+        code.append('    """')
+
+        # Class docstring
+        if description:
+            formatted_description = self._split_text_into_chunks(description)
+            for line in formatted_description:
+                code.append(f"    {line}")
+            code.append("")
+
+        # Add parameter documentation
+        if params:
+            code.append("    Attributes:")
+            for param in params:
+                param_name = param["name"]
+                param_desc = param.get("description", "")
+                param_type = self._get_python_type(param, decorator)
+                formatted_desc_lines = self._split_text_into_chunks(
+                    param_desc, max_length=60
+                )
+
+                code.append(f"        {param_name}: {param_desc}")
+
+        code.append('    """')
+        code.append("")
+
+        # Add class variables
+        code.append(f'    decorator_name = "{snake_name}"')
+        code.append('    version = "1.0.0"  # Initial version')
+        code.append("")
+
+        # Generate __init__ method
+        code.append("    def __init__(")
+        code.append("        self,")
+
+        # Add parameters
         for param in params:
             param_name = param["name"]
-            # Check if the parameter name is a Python keyword
-            if param_name in python_keywords:
-                param_name = f"{param_name}_param"
-            
             param_type = self._get_python_type(param, decorator)
-            
-            if param.get("required", False):
-                code.append(f'        {param_name}: {param_type},')
+            is_required = param.get("required", False)
+
+            if is_required:
+                code.append(f"        {param_name}: {param_type},")
             else:
-                default_value = self._get_default_value_str(param, decorator)
-                if param_type.startswith('Optional['):
-                    # Already Optional type
-                    code.append(f'        {param_name}: {param_type} = {default_value},')
-                else:
-                    # Make it Optional
-                    code.append(f'        {param_name}: Optional[{param_type}] = {default_value},')
-        
-        # Close init signature
-        code.append('    ):')
-        
-        # Add docstring
+                default = self._format_default_value(param)
+                code.append(f"        {param_name}: {param_type} = {default},")
+
+        code.append("    ) -> None:")
         code.append('        """')
-        code.append(f'        Initialize {name} decorator.')
-        code.append('')
-        code.append('        Args:')
+        code.append(f"        Initialize the {name} decorator.")
+        code.append("")
+        code.append("        Args:")
+
+        # Add parameter documentation in __init__
         for param in params:
-            orig_param_name = param["name"]
-            param_name = orig_param_name
-            if param_name in python_keywords:
-                param_name = f"{param_name}_param"
+            param_name = param["name"]
             param_desc = param.get("description", "")
-            code.append(f'            {param_name}: {param_desc}')
+            formatted_desc_lines = self._split_text_into_chunks(
+                param_desc, max_length=60
+            )
+
+            # Start with parameter name
+            param_line = f"            {param_name}: {formatted_desc_lines[0]}"
+            code.append(param_line)
+
+            # Add remaining description lines with proper indentation
+            for line in formatted_desc_lines[1:]:
+                code.append(f"                {line}")
+
+        # Add Returns section to fix docstring issue
+        code.append("")
+        code.append("        Returns:")
+        code.append("            None")
+
         code.append('        """')
-        
-        # Call super().__init__
-        code.append('        super().__init__(')
-        code.append(f'            name="{name}",')
-        code.append(f'            version="{decorator["version"]}",')
-        
-        # Add parameters to super call
-        code.append('            parameters={')
+
+        # Add validation code
+        code.append("        # Initialize with base values")
+        code.append("        super().__init__()")
+        code.append("")
+        code.append("        # Store parameters")
         for param in params:
-            orig_param_name = param["name"]
-            param_name = orig_param_name
-            if param_name in python_keywords:
-                param_name = f"{param_name}_param"
-            code.append(f'                "{orig_param_name}": {param_name},')
-        code.append('            },')
-        
-        # Add metadata
-        code.append('            metadata={')
-        code.append(f'                "description": "{description}",')
-        
-        if "author" in decorator and "name" in decorator["author"]:
-            code.append(f'                "author": "{decorator["author"]["name"]}",')
-        
-        # Add category if we can determine it
-        if "_source_file" in decorator:
-            parts = decorator["_source_file"].split('/')
-            if len(parts) > 1:
-                category = parts[0]
-                code.append(f'                "category": "{category}",')
-        
-        code.append('            },')
-        code.append('        )')
-        
-        # Add property getters for parameters
-        for param in params:
-            orig_param_name = param["name"]
-            param_name = orig_param_name
-            if param_name in python_keywords:
-                param_name = f"{param_name}_param"
-            
-            param_type = self._get_python_type(param, decorator)
-            param_desc = param.get("description", "")
-            
-            code.append('')
-            code.append('    @property')
-            code.append(f'    def {param_name}(self) -> {param_type}:')
-            code.append(f'        """{param_desc}"""')
-            code.append(f'        return self.parameters.get("{orig_param_name}")')
-        
-        # Add validation if needed
-        has_validation = any('validation' in param for param in params)
-        if has_validation:
-            code.append('')
-            code.append('    def validate(self) -> None:')
-            code.append('        """Validate decorator parameters."""')
-            code.append('        super().validate()')
-            code.append('')
-            
-            for param in params:
-                if 'validation' in param:
-                    orig_param_name = param["name"]
-                    param_name = orig_param_name
-                    if param_name in python_keywords:
-                        param_name = f"{param_name}_param"
-                    validation = param["validation"]
-                    
-                    if 'minimum' in validation:
-                        code.append(f'        if self.{param_name} is not None and self.{param_name} < {validation["minimum"]}:')
-                        code.append(f'            raise ValueError(f"{orig_param_name} must be at least {validation["minimum"]}, got {{self.{param_name}}}")')
-                    
-                    if 'maximum' in validation:
-                        code.append(f'        if self.{param_name} is not None and self.{param_name} > {validation["maximum"]}:')
-                        code.append(f'            raise ValueError(f"{orig_param_name} must be at most {validation["maximum"]}, got {{self.{param_name}}}")')
-                    
-                    if 'pattern' in validation:
-                        pattern = validation["pattern"].replace('"', '\\"')
-                        code.append(f'        if self.{param_name} is not None and not re.match(r"{pattern}", str(self.{param_name})):')
-                        code.append(f'            raise ValueError(f"{orig_param_name} must match pattern {pattern}, got {{self.{param_name}}}")')
-        
-        # Add apply method
-        code.append('')
-        code.append('    def apply(self, prompt: str) -> str:')
+            param_name = param["name"]
+            code.append(f"        self._{param_name} = {param_name}")
+        code.append("")
+        code.append("        # Validate parameters")
+        self._add_validation_code(decorator, params, code)
+
+        # Add getters for each parameter
+        code.append("")
+        self._add_get_property_methods(decorator, params, code)
+
+        # Add to_dict method
+        code.append("    def to_dict(self) -> Dict[str, Any]:")
         code.append('        """')
-        code.append('        Apply the decorator to a prompt.')
-        code.append('        ')
-        code.append('        Args:')
-        code.append('            prompt: The original prompt')
-        code.append('            ')
-        code.append('        Returns:')
-        code.append('            The modified prompt with the decorator applied')
+        code.append("        Convert the decorator to a dictionary.")
+        code.append("")
+        code.append("        Returns:")
+        code.append("            Dictionary representation of the decorator")
         code.append('        """')
-        
-        # Generate a generic apply implementation based on the decorator's description
-        short_desc = description.split('.')[0].strip() if '.' in description else description.strip()
-        code.append(f'        # Apply the decorator: {short_desc}')
-        code.append('        instruction = f"Instructions for {self.name} decorator: "')
-        
-        # Add parameter-specific instructions
+        code.append("        return {")
+        code.append(f'            "name": "{snake_name}",')
         for param in params:
-            orig_param_name = param["name"]
-            param_name = orig_param_name
-            if param_name in python_keywords:
-                param_name = f"{param_name}_param"
-            
-            # For non-default parameters, include their values in the instruction
-            code.append(f'        if self.{param_name} is not None:')
-            code.append(f'            instruction += f"{orig_param_name}={{self.{param_name}}}, "')
-        
-        code.append('        # Combine with original prompt')
-        code.append('        return f"{instruction}\\n\\n{prompt}"')
-        
-        return '\n'.join(code)
-    
-    def _generate_enums_module(self) -> str:
+            param_name = param["name"]
+            code.append(f'            "{param_name}": self.{param_name},')
+        code.append("        }")
+
+        # Add to_string method
+        code.append("")
+        code.append("    def to_string(self) -> str:")
+        code.append('        """')
+        code.append("        Convert the decorator to a string.")
+        code.append("")
+        code.append("        Returns:")
+        code.append("            String representation of the decorator")
+        code.append('        """')
+        code.append("        params = []")
+        for param in params:
+            param_name = param["name"]
+            code.append(f"        if self.{param_name} is not None:")
+            code.append(
+                f'            params.append(f"{param_name}={{self.{param_name}}}")'
+            )
+        code.append("")
+        code.append("        if params:")
+        code.append(
+            '            return f"@{self.decorator_name}(" + ", ".join(params) + ")"'
+        )
+        code.append("        else:")
+        code.append('            return f"@{self.decorator_name}"')
+
+        return "\n".join(imports + code)
+
+    def _add_get_property_methods(
+        self,
+        decorator: Union[DecoratorData, Dict],
+        params: List[Dict[str, Any]],
+        code: List[str],
+    ) -> None:
         """
-        Generate the enums.py module with all enum definitions.
-        
+        Add property getter methods for all parameters.
+
+        Args:
+            decorator: The decorator data
+            params: List of parameters
+            code: List of code lines to append to
+
+        Returns:
+            None
+        """
+        if not params:
+            return
+
+        for param in params:
+            param_name = param["name"]
+            param_type = self._get_python_type(param, decorator)
+
+            code.append("    @property")
+            code.append(f"    def {param_name}(self) -> {param_type}:")
+            code.append('        """')
+            code.append(f"        Get the {param_name} parameter value.")
+            code.append("")
+            code.append("        Args:")
+            code.append("            self: The decorator instance")
+            code.append("")
+            code.append("        Returns:")
+            code.append(f"            The {param_name} parameter value")
+            code.append('        """')
+            code.append(f"        return self._{param_name}")
+            code.append("")
+
+        return
+
+    def _add_validation_code(
+        self,
+        decorator: Union[DecoratorData, Dict],
+        params: List[Dict[str, Any]],
+        code: List[str],
+    ) -> None:
+        """Add validation code for parameters."""
+        if not params:
+            return
+
+        for param_index, param in enumerate(params):
+            param_name = param["name"]
+            param_type = param.get("type", "string")
+
+            # Only add validation if there are rules to check
+            if not self._has_validation_rules(param):
+                continue
+
+            # Required parameter validation
+            if param.get("required", False):
+                code.append(f"        if self._{param_name} is None:")
+                code.append(
+                    f'            raise ValidationError("The parameter \'{param_name}\' is required for {decorator["decoratorName"]} decorator.")'
+                )
+                code.append("")
+
+            # Skip validation for None values (if not required)
+            code.append(f"        if self._{param_name} is not None:")
+
+            # Add indentation for all validation checks
+            indent = "            "
+
+            # Type validation based on parameter type
+            if param_type == "string":
+                # String validation
+                code.append(f"{indent}if not isinstance(self._{param_name}, str):")
+                code.append(
+                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be a string value.\")"
+                )
+
+                # Pattern validation
+                if "pattern" in param:
+                    # Handle special regex escape sequences
+                    pattern = param["pattern"]
+                    # Make raw string by escaping backslashes
+                    pattern = pattern.replace("\\", "\\\\")
+                    # Fix common escape sequences that shouldn't be double-escaped
+                    pattern = pattern.replace("\\\\d", "\\d")  # Digits
+                    pattern = pattern.replace("\\\\w", "\\w")  # Word chars
+                    pattern = pattern.replace("\\\\s", "\\s")  # Whitespace
+                    pattern = pattern.replace("\\\\b", "\\b")  # Word boundary
+
+                    code.append(f"{indent}import re")
+                    code.append(
+                        f'{indent}if not re.match(r"{pattern}", self._{param_name}):'
+                    )
+                    code.append(
+                        f"{indent}    raise ValidationError(\"The parameter '{param_name}' value '\" + str(self._{param_name}) + \"' does not match the required pattern.\")"
+                    )
+
+            elif param_type == "integer":
+                # Integer validation
+                code.append(
+                    f"{indent}if not isinstance(self._{param_name}, int) or isinstance(self._{param_name}, bool):"
+                )
+                code.append(
+                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be an integer value.\")"
+                )
+
+                # Minimum validation
+                if "minimum" in param:
+                    code.append(f"{indent}if self._{param_name} < {param['minimum']}:")
+                    code.append(
+                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at least {param["minimum"]}.")'
+                    )
+
+                # Maximum validation
+                if "maximum" in param:
+                    code.append(f"{indent}if self._{param_name} > {param['maximum']}:")
+                    code.append(
+                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at most {param["maximum"]}.")'
+                    )
+
+            elif param_type == "number":
+                # Number validation
+                code.append(
+                    f"{indent}if not isinstance(self._{param_name}, (int, float)) or isinstance(self._{param_name}, bool):"
+                )
+                code.append(
+                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be a numeric value.\")"
+                )
+
+                # Minimum validation
+                if "minimum" in param:
+                    code.append(f"{indent}if self._{param_name} < {param['minimum']}:")
+                    code.append(
+                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at least {param["minimum"]}.")'
+                    )
+
+                # Maximum validation
+                if "maximum" in param:
+                    code.append(f"{indent}if self._{param_name} > {param['maximum']}:")
+                    code.append(
+                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at most {param["maximum"]}.")'
+                    )
+
+            elif param_type == "boolean":
+                # Boolean validation
+                code.append(f"{indent}if not isinstance(self._{param_name}, bool):")
+                code.append(
+                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be a boolean value.\")"
+                )
+
+            elif param_type == "array":
+                # Array validation
+                code.append(
+                    f"{indent}if not isinstance(self._{param_name}, (list, tuple)):"
+                )
+                code.append(
+                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be an array.\")"
+                )
+
+                # MinItems validation
+                if "minItems" in param:
+                    code.append(
+                        f"{indent}if len(self._{param_name}) < {param['minItems']}:"
+                    )
+                    code.append(
+                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must have at least {param["minItems"]} items.")'
+                    )
+
+                # MaxItems validation
+                if "maxItems" in param:
+                    code.append(
+                        f"{indent}if len(self._{param_name}) > {param['maxItems']}:"
+                    )
+                    code.append(
+                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must have at most {param["maxItems"]} items.")'
+                    )
+
+                # Items validation
+                if "items" in param and "type" in param["items"]:
+                    item_type = param["items"]["type"]
+                    if item_type == "string":
+                        code.append(f"{indent}for item in self._{param_name}:")
+                        code.append(f"{indent}    if not isinstance(item, str):")
+                        code.append(
+                            f"{indent}        raise ValidationError(\"All items in '{param_name}' must be strings.\")"
+                        )
+                    elif item_type == "integer":
+                        code.append(f"{indent}for item in self._{param_name}:")
+                        code.append(
+                            f"{indent}    if not isinstance(item, int) or isinstance(item, bool):"
+                        )
+                        code.append(
+                            f"{indent}        raise ValidationError(\"All items in '{param_name}' must be integers.\")"
+                        )
+                    elif item_type == "number":
+                        code.append(f"{indent}for item in self._{param_name}:")
+                        code.append(
+                            f"{indent}    if not isinstance(item, (int, float)) or isinstance(item, bool):"
+                        )
+                        code.append(
+                            f"{indent}        raise ValidationError(\"All items in '{param_name}' must be numbers.\")"
+                        )
+
+            elif param_type == "enum":
+                # Enum validation
+                if "enum" in param:
+                    enum_values = param["enum"]
+                    enum_str = ", ".join([f'"{val}"' for val in enum_values])
+                    code.append(f"{indent}valid_values = [{enum_str}]")
+                    code.append(f"{indent}if self._{param_name} not in valid_values:")
+                    code.append(
+                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be one of the following values: " + ", ".join(valid_values))'
+                    )
+
+            # Add a pass statement if no validation rules were added
+            else:
+                code.append(
+                    f"{indent}pass  # No specific validation for this parameter type"
+                )
+
+            # Add a blank line after each parameter validation block
+            code.append("")
+
+    def _generate_enums_module(self) -> str:
+        """Generate the enums.py module with all enum definitions.
+
+        Args:
+            self: The CodeGenerator instance.
+
         Returns:
             Generated code as a string
         """
         code = [
             '"""',
-            'Decorator Enum Definitions',
-            '',
-            'This module provides enum types used by decorators.',
+            "Decorator Enum Definitions",
+            "",
+            "This module provides enum types used by decorators.",
             '"""',
-            '',
-            'from enum import Enum',
-            '',
+            "",
+            "from enum import Enum",
+            "",
         ]
-        
+
         # Generate enums in alphabetical order
         for enum_name in sorted(self.enum_definitions.keys()):
             description, values = self.enum_definitions[enum_name]
-            
-            code.append('')
-            code.append(f'class {enum_name}(str, Enum):')
+
+            code.append("")
+            code.append(f"class {enum_name}(str, Enum):")
             code.append(f'    """{description}"""')
-            
+
             for value in values:
                 constant_name = self._convert_to_enum_constant(value)
                 code.append(f'    {constant_name} = "{value}"')
-        
-        return '\n'.join(code)
-    
+
+        return "\n".join(code)
+
     def _collect_enums(self) -> None:
-        """
-        Collect all enum types from all decorators.
-        """
+        """Collect all enum types from all decorators."""
         self.enum_definitions = {}
-        
+
         for decorator in self.decorators:
             name = decorator["decoratorName"]
-            
+
             for param in decorator.get("parameters", []):
                 if param.get("type") == "enum" and "enum" in param:
                     param_name = param["name"]
                     enum_name = f"{name}{param_name.capitalize()}Enum"
-                    description = param.get("description", f"Options for {name}.{param_name}")
+                    description = param.get(
+                        "description", f"Options for {name}.{param_name}"
+                    )
                     values = param["enum"]
-                    
+
                     self.enum_definitions[enum_name] = (description, values)
-    
+
     def _get_enums_for_decorator(self, decorator: DecoratorData) -> List[str]:
-        """
-        Get list of enum types used by a decorator.
-        
+        """Get list of enum types used by a decorator.
+
         Args:
             decorator: Decorator data
-            
+
         Returns:
             List of enum class names
         """
         result = []
         name = decorator["decoratorName"]
-        
+
         for param in decorator.get("parameters", []):
             if param.get("type") == "enum" and "enum" in param:
                 param_name = param["name"]
                 enum_name = f"{name}{param_name.capitalize()}Enum"
-                
+
                 # Ensure the enum exists in our definitions
                 if enum_name not in self.enum_definitions:
-                    description = param.get("description", f"Options for {name}.{param_name}")
+                    description = param.get(
+                        "description", f"Options for {name}.{param_name}"
+                    )
                     values = param["enum"]
                     self.enum_definitions[enum_name] = (description, values)
-                
+
                 result.append(enum_name)
-        
+
         return result
-    
-    def _get_python_type(self, param: Dict[str, Any], current_decorator: Optional[DecoratorData] = None) -> str:
-        """
-        Convert parameter type to Python type annotation.
-        
+
+    def _get_python_type(
+        self, param: Dict[str, Any], current_decorator: Optional[Dict[str, Any]] = None
+    ) -> str:
+        """Get the Python type for a parameter.
+
         Args:
             param: Parameter definition
-            current_decorator: The decorator this parameter belongs to (optional)
-            
+            current_decorator: Optional decorator data for context
+
         Returns:
-            Python type annotation as string
+            Python type as string
         """
         param_type = param.get("type", "string")
-        
         if param_type == "string":
             return "str"
-        elif param_type == "number":
-            return "float"
         elif param_type == "integer":
             return "int"
+        elif param_type == "float":
+            return "float"
         elif param_type == "boolean":
             return "bool"
         elif param_type == "enum":
-            # For enum types, reference the appropriate Enum class
-            param_name = param["name"]
-            
-            # If we know which decorator this parameter belongs to, use that directly
-            if current_decorator is not None:
-                decorator_name = current_decorator["decoratorName"]
-                enum_name = f"{decorator_name}{param_name.capitalize()}Enum"
-                return enum_name
-            
-            # Otherwise try to find the decorator this parameter belongs to
-            decorator_name = None
-            for decorator in self.decorators:
-                for p in decorator.get("parameters", []):
-                    if p.get("name") == param_name and p.get("type") == "enum" and p == param:
-                        decorator_name = decorator["decoratorName"]
-                        break
-                if decorator_name:
-                    break
-            
-            if decorator_name:
-                return f"{decorator_name}{param_name.capitalize()}Enum"
-            else:
-                # Fallback to literal type if we can't determine the enum class
-                if "enum" in param:
-                    values = [self._format_literal_value(val) for val in param["enum"]]
-                    return f"Literal[{', '.join(values)}]"
-                return "str"
+            # Use Literal type for enum values
+            if "enum" in param:
+                values = [self._format_literal_value(val) for val in param["enum"]]
+                return f"Literal[{', '.join(values)}]"
+            return "str"
         elif param_type == "array":
             # If items type is specified, use that
             if "items" in param and "type" in param["items"]:
@@ -440,14 +783,13 @@ class CodeGenerator:
             return "Dict[str, Any]"
         else:
             return "Any"
-    
+
     def _format_literal_value(self, value: Any) -> str:
-        """
-        Format a value for use in a Literal type.
-        
+        """Format a value for use in a Literal type.
+
         Args:
             value: Value to format
-            
+
         Returns:
             Formatted value as string
         """
@@ -458,33 +800,33 @@ class CodeGenerator:
             return str(value)
         else:
             return str(value)
-    
-    def _get_default_value_str(self, param: Dict[str, Any], current_decorator: Optional[DecoratorData] = None) -> str:
+
+    def _format_default_value(self, param: Dict[str, Any]) -> str:
         """
-        Get string representation of default value for a parameter.
-        
+        Format the default value for a parameter.
+
         Args:
             param: Parameter definition
-            current_decorator: The decorator this parameter belongs to (optional)
-            
+
         Returns:
-            String representation of default value
+            Formatted default value as a string
         """
         if "default" not in param:
             return "None"
-        
+
         default = param["default"]
         param_type = param.get("type", "string")
-        
+
         if param_type == "string":
-            return f'"{default}"'
+            # Always quote string values
+            return f'"{str(default)}"'
         elif param_type == "boolean":
             # Use Python's True/False instead of JavaScript's true/false
             if isinstance(default, bool):
                 return str(default)
             # Handle string representations from JSON
-            if default in ("true", "false"):
-                return "True" if default == "true" else "False"
+            if str(default).lower() in ("true", "false"):
+                return "True" if str(default).lower() == "true" else "False"
             return str(default)
         elif param_type == "array":
             if not default:
@@ -493,166 +835,170 @@ class CodeGenerator:
             items = [self._format_literal_value(item) for item in default]
             return f"[{', '.join(items)}]"
         elif param_type == "enum":
-            # For enum types, reference the enum constant
-            param_name = param["name"]
-            
-            # If we know which decorator this parameter belongs to, use that directly
-            if current_decorator is not None:
-                decorator_name = current_decorator["decoratorName"]
-                enum_name = f"{decorator_name}{param_name.capitalize()}Enum"
-                constant_name = self._convert_to_enum_constant(default)
-                return f"{enum_name}.{constant_name}"
-            
-            # Otherwise try to find the decorator this parameter belongs to
-            decorator_name = None
-            for decorator in self.decorators:
-                for p in decorator.get("parameters", []):
-                    if p.get("name") == param_name and p.get("type") == "enum" and p == param:
-                        decorator_name = decorator["decoratorName"]
-                        break
-                if decorator_name:
-                    break
-            
-            if decorator_name:
-                enum_name = f"{decorator_name}{param_name.capitalize()}Enum"
-                constant_name = self._convert_to_enum_constant(default)
-                return f"{enum_name}.{constant_name}"
-            else:
-                return f'"{default}"'
+            # Always quote enum values
+            return f'"{str(default)}"'
+        elif param_type == "number":
+            # Handle numeric values
+            try:
+                float(default)  # Validate it's a number
+                return str(default)
+            except (ValueError, TypeError):
+                return "0.0"  # Default to 0.0 for invalid numbers
+        elif param_type == "integer":
+            # Handle integer values
+            try:
+                int(default)  # Validate it's an integer
+                return str(default)
+            except (ValueError, TypeError):
+                return "0"  # Default to 0 for invalid integers
         else:
-            return str(default)
-    
+            # For unknown types, convert to string and quote
+            return f'"{str(default)}"'
+
     def _convert_to_snake_case(self, name: str) -> str:
-        """
-        Convert camelCase or PascalCase to snake_case.
-        
+        """Convert camelCase or PascalCase to snake_case.
+
         Args:
             name: Name to convert
-            
+
         Returns:
             snake_case version of the name
         """
         # Handle common acronyms that should stay together
-        name = re.sub(r'JSON', 'Json', name)
-        name = re.sub(r'XML', 'Xml', name)
-        name = re.sub(r'YAML', 'Yaml', name)
-        name = re.sub(r'HTML', 'Html', name)
-        name = re.sub(r'CSS', 'Css', name)
-        name = re.sub(r'URL', 'Url', name)
-        name = re.sub(r'API', 'Api', name)
-        
+        name = re.sub(r"JSON", "Json", name)
+        name = re.sub(r"XML", "Xml", name)
+        name = re.sub(r"YAML", "Yaml", name)
+        name = re.sub(r"HTML", "Html", name)
+        name = re.sub(r"CSS", "Css", name)
+        name = re.sub(r"URL", "Url", name)
+        name = re.sub(r"API", "Api", name)
+
         # Convert camelCase to snake_case
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-    
+        s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+        s2 = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+
+        # Replace spaces with underscores
+        return s2.replace(" ", "_")
+
     def _convert_to_enum_constant(self, value: str) -> str:
-        """
-        Convert a string value to a valid enum constant name.
-        
+        """Convert a string value to a valid enum constant name.
+
         Args:
             value: Value to convert
-            
+
         Returns:
             Valid enum constant name
         """
         # Replace special characters with underscores
-        result = re.sub(r'[^a-zA-Z0-9]', '_', str(value))
-        
+        result = re.sub(r"[^a-zA-Z0-9]", "_", str(value))
+
         # Convert to uppercase
         result = result.upper()
-        
+
         # Ensure it starts with a letter
         if result and not result[0].isalpha():
-            result = 'VALUE_' + result
-        
+            result = "VALUE_" + result
+
         # Handle empty string
         if not result:
-            result = 'EMPTY'
-        
+            result = "EMPTY"
+
         return result
-    
+
     def _get_decorator_file_name(self, decorator: DecoratorData) -> str:
-        """
-        Get the file name for a decorator module.
-        
+        """Get the file name for a decorator module.
+
         Args:
             decorator: Decorator data
-            
+
         Returns:
-            File name (without directory)
+            File name for the decorator module
         """
         name = decorator["decoratorName"]
         snake_case = self._convert_to_snake_case(name)
         return f"{snake_case}.py"
 
+    def _escape_string(self, s: str) -> str:
+        """Escape a string for use in Python code."""
+        if s is None:
+            return ""
+        # Replace backslashes first to avoid double escaping
+        s = s.replace("\\", "\\\\")
+        # Replace double quotes
+        s = s.replace('"', '\\"')
+        return s
 
-def generate_code(decorators: List[DecoratorData], output_dir: Optional[Union[str, Path]] = None) -> Dict[str, str]:
-    """
-    Generate Python code from decorator definitions.
-    
+
+def generate_code(
+    decorators: List[DecoratorData], output_dir: Optional[Union[str, Path]] = None
+) -> Dict[str, str]:
+    """Generate Python code from decorator definitions.
+
     Args:
         decorators: List of decorator definitions
         output_dir: Optional output directory to write files to
-        
+
     Returns:
         Dictionary mapping file paths to generated code
     """
     # Initialize the code generator
     generator = CodeGenerator(decorators)
-    
+
     # Collect enum definitions
     generator._collect_enums()
-    
+
     # Generate code
     generated_files = generator.generate_all()
-    
+
     # Write to files if output_dir is specified
     if output_dir:
         output_path = Path(output_dir)
         output_path.mkdir(parents=True, exist_ok=True)
-        
+
         for file_path, content in generated_files.items():
             full_path = output_path / file_path
             full_path.parent.mkdir(parents=True, exist_ok=True)
-            
-            with open(full_path, 'w', encoding='utf-8') as f:
+
+            with open(full_path, "w", encoding="utf-8") as f:
                 f.write(content)
-            
+
             logger.info(f"Generated {full_path}")
-    
+
     return generated_files
 
 
 if __name__ == "__main__":
     # Simple test when run directly
     import sys
+
     from .registry import scan_registry
-    
+
     if len(sys.argv) > 1:
         registry_dir = sys.argv[1]
     else:
         # Default to registry directory relative to this file
         script_dir = Path(__file__).parent.parent.parent
         registry_dir = script_dir / "registry"
-    
+
     if len(sys.argv) > 2:
         output_dir = sys.argv[2]
     else:
         output_dir = Path(__file__).parent.parent / "decorators" / "generated"
-    
+
     print(f"Scanning registry at: {registry_dir}")
     print(f"Output directory: {output_dir}")
-    
+
     try:
         # Scan registry
         decorators = scan_registry(registry_dir)
-        
+
         # Generate code
         generate_code(decorators, output_dir)
-        
+
         print(f"Generated {len(decorators)} decorator classes")
     except Exception as e:
         print(f"Error: {e}")
         import traceback
+
         traceback.print_exc()
-        sys.exit(1) 
+        sys.exit(1)

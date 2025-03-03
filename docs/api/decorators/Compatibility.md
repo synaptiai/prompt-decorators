@@ -8,22 +8,22 @@ A meta-decorator that specifies model-specific adaptations or fall-back behavior
 
 ### `models`
 
-**Type:** array  
-**Required:** Yes  
+**Type:** array
+**Required:** Yes
 
 List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.)
 
 ### `fallback`
 
-**Type:** string  
-**Required:** No  
+**Type:** string
+**Required:** No
 
 Decorator to apply if the current model doesn't match any in the models list
 
 ### `behaviors`
 
-**Type:** string  
-**Required:** No  
+**Type:** string
+**Required:** No
 
 JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}')
 
@@ -85,7 +85,7 @@ Apply the decorator to a prompt.
 
 Args:
     prompt: The original prompt
-    
+
 Returns:
     The modified prompt with the decorator applied
 
@@ -97,10 +97,10 @@ Create a decorator from a dictionary.
 
 Args:
     data: Dictionary representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the data is invalid or incompatible with this class
     IncompatibleVersionError: If the version is incompatible
@@ -113,10 +113,10 @@ Create a decorator from a JSON string.
 
 Args:
     json_str: JSON string representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the JSON is invalid or incompatible with this class
     json.JSONDecodeError: If the JSON is malformed
@@ -148,7 +148,7 @@ Check if this decorator is compatible with the specified version.
 
 Args:
     version_str: Version string to check compatibility with
-    
+
 Returns:
     True if compatible, False otherwise
 
@@ -169,7 +169,7 @@ Convert decorator to a JSON string.
 
 Args:
     indent: Optional indentation for pretty-printing
-    
+
 Returns:
     JSON string representation of the decorator
 
@@ -184,4 +184,3 @@ Subclasses should override for specific validation.
 
 Raises:
     ValidationError: If any parameter fails validation
-

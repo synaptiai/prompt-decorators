@@ -8,24 +8,24 @@ Structures the response using abductive reasoning, developing the most likely ex
 
 ### `hypotheses`
 
-**Type:** number  
-**Required:** No  
-**Default:** `3`  
+**Type:** number
+**Required:** No
+**Default:** `3`
 
 Number of alternative hypotheses or explanations to generate
 
 ### `criteria`
 
-**Type:** array  
-**Required:** No  
+**Type:** array
+**Required:** No
 
 Specific criteria to evaluate hypotheses against (e.g., simplicity, explanatory power)
 
 ### `rank`
 
-**Type:** boolean  
-**Required:** No  
-**Default:** `True`  
+**Type:** boolean
+**Required:** No
+**Default:** `True`
 
 Whether to explicitly rank hypotheses by likelihood
 
@@ -85,7 +85,7 @@ Apply the decorator to a prompt.
 
 Args:
     prompt: The original prompt
-    
+
 Returns:
     The modified prompt with the decorator applied
 
@@ -97,10 +97,10 @@ Create a decorator from a dictionary.
 
 Args:
     data: Dictionary representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the data is invalid or incompatible with this class
     IncompatibleVersionError: If the version is incompatible
@@ -113,10 +113,10 @@ Create a decorator from a JSON string.
 
 Args:
     json_str: JSON string representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the JSON is invalid or incompatible with this class
     json.JSONDecodeError: If the JSON is malformed
@@ -148,7 +148,7 @@ Check if this decorator is compatible with the specified version.
 
 Args:
     version_str: Version string to check compatibility with
-    
+
 Returns:
     True if compatible, False otherwise
 
@@ -169,7 +169,7 @@ Convert decorator to a JSON string.
 
 Args:
     indent: Optional indentation for pretty-printing
-    
+
 Returns:
     JSON string representation of the decorator
 
@@ -178,4 +178,3 @@ Returns:
 **Signature:** `validate() -> <class 'NoneType'>`
 
 Validate decorator parameters.
-

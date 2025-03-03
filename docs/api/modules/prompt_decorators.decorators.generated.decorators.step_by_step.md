@@ -29,4 +29,3 @@ Structures the AI's response as a sequence of clearly labeled steps. This decora
 #### Properties
 
 - `numbered`: Whether to number the steps or use bullet points
-

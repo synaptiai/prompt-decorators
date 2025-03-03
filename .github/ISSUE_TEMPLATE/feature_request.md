@@ -57,4 +57,4 @@ Your assessment of how complex this feature might be to implement:
 
 - [ ] Yes, I'm interested in implementing this myself with guidance
 - [ ] Maybe, but I would need significant help
-- [ ] No, I don't have the capacity to work on this 
+- [ ] No, I don't have the capacity to work on this

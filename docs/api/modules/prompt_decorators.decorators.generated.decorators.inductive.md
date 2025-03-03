@@ -31,4 +31,3 @@ Structures the response using inductive reasoning, moving from specific observat
 - `confidence`: Whether to explicitly state the confidence level of the inductive conclusions
 - `examples`: Number of specific examples or observations to include before generalizing
 - `structure`: The pattern of inductive reasoning to follow
-

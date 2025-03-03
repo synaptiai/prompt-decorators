@@ -44,4 +44,3 @@ This class provides methods for creating model-specific versions of decorators.
 #### Methods
 
 - `create_for_model(decorator_class, model_id, params) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-

@@ -31,4 +31,3 @@ Presents multiple distinct options, approaches, or solutions to a question or pr
 - `comparison`: Whether to include a comparative analysis of the alternatives
 - `count`: Number of alternative options or approaches to generate
 - `diversity`: How different or varied the alternatives should be from each other
-

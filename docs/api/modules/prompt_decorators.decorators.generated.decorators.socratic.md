@@ -29,4 +29,3 @@ Structures the response as a series of questions that guide the user through a p
 #### Properties
 
 - `iterations`: Number of question-answer cycles to include
-

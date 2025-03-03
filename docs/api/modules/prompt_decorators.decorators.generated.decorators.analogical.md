@@ -31,4 +31,3 @@ Enhances explanations through the use of analogies and metaphors. This decorator
 - `count`: Number of distinct analogies to provide
 - `depth`: Level of detail in developing the analogy
 - `domain`: Specific domain or context to draw analogies from (if not specified, will choose appropriate domains)
-

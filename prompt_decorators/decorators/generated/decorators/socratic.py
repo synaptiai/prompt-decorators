@@ -1,66 +1,93 @@
 """
-Socratic Decorator
+Implementation of the Socratic decorator.
+
+This module provides the Socratic decorator class for use in prompt engineering.
 
 Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
+import re
+from typing import Any, Dict, List, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
 
 
 class Socratic(BaseDecorator):
-    """Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding."""
+    """
+    Structures the response as a series of questions that guide the user
+    through a problem or topic. This decorator encourages critical
+    thinking through question-based exploration, helping to uncover
+    assumptions and lead to deeper understanding.
+
+    Attributes:
+        iterations: Number of question-answer cycles to include
+    """
+
+    decorator_name = "socratic"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        iterations: Optional[float] = 3,
-    ):
+        iterations: Any = 3,
+    ) -> None:
         """
-        Initialize Socratic decorator.
+        Initialize the Socratic decorator.
 
         Args:
             iterations: Number of question-answer cycles to include
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Socratic",
-            version="1.0.0",
-            parameters={
-                "iterations": iterations,
-            },
-            metadata={
-                "description": "Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding.",
-                "author": "Prompt Decorators Working Group",
-                "category": "reasoning",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._iterations = iterations
+
+        # Validate parameters
+        if self._iterations is not None:
+            if not isinstance(self._iterations, (int, float)) or isinstance(self._iterations, bool):
+                raise ValidationError("The parameter 'iterations' must be a numeric value.")
+
 
     @property
-    def iterations(self) -> float:
-        """Number of question-answer cycles to include"""
-        return self.parameters.get("iterations")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.iterations is not None and self.iterations < 1:
-            raise ValueError(f"iterations must be at least 1, got {self.iterations}")
-        if self.iterations is not None and self.iterations > 5:
-            raise ValueError(f"iterations must be at most 5, got {self.iterations}")
-
-    def apply(self, prompt: str) -> str:
+    def iterations(self) -> Any:
         """
-        Apply the decorator to a prompt.
-        
+        Get the iterations parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The iterations parameter value
         """
-        # Apply the decorator: Structures the response as a series of questions that guide the user through a problem or topic
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._iterations
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "socratic",
+            "iterations": self.iterations,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.iterations is not None:
-            instruction += f"iterations={self.iterations}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"iterations={self.iterations}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

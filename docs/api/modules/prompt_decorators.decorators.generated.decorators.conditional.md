@@ -31,4 +31,3 @@ A meta-decorator that applies different decorators based on specified conditions
 - `else_param`: The decorator to apply if the condition is false (can be a specific decorator with parameters)
 - `if_param`: The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}')
 - `then`: The decorator to apply if the condition is true (can be a specific decorator with parameters)
-

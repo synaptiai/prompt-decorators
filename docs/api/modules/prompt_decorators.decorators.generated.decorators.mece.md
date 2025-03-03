@@ -31,4 +31,3 @@ Structures the response using the Mutually Exclusive, Collectively Exhaustive fr
 - `depth`: Maximum level of hierarchical breakdown within each dimension
 - `dimensions`: Number of top-level MECE dimensions to use for categorization
 - `framework`: Optional predefined MECE framework to apply
-

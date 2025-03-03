@@ -72,20 +72,20 @@ from prompt_decorators.core.base import BaseDecorator
 def register_decorators():
     registry = DecoratorRegistry()
     registry.clear()
-    
+
     # Path to the generated decorators directory
     decorators_dir = Path("prompt_decorators/decorators/generated/decorators")
-    
+
     # Iterate through all Python files in the directory
     for file_path in decorators_dir.glob("*.py"):
         if file_path.name == "__init__.py":
             continue
-            
+
         # Import the module
         module_name = f"prompt_decorators.decorators.generated.decorators.{file_path.stem}"
         try:
             module = importlib.import_module(module_name)
-            
+
             # Find all classes in the module that are subclasses of BaseDecorator
             for name, obj in inspect.getmembers(module):
                 if inspect.isclass(obj) and issubclass(obj, BaseDecorator) and obj != BaseDecorator:
@@ -95,11 +95,11 @@ def register_decorators():
                     print(f"  - Registered: {decorator_name}")
         except Exception as e:
             print(f"Error registering decorators from {module_name}: {e}")
-    
+
     # Print summary
     decorators = registry.get_all_decorators()
     print(f"\nRegistered {len(decorators)} decorators:")
-    
+
     # Print categories
     categories = set(decorator.category for decorator in decorators)
     print(f"\nDecorator categories ({len(categories)}):")
@@ -180,4 +180,4 @@ The Decorator Registry is designed to be extensible and can be enhanced in sever
 2. **Web API**: Create a web API for discovering and using decorators
 3. **Caching**: Implement caching for better performance
 4. **Analytics**: Add analytics to track decorator usage
-5. **UI Integration**: Create a user interface for browsing and selecting decorators 
+5. **UI Integration**: Create a user interface for browsing and selecting decorators

@@ -1,87 +1,146 @@
 """
-Confidence Decorator
+Implementation of the Confidence decorator.
+
+This module provides the Confidence decorator class for use in prompt engineering.
 
 Enhances the response with explicit indications of confidence levels for different statements or claims. This decorator promotes transparency about knowledge certainty and helps differentiate between well-established facts and more speculative content.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import ConfidenceScaleEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    ConfidenceScaleEnum,
+)
 
 
 class Confidence(BaseDecorator):
-    """Enhances the response with explicit indications of confidence levels for different statements or claims. This decorator promotes transparency about knowledge certainty and helps differentiate between well-established facts and more speculative content."""
+    """
+    Enhances the response with explicit indications of confidence levels
+    for different statements or claims. This decorator promotes
+    transparency about knowledge certainty and helps differentiate between
+    well-established facts and more speculative content.
+
+    Attributes:
+        scale: The method used to express confidence levels
+        threshold: Minimum confidence level for including information (as a percentage)
+        detailed: Whether to provide explanations for confidence assessments
+    """
+
+    decorator_name = "confidence"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        scale: Optional[ConfidenceScaleEnum] = ConfidenceScaleEnum.QUALITATIVE,
-        threshold: Optional[float] = 50,
-        detailed: Optional[bool] = False,
-    ):
+        scale: Literal["percent", "qualitative", "stars", "numeric"] = "qualitative",
+        threshold: Any = 50,
+        detailed: bool = False,
+    ) -> None:
         """
-        Initialize Confidence decorator.
+        Initialize the Confidence decorator.
 
         Args:
             scale: The method used to express confidence levels
-            threshold: Minimum confidence level for including information (as a percentage)
+            threshold: Minimum confidence level for including information (as a
+                percentage)
             detailed: Whether to provide explanations for confidence assessments
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Confidence",
-            version="1.0.0",
-            parameters={
-                "scale": scale,
-                "threshold": threshold,
-                "detailed": detailed,
-            },
-            metadata={
-                "description": "Enhances the response with explicit indications of confidence levels for different statements or claims. This decorator promotes transparency about knowledge certainty and helps differentiate between well-established facts and more speculative content.",
-                "author": "Prompt Decorators Working Group",
-                "category": "verification",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._scale = scale
+        self._threshold = threshold
+        self._detailed = detailed
+
+        # Validate parameters
+        if self._scale is not None:
+            valid_values = ["percent", "qualitative", "stars", "numeric"]
+            if self._scale not in valid_values:
+                raise ValidationError("The parameter 'scale' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._threshold is not None:
+            if not isinstance(self._threshold, (int, float)) or isinstance(self._threshold, bool):
+                raise ValidationError("The parameter 'threshold' must be a numeric value.")
+
+        if self._detailed is not None:
+            if not isinstance(self._detailed, bool):
+                raise ValidationError("The parameter 'detailed' must be a boolean value.")
+
 
     @property
-    def scale(self) -> ConfidenceScaleEnum:
-        """The method used to express confidence levels"""
-        return self.parameters.get("scale")
+    def scale(self) -> Literal["percent", "qualitative", "stars", "numeric"]:
+        """
+        Get the scale parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The scale parameter value
+        """
+        return self._scale
 
     @property
-    def threshold(self) -> float:
-        """Minimum confidence level for including information (as a percentage)"""
-        return self.parameters.get("threshold")
+    def threshold(self) -> Any:
+        """
+        Get the threshold parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The threshold parameter value
+        """
+        return self._threshold
 
     @property
     def detailed(self) -> bool:
-        """Whether to provide explanations for confidence assessments"""
-        return self.parameters.get("detailed")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.threshold is not None and self.threshold < 0:
-            raise ValueError(f"threshold must be at least 0, got {self.threshold}")
-        if self.threshold is not None and self.threshold > 100:
-            raise ValueError(f"threshold must be at most 100, got {self.threshold}")
-
-    def apply(self, prompt: str) -> str:
         """
-        Apply the decorator to a prompt.
-        
+        Get the detailed parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The detailed parameter value
         """
-        # Apply the decorator: Enhances the response with explicit indications of confidence levels for different statements or claims
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._detailed
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "confidence",
+            "scale": self.scale,
+            "threshold": self.threshold,
+            "detailed": self.detailed,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.scale is not None:
-            instruction += f"scale={self.scale}, "
+            params.append(f"scale={self.scale}")
         if self.threshold is not None:
-            instruction += f"threshold={self.threshold}, "
+            params.append(f"threshold={self.threshold}")
         if self.detailed is not None:
-            instruction += f"detailed={self.detailed}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"detailed={self.detailed}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

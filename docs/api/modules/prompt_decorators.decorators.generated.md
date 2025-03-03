@@ -3,4 +3,3 @@
 Generated decorators package.
 
 This package contains auto-generated decorator implementations.
-

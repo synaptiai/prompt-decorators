@@ -31,4 +31,3 @@ Structures the response as a story-based delivery with narrative elements. This 
 - `characters`: Whether to include character elements in the narrative
 - `length`: The relative length of the narrative
 - `structure`: The narrative structure to employ
-

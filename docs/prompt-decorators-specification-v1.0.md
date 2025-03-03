@@ -133,7 +133,7 @@ Parameters MUST use one of the following types:
 2. **Numeric values**: `parameter=42` or `parameter=3.14`
 3. **Boolean values**: `parameter=true` or `parameter=false`
 4. **Enumerated values**: `parameter=option1` (from a predefined set)
-5. **Arrays**: `parameter=[item1,item2,item3]` 
+5. **Arrays**: `parameter=[item1,item2,item3]`
 
 ### 3.3 Decorator Placement and Composition
 
@@ -392,15 +392,15 @@ A reference implementation for processing decorators in a provider API might loo
 def process_decorators(user_prompt):
     decorators = []
     cleaned_prompt = user_prompt
-    
+
     # Extract decorator patterns
     decorator_pattern = r'\+\+\+([A-Za-z]+)(?:\(([^)]+)\))?'
     matches = re.findall(decorator_pattern, user_prompt)
-    
+
     for match in matches:
         decorator_name = match[0]
         params_str = match[1] if len(match) > 1 else ""
-        
+
         # Parse parameters
         params = {}
         if params_str:
@@ -409,16 +409,16 @@ def process_decorators(user_prompt):
                 if '=' in pair:
                     key, value = pair.split('=', 1)
                     params[key.strip()] = value.strip()
-        
+
         decorators.append({
             "name": decorator_name,
             "parameters": params
         })
-        
+
         # Remove decorator from prompt
         pattern_to_remove = f"+++{decorator_name}" + (f"({params_str})" if params_str else "")
         cleaned_prompt = cleaned_prompt.replace(pattern_to_remove, "", 1)
-    
+
     return {
         "decorators": decorators,
         "cleaned_prompt": cleaned_prompt.strip()
@@ -427,14 +427,14 @@ def process_decorators(user_prompt):
 def generate_system_prompt(decorators):
     """Generate model instructions based on recognized decorators"""
     system_prompt = "You are a helpful assistant. "
-    
+
     for decorator in decorators:
         if decorator["name"] == "Reasoning":
             system_prompt += "Provide detailed reasoning before giving your final answer. "
         elif decorator["name"] == "StepByStep":
             system_prompt += "Break down your response into clearly labeled steps. "
         # Add more decorator handling...
-    
+
     return system_prompt
 ```
 
@@ -469,41 +469,41 @@ class PromptDecoratorManager {
       },
       // More decorators...
     };
-    
+
     this.activeDecorators = [];
   }
-  
+
   addDecorator(name, parameters = {}) {
     if (!this.availableDecorators[name]) {
       throw new Error(`Unknown decorator: ${name}`);
     }
-    
+
     // Apply default parameters where not specified
     const decorator = {
       name,
       parameters: { ...this.availableDecorators[name].defaults, ...parameters }
     };
-    
+
     this.activeDecorators.push(decorator);
     return this;
   }
-  
+
   applyToPrompt(userPrompt) {
     let decoratedPrompt = userPrompt;
-    
+
     // Prepend decorators to prompt
     for (const decorator of this.activeDecorators) {
       const paramString = Object.entries(decorator.parameters)
         .map(([key, value]) => `${key}=${value}`)
         .join(',');
-      
-      const decoratorString = paramString 
-        ? `+++${decorator.name}(${paramString})\n` 
+
+      const decoratorString = paramString
+        ? `+++${decorator.name}(${paramString})\n`
         : `+++${decorator.name}\n`;
-        
+
       decoratedPrompt = decoratorString + decoratedPrompt;
     }
-    
+
     return decoratedPrompt;
   }
 }
@@ -575,7 +575,7 @@ def detect_model_capabilities(model_id):
             "output_formats": ["json"]
         }
     }
-    
+
     return model_capabilities.get(model_id, {
         "reasoning": False,
         "step_by_step": False,
@@ -968,7 +968,7 @@ Implementers should consider these ethical aspects:
 4. **User Agency**: Users SHOULD be able to understand and control decorator effects
 5. **Documentation**: Implementations SHOULD document limitations and potential issues
 
-## 9. Testing and Validation 
+## 9. Testing and Validation
 
 ### 9.1 Conformance Testing
 

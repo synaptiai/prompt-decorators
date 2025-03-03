@@ -152,7 +152,7 @@ from prompt_decorators.decorators.generated.decorators.technical import Technica
 from prompt_decorators.decorators.generated.decorators.bullet import Bullet
 
 # Create decorators
-reasoning = Reasoning(depth="comprehensive") 
+reasoning = Reasoning(depth="comprehensive")
 technical = Technical(domain="physics")
 bullet = Bullet()
 
@@ -301,4 +301,4 @@ Effective decorator combinations can significantly enhance the quality and consi
 Next steps:
 - Try the examples in this tutorial with your own prompts
 - Explore the [Compatibility Matrix](../compatibility.md) for more information
-- Check out the [Decorator Catalog](../api/decorators/) for all available decorators 
+- Check out the [Decorator Catalog](../api/decorators/) for all available decorators

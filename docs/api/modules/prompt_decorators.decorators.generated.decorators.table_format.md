@@ -31,4 +31,3 @@ Structures the AI's response in a tabular format with defined columns. This deco
 - `alignment`: Text alignment within table cells
 - `columns`: List of column names for the table
 - `format`: Format style for the table representation
-

@@ -8,9 +8,9 @@ Enhances the response with comprehensive information, thorough explanations, and
 
 ### `depth`
 
-**Type:** enum  
-**Required:** No  
-**Default:** `comprehensive`  
+**Type:** enum
+**Required:** No
+**Default:** `comprehensive`
 
 The level of detail and comprehensiveness
 
@@ -22,16 +22,16 @@ The level of detail and comprehensiveness
 
 ### `aspects`
 
-**Type:** array  
-**Required:** No  
+**Type:** array
+**Required:** No
 
 Specific aspects or dimensions to explore in detail
 
 ### `examples`
 
-**Type:** boolean  
-**Required:** No  
-**Default:** `True`  
+**Type:** boolean
+**Required:** No
+**Default:** `True`
 
 Whether to include detailed examples to illustrate points
 
@@ -96,7 +96,7 @@ Apply the Detailed decorator to a prompt.
 
 Args:
     prompt: The original prompt to decorate
-    
+
 Returns:
     The decorated prompt
 
@@ -108,10 +108,10 @@ Create a decorator from a dictionary.
 
 Args:
     data: Dictionary representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the data is invalid or incompatible with this class
     IncompatibleVersionError: If the version is incompatible
@@ -124,10 +124,10 @@ Create a decorator from a JSON string.
 
 Args:
     json_str: JSON string representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the JSON is invalid or incompatible with this class
     json.JSONDecodeError: If the JSON is malformed
@@ -159,7 +159,7 @@ Check if this decorator is compatible with the specified version.
 
 Args:
     version_str: Version string to check compatibility with
-    
+
 Returns:
     True if compatible, False otherwise
 
@@ -180,7 +180,7 @@ Convert decorator to a JSON string.
 
 Args:
     indent: Optional indentation for pretty-printing
-    
+
 Returns:
     JSON string representation of the decorator
 
@@ -195,4 +195,3 @@ Subclasses should override for specific validation.
 
 Raises:
     ValidationError: If any parameter fails validation
-

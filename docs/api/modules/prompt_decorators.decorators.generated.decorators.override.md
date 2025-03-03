@@ -31,4 +31,3 @@ A meta-decorator that overrides the default parameters or behaviors of other dec
 - `behavior`: Optional custom behavior modification instructions that override the standard decorator interpretation
 - `decorator`: The specific decorator whose behavior to override
 - `parameters`: JSON string specifying the parameters to override (e.g., '{"depth": "comprehensive", "focus": "methodology"}')
-

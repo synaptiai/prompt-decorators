@@ -31,4 +31,3 @@ Adapts the response to reflect the perspective and concerns of a specific person
 - `goals`: Primary goals or concerns of the persona
 - `role`: The specific persona or stakeholder role to adopt
 - `traits`: Key personality traits or characteristics of the persona
-

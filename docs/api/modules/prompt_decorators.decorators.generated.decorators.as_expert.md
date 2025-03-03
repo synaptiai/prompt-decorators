@@ -31,4 +31,3 @@ Generates responses from the perspective of a specified domain expert or special
 - `domain`: The specific field or discipline the expert specializes in
 - `experience`: The experience level of the expert
 - `technical`: Whether to use highly technical language and domain-specific terminology
-

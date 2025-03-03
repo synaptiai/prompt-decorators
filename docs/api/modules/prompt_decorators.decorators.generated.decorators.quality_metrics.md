@@ -31,4 +31,3 @@ Applies specific quality measurements to evaluate content against defined criter
 - `explanation`: Whether to provide detailed explanations for each metric score
 - `metrics`: Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness)
 - `scale`: Rating scale to use for evaluations
-

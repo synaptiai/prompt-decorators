@@ -30,4 +30,3 @@ Adapts the response to use business-oriented language appropriate for profession
 
 - `formality`: The level of formality to maintain in the response
 - `industry`: The specific industry context to adapt the language for
-

@@ -1,78 +1,150 @@
 """
-Priority Decorator
+Implementation of the Priority decorator.
+
+This module provides the Priority decorator class for use in prompt engineering.
 
 A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import PriorityModeEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    PriorityModeEnum,
+)
 
 
 class Priority(BaseDecorator):
-    """A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior."""
+    """
+    A meta-decorator that establishes a precedence hierarchy among
+    multiple decorators. This allows explicit control over which
+    decorator's parameters or behaviors take precedence when conflicts
+    arise, overriding the default last-decorator-wins behavior.
+
+    Attributes:
+        decorators: Ordered list of decorators by priority (highest priority first)
+        explicit: Whether to explicitly mention overridden behaviors in the response
+        mode: How to handle conflicts between decorators
+    """
+
+    decorator_name = "priority"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
         decorators: List[Any],
-        explicit: Optional[bool] = False,
-        mode: Optional[PriorityModeEnum] = PriorityModeEnum.OVERRIDE,
-    ):
+        explicit: bool = False,
+        mode: Literal["override", "merge", "cascade"] = "override",
+    ) -> None:
         """
-        Initialize Priority decorator.
+        Initialize the Priority decorator.
 
         Args:
-            decorators: Ordered list of decorators by priority (highest priority first)
-            explicit: Whether to explicitly mention overridden behaviors in the response
+            decorators: Ordered list of decorators by priority (highest priority
+                first)
+            explicit: Whether to explicitly mention overridden behaviors in the
+                response
             mode: How to handle conflicts between decorators
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Priority",
-            version="1.0.0",
-            parameters={
-                "decorators": decorators,
-                "explicit": explicit,
-                "mode": mode,
-            },
-            metadata={
-                "description": "A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior.",
-                "author": "Prompt Decorators Working Group",
-                "category": "meta",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._decorators = decorators
+        self._explicit = explicit
+        self._mode = mode
+
+        # Validate parameters
+        if self._decorators is None:
+            raise ValidationError("The parameter 'decorators' is required for Priority decorator.")
+
+        if self._decorators is not None:
+            if not isinstance(self._decorators, (list, tuple)):
+                raise ValidationError("The parameter 'decorators' must be an array.")
+
+        if self._explicit is not None:
+            if not isinstance(self._explicit, bool):
+                raise ValidationError("The parameter 'explicit' must be a boolean value.")
+
+        if self._mode is not None:
+            valid_values = ["override", "merge", "cascade"]
+            if self._mode not in valid_values:
+                raise ValidationError("The parameter 'mode' must be one of the following values: " + ", ".join(valid_values))
+
 
     @property
     def decorators(self) -> List[Any]:
-        """Ordered list of decorators by priority (highest priority first)"""
-        return self.parameters.get("decorators")
+        """
+        Get the decorators parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The decorators parameter value
+        """
+        return self._decorators
 
     @property
     def explicit(self) -> bool:
-        """Whether to explicitly mention overridden behaviors in the response"""
-        return self.parameters.get("explicit")
+        """
+        Get the explicit parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The explicit parameter value
+        """
+        return self._explicit
 
     @property
-    def mode(self) -> PriorityModeEnum:
-        """How to handle conflicts between decorators"""
-        return self.parameters.get("mode")
+    def mode(self) -> Literal["override", "merge", "cascade"]:
+        """
+        Get the mode parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The mode parameter value
         """
-        # Apply the decorator: A meta-decorator that establishes a precedence hierarchy among multiple decorators
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._mode
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "priority",
+            "decorators": self.decorators,
+            "explicit": self.explicit,
+            "mode": self.mode,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.decorators is not None:
-            instruction += f"decorators={self.decorators}, "
+            params.append(f"decorators={self.decorators}")
         if self.explicit is not None:
-            instruction += f"explicit={self.explicit}, "
+            params.append(f"explicit={self.explicit}")
         if self.mode is not None:
-            instruction += f"mode={self.mode}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"mode={self.mode}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

@@ -43,4 +43,3 @@ This decorator specifies the format of the model's output, such as:
 - `to_dict() -> typing.Dict[str, typing.Any]`
 - `to_json(indent) -> <class 'str'>`
 - `validate() -> <class 'NoneType'>`
-

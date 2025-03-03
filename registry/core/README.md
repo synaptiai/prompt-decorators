@@ -11,4 +11,4 @@ The decorators are organized into the following categories:
 - **verification**: Decorators that focus on ensuring accuracy, balance, and quality
 - **meta**: Decorators that modify the behavior of other decorators or provide higher-level control
 
-Each decorator is defined in a JSON file following the registry-entry.schema.json format. 
+Each decorator is defined in a JSON file following the registry-entry.schema.json format.

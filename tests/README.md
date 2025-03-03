@@ -30,13 +30,17 @@ tests/
 
 ## Test Generation
 
-Tests are automatically generated from decorator JSON definitions using the test generator script:
+Tests are automatically generated from decorator JSON definitions using the registry tools script:
 
 ```bash
-python scripts/generate_tests.py
+# Method 1: Use registry_tools.py (recommended)
+python scripts/registry_tools.py generate-tests
+
+# Method 2: Use run_tests.py with --generate flag
+python scripts/run_tests.py --generate
 ```
 
-This script:
+This process:
 1. Reads all decorator JSON files from the registry
 2. Extracts parameter information, examples, and compatibility requirements
 3. Generates test files for each decorator in the `tests/auto` directory
@@ -46,6 +50,10 @@ This script:
 ### Running All Tests
 
 ```bash
+# Method 1: Use run_tests.py (recommended)
+python scripts/run_tests.py
+
+# Method 2: Use pytest directly
 pytest tests/auto
 ```
 
@@ -109,7 +117,7 @@ def test_reasoning_depth_enum_values():
     validate_decorator_in_prompt("+++Reasoning(depth=basic)\nTest prompt.")
     validate_decorator_in_prompt("+++Reasoning(depth=moderate)\nTest prompt.")
     validate_decorator_in_prompt("+++Reasoning(depth=comprehensive)\nTest prompt.")
-    
+
     # Invalid value
     with pytest.raises(ValidationError):
         validate_decorator_in_prompt("+++Reasoning(depth=invalid_value)\nTest prompt.")
@@ -119,7 +127,7 @@ def test_reasoning_depth_enum_values():
 
 While most tests are auto-generated, you can add custom tests for specific scenarios:
 
-1. Create a new test file in the appropriate directory 
+1. Create a new test file in the appropriate directory
 2. Import the necessary test helpers
 3. Write your test cases
 4. Run the tests using pytest
@@ -140,7 +148,7 @@ def test_reasoning_with_step_by_step():
 To extend the testing framework:
 
 1. Add new expectation checkers in `test_helpers.py`
-2. Enhance the test generator in `generate_tests.py` 
+2. Enhance the test generator in `generate_tests.py`
 3. Improve the mock response generation in `LLMClient._generate_mock_response()`
 
 ## Continuous Integration
@@ -178,4 +186,4 @@ def _call_real_llm_api(self, prompt):
         messages=[{"role": "user", "content": prompt}]
     )
     return response.choices[0].message.content
-``` 
+```

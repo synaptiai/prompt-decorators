@@ -1,58 +1,99 @@
 """
-OutputFormat Decorator
+Implementation of the OutputFormat decorator.
+
+This module provides the OutputFormat decorator class for use in prompt engineering.
 
 Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import OutputFormatFormatEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    OutputFormatFormatEnum,
+)
 
 
 class OutputFormat(BaseDecorator):
-    """Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way."""
+    """
+    Specifies the format of the AI's response. This decorator ensures the
+    output follows a specific format, making it easier to parse, display,
+    or process the response in a consistent way.
+
+    Attributes:
+        format: The format to use for the response
+    """
+
+    decorator_name = "output_format"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        format: OutputFormatFormatEnum,
-    ):
+        format: Literal["json", "markdown", "yaml", "xml", "plaintext"],
+    ) -> None:
         """
-        Initialize OutputFormat decorator.
+        Initialize the OutputFormat decorator.
 
         Args:
             format: The format to use for the response
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="OutputFormat",
-            version="1.0.0",
-            parameters={
-                "format": format,
-            },
-            metadata={
-                "description": "Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way.",
-                "author": "Prompt Decorators Working Group",
-                "category": "minimal",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._format = format
+
+        # Validate parameters
+        if self._format is None:
+            raise ValidationError("The parameter 'format' is required for OutputFormat decorator.")
+
+        if self._format is not None:
+            valid_values = ["json", "markdown", "yaml", "xml", "plaintext"]
+            if self._format not in valid_values:
+                raise ValidationError("The parameter 'format' must be one of the following values: " + ", ".join(valid_values))
+
 
     @property
-    def format(self) -> OutputFormatFormatEnum:
-        """The format to use for the response"""
-        return self.parameters.get("format")
+    def format(self) -> Literal["json", "markdown", "yaml", "xml", "plaintext"]:
+        """
+        Get the format parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The format parameter value
         """
-        # Apply the decorator: Specifies the format of the AI's response
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._format
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "output_format",
+            "format": self.format,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.format is not None:
-            instruction += f"format={self.format}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"format={self.format}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

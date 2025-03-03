@@ -1,90 +1,143 @@
 """
-Deductive Decorator
+Implementation of the Deductive decorator.
+
+This module provides the Deductive decorator class for use in prompt engineering.
 
 Structures the response using deductive reasoning, moving from general principles to specific conclusions. This decorator emphasizes logical argument development, starting with premises and working methodically to necessary conclusions.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
+import re
+from typing import Any, Dict, List, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
 
 
 class Deductive(BaseDecorator):
-    """Structures the response using deductive reasoning, moving from general principles to specific conclusions. This decorator emphasizes logical argument development, starting with premises and working methodically to necessary conclusions."""
+    """
+    Structures the response using deductive reasoning, moving from general
+    principles to specific conclusions. This decorator emphasizes logical
+    argument development, starting with premises and working methodically
+    to necessary conclusions.
+
+    Attributes:
+        premises: Number of main premises to include before deducing conclusions
+        formal: Whether to use formal logical structures with explicit syllogisms
+        steps: Number of logical steps to include in the deductive process
+    """
+
+    decorator_name = "deductive"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        premises: Optional[float] = 2,
-        formal: Optional[bool] = False,
-        steps: Optional[float] = 3,
-    ):
+        premises: Any = 2,
+        formal: bool = False,
+        steps: Any = 3,
+    ) -> None:
         """
-        Initialize Deductive decorator.
+        Initialize the Deductive decorator.
 
         Args:
-            premises: Number of main premises to include before deducing conclusions
-            formal: Whether to use formal logical structures with explicit syllogisms
+            premises: Number of main premises to include before deducing
+                conclusions
+            formal: Whether to use formal logical structures with explicit
+                syllogisms
             steps: Number of logical steps to include in the deductive process
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Deductive",
-            version="1.0.0",
-            parameters={
-                "premises": premises,
-                "formal": formal,
-                "steps": steps,
-            },
-            metadata={
-                "description": "Structures the response using deductive reasoning, moving from general principles to specific conclusions. This decorator emphasizes logical argument development, starting with premises and working methodically to necessary conclusions.",
-                "author": "Prompt Decorators Working Group",
-                "category": "reasoning",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._premises = premises
+        self._formal = formal
+        self._steps = steps
+
+        # Validate parameters
+        if self._premises is not None:
+            if not isinstance(self._premises, (int, float)) or isinstance(self._premises, bool):
+                raise ValidationError("The parameter 'premises' must be a numeric value.")
+
+        if self._formal is not None:
+            if not isinstance(self._formal, bool):
+                raise ValidationError("The parameter 'formal' must be a boolean value.")
+
+        if self._steps is not None:
+            if not isinstance(self._steps, (int, float)) or isinstance(self._steps, bool):
+                raise ValidationError("The parameter 'steps' must be a numeric value.")
+
 
     @property
-    def premises(self) -> float:
-        """Number of main premises to include before deducing conclusions"""
-        return self.parameters.get("premises")
+    def premises(self) -> Any:
+        """
+        Get the premises parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The premises parameter value
+        """
+        return self._premises
 
     @property
     def formal(self) -> bool:
-        """Whether to use formal logical structures with explicit syllogisms"""
-        return self.parameters.get("formal")
+        """
+        Get the formal parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The formal parameter value
+        """
+        return self._formal
 
     @property
-    def steps(self) -> float:
-        """Number of logical steps to include in the deductive process"""
-        return self.parameters.get("steps")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.premises is not None and self.premises < 1:
-            raise ValueError(f"premises must be at least 1, got {self.premises}")
-        if self.premises is not None and self.premises > 5:
-            raise ValueError(f"premises must be at most 5, got {self.premises}")
-        if self.steps is not None and self.steps < 2:
-            raise ValueError(f"steps must be at least 2, got {self.steps}")
-        if self.steps is not None and self.steps > 7:
-            raise ValueError(f"steps must be at most 7, got {self.steps}")
-
-    def apply(self, prompt: str) -> str:
+    def steps(self) -> Any:
         """
-        Apply the decorator to a prompt.
-        
+        Get the steps parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The steps parameter value
         """
-        # Apply the decorator: Structures the response using deductive reasoning, moving from general principles to specific conclusions
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._steps
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "deductive",
+            "premises": self.premises,
+            "formal": self.formal,
+            "steps": self.steps,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.premises is not None:
-            instruction += f"premises={self.premises}, "
+            params.append(f"premises={self.premises}")
         if self.formal is not None:
-            instruction += f"formal={self.formal}, "
+            params.append(f"formal={self.formal}")
         if self.steps is not None:
-            instruction += f"steps={self.steps}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"steps={self.steps}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

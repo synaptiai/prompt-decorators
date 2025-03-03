@@ -31,4 +31,3 @@ Adds an explicit statement of limitations, caveats, or uncertainties related to 
 - `detail`: The level of detail in the limitations statement
 - `focus`: The primary aspect to focus on in the limitations
 - `position`: Where to place the limitations statement in the response
-

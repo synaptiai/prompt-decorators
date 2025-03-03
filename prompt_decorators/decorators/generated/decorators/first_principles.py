@@ -1,66 +1,93 @@
 """
-FirstPrinciples Decorator
+Implementation of the FirstPrinciples decorator.
+
+This module provides the FirstPrinciples decorator class for use in prompt engineering.
 
 Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there. This decorator promotes a deeper understanding by examining the most basic elements of a concept before constructing more complex ideas.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
+import re
+from typing import Any, Dict, List, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
 
 
 class FirstPrinciples(BaseDecorator):
-    """Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there. This decorator promotes a deeper understanding by examining the most basic elements of a concept before constructing more complex ideas."""
+    """
+    Structures the response by breaking down complex topics into their
+    fundamental truths or axioms, then building up from there. This
+    decorator promotes a deeper understanding by examining the most basic
+    elements of a concept before constructing more complex ideas.
+
+    Attributes:
+        depth: Level of detail in breaking down to fundamental principles
+    """
+
+    decorator_name = "first_principles"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        depth: Optional[float] = 3,
-    ):
+        depth: Any = 3,
+    ) -> None:
         """
-        Initialize FirstPrinciples decorator.
+        Initialize the FirstPrinciples decorator.
 
         Args:
             depth: Level of detail in breaking down to fundamental principles
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="FirstPrinciples",
-            version="1.0.0",
-            parameters={
-                "depth": depth,
-            },
-            metadata={
-                "description": "Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there. This decorator promotes a deeper understanding by examining the most basic elements of a concept before constructing more complex ideas.",
-                "author": "Prompt Decorators Working Group",
-                "category": "reasoning",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+
+        # Validate parameters
+        if self._depth is not None:
+            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+                raise ValidationError("The parameter 'depth' must be a numeric value.")
+
 
     @property
-    def depth(self) -> float:
-        """Level of detail in breaking down to fundamental principles"""
-        return self.parameters.get("depth")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.depth is not None and self.depth < 1:
-            raise ValueError(f"depth must be at least 1, got {self.depth}")
-        if self.depth is not None and self.depth > 5:
-            raise ValueError(f"depth must be at most 5, got {self.depth}")
-
-    def apply(self, prompt: str) -> str:
+    def depth(self) -> Any:
         """
-        Apply the decorator to a prompt.
-        
+        Get the depth parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The depth parameter value
         """
-        # Apply the decorator: Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._depth
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "first_principles",
+            "depth": self.depth,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.depth is not None:
-            instruction += f"depth={self.depth}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"depth={self.depth}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

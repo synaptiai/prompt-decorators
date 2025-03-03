@@ -1,87 +1,149 @@
 """
-BreakAndBuild Decorator
+Implementation of the BreakAndBuild decorator.
+
+This module provides the BreakAndBuild decorator class for use in prompt engineering.
 
 Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import BreakAndBuildBreakdownEnum, BreakAndBuildIntensityEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    BreakAndBuildBreakdownEnum,
+    BreakAndBuildIntensityEnum,
+)
 
 
 class BreakAndBuild(BaseDecorator):
-    """Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output."""
+    """
+    Structures responses in two distinct phases: first critically
+    analyzing and 'breaking down' an idea by identifying flaws,
+    assumptions, and weaknesses, then 'building it back up' with
+    improvements, refinements, and solutions. This decorator enhances
+    critical thinking while maintaining constructive output.
+
+    Attributes:
+        breakdown: Primary approach for the critical breakdown phase
+        intensity: How thorough and challenging the breakdown phase should be
+        buildRatio: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)
+    """
+
+    decorator_name = "break_and_build"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        breakdown: Optional[BreakAndBuildBreakdownEnum] = BreakAndBuildBreakdownEnum.COMPREHENSIVE,
-        intensity: Optional[BreakAndBuildIntensityEnum] = BreakAndBuildIntensityEnum.THOROUGH,
-        buildRatio: Optional[float] = 1,
-    ):
+        breakdown: Literal["weaknesses", "assumptions", "risks", "comprehensive"] = "comprehensive",
+        intensity: Literal["mild", "thorough", "intense"] = "thorough",
+        buildRatio: Any = 1,
+    ) -> None:
         """
-        Initialize BreakAndBuild decorator.
+        Initialize the BreakAndBuild decorator.
 
         Args:
             breakdown: Primary approach for the critical breakdown phase
             intensity: How thorough and challenging the breakdown phase should be
-            buildRatio: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)
-        """
-        super().__init__(
-            name="BreakAndBuild",
-            version="1.0.0",
-            parameters={
-                "breakdown": breakdown,
-                "intensity": intensity,
-                "buildRatio": buildRatio,
-            },
-            metadata={
-                "description": "Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.",
-                "author": "Prompt Decorators Working Group",
-                "category": "verification",
-            },
-        )
+            buildRatio: Approximate ratio of build-up content to breakdown content
+                (e.g., 2 means twice as much reconstruction as critique)
 
-    @property
-    def breakdown(self) -> BreakAndBuildBreakdownEnum:
-        """Primary approach for the critical breakdown phase"""
-        return self.parameters.get("breakdown")
-
-    @property
-    def intensity(self) -> BreakAndBuildIntensityEnum:
-        """How thorough and challenging the breakdown phase should be"""
-        return self.parameters.get("intensity")
-
-    @property
-    def buildRatio(self) -> float:
-        """Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)"""
-        return self.parameters.get("buildRatio")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.buildRatio is not None and self.buildRatio < 0.5:
-            raise ValueError(f"buildRatio must be at least 0.5, got {self.buildRatio}")
-        if self.buildRatio is not None and self.buildRatio > 3:
-            raise ValueError(f"buildRatio must be at most 3, got {self.buildRatio}")
-
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
-        Args:
-            prompt: The original prompt
-            
         Returns:
-            The modified prompt with the decorator applied
+            None
         """
-        # Apply the decorator: Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions
-        instruction = f"Instructions for {self.name} decorator: "
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._breakdown = breakdown
+        self._intensity = intensity
+        self._buildRatio = buildRatio
+
+        # Validate parameters
+        if self._breakdown is not None:
+            valid_values = ["weaknesses", "assumptions", "risks", "comprehensive"]
+            if self._breakdown not in valid_values:
+                raise ValidationError("The parameter 'breakdown' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._intensity is not None:
+            valid_values = ["mild", "thorough", "intense"]
+            if self._intensity not in valid_values:
+                raise ValidationError("The parameter 'intensity' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._buildRatio is not None:
+            if not isinstance(self._buildRatio, (int, float)) or isinstance(self._buildRatio, bool):
+                raise ValidationError("The parameter 'buildRatio' must be a numeric value.")
+
+
+    @property
+    def breakdown(self) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
+        """
+        Get the breakdown parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The breakdown parameter value
+        """
+        return self._breakdown
+
+    @property
+    def intensity(self) -> Literal["mild", "thorough", "intense"]:
+        """
+        Get the intensity parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The intensity parameter value
+        """
+        return self._intensity
+
+    @property
+    def buildRatio(self) -> Any:
+        """
+        Get the buildRatio parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The buildRatio parameter value
+        """
+        return self._buildRatio
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "break_and_build",
+            "breakdown": self.breakdown,
+            "intensity": self.intensity,
+            "buildRatio": self.buildRatio,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.breakdown is not None:
-            instruction += f"breakdown={self.breakdown}, "
+            params.append(f"breakdown={self.breakdown}")
         if self.intensity is not None:
-            instruction += f"intensity={self.intensity}, "
+            params.append(f"intensity={self.intensity}")
         if self.buildRatio is not None:
-            instruction += f"buildRatio={self.buildRatio}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"buildRatio={self.buildRatio}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

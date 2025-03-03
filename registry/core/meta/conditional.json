@@ -9,7 +9,7 @@
   },
   "parameters": [
     {
-      "name": "if",
+      "name": "if_param",
       "type": "string",
       "description": "The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}')",
       "required": true
@@ -21,7 +21,7 @@
       "required": true
     },
     {
-      "name": "else",
+      "name": "else_param",
       "type": "string",
       "description": "The decorator to apply if the condition is false (can be a specific decorator with parameters)",
       "required": false
@@ -30,12 +30,12 @@
   "examples": [
     {
       "description": "Basic conditional application based on content complexity",
-      "usage": "+++Conditional(if=complex, then=StepByStep, else=Concise)\nExplain how quantum computing works.",
+      "usage": "+++Conditional(if_param=complex, then=StepByStep, else_param=Concise)\nExplain how quantum computing works.",
       "result": "Evaluates if the topic is complex, which quantum computing is, so it applies the StepByStep decorator"
     },
     {
       "description": "Conditional application with parameterized decorators",
-      "usage": "+++Conditional(if=controversial, then=Debate(perspectives=3), else=Reasoning(depth=moderate))\nDiscuss the ethical implications of gene editing in humans.",
+      "usage": "+++Conditional(if_param=controversial, then=Debate(perspectives=3), else_param=Reasoning(depth=moderate))\nDiscuss the ethical implications of gene editing in humans.",
       "result": "Determines that gene editing ethics is controversial, so it applies the Debate decorator with 3 perspectives rather than the Reasoning decorator"
     }
   ],
@@ -48,4 +48,4 @@
       "gpt-4"
     ]
   }
-} 
+}

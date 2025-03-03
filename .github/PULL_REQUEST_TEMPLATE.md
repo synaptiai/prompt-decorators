@@ -55,4 +55,4 @@ If applicable, add screenshots to help explain your changes.
 
 ## Reviewer Notes
 
-Any notes for the reviewer to help them understand your implementation decisions or specific areas to focus on in their review. 
+Any notes for the reviewer to help them understand your implementation decisions or specific areas to focus on in their review.

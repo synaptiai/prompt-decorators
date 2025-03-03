@@ -31,4 +31,3 @@ Reframes or adapts content for a different context, purpose, or audience than or
 - `contrast`: Whether to highlight differences between the original framing and the remixed version
 - `preserve`: What aspects of the original content to prioritize preserving
 - `target`: The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch')
-

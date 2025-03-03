@@ -168,12 +168,12 @@ For each implementation language, create the necessary code to implement your de
 ```python
 class YourDecorator(BaseDecorator):
     """Your decorator implementation."""
-    
+
     def __init__(self, mode: str = "basic"):
         """Initialize with parameters."""
         super().__init__(name="YourDecorator", version="1.0.0")
         self.parameters = {"mode": mode}
-    
+
     def to_system_instructions(self) -> str:
         """Convert decorator to system instructions."""
         mode = self.parameters.get("mode", "basic")
@@ -316,4 +316,4 @@ To contribute your decorator to the central registry:
     ]
   }
 }
-``` 
+```

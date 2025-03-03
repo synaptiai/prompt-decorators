@@ -52,4 +52,3 @@ Get the global model detector.
 
 Returns:
     The global model detector instance
-

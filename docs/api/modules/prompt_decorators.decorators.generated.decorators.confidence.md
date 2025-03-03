@@ -31,4 +31,3 @@ Enhances the response with explicit indications of confidence levels for differe
 - `detailed`: Whether to provide explanations for confidence assessments
 - `scale`: The method used to express confidence levels
 - `threshold`: Minimum confidence level for including information (as a percentage)
-

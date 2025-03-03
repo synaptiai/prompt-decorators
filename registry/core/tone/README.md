@@ -19,4 +19,4 @@ These decorators modify the linguistic style and tone of the AI's response. They
 - **Remix** - Reframe content for different contexts
 - **Extremes** - Present radical and minimal versions
 
-Note: The **Tone** decorator from this category is part of the minimal core set and can be found in the minimal directory. 
+Note: The **Tone** decorator from this category is part of the minimal core set and can be found in the minimal directory.

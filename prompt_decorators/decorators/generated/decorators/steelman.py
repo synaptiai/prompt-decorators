@@ -1,86 +1,143 @@
 """
-Steelman Decorator
+Implementation of the Steelman decorator.
+
+This module provides the Steelman decorator class for use in prompt engineering.
 
 Presents the strongest possible version of an argument or position, even those the AI might not agree with. This decorator opposes strawman fallacies by ensuring each viewpoint is represented in its most compelling and charitable form.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
+import re
+from typing import Any, Dict, List, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
 
 
 class Steelman(BaseDecorator):
-    """Presents the strongest possible version of an argument or position, even those the AI might not agree with. This decorator opposes strawman fallacies by ensuring each viewpoint is represented in its most compelling and charitable form."""
+    """
+    Presents the strongest possible version of an argument or position,
+    even those the AI might not agree with. This decorator opposes
+    strawman fallacies by ensuring each viewpoint is represented in its
+    most compelling and charitable form.
+
+    Attributes:
+        sides: Number of different viewpoints to steel-man
+        critique: Whether to include critique after presenting the steel-manned arguments
+        separation: Whether to clearly separate the steel-manned presentations from any analysis
+    """
+
+    decorator_name = "steelman"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        sides: Optional[float] = 2,
-        critique: Optional[bool] = False,
-        separation: Optional[bool] = True,
-    ):
+        sides: Any = 2,
+        critique: bool = False,
+        separation: bool = True,
+    ) -> None:
         """
-        Initialize Steelman decorator.
+        Initialize the Steelman decorator.
 
         Args:
             sides: Number of different viewpoints to steel-man
-            critique: Whether to include critique after presenting the steel-manned arguments
-            separation: Whether to clearly separate the steel-manned presentations from any analysis
+            critique: Whether to include critique after presenting the steel-
+                manned arguments
+            separation: Whether to clearly separate the steel-manned presentations
+                from any analysis
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Steelman",
-            version="1.0.0",
-            parameters={
-                "sides": sides,
-                "critique": critique,
-                "separation": separation,
-            },
-            metadata={
-                "description": "Presents the strongest possible version of an argument or position, even those the AI might not agree with. This decorator opposes strawman fallacies by ensuring each viewpoint is represented in its most compelling and charitable form.",
-                "author": "Prompt Decorators Working Group",
-                "category": "verification",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._sides = sides
+        self._critique = critique
+        self._separation = separation
+
+        # Validate parameters
+        if self._sides is not None:
+            if not isinstance(self._sides, (int, float)) or isinstance(self._sides, bool):
+                raise ValidationError("The parameter 'sides' must be a numeric value.")
+
+        if self._critique is not None:
+            if not isinstance(self._critique, bool):
+                raise ValidationError("The parameter 'critique' must be a boolean value.")
+
+        if self._separation is not None:
+            if not isinstance(self._separation, bool):
+                raise ValidationError("The parameter 'separation' must be a boolean value.")
+
 
     @property
-    def sides(self) -> float:
-        """Number of different viewpoints to steel-man"""
-        return self.parameters.get("sides")
+    def sides(self) -> Any:
+        """
+        Get the sides parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The sides parameter value
+        """
+        return self._sides
 
     @property
     def critique(self) -> bool:
-        """Whether to include critique after presenting the steel-manned arguments"""
-        return self.parameters.get("critique")
+        """
+        Get the critique parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The critique parameter value
+        """
+        return self._critique
 
     @property
     def separation(self) -> bool:
-        """Whether to clearly separate the steel-manned presentations from any analysis"""
-        return self.parameters.get("separation")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.sides is not None and self.sides < 1:
-            raise ValueError(f"sides must be at least 1, got {self.sides}")
-        if self.sides is not None and self.sides > 5:
-            raise ValueError(f"sides must be at most 5, got {self.sides}")
-
-    def apply(self, prompt: str) -> str:
         """
-        Apply the decorator to a prompt.
-        
+        Get the separation parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The separation parameter value
         """
-        # Apply the decorator: Presents the strongest possible version of an argument or position, even those the AI might not agree with
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._separation
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "steelman",
+            "sides": self.sides,
+            "critique": self.critique,
+            "separation": self.separation,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.sides is not None:
-            instruction += f"sides={self.sides}, "
+            params.append(f"sides={self.sides}")
         if self.critique is not None:
-            instruction += f"critique={self.critique}, "
+            params.append(f"critique={self.critique}")
         if self.separation is not None:
-            instruction += f"separation={self.separation}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"separation={self.separation}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

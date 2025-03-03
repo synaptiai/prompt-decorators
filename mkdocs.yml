@@ -1,0 +1,70 @@
+site_name: Prompt Decorators
+site_url: https://github.com/synaptiai/prompt-decorators
+repo_url: https://github.com/synaptiai/prompt-decorators
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.indexes
+    - content.code.copy
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - admonition
+  - toc:
+      permalink: true
+plugins:
+  - search
+  - awesome-pages
+  - autolinks
+  - mkdocstrings:
+      handlers:
+        python:
+          selection:
+            docstring_style: google
+          rendering:
+            show_source: true
+            show_category_heading: true
+            show_if_no_docstring: false
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: installation.md
+    - Quick Start: quickstart.md
+    - Core Concepts: concepts.md
+  - User Guide:
+    - Basic Usage: guide/basic-usage.md
+    - Advanced Usage: guide/advanced-usage.md
+    - API Integration: guide/api-integration.md
+  - API Reference:
+    - Core: api/core.md
+    - Decorators: api/decorators.md
+    - Registry: api/registry.md
+    - Utilities: api/utilities.md
+  - Examples:
+    - Basic Examples: examples/basic.md
+    - Advanced Examples: examples/advanced.md
+    - Provider Examples: examples/providers.md
+    - Domain Examples: examples/domains.md
+  - Contributing:
+    - Guidelines: contributing.md
+    - Development Setup: development.md
+    - Comprehensive Development Guide: development_guide.md
+    - Code Style: code-style.md
+    - Testing: testing.md
+  - Project Documentation:
+    - Roadmap: roadmap.md
+    - Architecture: architecture.md
+    - FAQ: faq.md
+    - Glossary: glossary.md
+    - Project Summaries:
+      - Overview: project_summaries/index.md
+      - Modernization Summary: project_summaries/project_modernization_summary.md
+  - Domain Guides:
+    - AI Safety: guides/ai-safety.md
+    - Healthcare: guides/healthcare.md

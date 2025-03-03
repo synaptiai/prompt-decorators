@@ -31,4 +31,3 @@ Identifies potential cognitive blind spots, unstated assumptions, and overlooked
 - `categories`: Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias)
 - `depth`: How thoroughly to analyze for blind spots
 - `position`: Where to place the blind spots analysis
-

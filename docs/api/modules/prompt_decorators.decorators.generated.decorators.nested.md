@@ -31,4 +31,3 @@ Organizes information in a deeply hierarchical structure with multiple levels of
 - `collapsible`: Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)
 - `depth`: Maximum nesting level of the hierarchy
 - `style`: Visual style for hierarchical levels
-

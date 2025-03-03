@@ -31,4 +31,3 @@ A meta-decorator that applies multiple decorators in sequence, with each decorat
 - `decorators`: Ordered list of decorators to apply in sequence
 - `showSteps`: Whether to show intermediate outputs after each decorator in the chain
 - `stopOnFailure`: Whether to stop the chain if a decorator fails to apply correctly
-

@@ -31,4 +31,3 @@ A meta-decorator that adapts standard decorators for domain-specific contexts. T
 - `domain`: The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education')
 - `level`: The expertise level to target within the domain
 - `scope`: Which aspects of decorators to contextualize
-

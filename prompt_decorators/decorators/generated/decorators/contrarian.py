@@ -1,78 +1,147 @@
 """
-Contrarian Decorator
+Implementation of the Contrarian decorator.
+
+This module provides the Contrarian decorator class for use in prompt engineering.
 
 Generates responses that deliberately challenge conventional wisdom or mainstream perspectives. This decorator encourages critical thinking by presenting counterarguments, alternative interpretations, or challenging established positions on a topic.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import ContrarianApproachEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    ContrarianApproachEnum,
+)
 
 
 class Contrarian(BaseDecorator):
-    """Generates responses that deliberately challenge conventional wisdom or mainstream perspectives. This decorator encourages critical thinking by presenting counterarguments, alternative interpretations, or challenging established positions on a topic."""
+    """
+    Generates responses that deliberately challenge conventional wisdom or
+    mainstream perspectives. This decorator encourages critical thinking
+    by presenting counterarguments, alternative interpretations, or
+    challenging established positions on a topic.
+
+    Attributes:
+        approach: The specific contrarian approach to take
+        maintain: Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)
+        focus: Optional specific aspect of the topic to focus contrarian analysis on
+    """
+
+    decorator_name = "contrarian"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        approach: Optional[ContrarianApproachEnum] = ContrarianApproachEnum.DEVIL_S_ADVOCATE,
-        maintain: Optional[bool] = False,
-        focus: Optional[str] = None,
-    ):
+        approach: Literal["outsider", "skeptic", "devil's-advocate"] = "devil's-advocate",
+        maintain: bool = False,
+        focus: str = None,
+    ) -> None:
         """
-        Initialize Contrarian decorator.
+        Initialize the Contrarian decorator.
 
         Args:
             approach: The specific contrarian approach to take
-            maintain: Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)
-            focus: Optional specific aspect of the topic to focus contrarian analysis on
+            maintain: Whether to maintain contrarian stance throughout (true) or
+                provide balanced view at the end (false)
+            focus: Optional specific aspect of the topic to focus contrarian
+                analysis on
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Contrarian",
-            version="1.0.0",
-            parameters={
-                "approach": approach,
-                "maintain": maintain,
-                "focus": focus,
-            },
-            metadata={
-                "description": "Generates responses that deliberately challenge conventional wisdom or mainstream perspectives. This decorator encourages critical thinking by presenting counterarguments, alternative interpretations, or challenging established positions on a topic.",
-                "author": "Prompt Decorators Working Group",
-                "category": "reasoning",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._approach = approach
+        self._maintain = maintain
+        self._focus = focus
+
+        # Validate parameters
+        if self._approach is not None:
+            valid_values = ["outsider", "skeptic", "devil's-advocate"]
+            if self._approach not in valid_values:
+                raise ValidationError("The parameter 'approach' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._maintain is not None:
+            if not isinstance(self._maintain, bool):
+                raise ValidationError("The parameter 'maintain' must be a boolean value.")
+
+        if self._focus is not None:
+            if not isinstance(self._focus, str):
+                raise ValidationError("The parameter 'focus' must be a string value.")
+
 
     @property
-    def approach(self) -> ContrarianApproachEnum:
-        """The specific contrarian approach to take"""
-        return self.parameters.get("approach")
+    def approach(self) -> Literal["outsider", "skeptic", "devil's-advocate"]:
+        """
+        Get the approach parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The approach parameter value
+        """
+        return self._approach
 
     @property
     def maintain(self) -> bool:
-        """Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)"""
-        return self.parameters.get("maintain")
+        """
+        Get the maintain parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The maintain parameter value
+        """
+        return self._maintain
 
     @property
     def focus(self) -> str:
-        """Optional specific aspect of the topic to focus contrarian analysis on"""
-        return self.parameters.get("focus")
+        """
+        Get the focus parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The focus parameter value
         """
-        # Apply the decorator: Generates responses that deliberately challenge conventional wisdom or mainstream perspectives
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._focus
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "contrarian",
+            "approach": self.approach,
+            "maintain": self.maintain,
+            "focus": self.focus,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.approach is not None:
-            instruction += f"approach={self.approach}, "
+            params.append(f"approach={self.approach}")
         if self.maintain is not None:
-            instruction += f"maintain={self.maintain}, "
+            params.append(f"maintain={self.maintain}")
         if self.focus is not None:
-            instruction += f"focus={self.focus}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"focus={self.focus}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

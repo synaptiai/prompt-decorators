@@ -31,4 +31,3 @@ Explicitly highlights areas of uncertainty in the response. This decorator promo
 - `format`: How to format uncertainty indications in the response
 - `reason`: Whether to explain the reason for uncertainty
 - `threshold`: The threshold for flagging uncertain content
-

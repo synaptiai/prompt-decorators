@@ -31,4 +31,3 @@ Ensures equal representation of different perspectives or viewpoints on a topic.
 - `equal`: Whether to strictly enforce equal word count for each perspective
 - `perspectives`: Number of different perspectives to include
 - `structure`: How to structure the different perspectives
-

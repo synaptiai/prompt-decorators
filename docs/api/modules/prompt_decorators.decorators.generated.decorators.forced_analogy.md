@@ -31,4 +31,3 @@ Explains concepts by specifically comparing them to a particular domain or field
 - `comprehensiveness`: How comprehensively to map concepts between domains
 - `mappings`: Number of distinct concept mappings to create between domains
 - `source`: The specific domain, field, or context to draw analogies from
-

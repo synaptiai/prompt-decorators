@@ -32,4 +32,3 @@ Structures the response as a decision matrix, evaluating options against multipl
 - `options`: Specific options or alternatives to evaluate in the matrix
 - `scale`: Rating scale to use for evaluations
 - `weighted`: Whether to include weights for criteria importance
-

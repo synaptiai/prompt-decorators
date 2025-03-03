@@ -30,4 +30,3 @@ Defines a custom structure for the AI's response using a specified schema format
 
 - `schema`: JSON Schema definition or reference to a predefined schema that defines the structure of the response
 - `strict`: Whether to enforce strict schema compliance or allow flexibility
-

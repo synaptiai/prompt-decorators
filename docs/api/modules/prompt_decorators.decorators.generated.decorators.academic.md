@@ -30,4 +30,3 @@ Adapts the response to follow scholarly writing conventions appropriate for acad
 
 - `citationStyle`: The citation format to use for references
 - `style`: The academic discipline style to follow
-

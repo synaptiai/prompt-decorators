@@ -1,150 +1,168 @@
-#!/usr/bin/env python3
-"""
-Test Runner for Prompt Decorators
+#!/usr/bin/env python
+"""Test Runner for Prompt Decorators
 
-This script generates tests from decorator JSON files and runs them,
-providing a summary of the results.
-"""
+This script runs the test suite for prompt decorators. It can:
+1. Generate tests for all decorators in the registry
+2. Run the tests and report results
+3. Generate a test coverage report
 
+Usage:
+    python run_tests.py [options]
+
+Options:
+    --generate              Generate tests before running
+    --coverage              Generate coverage report
+    --verbose, -v           Verbose output
+    --test-dir=PATH         Path to test directory (default: tests)
+    --registry-dir=PATH     Path to registry directory (default: registry)
+"""
+import argparse
 import os
 import sys
-import argparse
-import subprocess
-import logging
-from pathlib import Path
 
-# Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# Check if pytest is available
+try:
+    import pytest
 
-# Paths
-SCRIPTS_DIR = Path(__file__).parent
-PROJECT_ROOT = SCRIPTS_DIR.parent
-TESTS_DIR = PROJECT_ROOT / "tests"
-AUTO_TESTS_DIR = TESTS_DIR / "auto"
+    PYTEST_AVAILABLE = True
+except ImportError:
+    PYTEST_AVAILABLE = False
 
+# Check if coverage is available
+try:
+    import coverage
 
-def parse_arguments():
-    """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description="Generate and run decorator tests.")
-    parser.add_argument(
-        "--use-real-llm", 
-        action="store_true",
-        help="Use real LLM API for tests (requires API keys)"
-    )
-    parser.add_argument(
-        "--no-cache", 
-        action="store_true",
-        help="Disable response caching (slower, but ensures fresh results)"
-    )
-    parser.add_argument(
-        "--no-generate", 
-        action="store_true",
-        help="Skip test generation (use existing tests only)"
-    )
-    parser.add_argument(
-        "--category", 
-        type=str,
-        choices=["reasoning", "structure", "tone", "verification", "meta", "minimal", "misc", "all"],
-        default="all",
-        help="Test only a specific decorator category"
-    )
-    parser.add_argument(
-        "--verbose", "-v",
-        action="store_true",
-        help="Enable verbose output"
-    )
-    return parser.parse_args()
+    COVERAGE_AVAILABLE = True
+except ImportError:
+    COVERAGE_AVAILABLE = False
 
 
-def generate_tests():
-    """Generate tests from decorator definitions."""
-    logger.info("Generating tests from decorator definitions...")
-    
-    generator_script = SCRIPTS_DIR / "generate_tests.py"
-    
-    if not generator_script.exists():
-        logger.error(f"Test generator script not found: {generator_script}")
-        sys.exit(1)
-    
-    try:
-        result = subprocess.run(
-            [sys.executable, str(generator_script)],
-            check=True,
-            capture_output=True,
-            text=True
-        )
-        # Check if there is any output before trying to access the last line
-        if result.stdout and result.stdout.splitlines():
-            logger.info(f"Test generation completed: {result.stdout.splitlines()[-1]}")
-        else:
-            logger.info("Test generation completed successfully.")
-    except subprocess.CalledProcessError as e:
-        logger.error(f"Test generation failed: {e.stderr}")
+def check_requirements():
+    """
+    Check if all required packages are installed.
+
+    Returns:
+        None
+    """
+    missing = []
+
+    if not PYTEST_AVAILABLE:
+        missing.append("pytest")
+
+    if missing:
+        print("Error: Missing required packages:")
+        for package in missing:
+            print(f"  - {package}")
+        print("\nPlease install the missing packages with:")
+        print(f"  pip install {' '.join(missing)}")
         sys.exit(1)
 
 
-def run_tests(category="all", use_real_llm=False, use_cache=True, verbose=False):
-    """Run the tests."""
-    logger.info(f"Running tests for category: {category}")
-    
-    # Prepare environment variables
-    env = os.environ.copy()
-    env["USE_REAL_LLM"] = "true" if use_real_llm else "false"
-    env["USE_RESPONSE_CACHE"] = "true" if use_cache else "false"
-    
-    # Prepare the test path
-    if category == "all":
-        test_path = str(AUTO_TESTS_DIR)
-    else:
-        test_path = str(AUTO_TESTS_DIR / category)
-    
-    # Prepare pytest arguments
-    pytest_args = ["-v"] if verbose else []
-    
+def generate_tests(args):
+    """
+    Generate tests for decorators.
+
+    Args:
+        args: Command-line arguments
+
+    Returns:
+        None
+    """
+    # Use registry_tools.py for test generation instead of duplicating logic
     try:
-        # Run the tests
-        result = subprocess.run(
-            [sys.executable, "-m", "pytest", test_path] + pytest_args,
-            env=env,
-            check=False  # Don't exit if tests fail
+        from scripts.registry_tools import generate_tests as registry_generate_tests
+    except ImportError:
+        print(
+            "Error: Could not import generate_tests from registry_tools. Make sure "
+            "the script is available."
         )
-        
-        if result.returncode != 0:
-            logger.warning(f"Some tests failed. Exit code: {result.returncode}")
-        else:
-            logger.info("All tests passed successfully.")
-            
-        return result.returncode
-    except Exception as e:
-        logger.error(f"Error running tests: {e}")
-        return 1
+        sys.exit(1)
 
-
-def main():
-    """Main entry point."""
-    args = parse_arguments()
-    
-    # Make sure directories exist
-    os.makedirs(AUTO_TESTS_DIR, exist_ok=True)
-    
-    # Generate tests if required
-    if not args.no_generate:
-        generate_tests()
-    else:
-        logger.info("Skipping test generation as requested.")
-    
-    # Run the tests
-    exit_code = run_tests(
-        category=args.category,
-        use_real_llm=args.use_real_llm,
-        use_cache=not args.no_cache,
+    # Call the generate_tests function from registry_tools
+    print("Generating decorator tests...")
+    success = registry_generate_tests(
+        registry_dir=args.registry_dir,
+        output_dir=os.path.join(args.test_dir, "auto"),
         verbose=args.verbose
     )
     
-    # Exit with the appropriate code
-    sys.exit(exit_code)
+    if not success:
+        print("Error: Test generation failed.")
+        sys.exit(1)
+    
+    print(f"Test generation completed successfully.")
+
+
+def run_tests(args):
+    """
+    Run the test suite.
+
+    Args:
+        args: Command-line arguments
+
+    Returns:
+        Exit code from pytest
+    """
+    check_requirements()
+
+    # Build pytest arguments
+    pytest_args = [args.test_dir]
+
+    if args.verbose:
+        pytest_args.append("-v")
+
+    # Run with coverage if requested
+    if args.coverage and COVERAGE_AVAILABLE:
+        pytest_args = [
+            "--cov=prompt_decorators",
+            "--cov-report=term",
+            "--cov-report=html:coverage_html",
+        ] + pytest_args
+
+    print("Running tests with pytest...")
+    return pytest.main(pytest_args)
+
+
+def main():
+    """
+    Main entry point for the test runner.
+
+    Returns:
+        None
+    """
+    parser = argparse.ArgumentParser(
+        description="Test runner for prompt decorators",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    parser.add_argument(
+        "--generate", action="store_true", help="Generate tests before running"
+    )
+
+    parser.add_argument(
+        "--coverage", action="store_true", help="Generate coverage report"
+    )
+
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+
+    parser.add_argument("--test-dir", default="tests", help="Path to test directory")
+
+    parser.add_argument(
+        "--registry-dir", default="registry", help="Path to registry directory"
+    )
+
+    args = parser.parse_args()
+
+    # Generate tests if requested
+    if args.generate:
+        generate_tests(args)
+
+    # Run tests
+    result = run_tests(args)
+
+    # Return exit code
+    sys.exit(result)
 
 
 if __name__ == "__main__":
-    main() 
+    main()

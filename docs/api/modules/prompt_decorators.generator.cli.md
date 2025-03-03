@@ -46,4 +46,3 @@ Scan the registry and report on found decorators.
 
 Args:
     args: Command-line arguments
-

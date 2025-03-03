@@ -1,68 +1,121 @@
 """
-Professional Decorator
+Implementation of the Professional decorator.
+
+This module provides the Professional decorator class for use in prompt engineering.
 
 Adapts the response to use business-oriented language appropriate for professional contexts. This decorator generates content using formal business terminology, clear and concise phrasing, and industry-appropriate jargon when relevant.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import ProfessionalFormalityEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    ProfessionalFormalityEnum,
+)
 
 
 class Professional(BaseDecorator):
-    """Adapts the response to use business-oriented language appropriate for professional contexts. This decorator generates content using formal business terminology, clear and concise phrasing, and industry-appropriate jargon when relevant."""
+    """
+    Adapts the response to use business-oriented language appropriate for
+    professional contexts. This decorator generates content using formal
+    business terminology, clear and concise phrasing, and industry-
+    appropriate jargon when relevant.
+
+    Attributes:
+        industry: The specific industry context to adapt the language for
+        formality: The level of formality to maintain in the response
+    """
+
+    decorator_name = "professional"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        industry: Optional[str] = "general",
-        formality: Optional[ProfessionalFormalityEnum] = ProfessionalFormalityEnum.STANDARD,
-    ):
+        industry: str = "general",
+        formality: Literal["standard", "high", "executive"] = "standard",
+    ) -> None:
         """
-        Initialize Professional decorator.
+        Initialize the Professional decorator.
 
         Args:
             industry: The specific industry context to adapt the language for
             formality: The level of formality to maintain in the response
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Professional",
-            version="1.0.0",
-            parameters={
-                "industry": industry,
-                "formality": formality,
-            },
-            metadata={
-                "description": "Adapts the response to use business-oriented language appropriate for professional contexts. This decorator generates content using formal business terminology, clear and concise phrasing, and industry-appropriate jargon when relevant.",
-                "author": "Prompt Decorators Working Group",
-                "category": "tone",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._industry = industry
+        self._formality = formality
+
+        # Validate parameters
+        if self._industry is not None:
+            if not isinstance(self._industry, str):
+                raise ValidationError("The parameter 'industry' must be a string value.")
+
+        if self._formality is not None:
+            valid_values = ["standard", "high", "executive"]
+            if self._formality not in valid_values:
+                raise ValidationError("The parameter 'formality' must be one of the following values: " + ", ".join(valid_values))
+
 
     @property
     def industry(self) -> str:
-        """The specific industry context to adapt the language for"""
-        return self.parameters.get("industry")
+        """
+        Get the industry parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The industry parameter value
+        """
+        return self._industry
 
     @property
-    def formality(self) -> ProfessionalFormalityEnum:
-        """The level of formality to maintain in the response"""
-        return self.parameters.get("formality")
+    def formality(self) -> Literal["standard", "high", "executive"]:
+        """
+        Get the formality parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The formality parameter value
         """
-        # Apply the decorator: Adapts the response to use business-oriented language appropriate for professional contexts
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._formality
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "professional",
+            "industry": self.industry,
+            "formality": self.formality,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.industry is not None:
-            instruction += f"industry={self.industry}, "
+            params.append(f"industry={self.industry}")
         if self.formality is not None:
-            instruction += f"formality={self.formality}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"formality={self.formality}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

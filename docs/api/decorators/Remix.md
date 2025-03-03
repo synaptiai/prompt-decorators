@@ -8,16 +8,16 @@ Reframes or adapts content for a different context, purpose, or audience than or
 
 ### `target`
 
-**Type:** string  
-**Required:** Yes  
+**Type:** string
+**Required:** Yes
 
 The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch')
 
 ### `preserve`
 
-**Type:** enum  
-**Required:** No  
-**Default:** `facts`  
+**Type:** enum
+**Required:** No
+**Default:** `facts`
 
 What aspects of the original content to prioritize preserving
 
@@ -30,8 +30,8 @@ What aspects of the original content to prioritize preserving
 
 ### `contrast`
 
-**Type:** boolean  
-**Required:** No  
+**Type:** boolean
+**Required:** No
 
 Whether to highlight differences between the original framing and the remixed version
 
@@ -91,7 +91,7 @@ Apply the decorator to a prompt.
 
 Args:
     prompt: The original prompt
-    
+
 Returns:
     The modified prompt with the decorator applied
 
@@ -103,10 +103,10 @@ Create a decorator from a dictionary.
 
 Args:
     data: Dictionary representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the data is invalid or incompatible with this class
     IncompatibleVersionError: If the version is incompatible
@@ -119,10 +119,10 @@ Create a decorator from a JSON string.
 
 Args:
     json_str: JSON string representation of a decorator
-    
+
 Returns:
     New decorator instance
-    
+
 Raises:
     ValueError: If the JSON is invalid or incompatible with this class
     json.JSONDecodeError: If the JSON is malformed
@@ -154,7 +154,7 @@ Check if this decorator is compatible with the specified version.
 
 Args:
     version_str: Version string to check compatibility with
-    
+
 Returns:
     True if compatible, False otherwise
 
@@ -175,7 +175,7 @@ Convert decorator to a JSON string.
 
 Args:
     indent: Optional indentation for pretty-printing
-    
+
 Returns:
     JSON string representation of the decorator
 
@@ -190,4 +190,3 @@ Subclasses should override for specific validation.
 
 Raises:
     ValidationError: If any parameter fails validation
-

@@ -31,4 +31,3 @@ Enhances responses with encouraging, inspiring, and empowering language. This de
 - `actionable`: Whether to include specific actionable steps or only inspirational content
 - `focus`: The primary motivational approach to emphasize
 - `intensity`: The level of motivational energy and enthusiasm
-

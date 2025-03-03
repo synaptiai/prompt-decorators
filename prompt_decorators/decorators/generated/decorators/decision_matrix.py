@@ -1,88 +1,169 @@
 """
-DecisionMatrix Decorator
+Implementation of the DecisionMatrix decorator.
+
+This module provides the DecisionMatrix decorator class for use in prompt engineering.
 
 Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import DecisionMatrixScaleEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    DecisionMatrixScaleEnum,
+)
 
 
 class DecisionMatrix(BaseDecorator):
-    """Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria."""
+    """
+    Structures the response as a decision matrix, evaluating options
+    against multiple criteria. This decorator facilitates systematic
+    comparison and selection between alternatives based on weighted or
+    unweighted criteria.
+
+    Attributes:
+        options: Specific options or alternatives to evaluate in the matrix
+        criteria: Evaluation criteria to assess each option against
+        weighted: Whether to include weights for criteria importance
+        scale: Rating scale to use for evaluations
+    """
+
+    decorator_name = "decision_matrix"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        options: Optional[List[Any]] = None,
-        criteria: Optional[List[Any]] = None,
-        weighted: Optional[bool] = False,
-        scale: Optional[DecisionMatrixScaleEnum] = DecisionMatrixScaleEnum.VALUE_1_5,
-    ):
+        options: List[Any] = None,
+        criteria: List[Any] = None,
+        weighted: bool = False,
+        scale: Literal["1-5", "1-10", "qualitative", "percentage"] = "1-5",
+    ) -> None:
         """
-        Initialize DecisionMatrix decorator.
+        Initialize the DecisionMatrix decorator.
 
         Args:
             options: Specific options or alternatives to evaluate in the matrix
             criteria: Evaluation criteria to assess each option against
             weighted: Whether to include weights for criteria importance
             scale: Rating scale to use for evaluations
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="DecisionMatrix",
-            version="1.0.0",
-            parameters={
-                "options": options,
-                "criteria": criteria,
-                "weighted": weighted,
-                "scale": scale,
-            },
-            metadata={
-                "description": "Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.",
-                "author": "Prompt Decorators Working Group",
-                "category": "structure",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._options = options
+        self._criteria = criteria
+        self._weighted = weighted
+        self._scale = scale
+
+        # Validate parameters
+        if self._options is not None:
+            if not isinstance(self._options, (list, tuple)):
+                raise ValidationError("The parameter 'options' must be an array.")
+
+        if self._criteria is not None:
+            if not isinstance(self._criteria, (list, tuple)):
+                raise ValidationError("The parameter 'criteria' must be an array.")
+
+        if self._weighted is not None:
+            if not isinstance(self._weighted, bool):
+                raise ValidationError("The parameter 'weighted' must be a boolean value.")
+
+        if self._scale is not None:
+            valid_values = ["1-5", "1-10", "qualitative", "percentage"]
+            if self._scale not in valid_values:
+                raise ValidationError("The parameter 'scale' must be one of the following values: " + ", ".join(valid_values))
+
 
     @property
     def options(self) -> List[Any]:
-        """Specific options or alternatives to evaluate in the matrix"""
-        return self.parameters.get("options")
+        """
+        Get the options parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The options parameter value
+        """
+        return self._options
 
     @property
     def criteria(self) -> List[Any]:
-        """Evaluation criteria to assess each option against"""
-        return self.parameters.get("criteria")
+        """
+        Get the criteria parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The criteria parameter value
+        """
+        return self._criteria
 
     @property
     def weighted(self) -> bool:
-        """Whether to include weights for criteria importance"""
-        return self.parameters.get("weighted")
+        """
+        Get the weighted parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The weighted parameter value
+        """
+        return self._weighted
 
     @property
-    def scale(self) -> DecisionMatrixScaleEnum:
-        """Rating scale to use for evaluations"""
-        return self.parameters.get("scale")
+    def scale(self) -> Literal["1-5", "1-10", "qualitative", "percentage"]:
+        """
+        Get the scale parameter value.
 
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt.
-        
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The scale parameter value
         """
-        # Apply the decorator: Structures the response as a decision matrix, evaluating options against multiple criteria
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._scale
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "decision_matrix",
+            "options": self.options,
+            "criteria": self.criteria,
+            "weighted": self.weighted,
+            "scale": self.scale,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.options is not None:
-            instruction += f"options={self.options}, "
+            params.append(f"options={self.options}")
         if self.criteria is not None:
-            instruction += f"criteria={self.criteria}, "
+            params.append(f"criteria={self.criteria}")
         if self.weighted is not None:
-            instruction += f"weighted={self.weighted}, "
+            params.append(f"weighted={self.weighted}")
         if self.scale is not None:
-            instruction += f"scale={self.scale}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"scale={self.scale}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

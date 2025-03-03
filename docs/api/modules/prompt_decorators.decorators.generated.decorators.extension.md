@@ -31,4 +31,3 @@ A meta-decorator that enables loading of community-defined decorators from exter
 - `decorators`: Specific decorators to load from the extension (if empty, loads all decorators from the package)
 - `source`: URI or identifier for the extension package (e.g., URL, namespace, or registry identifier)
 - `version`: Specific version of the extension package to use
-

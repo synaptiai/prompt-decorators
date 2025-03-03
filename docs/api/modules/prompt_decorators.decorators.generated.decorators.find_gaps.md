@@ -31,4 +31,3 @@ Identifies missing elements, unanswered questions, or overlooked considerations 
 - `aspects`: The specific types of gaps to focus on finding
 - `depth`: How thoroughly to analyze for gaps
 - `solutions`: Whether to suggest solutions or approaches for addressing the identified gaps
-

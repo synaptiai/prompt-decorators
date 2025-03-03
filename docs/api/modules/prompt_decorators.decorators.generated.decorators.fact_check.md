@@ -31,4 +31,3 @@ Enhances the response with verification of factual claims and explicit indicatio
 - `confidence`: Whether to include explicit confidence levels for claims
 - `strictness`: The threshold for considering information verified
 - `uncertain`: How to handle uncertain information
-

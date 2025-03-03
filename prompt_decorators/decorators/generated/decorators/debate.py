@@ -1,76 +1,117 @@
 """
-Debate Decorator
+Implementation of the Debate decorator.
+
+This module provides the Debate decorator class for use in prompt engineering.
 
 Structures the response as a debate between multiple perspectives on a topic. This decorator encourages balanced representation of different viewpoints and helps explore complex issues from various angles.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
+import re
+from typing import Any, Dict, List, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
 
 
 class Debate(BaseDecorator):
-    """Structures the response as a debate between multiple perspectives on a topic. This decorator encourages balanced representation of different viewpoints and helps explore complex issues from various angles."""
+    """
+    Structures the response as a debate between multiple perspectives on a
+    topic. This decorator encourages balanced representation of different
+    viewpoints and helps explore complex issues from various angles.
+
+    Attributes:
+        perspectives: Number of different perspectives to include in the debate
+        balanced: Whether to ensure equal representation and strength of arguments for each perspective
+    """
+
+    decorator_name = "debate"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        perspectives: Optional[float] = 2,
-        balanced: Optional[bool] = True,
-    ):
+        perspectives: Any = 2,
+        balanced: bool = True,
+    ) -> None:
         """
-        Initialize Debate decorator.
+        Initialize the Debate decorator.
 
         Args:
             perspectives: Number of different perspectives to include in the debate
-            balanced: Whether to ensure equal representation and strength of arguments for each perspective
+            balanced: Whether to ensure equal representation and strength of
+                arguments for each perspective
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Debate",
-            version="1.0.0",
-            parameters={
-                "perspectives": perspectives,
-                "balanced": balanced,
-            },
-            metadata={
-                "description": "Structures the response as a debate between multiple perspectives on a topic. This decorator encourages balanced representation of different viewpoints and helps explore complex issues from various angles.",
-                "author": "Prompt Decorators Working Group",
-                "category": "reasoning",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._perspectives = perspectives
+        self._balanced = balanced
+
+        # Validate parameters
+        if self._perspectives is not None:
+            if not isinstance(self._perspectives, (int, float)) or isinstance(self._perspectives, bool):
+                raise ValidationError("The parameter 'perspectives' must be a numeric value.")
+
+        if self._balanced is not None:
+            if not isinstance(self._balanced, bool):
+                raise ValidationError("The parameter 'balanced' must be a boolean value.")
+
 
     @property
-    def perspectives(self) -> float:
-        """Number of different perspectives to include in the debate"""
-        return self.parameters.get("perspectives")
+    def perspectives(self) -> Any:
+        """
+        Get the perspectives parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The perspectives parameter value
+        """
+        return self._perspectives
 
     @property
     def balanced(self) -> bool:
-        """Whether to ensure equal representation and strength of arguments for each perspective"""
-        return self.parameters.get("balanced")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.perspectives is not None and self.perspectives < 2:
-            raise ValueError(f"perspectives must be at least 2, got {self.perspectives}")
-        if self.perspectives is not None and self.perspectives > 5:
-            raise ValueError(f"perspectives must be at most 5, got {self.perspectives}")
-
-    def apply(self, prompt: str) -> str:
         """
-        Apply the decorator to a prompt.
-        
+        Get the balanced parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The balanced parameter value
         """
-        # Apply the decorator: Structures the response as a debate between multiple perspectives on a topic
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._balanced
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "debate",
+            "perspectives": self.perspectives,
+            "balanced": self.balanced,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.perspectives is not None:
-            instruction += f"perspectives={self.perspectives}, "
+            params.append(f"perspectives={self.perspectives}")
         if self.balanced is not None:
-            instruction += f"balanced={self.balanced}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"balanced={self.balanced}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

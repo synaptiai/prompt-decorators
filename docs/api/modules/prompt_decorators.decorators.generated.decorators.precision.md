@@ -31,4 +31,3 @@ Enhances responses with exact, specific, and precisely defined information. This
 - `definitions`: Whether to include precise definitions for key terms
 - `level`: The degree of precision to apply
 - `units`: Whether to consistently provide units for all measurements
-

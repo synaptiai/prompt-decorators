@@ -29,4 +29,3 @@ Specifies the version of the Prompt Decorators standard to use. This decorator m
 #### Properties
 
 - `standard`: The semantic version of the Prompt Decorators standard to use
-

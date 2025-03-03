@@ -35,4 +35,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Configuration system for decorators
 - Basic documentation
 - Examples for common use cases
-- Testing infrastructure 
+- Testing infrastructure

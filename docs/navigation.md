@@ -16,7 +16,7 @@ navigation:
         path: /tutorials/quickstart.html
       - title: Key Concepts
         path: /concepts.html
-  
+
   - title: Core Documentation
     items:
       - title: Architecture Overview
@@ -27,7 +27,7 @@ navigation:
         path: /api/modules/prompt_decorators.core.request.html
       - title: Version Support
         path: /api/modules/prompt_decorators.core.version.html
-  
+
   - title: Decorator Registry
     items:
       - title: Registry Overview
@@ -190,4 +190,4 @@ Previous: Quickstart | Next: Combining Decorators
 
 ## Documentation Index
 
-A separate index.md file should be created to serve as the search index and directory of all documentation pages, categorized according to the navigation structure and including a brief description of each page. 
+A separate index.md file should be created to serve as the search index and directory of all documentation pages, categorized according to the navigation structure and including a brief description of each page.

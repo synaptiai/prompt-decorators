@@ -31,4 +31,3 @@ Enhances responses with imaginative, novel, and original content. This decorator
 - `constraints`: Optional creative constraints to work within
 - `elements`: Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative)
 - `level`: The degree of creative thinking to apply
-

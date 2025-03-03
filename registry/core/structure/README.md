@@ -19,4 +19,4 @@ These decorators specify the structure and format of the AI's response. They con
 - **Constraints** - Apply specific limitations to the output
 - **Prioritize** - Rank items based on specified criteria
 
-Note: The **OutputFormat** decorator from this category is part of the minimal core set and can be found in the minimal directory. 
+Note: The **OutputFormat** decorator from this category is part of the minimal core set and can be found in the minimal directory.

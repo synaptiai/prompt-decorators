@@ -32,4 +32,3 @@ Applies specific limitations to the output format, length, or content. This deco
 - `timeframe`: Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week')
 - `vocabulary`: Constraints on vocabulary usage
 - `wordCount`: Maximum number of words allowed in the response
-

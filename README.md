@@ -195,3 +195,33 @@ See [REGISTRY_IMPLEMENTATION_PLAN.md](REGISTRY_IMPLEMENTATION_PLAN.md) for the d
 ## Acknowledgments
 
 This project was inspired by the need for more structured prompt engineering techniques when working with LLMs.
+
+## Code Quality
+
+This project uses several tools to maintain high code quality:
+
+- **Pre-commit hooks**: Automated checks run before each commit
+- **Docstring standardization**: Tools to check and fix docstring issues
+- **CI/CD integration**: GitHub Actions workflow for continuous quality checks
+
+### Setting Up Development Environment
+
+1. Install pre-commit:
+   ```bash
+   pip install pre-commit
+   pre-commit install
+   ```
+
+2. Run code quality checks:
+   ```bash
+   # Run all pre-commit hooks
+   pre-commit run --all-files
+
+   # Check docstrings
+   python scripts/check_docstrings.py
+
+   # Fix docstring issues automatically
+   python scripts/fix_docstrings.py
+   ```
+
+For more details, see the [Code Quality Integration](docs/code_quality_integration.md) and [Docstring Standards](docs/docstring_standards.md) documentation.

@@ -45,10 +45,10 @@ print(decorated_prompt)
 This will output something like:
 
 ```
-Please maintain a professional tone appropriate for the technology industry. Use industry-standard 
+Please maintain a professional tone appropriate for the technology industry. Use industry-standard
 terminology, clear explanations, and well-structured arguments.
 
-Please provide a concise response. Limit your response to 150 words or fewer. Format your response 
+Please provide a concise response. Limit your response to 150 words or fewer. Format your response
 as bullet points.
 
 Explain the benefits of machine learning in healthcare.
@@ -104,16 +104,16 @@ from prompt_decorators.core import BaseDecorator
 
 class CustomDecorator(BaseDecorator):
     """A custom decorator for specialized instructions."""
-    
+
     name = "Custom"
     version = "1.0.0"
     category = "custom"
-    
+
     def __init__(self, instruction: str, emphasis: int = 1):
         super().__init__()
         self.instruction = instruction
         self.emphasis = max(1, min(3, emphasis))
-    
+
     def apply(self, prompt: str) -> str:
         """Apply the custom instruction to the prompt."""
         emphasis_marks = "!" * self.emphasis
@@ -137,14 +137,14 @@ from prompt_decorators.core import ModelSpecificDecorator
 class CustomModelSpecificDecorator(ModelSpecificDecorator):
     name = "CustomModelSpecific"
     version = "1.0.0"
-    
+
     def apply_for_model(self, prompt: str) -> str:
         """Adapt based on model capabilities."""
         if self.model_capabilities.supports_feature("reasoning"):
             return f"Use your reasoning capabilities to answer: {prompt}"
         else:
             return self.apply_fallback(prompt)
-    
+
     def apply_fallback(self, prompt: str) -> str:
         """Fallback for models without specific capabilities."""
         return f"Answer this question step by step: {prompt}"
@@ -164,4 +164,4 @@ Check out these resources to learn more:
 - [Advanced usage tutorials](../tutorials/)
 - [Example scripts](../../examples/)
 
-For detailed information on specific decorators, see the generated documentation in the `docs/api/decorators/` directory. 
+For detailed information on specific decorators, see the generated documentation in the `docs/api/decorators/` directory.

@@ -39,7 +39,6 @@ Args:
     package_path: Path to the Python package to document
     registry_path: Path to the registry directory containing decorator definitions
     output_dir: Directory where documentation should be written
-    
+
 Returns:
     A documentation generator instance
-

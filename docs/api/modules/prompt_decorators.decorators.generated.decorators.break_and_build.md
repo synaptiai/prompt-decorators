@@ -31,4 +31,3 @@ Structures responses in two distinct phases: first critically analyzing and 'bre
 - `breakdown`: Primary approach for the critical breakdown phase
 - `buildRatio`: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)
 - `intensity`: How thorough and challenging the breakdown phase should be
-

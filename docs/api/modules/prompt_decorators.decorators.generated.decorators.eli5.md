@@ -29,4 +29,3 @@ Adapts the response to explain a concept as if to a 5-year-old child. This decor
 #### Properties
 
 - `strictness`: Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary
-

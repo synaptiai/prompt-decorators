@@ -31,4 +31,3 @@ Organizes the response as a branching exploration of multiple reasoning paths. T
 - `branches`: Number of different reasoning branches to explore
 - `depth`: Maximum depth of reasoning in each branch
 - `pruning`: Whether to eliminate less promising branches early
-

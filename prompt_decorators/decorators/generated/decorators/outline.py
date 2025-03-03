@@ -1,87 +1,146 @@
 """
-Outline Decorator
+Implementation of the Outline decorator.
+
+This module provides the Outline decorator class for use in prompt engineering.
 
 Structures the response as a hierarchical outline with headings and subheadings. This decorator organizes information in a clear, logical structure that highlights relationships between main topics and subtopics.
 """
 
-from typing import Dict, List, Optional, Any, Union, Literal
-from ....core.base import BaseDecorator
-from .enums import OutlineStyleEnum
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
+
+from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    OutlineStyleEnum,
+)
 
 
 class Outline(BaseDecorator):
-    """Structures the response as a hierarchical outline with headings and subheadings. This decorator organizes information in a clear, logical structure that highlights relationships between main topics and subtopics."""
+    """
+    Structures the response as a hierarchical outline with headings and
+    subheadings. This decorator organizes information in a clear, logical
+    structure that highlights relationships between main topics and
+    subtopics.
+
+    Attributes:
+        depth: Maximum nesting level of the outline
+        style: Numbering or bullet style for the outline
+        detailed: Whether to include brief explanations under each outline point
+    """
+
+    decorator_name = "outline"
+    version = "1.0.0"  # Initial version
 
     def __init__(
         self,
-        depth: Optional[float] = 3,
-        style: Optional[OutlineStyleEnum] = OutlineStyleEnum.NUMERIC,
-        detailed: Optional[bool] = False,
-    ):
+        depth: Any = 3,
+        style: Literal["numeric", "bullet", "roman", "alpha", "mixed"] = "numeric",
+        detailed: bool = False,
+    ) -> None:
         """
-        Initialize Outline decorator.
+        Initialize the Outline decorator.
 
         Args:
             depth: Maximum nesting level of the outline
             style: Numbering or bullet style for the outline
-            detailed: Whether to include brief explanations under each outline point
+            detailed: Whether to include brief explanations under each outline
+                point
+
+        Returns:
+            None
         """
-        super().__init__(
-            name="Outline",
-            version="1.0.0",
-            parameters={
-                "depth": depth,
-                "style": style,
-                "detailed": detailed,
-            },
-            metadata={
-                "description": "Structures the response as a hierarchical outline with headings and subheadings. This decorator organizes information in a clear, logical structure that highlights relationships between main topics and subtopics.",
-                "author": "Prompt Decorators Working Group",
-                "category": "structure",
-            },
-        )
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+        self._style = style
+        self._detailed = detailed
+
+        # Validate parameters
+        if self._depth is not None:
+            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+                raise ValidationError("The parameter 'depth' must be a numeric value.")
+
+        if self._style is not None:
+            valid_values = ["numeric", "bullet", "roman", "alpha", "mixed"]
+            if self._style not in valid_values:
+                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+
+        if self._detailed is not None:
+            if not isinstance(self._detailed, bool):
+                raise ValidationError("The parameter 'detailed' must be a boolean value.")
+
 
     @property
-    def depth(self) -> float:
-        """Maximum nesting level of the outline"""
-        return self.parameters.get("depth")
+    def depth(self) -> Any:
+        """
+        Get the depth parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The depth parameter value
+        """
+        return self._depth
 
     @property
-    def style(self) -> OutlineStyleEnum:
-        """Numbering or bullet style for the outline"""
-        return self.parameters.get("style")
+    def style(self) -> Literal["numeric", "bullet", "roman", "alpha", "mixed"]:
+        """
+        Get the style parameter value.
+
+        Args:
+            self: The decorator instance
+
+        Returns:
+            The style parameter value
+        """
+        return self._style
 
     @property
     def detailed(self) -> bool:
-        """Whether to include brief explanations under each outline point"""
-        return self.parameters.get("detailed")
-
-    def validate(self) -> None:
-        """Validate decorator parameters."""
-        super().validate()
-
-        if self.depth is not None and self.depth < 1:
-            raise ValueError(f"depth must be at least 1, got {self.depth}")
-        if self.depth is not None and self.depth > 5:
-            raise ValueError(f"depth must be at most 5, got {self.depth}")
-
-    def apply(self, prompt: str) -> str:
         """
-        Apply the decorator to a prompt.
-        
+        Get the detailed parameter value.
+
         Args:
-            prompt: The original prompt
-            
+            self: The decorator instance
+
         Returns:
-            The modified prompt with the decorator applied
+            The detailed parameter value
         """
-        # Apply the decorator: Structures the response as a hierarchical outline with headings and subheadings
-        instruction = f"Instructions for {self.name} decorator: "
+        return self._detailed
+
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": "outline",
+            "depth": self.depth,
+            "style": self.style,
+            "detailed": self.detailed,
+        }
+
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
+
+        Returns:
+            String representation of the decorator
+        """
+        params = []
         if self.depth is not None:
-            instruction += f"depth={self.depth}, "
+            params.append(f"depth={self.depth}")
         if self.style is not None:
-            instruction += f"style={self.style}, "
+            params.append(f"style={self.style}")
         if self.detailed is not None:
-            instruction += f"detailed={self.detailed}, "
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}"
+            params.append(f"detailed={self.detailed}")
+
+        if params:
+            return f"@{self.decorator_name}(" + ", ".join(params) + ")"
+        else:
+            return f"@{self.decorator_name}"

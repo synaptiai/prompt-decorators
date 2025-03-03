@@ -38,5 +38,3 @@ This decorator enhances responses by prompting the model to:
 Enumeration of reasoning styles.
 
 **Inherits from:** `Enum`
-
-

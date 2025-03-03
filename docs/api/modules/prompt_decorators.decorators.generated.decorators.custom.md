@@ -31,4 +31,3 @@ A meta-decorator that enables user-defined decorator behaviors through explicit 
 - `name`: Optional name for the custom decorator to reference in documentation or explanations
 - `priority`: How to prioritize custom rules relative to other decorators
 - `rules`: Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items')
-

@@ -1,133 +1,130 @@
 """
-Reasoning Decorator
+Implementation of the Reasoning decorator.
 
-This decorator instructs the model to explicitly reason through a problem step by step.
+This module provides the Reasoning decorator class for use in prompt engineering.
 """
 
-from enum import Enum
-from typing import Dict, Any, Optional
+from typing import Any, Dict, List, Optional, Union
 
-from ..core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.base import BaseDecorator
+from prompt_decorators.core.exceptions import IncompatibleVersionError
 
-
-class ReasoningStyle(Enum):
-    """Enumeration of reasoning styles."""
-    STANDARD = "standard"
-    DETAILED = "detailed"
-    CONCISE = "concise"
-    SOCRATIC = "socratic"
-    
 
 class Reasoning(BaseDecorator):
     """
-    Decorator that instructs the model to use explicit reasoning.
+    A decorator that encourages the model to provide reasoning for its responses.
     
-    This decorator enhances responses by prompting the model to:
-    1. Break down complex problems into steps
-    2. Show its thought process explicitly
-    3. Consider multiple perspectives where relevant
+    This decorator instructs the model to explain its thought process and provide
+    justification for its answers.
     """
     
+    decorator_name = "reasoning"
     name = "Reasoning"
-    description = "Instructs the model to reason step by step through problems"
-    category = "ThoughtProcess"
     version = "1.0.0"
-    min_compatible_version = "1.0.0"
+    min_compatible_version = "0.5.0"
+    category = "cognitive"
     
-    def __init__(
-        self,
-        style: str = ReasoningStyle.STANDARD.value,
-        show_working: bool = True,
-        consider_alternatives: bool = False,
-        depth: int = 3,
-        name: Optional[str] = None,
-        version: Optional[str] = None,
-        parameters: Optional[Dict[str, Any]] = None,
-        metadata: Optional[Dict[str, Any]] = None
-    ):
+    def __init__(self, depth: str = "medium") -> None:
         """
-        Initialize a Reasoning decorator.
+        Initialize the Reasoning decorator.
         
         Args:
-            style: Reasoning style to use (standard, detailed, concise, socratic)
-            show_working: Whether to show intermediate steps
-            consider_alternatives: Whether to consider alternative approaches
-            depth: Depth of reasoning (1-5)
-            name: Optional decorator name override
-            version: Optional version override
-            parameters: Optional parameter dictionary (overrides individual parameters)
-            metadata: Optional metadata dictionary
-        """
-        # If parameters are explicitly provided, use them instead of individual args
-        if parameters is None:
-            parameters = {
-                "style": style,
-                "show_working": show_working,
-                "consider_alternatives": consider_alternatives,
-                "depth": depth
-            }
-        
-        super().__init__(name, version, parameters, metadata)
-    
-    def validate(self) -> None:
-        """
-        Validate decorator parameters.
-        
-        Raises:
-            ValidationError: If any parameter fails validation
-        """
-        # Validate style parameter
-        self._validate_enum("style", ReasoningStyle)
-        
-        # Validate boolean parameters
-        self._validate_type("show_working", bool)
-        self._validate_type("consider_alternatives", bool)
-        
-        # Validate depth parameter
-        self._validate_range("depth", minimum=1, maximum=5)
-    
-    def apply(self, prompt: str) -> str:
-        """
-        Apply the reasoning decorator to a prompt.
-        
-        Args:
-            prompt: The original prompt
+            depth: The depth of reasoning to provide (shallow, medium, deep)
             
         Returns:
-            The modified prompt with reasoning instructions
+            None
         """
-        style = self._validate_enum("style", ReasoningStyle)
-        show_working = self._validate_type("show_working", bool)
-        consider_alternatives = self._validate_type("consider_alternatives", bool)
-        depth = self._validate_range("depth", minimum=1, maximum=5)
+        super().__init__()
+        self._depth = depth
         
-        # Build style-specific instructions
-        style_instructions = {
-            ReasoningStyle.STANDARD: "Think through this step by step.",
-            ReasoningStyle.DETAILED: "Provide a detailed analysis with thorough reasoning.",
-            ReasoningStyle.CONCISE: "Reason efficiently, focusing only on key points.",
-            ReasoningStyle.SOCRATIC: "Use Socratic questioning to explore the problem."
+    @property
+    def depth(self) -> str:
+        """Get the depth of reasoning."""
+        return self._depth
+        
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Convert the decorator to a dictionary.
+        
+        Returns:
+            Dictionary representation of the decorator
+        """
+        return {
+            "name": self.name,
+            "parameters": {
+                "depth": self.depth
+            }
         }
         
-        instruction = style_instructions.get(style, style_instructions[ReasoningStyle.STANDARD])
+    def to_string(self) -> str:
+        """
+        Convert the decorator to a string.
         
-        # Add additional instructions based on parameters
-        if show_working:
-            instruction += " Show your work and thought process."
+        Returns:
+            String representation of the decorator
+        """
+        return f"@{self.decorator_name}(depth={self.depth})"
         
-        if consider_alternatives:
-            instruction += " Consider multiple approaches or perspectives."
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt.
         
-        # Adjust depth of reasoning
+        Args:
+            prompt: The prompt to apply the decorator to
+            
+        Returns:
+            The modified prompt
+        """
         depth_instructions = {
-            1: "Focus on the most essential reasoning only.",
-            2: "Include key reasoning steps.",
-            3: "Provide a balanced level of detail in your reasoning.",
-            4: "Explore the reasoning in good detail.",
-            5: "Provide highly detailed, comprehensive reasoning."
+            "shallow": "Briefly explain your reasoning.",
+            "medium": "Explain your reasoning step by step.",
+            "deep": "Provide detailed reasoning for each step of your thought process."
         }
         
-        instruction += f" {depth_instructions.get(depth, '')}"
+        instruction = depth_instructions.get(self.depth, depth_instructions["medium"])
+        return f"{prompt}\n\n{instruction}"
         
-        # Combine with original prompt
-        return f"{instruction}\n\n{prompt}" 
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+        
+        Args:
+            version: The version to check compatibility with
+            
+        Returns:
+            True if compatible, False otherwise
+            
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        if version < cls.min_compatible_version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.name}. "
+                f"Minimum compatible version is {cls.min_compatible_version}."
+            )
+        return True
+        
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+        
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.name,
+            "description": "A decorator that encourages the model to provide reasoning for its responses.",
+            "category": cls.category,
+            "version": cls.version,
+            "parameters": {
+                "depth": {
+                    "description": "The depth of reasoning to provide",
+                    "type": "string",
+                    "enum": ["shallow", "medium", "deep"],
+                    "required": False,
+                    "default": "medium"
+                }
+            }
+        } 

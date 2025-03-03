@@ -16,4 +16,4 @@ These decorators modify the behavior of other decorators or provide higher-level
 - **Chain** - Define multi-step response process
 - **BuildOn** - Reference previous context
 
-Note: The **Version** decorator from this category is part of the minimal core set and can be found in the minimal directory. 
+Note: The **Version** decorator from this category is part of the minimal core set and can be found in the minimal directory.

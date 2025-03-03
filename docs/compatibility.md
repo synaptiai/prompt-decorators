@@ -115,4 +115,4 @@ If you encounter incompatibilities not listed here or have questions about speci
 2. Look at the examples in the `examples/` directory.
 3. Open an issue on the GitHub repository if you've discovered a new incompatibility.
 
-Remember that while some combinations are generally incompatible, the specific behavior may depend on the exact parameter values and the LLM model being used. 
+Remember that while some combinations are generally incompatible, the specific behavior may depend on the exact parameter values and the LLM model being used.
