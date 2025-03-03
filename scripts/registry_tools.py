@@ -129,6 +129,75 @@ def validate_registry(registry_dir: str = "registry", verbose: bool = False) -> 
         return False
 
 
+def _run_formatters(directory: str, verbose: bool = False) -> bool:
+    """Run code formatters on the generated files.
+
+    Args:
+        directory: Directory containing files to format
+        verbose: Whether to enable verbose output
+
+    Returns:
+        bool: True if formatting succeeded, False otherwise
+    """
+    logger = logging.getLogger(__name__)
+
+    try:
+        import black
+        import isort.api
+
+        # Get Python files in the directory
+        directory_path = Path(directory)
+        python_files = list(directory_path.glob("**/*.py"))
+
+        if not python_files:
+            logger.warning(f"No Python files found in {directory}")
+            return True
+
+        # Format with black
+        logger.info(f"Running black on {len(python_files)} files in {directory}")
+        for file_path in python_files:
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+
+                # Format with black
+                formatted_content = black.format_str(
+                    content,
+                    mode=black.Mode(
+                        line_length=88,
+                        string_normalization=True,
+                        is_pyi=False,
+                    ),
+                )
+
+                # Write back to file
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(formatted_content)
+
+                if verbose:
+                    logger.debug(f"Black formatted {file_path}")
+            except Exception as e:
+                logger.warning(f"Error formatting {file_path} with black: {e}")
+
+        # Format with isort
+        logger.info(f"Running isort on {len(python_files)} files in {directory}")
+        for file_path in python_files:
+            try:
+                isort.api.sort_file(str(file_path))
+                if verbose:
+                    logger.debug(f"Isort formatted {file_path}")
+            except Exception as e:
+                logger.warning(f"Error formatting {file_path} with isort: {e}")
+
+        return True
+    except ImportError as e:
+        logger.warning(f"Formatter not available: {e}. Skipping formatting.")
+        return True
+    except Exception as e:
+        logger.error(f"Error running formatters: {e}", exc_info=True)
+        return False
+
+
 def generate_code(
     registry_dir: str = "registry",
     output_dir: str = "prompt_decorators/decorators/generated",
@@ -181,6 +250,9 @@ def generate_code(
             full_path.parent.mkdir(parents=True, exist_ok=True)
 
             with open(full_path, "w", encoding="utf-8") as f:
+                # Ensure content ends with a newline
+                if not content.endswith("\n"):
+                    content += "\n"
                 f.write(content)
 
             file_count += 1
@@ -188,6 +260,10 @@ def generate_code(
                 logger.debug(f"Generated {full_path}")
 
         logger.info(f"✓ Successfully generated {file_count} files in {output_dir}")
+
+        # Format the generated files
+        _run_formatters(output_dir, verbose)
+
         return True
     except Exception as e:
         logger.error(f"Error generating code: {e}", exc_info=True)
@@ -244,6 +320,10 @@ def generate_tests(
         )
         logger.info("\nTo run the generated tests, install pytest and run:")
         logger.info(f"  python -m pytest {output_dir} -v")
+
+        # Format the generated files
+        _run_formatters(output_dir, verbose)
+
         return True
     except Exception as e:
         logger.error(f"Error generating tests: {e}", exc_info=True)

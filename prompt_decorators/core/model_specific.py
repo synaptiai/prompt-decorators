@@ -154,11 +154,16 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
 
 
 class ModelSpecificDecoratorFactory:
-    """    Factory for creating model-specific decorators.
+    """Factory for creating model-specific decorators.
 
     This class provides methods for creating model-specific versions of decorators.
-    """ @ staticmethod
+    It allows for customizing decorator behavior based on specific model requirements.
 
+    The factory creates decorator instances that are tailored to work optimally with
+    particular language models, taking into account their unique capabilities and limitations.
+    """
+
+    @staticmethod
     def create_for_model(
         decorator_class: Type[BaseDecorator], model_id: str, **params
     ) -> BaseDecorator:
