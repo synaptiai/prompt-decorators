@@ -1,5 +1,4 @@
-"""
-Implementation of the Confidence decorator.
+"""Implementation of the Confidence decorator.
 
 This module provides the Confidence decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import ConfidenceSc
 
 
 class Confidence(BaseDecorator):
-    """
-    Enhances the response with explicit indications of confidence levels
-    for different statements or claims. This decorator promotes
-    transparency about knowledge certainty and helps differentiate between
-    well-established facts and more speculative content.
+    """Enhances the response with explicit indications of confidence levels for different statements or claims. This decorator promotes transparency about knowledge certainty and helps differentiate between well-established facts and more speculative content.
 
     Attributes:
-        scale: The method used to express confidence levels
-        threshold: Minimum confidence level for including information (as a percentage)
-        detailed: Whether to provide explanations for confidence assessments
+        scale: The method used to express confidence levels. (Literal["percent", "qualitative", "stars", "numeric"])
+        threshold: Minimum confidence level for including information (as a percentage). (Any)
+        detailed: Whether to provide explanations for confidence assessments. (bool)
     """
 
     decorator_name = "confidence"
@@ -32,11 +27,11 @@ class Confidence(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,17 +41,13 @@ class Confidence(BaseDecorator):
         threshold: Any = 50,
         detailed: bool = False,
     ) -> None:
-        """
-        Initialize the Confidence decorator.
+        """Initialize the Confidence decorator.
 
         Args:
             scale: The method used to express confidence levels
-            threshold: Minimum confidence level for including information (as a
-                percentage)
+            threshold: Minimum confidence level for including information (as a percentage)
             detailed: Whether to provide explanations for confidence assessments
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -67,6 +58,14 @@ class Confidence(BaseDecorator):
         self._detailed = detailed
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._scale = scale
+        self._threshold = threshold
+        self._detailed = detailed
+
         # Validate parameters
         if self._scale is not None:
             if not isinstance(self._scale, str):
@@ -98,8 +97,7 @@ class Confidence(BaseDecorator):
 
     @property
     def scale(self) -> Literal["percent", "qualitative", "stars", "numeric"]:
-        """
-        Get the scale parameter value.
+        """Get the scale parameter value.
 
         Args:
             self: The decorator instance
@@ -111,8 +109,7 @@ class Confidence(BaseDecorator):
 
     @property
     def threshold(self) -> Any:
-        """
-        Get the threshold parameter value.
+        """Get the threshold parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +121,7 @@ class Confidence(BaseDecorator):
 
     @property
     def detailed(self) -> bool:
-        """
-        Get the detailed parameter value.
+        """Get the detailed parameter value.
 
         Args:
             self: The decorator instance
@@ -136,8 +132,7 @@ class Confidence(BaseDecorator):
         return self._detailed
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -152,8 +147,7 @@ class Confidence(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -172,32 +166,34 @@ class Confidence(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -215,11 +211,11 @@ class Confidence(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

@@ -1,5 +1,4 @@
-"""
-Implementation of the Narrative decorator.
+"""Implementation of the Narrative decorator.
 
 This module provides the Narrative decorator class for use in prompt engineering.
 
@@ -18,15 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Narrative(BaseDecorator):
-    """
-    Structures the response as a story-based delivery with narrative
-    elements. This decorator employs storytelling techniques to make
-    information more engaging, memorable, and contextually rich.
+    """Structures the response as a story-based delivery with narrative elements. This decorator employs storytelling techniques to make information more engaging, memorable, and contextually rich.
 
     Attributes:
-        structure: The narrative structure to employ
-        characters: Whether to include character elements in the narrative
-        length: The relative length of the narrative
+        structure: The narrative structure to employ. (Literal["classic", "nonlinear", "case-study"])
+        characters: Whether to include character elements in the narrative. (bool)
+        length: The relative length of the narrative. (Literal["brief", "moderate", "extended"])
     """
 
     decorator_name = "narrative"
@@ -34,11 +30,11 @@ class Narrative(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -48,16 +44,13 @@ class Narrative(BaseDecorator):
         characters: bool = True,
         length: Literal["brief", "moderate", "extended"] = "moderate",
     ) -> None:
-        """
-        Initialize the Narrative decorator.
+        """Initialize the Narrative decorator.
 
         Args:
             structure: The narrative structure to employ
             characters: Whether to include character elements in the narrative
             length: The relative length of the narrative
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -68,6 +61,14 @@ class Narrative(BaseDecorator):
         self._length = length
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._structure = structure
+        self._characters = characters
+        self._length = length
+
         # Validate parameters
         if self._structure is not None:
             if not isinstance(self._structure, str):
@@ -95,8 +96,7 @@ class Narrative(BaseDecorator):
 
     @property
     def structure(self) -> Literal["classic", "nonlinear", "case-study"]:
-        """
-        Get the structure parameter value.
+        """Get the structure parameter value.
 
         Args:
             self: The decorator instance
@@ -108,8 +108,7 @@ class Narrative(BaseDecorator):
 
     @property
     def characters(self) -> bool:
-        """
-        Get the characters parameter value.
+        """Get the characters parameter value.
 
         Args:
             self: The decorator instance
@@ -121,8 +120,7 @@ class Narrative(BaseDecorator):
 
     @property
     def length(self) -> Literal["brief", "moderate", "extended"]:
-        """
-        Get the length parameter value.
+        """Get the length parameter value.
 
         Args:
             self: The decorator instance
@@ -133,8 +131,7 @@ class Narrative(BaseDecorator):
         return self._length
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -149,8 +146,7 @@ class Narrative(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -169,32 +165,34 @@ class Narrative(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -212,11 +210,11 @@ class Narrative(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

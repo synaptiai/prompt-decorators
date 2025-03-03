@@ -22,8 +22,17 @@ def camel_to_snake(name: str) -> str:
 
 
 def snake_to_camel(name: str) -> str:
-    """Convert snake_case to CamelCase."""
-    components = name.split("_")
+    """Convert snake_case to CamelCase.
+    
+    If the input is already in camelCase, it will be properly converted to CamelCase
+    with the first letter capitalized.
+    """
+    # First ensure the name is in snake_case
+    snake_name = camel_to_snake(name)
+    
+    # Then convert to CamelCase
+    components = snake_name.split("_")
+    # Ensure each component starts with an uppercase letter
     return "".join(x.title() for x in components)
 
 
@@ -77,25 +86,25 @@ class CodeGenerator:
             decorators: List of decorator data dictionaries from the registry
         """
         self.decorators = decorators
-        self.enum_definitions: Dict[
+        self.enums: Dict[
             str, Tuple[str, List[str]]
         ] = {}  # Maps enum name to (description, values)
 
-    def _split_text_into_chunks(self, text: str, max_length: int = 70) -> List[str]:
+    def _split_text_into_chunks(self, text: str, max_length: int = 80) -> List[str]:
         """
-        Split text into chunks that don't exceed the maximum length.
+        Split text into chunks of maximum length.
 
         Args:
             text: The text to split
-            max_length: Maximum length of each chunk
+            max_length: The maximum length of each chunk
 
         Returns:
             List of text chunks
         """
         if not text:
-            return []
+            return [""]
 
-        # Use textwrap for better line wrapping
+        # Use textwrap to split the text
         return textwrap.wrap(text, width=max_length)
 
     def _format_long_string(
@@ -205,18 +214,13 @@ class CodeGenerator:
         return result
 
     def _generate_decorators_init(self) -> str:
-        """
-        Generate the __init__.py file for the decorators package.
-
-        Args:
-            self: The CodeGenerator instance.
+        """Generate the __init__.py file for the decorators package.
 
         Returns:
-            Generated code as a string
+            str: Generated code as a string
         """
         code = [
-            '"""',
-            "Decorator Classes",
+            '"""Decorator Classes',
             "",
             "This package provides classes for all decorators in the Prompt Decorators specification.",
             '"""',
@@ -265,10 +269,9 @@ class CodeGenerator:
         # Check if we need to import Literal for enum types
         needs_literal_import = any(param.get("type") == "enum" for param in params)
 
-        # Generate imports
+        # Generate imports with proper docstring format - no blank line at beginning for D212 compliance
         imports = [
-            '"""',
-            f"Implementation of the {name} decorator.",
+            f'"""Implementation of the {name} decorator.',
             "",
             f"This module provides the {name} decorator class for use in prompt engineering.",
             "",
@@ -309,32 +312,68 @@ class CodeGenerator:
         code.append("")
         code.append("")
         code.append(f"class {name}(BaseDecorator):")
-        code.append('    """')
 
-        # Class docstring
-        if description:
-            formatted_description = self._split_text_into_chunks(description)
-            for line in formatted_description:
-                code.append(f"    {line}")
-            code.append("")
+        # Ensure description ends with a period for D415 compliance
+        if description and not description.rstrip().endswith((".", "!", "?")):
+            description = description.rstrip() + "."
+
+        # Generate class docstring with proper formatting
+        class_docstring_first_line = (
+            description.split("\n")[0] if description else f"{name} decorator."
+        )
+        class_docstring_sections = {}
+
+        # If description has multiple lines, add the rest as a description section
+        if description and "\n" in description:
+            description_lines = description.split("\n")[1:]
+            if description_lines:
+                # Join the remaining lines and add as description
+                class_docstring_sections["Description"] = "\n".join(
+                    description_lines
+                ).strip()
+
+        # Generate the docstring lines - no blank line at beginning for D212 compliance
+        docstring_lines = []
+        docstring_lines.append('    """' + class_docstring_first_line)
+
+        # Always add blank line after first line for D205 compliance
+        docstring_lines.append("")
+
+        if class_docstring_sections:
+            for section_name, content in class_docstring_sections.items():
+                # No need for an additional blank line here since we already added one after the first line
+                docstring_lines.append(f"    {section_name}:")
+                for line in content.split("\n"):
+                    docstring_lines.append(f"        {line}")
 
         # Add parameter documentation
         if params:
-            code.append("    Attributes:")
+            # Add blank line before Attributes section for D411 compliance
+            # Only add if we already have sections (otherwise we already have a blank line after the first line)
+            if class_docstring_sections:
+                docstring_lines.append("")
+            docstring_lines.append("    Attributes:")
             for param in params:
                 param_name = param["name"]
                 param_desc = param.get("description", "")
                 param_type = self._get_python_type(param, decorator)
-                formatted_desc_lines = self._split_text_into_chunks(
-                    param_desc, max_length=60
+
+                # Ensure parameter description ends with a period
+                if param_desc and not param_desc.rstrip().endswith((".", "!", "?")):
+                    param_desc = param_desc.rstrip() + "."
+
+                docstring_lines.append(
+                    f"        {param_name}: {param_desc} ({param_type})"
                 )
 
-                code.append(f"        {param_name}: {param_desc}")
+        docstring_lines.append('    """')
 
-        code.append('    """')
+        # Add the docstring lines to the code
+        code.extend(docstring_lines)
         code.append("")
 
         # Add class variables
+        code.append(f'    name = "{snake_name}"  # Class-level name for serialization')
         code.append(f'    decorator_name = "{snake_name}"')
         code.append('    version = "1.0.0"  # Initial version')
         code.append("")
@@ -342,12 +381,15 @@ class CodeGenerator:
         # Add name property
         code.append("    @property")
         code.append("    def name(self) -> str:")
-        code.append('        """')
-        code.append("        Get the name of the decorator.")
-        code.append("")
-        code.append("        Returns:")
-        code.append("            The name of the decorator")
-        code.append('        """')
+
+        # Generate the docstring content
+        docstring_content = self._generate_docstring(
+            "Get the name of the decorator.", {"Returns": "The name of the decorator"}
+        )
+
+        # Add the docstring with proper indentation
+        indented_docstring = textwrap.indent(docstring_content, "        ")
+        code.append(indented_docstring)
         code.append("        return self.decorator_name")
         code.append("")
 
@@ -368,33 +410,22 @@ class CodeGenerator:
                 code.append(f"        {param_name}: {param_type} = {default},")
 
         code.append("    ) -> None:")
-        code.append('        """')
-        code.append(f"        Initialize the {name} decorator.")
-        code.append("")
-        code.append("        Args:")
 
-        # Add parameter documentation in __init__
+        # Create a dictionary for the Args section
+        args_dict = {}
         for param in params:
             param_name = param["name"]
             param_desc = param.get("description", "")
-            formatted_desc_lines = self._split_text_into_chunks(
-                param_desc, max_length=60
-            )
+            args_dict[param_name] = param_desc
 
-            # Start with parameter name
-            param_line = f"            {param_name}: {formatted_desc_lines[0]}"
-            code.append(param_line)
+        # Generate docstring using the helper method
+        init_docstring = self._generate_docstring(
+            f"Initialize the {name} decorator.", {"Args": args_dict}
+        )
 
-            # Add remaining description lines with proper indentation
-            for line in formatted_desc_lines[1:]:
-                code.append(f"                {line}")
-
-        # Add Returns section to fix docstring issue
-        code.append("")
-        code.append("        Returns:")
-        code.append("            None")
-
-        code.append('        """')
+        # Indent the docstring and append it as a single string
+        indented_init_docstring = textwrap.indent(init_docstring, "        ")
+        code.append(indented_init_docstring)
 
         # Add validation code
         code.append("        # Initialize with base values")
@@ -404,6 +435,14 @@ class CodeGenerator:
         for param in params:
             param_name = param["name"]
             code.append(f"        self._{param_name} = {param_name}")
+
+            # If the parameter is named 'parameters', we need to add a special case
+            # to avoid conflicts with the BaseDecorator.parameters property
+            if param_name == "parameters":
+                code.append(
+                    "        # Add an alias for the 'parameters' parameter to avoid conflicts"
+                )
+                code.append("        self._params = self._parameters")
         code.append("")
         code.append("        # Validate parameters")
         self._add_validation_code(decorator, params, code)
@@ -414,12 +453,11 @@ class CodeGenerator:
 
         # Add to_dict method
         code.append("    def to_dict(self) -> Dict[str, Any]:")
-        code.append('        """')
-        code.append("        Convert the decorator to a dictionary.")
+        code.append(f'        """Convert the decorator to a dictionary.')
         code.append("")
         code.append("        Returns:")
         code.append("            Dictionary representation of the decorator")
-        code.append('        """')
+        code.append(f'        """')
         code.append("        return {")
         code.append(f'            "name": "{snake_name}",')
         code.append('            "parameters": {')
@@ -433,8 +471,7 @@ class CodeGenerator:
         # Add to_string method
         code.append("")
         code.append("    def to_string(self) -> str:")
-        code.append('        """')
-        code.append("        Convert the decorator to a string.")
+        code.append(f'        """Convert the decorator to a string.')
         code.append("")
         code.append("        Returns:")
         code.append("            String representation of the decorator")
@@ -458,16 +495,19 @@ class CodeGenerator:
         # Add apply method
         code.append("")
         code.append("    def apply(self, prompt: str) -> str:")
-        code.append('        """')
-        code.append("        Apply the decorator to a prompt string.")
-        code.append("")
-        code.append("        Args:")
-        code.append("            prompt: The original prompt string")
-        code.append("")
-        code.append("        Returns:")
-        code.append("            The modified prompt string")
-        code.append('        """')
-        code.append("        # This is a placeholder implementation")
+
+        # Generate docstring for apply method with proper indentation
+        apply_docstring = self._generate_docstring(
+            "Apply the decorator to a prompt string.",
+            {
+                "Args": {"prompt": "The prompt to apply the decorator to"},
+                "Returns": "The modified prompt",
+            },
+        )
+        # Indent the docstring properly
+        indented_apply_docstring = textwrap.indent(apply_docstring, "        ")
+        code.append(indented_apply_docstring)
+
         code.append(
             "        # Subclasses should override this method with specific behavior"
         )
@@ -477,22 +517,25 @@ class CodeGenerator:
         code.append("")
         code.append("    @classmethod")
         code.append("    def is_compatible_with_version(cls, version: str) -> bool:")
-        code.append('        """')
-        code.append(
-            "        Check if the decorator is compatible with a specific version."
+
+        # Generate docstring using the helper method
+        compatibility_docstring = self._generate_docstring(
+            "Check if the decorator is compatible with a specific version",
+            {
+                "Args": {"version": "The version to check compatibility with."},
+                "Returns": "True if compatible, False otherwise.",
+                "Raises": {
+                    "IncompatibleVersionError": "If the version is incompatible."
+                },
+            },
         )
-        code.append("")
-        code.append("        Args:")
-        code.append("            version: The version to check compatibility with")
-        code.append("")
-        code.append("        Returns:")
-        code.append("            True if compatible, False otherwise")
-        code.append("")
-        code.append("        Raises:")
-        code.append(
-            "            IncompatibleVersionError: If the version is incompatible"
+        # Indent the docstring properly
+        indented_compatibility_docstring = textwrap.indent(
+            compatibility_docstring, "        "
         )
-        code.append('        """')
+        code.append(indented_compatibility_docstring)
+
+        # Add implementation
         code.append("        # Check version compatibility")
         code.append("        if version > cls.version:")
         code.append("            raise IncompatibleVersionError(")
@@ -515,12 +558,17 @@ class CodeGenerator:
         code.append("")
         code.append("    @classmethod")
         code.append("    def get_metadata(cls) -> Dict[str, Any]:")
-        code.append('        """')
-        code.append("        Get metadata about the decorator.")
-        code.append("")
-        code.append("        Returns:")
-        code.append("            Dictionary containing metadata about the decorator")
-        code.append('        """')
+
+        # Generate docstring using the helper method
+        metadata_docstring = self._generate_docstring(
+            "Get metadata about the decorator.",
+            {"Returns": "Dictionary containing metadata about the decorator"},
+        )
+
+        # Indent the docstring and append it as a single string
+        indented_metadata_docstring = textwrap.indent(metadata_docstring, "        ")
+        code.append(indented_metadata_docstring)
+
         code.append("        return {")
         code.append('            "name": cls.__name__,')
         code.append(f'            "description": """{description}""",')
@@ -531,18 +579,15 @@ class CodeGenerator:
         return "\n".join(imports + code)
 
     def _add_get_property_methods(
-        self,
-        decorator: Union[DecoratorData, Dict],
-        params: List[Dict[str, Any]],
-        code: List[str],
+        self, decorator: Dict[str, Any], params: List[Dict[str, Any]], code: List[str]
     ) -> None:
         """
-        Add getter property methods for each parameter.
+        Add property getter methods for each parameter.
 
         Args:
             decorator: The decorator data
-            params: List of parameter definitions
-            code: List of code lines to append to
+            params: The parameters
+            code: The code list to append to
         """
         for param in params:
             param_name = param["name"]
@@ -554,10 +599,10 @@ class CodeGenerator:
             if param_name == "parameters":
                 property_name = "params"
 
-            code.append("    @property")
+            # Add property getter
+            code.append(f"    @property")
             code.append(f"    def {property_name}(self) -> {param_type}:")
-            code.append('        """')
-            code.append(f"        Get the {param_name} parameter value.")
+            code.append(f'        """Get the {param_name} parameter value.')
             code.append("")
             code.append("        Args:")
             code.append("            self: The decorator instance")
@@ -568,21 +613,35 @@ class CodeGenerator:
             code.append(f"        return self._{param_name}")
             code.append("")
 
-        return
-
     def _add_validation_code(
         self, decorator: Dict[str, Any], params: List[Dict[str, Any]], code: List[str]
     ) -> None:
-        """Add parameter validation code to the decorator class.
+        """
+        Add validation code for parameters.
 
         Args:
             decorator: The decorator data
-            params: The parameters to validate
-            code: The code lines to append to
+            params: The parameters
+            code: The code list to append to
         """
-        # Add validation code for each parameter
-        code.append(f"        # Validate parameters")
+        # Add validation code
+        code.append("        # Initialize with base values")
+        code.append("        super().__init__()")
+        code.append("")
+        code.append("        # Store parameters")
+        for param in params:
+            param_name = param["name"]
+            code.append(f"        self._{param_name} = {param_name}")
 
+            # If the parameter is named 'parameters', we need to add a special case
+            # to avoid conflicts with the BaseDecorator.parameters property
+            if param_name == "parameters":
+                code.append(
+                    "        # Add an alias for the 'parameters' parameter to avoid conflicts"
+                )
+                code.append("        self._params = self._parameters")
+        code.append("")
+        code.append("        # Validate parameters")
         for param in params:
             param_name = param["name"]
             validation_added = False
@@ -667,15 +726,43 @@ class CodeGenerator:
             # Enum validation
             if "enum" in param and param["enum"]:
                 enum_values = param["enum"]
-                # Format enum values properly for the error message
-                enum_str_list = [f'"{val}"' for val in enum_values]
-                enum_str = ", ".join(enum_str_list)
 
-                # Create a proper list of enum values for the validation check
-                code.append(f"            if self._{param_name} not in [{enum_str}]:")
-                code.append(
-                    f"                raise ValidationError(f\"The parameter '{param_name}' must be one of the allowed enum values: {enum_values}. Got {{self._{param_name}}}\")"
-                )
+                # Check if we have an enum class for this parameter
+                enum_class_name = None
+                for enum_name, values in self.enums.items():
+                    if set(enum_values).issubset(set(values)):
+                        enum_class_name = enum_name
+                        break
+
+                if enum_class_name:
+                    # Use the enum class values for validation
+                    enum_values_code = [
+                        f"{enum_class_name}.{self._convert_to_enum_constant(val)}.value"
+                        for val in enum_values
+                    ]
+                    enum_str = ", ".join(enum_values_code)
+
+                    # Create a proper list of enum values for the validation check
+                    code.append(f"            valid_values = [{enum_str}]")
+                    code.append(
+                        f"            if self._{param_name} not in valid_values:"
+                    )
+                    code.append(
+                        f"                raise ValidationError(f\"The parameter '{param_name}' must be one of the allowed enum values: {{valid_values}}. Got {{self._{param_name}}}\")"
+                    )
+                else:
+                    # Format enum values properly for the error message
+                    enum_str_list = [f'"{val}"' for val in enum_values]
+                    enum_str = ", ".join(enum_str_list)
+
+                    # Create a proper list of enum values for the validation check
+                    code.append(
+                        f"            if self._{param_name} not in [{enum_str}]:"
+                    )
+                    code.append(
+                        f"                raise ValidationError(f\"The parameter '{param_name}' must be one of the allowed enum values: {enum_values}. Got {{self._{param_name}}}\")"
+                    )
+
                 validation_added = True
 
             # Pattern validation for strings
@@ -810,36 +897,52 @@ class CodeGenerator:
                 code.append("            pass")
 
     def _generate_enums_module(self) -> str:
-        """Generate the enums.py module with all enum definitions.
-
-        Args:
-            self: The CodeGenerator instance.
+        """
+        Generate the enums module with all enum definitions.
 
         Returns:
-            Generated code as a string
+            str: The generated code for the enums module
         """
         code = [
-            '"""',
-            "Decorator Enum Definitions",
+            '"""Decorator Enum Definitions.',
             "",
             "This module provides enum types used by decorators.",
             '"""',
             "",
-            "from enum import Enum",
+            "from enum import Enum, auto",
+            "from typing import Dict, List, Optional, Union, Any",
             "",
         ]
 
-        # Generate enums in alphabetical order
-        for enum_name in sorted(self.enum_definitions.keys()):
-            description, values = self.enum_definitions[enum_name]
+        # Make sure we collect enums before generating them
+        self._collect_enums()
+
+        # Add each enum class
+        for enum_name, (description, values) in self.enum_definitions.items():
+            code.append(f"class {enum_name}(Enum):")
+
+            # Add docstring for the enum class
+            code.append(f'    """{description}"""')
+            code.append("")
+
+            # Add enum values
+            for value in values:
+                # Ensure the value is a valid Python identifier
+                safe_value = value
+                if not safe_value.isidentifier():
+                    # Replace non-alphanumeric characters with underscores
+                    safe_value = "".join(c if c.isalnum() else "_" for c in safe_value)
+                    # Ensure it doesn't start with a digit
+                    if safe_value[0].isdigit():
+                        safe_value = f"_{safe_value}"
+                    logger.warning(
+                        f"Converted enum value '{value}' to '{safe_value}' to make it a valid identifier"
+                    )
+
+                code.append(f"    {safe_value} = auto()")
 
             code.append("")
-            code.append(f"class {enum_name}(str, Enum):")
-            code.append(f'    """{description}"""')
-
-            for value in values:
-                constant_name = self._convert_to_enum_constant(value)
-                code.append(f'    {constant_name} = "{value}"')
+            code.append("")
 
         return "\n".join(code)
 
@@ -874,10 +977,19 @@ class CodeGenerator:
 
                 if enum_values:
                     param_name = param["name"]
-                    enum_name = f"{name}{param_name.capitalize()}Enum"
+                    # Convert to snake_case first, then to CamelCase to handle camelCase properly
+                    param_name_snake = camel_to_snake(param_name)
+                    param_name_camel = snake_to_camel(param_name_snake)
+                    # Ensure decorator name is properly capitalized
+                    decorator_name = decorator['decoratorName']
+                    enum_name = f"{decorator_name}{param_name_camel}Enum"
                     description = param.get(
-                        "description", f"Options for {name}.{param_name}"
+                        "description", f"Options for {decorator_name}.{param_name}"
                     )
+
+                    # Ensure description ends with a period for D415 compliance
+                    if description and not description.endswith((".", "?", "!")):
+                        description = f"{description}."
 
                     self.enum_definitions[enum_name] = (description, enum_values)
 
@@ -908,7 +1020,12 @@ class CodeGenerator:
 
             if has_enum_values:
                 param_name = param["name"]
-                enum_name = f"{decorator['decoratorName']}{param_name.capitalize()}Enum"
+                # Convert to snake_case first, then to CamelCase to handle camelCase properly
+                param_name_snake = camel_to_snake(param_name)
+                param_name_camel = snake_to_camel(param_name_snake)
+                # Ensure decorator name is properly capitalized
+                decorator_name = decorator['decoratorName']
+                enum_name = f"{decorator_name}{param_name_camel}Enum"
                 if enum_name in self.enum_definitions:
                     enums.append(enum_name)
         return enums
@@ -1078,30 +1195,25 @@ class CodeGenerator:
         """Convert camelCase to snake_case."""
         return camel_to_snake(name)
 
-    def _convert_to_enum_constant(self, value: str) -> str:
-        """
-        Convert a string value to a valid Python enum constant.
+    def _convert_to_enum_constant(self, name: str) -> str:
+        """Convert a string to a valid Python enum constant.
 
         Args:
-            value: The string value to convert
+            name: The string to convert.
 
         Returns:
-            A valid Python enum constant
+            A valid Python enum constant.
         """
-        # Replace special characters with underscores
-        result = re.sub(r"[^a-zA-Z0-9]", "_", value)
-
-        # Convert to uppercase
-        result = result.upper()
-
-        # Ensure it doesn't start with a number
+        # Replace any non-alphanumeric characters with underscores
+        result = re.sub(r"[^a-zA-Z0-9]", "_", name)
+        
+        # If the name starts with a digit, prefix it with an underscore
         if result and result[0].isdigit():
-            result = f"VALUE_{result}"
-
-        # Handle empty string
-        if not result:
-            result = "EMPTY"
-
+            result = "_" + result
+        
+        # Ensure consistent capitalization for compound words
+        # This is important for names like "citationStyle" to become "CitationStyle"
+        # in enum class names like "AcademicCitationStyleEnum"
         return result
 
     def _get_decorator_file_name(self, decorator: DecoratorData) -> str:
@@ -1153,6 +1265,133 @@ class CodeGenerator:
         s = s.replace("\\\\|", "\\|")  # Pipe
 
         return s
+
+    def _generate_docstring(
+        self,
+        first_line: str,
+        sections: Dict[str, Union[str, List[str], Dict[str, str]]] = None,
+    ) -> str:
+        """Generate a properly formatted docstring.
+
+        Args:
+            first_line: The first line of the docstring
+            sections: Dictionary of section names to content (string, list of strings, or dict of attribute descriptions)
+
+        Returns:
+            A formatted docstring as a string
+        """
+        # Ensure first line ends with a period for D415 compliance
+        if first_line and not first_line.rstrip().endswith((".", "!", "?")):
+            first_line = first_line.rstrip() + "."
+
+        docstring = [f'"""{first_line}']
+
+        if sections:
+            # Always add blank line after first line for D205 compliance
+            docstring.append("")
+
+            first_section = True
+            for section_name, content in sections.items():
+                # Add blank line before section for D411 compliance (except for first section after description)
+                if not first_section:
+                    docstring.append("")
+                first_section = False
+
+                docstring.append(f"{section_name}:")
+
+                if isinstance(content, dict):
+                    # Content is a dictionary of attributes
+                    for attr_name, attr_desc in content.items():
+                        docstring.append(f"    {attr_name}: {attr_desc}")
+                elif isinstance(content, list):
+                    # Content is a list of lines
+                    for line in content:
+                        docstring.append(f"    {line}")
+                else:
+                    # Content is a string
+                    docstring.append(f"    {content}")
+
+                # Add blank line after section for D410 compliance
+                docstring.append("")
+
+        # Add closing quotes
+        docstring.append('"""')
+
+        # Join all lines with newlines
+        return "\n".join(docstring)
+
+    def _generate_module_docstring(self, name: str, description: str) -> str:
+        """Generate a module docstring.
+
+        Args:
+            name: The name of the module
+            description: The description of the module
+
+        Returns:
+            A formatted module docstring
+        """
+        lines = []
+
+        # Remove blank line at the beginning for D212 compliance
+        lines.append(f'"""{description}"""')
+
+        return "\n".join(lines)
+
+    def _generate_decorator_class(self, decorator: Dict) -> List[str]:
+        """Generate the decorator class definition.
+
+        Args:
+            decorator: The decorator data
+
+        Returns:
+            List of code lines for the class definition
+        """
+        name = decorator["decoratorName"]
+        description = decorator.get("description", "")
+        version = decorator.get("version", "1.0.0")  # Default version
+        params = decorator.get("parameters", [])
+
+        # Class definition
+        code = [
+            f"class {name}(BaseDecorator):",
+            f'    """{description}',
+            "",
+            "    Attributes:",
+        ]
+
+        # Add attribute documentation for each parameter
+        for param in params:
+            param_name = param["name"]
+            param_desc = param.get("description", "")
+            param_type = self._get_python_type(param, decorator)
+            code.append(f"        {param_name}: {param_desc} ({param_type})")
+
+        code.append('    """')
+        code.append("")
+
+        # Add class-level name attribute to match decorator_name
+        code.append(f'    name = "{self._convert_to_snake_case(name)}"')
+        code.append(f'    decorator_name = "{self._convert_to_snake_case(name)}"')
+        code.append(f'    version = "{version}"  # Initial version')
+        code.append("")
+
+        # Add name property
+        code.extend(
+            [
+                "    @property",
+                "    def name(self) -> str:",
+                '        """Get the name of the decorator.',
+                "",
+                "        Returns:",
+                "            The name of the decorator",
+                "",
+                '        """',
+                "        return self.decorator_name",
+                "",
+            ]
+        )
+
+        return code
 
 
 def generate_code(

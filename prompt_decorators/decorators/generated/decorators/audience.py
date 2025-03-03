@@ -1,5 +1,4 @@
-"""
-Implementation of the Audience decorator.
+"""Implementation of the Audience decorator.
 
 This module provides the Audience decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import AudienceLeve
 
 
 class Audience(BaseDecorator):
-    """
-    Adapts the response for a specific audience expertise level. This
-    decorator ensures content is appropriately tailored to the knowledge,
-    vocabulary, and needs of different audience types, from beginners to
-    technical experts.
+    """Adapts the response for a specific audience expertise level. This decorator ensures content is appropriately tailored to the knowledge, vocabulary, and needs of different audience types, from beginners to technical experts.
 
     Attributes:
-        level: The expertise level of the target audience
-        domain: Specific knowledge domain or field for domain-specific terminology adaptation
-        examples: Whether to include additional examples for clarity
+        level: The expertise level of the target audience. (Literal["beginner", "intermediate", "expert", "technical"])
+        domain: Specific knowledge domain or field for domain-specific terminology adaptation. (str)
+        examples: Whether to include additional examples for clarity. (bool)
     """
 
     decorator_name = "audience"
@@ -32,11 +27,11 @@ class Audience(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -48,17 +43,13 @@ class Audience(BaseDecorator):
         domain: str = "general",
         examples: bool = True,
     ) -> None:
-        """
-        Initialize the Audience decorator.
+        """Initialize the Audience decorator.
 
         Args:
             level: The expertise level of the target audience
-            domain: Specific knowledge domain or field for domain-specific
-                terminology adaptation
+            domain: Specific knowledge domain or field for domain-specific terminology adaptation
             examples: Whether to include additional examples for clarity
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -69,6 +60,14 @@ class Audience(BaseDecorator):
         self._examples = examples
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._level = level
+        self._domain = domain
+        self._examples = examples
+
         # Validate parameters
         if self._level is not None:
             if not isinstance(self._level, str):
@@ -92,8 +91,7 @@ class Audience(BaseDecorator):
 
     @property
     def level(self) -> Literal["beginner", "intermediate", "expert", "technical"]:
-        """
-        Get the level parameter value.
+        """Get the level parameter value.
 
         Args:
             self: The decorator instance
@@ -105,8 +103,7 @@ class Audience(BaseDecorator):
 
     @property
     def domain(self) -> str:
-        """
-        Get the domain parameter value.
+        """Get the domain parameter value.
 
         Args:
             self: The decorator instance
@@ -118,8 +115,7 @@ class Audience(BaseDecorator):
 
     @property
     def examples(self) -> bool:
-        """
-        Get the examples parameter value.
+        """Get the examples parameter value.
 
         Args:
             self: The decorator instance
@@ -130,8 +126,7 @@ class Audience(BaseDecorator):
         return self._examples
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -146,8 +141,7 @@ class Audience(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -166,32 +160,34 @@ class Audience(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -209,11 +205,11 @@ class Audience(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

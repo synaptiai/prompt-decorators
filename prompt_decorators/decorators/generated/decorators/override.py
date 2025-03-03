@@ -1,5 +1,4 @@
-"""
-Implementation of the Override decorator.
+"""Implementation of the Override decorator.
 
 This module provides the Override decorator class for use in prompt engineering.
 
@@ -14,16 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Override(BaseDecorator):
-    """
-    A meta-decorator that overrides the default parameters or behaviors of
-    other decorators. This enables customization of standard decorators
-    without modifying their definitions, allowing for reuse of established
-    patterns with specific adjustments.
+    """A meta-decorator that overrides the default parameters or behaviors of other decorators. This enables customization of standard decorators without modifying their definitions, allowing for reuse of established patterns with specific adjustments.
 
     Attributes:
-        decorator: The specific decorator whose behavior to override
-        parameters: JSON string specifying the parameters to override (e.g., '{"depth": "comprehensive", "focus": "methodology"}')
-        behavior: Optional custom behavior modification instructions that override the standard decorator interpretation
+        decorator: The specific decorator whose behavior to override. (str)
+        parameters: JSON string specifying the parameters to override (e.g., '{"depth": "comprehensive", "focus": "methodology"}'). (str)
+        behavior: Optional custom behavior modification instructions that override the standard decorator interpretation. (str)
     """
 
     decorator_name = "override"
@@ -31,11 +26,11 @@ class Override(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,18 +40,13 @@ class Override(BaseDecorator):
         parameters: str = None,
         behavior: str = None,
     ) -> None:
-        """
-        Initialize the Override decorator.
+        """Initialize the Override decorator.
 
         Args:
             decorator: The specific decorator whose behavior to override
-            parameters: JSON string specifying the parameters to override (e.g.,
-                '{"depth": "comprehensive", "focus": "methodology"}')
-            behavior: Optional custom behavior modification instructions that
-                override the standard decorator interpretation
+            parameters: JSON string specifying the parameters to override (e.g., '{"depth": "comprehensive", "focus": "methodology"}')
+            behavior: Optional custom behavior modification instructions that override the standard decorator interpretation
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -64,9 +54,21 @@ class Override(BaseDecorator):
         # Store parameters
         self._decorator = decorator
         self._parameters = parameters
+        # Add an alias for the 'parameters' parameter to avoid conflicts
+        self._params = self._parameters
         self._behavior = behavior
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._decorator = decorator
+        self._parameters = parameters
+        # Add an alias for the 'parameters' parameter to avoid conflicts
+        self._params = self._parameters
+        self._behavior = behavior
+
         # Validate parameters
         if self._decorator is not None:
             if not isinstance(self._decorator, str):
@@ -86,8 +88,7 @@ class Override(BaseDecorator):
 
     @property
     def decorator(self) -> str:
-        """
-        Get the decorator parameter value.
+        """Get the decorator parameter value.
 
         Args:
             self: The decorator instance
@@ -99,8 +100,7 @@ class Override(BaseDecorator):
 
     @property
     def params(self) -> str:
-        """
-        Get the parameters parameter value.
+        """Get the parameters parameter value.
 
         Args:
             self: The decorator instance
@@ -112,8 +112,7 @@ class Override(BaseDecorator):
 
     @property
     def behavior(self) -> str:
-        """
-        Get the behavior parameter value.
+        """Get the behavior parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +123,7 @@ class Override(BaseDecorator):
         return self._behavior
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -140,8 +138,7 @@ class Override(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -160,32 +157,34 @@ class Override(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -203,11 +202,11 @@ class Override(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

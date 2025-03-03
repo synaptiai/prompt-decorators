@@ -1,5 +1,4 @@
-"""
-Implementation of the Persona decorator.
+"""Implementation of the Persona decorator.
 
 This module provides the Persona decorator class for use in prompt engineering.
 
@@ -14,15 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Persona(BaseDecorator):
-    """
-    Adapts the response to reflect the perspective and concerns of a
-    specific persona. This decorator helps explore how different
-    stakeholders or personality types would view a situation or topic.
+    """Adapts the response to reflect the perspective and concerns of a specific persona. This decorator helps explore how different stakeholders or personality types would view a situation or topic.
 
     Attributes:
-        role: The specific persona or stakeholder role to adopt
-        traits: Key personality traits or characteristics of the persona
-        goals: Primary goals or concerns of the persona
+        role: The specific persona or stakeholder role to adopt. (str)
+        traits: Key personality traits or characteristics of the persona. (List[Any])
+        goals: Primary goals or concerns of the persona. (List[Any])
     """
 
     decorator_name = "persona"
@@ -30,11 +26,11 @@ class Persona(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -44,16 +40,13 @@ class Persona(BaseDecorator):
         traits: List[Any] = None,
         goals: List[Any] = None,
     ) -> None:
-        """
-        Initialize the Persona decorator.
+        """Initialize the Persona decorator.
 
         Args:
             role: The specific persona or stakeholder role to adopt
             traits: Key personality traits or characteristics of the persona
             goals: Primary goals or concerns of the persona
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -64,6 +57,14 @@ class Persona(BaseDecorator):
         self._goals = goals
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._role = role
+        self._traits = traits
+        self._goals = goals
+
         # Validate parameters
         if self._role is not None:
             if not isinstance(self._role, str):
@@ -83,8 +84,7 @@ class Persona(BaseDecorator):
 
     @property
     def role(self) -> str:
-        """
-        Get the role parameter value.
+        """Get the role parameter value.
 
         Args:
             self: The decorator instance
@@ -96,8 +96,7 @@ class Persona(BaseDecorator):
 
     @property
     def traits(self) -> List[Any]:
-        """
-        Get the traits parameter value.
+        """Get the traits parameter value.
 
         Args:
             self: The decorator instance
@@ -109,8 +108,7 @@ class Persona(BaseDecorator):
 
     @property
     def goals(self) -> List[Any]:
-        """
-        Get the goals parameter value.
+        """Get the goals parameter value.
 
         Args:
             self: The decorator instance
@@ -121,8 +119,7 @@ class Persona(BaseDecorator):
         return self._goals
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -137,8 +134,7 @@ class Persona(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -157,32 +153,34 @@ class Persona(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -200,11 +198,11 @@ class Persona(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

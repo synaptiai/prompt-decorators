@@ -1,5 +1,4 @@
-"""
-Implementation of the Version decorator.
+"""Implementation of the Version decorator.
 
 This module provides the Version decorator class for use in prompt engineering.
 
@@ -14,14 +13,10 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Version(BaseDecorator):
-    """
-    Specifies the version of the Prompt Decorators standard to use. This
-    decorator must be the first in any sequence when used, ensuring proper
-    interpretation of decorators according to the specified standard
-    version.
+    """Specifies the version of the Prompt Decorators standard to use. This decorator must be the first in any sequence when used, ensuring proper interpretation of decorators according to the specified standard version.
 
     Attributes:
-        standard: The semantic version of the Prompt Decorators standard to use
+        standard: The semantic version of the Prompt Decorators standard to use. (str)
     """
 
     decorator_name = "version"
@@ -29,11 +24,11 @@ class Version(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -41,15 +36,11 @@ class Version(BaseDecorator):
         self,
         standard: str,
     ) -> None:
-        """
-        Initialize the Version decorator.
+        """Initialize the Version decorator.
 
         Args:
-            standard: The semantic version of the Prompt Decorators standard to
-                use
+            standard: The semantic version of the Prompt Decorators standard to use
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -58,6 +49,12 @@ class Version(BaseDecorator):
         self._standard = standard
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._standard = standard
+
         # Validate parameters
         if self._standard is not None:
             if not isinstance(self._standard, str):
@@ -67,8 +64,7 @@ class Version(BaseDecorator):
 
     @property
     def standard(self) -> str:
-        """
-        Get the standard parameter value.
+        """Get the standard parameter value.
 
         Args:
             self: The decorator instance
@@ -79,8 +75,7 @@ class Version(BaseDecorator):
         return self._standard
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -93,8 +88,7 @@ class Version(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -109,32 +103,34 @@ class Version(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -152,11 +148,11 @@ class Version(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

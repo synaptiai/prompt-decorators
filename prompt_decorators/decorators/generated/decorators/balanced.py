@@ -1,5 +1,4 @@
-"""
-Implementation of the Balanced decorator.
+"""Implementation of the Balanced decorator.
 
 This module provides the Balanced decorator class for use in prompt engineering.
 
@@ -17,16 +16,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Balanced(BaseDecorator):
-    """
-    Ensures equal representation of different perspectives or viewpoints
-    on a topic. This decorator promotes fairness and comprehensiveness by
-    giving proportional attention to multiple sides of an issue, avoiding
-    bias toward any particular position.
+    """Ensures equal representation of different perspectives or viewpoints on a topic. This decorator promotes fairness and comprehensiveness by giving proportional attention to multiple sides of an issue, avoiding bias toward any particular position.
 
     Attributes:
-        perspectives: Number of different perspectives to include
-        structure: How to structure the different perspectives
-        equal: Whether to strictly enforce equal word count for each perspective
+        perspectives: Number of different perspectives to include. (Any)
+        structure: How to structure the different perspectives. (Literal["alternating", "sequential", "comparative"])
+        equal: Whether to strictly enforce equal word count for each perspective. (bool)
     """
 
     decorator_name = "balanced"
@@ -34,11 +29,11 @@ class Balanced(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -48,17 +43,13 @@ class Balanced(BaseDecorator):
         structure: Literal["alternating", "sequential", "comparative"] = "sequential",
         equal: bool = True,
     ) -> None:
-        """
-        Initialize the Balanced decorator.
+        """Initialize the Balanced decorator.
 
         Args:
             perspectives: Number of different perspectives to include
             structure: How to structure the different perspectives
-            equal: Whether to strictly enforce equal word count for each
-                perspective
+            equal: Whether to strictly enforce equal word count for each perspective
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -69,6 +60,14 @@ class Balanced(BaseDecorator):
         self._equal = equal
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._perspectives = perspectives
+        self._structure = structure
+        self._equal = equal
+
         # Validate parameters
         if self._perspectives is not None:
             if not isinstance(self._perspectives, (int, float)):
@@ -100,8 +99,7 @@ class Balanced(BaseDecorator):
 
     @property
     def perspectives(self) -> Any:
-        """
-        Get the perspectives parameter value.
+        """Get the perspectives parameter value.
 
         Args:
             self: The decorator instance
@@ -113,8 +111,7 @@ class Balanced(BaseDecorator):
 
     @property
     def structure(self) -> Literal["alternating", "sequential", "comparative"]:
-        """
-        Get the structure parameter value.
+        """Get the structure parameter value.
 
         Args:
             self: The decorator instance
@@ -126,8 +123,7 @@ class Balanced(BaseDecorator):
 
     @property
     def equal(self) -> bool:
-        """
-        Get the equal parameter value.
+        """Get the equal parameter value.
 
         Args:
             self: The decorator instance
@@ -138,8 +134,7 @@ class Balanced(BaseDecorator):
         return self._equal
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -154,8 +149,7 @@ class Balanced(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -174,32 +168,34 @@ class Balanced(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -217,11 +213,11 @@ class Balanced(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

@@ -1,5 +1,4 @@
-"""
-Implementation of the Conditional decorator.
+"""Implementation of the Conditional decorator.
 
 This module provides the Conditional decorator class for use in prompt engineering.
 
@@ -14,16 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Conditional(BaseDecorator):
-    """
-    A meta-decorator that applies different decorators based on specified
-    conditions. This enables dynamic behavior where the response
-    formatting and approach changes depending on the content, context, or
-    user-specified parameters.
+    """A meta-decorator that applies different decorators based on specified conditions. This enables dynamic behavior where the response formatting and approach changes depending on the content, context, or user-specified parameters.
 
     Attributes:
-        if_param: The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}')
-        then: The decorator to apply if the condition is true (can be a specific decorator with parameters)
-        else_param: The decorator to apply if the condition is false (can be a specific decorator with parameters)
+        if_param: The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}'). (str)
+        then: The decorator to apply if the condition is true (can be a specific decorator with parameters). (str)
+        else_param: The decorator to apply if the condition is false (can be a specific decorator with parameters). (str)
     """
 
     decorator_name = "conditional"
@@ -31,11 +26,11 @@ class Conditional(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,19 +40,13 @@ class Conditional(BaseDecorator):
         then: str,
         else_param: str = None,
     ) -> None:
-        """
-        Initialize the Conditional decorator.
+        """Initialize the Conditional decorator.
 
         Args:
-            if_param: The condition to evaluate (e.g., 'technical', 'complex',
-                'controversial', or a parameter like '{param}')
-            then: The decorator to apply if the condition is true (can be a
-                specific decorator with parameters)
-            else_param: The decorator to apply if the condition is false (can be a
-                specific decorator with parameters)
+            if_param: The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}')
+            then: The decorator to apply if the condition is true (can be a specific decorator with parameters)
+            else_param: The decorator to apply if the condition is false (can be a specific decorator with parameters)
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -68,6 +57,14 @@ class Conditional(BaseDecorator):
         self._else_param = else_param
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._if_param = if_param
+        self._then = then
+        self._else_param = else_param
+
         # Validate parameters
         if self._if_param is not None:
             if not isinstance(self._if_param, str):
@@ -87,8 +84,7 @@ class Conditional(BaseDecorator):
 
     @property
     def if_param(self) -> str:
-        """
-        Get the if_param parameter value.
+        """Get the if_param parameter value.
 
         Args:
             self: The decorator instance
@@ -100,8 +96,7 @@ class Conditional(BaseDecorator):
 
     @property
     def then(self) -> str:
-        """
-        Get the then parameter value.
+        """Get the then parameter value.
 
         Args:
             self: The decorator instance
@@ -113,8 +108,7 @@ class Conditional(BaseDecorator):
 
     @property
     def else_param(self) -> str:
-        """
-        Get the else_param parameter value.
+        """Get the else_param parameter value.
 
         Args:
             self: The decorator instance
@@ -125,8 +119,7 @@ class Conditional(BaseDecorator):
         return self._else_param
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -141,8 +134,7 @@ class Conditional(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -161,32 +153,34 @@ class Conditional(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -204,11 +198,11 @@ class Conditional(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

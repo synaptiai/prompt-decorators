@@ -1,0 +1,73 @@
+name: Documentation Verification
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'prompt_decorators/**'
+      - 'registry/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/documentation.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/**'
+      - 'prompt_decorators/**'
+      - 'registry/**'
+      - 'mkdocs.yml'
+      - '.github/workflows/documentation.yml'
+  workflow_dispatch:
+
+jobs:
+  verify-documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+          pip install mkdocs mkdocs-material mkdocs-awesome-pages-plugin mkdocstrings interrogate pydocstyle
+
+      - name: Verify documentation
+        run: |
+          python scripts/verify_documentation.py
+
+      - name: Build documentation
+        run: |
+          mkdocs build --strict
+
+      - name: Deploy documentation preview
+        if: github.event_name == 'pull_request'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          destination_dir: pr-preview/${{ github.event.pull_request.number }}
+
+      - name: Comment on PR with preview link
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const repoName = context.repo.repo;
+            const ownerName = context.repo.owner;
+
+            const previewUrl = `https://${ownerName}.github.io/${repoName}/pr-preview/${prNumber}/`;
+
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: ownerName,
+              repo: repoName,
+              body: `📚 Documentation preview is available at: [${previewUrl}](${previewUrl})`
+            });

@@ -1,5 +1,4 @@
-"""
-Implementation of the FirstPrinciples decorator.
+"""Implementation of the FirstPrinciples decorator.
 
 This module provides the FirstPrinciples decorator class for use in prompt engineering.
 
@@ -14,14 +13,10 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class FirstPrinciples(BaseDecorator):
-    """
-    Structures the response by breaking down complex topics into their
-    fundamental truths or axioms, then building up from there. This
-    decorator promotes a deeper understanding by examining the most basic
-    elements of a concept before constructing more complex ideas.
+    """Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there. This decorator promotes a deeper understanding by examining the most basic elements of a concept before constructing more complex ideas.
 
     Attributes:
-        depth: Level of detail in breaking down to fundamental principles
+        depth: Level of detail in breaking down to fundamental principles. (Any)
     """
 
     decorator_name = "first_principles"
@@ -29,11 +24,11 @@ class FirstPrinciples(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -41,14 +36,11 @@ class FirstPrinciples(BaseDecorator):
         self,
         depth: Any = 3,
     ) -> None:
-        """
-        Initialize the FirstPrinciples decorator.
+        """Initialize the FirstPrinciples decorator.
 
         Args:
             depth: Level of detail in breaking down to fundamental principles
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -57,6 +49,12 @@ class FirstPrinciples(BaseDecorator):
         self._depth = depth
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+
         # Validate parameters
         if self._depth is not None:
             if not isinstance(self._depth, (int, float)):
@@ -74,8 +72,7 @@ class FirstPrinciples(BaseDecorator):
 
     @property
     def depth(self) -> Any:
-        """
-        Get the depth parameter value.
+        """Get the depth parameter value.
 
         Args:
             self: The decorator instance
@@ -86,8 +83,7 @@ class FirstPrinciples(BaseDecorator):
         return self._depth
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -100,8 +96,7 @@ class FirstPrinciples(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -116,32 +111,34 @@ class FirstPrinciples(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -159,11 +156,11 @@ class FirstPrinciples(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

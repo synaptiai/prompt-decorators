@@ -1,5 +1,4 @@
-"""
-Implementation of the Deductive decorator.
+"""Implementation of the Deductive decorator.
 
 This module provides the Deductive decorator class for use in prompt engineering.
 
@@ -14,16 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Deductive(BaseDecorator):
-    """
-    Structures the response using deductive reasoning, moving from general
-    principles to specific conclusions. This decorator emphasizes logical
-    argument development, starting with premises and working methodically
-    to necessary conclusions.
+    """Structures the response using deductive reasoning, moving from general principles to specific conclusions. This decorator emphasizes logical argument development, starting with premises and working methodically to necessary conclusions.
 
     Attributes:
-        premises: Number of main premises to include before deducing conclusions
-        formal: Whether to use formal logical structures with explicit syllogisms
-        steps: Number of logical steps to include in the deductive process
+        premises: Number of main premises to include before deducing conclusions. (Any)
+        formal: Whether to use formal logical structures with explicit syllogisms. (bool)
+        steps: Number of logical steps to include in the deductive process. (Any)
     """
 
     decorator_name = "deductive"
@@ -31,11 +26,11 @@ class Deductive(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,18 +40,13 @@ class Deductive(BaseDecorator):
         formal: bool = False,
         steps: Any = 3,
     ) -> None:
-        """
-        Initialize the Deductive decorator.
+        """Initialize the Deductive decorator.
 
         Args:
-            premises: Number of main premises to include before deducing
-                conclusions
-            formal: Whether to use formal logical structures with explicit
-                syllogisms
+            premises: Number of main premises to include before deducing conclusions
+            formal: Whether to use formal logical structures with explicit syllogisms
             steps: Number of logical steps to include in the deductive process
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -67,6 +57,14 @@ class Deductive(BaseDecorator):
         self._steps = steps
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._premises = premises
+        self._formal = formal
+        self._steps = steps
+
         # Validate parameters
         if self._premises is not None:
             if not isinstance(self._premises, (int, float)):
@@ -102,8 +100,7 @@ class Deductive(BaseDecorator):
 
     @property
     def premises(self) -> Any:
-        """
-        Get the premises parameter value.
+        """Get the premises parameter value.
 
         Args:
             self: The decorator instance
@@ -115,8 +112,7 @@ class Deductive(BaseDecorator):
 
     @property
     def formal(self) -> bool:
-        """
-        Get the formal parameter value.
+        """Get the formal parameter value.
 
         Args:
             self: The decorator instance
@@ -128,8 +124,7 @@ class Deductive(BaseDecorator):
 
     @property
     def steps(self) -> Any:
-        """
-        Get the steps parameter value.
+        """Get the steps parameter value.
 
         Args:
             self: The decorator instance
@@ -140,8 +135,7 @@ class Deductive(BaseDecorator):
         return self._steps
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -156,8 +150,7 @@ class Deductive(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -176,32 +169,34 @@ class Deductive(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -219,11 +214,11 @@ class Deductive(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

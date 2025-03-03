@@ -1,5 +1,4 @@
-"""
-Implementation of the FactCheck decorator.
+"""Implementation of the FactCheck decorator.
 
 This module provides the FactCheck decorator class for use in prompt engineering.
 
@@ -18,16 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class FactCheck(BaseDecorator):
-    """
-    Enhances the response with verification of factual claims and explicit
-    indication of confidence levels. This decorator promotes accuracy by
-    distinguishing between well-established facts, likely facts, and
-    uncertain or speculative information.
+    """Enhances the response with verification of factual claims and explicit indication of confidence levels. This decorator promotes accuracy by distinguishing between well-established facts, likely facts, and uncertain or speculative information.
 
     Attributes:
-        confidence: Whether to include explicit confidence levels for claims
-        uncertain: How to handle uncertain information
-        strictness: The threshold for considering information verified
+        confidence: Whether to include explicit confidence levels for claims. (bool)
+        uncertain: How to handle uncertain information. (Literal["mark", "exclude", "qualify"])
+        strictness: The threshold for considering information verified. (Literal["low", "moderate", "high"])
     """
 
     decorator_name = "fact_check"
@@ -35,11 +30,11 @@ class FactCheck(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -49,16 +44,13 @@ class FactCheck(BaseDecorator):
         uncertain: Literal["mark", "exclude", "qualify"] = "mark",
         strictness: Literal["low", "moderate", "high"] = "moderate",
     ) -> None:
-        """
-        Initialize the FactCheck decorator.
+        """Initialize the FactCheck decorator.
 
         Args:
             confidence: Whether to include explicit confidence levels for claims
             uncertain: How to handle uncertain information
             strictness: The threshold for considering information verified
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -69,6 +61,14 @@ class FactCheck(BaseDecorator):
         self._strictness = strictness
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._confidence = confidence
+        self._uncertain = uncertain
+        self._strictness = strictness
+
         # Validate parameters
         if self._confidence is not None:
             if not isinstance(self._confidence, bool):
@@ -96,8 +96,7 @@ class FactCheck(BaseDecorator):
 
     @property
     def confidence(self) -> bool:
-        """
-        Get the confidence parameter value.
+        """Get the confidence parameter value.
 
         Args:
             self: The decorator instance
@@ -109,8 +108,7 @@ class FactCheck(BaseDecorator):
 
     @property
     def uncertain(self) -> Literal["mark", "exclude", "qualify"]:
-        """
-        Get the uncertain parameter value.
+        """Get the uncertain parameter value.
 
         Args:
             self: The decorator instance
@@ -122,8 +120,7 @@ class FactCheck(BaseDecorator):
 
     @property
     def strictness(self) -> Literal["low", "moderate", "high"]:
-        """
-        Get the strictness parameter value.
+        """Get the strictness parameter value.
 
         Args:
             self: The decorator instance
@@ -134,8 +131,7 @@ class FactCheck(BaseDecorator):
         return self._strictness
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -150,8 +146,7 @@ class FactCheck(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -170,32 +165,34 @@ class FactCheck(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -213,11 +210,11 @@ class FactCheck(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

@@ -1,5 +1,4 @@
-"""
-Implementation of the TableFormat decorator.
+"""Implementation of the TableFormat decorator.
 
 This module provides the TableFormat decorator class for use in prompt engineering.
 
@@ -18,16 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class TableFormat(BaseDecorator):
-    """
-    Structures the AI's response in a tabular format with defined columns.
-    This decorator is ideal for presenting comparative data, lists of
-    items with attributes, or any information that benefits from clear
-    columnar organization.
+    """Structures the AI's response in a tabular format with defined columns. This decorator is ideal for presenting comparative data, lists of items with attributes, or any information that benefits from clear columnar organization.
 
     Attributes:
-        columns: List of column names for the table
-        format: Format style for the table representation
-        alignment: Text alignment within table cells
+        columns: List of column names for the table. (List[Any])
+        format: Format style for the table representation. (Literal["markdown", "ascii", "csv"])
+        alignment: Text alignment within table cells. (Literal["left", "center", "right"])
     """
 
     decorator_name = "table_format"
@@ -35,11 +30,11 @@ class TableFormat(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -49,16 +44,13 @@ class TableFormat(BaseDecorator):
         format: Literal["markdown", "ascii", "csv"] = "markdown",
         alignment: Literal["left", "center", "right"] = "left",
     ) -> None:
-        """
-        Initialize the TableFormat decorator.
+        """Initialize the TableFormat decorator.
 
         Args:
             columns: List of column names for the table
             format: Format style for the table representation
             alignment: Text alignment within table cells
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -69,6 +61,14 @@ class TableFormat(BaseDecorator):
         self._alignment = alignment
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._columns = columns
+        self._format = format
+        self._alignment = alignment
+
         # Validate parameters
         if self._columns is not None:
             if not isinstance(self._columns, list):
@@ -96,8 +96,7 @@ class TableFormat(BaseDecorator):
 
     @property
     def columns(self) -> List[Any]:
-        """
-        Get the columns parameter value.
+        """Get the columns parameter value.
 
         Args:
             self: The decorator instance
@@ -109,8 +108,7 @@ class TableFormat(BaseDecorator):
 
     @property
     def format(self) -> Literal["markdown", "ascii", "csv"]:
-        """
-        Get the format parameter value.
+        """Get the format parameter value.
 
         Args:
             self: The decorator instance
@@ -122,8 +120,7 @@ class TableFormat(BaseDecorator):
 
     @property
     def alignment(self) -> Literal["left", "center", "right"]:
-        """
-        Get the alignment parameter value.
+        """Get the alignment parameter value.
 
         Args:
             self: The decorator instance
@@ -134,8 +131,7 @@ class TableFormat(BaseDecorator):
         return self._alignment
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -150,8 +146,7 @@ class TableFormat(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -170,32 +165,34 @@ class TableFormat(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -213,11 +210,11 @@ class TableFormat(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

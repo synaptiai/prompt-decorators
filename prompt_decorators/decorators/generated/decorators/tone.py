@@ -1,5 +1,4 @@
-"""
-Implementation of the Tone decorator.
+"""Implementation of the Tone decorator.
 
 This module provides the Tone decorator class for use in prompt engineering.
 
@@ -15,14 +14,10 @@ from prompt_decorators.decorators.generated.decorators.enums import ToneStyleEnu
 
 
 class Tone(BaseDecorator):
-    """
-    Adjusts the writing style and tone of the AI's response. This
-    decorator helps ensure that responses are appropriately styled for
-    different audiences and contexts, from formal technical documentation
-    to casual explanations.
+    """Adjusts the writing style and tone of the AI's response. This decorator helps ensure that responses are appropriately styled for different audiences and contexts, from formal technical documentation to casual explanations.
 
     Attributes:
-        style: The desired tone and style for the response
+        style: The desired tone and style for the response. (Literal["formal", "casual", "friendly", "technical", "humorous"])
     """
 
     decorator_name = "tone"
@@ -30,11 +25,11 @@ class Tone(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -42,14 +37,11 @@ class Tone(BaseDecorator):
         self,
         style: Literal["formal", "casual", "friendly", "technical", "humorous"],
     ) -> None:
-        """
-        Initialize the Tone decorator.
+        """Initialize the Tone decorator.
 
         Args:
             style: The desired tone and style for the response
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -58,6 +50,12 @@ class Tone(BaseDecorator):
         self._style = style
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._style = style
+
         # Validate parameters
         if self._style is not None:
             if not isinstance(self._style, str):
@@ -77,8 +75,7 @@ class Tone(BaseDecorator):
 
     @property
     def style(self) -> Literal["formal", "casual", "friendly", "technical", "humorous"]:
-        """
-        Get the style parameter value.
+        """Get the style parameter value.
 
         Args:
             self: The decorator instance
@@ -89,8 +86,7 @@ class Tone(BaseDecorator):
         return self._style
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -103,8 +99,7 @@ class Tone(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -119,32 +114,34 @@ class Tone(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -162,11 +159,11 @@ class Tone(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

@@ -1,5 +1,4 @@
-"""
-Implementation of the Inductive decorator.
+"""Implementation of the Inductive decorator.
 
 This module provides the Inductive decorator class for use in prompt engineering.
 
@@ -17,16 +16,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Inductive(BaseDecorator):
-    """
-    Structures the response using inductive reasoning, moving from
-    specific observations to broader generalizations and theories. This
-    decorator emphasizes pattern recognition and the derivation of general
-    principles from particular instances.
+    """Structures the response using inductive reasoning, moving from specific observations to broader generalizations and theories. This decorator emphasizes pattern recognition and the derivation of general principles from particular instances.
 
     Attributes:
-        examples: Number of specific examples or observations to include before generalizing
-        confidence: Whether to explicitly state the confidence level of the inductive conclusions
-        structure: The pattern of inductive reasoning to follow
+        examples: Number of specific examples or observations to include before generalizing. (Any)
+        confidence: Whether to explicitly state the confidence level of the inductive conclusions. (bool)
+        structure: The pattern of inductive reasoning to follow. (Literal["generalization", "causal", "statistical", "analogical"])
     """
 
     decorator_name = "inductive"
@@ -34,11 +29,11 @@ class Inductive(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -50,18 +45,13 @@ class Inductive(BaseDecorator):
             "generalization", "causal", "statistical", "analogical"
         ] = "generalization",
     ) -> None:
-        """
-        Initialize the Inductive decorator.
+        """Initialize the Inductive decorator.
 
         Args:
-            examples: Number of specific examples or observations to include
-                before generalizing
-            confidence: Whether to explicitly state the confidence level of the
-                inductive conclusions
+            examples: Number of specific examples or observations to include before generalizing
+            confidence: Whether to explicitly state the confidence level of the inductive conclusions
             structure: The pattern of inductive reasoning to follow
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -72,6 +62,14 @@ class Inductive(BaseDecorator):
         self._structure = structure
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._examples = examples
+        self._confidence = confidence
+        self._structure = structure
+
         # Validate parameters
         if self._examples is not None:
             if not isinstance(self._examples, (int, float)):
@@ -108,8 +106,7 @@ class Inductive(BaseDecorator):
 
     @property
     def examples(self) -> Any:
-        """
-        Get the examples parameter value.
+        """Get the examples parameter value.
 
         Args:
             self: The decorator instance
@@ -121,8 +118,7 @@ class Inductive(BaseDecorator):
 
     @property
     def confidence(self) -> bool:
-        """
-        Get the confidence parameter value.
+        """Get the confidence parameter value.
 
         Args:
             self: The decorator instance
@@ -136,8 +132,7 @@ class Inductive(BaseDecorator):
     def structure(
         self,
     ) -> Literal["generalization", "causal", "statistical", "analogical"]:
-        """
-        Get the structure parameter value.
+        """Get the structure parameter value.
 
         Args:
             self: The decorator instance
@@ -148,8 +143,7 @@ class Inductive(BaseDecorator):
         return self._structure
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -164,8 +158,7 @@ class Inductive(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -184,32 +177,34 @@ class Inductive(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -227,11 +222,11 @@ class Inductive(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

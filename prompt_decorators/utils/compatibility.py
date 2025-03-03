@@ -2,7 +2,6 @@
 
 This module provides utilities for checking compatibility between decorators.
 """
-
 import logging
 from typing import Any, Dict, List, Optional, Set, Union
 
@@ -29,8 +28,7 @@ class CompatibilityIssue:
         decorator2: Union[str, BaseDecorator],
         severity: str = SEVERITY_WARNING,
     ):
-        """
-        Initialize a compatibility issue.
+        """Initialize a compatibility issue.
 
         Args:
             message: Description of the issue
@@ -48,8 +46,7 @@ class CompatibilityIssue:
         self.severity = severity
 
     def __str__(self) -> str:
-        """
-        Get string representation of the issue.
+        """Get string representation of the issue.
 
         Returns:
             String representation
@@ -69,8 +66,7 @@ class CompatibilityChecker:
         self._incompatible_pairs: Set[tuple] = set()
 
     def add_rule(self, decorator1: str, decorator2: str, rule: Dict[str, Any]) -> None:
-        """
-        Add a compatibility rule.
+        """Add a compatibility rule.
 
         Args:
             decorator1: Name of the first decorator
@@ -95,8 +91,7 @@ class CompatibilityChecker:
     def add_incompatible_pair(
         self, decorator1: str, decorator2: str, message: Optional[str] = None
     ) -> None:
-        """
-        Add a pair of incompatible decorators.
+        """Add a pair of incompatible decorators.
 
         Args:
             decorator1: Name of the first decorator
@@ -125,8 +120,7 @@ class CompatibilityChecker:
         decorator1: Union[str, BaseDecorator],
         decorator2: Union[str, BaseDecorator],
     ) -> List[CompatibilityIssue]:
-        """
-        Check compatibility between two decorators.
+        """Check compatibility between two decorators.
 
         Args:
             decorator1: First decorator
@@ -180,8 +174,7 @@ class CompatibilityChecker:
     def check_compatibility_group(
         self, decorators: List[Union[str, BaseDecorator]]
     ) -> List[CompatibilityIssue]:
-        """
-        Check compatibility among a group of decorators.
+        """Check compatibility among a group of decorators.
 
         Args:
             decorators: List of decorators to check
@@ -205,8 +198,7 @@ compatibility_checker = CompatibilityChecker()
 
 # Convenience function to get the global compatibility checker
 def get_compatibility_checker() -> CompatibilityChecker:
-    """
-    Get the global compatibility checker.
+    """Get the global compatibility checker.
 
     Returns:
         The global compatibility checker instance

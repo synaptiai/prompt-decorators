@@ -2,7 +2,6 @@
 
 This module provides utilities for validating decorator parameters.
 """
-
 import re
 from enum import Enum
 from typing import Any, Dict, List, Optional, Pattern, Type, TypeVar, Union, cast
@@ -16,8 +15,7 @@ class Validator:
     """Base class for parameter validators."""
 
     def validate(self, decorator_name: str, param_name: str, value: Any) -> Any:
-        """
-        Validate a parameter value.
+        """Validate a parameter value.
 
         Args:
             decorator_name: Name of the decorator
@@ -37,8 +35,7 @@ class TypeValidator(Validator):
     """Validator for parameter types."""
 
     def __init__(self, expected_type: Type[T], allow_none: bool = False):
-        """
-        Initialize a type validator.
+        """Initialize a type validator.
 
         Args:
             expected_type: Expected type for the parameter
@@ -48,8 +45,7 @@ class TypeValidator(Validator):
         self.allow_none = allow_none
 
     def validate(self, decorator_name: str, param_name: str, value: Any) -> Optional[T]:
-        """
-        Validate a parameter value against the expected type.
+        """Validate a parameter value against the expected type.
 
         Args:
             decorator_name: Name of the decorator
@@ -61,8 +57,7 @@ class TypeValidator(Validator):
 
         Raises:
             ValidationError: If validation fails
-        """
-        # Handle None case
+        """  # Handle None case
         if value is None:
             if self.allow_none:
                 return None
@@ -113,8 +108,7 @@ class RangeValidator(Validator):
         maximum: Optional[Union[int, float]] = None,
         allow_none: bool = False,
     ):
-        """
-        Initialize a range validator.
+        """Initialize a range validator.
 
         Args:
             minimum: Optional minimum value (inclusive)
@@ -128,8 +122,7 @@ class RangeValidator(Validator):
     def validate(
         self, decorator_name: str, param_name: str, value: Any
     ) -> Optional[Union[int, float]]:
-        """
-        Validate a numeric parameter value against the range constraints.
+        """Validate a numeric parameter value against the range constraints.
 
         Args:
             decorator_name: Name of the decorator
@@ -179,8 +172,7 @@ class PatternValidator(Validator):
     """Validator for string patterns."""
 
     def __init__(self, pattern: Union[str, Pattern], allow_none: bool = False):
-        """
-        Initialize a pattern validator.
+        """Initialize a pattern validator.
 
         Args:
             pattern: Regex pattern to match
@@ -192,8 +184,7 @@ class PatternValidator(Validator):
     def validate(
         self, decorator_name: str, param_name: str, value: Any
     ) -> Optional[str]:
-        """
-        Validate a string parameter value against the pattern.
+        """Validate a string parameter value against the pattern.
 
         Args:
             decorator_name: Name of the decorator
@@ -205,8 +196,7 @@ class PatternValidator(Validator):
 
         Raises:
             ValidationError: If validation fails
-        """
-        # Handle None case
+        """  # Handle None case
         if value is None:
             if self.allow_none:
                 return None
@@ -237,8 +227,7 @@ class EnumValidator(Validator):
     """Validator for enum values."""
 
     def __init__(self, enum_class: Type[Enum], allow_none: bool = False):
-        """
-        Initialize an enum validator.
+        """Initialize an enum validator.
 
         Args:
             enum_class: Enum class to validate against
@@ -250,8 +239,7 @@ class EnumValidator(Validator):
     def validate(
         self, decorator_name: str, param_name: str, value: Any
     ) -> Optional[Enum]:
-        """
-        Validate an enum parameter value.
+        """Validate an enum parameter value.
 
         Args:
             decorator_name: Name of the decorator
@@ -263,8 +251,7 @@ class EnumValidator(Validator):
 
         Raises:
             ValidationError: If validation fails
-        """
-        # Handle None case
+        """  # Handle None case
         if value is None:
             if self.allow_none:
                 return None
@@ -313,8 +300,7 @@ class ListValidator(Validator):
         max_length: Optional[int] = None,
         allow_none: bool = False,
     ):
-        """
-        Initialize a list validator.
+        """Initialize a list validator.
 
         Args:
             item_validator: Optional validator for list items
@@ -330,8 +316,7 @@ class ListValidator(Validator):
     def validate(
         self, decorator_name: str, param_name: str, value: Any
     ) -> Optional[List[Any]]:
-        """
-        Validate a list parameter value.
+        """Validate a list parameter value.
 
         Args:
             decorator_name: Name of the decorator
@@ -343,8 +328,7 @@ class ListValidator(Validator):
 
         Raises:
             ValidationError: If validation fails
-        """
-        # Handle None case
+        """  # Handle None case
         if value is None:
             if self.allow_none:
                 return None
@@ -404,8 +388,7 @@ class DictValidator(Validator):
         allow_extra_keys: bool = True,
         allow_none: bool = False,
     ):
-        """
-        Initialize a dictionary validator.
+        """Initialize a dictionary validator.
 
         Args:
             key_validator: Optional validator for dictionary keys
@@ -423,8 +406,7 @@ class DictValidator(Validator):
     def validate(
         self, decorator_name: str, param_name: str, value: Any
     ) -> Optional[Dict[Any, Any]]:
-        """
-        Validate a dictionary parameter value.
+        """Validate a dictionary parameter value.
 
         Args:
             decorator_name: Name of the decorator
@@ -436,8 +418,7 @@ class DictValidator(Validator):
 
         Raises:
             ValidationError: If validation fails
-        """
-        # Handle None case
+        """  # Handle None case
         if value is None:
             if self.allow_none:
                 return None
@@ -508,8 +489,7 @@ class ValidationPipeline:
     """Pipeline for validating multiple parameters."""
 
     def __init__(self, validators: Dict[str, Validator]):
-        """
-        Initialize a validation pipeline.
+        """Initialize a validation pipeline.
 
         Args:
             validators: Dictionary mapping parameter names to validators
@@ -519,8 +499,7 @@ class ValidationPipeline:
     def validate(
         self, decorator_name: str, parameters: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """
-        Validate multiple parameters.
+        """Validate multiple parameters.
 
         Args:
             decorator_name: Name of the decorator

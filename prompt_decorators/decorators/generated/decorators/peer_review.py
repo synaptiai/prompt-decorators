@@ -1,5 +1,4 @@
-"""
-Implementation of the PeerReview decorator.
+"""Implementation of the PeerReview decorator.
 
 This module provides the PeerReview decorator class for use in prompt engineering.
 
@@ -19,16 +18,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class PeerReview(BaseDecorator):
-    """
-    Augments the response with a simulated peer review of the content.
-    This decorator enhances critical thinking by evaluating the response's
-    strengths, weaknesses, methodological soundness, and potential
-    improvements as an academic reviewer would.
+    """Augments the response with a simulated peer review of the content. This decorator enhances critical thinking by evaluating the response's strengths, weaknesses, methodological soundness, and potential improvements as an academic reviewer would.
 
     Attributes:
-        criteria: Primary criteria to focus on in the review
-        style: The tone and approach of the peer review
-        position: Where to place the peer review relative to the main content
+        criteria: Primary criteria to focus on in the review. (Literal["accuracy", "methodology", "limitations", "completeness", "all"])
+        style: The tone and approach of the peer review. (Literal["constructive", "critical", "balanced"])
+        position: Where to place the peer review relative to the main content. (Literal["after", "before", "alongside"])
     """
 
     decorator_name = "peer_review"
@@ -36,11 +31,11 @@ class PeerReview(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -52,16 +47,13 @@ class PeerReview(BaseDecorator):
         style: Literal["constructive", "critical", "balanced"] = "balanced",
         position: Literal["after", "before", "alongside"] = "after",
     ) -> None:
-        """
-        Initialize the PeerReview decorator.
+        """Initialize the PeerReview decorator.
 
         Args:
             criteria: Primary criteria to focus on in the review
             style: The tone and approach of the peer review
             position: Where to place the peer review relative to the main content
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -72,6 +64,14 @@ class PeerReview(BaseDecorator):
         self._position = position
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._criteria = criteria
+        self._style = style
+        self._position = position
+
         # Validate parameters
         if self._criteria is not None:
             if not isinstance(self._criteria, str):
@@ -111,8 +111,7 @@ class PeerReview(BaseDecorator):
     def criteria(
         self,
     ) -> Literal["accuracy", "methodology", "limitations", "completeness", "all"]:
-        """
-        Get the criteria parameter value.
+        """Get the criteria parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +123,7 @@ class PeerReview(BaseDecorator):
 
     @property
     def style(self) -> Literal["constructive", "critical", "balanced"]:
-        """
-        Get the style parameter value.
+        """Get the style parameter value.
 
         Args:
             self: The decorator instance
@@ -137,8 +135,7 @@ class PeerReview(BaseDecorator):
 
     @property
     def position(self) -> Literal["after", "before", "alongside"]:
-        """
-        Get the position parameter value.
+        """Get the position parameter value.
 
         Args:
             self: The decorator instance
@@ -149,8 +146,7 @@ class PeerReview(BaseDecorator):
         return self._position
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -165,8 +161,7 @@ class PeerReview(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -185,32 +180,34 @@ class PeerReview(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -228,11 +225,11 @@ class PeerReview(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

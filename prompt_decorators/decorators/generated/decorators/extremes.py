@@ -1,5 +1,4 @@
-"""
-Implementation of the Extremes decorator.
+"""Implementation of the Extremes decorator.
 
 This module provides the Extremes decorator class for use in prompt engineering.
 
@@ -15,17 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import ExtremesVers
 
 
 class Extremes(BaseDecorator):
-    """
-    Presents content at the extreme ends of a spectrum, showing both a
-    radical, ambitious, or maximalist version alongside a minimal,
-    conservative, or basic version. This decorator helps explore the range
-    of possibilities from the simplest implementation to the most
-    expansive vision.
+    """Presents content at the extreme ends of a spectrum, showing both a radical, ambitious, or maximalist version alongside a minimal, conservative, or basic version. This decorator helps explore the range of possibilities from the simplest implementation to the most expansive vision.
 
     Attributes:
-        versions: Which extreme versions to include
-        dimension: The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity')
-        compare: Whether to include a comparative analysis of the extreme versions
+        versions: Which extreme versions to include. (Literal["radical", "minimal", "both"])
+        dimension: The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity'). (str)
+        compare: Whether to include a comparative analysis of the extreme versions. (bool)
     """
 
     decorator_name = "extremes"
@@ -33,11 +27,11 @@ class Extremes(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -47,18 +41,13 @@ class Extremes(BaseDecorator):
         dimension: str = "ambition",
         compare: bool = True,
     ) -> None:
-        """
-        Initialize the Extremes decorator.
+        """Initialize the Extremes decorator.
 
         Args:
             versions: Which extreme versions to include
-            dimension: The specific dimension along which to explore extremes
-                (e.g., 'cost', 'time', 'ambition', 'complexity')
-            compare: Whether to include a comparative analysis of the extreme
-                versions
+            dimension: The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity')
+            compare: Whether to include a comparative analysis of the extreme versions
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -69,6 +58,14 @@ class Extremes(BaseDecorator):
         self._compare = compare
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._versions = versions
+        self._dimension = dimension
+        self._compare = compare
+
         # Validate parameters
         if self._versions is not None:
             if not isinstance(self._versions, str):
@@ -92,8 +89,7 @@ class Extremes(BaseDecorator):
 
     @property
     def versions(self) -> Literal["radical", "minimal", "both"]:
-        """
-        Get the versions parameter value.
+        """Get the versions parameter value.
 
         Args:
             self: The decorator instance
@@ -105,8 +101,7 @@ class Extremes(BaseDecorator):
 
     @property
     def dimension(self) -> str:
-        """
-        Get the dimension parameter value.
+        """Get the dimension parameter value.
 
         Args:
             self: The decorator instance
@@ -118,8 +113,7 @@ class Extremes(BaseDecorator):
 
     @property
     def compare(self) -> bool:
-        """
-        Get the compare parameter value.
+        """Get the compare parameter value.
 
         Args:
             self: The decorator instance
@@ -130,8 +124,7 @@ class Extremes(BaseDecorator):
         return self._compare
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -146,8 +139,7 @@ class Extremes(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -166,32 +158,34 @@ class Extremes(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -209,11 +203,11 @@ class Extremes(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

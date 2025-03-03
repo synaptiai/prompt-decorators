@@ -1,5 +1,4 @@
-"""
-Implementation of the ELI5 decorator.
+"""Implementation of the ELI5 decorator.
 
 This module provides the ELI5 decorator class for use in prompt engineering.
 
@@ -14,14 +13,10 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class ELI5(BaseDecorator):
-    """
-    Adapts the response to explain a concept as if to a 5-year-old child.
-    This decorator simplifies complex topics using basic vocabulary,
-    concrete examples, and relatable analogies to make information
-    accessible to non-experts or those new to a subject.
+    """Adapts the response to explain a concept as if to a 5-year-old child. This decorator simplifies complex topics using basic vocabulary, concrete examples, and relatable analogies to make information accessible to non-experts or those new to a subject.
 
     Attributes:
-        strictness: Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary
+        strictness: Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary. (bool)
     """
 
     decorator_name = "eli5"
@@ -29,11 +24,11 @@ class ELI5(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -41,15 +36,11 @@ class ELI5(BaseDecorator):
         self,
         strictness: bool = False,
     ) -> None:
-        """
-        Initialize the ELI5 decorator.
+        """Initialize the ELI5 decorator.
 
         Args:
-            strictness: Whether to strictly maintain a child-appropriate level of
-                simplicity or allow slightly more complexity when necessary
+            strictness: Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -58,6 +49,12 @@ class ELI5(BaseDecorator):
         self._strictness = strictness
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._strictness = strictness
+
         # Validate parameters
         if self._strictness is not None:
             if not isinstance(self._strictness, bool):
@@ -67,8 +64,7 @@ class ELI5(BaseDecorator):
 
     @property
     def strictness(self) -> bool:
-        """
-        Get the strictness parameter value.
+        """Get the strictness parameter value.
 
         Args:
             self: The decorator instance
@@ -79,8 +75,7 @@ class ELI5(BaseDecorator):
         return self._strictness
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -93,8 +88,7 @@ class ELI5(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -109,32 +103,34 @@ class ELI5(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -152,11 +148,11 @@ class ELI5(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

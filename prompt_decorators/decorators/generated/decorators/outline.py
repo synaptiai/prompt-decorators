@@ -1,5 +1,4 @@
-"""
-Implementation of the Outline decorator.
+"""Implementation of the Outline decorator.
 
 This module provides the Outline decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import OutlineStyle
 
 
 class Outline(BaseDecorator):
-    """
-    Structures the response as a hierarchical outline with headings and
-    subheadings. This decorator organizes information in a clear, logical
-    structure that highlights relationships between main topics and
-    subtopics.
+    """Structures the response as a hierarchical outline with headings and subheadings. This decorator organizes information in a clear, logical structure that highlights relationships between main topics and subtopics.
 
     Attributes:
-        depth: Maximum nesting level of the outline
-        style: Numbering or bullet style for the outline
-        detailed: Whether to include brief explanations under each outline point
+        depth: Maximum nesting level of the outline. (Any)
+        style: Numbering or bullet style for the outline. (Literal["numeric", "bullet", "roman", "alpha", "mixed"])
+        detailed: Whether to include brief explanations under each outline point. (bool)
     """
 
     decorator_name = "outline"
@@ -32,11 +27,11 @@ class Outline(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,17 +41,13 @@ class Outline(BaseDecorator):
         style: Literal["numeric", "bullet", "roman", "alpha", "mixed"] = "numeric",
         detailed: bool = False,
     ) -> None:
-        """
-        Initialize the Outline decorator.
+        """Initialize the Outline decorator.
 
         Args:
             depth: Maximum nesting level of the outline
             style: Numbering or bullet style for the outline
-            detailed: Whether to include brief explanations under each outline
-                point
+            detailed: Whether to include brief explanations under each outline point
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -67,6 +58,14 @@ class Outline(BaseDecorator):
         self._detailed = detailed
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+        self._style = style
+        self._detailed = detailed
+
         # Validate parameters
         if self._depth is not None:
             if not isinstance(self._depth, (int, float)):
@@ -98,8 +97,7 @@ class Outline(BaseDecorator):
 
     @property
     def depth(self) -> Any:
-        """
-        Get the depth parameter value.
+        """Get the depth parameter value.
 
         Args:
             self: The decorator instance
@@ -111,8 +109,7 @@ class Outline(BaseDecorator):
 
     @property
     def style(self) -> Literal["numeric", "bullet", "roman", "alpha", "mixed"]:
-        """
-        Get the style parameter value.
+        """Get the style parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +121,7 @@ class Outline(BaseDecorator):
 
     @property
     def detailed(self) -> bool:
-        """
-        Get the detailed parameter value.
+        """Get the detailed parameter value.
 
         Args:
             self: The decorator instance
@@ -136,8 +132,7 @@ class Outline(BaseDecorator):
         return self._detailed
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -152,8 +147,7 @@ class Outline(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -172,32 +166,34 @@ class Outline(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -215,11 +211,11 @@ class Outline(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

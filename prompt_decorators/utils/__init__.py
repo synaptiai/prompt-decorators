@@ -1,9 +1,7 @@
-"""
-Utils package for prompt decorators.
+"""Utils package for prompt decorators.
 
 This package provides utility functions and classes for the prompt decorators framework.
 """
-
 from .cache import DecoratorCache, get_cache, get_cached_decorator
 from .discovery import DecoratorRegistry, get_registry
 from .doc_gen import DocGenerator, get_doc_generator

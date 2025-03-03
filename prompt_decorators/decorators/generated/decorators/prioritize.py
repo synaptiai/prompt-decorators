@@ -1,5 +1,4 @@
-"""
-Implementation of the Prioritize decorator.
+"""Implementation of the Prioritize decorator.
 
 This module provides the Prioritize decorator class for use in prompt engineering.
 
@@ -14,16 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Prioritize(BaseDecorator):
-    """
-    Structures the response by ranking information according to
-    importance, urgency, or impact. This decorator helps identify the most
-    critical aspects of a topic and presents information in a hierarchical
-    manner from most to least important.
+    """Structures the response by ranking information according to importance, urgency, or impact. This decorator helps identify the most critical aspects of a topic and presents information in a hierarchical manner from most to least important.
 
     Attributes:
-        criteria: The specific criterion to use for prioritization (e.g., importance, urgency, ROI)
-        count: Number of prioritized items to include
-        showRationale: Whether to explain the reasoning behind each priority ranking
+        criteria: The specific criterion to use for prioritization (e.g., importance, urgency, ROI). (str)
+        count: Number of prioritized items to include. (Any)
+        showRationale: Whether to explain the reasoning behind each priority ranking. (bool)
     """
 
     decorator_name = "prioritize"
@@ -31,11 +26,11 @@ class Prioritize(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,18 +40,13 @@ class Prioritize(BaseDecorator):
         count: Any = 5,
         showRationale: bool = False,
     ) -> None:
-        """
-        Initialize the Prioritize decorator.
+        """Initialize the Prioritize decorator.
 
         Args:
-            criteria: The specific criterion to use for prioritization (e.g.,
-                importance, urgency, ROI)
+            criteria: The specific criterion to use for prioritization (e.g., importance, urgency, ROI)
             count: Number of prioritized items to include
-            showRationale: Whether to explain the reasoning behind each priority
-                ranking
+            showRationale: Whether to explain the reasoning behind each priority ranking
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -67,6 +57,14 @@ class Prioritize(BaseDecorator):
         self._showRationale = showRationale
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._criteria = criteria
+        self._count = count
+        self._showRationale = showRationale
+
         # Validate parameters
         if self._criteria is not None:
             if not isinstance(self._criteria, str):
@@ -94,8 +92,7 @@ class Prioritize(BaseDecorator):
 
     @property
     def criteria(self) -> str:
-        """
-        Get the criteria parameter value.
+        """Get the criteria parameter value.
 
         Args:
             self: The decorator instance
@@ -107,8 +104,7 @@ class Prioritize(BaseDecorator):
 
     @property
     def count(self) -> Any:
-        """
-        Get the count parameter value.
+        """Get the count parameter value.
 
         Args:
             self: The decorator instance
@@ -120,8 +116,7 @@ class Prioritize(BaseDecorator):
 
     @property
     def showRationale(self) -> bool:
-        """
-        Get the showRationale parameter value.
+        """Get the showRationale parameter value.
 
         Args:
             self: The decorator instance
@@ -132,8 +127,7 @@ class Prioritize(BaseDecorator):
         return self._showRationale
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -148,8 +142,7 @@ class Prioritize(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -168,32 +161,34 @@ class Prioritize(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -211,11 +206,11 @@ class Prioritize(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

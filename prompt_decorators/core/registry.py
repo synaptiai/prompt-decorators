@@ -1,5 +1,4 @@
-"""
-Registry for prompt decorators.
+"""Registry for prompt decorators.
 
 This module maintains a global registry of all available decorators and provides
 functions for registering and retrieving them.
@@ -17,8 +16,7 @@ _DECORATOR_CATEGORIES: Dict[str, Set[str]] = {}
 def register_decorator(
     decorator_class: Type[BaseDecorator], category: str = "unknown"
 ) -> None:
-    """
-    Register a decorator class in the global registry.
+    """Register a decorator class in the global registry.
 
     Args:
         decorator_class: The decorator class to register
@@ -35,8 +33,7 @@ def register_decorator(
 
 
 def get_decorator(name: str) -> Optional[Type[BaseDecorator]]:
-    """
-    Get a decorator class by name.
+    """Get a decorator class by name.
 
     Args:
         name: Name of the decorator
@@ -48,8 +45,7 @@ def get_decorator(name: str) -> Optional[Type[BaseDecorator]]:
 
 
 def get_registry() -> Dict[str, Type[BaseDecorator]]:
-    """
-    Get the complete decorator registry.
+    """Get the complete decorator registry.
 
     Returns:
         Dictionary mapping decorator names to decorator classes
@@ -58,8 +54,7 @@ def get_registry() -> Dict[str, Type[BaseDecorator]]:
 
 
 def get_categories() -> Dict[str, Set[str]]:
-    """
-    Get all decorator categories and their members.
+    """Get all decorator categories and their members.
 
     Returns:
         Dictionary mapping category names to sets of decorator names
@@ -68,8 +63,7 @@ def get_categories() -> Dict[str, Set[str]]:
 
 
 def get_decorators_by_category(category: str) -> List[Type[BaseDecorator]]:
-    """
-    Get all decorators in a specific category.
+    """Get all decorators in a specific category.
 
     Args:
         category: The category name
@@ -84,8 +78,7 @@ def get_decorators_by_category(category: str) -> List[Type[BaseDecorator]]:
 
 
 def clear_registry() -> None:
-    """
-    Clear the decorator registry.
+    """Clear the decorator registry.
 
     This is primarily used for testing.
     """

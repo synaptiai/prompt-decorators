@@ -1,5 +1,4 @@
-"""
-Implementation of the DecisionMatrix decorator.
+"""Implementation of the DecisionMatrix decorator.
 
 This module provides the DecisionMatrix decorator class for use in prompt engineering.
 
@@ -17,17 +16,13 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class DecisionMatrix(BaseDecorator):
-    """
-    Structures the response as a decision matrix, evaluating options
-    against multiple criteria. This decorator facilitates systematic
-    comparison and selection between alternatives based on weighted or
-    unweighted criteria.
+    """Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.
 
     Attributes:
-        options: Specific options or alternatives to evaluate in the matrix
-        criteria: Evaluation criteria to assess each option against
-        weighted: Whether to include weights for criteria importance
-        scale: Rating scale to use for evaluations
+        options: Specific options or alternatives to evaluate in the matrix. (List[Any])
+        criteria: Evaluation criteria to assess each option against. (List[Any])
+        weighted: Whether to include weights for criteria importance. (bool)
+        scale: Rating scale to use for evaluations. (Literal["1-5", "1-10", "qualitative", "percentage"])
     """
 
     decorator_name = "decision_matrix"
@@ -35,11 +30,11 @@ class DecisionMatrix(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -50,8 +45,7 @@ class DecisionMatrix(BaseDecorator):
         weighted: bool = False,
         scale: Literal["1-5", "1-10", "qualitative", "percentage"] = "1-5",
     ) -> None:
-        """
-        Initialize the DecisionMatrix decorator.
+        """Initialize the DecisionMatrix decorator.
 
         Args:
             options: Specific options or alternatives to evaluate in the matrix
@@ -59,8 +53,6 @@ class DecisionMatrix(BaseDecorator):
             weighted: Whether to include weights for criteria importance
             scale: Rating scale to use for evaluations
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -72,6 +64,15 @@ class DecisionMatrix(BaseDecorator):
         self._scale = scale
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._options = options
+        self._criteria = criteria
+        self._weighted = weighted
+        self._scale = scale
+
         # Validate parameters
         if self._options is not None:
             if not isinstance(self._options, list):
@@ -100,8 +101,7 @@ class DecisionMatrix(BaseDecorator):
 
     @property
     def options(self) -> List[Any]:
-        """
-        Get the options parameter value.
+        """Get the options parameter value.
 
         Args:
             self: The decorator instance
@@ -113,8 +113,7 @@ class DecisionMatrix(BaseDecorator):
 
     @property
     def criteria(self) -> List[Any]:
-        """
-        Get the criteria parameter value.
+        """Get the criteria parameter value.
 
         Args:
             self: The decorator instance
@@ -126,8 +125,7 @@ class DecisionMatrix(BaseDecorator):
 
     @property
     def weighted(self) -> bool:
-        """
-        Get the weighted parameter value.
+        """Get the weighted parameter value.
 
         Args:
             self: The decorator instance
@@ -139,8 +137,7 @@ class DecisionMatrix(BaseDecorator):
 
     @property
     def scale(self) -> Literal["1-5", "1-10", "qualitative", "percentage"]:
-        """
-        Get the scale parameter value.
+        """Get the scale parameter value.
 
         Args:
             self: The decorator instance
@@ -151,8 +148,7 @@ class DecisionMatrix(BaseDecorator):
         return self._scale
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -168,8 +164,7 @@ class DecisionMatrix(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -190,32 +185,34 @@ class DecisionMatrix(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -233,11 +230,11 @@ class DecisionMatrix(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

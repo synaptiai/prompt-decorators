@@ -2,7 +2,6 @@
 
 This module provides utilities for creating decorator instances from JSON definitions.
 """
-
 import logging
 from typing import Any, Dict, List, Optional, Type
 
@@ -18,16 +17,14 @@ logger = logging.getLogger(__name__)
 
 
 class DecoratorFactory:
-    """
-    Factory for creating decorator instances from JSON definitions.
+    """Factory for creating decorator instances from JSON definitions.
 
     This class provides utilities for creating decorator instances from JSON definitions,
     either by using existing decorator classes or by dynamically generating new ones.
     """
 
     def __init__(self, registry: Optional[DecoratorRegistry] = None):
-        """
-        Initialize the decorator factory.
+        """Initialize the decorator factory.
 
         Args:
             registry: The decorator registry to use (optional)
@@ -36,20 +33,16 @@ class DecoratorFactory:
         self.json_loader = JSONLoader()
 
     def create_from_json_string(self, json_string: str) -> Optional[BaseDecorator]:
-        """
-        Create a decorator instance from a JSON string.
+        """Create a decorator instance from a JSON string.
 
         Args:
-            json_string: The JSON string containing the decorator definition
+            json_string: JSON string containing the decorator definition
 
         Returns:
-            The decorator instance, or None if creation failed
-
-        Raises:
-            ValueError: If the JSON is invalid or doesn't define a valid decorator
+            The created decorator instance, or None if creation failed
         """
         try:
-            # Load the JSON
+            # Parse the JSON
             decorator_data = self.json_loader.load_from_string(json_string)
 
             # Create the decorator
@@ -59,21 +52,16 @@ class DecoratorFactory:
             return None
 
     def create_from_file(self, file_path: str) -> Optional[BaseDecorator]:
-        """
-        Create a decorator instance from a JSON file.
+        """Create a decorator instance from a JSON file.
 
         Args:
-            file_path: Path to the JSON file
+            file_path: Path to the JSON file containing the decorator definition
 
         Returns:
-            The decorator instance, or None if creation failed
-
-        Raises:
-            FileNotFoundError: If the file doesn't exist
-            ValueError: If the JSON is invalid or doesn't define a valid decorator
+            The created decorator instance, or None if creation failed
         """
         try:
-            # Load the JSON
+            # Load the JSON from file
             decorator_data = self.json_loader.load_from_file(file_path)
 
             # Create the decorator
@@ -85,45 +73,47 @@ class DecoratorFactory:
     def create_from_dict(
         self, decorator_data: Dict[str, Any]
     ) -> Optional[BaseDecorator]:
-        """
-        Create a decorator instance from a dictionary.
+        """Create a decorator instance from a dictionary.
 
         Args:
-            decorator_data: The decorator definition as a dictionary
+            decorator_data: Dictionary containing the decorator definition
 
         Returns:
-            The decorator instance, or None if creation failed
-
-        Raises:
-            ValueError: If the dictionary doesn't define a valid decorator
+            The created decorator instance, or None if creation failed
         """
         try:
-            # Get the decorator name and version
-            decorator_name = decorator_data.get("decoratorName")
+            # Get the decorator name
+            decorator_name = decorator_data.get("name")
             if not decorator_name:
-                raise ValueError("Decorator name is required")
+                logger.error("Decorator definition missing 'name' field")
+                return None
 
             # Try to find an existing decorator class
             decorator_class = self.find_decorator_class(decorator_name)
 
-            # If no matching class is found, create a dynamic class
+            # If not found, create a dynamic class
             if not decorator_class:
                 decorator_class = self.create_dynamic_class(decorator_data)
+                self.registry.register_decorator(decorator_class)
 
-            # Create the decorator parameters
+            # Extract parameters from the definition
             parameters = self.extract_parameters(decorator_data)
 
-            # Create the decorator instance
-            return decorator_class(**parameters)
+            # Create an instance of the decorator
+            decorator = decorator_class(**parameters)
+
+            # Register the instance
+            self.registry.register_decorator_instance(decorator)
+
+            return decorator
         except Exception as e:
-            logger.error(f"Error creating decorator from dictionary: {e}")
+            logger.error(f"Error creating decorator from dict: {e}")
             return None
 
     def find_decorator_class(
         self, decorator_name: str
     ) -> Optional[Type[BaseDecorator]]:
-        """
-        Find a decorator class by name.
+        """Find a decorator class by name.
 
         Args:
             decorator_name: The name of the decorator
@@ -137,87 +127,67 @@ class DecoratorFactory:
     def create_dynamic_class(
         self, decorator_data: Dict[str, Any]
     ) -> Type[BaseDecorator]:
-        """
-        Create a dynamic decorator class from a definition.
+        """Create a dynamic decorator class from a dictionary definition.
 
         Args:
-            decorator_data: The decorator definition as a dictionary
+            decorator_data: Dictionary containing the decorator definition
 
         Returns:
-            The dynamically created decorator class
-
-        Raises:
-            ValueError: If the dictionary doesn't define a valid decorator
+            A new decorator class
         """
-        decorator_name = decorator_data.get("decoratorName")
-        if not decorator_name:
-            raise ValueError("Decorator name is required")
-
-        version = decorator_data.get("version", "1.0.0")
+        # Get basic decorator information
+        decorator_name = decorator_data.get("name", "CustomDecorator")
         description = decorator_data.get("description", "")
-        category = decorator_data.get("category", "uncategorized")
+        category = decorator_data.get("category", "custom")
         parameters = decorator_data.get("parameters", [])
 
-        # Create parameter getters for each parameter
-        param_properties = {}
-        for param in parameters:
-            param_name = param.get("name")
-            if not param_name:
-                continue
-
-            # Create a property for each parameter
-            param_properties[param_name] = property(
-                lambda self, name=param_name: self.get_parameter(name)
-            )
-
-        # Create the apply method
-        def apply(self, prompt: str) -> str:
-            """
-
-            Args:
-                prompt: str description
-            Returns:
-
-                            Description of return value
-                        Apply the decorator to a prompt.
-
-            """
-            # Build a detailed instruction based on the decorator definition
-            instruction = f"Instructions for {self.name} decorator:\n"
-
-            # Add description if available
-            if description:
-                instruction += f"{description}\n"
-
-            # Add parameters
-            for param_name, param_value in self.parameters.items():
-                instruction += f"- {param_name}: {param_value}\n"
-
-            # Combine with original prompt
-            return f"{instruction}\n\n{prompt}"
-
-        # Create the dynamic class
+        # Create a dictionary of class attributes
         attrs = {
             "name": decorator_name,
-            "version": version,
             "description": description,
             "category": category,
-            "apply": apply,
-            "_json_definition": decorator_data,
-            **param_properties,
+            "parameters": parameters,
         }
 
+        # Define the apply method
+        def apply(self, prompt: str) -> str:
+            """Apply the decorator to a prompt.
+
+            Args:
+                prompt: The prompt to decorate
+
+            Returns:
+                The decorated prompt
+            """
+            # Get the template
+            template = decorator_data.get("template", "{prompt}")
+
+            # Format the template with the prompt and parameters
+            try:
+                # Create a dictionary of parameter values
+                param_values = {}
+                for param in parameters:
+                    param_name = param.get("name")
+                    if hasattr(self, param_name):
+                        param_values[param_name] = getattr(self, param_name)
+
+                # Add the prompt
+                param_values["prompt"] = prompt
+
+                # Format the template
+                return template.format(**param_values)
+            except Exception as e:
+                logger.error(f"Error applying decorator {decorator_name}: {e}")
+                return prompt
+
+        # Add the apply method to the class attributes
+        attrs["apply"] = apply
+
         # Create the class
-        dynamic_class = type(decorator_name, (BaseDecorator,), attrs)
-
-        # Register the class with the registry
-        self.registry.register_decorator(dynamic_class)
-
-        return dynamic_class
+        return type(decorator_name, (BaseDecorator,), attrs)
 
     def extract_parameters(self, decorator_data: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Extract parameter values from a decorator definition.
+        """Extract parameter values from a decorator definition.
 
         Args:
             decorator_data: The decorator definition as a dictionary
@@ -255,8 +225,7 @@ class DecoratorFactory:
         return param_values
 
     def create_all_from_directory(self, directory_path: str) -> List[BaseDecorator]:
-        """
-        Create decorator instances from all JSON files in a directory.
+        """Create decorator instances from all JSON files in a directory.
 
         Args:
             directory_path: Path to the directory containing JSON files

@@ -1,632 +1,632 @@
-"""
-Decorator Enum Definitions
+"""Decorator Enum Definitions.
 
 This module provides enum types used by decorators.
 """
 
-from enum import Enum
+from enum import Enum, auto
+from typing import Dict, List, Optional, Union, Any
 
+class AudienceLevelEnum(Enum):
+    """The expertise level of the target audience."""
 
-class AcademicCitationstyleEnum(str, Enum):
-    """The citation format to use for references"""
+    beginner = auto()
+    intermediate = auto()
+    expert = auto()
+    technical = auto()
 
-    APA = "APA"
-    MLA = "MLA"
-    CHICAGO = "Chicago"
-    HARVARD = "Harvard"
-    IEEE = "IEEE"
 
+class MotivationalIntensityEnum(Enum):
+    """The level of motivational energy and enthusiasm."""
 
-class AcademicStyleEnum(str, Enum):
-    """The academic discipline style to follow"""
+    mild = auto()
+    moderate = auto()
+    high = auto()
 
-    HUMANITIES = "humanities"
-    SCIENTIFIC = "scientific"
-    LEGAL = "legal"
 
+class MotivationalFocusEnum(Enum):
+    """The primary motivational approach to emphasize."""
 
-class AlternativesDiversityEnum(str, Enum):
-    """How different or varied the alternatives should be from each other"""
+    achievement = auto()
+    growth = auto()
+    resilience = auto()
+    purpose = auto()
+    balanced = auto()
 
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
 
+class StyleShiftAspectEnum(Enum):
+    """The specific style aspect to modify."""
 
-class AnalogicalDepthEnum(str, Enum):
-    """Level of detail in developing the analogy"""
+    formality = auto()
+    persuasion = auto()
+    urgency = auto()
+    confidence = auto()
+    complexity = auto()
 
-    BRIEF = "brief"
-    MODERATE = "moderate"
-    EXTENDED = "extended"
 
+class DetailedDepthEnum(Enum):
+    """The level of detail and comprehensiveness."""
 
-class AsExpertExperienceEnum(str, Enum):
-    """The experience level of the expert"""
+    moderate = auto()
+    comprehensive = auto()
+    exhaustive = auto()
 
-    JUNIOR = "junior"
-    SENIOR = "senior"
-    LEADING = "leading"
-    PIONEERING = "pioneering"
 
+class RemixPreserveEnum(Enum):
+    """What aspects of the original content to prioritize preserving."""
 
-class AudienceLevelEnum(str, Enum):
-    """The expertise level of the target audience"""
+    facts = auto()
+    structure = auto()
+    tone = auto()
+    comprehensiveness = auto()
 
-    BEGINNER = "beginner"
-    INTERMEDIATE = "intermediate"
-    EXPERT = "expert"
-    TECHNICAL = "technical"
 
+class AsExpertExperienceEnum(Enum):
+    """The experience level of the expert."""
 
-class BalancedStructureEnum(str, Enum):
-    """How to structure the different perspectives"""
+    junior = auto()
+    senior = auto()
+    leading = auto()
+    pioneering = auto()
 
-    ALTERNATING = "alternating"
-    SEQUENTIAL = "sequential"
-    COMPARATIVE = "comparative"
 
+class NarrativeStructureEnum(Enum):
+    """The narrative structure to employ."""
 
-class BlindSpotsDepthEnum(str, Enum):
-    """How thoroughly to analyze for blind spots"""
+    classic = auto()
+    nonlinear = auto()
+    case_study = auto()
 
-    BASIC = "basic"
-    THOROUGH = "thorough"
-    COMPREHENSIVE = "comprehensive"
 
+class NarrativeLengthEnum(Enum):
+    """The relative length of the narrative."""
 
-class BlindSpotsPositionEnum(str, Enum):
-    """Where to place the blind spots analysis"""
+    brief = auto()
+    moderate = auto()
+    extended = auto()
 
-    AFTER = "after"
-    BEFORE = "before"
-    INTEGRATED = "integrated"
 
+class AcademicStyleEnum(Enum):
+    """The academic discipline style to follow."""
 
-class BreakAndBuildBreakdownEnum(str, Enum):
-    """Primary approach for the critical breakdown phase"""
+    humanities = auto()
+    scientific = auto()
+    legal = auto()
 
-    WEAKNESSES = "weaknesses"
-    ASSUMPTIONS = "assumptions"
-    RISKS = "risks"
-    COMPREHENSIVE = "comprehensive"
 
+class AcademicFormatEnum(Enum):
+    """The citation format to use for references."""
 
-class BreakAndBuildIntensityEnum(str, Enum):
-    """How thorough and challenging the breakdown phase should be"""
+    APA = auto()
+    MLA = auto()
+    Chicago = auto()
+    Harvard = auto()
+    IEEE = auto()
 
-    MILD = "mild"
-    THOROUGH = "thorough"
-    INTENSE = "intense"
 
+class CreativeLevelEnum(Enum):
+    """The degree of creative thinking to apply."""
 
-class BuildOnApproachEnum(str, Enum):
-    """How to build upon the referenced content"""
+    moderate = auto()
+    high = auto()
+    unconventional = auto()
 
-    EXTEND = "extend"
-    REFINE = "refine"
-    CONTRAST = "contrast"
-    SYNTHESIZE = "synthesize"
 
+class ProfessionalFormalityEnum(Enum):
+    """The level of formality to maintain in the response."""
 
-class BuildOnReferenceEnum(str, Enum):
-    """What to build upon from the previous context"""
+    standard = auto()
+    high = auto()
+    executive = auto()
 
-    LAST = "last"
-    SPECIFIC = "specific"
-    ALL = "all"
 
+class ConciseLevelEnum(Enum):
+    """The degree of conciseness to apply."""
 
-class BulletStyleEnum(str, Enum):
-    """The visual marker used for bullet points"""
+    moderate = auto()
+    high = auto()
+    extreme = auto()
 
-    DASH = "dash"
-    DOT = "dot"
-    ARROW = "arrow"
-    STAR = "star"
-    PLUS = "plus"
 
+class ExtremesVersionsEnum(Enum):
+    """Which extreme versions to include."""
 
-class CiteSourcesFormatEnum(str, Enum):
-    """The citation format to use"""
+    radical = auto()
+    minimal = auto()
+    both = auto()
 
-    APA = "APA"
-    MLA = "MLA"
-    CHICAGO = "Chicago"
-    HARVARD = "Harvard"
-    IEEE = "IEEE"
 
+class PriorityModeEnum(Enum):
+    """How to handle conflicts between decorators."""
 
-class CiteSourcesStyleEnum(str, Enum):
-    """The placement and format of citations within the response"""
+    override = auto()
+    merge = auto()
+    cascade = auto()
 
-    INLINE = "inline"
-    FOOTNOTE = "footnote"
-    ENDNOTE = "endnote"
 
+class ContextScopeEnum(Enum):
+    """Which aspects of decorators to contextualize."""
 
-class ComparisonFormatEnum(str, Enum):
-    """The presentation format for the comparison"""
+    terminology = auto()
+    examples = auto()
+    structure = auto()
+    all = auto()
 
-    TABLE = "table"
-    PROSE = "prose"
-    BULLETS = "bullets"
 
+class ContextLevelEnum(Enum):
+    """The expertise level to target within the domain."""
 
-class ConciseLevelEnum(str, Enum):
-    """The degree of conciseness to apply"""
+    beginner = auto()
+    intermediate = auto()
+    expert = auto()
+    mixed = auto()
 
-    MODERATE = "moderate"
-    HIGH = "high"
-    EXTREME = "extreme"
 
+class CustomPriorityEnum(Enum):
+    """How to prioritize custom rules relative to other decorators."""
 
-class ConfidenceScaleEnum(str, Enum):
-    """The method used to express confidence levels"""
+    override = auto()
+    supplement = auto()
+    fallback = auto()
 
-    PERCENT = "percent"
-    QUALITATIVE = "qualitative"
-    STARS = "stars"
-    NUMERIC = "numeric"
 
+class BuildOnReferenceEnum(Enum):
+    """What to build upon from the previous context."""
 
-class ConstraintsVocabularyEnum(str, Enum):
-    """Constraints on vocabulary usage"""
+    last = auto()
+    specific = auto()
+    all = auto()
 
-    SIMPLE = "simple"
-    TECHNICAL = "technical"
-    DOMAIN_SPECIFIC = "domain-specific"
-    CREATIVE = "creative"
 
+class BuildOnApproachEnum(Enum):
+    """How to build upon the referenced content."""
 
-class ContextLevelEnum(str, Enum):
-    """The expertise level to target within the domain"""
+    extend = auto()
+    refine = auto()
+    contrast = auto()
+    synthesize = auto()
 
-    BEGINNER = "beginner"
-    INTERMEDIATE = "intermediate"
-    EXPERT = "expert"
-    MIXED = "mixed"
 
+class ReasoningDepthEnum(Enum):
+    """The level of detail in the reasoning process."""
 
-class ContextScopeEnum(str, Enum):
-    """Which aspects of decorators to contextualize"""
+    basic = auto()
+    moderate = auto()
+    comprehensive = auto()
 
-    TERMINOLOGY = "terminology"
-    EXAMPLES = "examples"
-    STRUCTURE = "structure"
-    ALL = "all"
 
+class ToneStyleEnum(Enum):
+    """The desired tone and style for the response."""
 
-class ContrarianApproachEnum(str, Enum):
-    """The specific contrarian approach to take"""
+    formal = auto()
+    casual = auto()
+    friendly = auto()
+    technical = auto()
+    humorous = auto()
 
-    OUTSIDER = "outsider"
-    SKEPTIC = "skeptic"
-    DEVILS_ADVOCATE = "devils-advocate"
 
+class OutputFormatFormatEnum(Enum):
+    """The format to use for the response."""
 
-class CreativeLevelEnum(str, Enum):
-    """The degree of creative thinking to apply"""
+    json = auto()
+    markdown = auto()
+    yaml = auto()
+    xml = auto()
+    plaintext = auto()
 
-    MODERATE = "moderate"
-    HIGH = "high"
-    UNCONVENTIONAL = "unconventional"
 
+class BlindSpotsDepthEnum(Enum):
+    """How thoroughly to analyze for blind spots."""
 
-class CustomPriorityEnum(str, Enum):
-    """How to prioritize custom rules relative to other decorators"""
+    basic = auto()
+    thorough = auto()
+    comprehensive = auto()
 
-    OVERRIDE = "override"
-    SUPPLEMENT = "supplement"
-    FALLBACK = "fallback"
 
+class BlindSpotsPositionEnum(Enum):
+    """Where to place the blind spots analysis."""
 
-class DecisionMatrixScaleEnum(str, Enum):
-    """Rating scale to use for evaluations"""
+    after = auto()
+    before = auto()
+    integrated = auto()
 
-    VALUE_1_5 = "1-5"
-    VALUE_1_10 = "1-10"
-    QUALITATIVE = "qualitative"
-    PERCENTAGE = "percentage"
 
+class ForcedAnalogyComprehensivenessEnum(Enum):
+    """How comprehensively to map concepts between domains."""
 
-class DetailedDepthEnum(str, Enum):
-    """The level of detail and comprehensiveness"""
+    basic = auto()
+    comprehensive = auto()
+    detailed = auto()
 
-    MODERATE = "moderate"
-    COMPREHENSIVE = "comprehensive"
-    EXHAUSTIVE = "exhaustive"
 
+class InductiveStructureEnum(Enum):
+    """The pattern of inductive reasoning to follow."""
 
-class ExtremesVersionsEnum(str, Enum):
-    """Which extreme versions to include"""
+    generalization = auto()
+    causal = auto()
+    statistical = auto()
+    analogical = auto()
 
-    RADICAL = "radical"
-    MINIMAL = "minimal"
-    BOTH = "both"
 
+class RootCauseMethodEnum(Enum):
+    """The specific root cause analysis methodology to apply."""
 
-class FactCheckStrictnessEnum(str, Enum):
-    """The threshold for considering information verified"""
+    fivewhys = auto()
+    fishbone = auto()
+    pareto = auto()
 
-    LOW = "low"
-    MODERATE = "moderate"
-    HIGH = "high"
 
+class AnalogicalDepthEnum(Enum):
+    """Level of detail in developing the analogy."""
 
-class FactCheckUncertainEnum(str, Enum):
-    """How to handle uncertain information"""
+    brief = auto()
+    moderate = auto()
+    extended = auto()
 
-    MARK = "mark"
-    EXCLUDE = "exclude"
-    QUALIFY = "qualify"
 
+class ContrarianApproachEnum(Enum):
+    """The specific contrarian approach to take."""
 
-class FindGapsAspectsEnum(str, Enum):
-    """The specific types of gaps to focus on finding"""
+    outsider = auto()
+    skeptic = auto()
+    devils_advocate = auto()
 
-    QUESTIONS = "questions"
-    RESOURCES = "resources"
-    STAKEHOLDERS = "stakeholders"
-    RISKS = "risks"
-    DEPENDENCIES = "dependencies"
-    COMPREHENSIVE = "comprehensive"
 
+class RedTeamStrengthEnum(Enum):
+    """How aggressive or challenging the red team analysis should be."""
 
-class FindGapsDepthEnum(str, Enum):
-    """How thoroughly to analyze for gaps"""
+    moderate = auto()
+    aggressive = auto()
+    steelman = auto()
 
-    BASIC = "basic"
-    THOROUGH = "thorough"
-    EXHAUSTIVE = "exhaustive"
 
+class NegativeSpaceFocusEnum(Enum):
+    """The specific aspect of negative space to emphasize."""
 
-class ForcedAnalogyComprehensivenessEnum(str, Enum):
-    """How comprehensively to map concepts between domains"""
+    implications = auto()
+    missing = auto()
+    unstated = auto()
+    comprehensive = auto()
 
-    BASIC = "basic"
-    COMPREHENSIVE = "comprehensive"
-    DETAILED = "detailed"
 
+class NegativeSpaceDepthEnum(Enum):
+    """How deeply to explore the negative space."""
 
-class InductiveStructureEnum(str, Enum):
-    """The pattern of inductive reasoning to follow"""
+    surface = auto()
+    moderate = auto()
+    deep = auto()
 
-    GENERALIZATION = "generalization"
-    CAUSAL = "causal"
-    STATISTICAL = "statistical"
-    ANALOGICAL = "analogical"
 
+class NegativeSpaceStructureEnum(Enum):
+    """How to present the negative space analysis."""
 
-class LayeredLevelsEnum(str, Enum):
-    """The granularity of explanation levels to include"""
+    before = auto()
+    after = auto()
+    integrated = auto()
+    separate = auto()
 
-    SENTENCE_PARAGRAPH_FULL = "sentence-paragraph-full"
-    BASIC_INTERMEDIATE_ADVANCED = "basic-intermediate-advanced"
-    SUMMARY_DETAIL_TECHNICAL = "summary-detail-technical"
 
+class FactCheckUncertainEnum(Enum):
+    """How to handle uncertain information."""
 
-class LayeredProgressionEnum(str, Enum):
-    """How to structure the progression between layers"""
+    mark = auto()
+    exclude = auto()
+    qualify = auto()
 
-    SEPARATE = "separate"
-    NESTED = "nested"
-    INCREMENTAL = "incremental"
 
+class FactCheckStrictnessEnum(Enum):
+    """The threshold for considering information verified."""
 
-class LimitationsDetailEnum(str, Enum):
-    """The level of detail in the limitations statement"""
+    low = auto()
+    moderate = auto()
+    high = auto()
 
-    BRIEF = "brief"
-    MODERATE = "moderate"
-    COMPREHENSIVE = "comprehensive"
 
+class LimitationsDetailEnum(Enum):
+    """The level of detail in the limitations statement."""
 
-class LimitationsFocusEnum(str, Enum):
-    """The primary aspect to focus on in the limitations"""
+    brief = auto()
+    moderate = auto()
+    comprehensive = auto()
 
-    KNOWLEDGE = "knowledge"
-    METHODOLOGY = "methodology"
-    CONTEXT = "context"
-    BIASES = "biases"
-    ALL = "all"
 
+class LimitationsPositionEnum(Enum):
+    """Where to place the limitations statement in the response."""
 
-class LimitationsPositionEnum(str, Enum):
-    """Where to place the limitations statement in the response"""
+    beginning = auto()
+    end = auto()
 
-    BEGINNING = "beginning"
-    END = "end"
 
+class LimitationsFocusEnum(Enum):
+    """The primary aspect to focus on in the limitations."""
 
-class MECEFrameworkEnum(str, Enum):
-    """Optional predefined MECE framework to apply"""
+    knowledge = auto()
+    methodology = auto()
+    context = auto()
+    biases = auto()
+    all = auto()
 
-    ISSUE_TREE = "issue tree"
-    VALUE_CHAIN = "value chain"
-    BUSINESS_SEGMENTS = "business segments"
-    STAKEHOLDERS = "stakeholders"
-    CUSTOM = "custom"
 
+class BreakAndBuildBreakdownEnum(Enum):
+    """Primary approach for the critical breakdown phase."""
 
-class MotivationalFocusEnum(str, Enum):
-    """The primary motivational approach to emphasize"""
+    weaknesses = auto()
+    assumptions = auto()
+    risks = auto()
+    comprehensive = auto()
 
-    ACHIEVEMENT = "achievement"
-    GROWTH = "growth"
-    RESILIENCE = "resilience"
-    PURPOSE = "purpose"
-    BALANCED = "balanced"
 
+class BreakAndBuildIntensityEnum(Enum):
+    """How thorough and challenging the breakdown phase should be."""
 
-class MotivationalIntensityEnum(str, Enum):
-    """The level of motivational energy and enthusiasm"""
+    mild = auto()
+    thorough = auto()
+    intense = auto()
 
-    MILD = "mild"
-    MODERATE = "moderate"
-    HIGH = "high"
 
+class StressTestSeverityEnum(Enum):
+    """The intensity level of the stress conditions."""
 
-class NarrativeLengthEnum(str, Enum):
-    """The relative length of the narrative"""
+    moderate = auto()
+    severe = auto()
+    extreme = auto()
 
-    BRIEF = "brief"
-    MODERATE = "moderate"
-    EXTENDED = "extended"
 
+class UncertaintyFormatEnum(Enum):
+    """How to format uncertainty indications in the response."""
 
-class NarrativeStructureEnum(str, Enum):
-    """The narrative structure to employ"""
+    inline = auto()
+    section = auto()
+    confidence = auto()
 
-    CLASSIC = "classic"
-    NONLINEAR = "nonlinear"
-    CASE_STUDY = "case-study"
 
+class UncertaintyThresholdEnum(Enum):
+    """The threshold for flagging uncertain content."""
 
-class NegativeSpaceDepthEnum(str, Enum):
-    """How deeply to explore the negative space"""
+    low = auto()
+    medium = auto()
+    high = auto()
 
-    SURFACE = "surface"
-    MODERATE = "moderate"
-    DEEP = "deep"
 
+class FindGapsAspectsEnum(Enum):
+    """The specific types of gaps to focus on finding."""
 
-class NegativeSpaceFocusEnum(str, Enum):
-    """The specific aspect of negative space to emphasize"""
+    questions = auto()
+    resources = auto()
+    stakeholders = auto()
+    risks = auto()
+    dependencies = auto()
+    comprehensive = auto()
 
-    IMPLICATIONS = "implications"
-    MISSING = "missing"
-    UNSTATED = "unstated"
-    COMPREHENSIVE = "comprehensive"
 
+class FindGapsDepthEnum(Enum):
+    """How thoroughly to analyze for gaps."""
 
-class NegativeSpaceStructureEnum(str, Enum):
-    """How to present the negative space analysis"""
+    basic = auto()
+    thorough = auto()
+    exhaustive = auto()
 
-    BEFORE = "before"
-    AFTER = "after"
-    INTEGRATED = "integrated"
-    SEPARATE = "separate"
 
+class CiteSourcesStyleEnum(Enum):
+    """The placement and format of citations within the response."""
 
-class NestedStyleEnum(str, Enum):
-    """Visual style for hierarchical levels"""
+    inline = auto()
+    footnote = auto()
+    endnote = auto()
 
-    BULLET = "bullet"
-    NUMBERED = "numbered"
-    MIXED = "mixed"
 
+class CiteSourcesFormatEnum(Enum):
+    """The citation format to use."""
 
-class OutlineStyleEnum(str, Enum):
-    """Numbering or bullet style for the outline"""
+    APA = auto()
+    MLA = auto()
+    Chicago = auto()
+    Harvard = auto()
+    IEEE = auto()
 
-    NUMERIC = "numeric"
-    BULLET = "bullet"
-    ROMAN = "roman"
-    ALPHA = "alpha"
-    MIXED = "mixed"
 
+class QualityMetricsScaleEnum(Enum):
+    """Rating scale to use for evaluations."""
 
-class OutputFormatFormatEnum(str, Enum):
-    """The format to use for the response"""
+    _1_5 = auto()
+    _1_10 = auto()
+    percentage = auto()
+    qualitative = auto()
 
-    JSON = "json"
-    MARKDOWN = "markdown"
-    YAML = "yaml"
-    XML = "xml"
-    PLAINTEXT = "plaintext"
 
+class BalancedStructureEnum(Enum):
+    """How to structure the different perspectives."""
 
-class PeerReviewCriteriaEnum(str, Enum):
-    """Primary criteria to focus on in the review"""
+    alternating = auto()
+    sequential = auto()
+    comparative = auto()
 
-    ACCURACY = "accuracy"
-    METHODOLOGY = "methodology"
-    LIMITATIONS = "limitations"
-    COMPLETENESS = "completeness"
-    ALL = "all"
 
+class PeerReviewCriteriaEnum(Enum):
+    """Primary criteria to focus on in the review."""
 
-class PeerReviewPositionEnum(str, Enum):
-    """Where to place the peer review relative to the main content"""
+    accuracy = auto()
+    methodology = auto()
+    limitations = auto()
+    completeness = auto()
+    all = auto()
 
-    AFTER = "after"
-    BEFORE = "before"
-    ALONGSIDE = "alongside"
 
+class PeerReviewStyleEnum(Enum):
+    """The tone and approach of the peer review."""
 
-class PeerReviewStyleEnum(str, Enum):
-    """The tone and approach of the peer review"""
+    constructive = auto()
+    critical = auto()
+    balanced = auto()
 
-    CONSTRUCTIVE = "constructive"
-    CRITICAL = "critical"
-    BALANCED = "balanced"
 
+class PeerReviewPositionEnum(Enum):
+    """Where to place the peer review relative to the main content."""
 
-class PrecisionLevelEnum(str, Enum):
-    """The degree of precision to apply"""
+    after = auto()
+    before = auto()
+    alongside = auto()
 
-    MODERATE = "moderate"
-    HIGH = "high"
-    SCIENTIFIC = "scientific"
 
+class ConfidenceScaleEnum(Enum):
+    """The method used to express confidence levels."""
 
-class PriorityModeEnum(str, Enum):
-    """How to handle conflicts between decorators"""
+    percent = auto()
+    qualitative = auto()
+    stars = auto()
+    numeric = auto()
 
-    OVERRIDE = "override"
-    MERGE = "merge"
-    CASCADE = "cascade"
 
+class PrecisionLevelEnum(Enum):
+    """The degree of precision to apply."""
 
-class ProfessionalFormalityEnum(str, Enum):
-    """The level of formality to maintain in the response"""
+    moderate = auto()
+    high = auto()
+    scientific = auto()
 
-    STANDARD = "standard"
-    HIGH = "high"
-    EXECUTIVE = "executive"
 
+class AlternativesDiversityEnum(Enum):
+    """How different or varied the alternatives should be from each other."""
 
-class QualityMetricsScaleEnum(str, Enum):
-    """Rating scale to use for evaluations"""
+    low = auto()
+    medium = auto()
+    high = auto()
 
-    VALUE_1_5 = "1-5"
-    VALUE_1_10 = "1-10"
-    PERCENTAGE = "percentage"
-    QUALITATIVE = "qualitative"
 
+class SummaryLengthEnum(Enum):
+    """Relative length of the summary."""
 
-class ReasoningDepthEnum(str, Enum):
-    """The level of detail in the reasoning process"""
+    short = auto()
+    medium = auto()
+    long = auto()
 
-    BASIC = "basic"
-    MODERATE = "moderate"
-    COMPREHENSIVE = "comprehensive"
 
+class SummaryPositionEnum(Enum):
+    """Where to position the summary in relation to any full content."""
 
-class RedTeamStrengthEnum(str, Enum):
-    """How aggressive or challenging the red team analysis should be"""
+    beginning = auto()
+    end = auto()
+    standalone = auto()
 
-    MODERATE = "moderate"
-    AGGRESSIVE = "aggressive"
-    STEELMAN = "steelman"
 
+class NestedStyleEnum(Enum):
+    """Visual style for hierarchical levels."""
 
-class RemixPreserveEnum(str, Enum):
-    """What aspects of the original content to prioritize preserving"""
+    bullet = auto()
+    numbered = auto()
+    mixed = auto()
 
-    FACTS = "facts"
-    STRUCTURE = "structure"
-    TONE = "tone"
-    COMPREHENSIVENESS = "comprehensiveness"
 
+class TableFormatFormatEnum(Enum):
+    """Format style for the table representation."""
 
-class RootCauseMethodEnum(str, Enum):
-    """The specific root cause analysis methodology to apply"""
+    markdown = auto()
+    ascii = auto()
+    csv = auto()
 
-    VALUE_5WHYS = "5whys"
-    FISHBONE = "fishbone"
-    PARETO = "pareto"
 
+class TableFormatAlignmentEnum(Enum):
+    """Text alignment within table cells."""
 
-class StressTestSeverityEnum(str, Enum):
-    """The intensity level of the stress conditions"""
+    left = auto()
+    center = auto()
+    right = auto()
 
-    MODERATE = "moderate"
-    SEVERE = "severe"
-    EXTREME = "extreme"
 
+class LayeredLevelsEnum(Enum):
+    """The granularity of explanation levels to include."""
 
-class StyleShiftAspectEnum(str, Enum):
-    """The specific style aspect to modify"""
+    sentence_paragraph_full = auto()
+    basic_intermediate_advanced = auto()
+    summary_detail_technical = auto()
 
-    FORMALITY = "formality"
-    PERSUASION = "persuasion"
-    URGENCY = "urgency"
-    CONFIDENCE = "confidence"
-    COMPLEXITY = "complexity"
 
+class LayeredProgressionEnum(Enum):
+    """How to structure the progression between layers."""
 
-class SummaryLengthEnum(str, Enum):
-    """Relative length of the summary"""
+    separate = auto()
+    nested = auto()
+    incremental = auto()
 
-    SHORT = "short"
-    MEDIUM = "medium"
-    LONG = "long"
 
+class ComparisonFormatEnum(Enum):
+    """The presentation format for the comparison."""
 
-class SummaryPositionEnum(str, Enum):
-    """Where to position the summary in relation to any full content"""
+    table = auto()
+    prose = auto()
+    bullets = auto()
 
-    BEGINNING = "beginning"
-    END = "end"
-    STANDALONE = "standalone"
 
+class BulletStyleEnum(Enum):
+    """The visual marker used for bullet points."""
 
-class TableFormatAlignmentEnum(str, Enum):
-    """Text alignment within table cells"""
+    dash = auto()
+    dot = auto()
+    arrow = auto()
+    star = auto()
+    plus = auto()
 
-    LEFT = "left"
-    CENTER = "center"
-    RIGHT = "right"
 
+class OutlineStyleEnum(Enum):
+    """Numbering or bullet style for the outline."""
 
-class TableFormatFormatEnum(str, Enum):
-    """Format style for the table representation"""
+    numeric = auto()
+    bullet = auto()
+    roman = auto()
+    alpha = auto()
+    mixed = auto()
 
-    MARKDOWN = "markdown"
-    ASCII = "ascii"
-    CSV = "csv"
 
+class TimelineGranularityEnum(Enum):
+    """The level of time detail to include in the timeline."""
 
-class TimelineDetailsEnum(str, Enum):
-    """The level of detail to include for each timeline event"""
+    day = auto()
+    month = auto()
+    year = auto()
+    decade = auto()
+    century = auto()
+    era = auto()
 
-    MINIMAL = "minimal"
-    MODERATE = "moderate"
-    COMPREHENSIVE = "comprehensive"
 
+class TimelineFormatEnum(Enum):
+    """The presentation format for the timeline."""
 
-class TimelineFormatEnum(str, Enum):
-    """The presentation format for the timeline"""
+    list = auto()
+    narrative = auto()
+    table = auto()
 
-    LIST = "list"
-    NARRATIVE = "narrative"
-    TABLE = "table"
 
+class TimelineDetailsEnum(Enum):
+    """The level of detail to include for each timeline event."""
 
-class TimelineGranularityEnum(str, Enum):
-    """The level of time detail to include in the timeline"""
+    minimal = auto()
+    moderate = auto()
+    comprehensive = auto()
 
-    DAY = "day"
-    MONTH = "month"
-    YEAR = "year"
-    DECADE = "decade"
-    CENTURY = "century"
-    ERA = "era"
 
+class MECEFrameworkEnum(Enum):
+    """Optional predefined MECE framework to apply."""
 
-class ToneStyleEnum(str, Enum):
-    """The desired tone and style for the response"""
+    issue_tree = auto()
+    value_chain = auto()
+    business_segments = auto()
+    stakeholders = auto()
+    custom = auto()
 
-    FORMAL = "formal"
-    CASUAL = "casual"
-    FRIENDLY = "friendly"
-    TECHNICAL = "technical"
-    HUMOROUS = "humorous"
 
+class DecisionMatrixScaleEnum(Enum):
+    """Rating scale to use for evaluations."""
 
-class UncertaintyFormatEnum(str, Enum):
-    """How to format uncertainty indications in the response"""
+    _1_5 = auto()
+    _1_10 = auto()
+    qualitative = auto()
+    percentage = auto()
 
-    INLINE = "inline"
-    SECTION = "section"
-    CONFIDENCE = "confidence"
 
+class ConstraintsVocabularyEnum(Enum):
+    """Constraints on vocabulary usage."""
 
-class UncertaintyThresholdEnum(str, Enum):
-    """The threshold for flagging uncertain content"""
+    simple = auto()
+    technical = auto()
+    domain_specific = auto()
+    creative = auto()
 
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"

@@ -7,7 +7,6 @@ This module provides a command-line interface for:
 2. Generating Python code for the decorators
 3. Generating tests for the decorators
 """
-
 import argparse
 import os
 import sys
@@ -36,7 +35,7 @@ def scan_registry(args: argparse.Namespace) -> None:
 
 
 def generate_code(args: argparse.Namespace) -> None:
-    """Generate Python code for decorators in the registry.
+    """Generate code for decorators in the registry.
 
     Args:
         args: Command-line arguments
@@ -48,29 +47,14 @@ def generate_code(args: argparse.Namespace) -> None:
     decorators = scanner.scan()  # This already returns parsed decorator data
 
     # Create generator
-    generator = CodeGenerator(decorators)
+    generator = CodeGenerator(
+        decorators=decorators,
+        output_dir=args.output_dir,
+        template_dir=args.template_dir,
+    )
 
     # Generate code
-    generated_files = generator.generate_all()
-
-    # Write to files
-    output_dir = Path(args.output_dir)
-    os.makedirs(output_dir, exist_ok=True)
-
-    file_count = 0
-    for rel_path, content in generated_files.items():
-        file_path = output_dir / rel_path
-        os.makedirs(file_path.parent, exist_ok=True)
-        with open(file_path, "w") as f:
-            f.write(content)
-        file_count += 1
-
-    if args.verbose:
-        print(f"Generated {file_count} files:")
-        for rel_path in generated_files.keys():
-            print(f"  - {output_dir / rel_path}")
-    else:
-        print(f"Generated {file_count} files.")
+    generator.generate_all()
 
 
 def generate_tests(args: argparse.Namespace) -> None:
@@ -88,14 +72,7 @@ def generate_tests(args: argparse.Namespace) -> None:
         template_dir=args.template_dir,
     )
 
-    generated_files = generator.generate_all_tests()
-
-    if args.verbose:
-        print(f"Generated {len(generated_files)} test files:")
-        for file in generated_files:
-            print(f"  - {file}")
-    else:
-        print(f"Generated {len(generated_files)} test files.")
+    generator.generate_all_tests()
 
 
 def main() -> None:

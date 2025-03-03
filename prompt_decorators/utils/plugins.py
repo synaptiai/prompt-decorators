@@ -2,7 +2,6 @@
 
 This module provides a plugin architecture for decorator extensions.
 """
-
 import importlib
 import importlib.util
 import inspect
@@ -27,8 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 class Plugin:
-    """
-    Class representing a plugin containing decorator extensions.
+    """Class representing a plugin containing decorator extensions.
 
     A plugin is a collection of decorators that can be loaded dynamically.
     """
@@ -43,8 +41,7 @@ class Plugin:
         decorators: Optional[List[Type[BaseDecorator]]] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ):
-        """
-        Initialize a plugin.
+        """Initialize a plugin.
 
         Args:
             name: Name of the plugin
@@ -73,8 +70,7 @@ class Plugin:
         self.enabled = True
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the plugin to a dictionary.
+        """Convert the plugin to a dictionary.
 
         Args:
             self: The plugin instance
@@ -95,8 +91,7 @@ class Plugin:
 
 
 class PluginManager:
-    """
-    Manager for decorator plugins.
+    """Manager for decorator plugins.
 
     This class provides functionality for loading, managing, and monitoring plugins.
     """
@@ -104,10 +99,10 @@ class PluginManager:
     _instance = None
 
     def __new__(cls):
-        """Returns:
+        """Create a singleton instance of the plugin manager.
 
-            Description of return value
-        Create a singleton instance of the plugin manager.
+        Returns:
+            The singleton instance of the plugin manager.
         """
         if cls._instance is None:
             cls._instance = super(PluginManager, cls).__new__(cls)
@@ -128,8 +123,7 @@ class PluginManager:
         self._plugin_hooks: Dict[str, List[Callable]] = {}
 
     def add_plugin_directory(self, directory: str) -> None:
-        """
-        Add a directory to search for plugins.
+        """Add a directory to search for plugins.
 
         Args:
             directory: Path to the directory containing plugins
@@ -147,8 +141,7 @@ class PluginManager:
             logger.info(f"Added plugin directory: {directory}")
 
     def discover_plugins(self) -> List[Plugin]:
-        """
-        Discover plugins in the registered directories.
+        """Discover plugins in the registered directories.
 
         Args:
             self: The plugin manager instance
@@ -192,8 +185,7 @@ class PluginManager:
         return discovered_plugins
 
     def load_discovered_plugins(self) -> int:
-        """
-        Load all discovered plugins.
+        """Load all discovered plugins.
 
         Args:
             self: The plugin manager instance
@@ -211,8 +203,7 @@ class PluginManager:
         return count
 
     def load_plugin(self, plugin: Plugin) -> bool:
-        """
-        Load a plugin.
+        """Load a plugin.
 
         Args:
             plugin: The plugin to load
@@ -240,8 +231,7 @@ class PluginManager:
         return True
 
     def unload_plugin(self, plugin_name: str) -> bool:
-        """
-        Unload a plugin.
+        """Unload a plugin.
 
         Args:
             plugin_name: Name of the plugin to unload
@@ -265,8 +255,7 @@ class PluginManager:
         return True
 
     def get_plugin(self, plugin_name: str) -> Optional[Plugin]:
-        """
-        Get a loaded plugin by name.
+        """Get a loaded plugin by name.
 
         Args:
             plugin_name: Name of the plugin to get
@@ -277,8 +266,7 @@ class PluginManager:
         return self._plugins.get(plugin_name)
 
     def get_all_plugins(self) -> Dict[str, Plugin]:
-        """
-        Get all loaded plugins.
+        """Get all loaded plugins.
 
         Args:
             self: The plugin manager instance
@@ -289,8 +277,7 @@ class PluginManager:
         return self._plugins.copy()
 
     def register_hook(self, hook_name: str, callback: Callable) -> None:
-        """
-        Register a hook callback.
+        """Register a hook callback.
 
         Args:
             hook_name: Name of the hook
@@ -305,8 +292,7 @@ class PluginManager:
         self._plugin_hooks[hook_name].append(callback)
 
     def _call_hook(self, hook_name: str, *args, **kwargs) -> None:
-        """
-        Call all registered callbacks for a hook.
+        """Call all registered callbacks for a hook.
 
         Args:
             hook_name: Name of the hook to call
@@ -326,8 +312,7 @@ class PluginManager:
                 logger.error(f"Error calling hook {hook_name}: {e}")
 
     def _load_plugin_from_package(self, package_path: Path) -> Optional[Plugin]:
-        """
-        Load a plugin from a Python package.
+        """Load a plugin from a Python package.
 
         Args:
             package_path: Path to the package directory
@@ -422,8 +407,7 @@ class PluginManager:
             return None
 
     def _load_plugin_from_module(self, module_path: Path) -> Optional[Plugin]:
-        """
-        Load a plugin from a Python module.
+        """Load a plugin from a Python module.
 
         Args:
             module_path: Path to the module file
@@ -503,8 +487,7 @@ class PluginManager:
             return None
 
     def _load_plugin_from_json(self, json_path: Path) -> Optional[Plugin]:
-        """
-        Load a plugin from a JSON file.
+        """Load a plugin from a JSON file.
 
         Args:
             json_path: Path to the JSON file
@@ -558,8 +541,7 @@ class PluginManager:
             return None
 
     def start_watching_directories(self, interval: int = 10) -> None:
-        """
-        Start watching plugin directories for changes.
+        """Start watching plugin directories for changes.
 
         Args:
             interval: How often to check for changes (in seconds)
@@ -684,8 +666,7 @@ plugin_manager = PluginManager()
 
 # Function to get the global plugin manager
 def get_plugin_manager() -> PluginManager:
-    """
-    Get the global plugin manager.
+    """Get the global plugin manager.
 
     Returns:
         The global plugin manager instance

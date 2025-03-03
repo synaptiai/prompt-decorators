@@ -1,5 +1,4 @@
-"""
-Implementation of the Schema decorator.
+"""Implementation of the Schema decorator.
 
 This module provides the Schema decorator class for use in prompt engineering.
 
@@ -14,15 +13,11 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Schema(BaseDecorator):
-    """
-    Defines a custom structure for the AI's response using a specified
-    schema format. This decorator enables precise control over the output
-    structure, ensuring responses follow a consistent, well-defined format
-    optimized for specific use cases or data processing needs.
+    """Defines a custom structure for the AI's response using a specified schema format. This decorator enables precise control over the output structure, ensuring responses follow a consistent, well-defined format optimized for specific use cases or data processing needs.
 
     Attributes:
-        schema: JSON Schema definition or reference to a predefined schema that defines the structure of the response
-        strict: Whether to enforce strict schema compliance or allow flexibility
+        schema: JSON Schema definition or reference to a predefined schema that defines the structure of the response. (str)
+        strict: Whether to enforce strict schema compliance or allow flexibility. (bool)
     """
 
     decorator_name = "schema"
@@ -30,11 +25,11 @@ class Schema(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -43,17 +38,12 @@ class Schema(BaseDecorator):
         schema: str,
         strict: bool = False,
     ) -> None:
-        """
-        Initialize the Schema decorator.
+        """Initialize the Schema decorator.
 
         Args:
-            schema: JSON Schema definition or reference to a predefined schema
-                that defines the structure of the response
-            strict: Whether to enforce strict schema compliance or allow
-                flexibility
+            schema: JSON Schema definition or reference to a predefined schema that defines the structure of the response
+            strict: Whether to enforce strict schema compliance or allow flexibility
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -63,6 +53,13 @@ class Schema(BaseDecorator):
         self._strict = strict
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._schema = schema
+        self._strict = strict
+
         # Validate parameters
         if self._schema is not None:
             if not isinstance(self._schema, str):
@@ -77,8 +74,7 @@ class Schema(BaseDecorator):
 
     @property
     def schema(self) -> str:
-        """
-        Get the schema parameter value.
+        """Get the schema parameter value.
 
         Args:
             self: The decorator instance
@@ -90,8 +86,7 @@ class Schema(BaseDecorator):
 
     @property
     def strict(self) -> bool:
-        """
-        Get the strict parameter value.
+        """Get the strict parameter value.
 
         Args:
             self: The decorator instance
@@ -102,8 +97,7 @@ class Schema(BaseDecorator):
         return self._strict
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -117,8 +111,7 @@ class Schema(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -135,32 +128,34 @@ class Schema(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -178,11 +173,11 @@ class Schema(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

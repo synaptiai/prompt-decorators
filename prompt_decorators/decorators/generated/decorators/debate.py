@@ -1,5 +1,4 @@
-"""
-Implementation of the Debate decorator.
+"""Implementation of the Debate decorator.
 
 This module provides the Debate decorator class for use in prompt engineering.
 
@@ -14,14 +13,11 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Debate(BaseDecorator):
-    """
-    Structures the response as a debate between multiple perspectives on a
-    topic. This decorator encourages balanced representation of different
-    viewpoints and helps explore complex issues from various angles.
+    """Structures the response as a debate between multiple perspectives on a topic. This decorator encourages balanced representation of different viewpoints and helps explore complex issues from various angles.
 
     Attributes:
-        perspectives: Number of different perspectives to include in the debate
-        balanced: Whether to ensure equal representation and strength of arguments for each perspective
+        perspectives: Number of different perspectives to include in the debate. (Any)
+        balanced: Whether to ensure equal representation and strength of arguments for each perspective. (bool)
     """
 
     decorator_name = "debate"
@@ -29,11 +25,11 @@ class Debate(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -42,16 +38,12 @@ class Debate(BaseDecorator):
         perspectives: Any = 2,
         balanced: bool = True,
     ) -> None:
-        """
-        Initialize the Debate decorator.
+        """Initialize the Debate decorator.
 
         Args:
             perspectives: Number of different perspectives to include in the debate
-            balanced: Whether to ensure equal representation and strength of
-                arguments for each perspective
+            balanced: Whether to ensure equal representation and strength of arguments for each perspective
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -61,6 +53,13 @@ class Debate(BaseDecorator):
         self._balanced = balanced
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._perspectives = perspectives
+        self._balanced = balanced
+
         # Validate parameters
         if self._perspectives is not None:
             if not isinstance(self._perspectives, (int, float)):
@@ -83,8 +82,7 @@ class Debate(BaseDecorator):
 
     @property
     def perspectives(self) -> Any:
-        """
-        Get the perspectives parameter value.
+        """Get the perspectives parameter value.
 
         Args:
             self: The decorator instance
@@ -96,8 +94,7 @@ class Debate(BaseDecorator):
 
     @property
     def balanced(self) -> bool:
-        """
-        Get the balanced parameter value.
+        """Get the balanced parameter value.
 
         Args:
             self: The decorator instance
@@ -108,8 +105,7 @@ class Debate(BaseDecorator):
         return self._balanced
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -123,8 +119,7 @@ class Debate(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -141,32 +136,34 @@ class Debate(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -184,11 +181,11 @@ class Debate(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

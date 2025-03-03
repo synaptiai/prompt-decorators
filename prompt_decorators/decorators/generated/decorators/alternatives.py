@@ -1,5 +1,4 @@
-"""
-Implementation of the Alternatives decorator.
+"""Implementation of the Alternatives decorator.
 
 This module provides the Alternatives decorator class for use in prompt engineering.
 
@@ -17,16 +16,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Alternatives(BaseDecorator):
-    """
-    Presents multiple distinct options, approaches, or solutions to a
-    question or problem. This decorator encourages exploring different
-    paths or perspectives rather than providing a single definitive
-    answer.
+    """Presents multiple distinct options, approaches, or solutions to a question or problem. This decorator encourages exploring different paths or perspectives rather than providing a single definitive answer.
 
     Attributes:
-        count: Number of alternative options or approaches to generate
-        diversity: How different or varied the alternatives should be from each other
-        comparison: Whether to include a comparative analysis of the alternatives
+        count: Number of alternative options or approaches to generate. (Any)
+        diversity: How different or varied the alternatives should be from each other. (Literal["low", "medium", "high"])
+        comparison: Whether to include a comparative analysis of the alternatives. (bool)
     """
 
     decorator_name = "alternatives"
@@ -34,11 +29,11 @@ class Alternatives(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -48,18 +43,13 @@ class Alternatives(BaseDecorator):
         diversity: Literal["low", "medium", "high"] = "medium",
         comparison: bool = False,
     ) -> None:
-        """
-        Initialize the Alternatives decorator.
+        """Initialize the Alternatives decorator.
 
         Args:
             count: Number of alternative options or approaches to generate
-            diversity: How different or varied the alternatives should be from each
-                other
-            comparison: Whether to include a comparative analysis of the
-                alternatives
+            diversity: How different or varied the alternatives should be from each other
+            comparison: Whether to include a comparative analysis of the alternatives
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -70,6 +60,14 @@ class Alternatives(BaseDecorator):
         self._comparison = comparison
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._count = count
+        self._diversity = diversity
+        self._comparison = comparison
+
         # Validate parameters
         if self._count is not None:
             if not isinstance(self._count, (int, float)):
@@ -101,8 +99,7 @@ class Alternatives(BaseDecorator):
 
     @property
     def count(self) -> Any:
-        """
-        Get the count parameter value.
+        """Get the count parameter value.
 
         Args:
             self: The decorator instance
@@ -114,8 +111,7 @@ class Alternatives(BaseDecorator):
 
     @property
     def diversity(self) -> Literal["low", "medium", "high"]:
-        """
-        Get the diversity parameter value.
+        """Get the diversity parameter value.
 
         Args:
             self: The decorator instance
@@ -127,8 +123,7 @@ class Alternatives(BaseDecorator):
 
     @property
     def comparison(self) -> bool:
-        """
-        Get the comparison parameter value.
+        """Get the comparison parameter value.
 
         Args:
             self: The decorator instance
@@ -139,8 +134,7 @@ class Alternatives(BaseDecorator):
         return self._comparison
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -155,8 +149,7 @@ class Alternatives(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -175,32 +168,34 @@ class Alternatives(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -218,11 +213,11 @@ class Alternatives(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

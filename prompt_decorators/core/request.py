@@ -1,12 +1,12 @@
-"""API Request Handling Module.
+"""Request handling for prompt decorators.
 
-This module provides utilities for handling API requests with decorators.
+This module provides the DecoratedRequest class for managing decorated prompts.
 """
 
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Type, Union
 
-from .base import BaseDecorator
+from prompt_decorators.core.base import BaseDecorator
 
 
 class DecoratedRequest:
@@ -19,8 +19,7 @@ class DecoratedRequest:
         model: Optional[str] = None,
         api_params: Optional[Dict[str, Any]] = None,
     ):
-        """
-        Initialize a decorated request.
+        """Initialize a decorated request.
 
         Args:
             prompt: The base prompt text
@@ -37,8 +36,7 @@ class DecoratedRequest:
         self._validate_decorators()
 
     def _validate_decorators(self) -> None:
-        """
-        Validate that the decorators are compatible with each other.
+        """Validate that the decorators are compatible with each other.
 
         Args:
             self: The request instance
@@ -59,8 +57,7 @@ class DecoratedRequest:
             decorator_names.add(decorator.name)
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the request to a dictionary representation.
+        """Convert the request to a dictionary representation.
 
         Args:
             self: The request instance
@@ -82,8 +79,7 @@ class DecoratedRequest:
         return result
 
     def to_json(self, indent: Optional[int] = None) -> str:
-        """
-        Convert the request to a JSON string.
+        """Convert the request to a JSON string.
 
         Args:
             indent: Optional indentation for pretty-printing
@@ -95,8 +91,7 @@ class DecoratedRequest:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DecoratedRequest":
-        """
-        Create a request from a dictionary.
+        """Create a request from a dictionary.
 
         Args:
             data: Dictionary representation of a request
@@ -122,18 +117,18 @@ class DecoratedRequest:
         }
 
         decorators = []
-        for decorator_data in data.get("decorators", []):
-            if "name" not in decorator_data:
-                raise ValueError("Decorator missing 'name' field")
+        if "decorators" in data:
+            for decorator_data in data["decorators"]:
+                if "type" not in decorator_data:
+                    raise ValueError("Decorator missing 'type' field")
 
-            decorator_name = decorator_data["name"]
-            if decorator_name in decorator_classes:
-                # Create a decorator instance of the appropriate class
-                decorators.append(
-                    decorator_classes[decorator_name].from_dict(decorator_data)
-                )
-            else:
-                raise ValueError(f"Unknown decorator type: {decorator_name}")
+                decorator_type = decorator_data["type"]
+                if decorator_type not in decorator_classes:
+                    raise ValueError(f"Unknown decorator type: {decorator_type}")
+
+                decorator_class = decorator_classes[decorator_type]
+                decorator = decorator_class.from_dict(decorator_data)
+                decorators.append(decorator)
 
         return cls(
             prompt=data["prompt"],
@@ -144,8 +139,7 @@ class DecoratedRequest:
 
     @classmethod
     def from_json(cls, json_str: str) -> "DecoratedRequest":
-        """
-        Create a request from a JSON string.
+        """Create a request from a JSON string.
 
         Args:
             json_str: JSON string representation of a request
@@ -155,42 +149,40 @@ class DecoratedRequest:
 
         Raises:
             ValueError: If the JSON is invalid
-            json.JSONDecodeError: If the JSON is malformed
         """
-        data = json.loads(json_str)
-        return cls.from_dict(data)
+        try:
+            data = json.loads(json_str)
+            return cls.from_dict(data)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON: {e}")
 
     def add_decorator(self, decorator: BaseDecorator) -> "DecoratedRequest":
-        """
-        Add a decorator to the request.
+        """Add a decorator to the request.
 
         Args:
-            decorator: Decorator to add
+            decorator: The decorator to add
 
         Returns:
             Self for method chaining
 
         Raises:
-            ValueError: If adding the decorator would create incompatibility
+            ValueError: If a decorator with the same name already exists
         """
-        # Check for duplicates
-        if any(d.name == decorator.name for d in self.decorators):
-            raise ValueError(f"Duplicate decorator: {decorator.name}")
+        # Check if a decorator with the same name already exists
+        for existing in self.decorators:
+            if existing.name == decorator.name:
+                raise ValueError(
+                    f"Decorator with name '{decorator.name}' already exists"
+                )
 
-        # Add the decorator
         self.decorators.append(decorator)
-
-        # Re-validate compatibility
-        self._validate_decorators()
-
         return self
 
     def get_decorator(self, decorator_name: str) -> Optional[BaseDecorator]:
-        """
-        Get a decorator by name.
+        """Get a decorator by name.
 
         Args:
-            decorator_name: Name of the decorator to find
+            decorator_name: Name of the decorator to retrieve
 
         Returns:
             The decorator if found, None otherwise
@@ -201,43 +193,42 @@ class DecoratedRequest:
         return None
 
     def remove_decorator(self, decorator_name: str) -> bool:
-        """
-        Remove a decorator by name.
+        """Remove a decorator by name.
 
         Args:
             decorator_name: Name of the decorator to remove
 
         Returns:
-            True if a decorator was removed, False otherwise
+            True if the decorator was removed, False if not found
         """
-        initial_count = len(self.decorators)
-        self.decorators = [d for d in self.decorators if d.name != decorator_name]
-        return len(self.decorators) < initial_count
+        for i, decorator in enumerate(self.decorators):
+            if decorator.name == decorator_name:
+                self.decorators.pop(i)
+                return True
+        return False
 
     def apply_decorators(self) -> str:
-        """
-        Apply all decorators to the prompt.
-
-        Args:
-            self: The request instance
+        """Apply all decorators to the prompt.
 
         Returns:
             The decorated prompt text
+
+        Note:
+            Decorators are applied in the order they were added.
+            This allows for composing decorators in a specific sequence.
         """
-        # Apply each decorator to the prompt in sequence
         decorated_prompt = self.prompt
 
         for decorator in self.decorators:
-            decorated_prompt = decorator.apply(decorated_prompt)
+            decorated_prompt = decorator.apply_to_prompt(decorated_prompt)
 
         return decorated_prompt
 
     def __str__(self) -> str:
-        """
-        Get string representation of the request.
+        """Get a string representation of the request.
 
         Returns:
-            String representation
+            String representation showing the prompt and decorators
         """
-        decorator_str = ", ".join(str(d) for d in self.decorators)
+        decorator_str = ", ".join(d.name for d in self.decorators)
         return f"DecoratedRequest(prompt='{self.prompt[:50]}...', decorators=[{decorator_str}])"

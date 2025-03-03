@@ -1,5 +1,4 @@
-"""
-Implementation of the Chain decorator.
+"""Implementation of the Chain decorator.
 
 This module provides the Chain decorator class for use in prompt engineering.
 
@@ -14,16 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Chain(BaseDecorator):
-    """
-    A meta-decorator that applies multiple decorators in sequence, with
-    each decorator processing the output of the previous one. This enables
-    complex transformations by combining multiple simpler decorators in a
-    pipeline.
+    """A meta-decorator that applies multiple decorators in sequence, with each decorator processing the output of the previous one. This enables complex transformations by combining multiple simpler decorators in a pipeline.
 
     Attributes:
-        decorators: Ordered list of decorators to apply in sequence
-        showSteps: Whether to show intermediate outputs after each decorator in the chain
-        stopOnFailure: Whether to stop the chain if a decorator fails to apply correctly
+        decorators: Ordered list of decorators to apply in sequence. (List[Any])
+        showSteps: Whether to show intermediate outputs after each decorator in the chain. (bool)
+        stopOnFailure: Whether to stop the chain if a decorator fails to apply correctly. (bool)
     """
 
     decorator_name = "chain"
@@ -31,11 +26,11 @@ class Chain(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,18 +40,13 @@ class Chain(BaseDecorator):
         showSteps: bool = False,
         stopOnFailure: bool = True,
     ) -> None:
-        """
-        Initialize the Chain decorator.
+        """Initialize the Chain decorator.
 
         Args:
             decorators: Ordered list of decorators to apply in sequence
-            showSteps: Whether to show intermediate outputs after each decorator in
-                the chain
-            stopOnFailure: Whether to stop the chain if a decorator fails to apply
-                correctly
+            showSteps: Whether to show intermediate outputs after each decorator in the chain
+            stopOnFailure: Whether to stop the chain if a decorator fails to apply correctly
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -67,6 +57,14 @@ class Chain(BaseDecorator):
         self._stopOnFailure = stopOnFailure
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._decorators = decorators
+        self._showSteps = showSteps
+        self._stopOnFailure = stopOnFailure
+
         # Validate parameters
         if self._decorators is not None:
             if not isinstance(self._decorators, list):
@@ -86,8 +84,7 @@ class Chain(BaseDecorator):
 
     @property
     def decorators(self) -> List[Any]:
-        """
-        Get the decorators parameter value.
+        """Get the decorators parameter value.
 
         Args:
             self: The decorator instance
@@ -99,8 +96,7 @@ class Chain(BaseDecorator):
 
     @property
     def showSteps(self) -> bool:
-        """
-        Get the showSteps parameter value.
+        """Get the showSteps parameter value.
 
         Args:
             self: The decorator instance
@@ -112,8 +108,7 @@ class Chain(BaseDecorator):
 
     @property
     def stopOnFailure(self) -> bool:
-        """
-        Get the stopOnFailure parameter value.
+        """Get the stopOnFailure parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +119,7 @@ class Chain(BaseDecorator):
         return self._stopOnFailure
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -140,8 +134,7 @@ class Chain(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -160,32 +153,34 @@ class Chain(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -203,11 +198,11 @@ class Chain(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

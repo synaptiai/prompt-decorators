@@ -1,5 +1,4 @@
-"""
-Implementation of the Remix decorator.
+"""Implementation of the Remix decorator.
 
 This module provides the Remix decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import RemixPreserv
 
 
 class Remix(BaseDecorator):
-    """
-    Reframes or adapts content for a different context, purpose, or
-    audience than originally intended. This decorator transforms the
-    presentation style while preserving core information, making it
-    accessible and relevant to specific scenarios or demographics.
+    """Reframes or adapts content for a different context, purpose, or audience than originally intended. This decorator transforms the presentation style while preserving core information, making it accessible and relevant to specific scenarios or demographics.
 
     Attributes:
-        target: The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch')
-        preserve: What aspects of the original content to prioritize preserving
-        contrast: Whether to highlight differences between the original framing and the remixed version
+        target: The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch'). (str)
+        preserve: What aspects of the original content to prioritize preserving. (Literal["facts", "structure", "tone", "comprehensiveness"])
+        contrast: Whether to highlight differences between the original framing and the remixed version. (bool)
     """
 
     decorator_name = "remix"
@@ -32,11 +27,11 @@ class Remix(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,20 +41,13 @@ class Remix(BaseDecorator):
         preserve: Literal["facts", "structure", "tone", "comprehensiveness"] = "facts",
         contrast: bool = False,
     ) -> None:
-        """
-        Initialize the Remix decorator.
+        """Initialize the Remix decorator.
 
         Args:
-            target: The specific audience or context to adapt the content for
-                (e.g., 'executives', 'teenagers', 'technical team', 'sales
-                pitch')
-            preserve: What aspects of the original content to prioritize
-                preserving
-            contrast: Whether to highlight differences between the original
-                framing and the remixed version
+            target: The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch')
+            preserve: What aspects of the original content to prioritize preserving
+            contrast: Whether to highlight differences between the original framing and the remixed version
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -70,6 +58,14 @@ class Remix(BaseDecorator):
         self._contrast = contrast
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._target = target
+        self._preserve = preserve
+        self._contrast = contrast
+
         # Validate parameters
         if self._target is not None:
             if not isinstance(self._target, str):
@@ -98,8 +94,7 @@ class Remix(BaseDecorator):
 
     @property
     def target(self) -> str:
-        """
-        Get the target parameter value.
+        """Get the target parameter value.
 
         Args:
             self: The decorator instance
@@ -111,8 +106,7 @@ class Remix(BaseDecorator):
 
     @property
     def preserve(self) -> Literal["facts", "structure", "tone", "comprehensiveness"]:
-        """
-        Get the preserve parameter value.
+        """Get the preserve parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +118,7 @@ class Remix(BaseDecorator):
 
     @property
     def contrast(self) -> bool:
-        """
-        Get the contrast parameter value.
+        """Get the contrast parameter value.
 
         Args:
             self: The decorator instance
@@ -136,8 +129,7 @@ class Remix(BaseDecorator):
         return self._contrast
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -152,8 +144,7 @@ class Remix(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -172,32 +163,34 @@ class Remix(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -215,11 +208,11 @@ class Remix(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

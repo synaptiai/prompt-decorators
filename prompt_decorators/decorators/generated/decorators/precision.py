@@ -1,5 +1,4 @@
-"""
-Implementation of the Precision decorator.
+"""Implementation of the Precision decorator.
 
 This module provides the Precision decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import PrecisionLev
 
 
 class Precision(BaseDecorator):
-    """
-    Enhances responses with exact, specific, and precisely defined
-    information. This decorator prioritizes accuracy in measurements,
-    terms, definitions, and claims, avoiding vague language in favor of
-    concrete specificity.
+    """Enhances responses with exact, specific, and precisely defined information. This decorator prioritizes accuracy in measurements, terms, definitions, and claims, avoiding vague language in favor of concrete specificity.
 
     Attributes:
-        level: The degree of precision to apply
-        units: Whether to consistently provide units for all measurements
-        definitions: Whether to include precise definitions for key terms
+        level: The degree of precision to apply. (Literal["moderate", "high", "scientific"])
+        units: Whether to consistently provide units for all measurements. (bool)
+        definitions: Whether to include precise definitions for key terms. (bool)
     """
 
     decorator_name = "precision"
@@ -32,11 +27,11 @@ class Precision(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,16 +41,13 @@ class Precision(BaseDecorator):
         units: bool = True,
         definitions: bool = False,
     ) -> None:
-        """
-        Initialize the Precision decorator.
+        """Initialize the Precision decorator.
 
         Args:
             level: The degree of precision to apply
             units: Whether to consistently provide units for all measurements
             definitions: Whether to include precise definitions for key terms
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -66,6 +58,14 @@ class Precision(BaseDecorator):
         self._definitions = definitions
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._level = level
+        self._units = units
+        self._definitions = definitions
+
         # Validate parameters
         if self._level is not None:
             if not isinstance(self._level, str):
@@ -89,8 +89,7 @@ class Precision(BaseDecorator):
 
     @property
     def level(self) -> Literal["moderate", "high", "scientific"]:
-        """
-        Get the level parameter value.
+        """Get the level parameter value.
 
         Args:
             self: The decorator instance
@@ -102,8 +101,7 @@ class Precision(BaseDecorator):
 
     @property
     def units(self) -> bool:
-        """
-        Get the units parameter value.
+        """Get the units parameter value.
 
         Args:
             self: The decorator instance
@@ -115,8 +113,7 @@ class Precision(BaseDecorator):
 
     @property
     def definitions(self) -> bool:
-        """
-        Get the definitions parameter value.
+        """Get the definitions parameter value.
 
         Args:
             self: The decorator instance
@@ -127,8 +124,7 @@ class Precision(BaseDecorator):
         return self._definitions
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -143,8 +139,7 @@ class Precision(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -163,32 +158,34 @@ class Precision(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -206,11 +203,11 @@ class Precision(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

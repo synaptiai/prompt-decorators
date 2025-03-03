@@ -1,5 +1,4 @@
-"""
-Implementation of the StepByStep decorator.
+"""Implementation of the StepByStep decorator.
 
 This module provides the StepByStep decorator class for use in prompt engineering.
 
@@ -14,13 +13,10 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class StepByStep(BaseDecorator):
-    """
-    Structures the AI's response as a sequence of clearly labeled steps.
-    This decorator helps break down complex processes, explanations, or
-    solutions into manageable, sequential parts for better understanding.
+    """Structures the AI's response as a sequence of clearly labeled steps. This decorator helps break down complex processes, explanations, or solutions into manageable, sequential parts for better understanding.
 
     Attributes:
-        numbered: Whether to number the steps or use bullet points
+        numbered: Whether to number the steps or use bullet points. (bool)
     """
 
     decorator_name = "step_by_step"
@@ -28,11 +24,11 @@ class StepByStep(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -40,14 +36,11 @@ class StepByStep(BaseDecorator):
         self,
         numbered: bool = True,
     ) -> None:
-        """
-        Initialize the StepByStep decorator.
+        """Initialize the StepByStep decorator.
 
         Args:
             numbered: Whether to number the steps or use bullet points
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -56,6 +49,12 @@ class StepByStep(BaseDecorator):
         self._numbered = numbered
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._numbered = numbered
+
         # Validate parameters
         if self._numbered is not None:
             if not isinstance(self._numbered, bool):
@@ -65,8 +64,7 @@ class StepByStep(BaseDecorator):
 
     @property
     def numbered(self) -> bool:
-        """
-        Get the numbered parameter value.
+        """Get the numbered parameter value.
 
         Args:
             self: The decorator instance
@@ -77,8 +75,7 @@ class StepByStep(BaseDecorator):
         return self._numbered
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -91,8 +88,7 @@ class StepByStep(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -107,32 +103,34 @@ class StepByStep(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -150,11 +148,11 @@ class StepByStep(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

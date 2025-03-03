@@ -1,5 +1,4 @@
-"""
-Implementation of the Custom decorator.
+"""Implementation of the Custom decorator.
 
 This module provides the Custom decorator class for use in prompt engineering.
 
@@ -15,15 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import CustomPriori
 
 
 class Custom(BaseDecorator):
-    """
-    A meta-decorator that enables user-defined decorator behaviors through
-    explicit rules or instructions. This provides maximum flexibility for
-    creating specialized behaviors not covered by standard decorators.
+    """A meta-decorator that enables user-defined decorator behaviors through explicit rules or instructions. This provides maximum flexibility for creating specialized behaviors not covered by standard decorators.
 
     Attributes:
-        rules: Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items')
-        name: Optional name for the custom decorator to reference in documentation or explanations
-        priority: How to prioritize custom rules relative to other decorators
+        rules: Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items'). (str)
+        name: Optional name for the custom decorator to reference in documentation or explanations. (str)
+        priority: How to prioritize custom rules relative to other decorators. (Literal["override", "supplement", "fallback"])
     """
 
     decorator_name = "custom"
@@ -31,11 +27,11 @@ class Custom(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,19 +41,13 @@ class Custom(BaseDecorator):
         name: str = None,
         priority: Literal["override", "supplement", "fallback"] = "override",
     ) -> None:
-        """
-        Initialize the Custom decorator.
+        """Initialize the Custom decorator.
 
         Args:
-            rules: Explicit instructions defining the custom behavior (e.g.,
-                'present all examples in a numbered list with exactly three
-                items')
-            name: Optional name for the custom decorator to reference in
-                documentation or explanations
+            rules: Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items')
+            name: Optional name for the custom decorator to reference in documentation or explanations
             priority: How to prioritize custom rules relative to other decorators
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -68,6 +58,14 @@ class Custom(BaseDecorator):
         self._priority = priority
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._rules = rules
+        self._name = name
+        self._priority = priority
+
         # Validate parameters
         if self._rules is not None:
             if not isinstance(self._rules, str):
@@ -91,8 +89,7 @@ class Custom(BaseDecorator):
 
     @property
     def rules(self) -> str:
-        """
-        Get the rules parameter value.
+        """Get the rules parameter value.
 
         Args:
             self: The decorator instance
@@ -104,8 +101,7 @@ class Custom(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name parameter value.
+        """Get the name parameter value.
 
         Args:
             self: The decorator instance
@@ -117,8 +113,7 @@ class Custom(BaseDecorator):
 
     @property
     def priority(self) -> Literal["override", "supplement", "fallback"]:
-        """
-        Get the priority parameter value.
+        """Get the priority parameter value.
 
         Args:
             self: The decorator instance
@@ -129,8 +124,7 @@ class Custom(BaseDecorator):
         return self._priority
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -145,8 +139,7 @@ class Custom(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -165,32 +158,34 @@ class Custom(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -208,11 +203,11 @@ class Custom(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

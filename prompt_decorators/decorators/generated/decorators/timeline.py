@@ -1,5 +1,4 @@
-"""
-Implementation of the Timeline decorator.
+"""Implementation of the Timeline decorator.
 
 This module provides the Timeline decorator class for use in prompt engineering.
 
@@ -19,16 +18,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Timeline(BaseDecorator):
-    """
-    Organizes information in chronological order, highlighting key events
-    or developments over time. This decorator is ideal for historical
-    accounts, project planning, process evolution, or any topic with a
-    temporal dimension.
+    """Organizes information in chronological order, highlighting key events or developments over time. This decorator is ideal for historical accounts, project planning, process evolution, or any topic with a temporal dimension.
 
     Attributes:
-        granularity: The level of time detail to include in the timeline
-        format: The presentation format for the timeline
-        details: The level of detail to include for each timeline event
+        granularity: The level of time detail to include in the timeline. (Literal["day", "month", "year", "decade", "century", "era"])
+        format: The presentation format for the timeline. (Literal["list", "narrative", "table"])
+        details: The level of detail to include for each timeline event. (Literal["minimal", "moderate", "comprehensive"])
     """
 
     decorator_name = "timeline"
@@ -36,11 +31,11 @@ class Timeline(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -52,16 +47,13 @@ class Timeline(BaseDecorator):
         format: Literal["list", "narrative", "table"] = "list",
         details: Literal["minimal", "moderate", "comprehensive"] = "moderate",
     ) -> None:
-        """
-        Initialize the Timeline decorator.
+        """Initialize the Timeline decorator.
 
         Args:
             granularity: The level of time detail to include in the timeline
             format: The presentation format for the timeline
             details: The level of detail to include for each timeline event
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -72,6 +64,14 @@ class Timeline(BaseDecorator):
         self._details = details
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._granularity = granularity
+        self._format = format
+        self._details = details
+
         # Validate parameters
         if self._granularity is not None:
             if not isinstance(self._granularity, str):
@@ -112,8 +112,7 @@ class Timeline(BaseDecorator):
     def granularity(
         self,
     ) -> Literal["day", "month", "year", "decade", "century", "era"]:
-        """
-        Get the granularity parameter value.
+        """Get the granularity parameter value.
 
         Args:
             self: The decorator instance
@@ -125,8 +124,7 @@ class Timeline(BaseDecorator):
 
     @property
     def format(self) -> Literal["list", "narrative", "table"]:
-        """
-        Get the format parameter value.
+        """Get the format parameter value.
 
         Args:
             self: The decorator instance
@@ -138,8 +136,7 @@ class Timeline(BaseDecorator):
 
     @property
     def details(self) -> Literal["minimal", "moderate", "comprehensive"]:
-        """
-        Get the details parameter value.
+        """Get the details parameter value.
 
         Args:
             self: The decorator instance
@@ -150,8 +147,7 @@ class Timeline(BaseDecorator):
         return self._details
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -166,8 +162,7 @@ class Timeline(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -186,32 +181,34 @@ class Timeline(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -229,11 +226,11 @@ class Timeline(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

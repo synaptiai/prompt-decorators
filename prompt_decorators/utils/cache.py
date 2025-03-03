@@ -2,7 +2,6 @@
 
 This module provides a caching system for decorator definitions and instances.
 """
-
 import logging
 import threading
 import time
@@ -19,8 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class DecoratorCache:
-    """
-    Cache for decorator definitions and instances.
+    """Cache for decorator definitions and instances.
 
     This class provides a caching system for decorator definitions and instances,
     with support for cache invalidation and metrics.
@@ -29,10 +27,10 @@ class DecoratorCache:
     _instance = None
 
     def __new__(cls):
-        """Returns:
+        """Create a singleton instance of the cache.
 
-            Description of return value
-        Create a singleton instance of the cache.
+        Returns:
+            DecoratorCache: The singleton instance
         """
         if cls._instance is None:
             cls._instance = super(DecoratorCache, cls).__new__(cls)
@@ -74,11 +72,10 @@ class DecoratorCache:
         self._lock = threading.RLock()
 
     def set_config(self, config: Dict[str, Any]) -> None:
-        """
-        Set the cache configuration.
+        """Update the cache configuration.
 
         Args:
-            config: Dictionary with configuration options
+            config: Dictionary with configuration options to update
 
         Returns:
             None
@@ -87,11 +84,7 @@ class DecoratorCache:
             self._config.update(config)
 
     def get_config(self) -> Dict[str, Any]:
-        """
-        Get the current cache configuration.
-
-        Args:
-            self: The cache instance
+        """Get the current cache configuration.
 
         Returns:
             Dictionary with configuration options
@@ -100,11 +93,7 @@ class DecoratorCache:
             return self._config.copy()
 
     def get_metrics(self) -> Dict[str, Any]:
-        """
-        Get cache metrics.
-
-        Args:
-            self: The cache instance
+        """Get cache metrics.
 
         Returns:
             Dictionary with metrics
@@ -130,11 +119,10 @@ class DecoratorCache:
                 self._metrics[key] = 0
 
     def get_definition(self, key: str) -> Optional[Dict[str, Any]]:
-        """
-        Get a decorator definition from the cache.
+        """Get a decorator definition from the cache.
 
         Args:
-            key: The cache key (typically the decorator name or path)
+            key: The cache key for the definition
 
         Returns:
             The decorator definition, or None if not found or expired
@@ -157,12 +145,11 @@ class DecoratorCache:
             return None
 
     def set_definition(self, key: str, definition: Dict[str, Any]) -> None:
-        """
-        Add a decorator definition to the cache.
+        """Store a decorator definition in the cache.
 
         Args:
-            key: The cache key
-            definition: The decorator definition
+            key: The cache key for the definition
+            definition: The decorator definition to store
 
         Returns:
             None
@@ -175,11 +162,10 @@ class DecoratorCache:
             self._definitions[key] = (time.time(), definition)
 
     def get_class(self, key: str) -> Optional[Type[BaseDecorator]]:
-        """
-        Get a decorator class from the cache.
+        """Get a decorator class from the cache.
 
         Args:
-            key: The cache key (typically the decorator name)
+            key: The cache key for the class
 
         Returns:
             The decorator class, or None if not found
@@ -193,12 +179,11 @@ class DecoratorCache:
             return None
 
     def set_class(self, key: str, decorator_class: Type[BaseDecorator]) -> None:
-        """
-        Add a decorator class to the cache.
+        """Store a decorator class in the cache.
 
         Args:
-            key: The cache key
-            decorator_class: The decorator class
+            key: The cache key for the class
+            decorator_class: The decorator class to store
 
         Returns:
             None
@@ -207,11 +192,10 @@ class DecoratorCache:
             self._classes[key] = decorator_class
 
     def get_instance(self, key: str) -> Optional[BaseDecorator]:
-        """
-        Get a decorator instance from the cache.
+        """Get a decorator instance from the cache.
 
         Args:
-            key: The cache key (typically a combination of decorator name and parameters)
+            key: The cache key for the instance
 
         Returns:
             The decorator instance, or None if not found or expired
@@ -234,12 +218,11 @@ class DecoratorCache:
             return None
 
     def set_instance(self, key: str, instance: BaseDecorator) -> None:
-        """
-        Add a decorator instance to the cache.
+        """Store a decorator instance in the cache.
 
         Args:
-            key: The cache key
-            instance: The decorator instance
+            key: The cache key for the instance
+            instance: The decorator instance to store
 
         Returns:
             None
@@ -252,11 +235,10 @@ class DecoratorCache:
             self._instances[key] = (time.time(), instance)
 
     def invalidate_definition(self, key: str) -> bool:
-        """
-        Invalidate a decorator definition in the cache.
+        """Invalidate a cached decorator definition.
 
         Args:
-            key: The cache key
+            key: The cache key for the definition
 
         Returns:
             True if the item was found and invalidated, False otherwise
@@ -269,11 +251,10 @@ class DecoratorCache:
             return False
 
     def invalidate_instance(self, key: str) -> bool:
-        """
-        Invalidate a decorator instance in the cache.
+        """Invalidate a cached decorator instance.
 
         Args:
-            key: The cache key
+            key: The cache key for the instance
 
         Returns:
             True if the item was found and invalidated, False otherwise
@@ -286,11 +267,10 @@ class DecoratorCache:
             return False
 
     def _is_expired(self, timestamp: float, ttl: int) -> bool:
-        """
-        Check if an item has expired.
+        """Check if a cached item is expired.
 
         Args:
-            timestamp: The timestamp when the item was added
+            timestamp: The timestamp when the item was cached
             ttl: Time-to-live in seconds
 
         Returns:
@@ -299,8 +279,7 @@ class DecoratorCache:
         return time.time() - timestamp > ttl
 
     def _evict_definitions(self, count: int) -> int:
-        """
-        Evict the oldest definitions from the cache.
+        """Evict the oldest definitions from the cache.
 
         Args:
             count: Number of items to evict
@@ -322,8 +301,7 @@ class DecoratorCache:
         return evicted
 
     def _evict_instances(self, count: int) -> int:
-        """
-        Evict the oldest instances from the cache.
+        """Evict the oldest instances from the cache.
 
         Args:
             count: Number of items to evict
@@ -351,8 +329,7 @@ cache = DecoratorCache()
 
 # Function to get the global cache
 def get_cache() -> DecoratorCache:
-    """
-    Get the global decorator cache.
+    """Get the global decorator cache instance.
 
     Returns:
         The global decorator cache instance
@@ -363,8 +340,7 @@ def get_cache() -> DecoratorCache:
 # LRU cache for decorator instance creation
 @lru_cache(maxsize=128)
 def get_cached_decorator(class_name: str, param_str: str) -> Optional[BaseDecorator]:
-    """
-    Get a cached decorator instance.
+    """Get a cached decorator instance.
 
     Args:
         class_name: The decorator class name
@@ -372,8 +348,7 @@ def get_cached_decorator(class_name: str, param_str: str) -> Optional[BaseDecora
 
     Returns:
         The decorator instance, or None if creation failed
-    """
-    # This is just a basic implementation using Python's built-in LRU cache
+    """  # This is just a basic implementation using Python's built-in LRU cache
     # The actual implementation would create the decorator instance
     # For now, this serves as a placeholder for external code to use
     return None

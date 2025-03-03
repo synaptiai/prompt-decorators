@@ -1,5 +1,4 @@
-"""
-Implementation of the Summary decorator.
+"""Implementation of the Summary decorator.
 
 This module provides the Summary decorator class for use in prompt engineering.
 
@@ -18,16 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Summary(BaseDecorator):
-    """
-    Provides a condensed summary of information that would otherwise be
-    presented in a more detailed format. This decorator is useful for
-    generating executive summaries, article summaries, or concise
-    overviews of complex topics.
+    """Provides a condensed summary of information that would otherwise be presented in a more detailed format. This decorator is useful for generating executive summaries, article summaries, or concise overviews of complex topics.
 
     Attributes:
-        length: Relative length of the summary
-        wordCount: Approximate target word count for the summary
-        position: Where to position the summary in relation to any full content
+        length: Relative length of the summary. (Literal["short", "medium", "long"])
+        wordCount: Approximate target word count for the summary. (Any)
+        position: Where to position the summary in relation to any full content. (Literal["beginning", "end", "standalone"])
     """
 
     decorator_name = "summary"
@@ -35,11 +30,11 @@ class Summary(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -49,17 +44,13 @@ class Summary(BaseDecorator):
         wordCount: Any = None,
         position: Literal["beginning", "end", "standalone"] = "standalone",
     ) -> None:
-        """
-        Initialize the Summary decorator.
+        """Initialize the Summary decorator.
 
         Args:
             length: Relative length of the summary
             wordCount: Approximate target word count for the summary
-            position: Where to position the summary in relation to any full
-                content
+            position: Where to position the summary in relation to any full content
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -70,6 +61,14 @@ class Summary(BaseDecorator):
         self._position = position
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._length = length
+        self._wordCount = wordCount
+        self._position = position
+
         # Validate parameters
         if self._length is not None:
             if not isinstance(self._length, str):
@@ -105,8 +104,7 @@ class Summary(BaseDecorator):
 
     @property
     def length(self) -> Literal["short", "medium", "long"]:
-        """
-        Get the length parameter value.
+        """Get the length parameter value.
 
         Args:
             self: The decorator instance
@@ -118,8 +116,7 @@ class Summary(BaseDecorator):
 
     @property
     def wordCount(self) -> Any:
-        """
-        Get the wordCount parameter value.
+        """Get the wordCount parameter value.
 
         Args:
             self: The decorator instance
@@ -131,8 +128,7 @@ class Summary(BaseDecorator):
 
     @property
     def position(self) -> Literal["beginning", "end", "standalone"]:
-        """
-        Get the position parameter value.
+        """Get the position parameter value.
 
         Args:
             self: The decorator instance
@@ -143,8 +139,7 @@ class Summary(BaseDecorator):
         return self._position
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -159,8 +154,7 @@ class Summary(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -179,32 +173,34 @@ class Summary(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -222,11 +218,11 @@ class Summary(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

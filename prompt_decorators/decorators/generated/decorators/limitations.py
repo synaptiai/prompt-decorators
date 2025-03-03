@@ -1,5 +1,4 @@
-"""
-Implementation of the Limitations decorator.
+"""Implementation of the Limitations decorator.
 
 This module provides the Limitations decorator class for use in prompt engineering.
 
@@ -19,16 +18,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Limitations(BaseDecorator):
-    """
-    Adds an explicit statement of limitations, caveats, or uncertainties
-    related to the provided information. This decorator promotes
-    intellectual honesty by acknowledging the boundaries of current
-    knowledge, potential biases, or contextual constraints.
+    """Adds an explicit statement of limitations, caveats, or uncertainties related to the provided information. This decorator promotes intellectual honesty by acknowledging the boundaries of current knowledge, potential biases, or contextual constraints.
 
     Attributes:
-        detail: The level of detail in the limitations statement
-        position: Where to place the limitations statement in the response
-        focus: The primary aspect to focus on in the limitations
+        detail: The level of detail in the limitations statement. (Literal["brief", "moderate", "comprehensive"])
+        position: Where to place the limitations statement in the response. (Literal["beginning", "end"])
+        focus: The primary aspect to focus on in the limitations. (Literal["knowledge", "methodology", "context", "biases", "all"])
     """
 
     decorator_name = "limitations"
@@ -36,11 +31,11 @@ class Limitations(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -50,16 +45,13 @@ class Limitations(BaseDecorator):
         position: Literal["beginning", "end"] = "end",
         focus: Literal["knowledge", "methodology", "context", "biases", "all"] = "all",
     ) -> None:
-        """
-        Initialize the Limitations decorator.
+        """Initialize the Limitations decorator.
 
         Args:
             detail: The level of detail in the limitations statement
             position: Where to place the limitations statement in the response
             focus: The primary aspect to focus on in the limitations
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -70,6 +62,14 @@ class Limitations(BaseDecorator):
         self._focus = focus
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._detail = detail
+        self._position = position
+        self._focus = focus
+
         # Validate parameters
         if self._detail is not None:
             if not isinstance(self._detail, str):
@@ -107,8 +107,7 @@ class Limitations(BaseDecorator):
 
     @property
     def detail(self) -> Literal["brief", "moderate", "comprehensive"]:
-        """
-        Get the detail parameter value.
+        """Get the detail parameter value.
 
         Args:
             self: The decorator instance
@@ -120,8 +119,7 @@ class Limitations(BaseDecorator):
 
     @property
     def position(self) -> Literal["beginning", "end"]:
-        """
-        Get the position parameter value.
+        """Get the position parameter value.
 
         Args:
             self: The decorator instance
@@ -133,8 +131,7 @@ class Limitations(BaseDecorator):
 
     @property
     def focus(self) -> Literal["knowledge", "methodology", "context", "biases", "all"]:
-        """
-        Get the focus parameter value.
+        """Get the focus parameter value.
 
         Args:
             self: The decorator instance
@@ -145,8 +142,7 @@ class Limitations(BaseDecorator):
         return self._focus
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -161,8 +157,7 @@ class Limitations(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -181,32 +176,34 @@ class Limitations(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -224,11 +221,11 @@ class Limitations(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

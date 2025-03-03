@@ -1,5 +1,4 @@
-"""
-Implementation of the BreakAndBuild decorator.
+"""Implementation of the BreakAndBuild decorator.
 
 This module provides the BreakAndBuild decorator class for use in prompt engineering.
 
@@ -18,17 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class BreakAndBuild(BaseDecorator):
-    """
-    Structures responses in two distinct phases: first critically
-    analyzing and 'breaking down' an idea by identifying flaws,
-    assumptions, and weaknesses, then 'building it back up' with
-    improvements, refinements, and solutions. This decorator enhances
-    critical thinking while maintaining constructive output.
+    """Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.
 
     Attributes:
-        breakdown: Primary approach for the critical breakdown phase
-        intensity: How thorough and challenging the breakdown phase should be
-        buildRatio: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)
+        breakdown: Primary approach for the critical breakdown phase. (Literal["weaknesses", "assumptions", "risks", "comprehensive"])
+        intensity: How thorough and challenging the breakdown phase should be. (Literal["mild", "thorough", "intense"])
+        buildRatio: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique). (Any)
     """
 
     decorator_name = "break_and_build"
@@ -36,11 +30,11 @@ class BreakAndBuild(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -52,17 +46,13 @@ class BreakAndBuild(BaseDecorator):
         intensity: Literal["mild", "thorough", "intense"] = "thorough",
         buildRatio: Any = 1,
     ) -> None:
-        """
-        Initialize the BreakAndBuild decorator.
+        """Initialize the BreakAndBuild decorator.
 
         Args:
             breakdown: Primary approach for the critical breakdown phase
             intensity: How thorough and challenging the breakdown phase should be
-            buildRatio: Approximate ratio of build-up content to breakdown content
-                (e.g., 2 means twice as much reconstruction as critique)
+            buildRatio: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -73,6 +63,14 @@ class BreakAndBuild(BaseDecorator):
         self._buildRatio = buildRatio
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._breakdown = breakdown
+        self._intensity = intensity
+        self._buildRatio = buildRatio
+
         # Validate parameters
         if self._breakdown is not None:
             if not isinstance(self._breakdown, str):
@@ -115,8 +113,7 @@ class BreakAndBuild(BaseDecorator):
     def breakdown(
         self,
     ) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
-        """
-        Get the breakdown parameter value.
+        """Get the breakdown parameter value.
 
         Args:
             self: The decorator instance
@@ -128,8 +125,7 @@ class BreakAndBuild(BaseDecorator):
 
     @property
     def intensity(self) -> Literal["mild", "thorough", "intense"]:
-        """
-        Get the intensity parameter value.
+        """Get the intensity parameter value.
 
         Args:
             self: The decorator instance
@@ -141,8 +137,7 @@ class BreakAndBuild(BaseDecorator):
 
     @property
     def buildRatio(self) -> Any:
-        """
-        Get the buildRatio parameter value.
+        """Get the buildRatio parameter value.
 
         Args:
             self: The decorator instance
@@ -153,8 +148,7 @@ class BreakAndBuild(BaseDecorator):
         return self._buildRatio
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -169,8 +163,7 @@ class BreakAndBuild(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -189,32 +182,34 @@ class BreakAndBuild(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -232,11 +227,11 @@ class BreakAndBuild(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

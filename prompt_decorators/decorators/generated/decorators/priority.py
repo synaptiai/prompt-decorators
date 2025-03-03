@@ -1,5 +1,4 @@
-"""
-Implementation of the Priority decorator.
+"""Implementation of the Priority decorator.
 
 This module provides the Priority decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import PriorityMode
 
 
 class Priority(BaseDecorator):
-    """
-    A meta-decorator that establishes a precedence hierarchy among
-    multiple decorators. This allows explicit control over which
-    decorator's parameters or behaviors take precedence when conflicts
-    arise, overriding the default last-decorator-wins behavior.
+    """A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior.
 
     Attributes:
-        decorators: Ordered list of decorators by priority (highest priority first)
-        explicit: Whether to explicitly mention overridden behaviors in the response
-        mode: How to handle conflicts between decorators
+        decorators: Ordered list of decorators by priority (highest priority first). (List[Any])
+        explicit: Whether to explicitly mention overridden behaviors in the response. (bool)
+        mode: How to handle conflicts between decorators. (Literal["override", "merge", "cascade"])
     """
 
     decorator_name = "priority"
@@ -32,11 +27,11 @@ class Priority(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,18 +41,13 @@ class Priority(BaseDecorator):
         explicit: bool = False,
         mode: Literal["override", "merge", "cascade"] = "override",
     ) -> None:
-        """
-        Initialize the Priority decorator.
+        """Initialize the Priority decorator.
 
         Args:
-            decorators: Ordered list of decorators by priority (highest priority
-                first)
-            explicit: Whether to explicitly mention overridden behaviors in the
-                response
+            decorators: Ordered list of decorators by priority (highest priority first)
+            explicit: Whether to explicitly mention overridden behaviors in the response
             mode: How to handle conflicts between decorators
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -68,6 +58,14 @@ class Priority(BaseDecorator):
         self._mode = mode
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._decorators = decorators
+        self._explicit = explicit
+        self._mode = mode
+
         # Validate parameters
         if self._decorators is not None:
             if not isinstance(self._decorators, list):
@@ -91,8 +89,7 @@ class Priority(BaseDecorator):
 
     @property
     def decorators(self) -> List[Any]:
-        """
-        Get the decorators parameter value.
+        """Get the decorators parameter value.
 
         Args:
             self: The decorator instance
@@ -104,8 +101,7 @@ class Priority(BaseDecorator):
 
     @property
     def explicit(self) -> bool:
-        """
-        Get the explicit parameter value.
+        """Get the explicit parameter value.
 
         Args:
             self: The decorator instance
@@ -117,8 +113,7 @@ class Priority(BaseDecorator):
 
     @property
     def mode(self) -> Literal["override", "merge", "cascade"]:
-        """
-        Get the mode parameter value.
+        """Get the mode parameter value.
 
         Args:
             self: The decorator instance
@@ -129,8 +124,7 @@ class Priority(BaseDecorator):
         return self._mode
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -145,8 +139,7 @@ class Priority(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -165,32 +158,34 @@ class Priority(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -208,11 +203,11 @@ class Priority(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

@@ -1,5 +1,4 @@
-"""
-Implementation of the Detailed decorator.
+"""Implementation of the Detailed decorator.
 
 This module provides the Detailed decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import DetailedDept
 
 
 class Detailed(BaseDecorator):
-    """
-    Enhances the response with comprehensive information, thorough
-    explanations, and rich context. This decorator is ideal for in-depth
-    learning, complex topics requiring nuance, or when completeness is
-    valued over brevity.
+    """Enhances the response with comprehensive information, thorough explanations, and rich context. This decorator is ideal for in-depth learning, complex topics requiring nuance, or when completeness is valued over brevity.
 
     Attributes:
-        depth: The level of detail and comprehensiveness
-        aspects: Specific aspects or dimensions to explore in detail
-        examples: Whether to include detailed examples to illustrate points
+        depth: The level of detail and comprehensiveness. (Literal["moderate", "comprehensive", "exhaustive"])
+        aspects: Specific aspects or dimensions to explore in detail. (List[Any])
+        examples: Whether to include detailed examples to illustrate points. (bool)
     """
 
     decorator_name = "detailed"
@@ -32,11 +27,11 @@ class Detailed(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,16 +41,13 @@ class Detailed(BaseDecorator):
         aspects: List[Any] = None,
         examples: bool = True,
     ) -> None:
-        """
-        Initialize the Detailed decorator.
+        """Initialize the Detailed decorator.
 
         Args:
             depth: The level of detail and comprehensiveness
             aspects: Specific aspects or dimensions to explore in detail
             examples: Whether to include detailed examples to illustrate points
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -66,6 +58,14 @@ class Detailed(BaseDecorator):
         self._examples = examples
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._depth = depth
+        self._aspects = aspects
+        self._examples = examples
+
         # Validate parameters
         if self._depth is not None:
             if not isinstance(self._depth, str):
@@ -89,8 +89,7 @@ class Detailed(BaseDecorator):
 
     @property
     def depth(self) -> Literal["moderate", "comprehensive", "exhaustive"]:
-        """
-        Get the depth parameter value.
+        """Get the depth parameter value.
 
         Args:
             self: The decorator instance
@@ -102,8 +101,7 @@ class Detailed(BaseDecorator):
 
     @property
     def aspects(self) -> List[Any]:
-        """
-        Get the aspects parameter value.
+        """Get the aspects parameter value.
 
         Args:
             self: The decorator instance
@@ -115,8 +113,7 @@ class Detailed(BaseDecorator):
 
     @property
     def examples(self) -> bool:
-        """
-        Get the examples parameter value.
+        """Get the examples parameter value.
 
         Args:
             self: The decorator instance
@@ -127,8 +124,7 @@ class Detailed(BaseDecorator):
         return self._examples
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -143,8 +139,7 @@ class Detailed(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -163,32 +158,34 @@ class Detailed(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -206,11 +203,11 @@ class Detailed(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

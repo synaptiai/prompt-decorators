@@ -1,5 +1,4 @@
-"""
-Implementation of the BlindSpots decorator.
+"""Implementation of the BlindSpots decorator.
 
 This module provides the BlindSpots decorator class for use in prompt engineering.
 
@@ -18,16 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class BlindSpots(BaseDecorator):
-    """
-    Identifies potential cognitive blind spots, unstated assumptions, and
-    overlooked perspectives in the response. This decorator helps mitigate
-    bias by explicitly acknowledging the limitations of one's thinking and
-    analysis.
+    """Identifies potential cognitive blind spots, unstated assumptions, and overlooked perspectives in the response. This decorator helps mitigate bias by explicitly acknowledging the limitations of one's thinking and analysis.
 
     Attributes:
-        categories: Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias)
-        depth: How thoroughly to analyze for blind spots
-        position: Where to place the blind spots analysis
+        categories: Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias). (List[Any])
+        depth: How thoroughly to analyze for blind spots. (Literal["basic", "thorough", "comprehensive"])
+        position: Where to place the blind spots analysis. (Literal["after", "before", "integrated"])
     """
 
     decorator_name = "blind_spots"
@@ -35,11 +30,11 @@ class BlindSpots(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -49,17 +44,13 @@ class BlindSpots(BaseDecorator):
         depth: Literal["basic", "thorough", "comprehensive"] = "thorough",
         position: Literal["after", "before", "integrated"] = "after",
     ) -> None:
-        """
-        Initialize the BlindSpots decorator.
+        """Initialize the BlindSpots decorator.
 
         Args:
-            categories: Specific categories of blind spots to check for (e.g.,
-                cultural, temporal, confirmation bias)
+            categories: Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias)
             depth: How thoroughly to analyze for blind spots
             position: Where to place the blind spots analysis
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -70,6 +61,14 @@ class BlindSpots(BaseDecorator):
         self._position = position
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._categories = categories
+        self._depth = depth
+        self._position = position
+
         # Validate parameters
         if self._categories is not None:
             if not isinstance(self._categories, list):
@@ -97,8 +96,7 @@ class BlindSpots(BaseDecorator):
 
     @property
     def categories(self) -> List[Any]:
-        """
-        Get the categories parameter value.
+        """Get the categories parameter value.
 
         Args:
             self: The decorator instance
@@ -110,8 +108,7 @@ class BlindSpots(BaseDecorator):
 
     @property
     def depth(self) -> Literal["basic", "thorough", "comprehensive"]:
-        """
-        Get the depth parameter value.
+        """Get the depth parameter value.
 
         Args:
             self: The decorator instance
@@ -123,8 +120,7 @@ class BlindSpots(BaseDecorator):
 
     @property
     def position(self) -> Literal["after", "before", "integrated"]:
-        """
-        Get the position parameter value.
+        """Get the position parameter value.
 
         Args:
             self: The decorator instance
@@ -135,8 +131,7 @@ class BlindSpots(BaseDecorator):
         return self._position
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -151,8 +146,7 @@ class BlindSpots(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -171,32 +165,34 @@ class BlindSpots(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -214,11 +210,11 @@ class BlindSpots(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

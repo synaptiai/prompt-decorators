@@ -1,23 +1,19 @@
-"""Model Detection Module.
+"""Model detection and capability utilities.
 
-This module provides utilities for detecting and managing model capabilities.
+This module provides utilities for detecting model capabilities and features.
 """
 
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
 logger = logging.getLogger(__name__)
 
 
 class ModelCapabilities:
-    """
-    Class to represent the capabilities of a model.
+    """Class to represent the capabilities of a model.
 
     This class stores information about what a model can and cannot do,
     such as supported decorator features and parameter types.
@@ -30,14 +26,13 @@ class ModelCapabilities:
         version: str = "unknown",
         capabilities: Optional[Dict[str, Any]] = None,
     ):
-        """
-        Initialize model capabilities.
+        """Initialize a model capabilities object.
 
         Args:
             model_id: Unique identifier for the model
-            model_family: Model family (e.g., GPT, Llama, Claude)
-            version: Model version
-            capabilities: Dictionary of capabilities
+            model_family: Family or provider of the model
+            version: Version of the model
+            capabilities: Dictionary of capability flags and values
         """
         self.model_id = model_id
         self.model_family = model_family
@@ -45,11 +40,10 @@ class ModelCapabilities:
         self.capabilities = capabilities or {}
 
     def supports_feature(self, feature: str) -> bool:
-        """
-        Check if the model supports a specific feature.
+        """Check if the model supports a specific feature.
 
         Args:
-            feature: Feature to check
+            feature: The feature to check
 
         Returns:
             True if the feature is supported, False otherwise
@@ -57,25 +51,23 @@ class ModelCapabilities:
         return self.capabilities.get(feature, False)
 
     def get_capability(self, capability: str, default: Any = None) -> Any:
-        """
-        Get a capability value.
+        """Get the value of a capability.
 
         Args:
-            capability: Capability to get
-            default: Default value if capability not found
+            capability: The capability to get
+            default: Default value if the capability is not defined
 
         Returns:
-            Capability value or default
+            The capability value, or the default if not found
         """
         return self.capabilities.get(capability, default)
 
     def set_capability(self, capability: str, value: Any) -> None:
-        """
-        Set a capability value.
+        """Set the value of a capability.
 
         Args:
-            capability: Capability to set
-            value: Value to set
+            capability: The capability to set
+            value: The value to set
 
         Returns:
             None
@@ -83,14 +75,10 @@ class ModelCapabilities:
         self.capabilities[capability] = value
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert capabilities to a dictionary.
-
-        Args:
-            self: The capabilities instance
+        """Convert the model capabilities to a dictionary.
 
         Returns:
-            Dictionary representation of capabilities
+            Dictionary representation of the model capabilities
         """
         return {
             "model_id": self.model_id,
@@ -101,17 +89,22 @@ class ModelCapabilities:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ModelCapabilities":
-        """
-        Create a ModelCapabilities instance from a dictionary.
+        """Create a model capabilities object from a dictionary.
 
         Args:
-            data: Dictionary with capability data
+            data: Dictionary containing model capabilities data
 
         Returns:
-            New ModelCapabilities instance
+            A new ModelCapabilities instance
+
+        Raises:
+            ValueError: If the dictionary is missing required fields
         """
+        if "model_id" not in data:
+            raise ValueError("Missing required field 'model_id'")
+
         return cls(
-            model_id=data.get("model_id", "unknown"),
+            model_id=data["model_id"],
             model_family=data.get("model_family", "unknown"),
             version=data.get("version", "unknown"),
             capabilities=data.get("capabilities", {}),
@@ -119,8 +112,7 @@ class ModelCapabilities:
 
 
 class ModelDetector:
-    """
-    Detector for model capabilities.
+    """Detector for model capabilities.
 
     This class provides utilities for detecting and querying model capabilities.
     """
@@ -133,10 +125,10 @@ class ModelDetector:
     _instance = None
 
     def __new__(cls):
-        """Returns:
+        """Create a singleton instance of the model detector.
 
-            Description of return value
-        Create a singleton instance of the model detector.
+        Returns:
+            The singleton model detector instance
         """
         if cls._instance is None:
             cls._instance = super(ModelDetector, cls).__new__(cls)
@@ -144,146 +136,171 @@ class ModelDetector:
         return cls._instance
 
     def _initialize(self):
-        """Initialize the model detector."""
-        self._models: Dict[str, ModelCapabilities] = {}
-        self._families: Dict[str, List[str]] = {}
+        """Initialize the model detector.
+
+        This method is called once when the singleton instance is created.
+        """
+        self._models = {}
+        self._families = {}
         self._load_default_capabilities()
+        self._load_builtin_capabilities()
 
     def _load_default_capabilities(self):
-        """Load default model capabilities from the configuration file."""
+        """Load default model capabilities from the configuration file.
+
+        This method loads model capabilities from the default configuration file
+        if it exists. If the file doesn't exist or can't be parsed, a warning is
+        logged but no exception is raised.
+        """
         try:
             capabilities_path = self.DEFAULT_CAPABILITIES_PATH
-            if capabilities_path.exists():
-                with open(capabilities_path, "r") as f:
-                    capabilities_data = json.load(f)
+            if not capabilities_path.exists():
+                logger.warning(
+                    f"Default capabilities file not found: {capabilities_path}"
+                )
+                return
 
-                for model_data in capabilities_data.get("models", []):
+            with open(capabilities_path, "r") as f:
+                data = json.load(f)
+
+            for model_data in data.get("models", []):
+                try:
                     model = ModelCapabilities.from_dict(model_data)
                     self.register_model(model)
-            else:
-                logger.info(
-                    f"Default capabilities file not found at {capabilities_path}. Using built-in defaults."
-                )
-                self._load_builtin_capabilities()
+                except Exception as e:
+                    logger.warning(f"Error loading model capabilities: {e}")
         except Exception as e:
-            logger.warning(
-                f"Error loading default capabilities: {e}. Using built-in defaults."
-            )
-            self._load_builtin_capabilities()
+            logger.warning(f"Error loading default capabilities: {e}")
 
     def _load_builtin_capabilities(self):
-        """Load built-in model capabilities for common models."""
-        # Define capabilities for common model families
+        """Load built-in model capabilities.
 
-        # GPT models (OpenAI)
-        gpt4_capabilities = ModelCapabilities(
-            model_id="gpt-4",
-            model_family="gpt",
-            version="4.0",
-            capabilities={
-                "reasoning": True,
-                "step_by_step": True,
-                "code_generation": True,
-                "json_output": True,
-                "markdown_output": True,
-                "max_tokens": 8192,
-                "streaming": True,
-                "function_calling": True,
-                "multi_tool_use": True,
-            },
-        )
-
-        gpt35_capabilities = ModelCapabilities(
-            model_id="gpt-3.5-turbo",
-            model_family="gpt",
-            version="3.5",
-            capabilities={
-                "reasoning": True,
-                "step_by_step": True,
-                "code_generation": True,
-                "json_output": True,
-                "markdown_output": True,
+        This method defines built-in capabilities for common models.
+        These are used as fallbacks if no configuration file is available.
+        """
+        # OpenAI models
+        openai_models = {
+            "gpt-3.5-turbo": {
                 "max_tokens": 4096,
-                "streaming": True,
-                "function_calling": True,
-                "multi_tool_use": False,
+                "supports_functions": True,
+                "supports_vision": False,
             },
-        )
+            "gpt-3.5-turbo-16k": {
+                "max_tokens": 16384,
+                "supports_functions": True,
+                "supports_vision": False,
+            },
+            "gpt-4": {
+                "max_tokens": 8192,
+                "supports_functions": True,
+                "supports_vision": False,
+            },
+            "gpt-4-32k": {
+                "max_tokens": 32768,
+                "supports_functions": True,
+                "supports_vision": False,
+            },
+            "gpt-4-vision-preview": {
+                "max_tokens": 8192,
+                "supports_functions": True,
+                "supports_vision": True,
+            },
+            "gpt-4-turbo-preview": {
+                "max_tokens": 128000,
+                "supports_functions": True,
+                "supports_vision": True,
+            },
+        }
 
-        # Claude models (Anthropic)
-        claude_capabilities = ModelCapabilities(
-            model_id="claude-2",
-            model_family="claude",
-            version="2.0",
-            capabilities={
-                "reasoning": True,
-                "step_by_step": True,
-                "code_generation": True,
-                "json_output": True,
-                "markdown_output": True,
+        for model_id, capabilities in openai_models.items():
+            model = ModelCapabilities(
+                model_id=model_id,
+                model_family="openai",
+                version="latest",
+                capabilities=capabilities,
+            )
+            self.register_model(model)
+
+        # Anthropic models
+        anthropic_models = {
+            "claude-instant-1": {
                 "max_tokens": 100000,
-                "streaming": True,
-                "function_calling": False,
-                "multi_tool_use": False,
+                "supports_functions": False,
+                "supports_vision": False,
             },
-        )
+            "claude-1": {
+                "max_tokens": 100000,
+                "supports_functions": False,
+                "supports_vision": False,
+            },
+            "claude-2": {
+                "max_tokens": 100000,
+                "supports_functions": False,
+                "supports_vision": False,
+            },
+            "claude-2.1": {
+                "max_tokens": 200000,
+                "supports_functions": False,
+                "supports_vision": True,
+            },
+        }
 
-        # Register all built-in models
-        for model in [gpt4_capabilities, gpt35_capabilities, claude_capabilities]:
+        for model_id, capabilities in anthropic_models.items():
+            model = ModelCapabilities(
+                model_id=model_id,
+                model_family="anthropic",
+                version="latest",
+                capabilities=capabilities,
+            )
             self.register_model(model)
 
     def register_model(self, model: ModelCapabilities) -> None:
-        """
-        Register a model's capabilities.
+        """Register a model's capabilities.
 
         Args:
-            model: ModelCapabilities instance
+            model: The model capabilities to register
 
         Returns:
             None
         """
         self._models[model.model_id] = model
 
-        # Add to family mapping
+        # Register in family
         if model.model_family not in self._families:
             self._families[model.model_family] = []
+
         self._families[model.model_family].append(model.model_id)
 
-        logger.debug(f"Registered model capabilities for {model.model_id}")
-
     def get_model_capabilities(self, model_id: str) -> Optional[ModelCapabilities]:
-        """
-        Get capabilities for a specific model.
+        """Get capabilities for a specific model.
 
         Args:
-            model_id: Model identifier
+            model_id: The model identifier
 
         Returns:
             ModelCapabilities for the model, or None if not found
+
+        Note:
+            This method attempts to find an exact match first, then falls back
+            to a partial match if no exact match is found.
         """
-        # Exact match
+        # Try exact match
         if model_id in self._models:
             return self._models[model_id]
 
-        # Try prefix matching (e.g., "gpt-4-0314" matches "gpt-4")
+        # Try partial match
         for registered_id in self._models:
-            if model_id.startswith(registered_id):
+            if model_id in registered_id or registered_id in model_id:
+                logger.debug(
+                    f"Using capabilities for {registered_id} as a match for {model_id}"
+                )
                 return self._models[registered_id]
 
-        # Try extracting family from model ID
-        parts = model_id.split("-")
-        if len(parts) > 0:
-            family = parts[0].lower()
-            if family in self._families and self._families[family]:
-                # Return the first model in the family
-                return self._models[self._families[family][0]]
-
-        logger.warning(f"No capabilities found for model {model_id}")
+        logger.warning(f"No capabilities found for model: {model_id}")
         return None
 
     def get_models_by_family(self, family: str) -> List[ModelCapabilities]:
-        """
-        Get all models in a specific family.
+        """Get all models in a specific family.
 
         Args:
             family: Model family
@@ -294,69 +311,57 @@ class ModelDetector:
         if family not in self._families:
             return []
 
-        return [
-            self._models[model_id]
-            for model_id in self._families[family]
-            if model_id in self._models
-        ]
+        return [self._models[model_id] for model_id in self._families[family]]
 
     def get_all_models(self) -> List[ModelCapabilities]:
-        """
-        Get all registered models.
-
-        Args:
-            self: The detector instance
+        """Get all registered models.
 
         Returns:
-            List of all ModelCapabilities
+            List of all registered ModelCapabilities
         """
         return list(self._models.values())
 
     def get_all_families(self) -> List[str]:
-        """
-        Get all registered model families.
-
-        Args:
-            self: The detector instance
+        """Get all registered model families.
 
         Returns:
-            List of all model family names
+            List of all registered model families
         """
         return list(self._families.keys())
 
     def detect_model_from_api(self, api_name: str) -> Optional[str]:
-        """
-        Try to determine a model ID from the API name.
+        """Detect the model family from an API name.
 
         Args:
-            api_name: Name of the API (e.g., "openai", "anthropic")
+            api_name: The API name or URL
 
         Returns:
-            Default model ID for the API, or None if not recognized
+            The detected model family, or None if not detected
         """
         api_name = api_name.lower()
 
-        # Map of API names to default models
-        api_models = {
-            "openai": "gpt-4",
-            "anthropic": "claude-2",
-            "cohere": "command",
-            "huggingface": "mistral-7b-instruct",
+        # Map of API name patterns to model families
+        api_patterns = {
+            "openai": "openai",
+            "api.openai.com": "openai",
+            "anthropic": "anthropic",
+            "api.anthropic.com": "anthropic",
+            "claude": "anthropic",
+            "cohere": "cohere",
+            "api.cohere.ai": "cohere",
         }
 
-        return api_models.get(api_name)
+        for pattern, family in api_patterns.items():
+            if pattern in api_name:
+                return family
+
+        return None
 
 
-# Create a global model detector instance
-detector = ModelDetector()
-
-
-# Function to get the global model detector
 def get_model_detector() -> ModelDetector:
-    """
-    Get the global model detector.
+    """Get the global model detector instance.
 
     Returns:
         The global model detector instance
     """
-    return detector
+    return ModelDetector()

@@ -1,32 +1,22 @@
-"""Decorator Discovery Module.
+"""Decorator discovery and registration utilities.
 
-This module provides utilities for discovering and registering decorators at runtime.
+This module provides utilities for discovering and registering prompt decorators.
 """
 
 import importlib
 import importlib.util
 import inspect
-import logging
+import json
 import os
 import sys
-from pathlib import Path
-from typing import Dict, Optional, Set, Type, TypeVar
+from typing import Dict, List, Optional, Set, Type, Union
 
-from ..core.base import BaseDecorator
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
-
-# Type variable for decorator classes
-T = TypeVar("T", bound=BaseDecorator)
+from prompt_decorators.core.base import BaseDecorator
+from prompt_decorators.utils.json_loader import load_json_file
 
 
 class DecoratorRegistry:
-    """
-    Registry for prompt decorators.
+    """Registry for prompt decorators.
 
     This class provides methods for registering and discovering decorators at runtime.
     """
@@ -34,30 +24,36 @@ class DecoratorRegistry:
     _instance = None
 
     def __new__(cls):
-        """Returns:
+        """Create a singleton instance of the registry.
 
-            Description of return value
-        Create a singleton instance of the registry.
+        Returns:
+            The singleton registry instance
         """
         if cls._instance is None:
             cls._instance = super(DecoratorRegistry, cls).__new__(cls)
             cls._instance._decorators = {}
             cls._instance._decorator_instances = {}
+            cls._instance._categories = {}
         return cls._instance
 
     def __init__(self):
-        """Initialize the registry."""
-        # Initialization is done in __new__
+        """Initialize the registry.
+
+        This is a no-op for the singleton pattern.
+        """
         pass
 
     def clear(self):
-        """Clear the registry."""
+        """Clear all registered decorators.
+
+        This is primarily used for testing.
+        """
         self._decorators = {}
         self._decorator_instances = {}
+        self._categories = {}
 
     def register_decorator(self, decorator_class: Type[BaseDecorator]) -> None:
-        """
-        Register a decorator class.
+        """Register a decorator class.
 
         Args:
             decorator_class: The decorator class to register
@@ -65,13 +61,17 @@ class DecoratorRegistry:
         Returns:
             None
         """
-        name = getattr(decorator_class, "name", decorator_class.__name__)
+        name = decorator_class.name
         self._decorators[name] = decorator_class
-        logger.debug(f"Registered decorator class: {name}")
+
+        # Register category
+        category = getattr(decorator_class, "category", "unknown")
+        if category not in self._categories:
+            self._categories[category] = set()
+        self._categories[category].add(name)
 
     def register_decorator_instance(self, decorator: BaseDecorator) -> None:
-        """
-        Register a decorator instance.
+        """Register a decorator instance.
 
         Args:
             decorator: The decorator instance to register
@@ -79,260 +79,223 @@ class DecoratorRegistry:
         Returns:
             None
         """
-        name = getattr(decorator, "name", decorator.__class__.__name__)
+        name = decorator.name
         self._decorator_instances[name] = decorator
-        logger.debug(f"Registered decorator instance: {name}")
 
     def get_decorator(self, name: str) -> Optional[Type[BaseDecorator]]:
-        """
-        Get a decorator class by name.
+        """Get a decorator class by name.
 
         Args:
-            name: The name of the decorator
+            name: The name of the decorator to retrieve
 
         Returns:
-            The decorator class, or None if not found
+            The decorator class if found, None otherwise
         """
         return self._decorators.get(name)
 
     def get_decorator_instance(self, name: str) -> Optional[BaseDecorator]:
-        """
-        Get a decorator instance by name.
+        """Get a decorator instance by name.
 
         Args:
-            name: The name of the decorator
+            name: The name of the decorator instance to retrieve
 
         Returns:
-            The decorator instance, or None if not found
+            The decorator instance if found, None otherwise
         """
         return self._decorator_instances.get(name)
 
     def get_all_decorators(self) -> Dict[str, Type[BaseDecorator]]:
-        """
-        Get all registered decorator classes.
-
-        Args:
-            self: The registry instance
+        """Get all registered decorator classes.
 
         Returns:
-            Dictionary mapping decorator names to classes
+            Dictionary mapping decorator names to decorator classes
         """
         return self._decorators.copy()
 
     def get_all_decorator_instances(self) -> Dict[str, BaseDecorator]:
-        """
-        Get all registered decorator instances.
-
-        Args:
-            self: The registry instance
+        """Get all registered decorator instances.
 
         Returns:
-            Dictionary mapping decorator names to instances
+            Dictionary mapping decorator names to decorator instances
         """
         return self._decorator_instances.copy()
 
     def find_decorators_by_category(
         self, category: str
     ) -> Dict[str, Type[BaseDecorator]]:
-        """
-        Find decorators by category.
+        """Find all decorators in a specific category.
 
         Args:
             category: The category to search for
 
         Returns:
-            Dictionary mapping decorator names to classes
+            Dictionary mapping decorator names to decorator classes
         """
+        if category not in self._categories:
+            return {}
+
         return {
-            name: decorator_class
-            for name, decorator_class in self._decorators.items()
-            if getattr(decorator_class, "category", "").lower() == category.lower()
+            name: self._decorators[name]
+            for name in self._categories[category]
+            if name in self._decorators
         }
 
     def get_categories(self) -> Set[str]:
-        """
-        Get all decorator categories.
-
-        Args:
-            self: The registry instance
+        """Get all registered decorator categories.
 
         Returns:
             Set of category names
         """
-        return {
-            getattr(decorator_class, "category", "uncategorized").lower()
-            for decorator_class in self._decorators.values()
-        }
+        return set(self._categories.keys())
 
     def register_all_from_directory(self, directory: str) -> int:
-        """
-        Register all decorators from a directory.
+        """Register all decorators from Python files in a directory.
 
         Args:
-            directory: Path to the directory containing decorator modules
+            directory: The directory to scan for decorator modules
 
         Returns:
             Number of decorators registered
+
+        Note:
+            This method will import all Python files in the directory and
+            register any classes that inherit from BaseDecorator.
         """
         count = 0
-        directory_path = Path(directory)
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".py") and not file.startswith("__"):
+                    file_path = os.path.join(root, file)
+                    module_name = os.path.splitext(file)[0]
 
-        if not directory_path.exists() or not directory_path.is_dir():
-            logger.warning(f"Directory not found: {directory}")
-            return 0
+                    # Import the module
+                    spec = importlib.util.spec_from_file_location(
+                        module_name, file_path
+                    )
+                    if spec and spec.loader:
+                        module = importlib.util.module_from_spec(spec)
+                        sys.modules[module_name] = module
+                        spec.loader.exec_module(module)
 
-        # Add the directory to the Python path
-        sys.path.insert(0, str(directory_path.parent))
-
-        try:
-            # Scan for Python files
-            for root, _, files in os.walk(directory_path):
-                for file in files:
-                    if file.endswith(".py") and not file.startswith("__"):
-                        # Get the module path
-                        module_path = os.path.join(root, file)
-                        module_name = os.path.splitext(
-                            os.path.relpath(module_path, directory_path.parent)
-                        )[0]
-                        module_name = module_name.replace(os.path.sep, ".")
-
-                        try:
-                            # Import the module
-                            module = importlib.import_module(module_name)
-
-                            # Find decorator classes
-                            for _name, obj in inspect.getmembers(module):
-                                if (
-                                    inspect.isclass(obj)
-                                    and issubclass(obj, BaseDecorator)
-                                    and obj != BaseDecorator
-                                ):
-                                    self.register_decorator(obj)
-                                    count += 1
-                                    logger.debug(
-                                        f"Registered decorator {obj.name} from {module_name}"
-                                    )
-                        except (ImportError, AttributeError) as e:
-                            logger.warning(f"Error importing {module_name}: {e}")
-        finally:
-            # Remove the directory from the Python path
-            if str(directory_path.parent) in sys.path:
-                sys.path.remove(str(directory_path.parent))
+                        # Find and register decorator classes
+                        for _, obj in inspect.getmembers(module):
+                            if (
+                                inspect.isclass(obj)
+                                and issubclass(obj, BaseDecorator)
+                                and obj != BaseDecorator
+                            ):
+                                self.register_decorator(obj)
+                                count += 1
 
         return count
 
     def register_from_json_string(
         self, json_string: str
     ) -> Optional[Type[BaseDecorator]]:
-        """
-        Register a decorator from a JSON string.
+        """Register a decorator from a JSON string.
 
         Args:
-            json_string: JSON string containing the decorator definition
+            json_string: JSON string defining a decorator
 
         Returns:
-            The registered decorator class, or None if registration failed
+            The registered decorator class if successful, None otherwise
+
+        Raises:
+            ValueError: If the JSON is invalid or missing required fields
         """
         try:
-            # Import the JSONLoader here to avoid circular imports
-            from .factory import DecoratorFactory
+            data = json.loads(json_string)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON: {e}")
 
-            # Create a factory and register the decorator
-            factory = DecoratorFactory(self)
-            decorator = factory.create_from_json_string(json_string)
+        # Validate required fields
+        if "name" not in data:
+            raise ValueError("Missing required field 'name'")
+        if "description" not in data:
+            raise ValueError("Missing required field 'description'")
 
-            if decorator:
-                # The class is already registered by the factory
-                return decorator.__class__
+        # Create a dynamic decorator class
+        from prompt_decorators.utils.factory import create_decorator_class
 
-            return None
-        except Exception as e:
-            logger.error(f"Error registering decorator from JSON string: {e}")
-            return None
+        decorator_class = create_decorator_class(data)
+        self.register_decorator(decorator_class)
+        return decorator_class
 
     def register_from_json_file(self, file_path: str) -> Optional[Type[BaseDecorator]]:
-        """
-        Register a decorator from a JSON file.
+        """Register a decorator from a JSON file.
 
         Args:
             file_path: Path to the JSON file
 
         Returns:
-            The registered decorator class, or None if registration failed
+            The registered decorator class if successful, None otherwise
+
+        Raises:
+            ValueError: If the file cannot be read or contains invalid JSON
         """
         try:
-            with open(file_path, "r") as f:
-                json_string = f.read()
-
+            data = load_json_file(file_path)
+            json_string = json.dumps(data)
             return self.register_from_json_string(json_string)
         except Exception as e:
-            logger.error(f"Error registering decorator from JSON file {file_path}: {e}")
-            return None
+            raise ValueError(f"Error loading decorator from {file_path}: {e}")
 
     def register_all_from_json_directory(self, directory: str) -> int:
-        """
-        Register all decorators from JSON files in a directory.
+        """Register all decorators from JSON files in a directory.
 
         Args:
-            directory: Path to the directory containing JSON files
+            directory: The directory to scan for JSON files
 
         Returns:
             Number of decorators registered
+
+        Note:
+            This method will attempt to register a decorator from each JSON file
+            in the specified directory.
         """
         count = 0
-        directory_path = Path(directory)
-
-        if not directory_path.exists() or not directory_path.is_dir():
-            logger.warning(f"Directory not found: {directory}")
-            return 0
-
-        # Import the JSONLoader and Factory here to avoid circular imports
-        from .factory import DecoratorFactory
-
-        # Create a factory
-        factory = DecoratorFactory(self)
-
-        # Load all decorators from the directory
-        decorators = factory.create_all_from_directory(directory)
-
-        # Count the number of registered decorators
-        count = len(decorators)
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".json"):
+                    file_path = os.path.join(root, file)
+                    try:
+                        if self.register_from_json_file(file_path):
+                            count += 1
+                    except ValueError as e:
+                        # Log the error but continue processing other files
+                        print(f"Error registering decorator from {file_path}: {e}")
 
         return count
 
     def create_decorator(self, name: str, **parameters) -> Optional[BaseDecorator]:
-        """
-        Create a decorator instance from a registered class.
+        """Create a decorator instance by name with the specified parameters.
 
         Args:
-            name: The name of the decorator
-            **parameters: Parameters for the decorator. These are passed to the decorator constructor.
+            name: The name of the decorator class to instantiate
+            **parameters: Parameters to pass to the decorator constructor
 
         Returns:
-            The decorator instance, or None if creation failed
+            The created decorator instance if successful, None otherwise
+
+        Raises:
+            ValueError: If the decorator class is not found
+            TypeError: If the parameters are invalid for the decorator
         """
         decorator_class = self.get_decorator(name)
         if not decorator_class:
-            logger.warning(f"Decorator {name} not found")
-            return None
+            raise ValueError(f"Decorator class not found: {name}")
 
         try:
-            return decorator_class(**parameters)
+            decorator = decorator_class(**parameters)
+            return decorator
         except Exception as e:
-            logger.error(f"Error creating decorator {name}: {e}")
-            return None
+            raise TypeError(f"Error creating decorator {name}: {e}")
 
 
-# Create a global registry instance
-registry = DecoratorRegistry()
-
-
-# Convenience function to get the global registry
 def get_registry() -> DecoratorRegistry:
-    """
-    Get the global decorator registry.
+    """Get the global decorator registry.
 
     Returns:
         The global decorator registry instance
     """
-    return registry
+    return DecoratorRegistry()

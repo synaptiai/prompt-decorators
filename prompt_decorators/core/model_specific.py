@@ -2,7 +2,6 @@
 
 This module provides base classes and utilities for model-specific decorator adaptations.
 """
-
 import logging
 from typing import Any, Dict, Generic, Optional, Type, TypeVar
 
@@ -20,16 +19,14 @@ T = TypeVar("T", bound=BaseDecorator)
 
 
 class ModelSpecificDecorator(BaseDecorator, Generic[T]):
-    """
-    Base class for model-specific decorator adaptations.
+    """Base class for model-specific decorator adaptations.
 
     This class extends BaseDecorator to support model-specific adaptations,
     allowing decorators to adjust their behavior based on the model being used.
     """
 
     def __init__(self, model_id: Optional[str] = None, **kwargs):
-        """
-        Initialize a model-specific decorator.
+        """Initialize a model-specific decorator.
 
         Args:
             model_id: ID of the model to adapt for (optional)
@@ -49,8 +46,7 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
             )
 
     def set_model(self, model_id: str) -> None:
-        """
-        Set the model for this decorator.
+        """Set the model ID for this decorator.
 
         Args:
             model_id: ID of the model to adapt for
@@ -62,11 +58,7 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
         self.model_capabilities = get_model_detector().get_model_capabilities(model_id)
 
     def is_supported_by_model(self) -> bool:
-        """
-        Check if this decorator is supported by the current model.
-
-        Args:
-            self: The decorator instance
+        """Check if this decorator is supported by the current model.
 
         Returns:
             True if supported, False otherwise
@@ -77,17 +69,18 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
 
         # Check if the model has a list of supported decorators
         if "supported_decorators" in self.model_capabilities.capabilities:
-            return (
+            # If the model has a list of supported decorators, check if this decorator is in it
+            supported = (
                 self.name
                 in self.model_capabilities.capabilities["supported_decorators"]
             )
+            return supported
 
-        # If no supported_decorators list exists, assume support
+        # If no specific support information, assume support
         return True
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt with model-specific adaptations.
+        """Apply the decorator to a prompt with model-specific adaptations.
 
         This implementation first checks if the decorator is supported by the model,
         then delegates to either apply_for_model or apply_fallback based on support.
@@ -106,8 +99,7 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
             return self.apply_fallback(prompt)
 
     def apply_for_model(self, prompt: str) -> str:
-        """
-        Apply the decorator with model-specific adaptations.
+        """Apply the decorator with model-specific adaptations.
 
         This method should be implemented by subclasses to provide
         model-specific adaptations.
@@ -117,13 +109,11 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
 
         Returns:
             The decorated prompt
-        """
-        # Default implementation - subclasses should override this
+        """  # Default implementation - subclasses should override this
         return f"Model-specific adaptation for {self.name} with model {self.model_id}:\n\n{prompt}"
 
     def apply_fallback(self, prompt: str) -> str:
-        """
-        Apply a fallback decoration when model doesn't support this decorator.
+        """Apply a fallback decoration when model doesn't support this decorator.
 
         This method provides a fallback implementation that still attempts to
         achieve a similar effect, but with simplified instructions.
@@ -133,17 +123,12 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
 
         Returns:
             The decorated prompt
-        """
-        # Default fallback - subclasses should override this
+        """  # Default fallback - subclasses should override this
         fallback_note = f"Note: The {self.name} decorator is not fully supported by this model. Using simplified instructions."
         return f"{fallback_note}\n\n{prompt}"
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
-
-        Args:
-            self: The decorator instance
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -154,11 +139,10 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "ModelSpecificDecorator":
-        """
-        Create a decorator from a dictionary.
+        """Create a decorator from a dictionary.
 
         Args:
-            data: Dictionary representation of a decorator
+            data: Dictionary representation of the decorator
 
         Returns:
             New decorator instance
@@ -170,18 +154,15 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
 
 
 class ModelSpecificDecoratorFactory:
-    """
-    Factory for creating model-specific decorators.
+    """    Factory for creating model-specific decorators.
 
     This class provides methods for creating model-specific versions of decorators.
-    """
+    """ @ staticmethod
 
-    @staticmethod
     def create_for_model(
         decorator_class: Type[BaseDecorator], model_id: str, **params
     ) -> BaseDecorator:
-        """
-        Create a model-specific version of a decorator.
+        """Create a model-specific version of a decorator.
 
         This method creates a new class that extends both ModelSpecificDecorator and
         the original decorator class, allowing for model-specific adaptations.
@@ -193,8 +174,7 @@ class ModelSpecificDecoratorFactory:
 
         Returns:
             Instance of the model-specific decorator
-        """
-        # Create a name for the model-specific class
+        """  # Create a name for the model-specific class
         model_specific_name = f"{decorator_class.__name__}_{model_id.replace('-', '_')}"
 
         # Create a new class that inherits from both ModelSpecificDecorator and the original class

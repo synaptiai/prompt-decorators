@@ -2,7 +2,6 @@
 
 This module provides an opt-in telemetry system for tracking decorator usage patterns.
 """
-
 import json
 import logging
 import os
@@ -21,8 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class TelemetryManager:
-    """
-    Manager for collecting and reporting telemetry data.
+    """Manager for collecting and reporting telemetry data.
 
     This class provides utilities for collecting usage data about decorators
     and reporting it for analytics purposes. All telemetry is opt-in.
@@ -31,10 +29,10 @@ class TelemetryManager:
     _instance = None
 
     def __new__(cls):
-        """Returns:
+        """Create a singleton instance of the telemetry manager.
 
-            Description of return value
-        Create a singleton instance of the telemetry manager.
+        Returns:
+            The singleton instance of the telemetry manager.
         """
         if cls._instance is None:
             cls._instance = super(TelemetryManager, cls).__new__(cls)
@@ -123,11 +121,7 @@ class TelemetryManager:
         logger.info("Telemetry collection disabled")
 
     def is_enabled(self) -> bool:
-        """
-        Check if telemetry is enabled.
-
-        Args:
-            self: The telemetry manager instance
+        """Check if telemetry is enabled.
 
         Returns:
             True if enabled, False otherwise
@@ -161,8 +155,7 @@ class TelemetryManager:
         parameters: Optional[Dict[str, Any]] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
-        """
-        Track usage of a decorator.
+        """Track usage of a decorator.
 
         Args:
             decorator_name: Name of the decorator
@@ -196,8 +189,7 @@ class TelemetryManager:
         prompt_length: Optional[int] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
-        """
-        Track a combination of decorators used together.
+        """Track a combination of decorators used together.
 
         Args:
             decorators: List of decorator information dictionaries
@@ -228,8 +220,7 @@ class TelemetryManager:
         execution_time: float,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
-        """
-        Track performance metrics for a decorator.
+        """Track performance metrics for a decorator.
 
         Args:
             decorator_name: Name of the decorator
@@ -258,8 +249,7 @@ class TelemetryManager:
         self._call_callbacks("performance", event)
 
     def _queue_event(self, event: Dict[str, Any]) -> None:
-        """
-        Queue an event for processing.
+        """Queue an event for processing.
 
         Args:
             event: Event data to queue
@@ -316,8 +306,7 @@ class TelemetryManager:
                 time.sleep(1.0)
 
     def _process_event(self, event: Dict[str, Any]) -> None:
-        """
-        Process a telemetry event.
+        """Process a telemetry event.
 
         Args:
             event: The event to process
@@ -340,8 +329,7 @@ class TelemetryManager:
     def register_callback(
         self, event_type: str, callback: Callable[[Dict[str, Any]], None]
     ) -> None:
-        """
-        Register a callback for a specific event type.
+        """Register a callback for a specific event type.
 
         Args:
             event_type: Type of event to register for
@@ -359,8 +347,7 @@ class TelemetryManager:
     def unregister_callback(
         self, event_type: str, callback: Callable[[Dict[str, Any]], None]
     ) -> None:
-        """
-        Unregister a callback for telemetry events.
+        """Unregister a callback for telemetry events.
 
         Args:
             event_type: Type of event
@@ -375,8 +362,7 @@ class TelemetryManager:
             ]
 
     def _call_callbacks(self, event_type: str, event: Dict[str, Any]) -> None:
-        """
-        Call registered callbacks for an event.
+        """Call registered callbacks for an event.
 
         Args:
             event_type: Type of event
@@ -401,8 +387,7 @@ telemetry_manager = TelemetryManager()
 
 # Function to get the global telemetry manager
 def get_telemetry_manager() -> TelemetryManager:
-    """
-    Get the global telemetry manager.
+    """Get the global telemetry manager.
 
     Returns:
         The global telemetry manager instance

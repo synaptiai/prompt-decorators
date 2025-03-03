@@ -1,5 +1,4 @@
-"""
-Implementation of the OutputFormat decorator.
+"""Implementation of the OutputFormat decorator.
 
 This module provides the OutputFormat decorator class for use in prompt engineering.
 
@@ -17,13 +16,10 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class OutputFormat(BaseDecorator):
-    """
-    Specifies the format of the AI's response. This decorator ensures the
-    output follows a specific format, making it easier to parse, display,
-    or process the response in a consistent way.
+    """Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way.
 
     Attributes:
-        format: The format to use for the response
+        format: The format to use for the response. (Literal["json", "markdown", "yaml", "xml", "plaintext"])
     """
 
     decorator_name = "output_format"
@@ -31,11 +27,11 @@ class OutputFormat(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -43,14 +39,11 @@ class OutputFormat(BaseDecorator):
         self,
         format: Literal["json", "markdown", "yaml", "xml", "plaintext"],
     ) -> None:
-        """
-        Initialize the OutputFormat decorator.
+        """Initialize the OutputFormat decorator.
 
         Args:
             format: The format to use for the response
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -59,6 +52,12 @@ class OutputFormat(BaseDecorator):
         self._format = format
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._format = format
+
         # Validate parameters
         if self._format is not None:
             if not isinstance(self._format, str):
@@ -72,8 +71,7 @@ class OutputFormat(BaseDecorator):
 
     @property
     def format(self) -> Literal["json", "markdown", "yaml", "xml", "plaintext"]:
-        """
-        Get the format parameter value.
+        """Get the format parameter value.
 
         Args:
             self: The decorator instance
@@ -84,8 +82,7 @@ class OutputFormat(BaseDecorator):
         return self._format
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -98,8 +95,7 @@ class OutputFormat(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -114,32 +110,34 @@ class OutputFormat(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -157,11 +155,11 @@ class OutputFormat(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

@@ -1,5 +1,4 @@
-"""
-Implementation of the Compatibility decorator.
+"""Implementation of the Compatibility decorator.
 
 This module provides the Compatibility decorator class for use in prompt engineering.
 
@@ -14,16 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Compatibility(BaseDecorator):
-    """
-    A meta-decorator that specifies model-specific adaptations or fall-
-    back behaviors. This enables graceful degradation of decorator
-    functionalities across different LLM capabilities and ensures optimal
-    performance across model variants.
+    """A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.
 
     Attributes:
-        models: List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.)
-        fallback: Decorator to apply if the current model doesn't match any in the models list
-        behaviors: JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}')
+        models: List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.). (List[Any])
+        fallback: Decorator to apply if the current model doesn't match any in the models list. (str)
+        behaviors: JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}'). (str)
     """
 
     decorator_name = "compatibility"
@@ -31,11 +26,11 @@ class Compatibility(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,20 +40,13 @@ class Compatibility(BaseDecorator):
         fallback: str = None,
         behaviors: str = None,
     ) -> None:
-        """
-        Initialize the Compatibility decorator.
+        """Initialize the Compatibility decorator.
 
         Args:
-            models: List of specific models to adapt for (e.g., gpt-3.5-turbo,
-                gpt-4, etc.)
-            fallback: Decorator to apply if the current model doesn't match any in
-                the models list
-            behaviors: JSON string mapping model names to specific adaptations
-                (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning",
-                "gpt-4": "maximize detailed analysis"}')
+            models: List of specific models to adapt for (e.g., gpt-3.5-turbo, gpt-4, etc.)
+            fallback: Decorator to apply if the current model doesn't match any in the models list
+            behaviors: JSON string mapping model names to specific adaptations (e.g., '{"gpt-3.5-turbo": "simplify complex reasoning", "gpt-4": "maximize detailed analysis"}')
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -69,6 +57,14 @@ class Compatibility(BaseDecorator):
         self._behaviors = behaviors
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._models = models
+        self._fallback = fallback
+        self._behaviors = behaviors
+
         # Validate parameters
         if self._models is not None:
             if not isinstance(self._models, list):
@@ -88,8 +84,7 @@ class Compatibility(BaseDecorator):
 
     @property
     def models(self) -> List[Any]:
-        """
-        Get the models parameter value.
+        """Get the models parameter value.
 
         Args:
             self: The decorator instance
@@ -101,8 +96,7 @@ class Compatibility(BaseDecorator):
 
     @property
     def fallback(self) -> str:
-        """
-        Get the fallback parameter value.
+        """Get the fallback parameter value.
 
         Args:
             self: The decorator instance
@@ -114,8 +108,7 @@ class Compatibility(BaseDecorator):
 
     @property
     def behaviors(self) -> str:
-        """
-        Get the behaviors parameter value.
+        """Get the behaviors parameter value.
 
         Args:
             self: The decorator instance
@@ -126,8 +119,7 @@ class Compatibility(BaseDecorator):
         return self._behaviors
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -142,8 +134,7 @@ class Compatibility(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -162,32 +153,34 @@ class Compatibility(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -205,11 +198,11 @@ class Compatibility(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

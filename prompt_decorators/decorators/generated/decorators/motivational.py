@@ -1,5 +1,4 @@
-"""
-Implementation of the Motivational decorator.
+"""Implementation of the Motivational decorator.
 
 This module provides the Motivational decorator class for use in prompt engineering.
 
@@ -18,16 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Motivational(BaseDecorator):
-    """
-    Enhances responses with encouraging, inspiring, and empowering
-    language. This decorator is designed to motivate action, build
-    confidence, and create a positive emotional impact while still
-    delivering substantive content.
+    """Enhances responses with encouraging, inspiring, and empowering language. This decorator is designed to motivate action, build confidence, and create a positive emotional impact while still delivering substantive content.
 
     Attributes:
-        intensity: The level of motivational energy and enthusiasm
-        focus: The primary motivational approach to emphasize
-        actionable: Whether to include specific actionable steps or only inspirational content
+        intensity: The level of motivational energy and enthusiasm. (Literal["mild", "moderate", "high"])
+        focus: The primary motivational approach to emphasize. (Literal["achievement", "growth", "resilience", "purpose", "balanced"])
+        actionable: Whether to include specific actionable steps or only inspirational content. (bool)
     """
 
     decorator_name = "motivational"
@@ -35,11 +30,11 @@ class Motivational(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -51,17 +46,13 @@ class Motivational(BaseDecorator):
         ] = "balanced",
         actionable: bool = True,
     ) -> None:
-        """
-        Initialize the Motivational decorator.
+        """Initialize the Motivational decorator.
 
         Args:
             intensity: The level of motivational energy and enthusiasm
             focus: The primary motivational approach to emphasize
-            actionable: Whether to include specific actionable steps or only
-                inspirational content
+            actionable: Whether to include specific actionable steps or only inspirational content
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -72,6 +63,14 @@ class Motivational(BaseDecorator):
         self._actionable = actionable
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._intensity = intensity
+        self._focus = focus
+        self._actionable = actionable
+
         # Validate parameters
         if self._intensity is not None:
             if not isinstance(self._intensity, str):
@@ -105,8 +104,7 @@ class Motivational(BaseDecorator):
 
     @property
     def intensity(self) -> Literal["mild", "moderate", "high"]:
-        """
-        Get the intensity parameter value.
+        """Get the intensity parameter value.
 
         Args:
             self: The decorator instance
@@ -120,8 +118,7 @@ class Motivational(BaseDecorator):
     def focus(
         self,
     ) -> Literal["achievement", "growth", "resilience", "purpose", "balanced"]:
-        """
-        Get the focus parameter value.
+        """Get the focus parameter value.
 
         Args:
             self: The decorator instance
@@ -133,8 +130,7 @@ class Motivational(BaseDecorator):
 
     @property
     def actionable(self) -> bool:
-        """
-        Get the actionable parameter value.
+        """Get the actionable parameter value.
 
         Args:
             self: The decorator instance
@@ -145,8 +141,7 @@ class Motivational(BaseDecorator):
         return self._actionable
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -161,8 +156,7 @@ class Motivational(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -181,32 +175,34 @@ class Motivational(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -224,11 +220,11 @@ class Motivational(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

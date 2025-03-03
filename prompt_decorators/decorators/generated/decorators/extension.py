@@ -1,5 +1,4 @@
-"""
-Implementation of the Extension decorator.
+"""Implementation of the Extension decorator.
 
 This module provides the Extension decorator class for use in prompt engineering.
 
@@ -14,16 +13,12 @@ from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Extension(BaseDecorator):
-    """
-    A meta-decorator that enables loading of community-defined decorators
-    from external sources. This facilitates the use of specialized
-    decorator packages, domain-specific extensions, or custom decorator
-    libraries maintained by communities or organizations.
+    """A meta-decorator that enables loading of community-defined decorators from external sources. This facilitates the use of specialized decorator packages, domain-specific extensions, or custom decorator libraries maintained by communities or organizations.
 
     Attributes:
-        source: URI or identifier for the extension package (e.g., URL, namespace, or registry identifier)
-        version: Specific version of the extension package to use
-        decorators: Specific decorators to load from the extension (if empty, loads all decorators from the package)
+        source: URI or identifier for the extension package (e.g., URL, namespace, or registry identifier). (str)
+        version: Specific version of the extension package to use. (str)
+        decorators: Specific decorators to load from the extension (if empty, loads all decorators from the package). (List[Any])
     """
 
     decorator_name = "extension"
@@ -31,11 +26,11 @@ class Extension(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,18 +40,13 @@ class Extension(BaseDecorator):
         version: str = None,
         decorators: List[Any] = None,
     ) -> None:
-        """
-        Initialize the Extension decorator.
+        """Initialize the Extension decorator.
 
         Args:
-            source: URI or identifier for the extension package (e.g., URL,
-                namespace, or registry identifier)
+            source: URI or identifier for the extension package (e.g., URL, namespace, or registry identifier)
             version: Specific version of the extension package to use
-            decorators: Specific decorators to load from the extension (if empty,
-                loads all decorators from the package)
+            decorators: Specific decorators to load from the extension (if empty, loads all decorators from the package)
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -67,6 +57,14 @@ class Extension(BaseDecorator):
         self._decorators = decorators
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._source = source
+        self._version = version
+        self._decorators = decorators
+
         # Validate parameters
         if self._source is not None:
             if not isinstance(self._source, str):
@@ -86,8 +84,7 @@ class Extension(BaseDecorator):
 
     @property
     def source(self) -> str:
-        """
-        Get the source parameter value.
+        """Get the source parameter value.
 
         Args:
             self: The decorator instance
@@ -99,8 +96,7 @@ class Extension(BaseDecorator):
 
     @property
     def version(self) -> str:
-        """
-        Get the version parameter value.
+        """Get the version parameter value.
 
         Args:
             self: The decorator instance
@@ -112,8 +108,7 @@ class Extension(BaseDecorator):
 
     @property
     def decorators(self) -> List[Any]:
-        """
-        Get the decorators parameter value.
+        """Get the decorators parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +119,7 @@ class Extension(BaseDecorator):
         return self._decorators
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -140,8 +134,7 @@ class Extension(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -160,32 +153,34 @@ class Extension(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -203,11 +198,11 @@ class Extension(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

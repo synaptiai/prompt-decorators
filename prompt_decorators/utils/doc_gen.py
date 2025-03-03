@@ -2,7 +2,6 @@
 
 This module provides utilities for generating API documentation from code and registry metadata.
 """
-
 import importlib
 import inspect
 import json
@@ -21,8 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class DocGenerator:
-    """
-    Generator for API documentation from code and registry metadata.
+    """Generator for API documentation from code and registry metadata.
 
     This class provides utilities for extracting docstrings, type annotations,
     and other metadata from Python code, and generating documentation in various formats.
@@ -34,8 +32,7 @@ class DocGenerator:
         registry_path: Optional[str] = None,
         output_dir: Optional[str] = None,
     ):
-        """
-        Initialize the documentation generator.
+        """Initialize the documentation generator.
 
         Args:
             package_path: Path to the Python package to document
@@ -55,8 +52,7 @@ class DocGenerator:
         self.registry_data: Dict[str, Dict[str, Any]] = {}
 
     def extract_package_docs(self, package_name: str) -> Dict[str, Any]:
-        """
-        Extract documentation from a Python package.
+        """Extract documentation from a Python package.
 
         Args:
             package_name: Name of the package to document
@@ -107,8 +103,7 @@ class DocGenerator:
             return {}
 
     def _extract_module_doc(self, module) -> Dict[str, Any]:
-        """
-        Extract documentation from a module.
+        """Extract documentation from a module.
 
         Args:
             module: The module to extract documentation from
@@ -131,14 +126,14 @@ class DocGenerator:
         }
 
     def _extract_members_doc(self, module) -> None:
-        """
-        Extract documentation from module members (classes and functions).
+        """Extract documentation from module members (classes and functions).
 
         Args:
             module: The module to extract documentation from
 
         Returns:
-            None"""
+            None
+        """
         module_name = module.__name__
 
         # Get all members
@@ -173,8 +168,7 @@ class DocGenerator:
                 logger.warning(f"Error extracting docs from {module_name}.{name}: {e}")
 
     def _extract_class_doc(self, cls) -> Dict[str, Any]:
-        """
-        Extract documentation from a class.
+        """Extract documentation from a class.
 
         Args:
             cls: The class to extract documentation from
@@ -231,8 +225,7 @@ class DocGenerator:
         }
 
     def _extract_function_doc(self, func) -> Dict[str, Any]:
-        """
-        Extract documentation from a function or method.
+        """Extract documentation from a function or method.
 
         Args:
             func: The function to extract documentation from
@@ -307,8 +300,7 @@ class DocGenerator:
         }
 
     def _extract_param_types_from_docstring(self, docstring: str) -> Dict[str, str]:
-        """
-        Extract parameter types from a docstring.
+        """Extract parameter types from a docstring.
 
         Args:
             docstring: The docstring to extract types from
@@ -368,8 +360,7 @@ class DocGenerator:
         return param_types
 
     def _extract_return_type_from_docstring(self, docstring: str) -> Optional[str]:
-        """
-        Extract return type from a docstring.
+        """Extract return type from a docstring.
 
         Args:
             docstring: The docstring to extract the return type from
@@ -420,8 +411,7 @@ class DocGenerator:
         return None
 
     def load_registry_data(self) -> Dict[str, Dict[str, Any]]:
-        """
-        Load decorator definitions from the registry.
+        """Load decorator definitions from the registry.
 
         Args:
             self: The DocGenerator instance
@@ -460,8 +450,7 @@ class DocGenerator:
         return registry_data
 
     def merge_code_and_registry_docs(self) -> Dict[str, Dict[str, Any]]:
-        """
-        Merge documentation extracted from code with registry data.
+        """Merge documentation extracted from code with registry data.
 
         Args:
             self: The DocGenerator instance
@@ -500,8 +489,7 @@ class DocGenerator:
         return merged_docs
 
     def generate_markdown_docs(self, output_dir: Optional[str] = None) -> None:
-        """
-        Generate markdown documentation files.
+        """Generate markdown documentation files.
 
         Args:
             output_dir: Optional output directory path
@@ -533,8 +521,7 @@ class DocGenerator:
             self._generate_decorator_markdown(decorator_name, decorator_doc, output_dir)
 
     def _generate_index_markdown(self, docs: Dict[str, Any], output_dir: str) -> None:
-        """
-        Generate the index markdown file.
+        """Generate the index markdown file.
 
         Args:
             docs: Dictionary of documentation data
@@ -571,8 +558,7 @@ class DocGenerator:
         docs: Dict[str, Any],
         output_dir: str,
     ) -> None:
-        """
-        Generate markdown documentation for a module.
+        """Generate markdown documentation for a module.
 
         Args:
             module_path: Path to the module
@@ -641,8 +627,7 @@ class DocGenerator:
     def _generate_decorator_markdown(
         self, decorator_name: str, decorator_doc: Dict[str, Any], output_dir: str
     ) -> None:
-        """
-        Generate markdown documentation for a decorator.
+        """Generate markdown documentation for a decorator.
 
         Args:
             decorator_name: Name of the decorator
@@ -789,8 +774,7 @@ class DocGenerator:
             f.write(decorator_content)
 
     def _format_class_markdown(self, class_name: str, class_doc: Dict[str, Any]) -> str:
-        """
-        Format a class for Markdown documentation.
+        """Format a class for Markdown documentation.
 
         Args:
             class_name: The class name
@@ -845,8 +829,7 @@ class DocGenerator:
     def _format_function_markdown(
         self, func_name: str, func_doc: Dict[str, Any]
     ) -> str:
-        """
-        Format a function for Markdown documentation.
+        """Format a function for Markdown documentation.
 
         Args:
             func_name: The function name
@@ -880,8 +863,7 @@ class DocGenerator:
         return content
 
     def _get_summary(self, docstring: str) -> str:
-        """
-        Get a summary from a docstring.
+        """Get a summary from a docstring.
 
         Args:
             docstring: The docstring to get a summary from
@@ -896,8 +878,7 @@ class DocGenerator:
         return lines[0].strip()
 
     def generate_html_docs(self, output_dir: Optional[str] = None) -> None:
-        """
-        Generate HTML documentation files.
+        """Generate HTML documentation files.
 
         Args:
             output_dir: Optional output directory path
@@ -935,7 +916,6 @@ Documentation Generator CLI
 
 This script provides a command-line interface for generating API documentation.
 """
-
 import argparse
 import logging
 import os
@@ -954,8 +934,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-
-"""Run the documentation generator CLI."""
+    """Run the documentation generator CLI."""
     parser = argparse.ArgumentParser(description="Generate API documentation")
     parser.add_argument(
         "--package", "-p",
@@ -1007,7 +986,6 @@ def main():
 if __name__ == "__main__":
     main()
 '''
-
         # Write the script
         with open(script_path, "w") as f:
             f.write(script_content)

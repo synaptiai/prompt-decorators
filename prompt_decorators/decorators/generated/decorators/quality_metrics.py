@@ -1,5 +1,4 @@
-"""
-Implementation of the QualityMetrics decorator.
+"""Implementation of the QualityMetrics decorator.
 
 This module provides the QualityMetrics decorator class for use in prompt engineering.
 
@@ -17,16 +16,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class QualityMetrics(BaseDecorator):
-    """
-    Applies specific quality measurements to evaluate content against
-    defined criteria. This decorator enhances verification by providing
-    quantifiable assessments of aspects like accuracy, completeness,
-    clarity, or other custom metrics.
+    """Applies specific quality measurements to evaluate content against defined criteria. This decorator enhances verification by providing quantifiable assessments of aspects like accuracy, completeness, clarity, or other custom metrics.
 
     Attributes:
-        metrics: Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness)
-        scale: Rating scale to use for evaluations
-        explanation: Whether to provide detailed explanations for each metric score
+        metrics: Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness). (List[Any])
+        scale: Rating scale to use for evaluations. (Literal["1-5", "1-10", "percentage", "qualitative"])
+        explanation: Whether to provide detailed explanations for each metric score. (bool)
     """
 
     decorator_name = "quality_metrics"
@@ -34,11 +29,11 @@ class QualityMetrics(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -48,18 +43,13 @@ class QualityMetrics(BaseDecorator):
         scale: Literal["1-5", "1-10", "percentage", "qualitative"] = "1-5",
         explanation: bool = True,
     ) -> None:
-        """
-        Initialize the QualityMetrics decorator.
+        """Initialize the QualityMetrics decorator.
 
         Args:
-            metrics: Specific quality metrics to measure (e.g., accuracy,
-                completeness, clarity, usefulness)
+            metrics: Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness)
             scale: Rating scale to use for evaluations
-            explanation: Whether to provide detailed explanations for each metric
-                score
+            explanation: Whether to provide detailed explanations for each metric score
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -70,6 +60,14 @@ class QualityMetrics(BaseDecorator):
         self._explanation = explanation
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._metrics = metrics
+        self._scale = scale
+        self._explanation = explanation
+
         # Validate parameters
         if self._metrics is not None:
             if not isinstance(self._metrics, list):
@@ -93,8 +91,7 @@ class QualityMetrics(BaseDecorator):
 
     @property
     def metrics(self) -> List[Any]:
-        """
-        Get the metrics parameter value.
+        """Get the metrics parameter value.
 
         Args:
             self: The decorator instance
@@ -106,8 +103,7 @@ class QualityMetrics(BaseDecorator):
 
     @property
     def scale(self) -> Literal["1-5", "1-10", "percentage", "qualitative"]:
-        """
-        Get the scale parameter value.
+        """Get the scale parameter value.
 
         Args:
             self: The decorator instance
@@ -119,8 +115,7 @@ class QualityMetrics(BaseDecorator):
 
     @property
     def explanation(self) -> bool:
-        """
-        Get the explanation parameter value.
+        """Get the explanation parameter value.
 
         Args:
             self: The decorator instance
@@ -131,8 +126,7 @@ class QualityMetrics(BaseDecorator):
         return self._explanation
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -147,8 +141,7 @@ class QualityMetrics(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -167,32 +160,34 @@ class QualityMetrics(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -210,11 +205,11 @@ class QualityMetrics(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

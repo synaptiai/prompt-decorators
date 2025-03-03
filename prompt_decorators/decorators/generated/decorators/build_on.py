@@ -1,5 +1,4 @@
-"""
-Implementation of the BuildOn decorator.
+"""Implementation of the BuildOn decorator.
 
 This module provides the BuildOn decorator class for use in prompt engineering.
 
@@ -18,16 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class BuildOn(BaseDecorator):
-    """
-    A meta-decorator that builds upon previous context or responses rather
-    than starting from scratch. This enables continuity across
-    interactions, allowing refinement, extension, or alteration of
-    previous outputs in a coherent manner.
+    """A meta-decorator that builds upon previous context or responses rather than starting from scratch. This enables continuity across interactions, allowing refinement, extension, or alteration of previous outputs in a coherent manner.
 
     Attributes:
-        reference: What to build upon from the previous context
-        approach: How to build upon the referenced content
-        preserveStructure: Whether to maintain the structure of the referenced content
+        reference: What to build upon from the previous context. (Literal["last", "specific", "all"])
+        approach: How to build upon the referenced content. (Literal["extend", "refine", "contrast", "synthesize"])
+        preserveStructure: Whether to maintain the structure of the referenced content. (bool)
     """
 
     decorator_name = "build_on"
@@ -35,11 +30,11 @@ class BuildOn(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -49,16 +44,13 @@ class BuildOn(BaseDecorator):
         approach: Literal["extend", "refine", "contrast", "synthesize"] = "extend",
         preserveStructure: bool = True,
     ) -> None:
-        """
-        Initialize the BuildOn decorator.
+        """Initialize the BuildOn decorator.
 
         Args:
             reference: What to build upon from the previous context
             approach: How to build upon the referenced content
             preserveStructure: Whether to maintain the structure of the referenced content
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -69,6 +61,14 @@ class BuildOn(BaseDecorator):
         self._preserveStructure = preserveStructure
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._reference = reference
+        self._approach = approach
+        self._preserveStructure = preserveStructure
+
         # Validate parameters
         if self._reference is not None:
             if not isinstance(self._reference, str):
@@ -96,8 +96,7 @@ class BuildOn(BaseDecorator):
 
     @property
     def reference(self) -> Literal["last", "specific", "all"]:
-        """
-        Get the reference parameter value.
+        """Get the reference parameter value.
 
         Args:
             self: The decorator instance
@@ -109,8 +108,7 @@ class BuildOn(BaseDecorator):
 
     @property
     def approach(self) -> Literal["extend", "refine", "contrast", "synthesize"]:
-        """
-        Get the approach parameter value.
+        """Get the approach parameter value.
 
         Args:
             self: The decorator instance
@@ -122,8 +120,7 @@ class BuildOn(BaseDecorator):
 
     @property
     def preserveStructure(self) -> bool:
-        """
-        Get the preserveStructure parameter value.
+        """Get the preserveStructure parameter value.
 
         Args:
             self: The decorator instance
@@ -134,8 +131,7 @@ class BuildOn(BaseDecorator):
         return self._preserveStructure
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -150,8 +146,7 @@ class BuildOn(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -170,32 +165,34 @@ class BuildOn(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -213,11 +210,11 @@ class BuildOn(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

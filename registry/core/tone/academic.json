@@ -17,7 +17,7 @@
       "required": false
     },
     {
-      "name": "citationStyle",
+      "name": "format",
       "type": "enum",
       "description": "The citation format to use for references",
       "enum": ["APA", "MLA", "Chicago", "Harvard", "IEEE"],
@@ -33,7 +33,7 @@
     },
     {
       "description": "Humanities-focused academic response with MLA citations",
-      "usage": "+++Academic(style=humanities, citationStyle=MLA)\nAnalyze the themes in Shakespeare's Hamlet.",
+      "usage": "+++Academic(style=humanities, format=MLA)\nAnalyze the themes in Shakespeare's Hamlet.",
       "result": "Provides a literary analysis of Hamlet using humanities-appropriate terminology and MLA citation format"
     }
   ],

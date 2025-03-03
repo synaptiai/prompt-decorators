@@ -1,5 +1,4 @@
-"""
-Implementation of the Analogical decorator.
+"""Implementation of the Analogical decorator.
 
 This module provides the Analogical decorator class for use in prompt engineering.
 
@@ -15,15 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import AnalogicalDe
 
 
 class Analogical(BaseDecorator):
-    """
-    Enhances explanations through the use of analogies and metaphors. This
-    decorator helps make complex or abstract concepts more accessible by
-    systematically comparing them to more familiar domains or experiences.
+    """Enhances explanations through the use of analogies and metaphors. This decorator helps make complex or abstract concepts more accessible by systematically comparing them to more familiar domains or experiences.
 
     Attributes:
-        domain: Specific domain or context to draw analogies from (if not specified, will choose appropriate domains)
-        count: Number of distinct analogies to provide
-        depth: Level of detail in developing the analogy
+        domain: Specific domain or context to draw analogies from (if not specified, will choose appropriate domains). (str)
+        count: Number of distinct analogies to provide. (Any)
+        depth: Level of detail in developing the analogy. (Literal["brief", "moderate", "extended"])
     """
 
     decorator_name = "analogical"
@@ -31,11 +27,11 @@ class Analogical(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,17 +41,13 @@ class Analogical(BaseDecorator):
         count: Any = 1,
         depth: Literal["brief", "moderate", "extended"] = "moderate",
     ) -> None:
-        """
-        Initialize the Analogical decorator.
+        """Initialize the Analogical decorator.
 
         Args:
-            domain: Specific domain or context to draw analogies from (if not
-                specified, will choose appropriate domains)
+            domain: Specific domain or context to draw analogies from (if not specified, will choose appropriate domains)
             count: Number of distinct analogies to provide
             depth: Level of detail in developing the analogy
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -66,6 +58,14 @@ class Analogical(BaseDecorator):
         self._depth = depth
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._domain = domain
+        self._count = count
+        self._depth = depth
+
         # Validate parameters
         if self._domain is not None:
             if not isinstance(self._domain, str):
@@ -97,8 +97,7 @@ class Analogical(BaseDecorator):
 
     @property
     def domain(self) -> str:
-        """
-        Get the domain parameter value.
+        """Get the domain parameter value.
 
         Args:
             self: The decorator instance
@@ -110,8 +109,7 @@ class Analogical(BaseDecorator):
 
     @property
     def count(self) -> Any:
-        """
-        Get the count parameter value.
+        """Get the count parameter value.
 
         Args:
             self: The decorator instance
@@ -123,8 +121,7 @@ class Analogical(BaseDecorator):
 
     @property
     def depth(self) -> Literal["brief", "moderate", "extended"]:
-        """
-        Get the depth parameter value.
+        """Get the depth parameter value.
 
         Args:
             self: The decorator instance
@@ -135,8 +132,7 @@ class Analogical(BaseDecorator):
         return self._depth
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -151,8 +147,7 @@ class Analogical(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -171,32 +166,34 @@ class Analogical(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -214,11 +211,11 @@ class Analogical(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

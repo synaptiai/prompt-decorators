@@ -2,7 +2,6 @@
 
 This module scans the registry directory and parses decorator JSON files.
 """
-
 import json
 import logging
 import os
@@ -23,8 +22,7 @@ class RegistryScanner:
     """Scanner for decorator registry files."""
 
     def __init__(self, registry_path: Union[str, Path]):
-        """
-        Initialize the registry scanner.
+        """Initialize the registry scanner.
 
         Args:
             registry_path: Path to the decorator registry directory
@@ -45,8 +43,7 @@ class RegistryScanner:
         self.all_decorators: List[DecoratorData] = []
 
     def scan(self) -> List[DecoratorData]:
-        """
-        Scan the registry directory for decorator JSON files.
+        """Scan the registry directory for decorator JSON files.
 
         Args:
             self: The RegistryScanner instance.
@@ -88,8 +85,7 @@ class RegistryScanner:
         return self.all_decorators
 
     def get_decorators_by_category(self, category: str) -> List[DecoratorData]:
-        """
-        Get decorators for a specific category.
+        """Get decorators for a specific category.
 
         Args:
             category: Category name
@@ -100,8 +96,7 @@ class RegistryScanner:
         return self.decorators_by_category.get(category, [])
 
     def _find_all_json_files(self) -> List[Path]:
-        """
-        Find all JSON files in the registry directory recursively.
+        """Find all JSON files in the registry directory recursively.
 
         Args:
             self: The RegistryScanner instance.
@@ -131,8 +126,7 @@ class RegistryScanner:
         return json_files
 
     def _parse_json_file(self, file_path: Path) -> Optional[DecoratorData]:
-        """
-        Parse a JSON file and validate its structure as a decorator.
+        """Parse a JSON file and validate its structure as a decorator.
 
         Args:
             file_path: Path to the JSON file
@@ -160,8 +154,7 @@ class RegistryScanner:
             return None
 
     def _is_valid_decorator(self, data: Dict[str, Any], file_path: Path) -> bool:
-        """
-        Check if the JSON data represents a valid decorator definition.
+        """Check if the JSON data represents a valid decorator definition.
 
         Args:
             data: Parsed JSON data
@@ -197,8 +190,7 @@ class RegistryScanner:
         return True
 
     def _get_category_from_path(self, file_path: Path) -> str:
-        """
-        Determine the decorator category from its file path.
+        """Determine the decorator category from its file path.
 
         Args:
             file_path: Path to the decorator file
@@ -219,8 +211,7 @@ class RegistryScanner:
 
 
 def scan_registry(registry_path: Union[str, Path]) -> List[DecoratorData]:
-    """
-    Scan the registry at the given path and return all decorator definitions.
+    """Scan the registry at the given path and return all decorator definitions.
 
     Args:
         registry_path: Path to the decorator registry

@@ -1,5 +1,4 @@
-"""
-Implementation of the Professional decorator.
+"""Implementation of the Professional decorator.
 
 This module provides the Professional decorator class for use in prompt engineering.
 
@@ -17,15 +16,11 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Professional(BaseDecorator):
-    """
-    Adapts the response to use business-oriented language appropriate for
-    professional contexts. This decorator generates content using formal
-    business terminology, clear and concise phrasing, and industry-
-    appropriate jargon when relevant.
+    """Adapts the response to use business-oriented language appropriate for professional contexts. This decorator generates content using formal business terminology, clear and concise phrasing, and industry-appropriate jargon when relevant.
 
     Attributes:
-        industry: The specific industry context to adapt the language for
-        formality: The level of formality to maintain in the response
+        industry: The specific industry context to adapt the language for. (str)
+        formality: The level of formality to maintain in the response. (Literal["standard", "high", "executive"])
     """
 
     decorator_name = "professional"
@@ -33,11 +28,11 @@ class Professional(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,15 +41,12 @@ class Professional(BaseDecorator):
         industry: str = "general",
         formality: Literal["standard", "high", "executive"] = "standard",
     ) -> None:
-        """
-        Initialize the Professional decorator.
+        """Initialize the Professional decorator.
 
         Args:
             industry: The specific industry context to adapt the language for
             formality: The level of formality to maintain in the response
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -64,6 +56,13 @@ class Professional(BaseDecorator):
         self._formality = formality
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._industry = industry
+        self._formality = formality
+
         # Validate parameters
         if self._industry is not None:
             if not isinstance(self._industry, str):
@@ -82,8 +81,7 @@ class Professional(BaseDecorator):
 
     @property
     def industry(self) -> str:
-        """
-        Get the industry parameter value.
+        """Get the industry parameter value.
 
         Args:
             self: The decorator instance
@@ -95,8 +93,7 @@ class Professional(BaseDecorator):
 
     @property
     def formality(self) -> Literal["standard", "high", "executive"]:
-        """
-        Get the formality parameter value.
+        """Get the formality parameter value.
 
         Args:
             self: The decorator instance
@@ -107,8 +104,7 @@ class Professional(BaseDecorator):
         return self._formality
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -122,8 +118,7 @@ class Professional(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -140,32 +135,34 @@ class Professional(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -183,11 +180,11 @@ class Professional(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

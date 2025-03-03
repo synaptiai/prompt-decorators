@@ -1,5 +1,4 @@
-"""
-Implementation of the Creative decorator.
+"""Implementation of the Creative decorator.
 
 This module provides the Creative decorator class for use in prompt engineering.
 
@@ -15,15 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import CreativeLeve
 
 
 class Creative(BaseDecorator):
-    """
-    Enhances responses with imaginative, novel, and original content. This
-    decorator encourages divergent thinking, metaphorical language, and
-    unusual connections to generate engaging and non-obvious outputs.
+    """Enhances responses with imaginative, novel, and original content. This decorator encourages divergent thinking, metaphorical language, and unusual connections to generate engaging and non-obvious outputs.
 
     Attributes:
-        level: The degree of creative thinking to apply
-        elements: Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative)
-        constraints: Optional creative constraints to work within
+        level: The degree of creative thinking to apply. (Literal["moderate", "high", "unconventional"])
+        elements: Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative). (List[Any])
+        constraints: Optional creative constraints to work within. (List[Any])
     """
 
     decorator_name = "creative"
@@ -31,11 +27,11 @@ class Creative(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -45,17 +41,13 @@ class Creative(BaseDecorator):
         elements: List[Any] = None,
         constraints: List[Any] = None,
     ) -> None:
-        """
-        Initialize the Creative decorator.
+        """Initialize the Creative decorator.
 
         Args:
             level: The degree of creative thinking to apply
-            elements: Specific creative elements to incorporate (e.g., metaphor,
-                wordplay, narrative)
+            elements: Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative)
             constraints: Optional creative constraints to work within
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -66,6 +58,14 @@ class Creative(BaseDecorator):
         self._constraints = constraints
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._level = level
+        self._elements = elements
+        self._constraints = constraints
+
         # Validate parameters
         if self._level is not None:
             if not isinstance(self._level, str):
@@ -89,8 +89,7 @@ class Creative(BaseDecorator):
 
     @property
     def level(self) -> Literal["moderate", "high", "unconventional"]:
-        """
-        Get the level parameter value.
+        """Get the level parameter value.
 
         Args:
             self: The decorator instance
@@ -102,8 +101,7 @@ class Creative(BaseDecorator):
 
     @property
     def elements(self) -> List[Any]:
-        """
-        Get the elements parameter value.
+        """Get the elements parameter value.
 
         Args:
             self: The decorator instance
@@ -115,8 +113,7 @@ class Creative(BaseDecorator):
 
     @property
     def constraints(self) -> List[Any]:
-        """
-        Get the constraints parameter value.
+        """Get the constraints parameter value.
 
         Args:
             self: The decorator instance
@@ -127,8 +124,7 @@ class Creative(BaseDecorator):
         return self._constraints
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -143,8 +139,7 @@ class Creative(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -163,32 +158,34 @@ class Creative(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -206,11 +203,11 @@ class Creative(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

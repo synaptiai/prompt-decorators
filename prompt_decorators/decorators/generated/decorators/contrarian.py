@@ -1,5 +1,4 @@
-"""
-Implementation of the Contrarian decorator.
+"""Implementation of the Contrarian decorator.
 
 This module provides the Contrarian decorator class for use in prompt engineering.
 
@@ -17,16 +16,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Contrarian(BaseDecorator):
-    """
-    Generates responses that deliberately challenge conventional wisdom or
-    mainstream perspectives. This decorator encourages critical thinking
-    by presenting counterarguments, alternative interpretations, or
-    challenging established positions on a topic.
+    """Generates responses that deliberately challenge conventional wisdom or mainstream perspectives. This decorator encourages critical thinking by presenting counterarguments, alternative interpretations, or challenging established positions on a topic.
 
     Attributes:
-        approach: The specific contrarian approach to take
-        maintain: Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)
-        focus: Optional specific aspect of the topic to focus contrarian analysis on
+        approach: The specific contrarian approach to take. (Literal["outsider", "skeptic", "devils-advocate"])
+        maintain: Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false). (bool)
+        focus: Optional specific aspect of the topic to focus contrarian analysis on. (str)
     """
 
     decorator_name = "contrarian"
@@ -34,11 +29,11 @@ class Contrarian(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -48,18 +43,13 @@ class Contrarian(BaseDecorator):
         maintain: bool = False,
         focus: str = None,
     ) -> None:
-        """
-        Initialize the Contrarian decorator.
+        """Initialize the Contrarian decorator.
 
         Args:
             approach: The specific contrarian approach to take
-            maintain: Whether to maintain contrarian stance throughout (true) or
-                provide balanced view at the end (false)
-            focus: Optional specific aspect of the topic to focus contrarian
-                analysis on
+            maintain: Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)
+            focus: Optional specific aspect of the topic to focus contrarian analysis on
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -70,6 +60,14 @@ class Contrarian(BaseDecorator):
         self._focus = focus
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._approach = approach
+        self._maintain = maintain
+        self._focus = focus
+
         # Validate parameters
         if self._approach is not None:
             if not isinstance(self._approach, str):
@@ -93,8 +91,7 @@ class Contrarian(BaseDecorator):
 
     @property
     def approach(self) -> Literal["outsider", "skeptic", "devils-advocate"]:
-        """
-        Get the approach parameter value.
+        """Get the approach parameter value.
 
         Args:
             self: The decorator instance
@@ -106,8 +103,7 @@ class Contrarian(BaseDecorator):
 
     @property
     def maintain(self) -> bool:
-        """
-        Get the maintain parameter value.
+        """Get the maintain parameter value.
 
         Args:
             self: The decorator instance
@@ -119,8 +115,7 @@ class Contrarian(BaseDecorator):
 
     @property
     def focus(self) -> str:
-        """
-        Get the focus parameter value.
+        """Get the focus parameter value.
 
         Args:
             self: The decorator instance
@@ -131,8 +126,7 @@ class Contrarian(BaseDecorator):
         return self._focus
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -147,8 +141,7 @@ class Contrarian(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -167,32 +160,34 @@ class Contrarian(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -210,11 +205,11 @@ class Contrarian(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

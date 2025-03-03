@@ -1,5 +1,4 @@
-"""
-Implementation of the Concise decorator.
+"""Implementation of the Concise decorator.
 
 This module provides the Concise decorator class for use in prompt engineering.
 
@@ -15,16 +14,12 @@ from prompt_decorators.decorators.generated.decorators.enums import ConciseLevel
 
 
 class Concise(BaseDecorator):
-    """
-    Optimizes the response for brevity and directness, eliminating
-    unnecessary details and verbose language. This decorator is ideal for
-    obtaining quick answers, executive summaries, or essential information
-    when time or space is limited.
+    """Optimizes the response for brevity and directness, eliminating unnecessary details and verbose language. This decorator is ideal for obtaining quick answers, executive summaries, or essential information when time or space is limited.
 
     Attributes:
-        maxWords: Maximum word count for the entire response
-        bulletPoints: Whether to use bullet points for maximum brevity
-        level: The degree of conciseness to apply
+        maxWords: Maximum word count for the entire response. (Any)
+        bulletPoints: Whether to use bullet points for maximum brevity. (bool)
+        level: The degree of conciseness to apply. (Literal["moderate", "high", "extreme"])
     """
 
     decorator_name = "concise"
@@ -32,11 +27,11 @@ class Concise(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -46,16 +41,13 @@ class Concise(BaseDecorator):
         bulletPoints: bool = False,
         level: Literal["moderate", "high", "extreme"] = "moderate",
     ) -> None:
-        """
-        Initialize the Concise decorator.
+        """Initialize the Concise decorator.
 
         Args:
             maxWords: Maximum word count for the entire response
             bulletPoints: Whether to use bullet points for maximum brevity
             level: The degree of conciseness to apply
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -66,6 +58,14 @@ class Concise(BaseDecorator):
         self._level = level
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._maxWords = maxWords
+        self._bulletPoints = bulletPoints
+        self._level = level
+
         # Validate parameters
         if self._maxWords is not None:
             if not isinstance(self._maxWords, (int, float)):
@@ -97,8 +97,7 @@ class Concise(BaseDecorator):
 
     @property
     def maxWords(self) -> Any:
-        """
-        Get the maxWords parameter value.
+        """Get the maxWords parameter value.
 
         Args:
             self: The decorator instance
@@ -110,8 +109,7 @@ class Concise(BaseDecorator):
 
     @property
     def bulletPoints(self) -> bool:
-        """
-        Get the bulletPoints parameter value.
+        """Get the bulletPoints parameter value.
 
         Args:
             self: The decorator instance
@@ -123,8 +121,7 @@ class Concise(BaseDecorator):
 
     @property
     def level(self) -> Literal["moderate", "high", "extreme"]:
-        """
-        Get the level parameter value.
+        """Get the level parameter value.
 
         Args:
             self: The decorator instance
@@ -135,8 +132,7 @@ class Concise(BaseDecorator):
         return self._level
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -151,8 +147,7 @@ class Concise(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -171,32 +166,34 @@ class Concise(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -214,11 +211,11 @@ class Concise(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

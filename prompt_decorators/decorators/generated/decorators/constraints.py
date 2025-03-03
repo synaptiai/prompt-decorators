@@ -1,5 +1,4 @@
-"""
-Implementation of the Constraints decorator.
+"""Implementation of the Constraints decorator.
 
 This module provides the Constraints decorator class for use in prompt engineering.
 
@@ -17,17 +16,13 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Constraints(BaseDecorator):
-    """
-    Applies specific limitations to the output format, length, or content.
-    This decorator enforces creative constraints that can enhance focus,
-    brevity, or precision by requiring the response to work within defined
-    boundaries.
+    """Applies specific limitations to the output format, length, or content. This decorator enforces creative constraints that can enhance focus, brevity, or precision by requiring the response to work within defined boundaries.
 
     Attributes:
-        wordCount: Maximum number of words allowed in the response
-        timeframe: Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week')
-        vocabulary: Constraints on vocabulary usage
-        custom: Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet')
+        wordCount: Maximum number of words allowed in the response. (Any)
+        timeframe: Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week'). (str)
+        vocabulary: Constraints on vocabulary usage. (Literal["simple", "technical", "domain-specific", "creative"])
+        custom: Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet'). (str)
     """
 
     decorator_name = "constraints"
@@ -35,11 +30,11 @@ class Constraints(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -52,20 +47,14 @@ class Constraints(BaseDecorator):
         ] = None,
         custom: str = None,
     ) -> None:
-        """
-        Initialize the Constraints decorator.
+        """Initialize the Constraints decorator.
 
         Args:
             wordCount: Maximum number of words allowed in the response
-            timeframe: Maximum time required to implement or consume the response
-                (e.g., '5min', '1hr', '1week')
+            timeframe: Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week')
             vocabulary: Constraints on vocabulary usage
-            custom: Custom constraint to apply (e.g., 'no negatives', 'use only
-                questions', 'each sentence starts with consecutive letters
-                of the alphabet')
+            custom: Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet')
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -77,6 +66,15 @@ class Constraints(BaseDecorator):
         self._custom = custom
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._wordCount = wordCount
+        self._timeframe = timeframe
+        self._vocabulary = vocabulary
+        self._custom = custom
+
         # Validate parameters
         if self._wordCount is not None:
             if not isinstance(self._wordCount, (int, float)):
@@ -118,8 +116,7 @@ class Constraints(BaseDecorator):
 
     @property
     def wordCount(self) -> Any:
-        """
-        Get the wordCount parameter value.
+        """Get the wordCount parameter value.
 
         Args:
             self: The decorator instance
@@ -131,8 +128,7 @@ class Constraints(BaseDecorator):
 
     @property
     def timeframe(self) -> str:
-        """
-        Get the timeframe parameter value.
+        """Get the timeframe parameter value.
 
         Args:
             self: The decorator instance
@@ -146,8 +142,7 @@ class Constraints(BaseDecorator):
     def vocabulary(
         self,
     ) -> Literal["simple", "technical", "domain-specific", "creative"]:
-        """
-        Get the vocabulary parameter value.
+        """Get the vocabulary parameter value.
 
         Args:
             self: The decorator instance
@@ -159,8 +154,7 @@ class Constraints(BaseDecorator):
 
     @property
     def custom(self) -> str:
-        """
-        Get the custom parameter value.
+        """Get the custom parameter value.
 
         Args:
             self: The decorator instance
@@ -171,8 +165,7 @@ class Constraints(BaseDecorator):
         return self._custom
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -188,8 +181,7 @@ class Constraints(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -210,32 +202,34 @@ class Constraints(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -253,11 +247,11 @@ class Constraints(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,

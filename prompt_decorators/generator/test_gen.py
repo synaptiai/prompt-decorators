@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 """Test Generator for Prompt Decorators.
-
 This module generates comprehensive unit tests for all decorators defined in the registry.
 It creates test cases for:
 1. Decorator initialization with valid and invalid parameters
@@ -42,7 +41,6 @@ class Parameter:
         description: Optional[str] = None,
     ):
         """Initialize a Parameter.
-
         Args:
             name: The name of the parameter
             type: The type of the parameter
@@ -95,7 +93,6 @@ class TestGenerator:
         self, registry_dir: str, output_dir: str, template_dir: Optional[str] = None
     ):
         """Initialize the TestGenerator.
-
         Args:
             registry_dir: Path to the registry directory
             output_dir: Path to the output directory for generated tests
@@ -118,7 +115,6 @@ class TestGenerator:
 
     def generate_all_tests(self) -> List[str]:
         """Generate test files for all decorators in the registry.
-
         Returns:
             List of paths to the generated test files
         """
@@ -190,7 +186,6 @@ class TestGenerator:
 
     def generate_conftest(self) -> str:
         """Generate the conftest.py file for pytest.
-
         Returns:
             The conftest.py file content as a string
         """
@@ -220,7 +215,6 @@ class TestGenerator:
 
     def generate_decorator_test(self, decorator_data: Dict[str, Any]) -> Optional[str]:
         """Generate a test file for a decorator.
-
         Args:
             decorator_data: The decorator data to generate a test file for
 
@@ -269,7 +263,6 @@ class TestGenerator:
 
     def _generate_test_content(self, decorator_data: Dict[str, Any]) -> str:
         """Generate the test content for a decorator.
-
         Args:
             decorator_data: The decorator data to generate test content for
 
@@ -284,7 +277,6 @@ class TestGenerator:
 
     def _generate_file_header(self, decorator_name: str) -> str:
         """Generate the file header for a test file.
-
         Args:
             decorator_name: The name of the decorator
 
@@ -309,7 +301,6 @@ class TestGenerator:
 
     def _generate_test_class(self, decorator_data: Dict[str, Any]) -> List[str]:
         """Generate the test class for a decorator.
-
         Args:
             decorator_data: The decorator data to generate a test class for
 
@@ -373,7 +364,6 @@ class TestGenerator:
         self, decorator_data: Dict[str, Any]
     ) -> List[str]:
         """Generate the _get_valid_params method for testing.
-
         Args:
             decorator_data: The decorator data from the registry
 
@@ -469,7 +459,6 @@ class TestGenerator:
 
     def _generate_test_methods(self, decorator_data: Dict[str, Any]) -> List[str]:
         """Generate test methods for a decorator.
-
         Args:
             decorator_data: The decorator data to generate test methods for
 
@@ -539,7 +528,6 @@ class TestGenerator:
 
         This method creates test cases for required parameter validation,
         ensuring that initialization fails when required parameters are missing.
-
         Args:
             decorator_name: Name of the decorator being tested
             param: Parameter object containing validation rules
@@ -573,7 +561,6 @@ class TestGenerator:
         self, decorator_name: str, param: Parameter
     ) -> str:
         """Generate a test method for parameter validation.
-
         Args:
             decorator_name: The name of the decorator
             param: The parameter to generate a test for
@@ -692,6 +679,7 @@ class TestGenerator:
 
                 # Add tests for each valid enum value
                 for enum_value in param.enum:
+                    # Always use string literals for enum values in tests
                     test_lines.extend(
                         [
                             f"        params['{param_name}'] = '{enum_value}'",
@@ -868,11 +856,22 @@ class TestGenerator:
 
         return "\n".join(test_lines)
 
+    def _convert_to_enum_constant(self, value: str) -> str:
+        """Convert a string to an enum constant name.
+
+        Args:
+            value: The string value to convert
+
+        Returns:
+            The enum constant name
+        """
+        # Convert to uppercase and replace spaces/hyphens with underscores
+        return value.upper().replace(" ", "_").replace("-", "_")
+
     def _generate_apply_examples_test(
         self, decorator_data: Dict[str, Any]
     ) -> List[str]:
         """Generate the test_apply_examples method.
-
         Args:
             decorator_data: The decorator data from the registry
 
@@ -933,7 +932,6 @@ class TestGenerator:
 
     def _generate_serialization_tests(self, decorator_name: str) -> str:
         """Generate tests for serialization.
-
         Args:
             decorator_name: The name of the decorator
 
@@ -971,7 +969,6 @@ class TestGenerator:
 
     def _format_params_for_test(self, params: Dict[str, Any]) -> str:
         """Format parameters for test code.
-
         Args:
             params: Dictionary of parameter names and values
 
@@ -998,6 +995,13 @@ class TestGenerator:
                     or (value.startswith("{") and value.endswith("}"))
                 ):
                     formatted_params[name] = value
+                # Check if this is an enum value (from an Enum class)
+                elif "." in value and any(
+                    enum_class in value
+                    for enum_class in ["FormatType", "GranularityType", "AlignmentType"]
+                ):
+                    # This is likely an enum value reference like FormatType.JSON
+                    formatted_params[name] = value
                 else:
                     # Use double quotes if the string contains apostrophes
                     if "'" in value:
@@ -1009,7 +1013,18 @@ class TestGenerator:
                 formatted_elements = []
                 for element in value:
                     if isinstance(element, str):
-                        formatted_elements.append(f"'{element}'")
+                        # Check if this is an enum value
+                        if "." in element and any(
+                            enum_class in element
+                            for enum_class in [
+                                "FormatType",
+                                "GranularityType",
+                                "AlignmentType",
+                            ]
+                        ):
+                            formatted_elements.append(element)
+                        else:
+                            formatted_elements.append(f"'{element}'")
                     else:
                         formatted_elements.append(str(element))
                 formatted_params[name] = f"[{', '.join(formatted_elements)}]"
@@ -1018,7 +1033,18 @@ class TestGenerator:
                 formatted_dict = "{"
                 for k, v in value.items():
                     if isinstance(v, str):
-                        formatted_dict += f"'{k}': '{v}', "
+                        # Check if this is an enum value
+                        if "." in v and any(
+                            enum_class in v
+                            for enum_class in [
+                                "FormatType",
+                                "GranularityType",
+                                "AlignmentType",
+                            ]
+                        ):
+                            formatted_dict += f"'{k}': {v}, "
+                        else:
+                            formatted_dict += f"'{k}': '{v}', "
                     else:
                         formatted_dict += f"'{k}': {v}, "
                 formatted_dict = formatted_dict.rstrip(", ") + "}"
@@ -1033,7 +1059,6 @@ class TestGenerator:
 
     def generate_test_discovery(self) -> str:
         """Generate the __init__.py file for test discovery.
-
         Returns:
             The __init__.py file content as a string
         """
@@ -1050,7 +1075,6 @@ class TestGenerator:
     def _convert_to_snake_case(self, name: str) -> str:
         """
         Convert a camelCase or PascalCase string to snake_case.
-
         Args:
             name: The string to convert
 

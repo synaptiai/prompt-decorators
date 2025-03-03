@@ -1,10 +1,8 @@
-"""
-Base classes for prompt decorators.
+"""Base classes for prompt decorators.
 
-This module contains the foundational classes used throughout the prompt decorators system,
-including BaseDecorator, Parameter, and ValidationError.
+This module provides the base classes and utilities for creating and using
+prompt decorators.
 """
-
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set, Union
 
@@ -15,8 +13,7 @@ class ValidationError(Exception):
     """Exception raised when decorator validation fails."""
 
     def __init__(self, message: str, decorator_name: Optional[str] = None):
-        """
-        Initialize ValidationError.
+        """Initialize ValidationError.
 
         Args:
             message: The error message
@@ -40,8 +37,7 @@ class ParameterType(str, Enum):
 
 
 class Parameter(BaseModel):
-    """
-    Represents a parameter for a decorator.
+    """Represents a parameter for a decorator.
 
     This class defines the metadata for a parameter, including its name, type,
     description, default value, and constraints.
@@ -61,10 +57,18 @@ class Parameter(BaseModel):
     max_value: Optional[Union[int, float]] = Field(
         None, description="Maximum value for numeric types"
     )
+    min_length: Optional[int] = Field(
+        None, description="Minimum length for string or array types"
+    )
+    max_length: Optional[int] = Field(
+        None, description="Maximum length for string or array types"
+    )
+    pattern: Optional[str] = Field(
+        None, description="Regex pattern for string validation"
+    )
 
     def validate_value(self, value: Any) -> Any:
-        """
-        Validate that the given value meets the parameter constraints.
+        """Validate a parameter value against the parameter's constraints.
 
         Args:
             value: The value to validate
@@ -73,66 +77,58 @@ class Parameter(BaseModel):
             The validated value (possibly converted to the correct type)
 
         Raises:
-            ValidationError: If the value is invalid for this parameter
+            ValidationError: If the value is invalid
         """
-        # Type validation
+        # Handle None for non-required parameters
         if value is None:
             if self.required:
                 raise ValidationError(f"Parameter '{self.name}' is required")
             return self.default
 
-        # Type-specific validation
+        # Type validation
         if self.type == ParameterType.STRING:
             if not isinstance(value, str):
-                raise ValidationError(f"Parameter '{self.name}' must be a string")
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be a string, got {type(value).__name__}"
+                )
+            # Length validation
+            if self.min_length is not None and len(value) < self.min_length:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at least {self.min_length} characters"
+                )
+            if self.max_length is not None and len(value) > self.max_length:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at most {self.max_length} characters"
+                )
+            # Pattern validation
+            if self.pattern is not None:
+                import re
 
+                if not re.match(self.pattern, value):
+                    raise ValidationError(
+                        f"Parameter '{self.name}' must match pattern '{self.pattern}'"
+                    )
         elif self.type == ParameterType.INTEGER:
             if not isinstance(value, int) or isinstance(value, bool):
-                raise ValidationError(f"Parameter '{self.name}' must be an integer")
-
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be an integer, got {type(value).__name__}"
+                )
+            # Range validation
             if self.min_value is not None and value < self.min_value:
                 raise ValidationError(
-                    f"Parameter '{self.name}' must be >= {self.min_value}"
+                    f"Parameter '{self.name}' must be at least {self.min_value}"
                 )
-
             if self.max_value is not None and value > self.max_value:
                 raise ValidationError(
-                    f"Parameter '{self.name}' must be <= {self.max_value}"
+                    f"Parameter '{self.name}' must be at most {self.max_value}"
                 )
-
-        elif self.type == ParameterType.FLOAT:
-            if not isinstance(value, (int, float)) or isinstance(value, bool):
-                raise ValidationError(f"Parameter '{self.name}' must be a number")
-
-            if self.min_value is not None and value < self.min_value:
-                raise ValidationError(
-                    f"Parameter '{self.name}' must be >= {self.min_value}"
-                )
-
-            if self.max_value is not None and value > self.max_value:
-                raise ValidationError(
-                    f"Parameter '{self.name}' must be <= {self.max_value}"
-                )
-
-        elif self.type == ParameterType.BOOLEAN:
-            if not isinstance(value, bool):
-                raise ValidationError(f"Parameter '{self.name}' must be a boolean")
-
-        elif self.type == ParameterType.ENUM:
-            if not isinstance(value, str):
-                raise ValidationError(f"Parameter '{self.name}' must be a string")
-
-            if self.enum_values and value not in self.enum_values:
-                raise ValidationError(
-                    f"Parameter '{self.name}' must be one of: {', '.join(self.enum_values)}"
-                )
+        # Add validation for other types as needed
 
         return value
 
 
 class BaseDecorator:
-    """
-    Base class for all prompt decorators.
+    """Base class for all prompt decorators.
 
     This class defines the common interface and behavior for all decorators.
     Subclasses should implement the apply_to_prompt and transform_response methods.
@@ -144,38 +140,35 @@ class BaseDecorator:
     conflicts_with: Set[str] = set()
 
     def __init__(self, **kwargs):
-        """
-        Initialize the decorator with parameter values.
+        """Initialize a decorator with parameter values.
 
         Args:
-            **kwargs: Parameter values for this decorator instance
+            **kwargs: Parameter values for the decorator
 
         Raises:
             ValidationError: If any parameter values are invalid
         """
-        self.values = {}
+        # Store parameter values
+        for name, value in kwargs.items():
+            if name in self.parameters:
+                # Validate the parameter value
+                validated_value = self.parameters[name].validate_value(value)
+                setattr(self, f"_{name}", validated_value)
+            else:
+                raise ValidationError(f"Unknown parameter: {name}", self.name)
 
-        # Validate and store parameter values
+        # Set default values for missing parameters
         for name, param in self.parameters.items():
-            if name in kwargs:
-                value = kwargs.pop(name)
-                validated_value = param.validate_value(value)
-                self.values[name] = validated_value
-            elif param.default is not None:
-                self.values[name] = param.default
-            elif param.required:
-                raise ValidationError(f"Missing required parameter: {name}", self.name)
-
-        # Check for unexpected parameters
-        if kwargs:
-            raise ValidationError(
-                f"Unexpected parameters: {', '.join(kwargs.keys())}", self.name
-            )
+            if name not in kwargs:
+                if param.required:
+                    raise ValidationError(
+                        f"Missing required parameter: {name}", self.name
+                    )
+                setattr(self, f"_{name}", param.default)
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "BaseDecorator":
-        """
-        Create a decorator instance from a dictionary representation.
+        """Create a decorator instance from a dictionary representation.
 
         Args:
             data: Dictionary representation of the decorator
@@ -187,44 +180,68 @@ class BaseDecorator:
             ValidationError: If the dictionary is invalid
         """
         if "name" not in data:
-            raise ValidationError("Missing 'name' field in decorator data")
+            raise ValidationError("Missing required field: name")
 
-        if "parameters" not in data:
-            raise ValidationError("Missing 'parameters' field in decorator data")
+        decorator_name = data["name"]
 
-        return cls(**data.get("parameters", {}))
+        # Get the expected name from the decorator_name class attribute
+        # This is more reliable than trying to access the name property on the class
+        expected_name = getattr(cls, 'decorator_name', cls.__name__.lower())
+
+        if decorator_name != expected_name:
+            raise ValidationError(
+                f"Expected decorator name '{expected_name}', got '{decorator_name}'"
+            )
+
+        # Extract parameter values
+        params = {}
+        if "parameters" in data:
+            parameters = data["parameters"]
+            # Handle parameters as a dictionary (name: value)
+            if isinstance(parameters, dict):
+                params = parameters
+            # Handle parameters as a list of dictionaries with name and value fields
+            elif isinstance(parameters, list):
+                for param_data in parameters:
+                    if "name" not in param_data or "value" not in param_data:
+                        raise ValidationError(
+                            "Parameter must have 'name' and 'value' fields"
+                        )
+                    params[param_data["name"]] = param_data["value"]
+            else:
+                raise ValidationError("Parameters must be a dictionary or a list")
+
+        # Create the decorator instance
+        return cls(**params)
 
     def apply_to_prompt(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to decorate
 
         Returns:
-            The modified prompt string
-
-        Note:
-            This method should be overridden by subclasses.
+            The decorated prompt
         """
+        # Base implementation does nothing
         return prompt
 
     def transform_response(self, response: str) -> str:
-        """
-        Transform the response from an LLM.
+        """Transform the response from the model.
 
         Args:
-            response: The original response string
+            response: The response to transform
 
         Returns:
-            The transformed response string
-
-        Note:
-            This method should be overridden by subclasses.
+            The transformed response
         """
+        # Base implementation does nothing
         return response
 
     def __str__(self) -> str:
-        """Return a string representation of the decorator."""
-        params = ", ".join(f"{k}={repr(v)}" for k, v in self.values.items())
-        return f"{self.name}({params})"
+        """Return a string representation of the decorator.
+
+        Returns:
+            A string representation
+        """
+        return f"{self.name}()"

@@ -1,5 +1,4 @@
-"""
-Implementation of the Context decorator.
+"""Implementation of the Context decorator.
 
 This module provides the Context decorator class for use in prompt engineering.
 
@@ -18,16 +17,12 @@ from prompt_decorators.decorators.generated.decorators.enums import (
 
 
 class Context(BaseDecorator):
-    """
-    A meta-decorator that adapts standard decorators for domain-specific
-    contexts. This provides specialized interpretations of decorators
-    based on particular fields, industries, or subject matter to ensure
-    appropriate adaptation to contextual requirements.
+    """A meta-decorator that adapts standard decorators for domain-specific contexts. This provides specialized interpretations of decorators based on particular fields, industries, or subject matter to ensure appropriate adaptation to contextual requirements.
 
     Attributes:
-        domain: The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education')
-        scope: Which aspects of decorators to contextualize
-        level: The expertise level to target within the domain
+        domain: The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education'). (str)
+        scope: Which aspects of decorators to contextualize. (Literal["terminology", "examples", "structure", "all"])
+        level: The expertise level to target within the domain. (Literal["beginner", "intermediate", "expert", "mixed"])
     """
 
     decorator_name = "context"
@@ -35,11 +30,11 @@ class Context(BaseDecorator):
 
     @property
     def name(self) -> str:
-        """
-        Get the name of the decorator.
+        """Get the name of the decorator.
 
         Returns:
             The name of the decorator
+
         """
         return self.decorator_name
 
@@ -49,18 +44,13 @@ class Context(BaseDecorator):
         scope: Literal["terminology", "examples", "structure", "all"] = "all",
         level: Literal["beginner", "intermediate", "expert", "mixed"] = "mixed",
     ) -> None:
-        """
-        Initialize the Context decorator.
+        """Initialize the Context decorator.
 
         Args:
-            domain: The specific domain, field, or industry to contextualize
-                decorators for (e.g., 'medicine', 'legal', 'engineering',
-                'education')
+            domain: The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education')
             scope: Which aspects of decorators to contextualize
             level: The expertise level to target within the domain
 
-        Returns:
-            None
         """
         # Initialize with base values
         super().__init__()
@@ -71,6 +61,14 @@ class Context(BaseDecorator):
         self._level = level
 
         # Validate parameters
+        # Initialize with base values
+        super().__init__()
+
+        # Store parameters
+        self._domain = domain
+        self._scope = scope
+        self._level = level
+
         # Validate parameters
         if self._domain is not None:
             if not isinstance(self._domain, str):
@@ -98,8 +96,7 @@ class Context(BaseDecorator):
 
     @property
     def domain(self) -> str:
-        """
-        Get the domain parameter value.
+        """Get the domain parameter value.
 
         Args:
             self: The decorator instance
@@ -111,8 +108,7 @@ class Context(BaseDecorator):
 
     @property
     def scope(self) -> Literal["terminology", "examples", "structure", "all"]:
-        """
-        Get the scope parameter value.
+        """Get the scope parameter value.
 
         Args:
             self: The decorator instance
@@ -124,8 +120,7 @@ class Context(BaseDecorator):
 
     @property
     def level(self) -> Literal["beginner", "intermediate", "expert", "mixed"]:
-        """
-        Get the level parameter value.
+        """Get the level parameter value.
 
         Args:
             self: The decorator instance
@@ -136,8 +131,7 @@ class Context(BaseDecorator):
         return self._level
 
     def to_dict(self) -> Dict[str, Any]:
-        """
-        Convert the decorator to a dictionary.
+        """Convert the decorator to a dictionary.
 
         Returns:
             Dictionary representation of the decorator
@@ -152,8 +146,7 @@ class Context(BaseDecorator):
         }
 
     def to_string(self) -> str:
-        """
-        Convert the decorator to a string.
+        """Convert the decorator to a string.
 
         Returns:
             String representation of the decorator
@@ -172,32 +165,34 @@ class Context(BaseDecorator):
             return f"@{self.decorator_name}"
 
     def apply(self, prompt: str) -> str:
-        """
-        Apply the decorator to a prompt string.
+        """Apply the decorator to a prompt string.
 
         Args:
-            prompt: The original prompt string
+            prompt: The prompt to apply the decorator to
+
 
         Returns:
-            The modified prompt string
+            The modified prompt
+
         """
-        # This is a placeholder implementation
         # Subclasses should override this method with specific behavior
         return prompt
 
     @classmethod
     def is_compatible_with_version(cls, version: str) -> bool:
-        """
-        Check if the decorator is compatible with a specific version.
+        """Check if the decorator is compatible with a specific version.
 
         Args:
-            version: The version to check compatibility with
+            version: The version to check compatibility with.
+
 
         Returns:
-            True if compatible, False otherwise
+            True if compatible, False otherwise.
+
 
         Raises:
-            IncompatibleVersionError: If the version is incompatible
+            IncompatibleVersionError: If the version is incompatible.
+
         """
         # Check version compatibility
         if version > cls.version:
@@ -215,11 +210,11 @@ class Context(BaseDecorator):
 
     @classmethod
     def get_metadata(cls) -> Dict[str, Any]:
-        """
-        Get metadata about the decorator.
+        """Get metadata about the decorator.
 
         Returns:
             Dictionary containing metadata about the decorator
+
         """
         return {
             "name": cls.__name__,
