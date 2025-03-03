@@ -8,11 +8,11 @@ version = "0.1.0"
 description = "A framework for managing prompt decorators to enhance interactions with language models"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
-license = "MIT"
+license = "Apache-2.0"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -45,6 +45,12 @@ pre-commit = "^4.1.0"
 sphinx = "^7.0.0"
 sphinx-rtd-theme = "^1.0.0"
 myst-parser = "^2.0.0"
+mkdocs = "^1.5.0"
+mkdocs-material = "^9.0.0"
+mkdocs-awesome-pages-plugin = "^2.9.0"
+mkdocs-autolinks-plugin = "^0.7.0"
+mkdocs-git-revision-date-localized-plugin = "^1.2.0"
+mkdocstrings = "^0.24.0"
 
 [tool.poetry.group.langchain.dependencies]
 langchain = ">=0.0.200"

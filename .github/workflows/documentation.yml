@@ -35,7 +35,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-          pip install mkdocs mkdocs-material mkdocs-awesome-pages-plugin mkdocstrings interrogate pydocstyle
+          pip install -r docs/requirements.txt
 
       - name: Verify documentation
         run: |
