@@ -210,6 +210,9 @@ class DecoratedRequest:
     def apply_decorators(self) -> str:
         """Apply all decorators to the prompt.
 
+        Args:
+            self: The request instance
+
         Returns:
             The decorated prompt text
 

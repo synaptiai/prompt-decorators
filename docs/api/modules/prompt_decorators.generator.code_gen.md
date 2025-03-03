@@ -50,3 +50,9 @@ Convert snake_case to CamelCase.
 
 If the input is already in camelCase, it will be properly converted to CamelCase
 with the first letter capitalized.
+
+Args:
+    name: The name to convert
+
+Returns:
+    The converted name

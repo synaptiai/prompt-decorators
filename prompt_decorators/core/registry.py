@@ -21,6 +21,9 @@ def register_decorator(
     Args:
         decorator_class: The decorator class to register
         category: Optional category for organizing decorators
+
+    Returns:
+        None
     """
     name = decorator_class.name
     _DECORATOR_REGISTRY[name] = decorator_class
@@ -81,6 +84,9 @@ def clear_registry() -> None:
     """Clear the decorator registry.
 
     This is primarily used for testing.
+
+    Returns:
+        None
     """
     _DECORATOR_REGISTRY.clear()
     _DECORATOR_CATEGORIES.clear()

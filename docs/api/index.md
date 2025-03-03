@@ -1,86 +1,175 @@
-# API Reference
+# Prompt Decorators API Documentation
 
-Welcome to the Prompt Decorators API Reference. This section provides detailed documentation for all components of the Prompt Decorators framework.
+## Modules
 
-## Core Components
-
-The [Core Module](modules/prompt_decorators.core.md) contains the foundational components of the Prompt Decorators framework:
-
-- [Base](modules/prompt_decorators.core.base.md): Base classes for decorators
-- [Registry](modules/prompt_decorators.core.registry.md): Registry management for decorators
-- [Validation](modules/prompt_decorators.core.validation.md): Validation utilities for decorators
-- [Request](modules/prompt_decorators.core.request.md): Request handling for decorators
-- [Exceptions](modules/prompt_decorators.core.exceptions.md): Exception classes for error handling
-- [Model Specific](modules/prompt_decorators.core.model_specific.md): Model-specific functionality
+- [prompt_decorators](modules/prompt_decorators.md)
+- [prompt_decorators.core](modules/prompt_decorators.core.md)
+- [prompt_decorators.core.base](modules/prompt_decorators.core.base.md)
+- [prompt_decorators.core.exceptions](modules/prompt_decorators.core.exceptions.md)
+- [prompt_decorators.core.model_specific](modules/prompt_decorators.core.model_specific.md)
+- [prompt_decorators.core.registry](modules/prompt_decorators.core.registry.md)
+- [prompt_decorators.core.request](modules/prompt_decorators.core.request.md)
+- [prompt_decorators.core.validation](modules/prompt_decorators.core.validation.md)
+- [prompt_decorators.decorators](modules/prompt_decorators.decorators.md)
+- [prompt_decorators.decorators.generated](modules/prompt_decorators.decorators.generated.md)
+- [prompt_decorators.decorators.generated.decorators](modules/prompt_decorators.decorators.generated.decorators.md)
+- [prompt_decorators.decorators.generated.decorators.abductive](modules/prompt_decorators.decorators.generated.decorators.abductive.md)
+- [prompt_decorators.decorators.generated.decorators.academic](modules/prompt_decorators.decorators.generated.decorators.academic.md)
+- [prompt_decorators.decorators.generated.decorators.alternatives](modules/prompt_decorators.decorators.generated.decorators.alternatives.md)
+- [prompt_decorators.decorators.generated.decorators.analogical](modules/prompt_decorators.decorators.generated.decorators.analogical.md)
+- [prompt_decorators.decorators.generated.decorators.as_expert](modules/prompt_decorators.decorators.generated.decorators.as_expert.md)
+- [prompt_decorators.decorators.generated.decorators.audience](modules/prompt_decorators.decorators.generated.decorators.audience.md)
+- [prompt_decorators.decorators.generated.decorators.balanced](modules/prompt_decorators.decorators.generated.decorators.balanced.md)
+- [prompt_decorators.decorators.generated.decorators.blind_spots](modules/prompt_decorators.decorators.generated.decorators.blind_spots.md)
+- [prompt_decorators.decorators.generated.decorators.break_and_build](modules/prompt_decorators.decorators.generated.decorators.break_and_build.md)
+- [prompt_decorators.decorators.generated.decorators.build_on](modules/prompt_decorators.decorators.generated.decorators.build_on.md)
+- [prompt_decorators.decorators.generated.decorators.bullet](modules/prompt_decorators.decorators.generated.decorators.bullet.md)
+- [prompt_decorators.decorators.generated.decorators.chain](modules/prompt_decorators.decorators.generated.decorators.chain.md)
+- [prompt_decorators.decorators.generated.decorators.cite_sources](modules/prompt_decorators.decorators.generated.decorators.cite_sources.md)
+- [prompt_decorators.decorators.generated.decorators.comparison](modules/prompt_decorators.decorators.generated.decorators.comparison.md)
+- [prompt_decorators.decorators.generated.decorators.compatibility](modules/prompt_decorators.decorators.generated.decorators.compatibility.md)
+- [prompt_decorators.decorators.generated.decorators.concise](modules/prompt_decorators.decorators.generated.decorators.concise.md)
+- [prompt_decorators.decorators.generated.decorators.conditional](modules/prompt_decorators.decorators.generated.decorators.conditional.md)
+- [prompt_decorators.decorators.generated.decorators.confidence](modules/prompt_decorators.decorators.generated.decorators.confidence.md)
+- [prompt_decorators.decorators.generated.decorators.constraints](modules/prompt_decorators.decorators.generated.decorators.constraints.md)
+- [prompt_decorators.decorators.generated.decorators.context](modules/prompt_decorators.decorators.generated.decorators.context.md)
+- [prompt_decorators.decorators.generated.decorators.contrarian](modules/prompt_decorators.decorators.generated.decorators.contrarian.md)
+- [prompt_decorators.decorators.generated.decorators.creative](modules/prompt_decorators.decorators.generated.decorators.creative.md)
+- [prompt_decorators.decorators.generated.decorators.custom](modules/prompt_decorators.decorators.generated.decorators.custom.md)
+- [prompt_decorators.decorators.generated.decorators.debate](modules/prompt_decorators.decorators.generated.decorators.debate.md)
+- [prompt_decorators.decorators.generated.decorators.decision_matrix](modules/prompt_decorators.decorators.generated.decorators.decision_matrix.md)
+- [prompt_decorators.decorators.generated.decorators.decorator_name](modules/prompt_decorators.decorators.generated.decorators.decorator_name.md)
+- [prompt_decorators.decorators.generated.decorators.deductive](modules/prompt_decorators.decorators.generated.decorators.deductive.md)
+- [prompt_decorators.decorators.generated.decorators.detailed](modules/prompt_decorators.decorators.generated.decorators.detailed.md)
+- [prompt_decorators.decorators.generated.decorators.eli5](modules/prompt_decorators.decorators.generated.decorators.eli5.md)
+- [prompt_decorators.decorators.generated.decorators.enums](modules/prompt_decorators.decorators.generated.decorators.enums.md)
+- [prompt_decorators.decorators.generated.decorators.extension](modules/prompt_decorators.decorators.generated.decorators.extension.md)
+- [prompt_decorators.decorators.generated.decorators.extremes](modules/prompt_decorators.decorators.generated.decorators.extremes.md)
+- [prompt_decorators.decorators.generated.decorators.fact_check](modules/prompt_decorators.decorators.generated.decorators.fact_check.md)
+- [prompt_decorators.decorators.generated.decorators.find_gaps](modules/prompt_decorators.decorators.generated.decorators.find_gaps.md)
+- [prompt_decorators.decorators.generated.decorators.first_principles](modules/prompt_decorators.decorators.generated.decorators.first_principles.md)
+- [prompt_decorators.decorators.generated.decorators.forced_analogy](modules/prompt_decorators.decorators.generated.decorators.forced_analogy.md)
+- [prompt_decorators.decorators.generated.decorators.inductive](modules/prompt_decorators.decorators.generated.decorators.inductive.md)
+- [prompt_decorators.decorators.generated.decorators.layered](modules/prompt_decorators.decorators.generated.decorators.layered.md)
+- [prompt_decorators.decorators.generated.decorators.limitations](modules/prompt_decorators.decorators.generated.decorators.limitations.md)
+- [prompt_decorators.decorators.generated.decorators.mece](modules/prompt_decorators.decorators.generated.decorators.mece.md)
+- [prompt_decorators.decorators.generated.decorators.motivational](modules/prompt_decorators.decorators.generated.decorators.motivational.md)
+- [prompt_decorators.decorators.generated.decorators.narrative](modules/prompt_decorators.decorators.generated.decorators.narrative.md)
+- [prompt_decorators.decorators.generated.decorators.negative_space](modules/prompt_decorators.decorators.generated.decorators.negative_space.md)
+- [prompt_decorators.decorators.generated.decorators.nested](modules/prompt_decorators.decorators.generated.decorators.nested.md)
+- [prompt_decorators.decorators.generated.decorators.outline](modules/prompt_decorators.decorators.generated.decorators.outline.md)
+- [prompt_decorators.decorators.generated.decorators.output_format](modules/prompt_decorators.decorators.generated.decorators.output_format.md)
+- [prompt_decorators.decorators.generated.decorators.override](modules/prompt_decorators.decorators.generated.decorators.override.md)
+- [prompt_decorators.decorators.generated.decorators.peer_review](modules/prompt_decorators.decorators.generated.decorators.peer_review.md)
+- [prompt_decorators.decorators.generated.decorators.persona](modules/prompt_decorators.decorators.generated.decorators.persona.md)
+- [prompt_decorators.decorators.generated.decorators.precision](modules/prompt_decorators.decorators.generated.decorators.precision.md)
+- [prompt_decorators.decorators.generated.decorators.prioritize](modules/prompt_decorators.decorators.generated.decorators.prioritize.md)
+- [prompt_decorators.decorators.generated.decorators.priority](modules/prompt_decorators.decorators.generated.decorators.priority.md)
+- [prompt_decorators.decorators.generated.decorators.professional](modules/prompt_decorators.decorators.generated.decorators.professional.md)
+- [prompt_decorators.decorators.generated.decorators.quality_metrics](modules/prompt_decorators.decorators.generated.decorators.quality_metrics.md)
+- [prompt_decorators.decorators.generated.decorators.reasoning](modules/prompt_decorators.decorators.generated.decorators.reasoning.md)
+- [prompt_decorators.decorators.generated.decorators.red_team](modules/prompt_decorators.decorators.generated.decorators.red_team.md)
+- [prompt_decorators.decorators.generated.decorators.refine](modules/prompt_decorators.decorators.generated.decorators.refine.md)
+- [prompt_decorators.decorators.generated.decorators.remix](modules/prompt_decorators.decorators.generated.decorators.remix.md)
+- [prompt_decorators.decorators.generated.decorators.root_cause](modules/prompt_decorators.decorators.generated.decorators.root_cause.md)
+- [prompt_decorators.decorators.generated.decorators.schema](modules/prompt_decorators.decorators.generated.decorators.schema.md)
+- [prompt_decorators.decorators.generated.decorators.socratic](modules/prompt_decorators.decorators.generated.decorators.socratic.md)
+- [prompt_decorators.decorators.generated.decorators.steelman](modules/prompt_decorators.decorators.generated.decorators.steelman.md)
+- [prompt_decorators.decorators.generated.decorators.step_by_step](modules/prompt_decorators.decorators.generated.decorators.step_by_step.md)
+- [prompt_decorators.decorators.generated.decorators.stress_test](modules/prompt_decorators.decorators.generated.decorators.stress_test.md)
+- [prompt_decorators.decorators.generated.decorators.style_shift](modules/prompt_decorators.decorators.generated.decorators.style_shift.md)
+- [prompt_decorators.decorators.generated.decorators.summary](modules/prompt_decorators.decorators.generated.decorators.summary.md)
+- [prompt_decorators.decorators.generated.decorators.table_format](modules/prompt_decorators.decorators.generated.decorators.table_format.md)
+- [prompt_decorators.decorators.generated.decorators.timeline](modules/prompt_decorators.decorators.generated.decorators.timeline.md)
+- [prompt_decorators.decorators.generated.decorators.tone](modules/prompt_decorators.decorators.generated.decorators.tone.md)
+- [prompt_decorators.decorators.generated.decorators.tree_of_thought](modules/prompt_decorators.decorators.generated.decorators.tree_of_thought.md)
+- [prompt_decorators.decorators.generated.decorators.uncertainty](modules/prompt_decorators.decorators.generated.decorators.uncertainty.md)
+- [prompt_decorators.decorators.generated.decorators.version](modules/prompt_decorators.decorators.generated.decorators.version.md)
+- [prompt_decorators.generator](modules/prompt_decorators.generator.md)
+- [prompt_decorators.generator.code_gen](modules/prompt_decorators.generator.code_gen.md)
+- [prompt_decorators.generator.registry](modules/prompt_decorators.generator.registry.md)
+- [prompt_decorators.generator.test_gen](modules/prompt_decorators.generator.test_gen.md)
+- [prompt_decorators.utils](modules/prompt_decorators.utils.md)
+- [prompt_decorators.utils.cache](modules/prompt_decorators.utils.cache.md)
+- [prompt_decorators.utils.compatibility](modules/prompt_decorators.utils.compatibility.md)
+- [prompt_decorators.utils.discovery](modules/prompt_decorators.utils.discovery.md)
+- [prompt_decorators.utils.doc_gen](modules/prompt_decorators.utils.doc_gen.md)
+- [prompt_decorators.utils.factory](modules/prompt_decorators.utils.factory.md)
+- [prompt_decorators.utils.json_loader](modules/prompt_decorators.utils.json_loader.md)
+- [prompt_decorators.utils.model_detection](modules/prompt_decorators.utils.model_detection.md)
+- [prompt_decorators.utils.plugins](modules/prompt_decorators.utils.plugins.md)
+- [prompt_decorators.utils.telemetry](modules/prompt_decorators.utils.telemetry.md)
 
 ## Decorators
 
-The [Decorators Module](modules/prompt_decorators.decorators.md) contains all the decorators available in the framework:
-
-### Reasoning Decorators
-- [Reasoning](decorators/Reasoning.md): Enhances reasoning capabilities
-- [StepByStep](decorators/StepByStep.md): Breaks down reasoning into steps
-- [TreeOfThought](decorators/TreeOfThought.md): Explores multiple reasoning paths
-- [FirstPrinciples](decorators/FirstPrinciples.md): Reasons from first principles
-
-### Output Structure Decorators
-- [OutputFormat](decorators/OutputFormat.md): Controls output format
-- [Schema](decorators/Schema.md): Structures output according to a schema
-- [TableFormat](decorators/TableFormat.md): Formats output as a table
-- [Bullet](decorators/Bullet.md): Formats output as bullet points
-- [Outline](decorators/Outline.md): Formats output as an outline
-- [MECE](decorators/MECE.md): Ensures output is mutually exclusive and collectively exhaustive
-- [Comparison](decorators/Comparison.md): Formats output as a comparison
-- [DecisionMatrix](decorators/DecisionMatrix.md): Formats output as a decision matrix
-- [Timeline](decorators/Timeline.md): Formats output as a timeline
-- [Summary](decorators/Summary.md): Summarizes output
-- [Prioritize](decorators/Prioritize.md): Prioritizes items in output
-- [Layered](decorators/Layered.md): Structures output in layers
-- [Nested](decorators/Nested.md): Structures output in a nested format
-
-### Tone and Style Decorators
-- [Tone](decorators/Tone.md): Controls the tone of the output
-- [Persona](decorators/Persona.md): Adopts a specific persona
-- [Audience](decorators/Audience.md): Tailors output for a specific audience
-- [Creative](decorators/Creative.md): Enhances creativity in output
-- [Professional](decorators/Professional.md): Ensures professional tone
-- [Academic](decorators/Academic.md): Adopts academic style
-- [Concise](decorators/Concise.md): Makes output concise
-- [Detailed](decorators/Detailed.md): Makes output detailed
-- [ELI5](decorators/ELI5.md): Explains like I'm 5
-
-### Meta Decorators
-- [Context](decorators/Context.md): Provides context for the model
-- [Custom](decorators/Custom.md): Creates custom decorators
-- [Chain](decorators/Chain.md): Chains multiple decorators
-- [Override](decorators/Override.md): Overrides decorator behavior
-- [Conditional](decorators/Conditional.md): Applies decorators conditionally
-- [Priority](decorators/Priority.md): Sets decorator priority
-- [Version](decorators/Version.md): Specifies decorator version
-- [Compatibility](decorators/Compatibility.md): Specifies decorator compatibility
-- [Extension](decorators/Extension.md): Extends decorator functionality
-- [BuildOn](decorators/BuildOn.md): Builds on existing decorators
-- [Refine](decorators/Refine.md): Refines decorator output
-- [Constraints](decorators/Constraints.md): Applies constraints to output
-
-## Utilities
-
-The [Utilities Module](modules/prompt_decorators.utils.md) contains utility functions and classes:
-
-- [Cache](modules/prompt_decorators.utils.cache.md): Caching utilities
-- [Compatibility](modules/prompt_decorators.utils.compatibility.md): Compatibility utilities
-- [Discovery](modules/prompt_decorators.utils.discovery.md): Discovery utilities
-- [Documentation](modules/prompt_decorators.utils.doc_gen.md): Documentation generation
-- [Factory](modules/prompt_decorators.utils.factory.md): Factory utilities
-- [JSON Loader](modules/prompt_decorators.utils.json_loader.md): JSON loading utilities
-- [Model Detection](modules/prompt_decorators.utils.model_detection.md): Model detection utilities
-- [Plugins](modules/prompt_decorators.utils.plugins.md): Plugin utilities
-- [Telemetry](modules/prompt_decorators.utils.telemetry.md): Telemetry utilities
-
-## Generator
-
-The [Generator Module](modules/prompt_decorators.generator.md) contains code generation utilities:
-
-- [Code Generator](modules/prompt_decorators.generator.code_gen.md): Generates decorator code
-- [Test Generator](modules/prompt_decorators.generator.test_gen.md): Generates test code
-- [Registry](modules/prompt_decorators.generator.registry.md): Registry management utilities
+- [DecoratorName](decorators/DecoratorName.md)
+- [Audience](decorators/Audience.md)
+- [Persona](decorators/Persona.md)
+- [Motivational](decorators/Motivational.md)
+- [StyleShift](decorators/StyleShift.md)
+- [Detailed](decorators/Detailed.md)
+- [Remix](decorators/Remix.md)
+- [AsExpert](decorators/AsExpert.md)
+- [Narrative](decorators/Narrative.md)
+- [Academic](decorators/Academic.md)
+- [Creative](decorators/Creative.md)
+- [Professional](decorators/Professional.md)
+- [Concise](decorators/Concise.md)
+- [ELI5](decorators/ELI5.md)
+- [Extremes](decorators/Extremes.md)
+- [Priority](decorators/Priority.md)
+- [Conditional](decorators/Conditional.md)
+- [Compatibility](decorators/Compatibility.md)
+- [Override](decorators/Override.md)
+- [Chain](decorators/Chain.md)
+- [Context](decorators/Context.md)
+- [Custom](decorators/Custom.md)
+- [Refine](decorators/Refine.md)
+- [Extension](decorators/Extension.md)
+- [BuildOn](decorators/BuildOn.md)
+- [Version](decorators/Version.md)
+- [Reasoning](decorators/Reasoning.md)
+- [Tone](decorators/Tone.md)
+- [StepByStep](decorators/StepByStep.md)
+- [OutputFormat](decorators/OutputFormat.md)
+- [BlindSpots](decorators/BlindSpots.md)
+- [TreeOfThought](decorators/TreeOfThought.md)
+- [FirstPrinciples](decorators/FirstPrinciples.md)
+- [ForcedAnalogy](decorators/ForcedAnalogy.md)
+- [Inductive](decorators/Inductive.md)
+- [RootCause](decorators/RootCause.md)
+- [Analogical](decorators/Analogical.md)
+- [Abductive](decorators/Abductive.md)
+- [Deductive](decorators/Deductive.md)
+- [Contrarian](decorators/Contrarian.md)
+- [RedTeam](decorators/RedTeam.md)
+- [NegativeSpace](decorators/NegativeSpace.md)
+- [Socratic](decorators/Socratic.md)
+- [Debate](decorators/Debate.md)
+- [FactCheck](decorators/FactCheck.md)
+- [Limitations](decorators/Limitations.md)
+- [BreakAndBuild](decorators/BreakAndBuild.md)
+- [StressTest](decorators/StressTest.md)
+- [Uncertainty](decorators/Uncertainty.md)
+- [FindGaps](decorators/FindGaps.md)
+- [CiteSources](decorators/CiteSources.md)
+- [QualityMetrics](decorators/QualityMetrics.md)
+- [Balanced](decorators/Balanced.md)
+- [PeerReview](decorators/PeerReview.md)
+- [Confidence](decorators/Confidence.md)
+- [Steelman](decorators/Steelman.md)
+- [Precision](decorators/Precision.md)
+- [Alternatives](decorators/Alternatives.md)
+- [Summary](decorators/Summary.md)
+- [Prioritize](decorators/Prioritize.md)
+- [Nested](decorators/Nested.md)
+- [TableFormat](decorators/TableFormat.md)
+- [Layered](decorators/Layered.md)
+- [Comparison](decorators/Comparison.md)
+- [Bullet](decorators/Bullet.md)
+- [Outline](decorators/Outline.md)
+- [Timeline](decorators/Timeline.md)
+- [MECE](decorators/MECE.md)
+- [DecisionMatrix](decorators/DecisionMatrix.md)
+- [Schema](decorators/Schema.md)
+- [Constraints](decorators/Constraints.md)

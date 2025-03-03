@@ -60,6 +60,9 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
     def is_supported_by_model(self) -> bool:
         """Check if this decorator is supported by the current model.
 
+        Args:
+            self: The decorator instance
+
         Returns:
             True if supported, False otherwise
         """
@@ -129,6 +132,9 @@ class ModelSpecificDecorator(BaseDecorator, Generic[T]):
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert the decorator to a dictionary.
+
+        Args:
+            self: The decorator instance
 
         Returns:
             Dictionary representation of the decorator

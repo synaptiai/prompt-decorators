@@ -86,6 +86,9 @@ class DecoratorCache:
     def get_config(self) -> Dict[str, Any]:
         """Get the current cache configuration.
 
+        Args:
+            self: The DecoratorCache instance
+
         Returns:
             Dictionary with configuration options
         """
@@ -94,6 +97,9 @@ class DecoratorCache:
 
     def get_metrics(self) -> Dict[str, Any]:
         """Get cache metrics.
+
+        Args:
+            self: The DecoratorCache instance
 
         Returns:
             Dictionary with metrics

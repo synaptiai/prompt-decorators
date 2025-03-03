@@ -22,6 +22,9 @@ Clear the decorator registry.
 
 This is primarily used for testing.
 
+Returns:
+    None
+
 ### Function `get_categories`
 
 **Signature:** `get_categories() -> typing.Dict[str, typing.Set[str]]`
@@ -73,3 +76,6 @@ Register a decorator class in the global registry.
 Args:
     decorator_class: The decorator class to register
     category: Optional category for organizing decorators
+
+Returns:
+    None

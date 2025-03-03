@@ -123,6 +123,9 @@ class TelemetryManager:
     def is_enabled(self) -> bool:
         """Check if telemetry is enabled.
 
+        Args:
+            self: The TelemetryManager instance
+
         Returns:
             True if enabled, False otherwise
         """

@@ -115,6 +115,9 @@ class TestGenerator:
 
     def generate_all_tests(self) -> List[str]:
         """Generate test files for all decorators in the registry.
+        Args:
+            self: The TestGenerator instance
+
         Returns:
             List of paths to the generated test files
         """
@@ -186,6 +189,9 @@ class TestGenerator:
 
     def generate_conftest(self) -> str:
         """Generate the conftest.py file for pytest.
+        Args:
+            self: The TestGenerator instance
+
         Returns:
             The conftest.py file content as a string
         """
@@ -1059,6 +1065,9 @@ class TestGenerator:
 
     def generate_test_discovery(self) -> str:
         """Generate the __init__.py file for test discovery.
+        Args:
+            self: The TestGenerator instance
+
         Returns:
             The __init__.py file content as a string
         """

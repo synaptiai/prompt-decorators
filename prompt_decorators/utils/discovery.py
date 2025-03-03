@@ -40,6 +40,12 @@ class DecoratorRegistry:
         """Initialize the registry.
 
         This is a no-op for the singleton pattern.
+
+        Args:
+            self: The DecoratorRegistry instance
+
+        Returns:
+            None
         """
         pass
 
@@ -47,6 +53,12 @@ class DecoratorRegistry:
         """Clear all registered decorators.
 
         This is primarily used for testing.
+
+        Args:
+            self: The DecoratorRegistry instance
+
+        Returns:
+            None
         """
         self._decorators = {}
         self._decorator_instances = {}
@@ -107,6 +119,9 @@ class DecoratorRegistry:
     def get_all_decorators(self) -> Dict[str, Type[BaseDecorator]]:
         """Get all registered decorator classes.
 
+        Args:
+            self: The DecoratorRegistry instance
+
         Returns:
             Dictionary mapping decorator names to decorator classes
         """
@@ -114,6 +129,9 @@ class DecoratorRegistry:
 
     def get_all_decorator_instances(self) -> Dict[str, BaseDecorator]:
         """Get all registered decorator instances.
+
+        Args:
+            self: The DecoratorRegistry instance
 
         Returns:
             Dictionary mapping decorator names to decorator instances
@@ -142,6 +160,9 @@ class DecoratorRegistry:
 
     def get_categories(self) -> Set[str]:
         """Get all registered decorator categories.
+
+        Args:
+            self: The DecoratorRegistry instance
 
         Returns:
             Set of category names

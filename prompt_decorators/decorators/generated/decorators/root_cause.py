@@ -113,6 +113,9 @@ class RootCause(BaseDecorator):
     def to_dict(self) -> Dict[str, Any]:
         """Convert the decorator to a dictionary.
 
+        Args:
+            self: The decorator instance
+
         Returns:
             Dictionary representation of the decorator
         """
@@ -126,6 +129,9 @@ class RootCause(BaseDecorator):
 
     def to_string(self) -> str:
         """Convert the decorator to a string.
+
+        Args:
+            self: The decorator instance
 
         Returns:
             String representation of the decorator

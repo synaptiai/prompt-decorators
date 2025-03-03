@@ -26,6 +26,12 @@ def snake_to_camel(name: str) -> str:
 
     If the input is already in camelCase, it will be properly converted to CamelCase
     with the first letter capitalized.
+
+    Args:
+        name: The name to convert
+
+    Returns:
+        The converted name
     """
     # First ensure the name is in snake_case
     snake_name = camel_to_snake(name)
@@ -215,6 +221,9 @@ class CodeGenerator:
 
     def _generate_decorators_init(self) -> str:
         """Generate the __init__.py file for the decorators package.
+
+        Args:
+            self: The CodeGenerator instance
 
         Returns:
             str: Generated code as a string
@@ -455,6 +464,9 @@ class CodeGenerator:
         code.append("    def to_dict(self) -> Dict[str, Any]:")
         code.append(f'        """Convert the decorator to a dictionary.')
         code.append("")
+        code.append("        Args:")
+        code.append("            self: The decorator instance")
+        code.append("")
         code.append("        Returns:")
         code.append("            Dictionary representation of the decorator")
         code.append(f'        """')
@@ -472,6 +484,9 @@ class CodeGenerator:
         code.append("")
         code.append("    def to_string(self) -> str:")
         code.append(f'        """Convert the decorator to a string.')
+        code.append("")
+        code.append("        Args:")
+        code.append("            self: The decorator instance")
         code.append("")
         code.append("        Returns:")
         code.append("            String representation of the decorator")
@@ -588,6 +603,9 @@ class CodeGenerator:
             decorator: The decorator data
             params: The parameters
             code: The code list to append to
+
+        Returns:
+            None
         """
         for param in params:
             param_name = param["name"]
@@ -623,6 +641,9 @@ class CodeGenerator:
             decorator: The decorator data
             params: The parameters
             code: The code list to append to
+
+        Returns:
+            None
         """
         # Add validation code
         code.append("        # Initialize with base values")
@@ -899,6 +920,9 @@ class CodeGenerator:
     def _generate_enums_module(self) -> str:
         """
         Generate the enums module with all enum definitions.
+
+        Args:
+            self: The CodeGenerator instance
 
         Returns:
             str: The generated code for the enums module
@@ -1381,6 +1405,9 @@ class CodeGenerator:
                 "    @property",
                 "    def name(self) -> str:",
                 '        """Get the name of the decorator.',
+                "",
+                "        Args:",
+                "            self: The decorator instance",
                 "",
                 "        Returns:",
                 "            The name of the decorator",

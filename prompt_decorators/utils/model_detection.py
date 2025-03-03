@@ -77,6 +77,9 @@ class ModelCapabilities:
     def to_dict(self) -> Dict[str, Any]:
         """Convert the model capabilities to a dictionary.
 
+        Args:
+            self: The ModelCapabilities instance
+
         Returns:
             Dictionary representation of the model capabilities
         """
@@ -139,6 +142,12 @@ class ModelDetector:
         """Initialize the model detector.
 
         This method is called once when the singleton instance is created.
+
+        Args:
+            self: The ModelDetector instance
+
+        Returns:
+            None
         """
         self._models = {}
         self._families = {}
@@ -151,6 +160,12 @@ class ModelDetector:
         This method loads model capabilities from the default configuration file
         if it exists. If the file doesn't exist or can't be parsed, a warning is
         logged but no exception is raised.
+
+        Args:
+            self: The ModelDetector instance
+
+        Returns:
+            None
         """
         try:
             capabilities_path = self.DEFAULT_CAPABILITIES_PATH
@@ -177,6 +192,12 @@ class ModelDetector:
 
         This method defines built-in capabilities for common models.
         These are used as fallbacks if no configuration file is available.
+
+        Args:
+            self: The ModelDetector instance
+
+        Returns:
+            None
         """
         # OpenAI models
         openai_models = {
@@ -316,6 +337,9 @@ class ModelDetector:
     def get_all_models(self) -> List[ModelCapabilities]:
         """Get all registered models.
 
+        Args:
+            self: The ModelDetector instance
+
         Returns:
             List of all registered ModelCapabilities
         """
@@ -323,6 +347,9 @@ class ModelDetector:
 
     def get_all_families(self) -> List[str]:
         """Get all registered model families.
+
+        Args:
+            self: The ModelDetector instance
 
         Returns:
             List of all registered model families
