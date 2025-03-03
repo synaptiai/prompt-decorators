@@ -77,4 +77,4 @@ jobs:
           pip install poetry
           poetry install
       - name: Check docstrings
-        run: python standardize_docstrings.py prompt_decorators --check
+        run: python scripts/standardize_docstrings.py prompt_decorators --check

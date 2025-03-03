@@ -140,7 +140,7 @@ poetry run ruff prompt_decorators tests
 poetry run mypy prompt_decorators
 
 # Check docstrings
-python standardize_docstrings.py prompt_decorators --check
+python scripts/standardize_docstrings.py prompt_decorators --check
 
 # Run all checks (using pre-commit)
 pre-commit run --all-files
