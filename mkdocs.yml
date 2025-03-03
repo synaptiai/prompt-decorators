@@ -41,26 +41,44 @@ nav:
     - Basic Usage: guide/basic-usage.md
     - Advanced Usage: guide/advanced-usage.md
     - API Integration: guide/api-integration.md
+    - CLI Usage: guide/cli-usage.md
+    - Troubleshooting: guide/troubleshooting.md
   - API Reference:
     - Core: api/core.md
     - Decorators: api/decorators.md
     - Registry: api/registry.md
     - Utilities: api/utilities.md
+    - Generator: api/generator.md
   - Examples:
     - Basic Examples: examples/basic.md
     - Advanced Examples: examples/advanced.md
     - Provider Examples: examples/providers.md
+  - Tutorials:
+    - Combining Decorators: tutorials/combining_decorators.md
+    - Creating Custom Decorators: tutorials/creating_custom_decorator.md
+    - Extension Development: tutorials/extension_development.md
+    - Quickstart Tutorial: tutorials/quickstart.md
   - Contributing:
     - Guidelines: contributing.md
     - Development Setup: development.md
     - Comprehensive Development Guide: development_guide.md
+    - Documentation Standards: DOCSTRING_STANDARDS.md
+    - Decorator Registry: DECORATOR_REGISTRY.md
+    - Type Annotation Improvements: type_annotation_improvements.md
+    - Docstring Improvement Plan: docstring_improvement_plan.md
+    - MkDocs Enhancement Plan: mkdocs_enhancement_plan.md
   - Project Documentation:
     - Roadmap: roadmap.md
     - Architecture: architecture.md
     - FAQ: faq.md
     - Glossary: glossary.md
+    - Specification: prompt-decorators-specification-v1.0.md
+    - Code Quality Integration: code_quality_integration.md
     - Project Summaries:
       - Overview: project_summaries/index.md
       - Modernization Summary: project_summaries/project_modernization_summary.md
   - Domain Guides:
     - Healthcare: guides/healthcare.md
+    - AI Safety: guides/ai_safety.md
+  - Tools:
+    - Validator Tool: validator_tool.md
