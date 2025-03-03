@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pre-commit
+          pip install pre-commit mypy
           pip install -e .
       - name: Run pre-commit
         run: pre-commit run --all-files
@@ -57,7 +57,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
+          pip install poetry mypy
           poetry install
       - name: Run mypy
         run: poetry run mypy prompt_decorators
