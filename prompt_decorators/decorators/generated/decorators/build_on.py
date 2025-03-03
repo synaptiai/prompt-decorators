@@ -6,9 +6,15 @@ This module provides the BuildOn decorator class for use in prompt engineering.
 A meta-decorator that builds upon previous context or responses rather than starting from scratch. This enables continuity across interactions, allowing refinement, extension, or alteration of previous outputs in a coherent manner.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    BuildOnReferenceEnum,
+    BuildOnApproachEnum,
+)
 
 
 class BuildOn(BaseDecorator):
@@ -26,6 +32,16 @@ class BuildOn(BaseDecorator):
 
     decorator_name = "build_on"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -53,27 +69,20 @@ class BuildOn(BaseDecorator):
         self._preserveStructure = preserveStructure
 
         # Validate parameters
+        # Validate parameters
         if self._reference is not None:
-            valid_values = ["last", "specific", "all"]
-            if self._reference not in valid_values:
-                raise ValidationError(
-                    "The parameter 'reference' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._reference, str):
+                raise ValidationError("The parameter 'reference' must be a string type value.")
+            if self._reference not in ["last", "specific", "all"]:
+                raise ValidationError(f"The parameter 'reference' must be one of the allowed enum values: ['last', 'specific', 'all']. Got {self._reference}")
         if self._approach is not None:
-            valid_values = ["extend", "refine", "contrast", "synthesize"]
-            if self._approach not in valid_values:
-                raise ValidationError(
-                    "The parameter 'approach' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._approach, str):
+                raise ValidationError("The parameter 'approach' must be a string type value.")
+            if self._approach not in ["extend", "refine", "contrast", "synthesize"]:
+                raise ValidationError(f"The parameter 'approach' must be one of the allowed enum values: ['extend', 'refine', 'contrast', 'synthesize']. Got {self._approach}")
         if self._preserveStructure is not None:
             if not isinstance(self._preserveStructure, bool):
-                raise ValidationError(
-                    "The parameter 'preserveStructure' must be a boolean value."
-                )
+                raise ValidationError("The parameter 'preserveStructure' must be a boolean type value.")
 
     @property
     def reference(self) -> Literal["last", "specific", "all"]:
@@ -123,9 +132,11 @@ class BuildOn(BaseDecorator):
         """
         return {
             "name": "build_on",
-            "reference": self.reference,
-            "approach": self.approach,
-            "preserveStructure": self.preserveStructure,
+            "parameters": {
+                "reference": self.reference,
+                "approach": self.approach,
+                "preserveStructure": self.preserveStructure,
+            }
         }
 
     def to_string(self) -> str:
@@ -147,3 +158,60 @@ class BuildOn(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """A meta-decorator that builds upon previous context or responses rather than starting from scratch. This enables continuity across interactions, allowing refinement, extension, or alteration of previous outputs in a coherent manner.""",
+            "category": "general",
+            "version": cls.version,
+        }

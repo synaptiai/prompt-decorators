@@ -113,6 +113,11 @@ class RegistryScanner:
         for root, _, files in os.walk(self.registry_path):
             for file in files:
                 if file.endswith(".json") and not file.startswith("."):
+                    # Skip the template file
+                    if file == "decorator-template.json":
+                        logger.info(f"Skipping template file: {os.path.join(root, file)}")
+                        continue
+                        
                     file_path = Path(root) / file
 
                     # Skip files in __pycache__, .git, etc.

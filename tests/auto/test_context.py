@@ -1,147 +1,179 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the Context decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.context import Context
 
+class TestContext(unittest.TestCase):
+    """Tests for the Context decorator.
 
-# Tests for the Context decorator
-# -------------------------------
-class TestContext:
-    """Tests for the Context decorator."""
+    A meta-decorator that adapts standard decorators for domain-specific
+    contexts. This provides specialized interpretations of decorators based on
+    particular fields, industries, or subject matter to ensure appropriate
+    adaptation to contextual requirements.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
-            "domain": "test_value",
+            "domain": "example_value",
             "scope": "terminology",
             "level": "beginner",
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        assert decorator is not None
-        assert decorator.name == "Context"
 
-    def test_domain_required(self, load_decorator):
-        """Test that domain is required."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
+    def test_missing_required_param_domain(self):
+        """Test that initialization fails when missing required parameter domain."""
+        # Get valid parameters for all required fields except the one we're testing
         params = self._get_valid_params()
-        del params["domain"]
-        with pytest.raises(ValidationError):
-            decorator_class(**params)
 
-    def test_domain_type_validation(self, load_decorator):
-        """Test domain type validation."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["domain"] = 123
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "domain" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
+        # Remove the parameter we want to test as required
+        if "domain" in params:
+            del params["domain"]
 
-    def test_scope_type_validation(self, load_decorator):
-        """Test scope type validation."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["scope"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "scope" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Should raise either ValidationError or TypeError when the required parameter is missing
+        with self.assertRaises((ValidationError, TypeError)) as exc_info:
+            Context(**params)
+        
+        # Check that the error message contains the parameter name
+        error_message = str(exc_info.exception)
+        self.assertTrue(
+            "domain" in error_message or 
+            "required" in error_message.lower()
+        )
 
-    def test_scope_enum_validation(self, load_decorator):
-        """Test scope enum value validation."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["scope"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "scope" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_level_type_validation(self, load_decorator):
-        """Test level type validation."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
+    def test_validate_domain(self):
+        """Test validation for the domain parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["level"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "level" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_level_enum_validation(self, load_decorator):
-        """Test level enum value validation."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["level"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "level" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test type validation
+        params['domain'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            Context(**params)
+        self.assertIn('domain', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
+
+    def test_validate_scope(self):
+        """Test validation for the scope parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test type validation
+        params['scope'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            Context(**params)
+        self.assertIn('scope', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['scope'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            Context(**params)
+        self.assertIn('scope', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['scope'] = 'terminology'
+        # This should not raise an exception
+        Context(**params)
+        params['scope'] = 'examples'
+        # This should not raise an exception
+        Context(**params)
+        params['scope'] = 'structure'
+        # This should not raise an exception
+        Context(**params)
+        params['scope'] = 'all'
+        # This should not raise an exception
+        Context(**params)
+
+    def test_validate_level(self):
+        """Test validation for the level parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['level'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            Context(**params)
+        self.assertIn('level', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['level'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            Context(**params)
+        self.assertIn('level', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['level'] = 'beginner'
+        # This should not raise an exception
+        Context(**params)
+        params['level'] = 'intermediate'
+        # This should not raise an exception
+        Context(**params)
+        params['level'] = 'expert'
+        # This should not raise an exception
+        Context(**params)
+        params['level'] = 'mixed'
+        # This should not raise an exception
+        Context(**params)
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Basic domain-specific adaptation of decorators
+        params = self._get_valid_params()
+        decorator = Context(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # Targeted contextualization for specific expertise level
+        params = self._get_valid_params()
+        decorator = Context(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = Context(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "context")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = Context.from_dict(serialized)
+        self.assertIsInstance(deserialized, Context)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("Context")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "Context"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

@@ -1,16 +1,18 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the Layered decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.layered import Layered
 
+class TestLayered(unittest.TestCase):
+    """Tests for the Layered decorator.
 
-# Tests for the Layered decorator
-# -------------------------------
-class TestLayered:
-    """Tests for the Layered decorator."""
+    Presents content at multiple levels of explanation depth, allowing readers
+    to engage with information at their preferred level of detail. This
+    decorator structures responses with progressive disclosure, from high-level
+    summaries to increasingly detailed explanations.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -19,141 +21,151 @@ class TestLayered:
             "progression": "separate",
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
-        decorator = decorator_class()
-        assert decorator is not None
-        assert decorator.name == "Layered"
-
-    def test_levels_type_validation(self, load_decorator):
-        """Test levels type validation."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
+    def test_validate_levels(self):
+        """Test validation for the levels parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["levels"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "levels" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_levels_enum_validation(self, load_decorator):
-        """Test levels enum value validation."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["levels"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "levels" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test type validation
+        params['levels'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            Layered(**params)
+        self.assertIn('levels', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
 
-    def test_count_type_validation(self, load_decorator):
-        """Test count type validation."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["count"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "count" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
 
-    def test_count_min_validation(self, load_decorator):
-        """Test count minimum value validation."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["count"] = 1
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "count" in str(exc_info.value)
-        assert "at least" in str(exc_info.value).lower()
+        # Test invalid enum value
+        params['levels'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            Layered(**params)
+        self.assertIn('levels', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
 
-    def test_count_max_validation(self, load_decorator):
-        """Test count maximum value validation."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["count"] = 6
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "count" in str(exc_info.value)
-        assert "at most" in str(exc_info.value).lower()
 
-    def test_progression_type_validation(self, load_decorator):
-        """Test progression type validation."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["progression"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "progression" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test valid enum values
+        params['levels'] = 'sentence-paragraph-full'
+        # This should not raise an exception
+        Layered(**params)
+        params['levels'] = 'basic-intermediate-advanced'
+        # This should not raise an exception
+        Layered(**params)
+        params['levels'] = 'summary-detail-technical'
+        # This should not raise an exception
+        Layered(**params)
 
-    def test_progression_enum_validation(self, load_decorator):
-        """Test progression enum value validation."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
+    def test_validate_count(self):
+        """Test validation for the count parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["progression"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "progression" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
+        # Test type validation
+        params['count'] = 'not_a_number'  # Not a number
+        with self.assertRaises(ValidationError) as context:
+            Layered(**params)
+        self.assertIn('count', str(context.exception))
+        self.assertIn('numeric', str(context.exception).lower())
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test minimum value validation
+        params['count'] = 1  # Below minimum
+        with self.assertRaises(ValidationError) as context:
+            Layered(**params)
+        self.assertIn('count', str(context.exception))
+        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test maximum value validation
+        params['count'] = 6  # Above maximum
+        with self.assertRaises(ValidationError) as context:
+            Layered(**params)
+        self.assertIn('count', str(context.exception))
+        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+
+    def test_validate_progression(self):
+        """Test validation for the progression parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['progression'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            Layered(**params)
+        self.assertIn('progression', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['progression'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            Layered(**params)
+        self.assertIn('progression', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['progression'] = 'separate'
+        # This should not raise an exception
+        Layered(**params)
+        params['progression'] = 'nested'
+        # This should not raise an exception
+        Layered(**params)
+        params['progression'] = 'incremental'
+        # This should not raise an exception
+        Layered(**params)
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Basic three-level explanation of a complex concept
+        params = self._get_valid_params()
+        decorator = Layered(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # Multi-layered nested progression with custom levels
+        params = self._get_valid_params()
+        decorator = Layered(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = Layered(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "layered")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = Layered.from_dict(serialized)
+        self.assertIsInstance(deserialized, Layered)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("Layered")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "Layered"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

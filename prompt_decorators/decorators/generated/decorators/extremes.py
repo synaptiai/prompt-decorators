@@ -6,9 +6,14 @@ This module provides the Extremes decorator class for use in prompt engineering.
 Presents content at the extreme ends of a spectrum, showing both a radical, ambitious, or maximalist version alongside a minimal, conservative, or basic version. This decorator helps explore the range of possibilities from the simplest implementation to the most expansive vision.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    ExtremesVersionsEnum,
+)
 
 
 class Extremes(BaseDecorator):
@@ -27,6 +32,16 @@ class Extremes(BaseDecorator):
 
     decorator_name = "extremes"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -56,25 +71,18 @@ class Extremes(BaseDecorator):
         self._compare = compare
 
         # Validate parameters
+        # Validate parameters
         if self._versions is not None:
-            valid_values = ["radical", "minimal", "both"]
-            if self._versions not in valid_values:
-                raise ValidationError(
-                    "The parameter 'versions' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._versions, str):
+                raise ValidationError("The parameter 'versions' must be a string type value.")
+            if self._versions not in ["radical", "minimal", "both"]:
+                raise ValidationError(f"The parameter 'versions' must be one of the allowed enum values: ['radical', 'minimal', 'both']. Got {self._versions}")
         if self._dimension is not None:
             if not isinstance(self._dimension, str):
-                raise ValidationError(
-                    "The parameter 'dimension' must be a string value."
-                )
-
+                raise ValidationError("The parameter 'dimension' must be a string type value.")
         if self._compare is not None:
             if not isinstance(self._compare, bool):
-                raise ValidationError(
-                    "The parameter 'compare' must be a boolean value."
-                )
+                raise ValidationError("The parameter 'compare' must be a boolean type value.")
 
     @property
     def versions(self) -> Literal["radical", "minimal", "both"]:
@@ -124,9 +132,11 @@ class Extremes(BaseDecorator):
         """
         return {
             "name": "extremes",
-            "versions": self.versions,
-            "dimension": self.dimension,
-            "compare": self.compare,
+            "parameters": {
+                "versions": self.versions,
+                "dimension": self.dimension,
+                "compare": self.compare,
+            }
         }
 
     def to_string(self) -> str:
@@ -148,3 +158,60 @@ class Extremes(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Presents content at the extreme ends of a spectrum, showing both a radical, ambitious, or maximalist version alongside a minimal, conservative, or basic version. This decorator helps explore the range of possibilities from the simplest implementation to the most expansive vision.""",
+            "category": "general",
+            "version": cls.version,
+        }

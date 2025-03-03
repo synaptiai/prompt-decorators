@@ -6,9 +6,11 @@ This module provides the Chain decorator class for use in prompt engineering.
 A meta-decorator that applies multiple decorators in sequence, with each decorator processing the output of the previous one. This enables complex transformations by combining multiple simpler decorators in a pipeline.
 """
 
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Chain(BaseDecorator):
@@ -26,6 +28,16 @@ class Chain(BaseDecorator):
 
     decorator_name = "chain"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -55,26 +67,16 @@ class Chain(BaseDecorator):
         self._stopOnFailure = stopOnFailure
 
         # Validate parameters
-        if self._decorators is None:
-            raise ValidationError(
-                "The parameter 'decorators' is required for Chain decorator."
-            )
-
+        # Validate parameters
         if self._decorators is not None:
-            if not isinstance(self._decorators, (list, tuple)):
-                raise ValidationError("The parameter 'decorators' must be an array.")
-
+            if not isinstance(self._decorators, list):
+                raise ValidationError("The parameter 'decorators' must be an array type value.")
         if self._showSteps is not None:
             if not isinstance(self._showSteps, bool):
-                raise ValidationError(
-                    "The parameter 'showSteps' must be a boolean value."
-                )
-
+                raise ValidationError("The parameter 'showSteps' must be a boolean type value.")
         if self._stopOnFailure is not None:
             if not isinstance(self._stopOnFailure, bool):
-                raise ValidationError(
-                    "The parameter 'stopOnFailure' must be a boolean value."
-                )
+                raise ValidationError("The parameter 'stopOnFailure' must be a boolean type value.")
 
     @property
     def decorators(self) -> List[Any]:
@@ -124,9 +126,11 @@ class Chain(BaseDecorator):
         """
         return {
             "name": "chain",
-            "decorators": self.decorators,
-            "showSteps": self.showSteps,
-            "stopOnFailure": self.stopOnFailure,
+            "parameters": {
+                "decorators": self.decorators,
+                "showSteps": self.showSteps,
+                "stopOnFailure": self.stopOnFailure,
+            }
         }
 
     def to_string(self) -> str:
@@ -148,3 +152,60 @@ class Chain(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """A meta-decorator that applies multiple decorators in sequence, with each decorator processing the output of the previous one. This enables complex transformations by combining multiple simpler decorators in a pipeline.""",
+            "category": "general",
+            "version": cls.version,
+        }

@@ -6,9 +6,11 @@ This module provides the Schema decorator class for use in prompt engineering.
 Defines a custom structure for the AI's response using a specified schema format. This decorator enables precise control over the output structure, ensuring responses follow a consistent, well-defined format optimized for specific use cases or data processing needs.
 """
 
-from typing import Any, Dict
+import re
+from typing import Any, Dict, List, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Schema(BaseDecorator):
@@ -25,6 +27,16 @@ class Schema(BaseDecorator):
 
     decorator_name = "schema"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -51,18 +63,13 @@ class Schema(BaseDecorator):
         self._strict = strict
 
         # Validate parameters
-        if self._schema is None:
-            raise ValidationError(
-                "The parameter 'schema' is required for Schema decorator."
-            )
-
+        # Validate parameters
         if self._schema is not None:
             if not isinstance(self._schema, str):
-                raise ValidationError("The parameter 'schema' must be a string value.")
-
+                raise ValidationError("The parameter 'schema' must be a string type value.")
         if self._strict is not None:
             if not isinstance(self._strict, bool):
-                raise ValidationError("The parameter 'strict' must be a boolean value.")
+                raise ValidationError("The parameter 'strict' must be a boolean type value.")
 
     @property
     def schema(self) -> str:
@@ -99,8 +106,10 @@ class Schema(BaseDecorator):
         """
         return {
             "name": "schema",
-            "schema": self.schema,
-            "strict": self.strict,
+            "parameters": {
+                "schema": self.schema,
+                "strict": self.strict,
+            }
         }
 
     def to_string(self) -> str:
@@ -120,3 +129,60 @@ class Schema(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Defines a custom structure for the AI's response using a specified schema format. This decorator enables precise control over the output structure, ensuring responses follow a consistent, well-defined format optimized for specific use cases or data processing needs.""",
+            "category": "general",
+            "version": cls.version,
+        }

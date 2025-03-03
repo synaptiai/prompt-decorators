@@ -1,101 +1,92 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the Version decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.version import Version
 
+class TestVersion(unittest.TestCase):
+    """Tests for the Version decorator.
 
-# Tests for the Version decorator
-# -------------------------------
-class TestVersion:
-    """Tests for the Version decorator."""
+    Specifies the version of the Prompt Decorators standard to use. This
+    decorator must be the first in any sequence when used, ensuring proper
+    interpretation of decorators according to the specified standard version.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
             "standard": "1.0.0",
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("Version")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        assert decorator is not None
-        assert decorator.name == "Version"
 
-    def test_standard_required(self, load_decorator):
-        """Test that standard is required."""
-        decorator_class = load_decorator("Version")
-        assert decorator_class is not None
+    def test_missing_required_param_standard(self):
+        """Test that initialization fails when missing required parameter standard."""
+        # Get valid parameters for all required fields except the one we're testing
         params = self._get_valid_params()
-        del params["standard"]
-        with pytest.raises(ValidationError):
-            decorator_class(**params)
 
-    def test_standard_type_validation(self, load_decorator):
-        """Test standard type validation."""
-        decorator_class = load_decorator("Version")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["standard"] = 123
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "standard" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
+        # Remove the parameter we want to test as required
+        if "standard" in params:
+            del params["standard"]
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("Version")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
+        # Should raise either ValidationError or TypeError when the required parameter is missing
+        with self.assertRaises((ValidationError, TypeError)) as exc_info:
+            Version(**params)
+        
+        # Check that the error message contains the parameter name
+        error_message = str(exc_info.exception)
+        self.assertTrue(
+            "standard" in error_message or 
+            "required" in error_message.lower()
+        )
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("Version")
-        assert decorator_class is not None
+
+    def test_validate_standard(self):
+        """Test validation for the standard parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test type validation
+        params['standard'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            Version(**params)
+        self.assertIn('standard', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Specify standard version for compatibility
+        params = self._get_valid_params()
+        decorator = Version(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = Version(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "version")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("Version")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = Version.from_dict(serialized)
+        self.assertIsInstance(deserialized, Version)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("Version")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "Version"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

@@ -6,9 +6,14 @@ This module provides the Bullet decorator class for use in prompt engineering.
 Formats the response as a bulleted list, making information easier to scan and digest. This decorator is ideal for presenting sequential steps, key points, or collections of related items in a clean, concise format.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    BulletStyleEnum,
+)
 
 
 class Bullet(BaseDecorator):
@@ -26,6 +31,16 @@ class Bullet(BaseDecorator):
 
     decorator_name = "bullet"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -54,25 +69,18 @@ class Bullet(BaseDecorator):
         self._compact = compact
 
         # Validate parameters
+        # Validate parameters
         if self._style is not None:
-            valid_values = ["dash", "dot", "arrow", "star", "plus"]
-            if self._style not in valid_values:
-                raise ValidationError(
-                    "The parameter 'style' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._style, str):
+                raise ValidationError("The parameter 'style' must be a string type value.")
+            if self._style not in ["dash", "dot", "arrow", "star", "plus"]:
+                raise ValidationError(f"The parameter 'style' must be one of the allowed enum values: ['dash', 'dot', 'arrow', 'star', 'plus']. Got {self._style}")
         if self._indented is not None:
             if not isinstance(self._indented, bool):
-                raise ValidationError(
-                    "The parameter 'indented' must be a boolean value."
-                )
-
+                raise ValidationError("The parameter 'indented' must be a boolean type value.")
         if self._compact is not None:
             if not isinstance(self._compact, bool):
-                raise ValidationError(
-                    "The parameter 'compact' must be a boolean value."
-                )
+                raise ValidationError("The parameter 'compact' must be a boolean type value.")
 
     @property
     def style(self) -> Literal["dash", "dot", "arrow", "star", "plus"]:
@@ -122,9 +130,11 @@ class Bullet(BaseDecorator):
         """
         return {
             "name": "bullet",
-            "style": self.style,
-            "indented": self.indented,
-            "compact": self.compact,
+            "parameters": {
+                "style": self.style,
+                "indented": self.indented,
+                "compact": self.compact,
+            }
         }
 
     def to_string(self) -> str:
@@ -146,3 +156,60 @@ class Bullet(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Formats the response as a bulleted list, making information easier to scan and digest. This decorator is ideal for presenting sequential steps, key points, or collections of related items in a clean, concise format.""",
+            "category": "general",
+            "version": cls.version,
+        }

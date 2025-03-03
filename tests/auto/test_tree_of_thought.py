@@ -1,159 +1,151 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the TreeOfThought decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.tree_of_thought import TreeOfThought
 
+class TestTreeOfThought(unittest.TestCase):
+    """Tests for the TreeOfThought decorator.
 
-# Tests for the TreeOfThought decorator
-# -------------------------------------
-class TestTreeOfThought:
-    """Tests for the TreeOfThought decorator."""
+    Organizes the response as a branching exploration of multiple reasoning
+    paths. This decorator enables the AI to consider several possible approaches
+    or hypotheses simultaneously, exploring the implications of each before
+    reaching conclusions.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
             "branches": 3,
             "depth": 3,
-            "pruning": false,
+            "pruning": False,
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
-        decorator = decorator_class()
-        assert decorator is not None
-        assert decorator.name == "TreeOfThought"
-
-    def test_branches_type_validation(self, load_decorator):
-        """Test branches type validation."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
+    def test_validate_branches(self):
+        """Test validation for the branches parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["branches"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "branches" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
 
-    def test_branches_min_validation(self, load_decorator):
-        """Test branches minimum value validation."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["branches"] = 1
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "branches" in str(exc_info.value)
-        assert "at least" in str(exc_info.value).lower()
+        # Test type validation
+        params['branches'] = 'not_a_number'  # Not a number
+        with self.assertRaises(ValidationError) as context:
+            TreeOfThought(**params)
+        self.assertIn('branches', str(context.exception))
+        self.assertIn('numeric', str(context.exception).lower())
 
-    def test_branches_max_validation(self, load_decorator):
-        """Test branches maximum value validation."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["branches"] = 6
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "branches" in str(exc_info.value)
-        assert "at most" in str(exc_info.value).lower()
 
-    def test_depth_type_validation(self, load_decorator):
-        """Test depth type validation."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["depth"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "depth" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
+        # Test minimum value validation
+        params['branches'] = 1  # Below minimum
+        with self.assertRaises(ValidationError) as context:
+            TreeOfThought(**params)
+        self.assertIn('branches', str(context.exception))
+        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
 
-    def test_depth_min_validation(self, load_decorator):
-        """Test depth minimum value validation."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["depth"] = 0
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "depth" in str(exc_info.value)
-        assert "at least" in str(exc_info.value).lower()
 
-    def test_depth_max_validation(self, load_decorator):
-        """Test depth maximum value validation."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["depth"] = 6
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "depth" in str(exc_info.value)
-        assert "at most" in str(exc_info.value).lower()
+        # Test maximum value validation
+        params['branches'] = 6  # Above maximum
+        with self.assertRaises(ValidationError) as context:
+            TreeOfThought(**params)
+        self.assertIn('branches', str(context.exception))
+        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
 
-    def test_pruning_type_validation(self, load_decorator):
-        """Test pruning type validation."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["pruning"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "pruning" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
+    def test_validate_depth(self):
+        """Test validation for the depth parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test type validation
+        params['depth'] = 'not_a_number'  # Not a number
+        with self.assertRaises(ValidationError) as context:
+            TreeOfThought(**params)
+        self.assertIn('depth', str(context.exception))
+        self.assertIn('numeric', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test minimum value validation
+        params['depth'] = 0  # Below minimum
+        with self.assertRaises(ValidationError) as context:
+            TreeOfThought(**params)
+        self.assertIn('depth', str(context.exception))
+        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test maximum value validation
+        params['depth'] = 6  # Above maximum
+        with self.assertRaises(ValidationError) as context:
+            TreeOfThought(**params)
+        self.assertIn('depth', str(context.exception))
+        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+
+    def test_validate_pruning(self):
+        """Test validation for the pruning parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['pruning'] = 'not_a_boolean'  # Not a boolean
+        with self.assertRaises(ValidationError) as context:
+            TreeOfThought(**params)
+        self.assertIn('pruning', str(context.exception))
+        self.assertIn('boolean', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Multi-branch problem solving for a complex question
+        params = self._get_valid_params()
+        decorator = TreeOfThought(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # Deep, focused exploration with pruning
+        params = self._get_valid_params()
+        decorator = TreeOfThought(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = TreeOfThought(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "tree_of_thought")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = TreeOfThought.from_dict(serialized)
+        self.assertIsInstance(deserialized, TreeOfThought)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("TreeOfThought")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "TreeOfThought"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

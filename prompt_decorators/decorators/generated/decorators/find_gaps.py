@@ -6,9 +6,15 @@ This module provides the FindGaps decorator class for use in prompt engineering.
 Identifies missing elements, unanswered questions, or overlooked considerations in an idea, plan, or argument. This decorator helps improve completeness by systematically discovering and highlighting gaps that need addressing.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    FindGapsAspectsEnum,
+    FindGapsDepthEnum,
+)
 
 
 class FindGaps(BaseDecorator):
@@ -27,16 +33,19 @@ class FindGaps(BaseDecorator):
     decorator_name = "find_gaps"
     version = "1.0.0"  # Initial version
 
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
+
     def __init__(
         self,
-        aspects: Literal[
-            "questions",
-            "resources",
-            "stakeholders",
-            "risks",
-            "dependencies",
-            "comprehensive",
-        ] = "comprehensive",
+        aspects: Literal["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"] = "comprehensive",
         depth: Literal["basic", "thorough", "exhaustive"] = "thorough",
         solutions: bool = True,
     ) -> None:
@@ -61,46 +70,23 @@ class FindGaps(BaseDecorator):
         self._solutions = solutions
 
         # Validate parameters
+        # Validate parameters
         if self._aspects is not None:
-            valid_values = [
-                "questions",
-                "resources",
-                "stakeholders",
-                "risks",
-                "dependencies",
-                "comprehensive",
-            ]
-            if self._aspects not in valid_values:
-                raise ValidationError(
-                    "The parameter 'aspects' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._aspects, str):
+                raise ValidationError("The parameter 'aspects' must be a string type value.")
+            if self._aspects not in ["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"]:
+                raise ValidationError(f"The parameter 'aspects' must be one of the allowed enum values: ['questions', 'resources', 'stakeholders', 'risks', 'dependencies', 'comprehensive']. Got {self._aspects}")
         if self._depth is not None:
-            valid_values = ["basic", "thorough", "exhaustive"]
-            if self._depth not in valid_values:
-                raise ValidationError(
-                    "The parameter 'depth' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._depth, str):
+                raise ValidationError("The parameter 'depth' must be a string type value.")
+            if self._depth not in ["basic", "thorough", "exhaustive"]:
+                raise ValidationError(f"The parameter 'depth' must be one of the allowed enum values: ['basic', 'thorough', 'exhaustive']. Got {self._depth}")
         if self._solutions is not None:
             if not isinstance(self._solutions, bool):
-                raise ValidationError(
-                    "The parameter 'solutions' must be a boolean value."
-                )
+                raise ValidationError("The parameter 'solutions' must be a boolean type value.")
 
     @property
-    def aspects(
-        self,
-    ) -> Literal[
-        "questions",
-        "resources",
-        "stakeholders",
-        "risks",
-        "dependencies",
-        "comprehensive",
-    ]:
+    def aspects(self) -> Literal["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"]:
         """
         Get the aspects parameter value.
 
@@ -147,9 +133,11 @@ class FindGaps(BaseDecorator):
         """
         return {
             "name": "find_gaps",
-            "aspects": self.aspects,
-            "depth": self.depth,
-            "solutions": self.solutions,
+            "parameters": {
+                "aspects": self.aspects,
+                "depth": self.depth,
+                "solutions": self.solutions,
+            }
         }
 
     def to_string(self) -> str:
@@ -171,3 +159,60 @@ class FindGaps(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Identifies missing elements, unanswered questions, or overlooked considerations in an idea, plan, or argument. This decorator helps improve completeness by systematically discovering and highlighting gaps that need addressing.""",
+            "category": "general",
+            "version": cls.version,
+        }

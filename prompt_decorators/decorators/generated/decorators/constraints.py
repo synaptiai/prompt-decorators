@@ -6,9 +6,14 @@ This module provides the Constraints decorator class for use in prompt engineeri
 Applies specific limitations to the output format, length, or content. This decorator enforces creative constraints that can enhance focus, brevity, or precision by requiring the response to work within defined boundaries.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    ConstraintsVocabularyEnum,
+)
 
 
 class Constraints(BaseDecorator):
@@ -28,13 +33,21 @@ class Constraints(BaseDecorator):
     decorator_name = "constraints"
     version = "1.0.0"  # Initial version
 
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
+
     def __init__(
         self,
         wordCount: Any = None,
         timeframe: str = None,
-        vocabulary: Literal[
-            "simple", "technical", "domain-specific", "creative"
-        ] = None,
+        vocabulary: Literal["simple", "technical", "domain-specific", "creative"] = None,
         custom: str = None,
     ) -> None:
         """
@@ -62,31 +75,25 @@ class Constraints(BaseDecorator):
         self._custom = custom
 
         # Validate parameters
+        # Validate parameters
         if self._wordCount is not None:
-            if not isinstance(self._wordCount, (int, float)) or isinstance(
-                self._wordCount, bool
-            ):
-                raise ValidationError(
-                    "The parameter 'wordCount' must be a numeric value."
-                )
-
+            if not isinstance(self._wordCount, (int, float)):
+                raise ValidationError("The parameter 'wordCount' must be a numeric type value.")
+            if self._wordCount < 10:
+                raise ValidationError("The parameter 'wordCount' must be greater than or equal to 10.")
+            if self._wordCount > 1000:
+                raise ValidationError("The parameter 'wordCount' must be less than or equal to 1000.")
         if self._timeframe is not None:
             if not isinstance(self._timeframe, str):
-                raise ValidationError(
-                    "The parameter 'timeframe' must be a string value."
-                )
-
+                raise ValidationError("The parameter 'timeframe' must be a string type value.")
         if self._vocabulary is not None:
-            valid_values = ["simple", "technical", "domain-specific", "creative"]
-            if self._vocabulary not in valid_values:
-                raise ValidationError(
-                    "The parameter 'vocabulary' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._vocabulary, str):
+                raise ValidationError("The parameter 'vocabulary' must be a string type value.")
+            if self._vocabulary not in ["simple", "technical", "domain-specific", "creative"]:
+                raise ValidationError(f"The parameter 'vocabulary' must be one of the allowed enum values: ['simple', 'technical', 'domain-specific', 'creative']. Got {self._vocabulary}")
         if self._custom is not None:
             if not isinstance(self._custom, str):
-                raise ValidationError("The parameter 'custom' must be a string value.")
+                raise ValidationError("The parameter 'custom' must be a string type value.")
 
     @property
     def wordCount(self) -> Any:
@@ -115,9 +122,7 @@ class Constraints(BaseDecorator):
         return self._timeframe
 
     @property
-    def vocabulary(
-        self,
-    ) -> Literal["simple", "technical", "domain-specific", "creative"]:
+    def vocabulary(self) -> Literal["simple", "technical", "domain-specific", "creative"]:
         """
         Get the vocabulary parameter value.
 
@@ -151,10 +156,12 @@ class Constraints(BaseDecorator):
         """
         return {
             "name": "constraints",
-            "wordCount": self.wordCount,
-            "timeframe": self.timeframe,
-            "vocabulary": self.vocabulary,
-            "custom": self.custom,
+            "parameters": {
+                "wordCount": self.wordCount,
+                "timeframe": self.timeframe,
+                "vocabulary": self.vocabulary,
+                "custom": self.custom,
+            }
         }
 
     def to_string(self) -> str:
@@ -178,3 +185,60 @@ class Constraints(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Applies specific limitations to the output format, length, or content. This decorator enforces creative constraints that can enhance focus, brevity, or precision by requiring the response to work within defined boundaries.""",
+            "category": "general",
+            "version": cls.version,
+        }

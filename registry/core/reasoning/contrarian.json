@@ -12,8 +12,8 @@
       "name": "approach",
       "type": "enum",
       "description": "The specific contrarian approach to take",
-      "enum": ["outsider", "skeptic", "devil's-advocate"],
-      "default": "devil's-advocate",
+      "enum": ["outsider", "skeptic", "devils-advocate"],
+      "default": "devils-advocate",
       "required": false
     },
     {

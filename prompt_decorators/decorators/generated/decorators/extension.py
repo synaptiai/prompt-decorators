@@ -6,9 +6,11 @@ This module provides the Extension decorator class for use in prompt engineering
 A meta-decorator that enables loading of community-defined decorators from external sources. This facilitates the use of specialized decorator packages, domain-specific extensions, or custom decorator libraries maintained by communities or organizations.
 """
 
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Extension(BaseDecorator):
@@ -26,6 +28,16 @@ class Extension(BaseDecorator):
 
     decorator_name = "extension"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -55,22 +67,16 @@ class Extension(BaseDecorator):
         self._decorators = decorators
 
         # Validate parameters
-        if self._source is None:
-            raise ValidationError(
-                "The parameter 'source' is required for Extension decorator."
-            )
-
+        # Validate parameters
         if self._source is not None:
             if not isinstance(self._source, str):
-                raise ValidationError("The parameter 'source' must be a string value.")
-
+                raise ValidationError("The parameter 'source' must be a string type value.")
         if self._version is not None:
             if not isinstance(self._version, str):
-                raise ValidationError("The parameter 'version' must be a string value.")
-
+                raise ValidationError("The parameter 'version' must be a string type value.")
         if self._decorators is not None:
-            if not isinstance(self._decorators, (list, tuple)):
-                raise ValidationError("The parameter 'decorators' must be an array.")
+            if not isinstance(self._decorators, list):
+                raise ValidationError("The parameter 'decorators' must be an array type value.")
 
     @property
     def source(self) -> str:
@@ -120,9 +126,11 @@ class Extension(BaseDecorator):
         """
         return {
             "name": "extension",
-            "source": self.source,
-            "version": self.version,
-            "decorators": self.decorators,
+            "parameters": {
+                "source": self.source,
+                "version": self.version,
+                "decorators": self.decorators,
+            }
         }
 
     def to_string(self) -> str:
@@ -144,3 +152,60 @@ class Extension(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """A meta-decorator that enables loading of community-defined decorators from external sources. This facilitates the use of specialized decorator packages, domain-specific extensions, or custom decorator libraries maintained by communities or organizations.""",
+            "category": "general",
+            "version": cls.version,
+        }

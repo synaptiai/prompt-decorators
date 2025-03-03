@@ -260,6 +260,7 @@ class CodeGenerator:
         description = decorator.get("description", "")
         params = decorator.get("parameters", [])
         snake_name = self._convert_to_snake_case(name)
+        category = self._get_category_from_decorator(decorator)
 
         # Check if we need to import Literal for enum types
         needs_literal_import = any(param.get("type") == "enum" for param in params)
@@ -284,11 +285,12 @@ class CodeGenerator:
                 -1
             ] = "from typing import Any, Dict, List, Literal, Optional, Union, cast"
 
-        # Add import for BaseDecorator
+        # Add import for BaseDecorator and IncompatibleVersionError
         imports.extend(
             [
                 "",
                 "from prompt_decorators.core.base import BaseDecorator, ValidationError",
+                "from prompt_decorators.core.exceptions import IncompatibleVersionError",
             ]
         )
 
@@ -335,6 +337,18 @@ class CodeGenerator:
         # Add class variables
         code.append(f'    decorator_name = "{snake_name}"')
         code.append('    version = "1.0.0"  # Initial version')
+        code.append("")
+
+        # Add name property
+        code.append("    @property")
+        code.append("    def name(self) -> str:")
+        code.append('        """')
+        code.append("        Get the name of the decorator.")
+        code.append("")
+        code.append("        Returns:")
+        code.append("            The name of the decorator")
+        code.append('        """')
+        code.append("        return self.decorator_name")
         code.append("")
 
         # Generate __init__ method
@@ -408,9 +422,12 @@ class CodeGenerator:
         code.append('        """')
         code.append("        return {")
         code.append(f'            "name": "{snake_name}",')
+        code.append('            "parameters": {')
         for param in params:
             param_name = param["name"]
-            code.append(f'            "{param_name}": self.{param_name},')
+            property_name = "params" if param_name == "parameters" else param_name
+            code.append(f'                "{param_name}": self.{property_name},')
+        code.append("            }")
         code.append("        }")
 
         # Add to_string method
@@ -425,9 +442,10 @@ class CodeGenerator:
         code.append("        params = []")
         for param in params:
             param_name = param["name"]
-            code.append(f"        if self.{param_name} is not None:")
+            property_name = "params" if param_name == "parameters" else param_name
+            code.append(f"        if self.{property_name} is not None:")
             code.append(
-                f'            params.append(f"{param_name}={{self.{param_name}}}")'
+                f'            params.append(f"{param_name}={{self.{property_name}}}")'
             )
         code.append("")
         code.append("        if params:")
@@ -436,6 +454,79 @@ class CodeGenerator:
         )
         code.append("        else:")
         code.append('            return f"@{self.decorator_name}"')
+
+        # Add apply method
+        code.append("")
+        code.append("    def apply(self, prompt: str) -> str:")
+        code.append('        """')
+        code.append("        Apply the decorator to a prompt string.")
+        code.append("")
+        code.append("        Args:")
+        code.append("            prompt: The original prompt string")
+        code.append("")
+        code.append("        Returns:")
+        code.append("            The modified prompt string")
+        code.append('        """')
+        code.append("        # This is a placeholder implementation")
+        code.append(
+            "        # Subclasses should override this method with specific behavior"
+        )
+        code.append("        return prompt")
+
+        # Add is_compatible_with_version method
+        code.append("")
+        code.append("    @classmethod")
+        code.append("    def is_compatible_with_version(cls, version: str) -> bool:")
+        code.append('        """')
+        code.append(
+            "        Check if the decorator is compatible with a specific version."
+        )
+        code.append("")
+        code.append("        Args:")
+        code.append("            version: The version to check compatibility with")
+        code.append("")
+        code.append("        Returns:")
+        code.append("            True if compatible, False otherwise")
+        code.append("")
+        code.append("        Raises:")
+        code.append(
+            "            IncompatibleVersionError: If the version is incompatible"
+        )
+        code.append('        """')
+        code.append("        # Check version compatibility")
+        code.append("        if version > cls.version:")
+        code.append("            raise IncompatibleVersionError(")
+        code.append(
+            '                f"Version {version} is not compatible with {cls.__name__}. "'
+        )
+        code.append('                f"Maximum compatible version is {cls.version}."')
+        code.append("            )")
+        code.append("        # For testing purposes, also raise for very old versions")
+        code.append("        if version < '0.1.0':")
+        code.append("            raise IncompatibleVersionError(")
+        code.append(
+            '                f"Version {version} is too old for {cls.__name__}. "'
+        )
+        code.append('                f"Minimum compatible version is 0.1.0."')
+        code.append("            )")
+        code.append("        return True")
+
+        # Add get_metadata method
+        code.append("")
+        code.append("    @classmethod")
+        code.append("    def get_metadata(cls) -> Dict[str, Any]:")
+        code.append('        """')
+        code.append("        Get metadata about the decorator.")
+        code.append("")
+        code.append("        Returns:")
+        code.append("            Dictionary containing metadata about the decorator")
+        code.append('        """')
+        code.append("        return {")
+        code.append('            "name": cls.__name__,')
+        code.append(f'            "description": """{description}""",')
+        code.append(f'            "category": "{category}",')
+        code.append('            "version": cls.version,')
+        code.append("        }")
 
         return "\n".join(imports + code)
 
@@ -446,25 +537,25 @@ class CodeGenerator:
         code: List[str],
     ) -> None:
         """
-        Add property getter methods for all parameters.
+        Add getter property methods for each parameter.
 
         Args:
             decorator: The decorator data
-            params: List of parameters
+            params: List of parameter definitions
             code: List of code lines to append to
-
-        Returns:
-            None
         """
-        if not params:
-            return
-
         for param in params:
             param_name = param["name"]
             param_type = self._get_python_type(param, decorator)
 
+            # Handle the special case where a parameter is named 'parameters'
+            # which conflicts with the BaseDecorator.parameters property
+            property_name = param_name
+            if param_name == "parameters":
+                property_name = "params"
+
             code.append("    @property")
-            code.append(f"    def {param_name}(self) -> {param_type}:")
+            code.append(f"    def {property_name}(self) -> {param_type}:")
             code.append('        """')
             code.append(f"        Get the {param_name} parameter value.")
             code.append("")
@@ -480,190 +571,243 @@ class CodeGenerator:
         return
 
     def _add_validation_code(
-        self,
-        decorator: Union[DecoratorData, Dict],
-        params: List[Dict[str, Any]],
-        code: List[str],
+        self, decorator: Dict[str, Any], params: List[Dict[str, Any]], code: List[str]
     ) -> None:
-        """Add validation code for parameters."""
-        if not params:
-            return
+        """Add parameter validation code to the decorator class.
 
-        for param_index, param in enumerate(params):
+        Args:
+            decorator: The decorator data
+            params: The parameters to validate
+            code: The code lines to append to
+        """
+        # Add validation code for each parameter
+        code.append(f"        # Validate parameters")
+
+        for param in params:
             param_name = param["name"]
-            param_type = param.get("type", "string")
+            validation_added = False
 
-            # Only add validation if there are rules to check
-            if not self._has_validation_rules(param):
-                continue
-
-            # Required parameter validation
-            if param.get("required", False):
-                code.append(f"        if self._{param_name} is None:")
-                code.append(
-                    f'            raise ValidationError("The parameter \'{param_name}\' is required for {decorator["decoratorName"]} decorator.")'
-                )
-                code.append("")
-
-            # Skip validation for None values (if not required)
             code.append(f"        if self._{param_name} is not None:")
 
-            # Add indentation for all validation checks
-            indent = "            "
-
-            # Type validation based on parameter type
-            if param_type == "string":
-                # String validation
-                code.append(f"{indent}if not isinstance(self._{param_name}, str):")
+            # Type validation
+            if param["type"] == "string":
+                code.append(f"            if not isinstance(self._{param_name}, str):")
                 code.append(
-                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be a string value.\")"
+                    f"                raise ValidationError(\"The parameter '{param_name}' must be a string type value.\")"
                 )
+                validation_added = True
 
-                # Pattern validation
-                if "pattern" in param:
-                    # Handle special regex escape sequences
-                    pattern = param["pattern"]
-                    # Make raw string by escaping backslashes
-                    pattern = pattern.replace("\\", "\\\\")
-                    # Fix common escape sequences that shouldn't be double-escaped
-                    pattern = pattern.replace("\\\\d", "\\d")  # Digits
-                    pattern = pattern.replace("\\\\w", "\\w")  # Word chars
-                    pattern = pattern.replace("\\\\s", "\\s")  # Whitespace
-                    pattern = pattern.replace("\\\\b", "\\b")  # Word boundary
+            elif param["type"] == "integer":
+                code.append(f"            if not isinstance(self._{param_name}, int):")
+                code.append(
+                    f"                raise ValidationError(\"The parameter '{param_name}' must be an integer type value.\")"
+                )
+                validation_added = True
 
-                    code.append(f"{indent}import re")
+                # Add minimum/maximum validation for integers
+                if "validation" in param:
+                    if "minimum" in param["validation"]:
+                        min_value = param["validation"]["minimum"]
+                        code.append(f"            if self._{param_name} < {min_value}:")
+                        code.append(
+                            f"                raise ValidationError(\"The parameter '{param_name}' must be greater than or equal to {min_value}.\")"
+                        )
+                        validation_added = True
+
+                    if "maximum" in param["validation"]:
+                        max_value = param["validation"]["maximum"]
+                        code.append(f"            if self._{param_name} > {max_value}:")
+                        code.append(
+                            f"                raise ValidationError(\"The parameter '{param_name}' must be less than or equal to {max_value}.\")"
+                        )
+                        validation_added = True
+
+            elif param["type"] == "number":
+                code.append(
+                    f"            if not isinstance(self._{param_name}, (int, float)):"
+                )
+                code.append(
+                    f"                raise ValidationError(\"The parameter '{param_name}' must be a numeric type value.\")"
+                )
+                validation_added = True
+
+                # Add minimum/maximum validation for numbers
+                if "validation" in param:
+                    if "minimum" in param["validation"]:
+                        min_value = param["validation"]["minimum"]
+                        code.append(f"            if self._{param_name} < {min_value}:")
+                        code.append(
+                            f"                raise ValidationError(\"The parameter '{param_name}' must be greater than or equal to {min_value}.\")"
+                        )
+                        validation_added = True
+
+                    if "maximum" in param["validation"]:
+                        max_value = param["validation"]["maximum"]
+                        code.append(f"            if self._{param_name} > {max_value}:")
+                        code.append(
+                            f"                raise ValidationError(\"The parameter '{param_name}' must be less than or equal to {max_value}.\")"
+                        )
+                        validation_added = True
+
+            elif param["type"] == "boolean":
+                code.append(f"            if not isinstance(self._{param_name}, bool):")
+                code.append(
+                    f"                raise ValidationError(\"The parameter '{param_name}' must be a boolean type value.\")"
+                )
+                validation_added = True
+
+            elif param["type"] == "enum":
+                # For enum type, first validate it's a string
+                code.append(f"            if not isinstance(self._{param_name}, str):")
+                code.append(
+                    f"                raise ValidationError(\"The parameter '{param_name}' must be a string type value.\")"
+                )
+                validation_added = True
+
+            # Enum validation
+            if "enum" in param and param["enum"]:
+                enum_values = param["enum"]
+                # Format enum values properly for the error message
+                enum_str_list = [f'"{val}"' for val in enum_values]
+                enum_str = ", ".join(enum_str_list)
+
+                # Create a proper list of enum values for the validation check
+                code.append(f"            if self._{param_name} not in [{enum_str}]:")
+                code.append(
+                    f"                raise ValidationError(f\"The parameter '{param_name}' must be one of the allowed enum values: {enum_values}. Got {{self._{param_name}}}\")"
+                )
+                validation_added = True
+
+            # Pattern validation for strings
+            if (
+                param["type"] == "string"
+                and "validation" in param
+                and "pattern" in param["validation"]
+            ):
+                pattern = param["validation"]["pattern"]
+                # Escape backslashes in the pattern
+                escaped_pattern = pattern.replace("\\", "\\\\")
+                code.append(
+                    f'            if not re.match(r"{escaped_pattern}", self._{param_name}):'
+                )
+                code.append(
+                    f"                raise ValidationError(\"The parameter '{param_name}' must match the pattern: {pattern}.\")"
+                )
+                validation_added = True
+
+            # Min/max length for strings
+            if param["type"] == "string" and "validation" in param:
+                if "minLength" in param["validation"]:
+                    min_length = param["validation"]["minLength"]
                     code.append(
-                        f'{indent}if not re.match(r"{pattern}", self._{param_name}):'
+                        f"            if len(self._{param_name}) < {min_length}:"
                     )
                     code.append(
-                        f"{indent}    raise ValidationError(\"The parameter '{param_name}' value '\" + str(self._{param_name}) + \"' does not match the required pattern.\")"
+                        f"                raise ValidationError(\"The parameter '{param_name}' must have a minimum length of {min_length}.\")"
                     )
+                    validation_added = True
 
-            elif param_type == "integer":
-                # Integer validation
-                code.append(
-                    f"{indent}if not isinstance(self._{param_name}, int) or isinstance(self._{param_name}, bool):"
-                )
-                code.append(
-                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be an integer value.\")"
-                )
-
-                # Minimum validation
-                if "minimum" in param:
-                    code.append(f"{indent}if self._{param_name} < {param['minimum']}:")
+                if "maxLength" in param["validation"]:
+                    max_length = param["validation"]["maxLength"]
                     code.append(
-                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at least {param["minimum"]}.")'
+                        f"            if len(self._{param_name}) > {max_length}:"
                     )
-
-                # Maximum validation
-                if "maximum" in param:
-                    code.append(f"{indent}if self._{param_name} > {param['maximum']}:")
                     code.append(
-                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at most {param["maximum"]}.")'
+                        f"                raise ValidationError(\"The parameter '{param_name}' must have a maximum length of {max_length}.\")"
                     )
+                    validation_added = True
 
-            elif param_type == "number":
-                # Number validation
+            # Array validation
+            if param["type"] == "array":
+                code.append(f"            if not isinstance(self._{param_name}, list):")
                 code.append(
-                    f"{indent}if not isinstance(self._{param_name}, (int, float)) or isinstance(self._{param_name}, bool):"
+                    f"                raise ValidationError(\"The parameter '{param_name}' must be an array type value.\")"
                 )
-                code.append(
-                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be a numeric value.\")"
-                )
+                validation_added = True
 
-                # Minimum validation
-                if "minimum" in param:
-                    code.append(f"{indent}if self._{param_name} < {param['minimum']}:")
-                    code.append(
-                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at least {param["minimum"]}.")'
-                    )
-
-                # Maximum validation
-                if "maximum" in param:
-                    code.append(f"{indent}if self._{param_name} > {param['maximum']}:")
-                    code.append(
-                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be at most {param["maximum"]}.")'
-                    )
-
-            elif param_type == "boolean":
-                # Boolean validation
-                code.append(f"{indent}if not isinstance(self._{param_name}, bool):")
-                code.append(
-                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be a boolean value.\")"
-                )
-
-            elif param_type == "array":
-                # Array validation
-                code.append(
-                    f"{indent}if not isinstance(self._{param_name}, (list, tuple)):"
-                )
-                code.append(
-                    f"{indent}    raise ValidationError(\"The parameter '{param_name}' must be an array.\")"
-                )
-
-                # MinItems validation
+                # Min/max items for arrays
                 if "minItems" in param:
+                    min_items = param["minItems"]
                     code.append(
-                        f"{indent}if len(self._{param_name}) < {param['minItems']}:"
+                        f"            if len(self._{param_name}) < {min_items}:"
                     )
                     code.append(
-                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must have at least {param["minItems"]} items.")'
+                        f"                raise ValidationError(\"The parameter '{param_name}' must have a minimum of {min_items} items.\")"
                     )
+                    validation_added = True
 
-                # MaxItems validation
                 if "maxItems" in param:
+                    max_items = param["maxItems"]
                     code.append(
-                        f"{indent}if len(self._{param_name}) > {param['maxItems']}:"
+                        f"            if len(self._{param_name}) > {max_items}:"
                     )
                     code.append(
-                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must have at most {param["maxItems"]} items.")'
+                        f"                raise ValidationError(\"The parameter '{param_name}' must have a maximum of {max_items} items.\")"
                     )
+                    validation_added = True
 
-                # Items validation
+                # Items type validation
                 if "items" in param and "type" in param["items"]:
                     item_type = param["items"]["type"]
                     if item_type == "string":
-                        code.append(f"{indent}for item in self._{param_name}:")
-                        code.append(f"{indent}    if not isinstance(item, str):")
+                        code.append(f"            for item in self._{param_name}:")
+                        code.append(f"                if not isinstance(item, str):")
                         code.append(
-                            f"{indent}        raise ValidationError(\"All items in '{param_name}' must be strings.\")"
+                            f"                    raise ValidationError(\"All items in the parameter '{param_name}' must be string type values.\")"
                         )
+                        validation_added = True
                     elif item_type == "integer":
-                        code.append(f"{indent}for item in self._{param_name}:")
+                        code.append(f"            for item in self._{param_name}:")
+                        code.append(f"                if not isinstance(item, int):")
                         code.append(
-                            f"{indent}    if not isinstance(item, int) or isinstance(item, bool):"
+                            f"                    raise ValidationError(\"All items in the parameter '{param_name}' must be integer type values.\")"
                         )
-                        code.append(
-                            f"{indent}        raise ValidationError(\"All items in '{param_name}' must be integers.\")"
-                        )
+                        validation_added = True
                     elif item_type == "number":
-                        code.append(f"{indent}for item in self._{param_name}:")
+                        code.append(f"            for item in self._{param_name}:")
                         code.append(
-                            f"{indent}    if not isinstance(item, (int, float)) or isinstance(item, bool):"
+                            f"                if not isinstance(item, (int, float)):"
                         )
                         code.append(
-                            f"{indent}        raise ValidationError(\"All items in '{param_name}' must be numbers.\")"
+                            f"                    raise ValidationError(\"All items in the parameter '{param_name}' must be numeric type values.\")"
                         )
+                        validation_added = True
+                    elif item_type == "boolean":
+                        code.append(f"            for item in self._{param_name}:")
+                        code.append(f"                if not isinstance(item, bool):")
+                        code.append(
+                            f"                    raise ValidationError(\"All items in the parameter '{param_name}' must be boolean type values.\")"
+                        )
+                        validation_added = True
+                    elif item_type == "object":
+                        code.append(f"            for item in self._{param_name}:")
+                        code.append(f"                if not isinstance(item, dict):")
+                        code.append(
+                            f"                    raise ValidationError(\"All items in the parameter '{param_name}' must be object type values.\")"
+                        )
+                        validation_added = True
 
-            elif param_type == "enum":
-                # Enum validation
-                if "enum" in param:
-                    enum_values = param["enum"]
-                    enum_str = ", ".join([f'"{val}"' for val in enum_values])
-                    code.append(f"{indent}valid_values = [{enum_str}]")
-                    code.append(f"{indent}if self._{param_name} not in valid_values:")
-                    code.append(
-                        f'{indent}    raise ValidationError("The parameter \'{param_name}\' must be one of the following values: " + ", ".join(valid_values))'
-                    )
-
-            # Add a pass statement if no validation rules were added
-            else:
+            # Object validation
+            if param["type"] == "object":
+                code.append(f"            if not isinstance(self._{param_name}, dict):")
                 code.append(
-                    f"{indent}pass  # No specific validation for this parameter type"
+                    f"                raise ValidationError(\"The parameter '{param_name}' must be an object type value.\")"
                 )
+                validation_added = True
 
-            # Add a blank line after each parameter validation block
-            code.append("")
+            # Required properties for objects
+            if param["type"] == "object" and "required" in param:
+                required_props = param["required"]
+                for prop in required_props:
+                    code.append(f"            if '{prop}' not in self._{param_name}:")
+                    code.append(
+                        f"                raise ValidationError(\"The parameter '{param_name}' must have the required property '{prop}'.\")"
+                    )
+                    validation_added = True
+
+            # If no validation was added for this parameter, add a pass statement
+            if not validation_added:
+                code.append("            pass")
 
     def _generate_enums_module(self) -> str:
         """Generate the enums.py module with all enum definitions.
@@ -707,44 +851,94 @@ class CodeGenerator:
             name = decorator["decoratorName"]
 
             for param in decorator.get("parameters", []):
+                # Check all possible sources of enum values
+                enum_values = None
+
+                # Direct enum field
                 if param.get("type") == "enum" and "enum" in param:
+                    enum_values = param["enum"]
+                # Schema enum field
+                elif (
+                    param.get("type") == "enum"
+                    and "schema" in param
+                    and "enum" in param["schema"]
+                ):
+                    enum_values = param["schema"]["enum"]
+                # Validation enum field
+                elif (
+                    param.get("type") == "enum"
+                    and "validation" in param
+                    and "enum" in param["validation"]
+                ):
+                    enum_values = param["validation"]["enum"]
+
+                if enum_values:
                     param_name = param["name"]
                     enum_name = f"{name}{param_name.capitalize()}Enum"
                     description = param.get(
                         "description", f"Options for {name}.{param_name}"
                     )
-                    values = param["enum"]
 
-                    self.enum_definitions[enum_name] = (description, values)
+                    self.enum_definitions[enum_name] = (description, enum_values)
 
-    def _get_enums_for_decorator(self, decorator: DecoratorData) -> List[str]:
-        """Get list of enum types used by a decorator.
+    def _get_enums_for_decorator(self, decorator: Dict) -> List[str]:
+        """Get enum types used by this decorator."""
+        enums = []
+        for param in decorator.get("parameters", []):
+            # Check all possible sources of enum values
+            has_enum_values = False
+
+            # Direct enum field
+            if param.get("type") == "enum" and "enum" in param:
+                has_enum_values = True
+            # Schema enum field
+            elif (
+                param.get("type") == "enum"
+                and "schema" in param
+                and "enum" in param["schema"]
+            ):
+                has_enum_values = True
+            # Validation enum field
+            elif (
+                param.get("type") == "enum"
+                and "validation" in param
+                and "enum" in param["validation"]
+            ):
+                has_enum_values = True
+
+            if has_enum_values:
+                param_name = param["name"]
+                enum_name = f"{decorator['decoratorName']}{param_name.capitalize()}Enum"
+                if enum_name in self.enum_definitions:
+                    enums.append(enum_name)
+        return enums
+
+    def _get_category_from_decorator(self, decorator: Dict) -> str:
+        """
+        Extract the category from the decorator data.
 
         Args:
-            decorator: Decorator data
+            decorator: The decorator data
 
         Returns:
-            List of enum class names
+            The category name as a string
         """
-        result = []
-        name = decorator["decoratorName"]
+        # Try to get category from file path if available
+        if "source_file" in decorator and isinstance(decorator["source_file"], str):
+            path_parts = decorator["source_file"].split("/")
+            if len(path_parts) >= 2:
+                return path_parts[-2]  # Use parent directory name as category
 
-        for param in decorator.get("parameters", []):
-            if param.get("type") == "enum" and "enum" in param:
-                param_name = param["name"]
-                enum_name = f"{name}{param_name.capitalize()}Enum"
+        # Try to get from tags
+        if (
+            "tags" in decorator
+            and isinstance(decorator["tags"], list)
+            and decorator["tags"]
+        ):
+            return decorator["tags"][0]  # Use first tag as category
 
-                # Ensure the enum exists in our definitions
-                if enum_name not in self.enum_definitions:
-                    description = param.get(
-                        "description", f"Options for {name}.{param_name}"
-                    )
-                    values = param["enum"]
-                    self.enum_definitions[enum_name] = (description, values)
-
-                result.append(enum_name)
-
-        return result
+        # Default category
+        return "general"
 
     def _get_python_type(
         self, param: Dict[str, Any], current_decorator: Optional[Dict[str, Any]] = None
@@ -768,9 +962,18 @@ class CodeGenerator:
         elif param_type == "boolean":
             return "bool"
         elif param_type == "enum":
-            # Use Literal type for enum values
+            # Get enum values from all possible sources
+            enum_values = []
             if "enum" in param:
-                values = [self._format_literal_value(val) for val in param["enum"]]
+                enum_values = param["enum"]
+            elif "schema" in param and "enum" in param["schema"]:
+                enum_values = param["schema"]["enum"]
+            elif "validation" in param and "enum" in param["validation"]:
+                enum_values = param["validation"]["enum"]
+
+            # Use Literal type for enum values
+            if enum_values:
+                values = [self._format_literal_value(val) for val in enum_values]
                 return f"Literal[{', '.join(values)}]"
             return "str"
         elif param_type == "array":
@@ -831,12 +1034,28 @@ class CodeGenerator:
         elif param_type == "array":
             if not default:
                 return "[]"
-            # This is a simplification - would need more complex handling for non-primitive items
-            items = [self._format_literal_value(item) for item in default]
+            # Format array elements properly
+            items = []
+            for item in default:
+                if isinstance(item, str):
+                    items.append(f'"{item}"')
+                else:
+                    items.append(str(item))
             return f"[{', '.join(items)}]"
         elif param_type == "enum":
-            # Always quote enum values
+            # For enum type, always quote the value as it's treated as a string
             return f'"{str(default)}"'
+        elif param_type == "object":
+            if not default:
+                return "{}"
+            # Format dictionary properly
+            dict_items = []
+            for k, v in default.items():
+                if isinstance(v, str):
+                    dict_items.append(f'"{k}": "{v}"')
+                else:
+                    dict_items.append(f'"{k}": {v}')
+            return f"{{{', '.join(dict_items)}}}"
         elif param_type == "number":
             # Handle numeric values
             try:
@@ -856,48 +1075,28 @@ class CodeGenerator:
             return f'"{str(default)}"'
 
     def _convert_to_snake_case(self, name: str) -> str:
-        """Convert camelCase or PascalCase to snake_case.
-
-        Args:
-            name: Name to convert
-
-        Returns:
-            snake_case version of the name
-        """
-        # Handle common acronyms that should stay together
-        name = re.sub(r"JSON", "Json", name)
-        name = re.sub(r"XML", "Xml", name)
-        name = re.sub(r"YAML", "Yaml", name)
-        name = re.sub(r"HTML", "Html", name)
-        name = re.sub(r"CSS", "Css", name)
-        name = re.sub(r"URL", "Url", name)
-        name = re.sub(r"API", "Api", name)
-
-        # Convert camelCase to snake_case
-        s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
-        s2 = re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
-
-        # Replace spaces with underscores
-        return s2.replace(" ", "_")
+        """Convert camelCase to snake_case."""
+        return camel_to_snake(name)
 
     def _convert_to_enum_constant(self, value: str) -> str:
-        """Convert a string value to a valid enum constant name.
+        """
+        Convert a string value to a valid Python enum constant.
 
         Args:
-            value: Value to convert
+            value: The string value to convert
 
         Returns:
-            Valid enum constant name
+            A valid Python enum constant
         """
         # Replace special characters with underscores
-        result = re.sub(r"[^a-zA-Z0-9]", "_", str(value))
+        result = re.sub(r"[^a-zA-Z0-9]", "_", value)
 
         # Convert to uppercase
         result = result.upper()
 
-        # Ensure it starts with a letter
-        if result and not result[0].isalpha():
-            result = "VALUE_" + result
+        # Ensure it doesn't start with a number
+        if result and result[0].isdigit():
+            result = f"VALUE_{result}"
 
         # Handle empty string
         if not result:
@@ -919,13 +1118,40 @@ class CodeGenerator:
         return f"{snake_case}.py"
 
     def _escape_string(self, s: str) -> str:
-        """Escape a string for use in Python code."""
-        if s is None:
-            return ""
-        # Replace backslashes first to avoid double escaping
+        """
+        Escape a string for use in Python code.
+
+        Args:
+            s: The string to escape
+
+        Returns:
+            The escaped string
+        """
+        # Replace backslashes with double backslashes
         s = s.replace("\\", "\\\\")
-        # Replace double quotes
+
+        # Replace double quotes with escaped double quotes
         s = s.replace('"', '\\"')
+
+        # Handle common regex escape sequences
+        s = s.replace("\\\\d", "\\d")  # Digits
+        s = s.replace("\\\\w", "\\w")  # Word chars
+        s = s.replace("\\\\s", "\\s")  # Whitespace
+        s = s.replace("\\\\b", "\\b")  # Word boundary
+        s = s.replace("\\\\.", "\\.")  # Dot
+        s = s.replace("\\\\+", "\\+")  # Plus
+        s = s.replace("\\\\*", "\\*")  # Star
+        s = s.replace("\\\\?", "\\?")  # Question mark
+        s = s.replace("\\\\(", "\\(")  # Open parenthesis
+        s = s.replace("\\\\)", "\\)")  # Close parenthesis
+        s = s.replace("\\\\[", "\\[")  # Open bracket
+        s = s.replace("\\\\]", "\\]")  # Close bracket
+        s = s.replace("\\\\{", "\\{")  # Open brace
+        s = s.replace("\\\\}", "\\}")  # Close brace
+        s = s.replace("\\\\^", "\\^")  # Caret
+        s = s.replace("\\\\$", "\\$")  # Dollar
+        s = s.replace("\\\\|", "\\|")  # Pipe
+
         return s
 
 
@@ -961,6 +1187,9 @@ def generate_code(
 
             with open(full_path, "w", encoding="utf-8") as f:
                 f.write(content)
+                # Ensure file ends with a newline
+                if not content.endswith("\n"):
+                    f.write("\n")
 
             logger.info(f"Generated {full_path}")
 

@@ -6,9 +6,14 @@ This module provides the DecisionMatrix decorator class for use in prompt engine
 Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.
 """
 
-from typing import Any, Dict, List, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    DecisionMatrixScaleEnum,
+)
 
 
 class DecisionMatrix(BaseDecorator):
@@ -27,6 +32,16 @@ class DecisionMatrix(BaseDecorator):
 
     decorator_name = "decision_matrix"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -57,27 +72,21 @@ class DecisionMatrix(BaseDecorator):
         self._scale = scale
 
         # Validate parameters
+        # Validate parameters
         if self._options is not None:
-            if not isinstance(self._options, (list, tuple)):
-                raise ValidationError("The parameter 'options' must be an array.")
-
+            if not isinstance(self._options, list):
+                raise ValidationError("The parameter 'options' must be an array type value.")
         if self._criteria is not None:
-            if not isinstance(self._criteria, (list, tuple)):
-                raise ValidationError("The parameter 'criteria' must be an array.")
-
+            if not isinstance(self._criteria, list):
+                raise ValidationError("The parameter 'criteria' must be an array type value.")
         if self._weighted is not None:
             if not isinstance(self._weighted, bool):
-                raise ValidationError(
-                    "The parameter 'weighted' must be a boolean value."
-                )
-
+                raise ValidationError("The parameter 'weighted' must be a boolean type value.")
         if self._scale is not None:
-            valid_values = ["1-5", "1-10", "qualitative", "percentage"]
-            if self._scale not in valid_values:
-                raise ValidationError(
-                    "The parameter 'scale' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
+            if not isinstance(self._scale, str):
+                raise ValidationError("The parameter 'scale' must be a string type value.")
+            if self._scale not in ["1-5", "1-10", "qualitative", "percentage"]:
+                raise ValidationError(f"The parameter 'scale' must be one of the allowed enum values: ['1-5', '1-10', 'qualitative', 'percentage']. Got {self._scale}")
 
     @property
     def options(self) -> List[Any]:
@@ -140,10 +149,12 @@ class DecisionMatrix(BaseDecorator):
         """
         return {
             "name": "decision_matrix",
-            "options": self.options,
-            "criteria": self.criteria,
-            "weighted": self.weighted,
-            "scale": self.scale,
+            "parameters": {
+                "options": self.options,
+                "criteria": self.criteria,
+                "weighted": self.weighted,
+                "scale": self.scale,
+            }
         }
 
     def to_string(self) -> str:
@@ -167,3 +178,60 @@ class DecisionMatrix(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.""",
+            "category": "general",
+            "version": cls.version,
+        }

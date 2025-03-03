@@ -20,7 +20,7 @@ repos:
         language_version: python3
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.1.6
+    rev: v0.0.262
     hooks:
       - id: ruff
         stages: [manual]  # This will prevent it from running automatically
@@ -38,29 +38,27 @@ repos:
       - id: poetry-lock
         args: ["--no-update"]
 
-  # Temporarily commented out the local hooks that are failing
-  # - repo: local
-  #   hooks:
-  #     - id: mypy
-  #       name: mypy
-  #       entry: poetry run mypy
-  #       language: system
-  #       types: [python]
-  #       require_serial: true
-  #       args: ["--ignore-missing-imports"]
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        types: [python]
+        exclude: ^(docs/|examples/|scripts/|tests/)
+        args: ["--ignore-missing-imports", "--disallow-untyped-defs", "--disallow-incomplete-defs"]
 
-  #     - id: pytest
-  #       name: pytest
-  #       entry: python -m pytest
-  #       language: system
-  #       pass_filenames: false
-  #       always_run: true
+      - id: pytest
+        name: pytest
+        entry: python -m pytest
+        language: system
+        pass_filenames: false
+        always_run: true
+        args: ["tests/"]
 
-  #     - id: check-docstrings
-  #       name: check-docstrings
-  #       entry: python scripts/standardize_docstrings.py
-  #       language: python
-  #       types: [python]
-  #       args: ["--check", "."]
-  #       pass_filenames: false
-  #       description: Check that docstrings follow Google-style format
+      - id: check-docstrings
+        name: check-docstrings
+        entry: python -m scripts.check_docstrings
+        language: system
+        pass_filenames: false
+        always_run: true

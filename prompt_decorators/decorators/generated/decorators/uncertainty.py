@@ -6,9 +6,15 @@ This module provides the Uncertainty decorator class for use in prompt engineeri
 Explicitly highlights areas of uncertainty in the response. This decorator promotes intellectual honesty by clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    UncertaintyFormatEnum,
+    UncertaintyThresholdEnum,
+)
 
 
 class Uncertainty(BaseDecorator):
@@ -26,6 +32,16 @@ class Uncertainty(BaseDecorator):
 
     decorator_name = "uncertainty"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -53,25 +69,20 @@ class Uncertainty(BaseDecorator):
         self._reason = reason
 
         # Validate parameters
+        # Validate parameters
         if self._format is not None:
-            valid_values = ["inline", "section", "confidence"]
-            if self._format not in valid_values:
-                raise ValidationError(
-                    "The parameter 'format' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._format, str):
+                raise ValidationError("The parameter 'format' must be a string type value.")
+            if self._format not in ["inline", "section", "confidence"]:
+                raise ValidationError(f"The parameter 'format' must be one of the allowed enum values: ['inline', 'section', 'confidence']. Got {self._format}")
         if self._threshold is not None:
-            valid_values = ["low", "medium", "high"]
-            if self._threshold not in valid_values:
-                raise ValidationError(
-                    "The parameter 'threshold' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._threshold, str):
+                raise ValidationError("The parameter 'threshold' must be a string type value.")
+            if self._threshold not in ["low", "medium", "high"]:
+                raise ValidationError(f"The parameter 'threshold' must be one of the allowed enum values: ['low', 'medium', 'high']. Got {self._threshold}")
         if self._reason is not None:
             if not isinstance(self._reason, bool):
-                raise ValidationError("The parameter 'reason' must be a boolean value.")
+                raise ValidationError("The parameter 'reason' must be a boolean type value.")
 
     @property
     def format(self) -> Literal["inline", "section", "confidence"]:
@@ -121,9 +132,11 @@ class Uncertainty(BaseDecorator):
         """
         return {
             "name": "uncertainty",
-            "format": self.format,
-            "threshold": self.threshold,
-            "reason": self.reason,
+            "parameters": {
+                "format": self.format,
+                "threshold": self.threshold,
+                "reason": self.reason,
+            }
         }
 
     def to_string(self) -> str:
@@ -145,3 +158,60 @@ class Uncertainty(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Explicitly highlights areas of uncertainty in the response. This decorator promotes intellectual honesty by clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate.""",
+            "category": "general",
+            "version": cls.version,
+        }

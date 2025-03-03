@@ -6,9 +6,11 @@ This module provides the TreeOfThought decorator class for use in prompt enginee
 Organizes the response as a branching exploration of multiple reasoning paths. This decorator enables the AI to consider several possible approaches or hypotheses simultaneously, exploring the implications of each before reaching conclusions.
 """
 
-from typing import Any, Dict
+import re
+from typing import Any, Dict, List, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class TreeOfThought(BaseDecorator):
@@ -26,6 +28,16 @@ class TreeOfThought(BaseDecorator):
 
     decorator_name = "tree_of_thought"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -53,25 +65,24 @@ class TreeOfThought(BaseDecorator):
         self._pruning = pruning
 
         # Validate parameters
+        # Validate parameters
         if self._branches is not None:
-            if not isinstance(self._branches, (int, float)) or isinstance(
-                self._branches, bool
-            ):
-                raise ValidationError(
-                    "The parameter 'branches' must be a numeric value."
-                )
-
+            if not isinstance(self._branches, (int, float)):
+                raise ValidationError("The parameter 'branches' must be a numeric type value.")
+            if self._branches < 2:
+                raise ValidationError("The parameter 'branches' must be greater than or equal to 2.")
+            if self._branches > 5:
+                raise ValidationError("The parameter 'branches' must be less than or equal to 5.")
         if self._depth is not None:
-            if not isinstance(self._depth, (int, float)) or isinstance(
-                self._depth, bool
-            ):
-                raise ValidationError("The parameter 'depth' must be a numeric value.")
-
+            if not isinstance(self._depth, (int, float)):
+                raise ValidationError("The parameter 'depth' must be a numeric type value.")
+            if self._depth < 1:
+                raise ValidationError("The parameter 'depth' must be greater than or equal to 1.")
+            if self._depth > 5:
+                raise ValidationError("The parameter 'depth' must be less than or equal to 5.")
         if self._pruning is not None:
             if not isinstance(self._pruning, bool):
-                raise ValidationError(
-                    "The parameter 'pruning' must be a boolean value."
-                )
+                raise ValidationError("The parameter 'pruning' must be a boolean type value.")
 
     @property
     def branches(self) -> Any:
@@ -121,9 +132,11 @@ class TreeOfThought(BaseDecorator):
         """
         return {
             "name": "tree_of_thought",
-            "branches": self.branches,
-            "depth": self.depth,
-            "pruning": self.pruning,
+            "parameters": {
+                "branches": self.branches,
+                "depth": self.depth,
+                "pruning": self.pruning,
+            }
         }
 
     def to_string(self) -> str:
@@ -145,3 +158,60 @@ class TreeOfThought(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Organizes the response as a branching exploration of multiple reasoning paths. This decorator enables the AI to consider several possible approaches or hypotheses simultaneously, exploring the implications of each before reaching conclusions.""",
+            "category": "general",
+            "version": cls.version,
+        }

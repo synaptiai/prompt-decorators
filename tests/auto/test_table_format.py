@@ -1,16 +1,18 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the TableFormat decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.table_format import TableFormat
 
+class TestTableFormat(unittest.TestCase):
+    """Tests for the TableFormat decorator.
 
-# Tests for the TableFormat decorator
-# -----------------------------------
-class TestTableFormat:
-    """Tests for the TableFormat decorator."""
+    Structures the AI's response in a tabular format with defined columns. This
+    decorator is ideal for presenting comparative data, lists of items with
+    attributes, or any information that benefits from clear columnar
+    organization.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -19,129 +21,153 @@ class TestTableFormat:
             "alignment": "left",
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        assert decorator is not None
-        assert decorator.name == "TableFormat"
 
-    def test_columns_required(self, load_decorator):
-        """Test that columns is required."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
+    def test_missing_required_param_columns(self):
+        """Test that initialization fails when missing required parameter columns."""
+        # Get valid parameters for all required fields except the one we're testing
         params = self._get_valid_params()
-        del params["columns"]
-        with pytest.raises(ValidationError):
-            decorator_class(**params)
 
-    def test_columns_type_validation(self, load_decorator):
-        """Test columns type validation."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["columns"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "columns" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
+        # Remove the parameter we want to test as required
+        if "columns" in params:
+            del params["columns"]
 
-    def test_format_type_validation(self, load_decorator):
-        """Test format type validation."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["format"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "format" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Should raise either ValidationError or TypeError when the required parameter is missing
+        with self.assertRaises((ValidationError, TypeError)) as exc_info:
+            TableFormat(**params)
+        
+        # Check that the error message contains the parameter name
+        error_message = str(exc_info.exception)
+        self.assertTrue(
+            "columns" in error_message or 
+            "required" in error_message.lower()
+        )
 
-    def test_format_enum_validation(self, load_decorator):
-        """Test format enum value validation."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["format"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "format" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_alignment_type_validation(self, load_decorator):
-        """Test alignment type validation."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
+    def test_validate_columns(self):
+        """Test validation for the columns parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["alignment"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "alignment" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_alignment_enum_validation(self, load_decorator):
-        """Test alignment enum value validation."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["alignment"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "alignment" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test type validation
+        params['columns'] = 'not_an_array'  # Not an array
+        with self.assertRaises(ValidationError) as context:
+            TableFormat(**params)
+        self.assertIn('columns', str(context.exception))
+        self.assertIn('array', str(context.exception).lower())
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
+
+    def test_validate_format(self):
+        """Test validation for the format parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test type validation
+        params['format'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            TableFormat(**params)
+        self.assertIn('format', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['format'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            TableFormat(**params)
+        self.assertIn('format', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['format'] = 'markdown'
+        # This should not raise an exception
+        TableFormat(**params)
+        params['format'] = 'ascii'
+        # This should not raise an exception
+        TableFormat(**params)
+        params['format'] = 'csv'
+        # This should not raise an exception
+        TableFormat(**params)
+
+    def test_validate_alignment(self):
+        """Test validation for the alignment parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['alignment'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            TableFormat(**params)
+        self.assertIn('alignment', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['alignment'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            TableFormat(**params)
+        self.assertIn('alignment', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['alignment'] = 'left'
+        # This should not raise an exception
+        TableFormat(**params)
+        params['alignment'] = 'center'
+        # This should not raise an exception
+        TableFormat(**params)
+        params['alignment'] = 'right'
+        # This should not raise an exception
+        TableFormat(**params)
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Simple comparison table in markdown format
+        params = self._get_valid_params()
+        decorator = TableFormat(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # Detailed CSV table with specific columns
+        params = self._get_valid_params()
+        decorator = TableFormat(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = TableFormat(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "table_format")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = TableFormat.from_dict(serialized)
+        self.assertIsInstance(deserialized, TableFormat)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("TableFormat")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "TableFormat"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

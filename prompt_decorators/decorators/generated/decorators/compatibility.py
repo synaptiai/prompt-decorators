@@ -6,9 +6,11 @@ This module provides the Compatibility decorator class for use in prompt enginee
 A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.
 """
 
-from typing import Any, Dict, List
+import re
+from typing import Any, Dict, List, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Compatibility(BaseDecorator):
@@ -26,6 +28,16 @@ class Compatibility(BaseDecorator):
 
     decorator_name = "compatibility"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -57,26 +69,16 @@ class Compatibility(BaseDecorator):
         self._behaviors = behaviors
 
         # Validate parameters
-        if self._models is None:
-            raise ValidationError(
-                "The parameter 'models' is required for Compatibility decorator."
-            )
-
+        # Validate parameters
         if self._models is not None:
-            if not isinstance(self._models, (list, tuple)):
-                raise ValidationError("The parameter 'models' must be an array.")
-
+            if not isinstance(self._models, list):
+                raise ValidationError("The parameter 'models' must be an array type value.")
         if self._fallback is not None:
             if not isinstance(self._fallback, str):
-                raise ValidationError(
-                    "The parameter 'fallback' must be a string value."
-                )
-
+                raise ValidationError("The parameter 'fallback' must be a string type value.")
         if self._behaviors is not None:
             if not isinstance(self._behaviors, str):
-                raise ValidationError(
-                    "The parameter 'behaviors' must be a string value."
-                )
+                raise ValidationError("The parameter 'behaviors' must be a string type value.")
 
     @property
     def models(self) -> List[Any]:
@@ -126,9 +128,11 @@ class Compatibility(BaseDecorator):
         """
         return {
             "name": "compatibility",
-            "models": self.models,
-            "fallback": self.fallback,
-            "behaviors": self.behaviors,
+            "parameters": {
+                "models": self.models,
+                "fallback": self.fallback,
+                "behaviors": self.behaviors,
+            }
         }
 
     def to_string(self) -> str:
@@ -150,3 +154,60 @@ class Compatibility(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.""",
+            "category": "general",
+            "version": cls.version,
+        }

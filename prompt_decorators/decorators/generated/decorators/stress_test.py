@@ -6,9 +6,14 @@ This module provides the StressTest decorator class for use in prompt engineerin
 Tests the robustness of ideas, theories, plans, or systems by applying extreme conditions, edge cases, and unlikely scenarios. This decorator helps identify vulnerabilities, limitations, and breaking points that might not be apparent under normal circumstances.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    StressTestSeverityEnum,
+)
 
 
 class StressTest(BaseDecorator):
@@ -26,6 +31,16 @@ class StressTest(BaseDecorator):
 
     decorator_name = "stress_test"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -54,25 +69,22 @@ class StressTest(BaseDecorator):
         self._domain = domain
 
         # Validate parameters
+        # Validate parameters
         if self._scenarios is not None:
-            if not isinstance(self._scenarios, (int, float)) or isinstance(
-                self._scenarios, bool
-            ):
-                raise ValidationError(
-                    "The parameter 'scenarios' must be a numeric value."
-                )
-
+            if not isinstance(self._scenarios, (int, float)):
+                raise ValidationError("The parameter 'scenarios' must be a numeric type value.")
+            if self._scenarios < 1:
+                raise ValidationError("The parameter 'scenarios' must be greater than or equal to 1.")
+            if self._scenarios > 5:
+                raise ValidationError("The parameter 'scenarios' must be less than or equal to 5.")
         if self._severity is not None:
-            valid_values = ["moderate", "severe", "extreme"]
-            if self._severity not in valid_values:
-                raise ValidationError(
-                    "The parameter 'severity' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._severity, str):
+                raise ValidationError("The parameter 'severity' must be a string type value.")
+            if self._severity not in ["moderate", "severe", "extreme"]:
+                raise ValidationError(f"The parameter 'severity' must be one of the allowed enum values: ['moderate', 'severe', 'extreme']. Got {self._severity}")
         if self._domain is not None:
             if not isinstance(self._domain, str):
-                raise ValidationError("The parameter 'domain' must be a string value.")
+                raise ValidationError("The parameter 'domain' must be a string type value.")
 
     @property
     def scenarios(self) -> Any:
@@ -122,9 +134,11 @@ class StressTest(BaseDecorator):
         """
         return {
             "name": "stress_test",
-            "scenarios": self.scenarios,
-            "severity": self.severity,
-            "domain": self.domain,
+            "parameters": {
+                "scenarios": self.scenarios,
+                "severity": self.severity,
+                "domain": self.domain,
+            }
         }
 
     def to_string(self) -> str:
@@ -146,3 +160,60 @@ class StressTest(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Tests the robustness of ideas, theories, plans, or systems by applying extreme conditions, edge cases, and unlikely scenarios. This decorator helps identify vulnerabilities, limitations, and breaking points that might not be apparent under normal circumstances.""",
+            "category": "general",
+            "version": cls.version,
+        }

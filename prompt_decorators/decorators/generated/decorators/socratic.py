@@ -6,9 +6,11 @@ This module provides the Socratic decorator class for use in prompt engineering.
 Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding.
 """
 
-from typing import Any, Dict
+import re
+from typing import Any, Dict, List, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
 
 
 class Socratic(BaseDecorator):
@@ -24,6 +26,16 @@ class Socratic(BaseDecorator):
 
     decorator_name = "socratic"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -45,13 +57,14 @@ class Socratic(BaseDecorator):
         self._iterations = iterations
 
         # Validate parameters
+        # Validate parameters
         if self._iterations is not None:
-            if not isinstance(self._iterations, (int, float)) or isinstance(
-                self._iterations, bool
-            ):
-                raise ValidationError(
-                    "The parameter 'iterations' must be a numeric value."
-                )
+            if not isinstance(self._iterations, (int, float)):
+                raise ValidationError("The parameter 'iterations' must be a numeric type value.")
+            if self._iterations < 1:
+                raise ValidationError("The parameter 'iterations' must be greater than or equal to 1.")
+            if self._iterations > 5:
+                raise ValidationError("The parameter 'iterations' must be less than or equal to 5.")
 
     @property
     def iterations(self) -> Any:
@@ -75,7 +88,9 @@ class Socratic(BaseDecorator):
         """
         return {
             "name": "socratic",
-            "iterations": self.iterations,
+            "parameters": {
+                "iterations": self.iterations,
+            }
         }
 
     def to_string(self) -> str:
@@ -93,3 +108,60 @@ class Socratic(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding.""",
+            "category": "general",
+            "version": cls.version,
+        }

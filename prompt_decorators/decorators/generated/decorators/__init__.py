@@ -30,7 +30,6 @@ from .creative import Creative
 from .custom import Custom
 from .debate import Debate
 from .decision_matrix import DecisionMatrix
-from .decorator_name import DecoratorName
 from .deductive import Deductive
 from .detailed import Detailed
 from .eli5 import ELI5
@@ -103,7 +102,6 @@ __all__ = [
     "Custom",
     "Debate",
     "DecisionMatrix",
-    "DecoratorName",
     "Deductive",
     "Detailed",
     "ELI5",

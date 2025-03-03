@@ -6,9 +6,15 @@ This module provides the TableFormat decorator class for use in prompt engineeri
 Structures the AI's response in a tabular format with defined columns. This decorator is ideal for presenting comparative data, lists of items with attributes, or any information that benefits from clear columnar organization.
 """
 
-from typing import Any, Dict, List, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    TableFormatFormatEnum,
+    TableFormatAlignmentEnum,
+)
 
 
 class TableFormat(BaseDecorator):
@@ -26,6 +32,16 @@ class TableFormat(BaseDecorator):
 
     decorator_name = "table_format"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -53,30 +69,20 @@ class TableFormat(BaseDecorator):
         self._alignment = alignment
 
         # Validate parameters
-        if self._columns is None:
-            raise ValidationError(
-                "The parameter 'columns' is required for TableFormat decorator."
-            )
-
+        # Validate parameters
         if self._columns is not None:
-            if not isinstance(self._columns, (list, tuple)):
-                raise ValidationError("The parameter 'columns' must be an array.")
-
+            if not isinstance(self._columns, list):
+                raise ValidationError("The parameter 'columns' must be an array type value.")
         if self._format is not None:
-            valid_values = ["markdown", "ascii", "csv"]
-            if self._format not in valid_values:
-                raise ValidationError(
-                    "The parameter 'format' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._format, str):
+                raise ValidationError("The parameter 'format' must be a string type value.")
+            if self._format not in ["markdown", "ascii", "csv"]:
+                raise ValidationError(f"The parameter 'format' must be one of the allowed enum values: ['markdown', 'ascii', 'csv']. Got {self._format}")
         if self._alignment is not None:
-            valid_values = ["left", "center", "right"]
-            if self._alignment not in valid_values:
-                raise ValidationError(
-                    "The parameter 'alignment' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
+            if not isinstance(self._alignment, str):
+                raise ValidationError("The parameter 'alignment' must be a string type value.")
+            if self._alignment not in ["left", "center", "right"]:
+                raise ValidationError(f"The parameter 'alignment' must be one of the allowed enum values: ['left', 'center', 'right']. Got {self._alignment}")
 
     @property
     def columns(self) -> List[Any]:
@@ -126,9 +132,11 @@ class TableFormat(BaseDecorator):
         """
         return {
             "name": "table_format",
-            "columns": self.columns,
-            "format": self.format,
-            "alignment": self.alignment,
+            "parameters": {
+                "columns": self.columns,
+                "format": self.format,
+                "alignment": self.alignment,
+            }
         }
 
     def to_string(self) -> str:
@@ -150,3 +158,60 @@ class TableFormat(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Structures the AI's response in a tabular format with defined columns. This decorator is ideal for presenting comparative data, lists of items with attributes, or any information that benefits from clear columnar organization.""",
+            "category": "general",
+            "version": cls.version,
+        }

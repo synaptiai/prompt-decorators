@@ -1,5 +1,4 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Test package for auto-generated decorator tests."""
 
-from prompt_decorators.decorators import *
-
-# This file ensures pytest discovers all tests in this directory
+# This file is intentionally empty.
+# It ensures that pytest recognizes this directory as a test package.

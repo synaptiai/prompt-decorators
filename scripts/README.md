@@ -25,24 +25,6 @@ python scripts/registry_tools.py generate-tests
 python scripts/registry_tools.py all
 ```
 
-### 📌 `generate_all_tests.py`
-
-For test generation only, this script provides a focused interface.
-
-```bash
-# Generate tests with default settings
-python scripts/generate_all_tests.py
-
-# Generate tests with custom paths
-python scripts/generate_all_tests.py --registry-dir registry --output-dir tests/custom
-```
-
-## Deprecated Scripts
-
-The following scripts are **deprecated** and should not be used directly. Their functionality has been incorporated into the unified `registry_tools.py` script:
-
-- ❌ `generate_tests.py` - Use `registry_tools.py generate-tests` instead
-
 ## Development Scripts
 
 These scripts may be useful for development purposes:

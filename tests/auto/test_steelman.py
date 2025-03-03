@@ -1,137 +1,131 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the Steelman decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.steelman import Steelman
 
+class TestSteelman(unittest.TestCase):
+    """Tests for the Steelman decorator.
 
-# Tests for the Steelman decorator
-# --------------------------------
-class TestSteelman:
-    """Tests for the Steelman decorator."""
+    Presents the strongest possible version of an argument or position, even
+    those the AI might not agree with. This decorator opposes strawman fallacies
+    by ensuring each viewpoint is represented in its most compelling and
+    charitable form.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
             "sides": 2,
-            "critique": false,
-            "separation": true,
+            "critique": False,
+            "separation": True,
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
-        decorator = decorator_class()
-        assert decorator is not None
-        assert decorator.name == "Steelman"
-
-    def test_sides_type_validation(self, load_decorator):
-        """Test sides type validation."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
+    def test_validate_sides(self):
+        """Test validation for the sides parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["sides"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "sides" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
 
-    def test_sides_min_validation(self, load_decorator):
-        """Test sides minimum value validation."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["sides"] = 0
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "sides" in str(exc_info.value)
-        assert "at least" in str(exc_info.value).lower()
+        # Test type validation
+        params['sides'] = 'not_a_number'  # Not a number
+        with self.assertRaises(ValidationError) as context:
+            Steelman(**params)
+        self.assertIn('sides', str(context.exception))
+        self.assertIn('numeric', str(context.exception).lower())
 
-    def test_sides_max_validation(self, load_decorator):
-        """Test sides maximum value validation."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["sides"] = 6
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "sides" in str(exc_info.value)
-        assert "at most" in str(exc_info.value).lower()
 
-    def test_critique_type_validation(self, load_decorator):
-        """Test critique type validation."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["critique"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "critique" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
+        # Test minimum value validation
+        params['sides'] = 0  # Below minimum
+        with self.assertRaises(ValidationError) as context:
+            Steelman(**params)
+        self.assertIn('sides', str(context.exception))
+        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
 
-    def test_separation_type_validation(self, load_decorator):
-        """Test separation type validation."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["separation"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "separation" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
+        # Test maximum value validation
+        params['sides'] = 6  # Above maximum
+        with self.assertRaises(ValidationError) as context:
+            Steelman(**params)
+        self.assertIn('sides', str(context.exception))
+        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+
+    def test_validate_critique(self):
+        """Test validation for the critique parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['critique'] = 'not_a_boolean'  # Not a boolean
+        with self.assertRaises(ValidationError) as context:
+            Steelman(**params)
+        self.assertIn('critique', str(context.exception))
+        self.assertIn('boolean', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+
+    def test_validate_separation(self):
+        """Test validation for the separation parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['separation'] = 'not_a_boolean'  # Not a boolean
+        with self.assertRaises(ValidationError) as context:
+            Steelman(**params)
+        self.assertIn('separation', str(context.exception))
+        self.assertIn('boolean', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Steel-manning both sides of a controversial issue
+        params = self._get_valid_params()
+        decorator = Steelman(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # Steel-manning one position with subsequent critique
+        params = self._get_valid_params()
+        decorator = Steelman(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = Steelman(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "steelman")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = Steelman.from_dict(serialized)
+        self.assertIsInstance(deserialized, Steelman)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("Steelman")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "Steelman"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

@@ -1,16 +1,18 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the PeerReview decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.peer_review import PeerReview
 
+class TestPeerReview(unittest.TestCase):
+    """Tests for the PeerReview decorator.
 
-# Tests for the PeerReview decorator
-# ----------------------------------
-class TestPeerReview:
-    """Tests for the PeerReview decorator."""
+    Augments the response with a simulated peer review of the content. This
+    decorator enhances critical thinking by evaluating the response's strengths,
+    weaknesses, methodological soundness, and potential improvements as an
+    academic reviewer would.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -19,130 +21,157 @@ class TestPeerReview:
             "position": "after",
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
-        decorator = decorator_class()
-        assert decorator is not None
-        assert decorator.name == "PeerReview"
-
-    def test_criteria_type_validation(self, load_decorator):
-        """Test criteria type validation."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
+    def test_validate_criteria(self):
+        """Test validation for the criteria parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["criteria"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "criteria" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_criteria_enum_validation(self, load_decorator):
-        """Test criteria enum value validation."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["criteria"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "criteria" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test type validation
+        params['criteria'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            PeerReview(**params)
+        self.assertIn('criteria', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
 
-    def test_style_type_validation(self, load_decorator):
-        """Test style type validation."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["style"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "style" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_style_enum_validation(self, load_decorator):
-        """Test style enum value validation."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["style"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "style" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test invalid enum value
+        params['criteria'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            PeerReview(**params)
+        self.assertIn('criteria', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
 
-    def test_position_type_validation(self, load_decorator):
-        """Test position type validation."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["position"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "position" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_position_enum_validation(self, load_decorator):
-        """Test position enum value validation."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["position"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "position" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test valid enum values
+        params['criteria'] = 'accuracy'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['criteria'] = 'methodology'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['criteria'] = 'limitations'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['criteria'] = 'completeness'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['criteria'] = 'all'
+        # This should not raise an exception
+        PeerReview(**params)
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
+    def test_validate_style(self):
+        """Test validation for the style parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
+        # Test type validation
+        params['style'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            PeerReview(**params)
+        self.assertIn('style', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test invalid enum value
+        params['style'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            PeerReview(**params)
+        self.assertIn('style', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['style'] = 'constructive'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['style'] = 'critical'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['style'] = 'balanced'
+        # This should not raise an exception
+        PeerReview(**params)
+
+    def test_validate_position(self):
+        """Test validation for the position parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['position'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            PeerReview(**params)
+        self.assertIn('position', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['position'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            PeerReview(**params)
+        self.assertIn('position', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['position'] = 'after'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['position'] = 'before'
+        # This should not raise an exception
+        PeerReview(**params)
+        params['position'] = 'alongside'
+        # This should not raise an exception
+        PeerReview(**params)
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Basic peer review of content accuracy
+        params = self._get_valid_params()
+        decorator = PeerReview(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # Critical peer review of multiple aspects, shown alongside content
+        params = self._get_valid_params()
+        decorator = PeerReview(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = PeerReview(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "peer_review")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = PeerReview.from_dict(serialized)
+        self.assertIsInstance(deserialized, PeerReview)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("PeerReview")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "PeerReview"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

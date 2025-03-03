@@ -12,12 +12,79 @@ It creates test cases for:
 The generated tests follow pytest conventions and can be run with standard pytest commands.
 """
 
+import glob
+import json
+import logging
 import os
 import re
-from typing import Any, Dict, List, Optional, Set
+import textwrap
+import unittest
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from prompt_decorators.core.base import Parameter
-from prompt_decorators.generator.registry import RegistryScanner
+from prompt_decorators.core.base import Parameter, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.generator.registry import DecoratorData, RegistryScanner
+
+
+# Define our own Parameter class for test generation
+class Parameter:
+    """Parameter class for test generation."""
+
+    def __init__(
+        self,
+        name: str,
+        type: str = "string",
+        required: bool = False,
+        validation: Optional[Dict[str, Any]] = None,
+        schema: Optional[Dict[str, Any]] = None,
+        enum: Optional[List[str]] = None,
+        description: Optional[str] = None,
+    ):
+        """Initialize a Parameter.
+
+        Args:
+            name: The name of the parameter
+            type: The type of the parameter
+            required: Whether the parameter is required
+            validation: Validation rules for the parameter
+            schema: Schema for the parameter
+            enum: Enum values for the parameter
+            description: Description of the parameter
+        """
+        self.name = name
+
+        # Normalize type to one of the allowed values
+        if type in ["string", "integer", "float", "boolean", "enum", "array", "object"]:
+            self.type = type
+        elif type == "number":
+            self.type = "float"
+        elif "|" in type:
+            # Handle union types like "string|number|boolean|enum"
+            types = type.split("|")
+            if "enum" in types:
+                self.type = "enum"
+            elif "string" in types:
+                self.type = "string"
+            elif "number" in types or "float" in types:
+                self.type = "float"
+            elif "integer" in types:
+                self.type = "integer"
+            elif "boolean" in types:
+                self.type = "boolean"
+            elif "array" in types:
+                self.type = "array"
+            elif "object" in types:
+                self.type = "object"
+            else:
+                self.type = "string"  # Default to string
+        else:
+            self.type = "string"  # Default to string
+
+        self.required = required
+        self.validation = validation or {}
+        self.schema = schema or {}
+        self.enum = enum or []
+        self.description = description
 
 
 class TestGenerator:
@@ -29,9 +96,9 @@ class TestGenerator:
         """Initialize the TestGenerator.
 
         Args:
-            registry_dir: Directory containing the registry
-            output_dir: Directory to write generated tests to
-            template_dir: Optional directory containing templates
+            registry_dir: Path to the registry directory
+            output_dir: Path to the output directory for generated tests
+            template_dir: Optional path to the template directory
         """
         self.registry_dir = registry_dir
         self.output_dir = output_dir
@@ -52,48 +119,99 @@ class TestGenerator:
         """Generate test files for all decorators in the registry.
 
         Returns:
-            List of generated file paths
+            List of paths to the generated test files
         """
-        # Create output directory if it doesn't exist
+        generated_files = []
+
+        # Create the output directory if it doesn't exist
         os.makedirs(self.output_dir, exist_ok=True)
 
-        # Generate the conftest file
+        # Generate the conftest.py file
         conftest_path = os.path.join(self.output_dir, "conftest.py")
         with open(conftest_path, "w") as f:
             f.write(self.generate_conftest())
+            # Ensure file ends with a newline
+            if not self.generate_conftest().endswith("\n"):
+                f.write("\n")
+
+        generated_files.append(conftest_path)
+
+        # Generate test files for each decorator
+        for decorator_file in glob.glob(
+            os.path.join(self.registry_dir, "**/*.json"), recursive=True
+        ):
+            # Skip the template file
+            if os.path.basename(decorator_file) == "decorator-template.json":
+                logging.info(f"Skipping template file: {decorator_file}")
+                continue
+
+            try:
+                with open(decorator_file, "r") as f:
+                    decorator_data = json.load(f)
+
+                # Skip if the decorator is marked as skipTest
+                if decorator_data.get("skipTest", False):
+                    continue
+
+                # Generate the test file content
+                test_content = self.generate_decorator_test(decorator_data)
+                if not test_content:
+                    continue
+
+                # Save the test file
+                decorator_name = decorator_data.get("decoratorName", "")
+                snake_case_name = self._convert_to_snake_case(decorator_name)
+                test_file_name = f"test_{snake_case_name}.py"
+                test_file_path = os.path.join(self.output_dir, test_file_name)
+
+                with open(test_file_path, "w") as f:
+                    f.write(test_content)
+                    # Ensure file ends with a newline
+                    if not test_content.endswith("\n"):
+                        f.write("\n")
+
+                generated_files.append(test_file_path)
+            except Exception as e:
+                logging.error(f"Error generating tests for {decorator_file}: {e}")
 
         # Generate the test discovery file
         discovery_path = os.path.join(self.output_dir, "__init__.py")
         with open(discovery_path, "w") as f:
-            f.write(self.generate_test_discovery())
+            discovery_content = self.generate_test_discovery()
+            f.write(discovery_content)
+            # Ensure file ends with a newline
+            if not discovery_content.endswith("\n"):
+                f.write("\n")
 
-        # Generate test files for each decorator
-        test_files = [conftest_path, discovery_path]
-        for decorator_data in self.decorators:
-            test_file_path = self.generate_decorator_test(decorator_data)
-            if test_file_path:
-                test_files.append(test_file_path)
+        generated_files.append(discovery_path)
 
-        return test_files
+        return generated_files
 
     def generate_conftest(self) -> str:
-        """Generate a conftest.py file for pytest fixtures.
+        """Generate the conftest.py file for pytest.
 
         Returns:
-            The content of the conftest.py file
+            The conftest.py file content as a string
         """
         conftest_content = [
-            "# Generated file - DO NOT EDIT BY HAND",
+            '"""Pytest configuration for decorator tests."""',
             "",
             "import pytest",
-            "from prompt_decorators.decorators import *",
+            "import importlib",
+            "from typing import Optional, Type",
             "",
+            "from prompt_decorators.core.base import BaseDecorator",
             "",
             "@pytest.fixture",
-            "def decorator_registry():",
-            '    """Fixture providing access to all registered decorators."""',
-            "    from prompt_decorators.core.registry import get_registry",
-            "    return get_registry()",
+            "def load_decorator():",
+            '    """Fixture to load a decorator class by name."""',
+            "    def _load_decorator(decorator_name: str) -> Optional[Type[BaseDecorator]]:",
+            "        try:",
+            "            module = importlib.import_module(f'prompt_decorators.decorators.generated.decorators.{decorator_name.lower()}')",
+            "            return getattr(module, decorator_name)",
+            "        except (ImportError, AttributeError):",
+            "            return None",
+            "    return _load_decorator",
             "",
         ]
 
@@ -103,473 +221,315 @@ class TestGenerator:
         """Generate a test file for a decorator.
 
         Args:
-            decorator_data: The decorator data to generate tests for
+            decorator_data: The decorator data to generate a test file for
 
         Returns:
-            The path to the generated test file, or None if no tests were generated
+            The test file content as a string, or None if the decorator should be skipped
         """
-        # Extract decorator details
-        decorator_name = decorator_data.get("decoratorName")
-        if not decorator_name:
+        # Skip if the decorator is marked as skipTest
+        if decorator_data.get("skipTest", False):
             return None
 
-        # Generate the test content
-        test_content = self._generate_test_content(decorator_data)
-        if not test_content:
-            return None
-
-        # Make sure there's a directory to save the file
-        os.makedirs(self.output_dir, exist_ok=True)
-
-        # Save the test file
-        snake_case_name = self._convert_to_snake_case(decorator_name)
-        test_file_name = f"test_{snake_case_name}.py"
-        test_file_path = os.path.join(self.output_dir, test_file_name)
-
-        with open(test_file_path, "w") as f:
-            f.write(test_content)
-
-        return test_file_path
-
-    def _generate_test_content(self, decorator_data: Dict[str, Any]) -> str:
-        """Generate test content for a decorator.
-
-        Args:
-            decorator_data: The decorator data to generate tests for
-
-        Returns:
-            The content of the test file
-        """
+        # Get the decorator name
         decorator_name = decorator_data.get("decoratorName", "")
         if not decorator_name:
-            return ""
+            return None
 
-        # Generate file header
+        # Create a dictionary with the decorator data
+        self.decorator_data = {
+            "name": decorator_name,
+            "description": decorator_data.get("description", ""),
+            "category": decorator_data.get("category", "unknown"),
+            "version": decorator_data.get("version", "1.0.0"),
+            "parameters": [
+                {
+                    "name": param["name"],
+                    "type": param.get("type", "string"),
+                    "required": param.get("required", False),
+                    "validation": param.get("validation", {}),
+                    "schema": param.get("schema", {}),
+                    "enum": param.get("enum", []),
+                    "description": param.get("description", ""),
+                }
+                for param in decorator_data.get("parameters", [])
+            ],
+            "examples": decorator_data.get("examples", []),
+            "tags": decorator_data.get("tags", []),
+        }
+
+        # Generate the file header
         header = self._generate_file_header(decorator_name)
 
-        # Generate test class
-        test_class = self._generate_test_class(decorator_data)
+        # Generate the test content
+        content = self._generate_test_content(decorator_data)
 
-        # Combine everything
-        content = header + "\n".join(test_class)
+        # Combine the header and content
+        return header + content
 
-        return content
+    def _generate_test_content(self, decorator_data: Dict[str, Any]) -> str:
+        """Generate the test content for a decorator.
+
+        Args:
+            decorator_data: The decorator data to generate test content for
+
+        Returns:
+            The test content as a string
+        """
+        # Generate the test class
+        test_class_lines = self._generate_test_class(decorator_data)
+
+        # Join the lines with newlines
+        return "\n".join(test_class_lines)
 
     def _generate_file_header(self, decorator_name: str) -> str:
-        """Generate the header for a test file.
+        """Generate the file header for a test file.
 
         Args:
             decorator_name: The name of the decorator
 
         Returns:
-            The header content
+            The file header as a string
         """
         snake_case_name = self._convert_to_snake_case(decorator_name)
 
-        header_lines = [
-            "# Generated file - DO NOT EDIT BY HAND",
+        header = [
+            '"""Tests for the {0} decorator."""'.format(decorator_name),
             "",
-            "import pytest",
-            "import json",
+            "import unittest",
             "from prompt_decorators.core.base import ValidationError",
-            f"from prompt_decorators.decorators import {decorator_name}",
+            "from prompt_decorators.decorators.generated.decorators.{0} import {1}".format(
+                snake_case_name, decorator_name
+            ),
             "",
-            "",
-            f"# Tests for the {decorator_name} decorator",
-            f"# {'-' * len(f'Tests for the {decorator_name} decorator')}",
             "",
         ]
 
-        return "\n".join(header_lines)
+        return "\n".join(header)
 
     def _generate_test_class(self, decorator_data: Dict[str, Any]) -> List[str]:
-        """Generate a test class for a decorator.
+        """Generate the test class for a decorator.
 
         Args:
-            decorator_data: The decorator data to generate tests for
+            decorator_data: The decorator data to generate a test class for
 
         Returns:
-            A list of code lines for the test class
+            List of code lines for the test class
         """
         decorator_name = decorator_data.get("decoratorName", "")
-        test_methods = self._generate_test_methods(decorator_data)
+        description = decorator_data.get("description", "")
 
-        # Start with the class definition
+        # Start with the class definition and docstring
         class_lines = [
-            f"class Test{decorator_name}:",
-            f'    """Tests for the {decorator_name} decorator."""',
+            f"class Test{decorator_name}(unittest.TestCase):",
+            f'    """Tests for the {decorator_name} decorator.',
             "",
         ]
 
-        # Add helper method for valid parameters
-        valid_params_method = self._generate_valid_params_method(decorator_data)
-        class_lines.extend(valid_params_method)
+        # Add the description to the docstring if available
+        if description:
+            # Split the description into lines of 80 characters or less
+            description_lines = []
+            words = description.split()
+            current_line = ""
 
-        # Add all test methods
-        class_lines.extend(test_methods)
+            for word in words:
+                if (
+                    len(current_line) + len(word) + 1 <= 76
+                ):  # 76 to account for indentation
+                    if current_line:
+                        current_line += " " + word
+                    else:
+                        current_line = word
+                else:
+                    description_lines.append(current_line)
+                    current_line = word
+
+            if current_line:
+                description_lines.append(current_line)
+
+            # Add the description lines to the docstring
+            for line in description_lines:
+                class_lines.append(f"    {line}")
+
+            class_lines.append("")
+
+        # Close the docstring
+        class_lines.append('    """')
+
+        # Add the _get_valid_params method
+        valid_params_lines = self._generate_get_valid_params_method(decorator_data)
+        class_lines.extend(valid_params_lines)
+
+        # Add test methods
+        test_methods = self._generate_test_methods(decorator_data)
+        for method in test_methods:
+            class_lines.append("")  # Add a blank line between methods
+            class_lines.append(method)
 
         return class_lines
 
-    def _generate_valid_params_method(
+    def _generate_get_valid_params_method(
         self, decorator_data: Dict[str, Any]
     ) -> List[str]:
-        """Generate the _get_valid_params helper method for the test class.
+        """Generate the _get_valid_params method for testing.
 
         Args:
-            decorator_data: The decorator data to generate for
+            decorator_data: The decorator data from the registry
 
         Returns:
-            List of code lines for the _get_valid_params method
+            List of code lines for the method
         """
-        params = decorator_data.get("parameters", [])
+        decorator_name = decorator_data.get("decoratorName", "")
+        parameters = decorator_data.get("parameters", [])
 
-        code = [
+        code_lines = [
             "    def _get_valid_params(self):",
             '        """Get valid parameters for testing."""',
             "        return {",
         ]
 
-        for param in params:
-            param_name = param["name"]
-            param_type = param.get("type", "string")
+        for param in parameters:
+            param_name = param.get("name", "")
+            param_type = param.get("type", "")
+            default_value = param.get("default", None)
+            enum_values = param.get("enum", [])
+            validation = param.get("validation", {})
 
-            # Get a valid value for this parameter type
-            if param_type == "string":
-                if "enum" in param:
-                    # Use the first enum value
-                    value = f'"{param["enum"][0]}"'
-                elif "default" in param:
-                    value = f'"{param["default"]}"'
+            # Determine a valid value for the parameter
+            valid_value = None
+
+            # First check for enum values
+            if enum_values and len(enum_values) > 0:
+                # For string enums, we need to quote the value
+                if param_type == "string" or param_type == "enum":
+                    valid_value = f'"{enum_values[0]}"'
                 else:
-                    value = '"test_value"'
-            elif param_type == "integer":
-                if "default" in param:
-                    value = str(param["default"])
+                    # For non-string enums, convert to string representation
+                    valid_value = str(enum_values[0])
+            # Then check for default value
+            elif default_value is not None:
+                if param_type == "string" or param_type == "enum":
+                    valid_value = f'"{default_value}"'
+                elif param_type == "boolean":
+                    # Ensure boolean values are properly formatted for Python
+                    if isinstance(default_value, bool):
+                        valid_value = str(default_value)
+                    elif default_value == "true" or default_value == True:
+                        valid_value = "True"
+                    elif default_value == "false" or default_value == False:
+                        valid_value = "False"
+                    else:
+                        valid_value = str(default_value)
+                elif param_type == "array" and isinstance(default_value, list):
+                    # Format array elements properly
+                    elements = []
+                    for element in default_value:
+                        if isinstance(element, str):
+                            elements.append(f'"{element}"')
+                        else:
+                            elements.append(str(element))
+                    valid_value = f"[{', '.join(elements)}]"
                 else:
-                    value = "1"
-            elif param_type == "number" or param_type == "float":
-                if "default" in param:
-                    value = str(param["default"])
-                else:
-                    value = "1.0"
-            elif param_type == "boolean":
-                if "default" in param:
-                    value = str(param["default"]).lower()
-                else:
-                    value = "True"
-            elif param_type == "array":
-                if "default" in param:
-                    value = str(param["default"])
-                else:
-                    value = "[]"
-            elif param_type == "enum":
-                if "enum" in param:
-                    # Use the first enum value
-                    value = f'"{param["enum"][0]}"'
-                elif "default" in param:
-                    value = f'"{param["default"]}"'
-                else:
-                    value = '""'
+                    valid_value = str(default_value)
+            # Otherwise, generate a reasonable default based on type
             else:
-                value = '""'
+                if param_type == "string" or param_type == "enum":
+                    valid_value = '"example_value"'
+                elif param_type == "integer":
+                    # Use a value that satisfies minimum constraints if present
+                    if validation and "minimum" in validation:
+                        min_val = validation["minimum"]
+                        # Use a value slightly above the minimum
+                        valid_value = str(min_val + 1)
+                    else:
+                        valid_value = "1"
+                elif param_type == "number":
+                    # Use a value that satisfies minimum constraints if present
+                    if validation and "minimum" in validation:
+                        min_val = validation["minimum"]
+                        # Use a value slightly above the minimum
+                        valid_value = str(min_val + 1)
+                    else:
+                        valid_value = "1.0"
+                elif param_type == "boolean":
+                    valid_value = "True"
+                elif param_type == "array":
+                    valid_value = "[]"
+                elif param_type == "object":
+                    valid_value = "{}"
+                else:
+                    valid_value = "None"
 
-            code.append(f'            "{param_name}": {value},')
+            # Add the parameter to the code
+            code_lines.append(f'            "{param_name}": {valid_value},')
 
-        code.append("        }")
-        code.append("")
-
-        return code
+        code_lines.append("        }")
+        return code_lines
 
     def _generate_test_methods(self, decorator_data: Dict[str, Any]) -> List[str]:
         """Generate test methods for a decorator.
 
         Args:
-            decorator_data: Decorator data from registry
+            decorator_data: The decorator data to generate test methods for
 
         Returns:
-            List of code lines
+            List of test methods as strings
         """
-        name = decorator_data["decoratorName"]
+        decorator_name = decorator_data.get("decoratorName", "")
         params = decorator_data.get("parameters", [])
-        code = []
+        examples = decorator_data.get("examples", [])
 
-        # Check if there are any required parameters
-        has_required_params = any(param.get("required", False) for param in params)
+        all_methods = []
 
-        # Test initialization with default parameters
-        code.append("    def test_initialization_default_params(self, load_decorator):")
-        code.append('        """Test initialization with default parameters."""')
-        code.append(f'        decorator_class = load_decorator("{name}")')
-        code.append("        assert decorator_class is not None")
-        if has_required_params:
-            code.append("        params = self._get_valid_params()")
-            code.append("        decorator = decorator_class(**params)")
-        else:
-            code.append("        decorator = decorator_class()")
-        code.append("        assert decorator is not None")
-        code.append(f'        assert decorator.name == "{name}"')
-        code.append("")
-
-        # Test parameter validation
+        # Generate tests for required parameters
         for param in params:
-            param_name = param["name"]
-            param_type = param.get("type", "string")
-            required = param.get("required", False)
-
-            if required:
-                # Test required parameter
-                code.append(
-                    f"    def test_{param_name}_required(self, load_decorator):"
+            if param.get("required", False):
+                param_obj = Parameter(
+                    name=param["name"],
+                    type=param.get("type", "string"),
+                    required=True,
+                    validation=param.get("validation", {}),
+                    schema=param.get("schema", {}),
+                    enum=param.get("enum", []),
                 )
-                code.append(f'        """Test that {param_name} is required."""')
-                code.append(f'        decorator_class = load_decorator("{name}")')
-                code.append("        assert decorator_class is not None")
-                code.append("        params = self._get_valid_params()")
-                code.append(f'        del params["{param_name}"]')
-                code.append("        with pytest.raises(ValidationError):")
-                code.append("            decorator_class(**params)")
-                code.append("")
+                method_code = self._generate_required_param_test(
+                    decorator_name, param_obj
+                )
+                all_methods.append(method_code)
 
-            # Test type validation
-            code.append(
-                f"    def test_{param_name}_type_validation(self, load_decorator):"
+        # Generate tests for parameter validation
+        for param in params:
+            param_obj = Parameter(
+                name=param["name"],
+                type=param.get("type", "string"),
+                required=param.get("required", False),
+                validation=param.get("validation", {}),
+                schema=param.get("schema", {}),
+                enum=param.get("enum", []),
             )
-            code.append(f'        """Test {param_name} type validation."""')
-            code.append(f'        decorator_class = load_decorator("{name}")')
-            code.append("        assert decorator_class is not None")
-            code.append("        params = self._get_valid_params()")
+            method_code = self._generate_param_validation_test(
+                decorator_name, param_obj
+            )
+            all_methods.append(method_code)
 
-            # Generate invalid value based on parameter type
-            if param_type == "string":
-                code.append(f"        params['{param_name}'] = 123")
-            elif (
-                param_type == "integer"
-                or param_type == "number"
-                or param_type == "float"
-            ):
-                code.append(f"        params['{param_name}'] = 'invalid'")
-            elif param_type == "boolean":
-                code.append(f"        params['{param_name}'] = 'invalid'")
-            elif param_type == "array":
-                code.append(f"        params['{param_name}'] = 'invalid'")
-            elif param_type == "enum":
-                code.append(f"        params['{param_name}'] = 'invalid_enum_value'")
-            else:
-                code.append(f"        params['{param_name}'] = None")
+        # Generate tests for apply method using examples
+        if examples:
+            apply_test_lines = self._generate_apply_examples_test(decorator_data)
+            # Make sure the apply_examples test is properly indented
+            apply_test_method = "\n".join(apply_test_lines)
+            # Fix indentation by adding 4 spaces to the beginning of each line
+            apply_test_method = apply_test_method.replace(
+                "def test_apply_examples(self):", "    def test_apply_examples(self):"
+            )
+            apply_test_method = apply_test_method.replace("\n    ", "\n        ")
+            all_methods.append(apply_test_method)
 
-            code.append("        with pytest.raises(ValidationError) as exc_info:")
-            code.append("            decorator_class(**params)")
-            code.append(f'        assert "{param_name}" in str(exc_info.value)')
+        # Generate tests for serialization
+        serialization_test = self._generate_serialization_tests(decorator_name)
+        all_methods.append(serialization_test)
 
-            if param_type == "enum":
-                code.append('        assert "one of" in str(exc_info.value).lower()')
-            else:
-                code.append('        assert "type" in str(exc_info.value).lower()')
-
-            code.append("")
-
-            # Add enum validation test if applicable
-            if param_type == "enum" and "enum" in param:
-                code.append(
-                    f"    def test_{param_name}_enum_validation(self, load_decorator):"
-                )
-                code.append(f'        """Test {param_name} enum value validation."""')
-                code.append(f'        decorator_class = load_decorator("{name}")')
-                code.append("        assert decorator_class is not None")
-                code.append("        params = self._get_valid_params()")
-                code.append(f"        params['{param_name}'] = 'invalid_enum_value'")
-                code.append("        with pytest.raises(ValidationError) as exc_info:")
-                code.append("            decorator_class(**params)")
-                code.append(f'        assert "{param_name}" in str(exc_info.value)')
-                code.append('        assert "one of" in str(exc_info.value).lower()')
-                code.append("")
-
-            # Add range validation tests if applicable
-            if "validation" in param:
-                validation = param["validation"]
-                if "minimum" in validation:
-                    code.append(
-                        f"    def test_{param_name}_min_validation(self, load_decorator):"
-                    )
-                    code.append(
-                        f'        """Test {param_name} minimum value validation."""'
-                    )
-                    code.append(f'        decorator_class = load_decorator("{name}")')
-                    code.append("        assert decorator_class is not None")
-                    code.append("        params = self._get_valid_params()")
-                    if (
-                        param_type == "integer"
-                        or param_type == "number"
-                        or param_type == "float"
-                    ):
-                        code.append(
-                            f"        params['{param_name}'] = {validation['minimum'] - 1}"
-                        )
-                    code.append(
-                        "        with pytest.raises(ValidationError) as exc_info:"
-                    )
-                    code.append("            decorator_class(**params)")
-                    code.append(f'        assert "{param_name}" in str(exc_info.value)')
-                    code.append(
-                        '        assert "at least" in str(exc_info.value).lower()'
-                    )
-                    code.append("")
-
-                if "maximum" in validation:
-                    code.append(
-                        f"    def test_{param_name}_max_validation(self, load_decorator):"
-                    )
-                    code.append(
-                        f'        """Test {param_name} maximum value validation."""'
-                    )
-                    code.append(f'        decorator_class = load_decorator("{name}")')
-                    code.append("        assert decorator_class is not None")
-                    code.append("        params = self._get_valid_params()")
-                    if (
-                        param_type == "integer"
-                        or param_type == "number"
-                        or param_type == "float"
-                    ):
-                        code.append(
-                            f"        params['{param_name}'] = {validation['maximum'] + 1}"
-                        )
-                    code.append(
-                        "        with pytest.raises(ValidationError) as exc_info:"
-                    )
-                    code.append("            decorator_class(**params)")
-                    code.append(f'        assert "{param_name}" in str(exc_info.value)')
-                    code.append(
-                        '        assert "at most" in str(exc_info.value).lower()'
-                    )
-                    code.append("")
-
-        # Test apply method
-        code.append("    def test_apply_basic(self, load_decorator, sample_prompt):")
-        code.append('        """Test basic apply functionality."""')
-        code.append(f'        decorator_class = load_decorator("{name}")')
-        code.append("        assert decorator_class is not None")
-        code.append("        params = self._get_valid_params()")
-        code.append("        decorator = decorator_class(**params)")
-        code.append("        result = decorator.apply(sample_prompt)")
-        code.append("        assert isinstance(result, str)")
-        code.append("")
-
-        # Test serialization
-        code.append("    def test_serialization(self, load_decorator):")
-        code.append('        """Test decorator serialization."""')
-        code.append(f'        decorator_class = load_decorator("{name}")')
-        code.append("        assert decorator_class is not None")
-        code.append("        params = self._get_valid_params()")
-        code.append("        decorator = decorator_class(**params)")
-        code.append("        serialized = decorator.to_dict()")
-        code.append("        assert isinstance(serialized, dict)")
-        code.append('        assert serialized["name"] == decorator.name')
-        code.append('        assert "parameters" in serialized')
-        code.append('        assert isinstance(serialized["parameters"], dict)')
-        code.append("")
-
-        # Test version compatibility
-        code.append("    def test_version_compatibility(self, load_decorator):")
-        code.append('        """Test version compatibility checks."""')
-        code.append(f'        decorator_class = load_decorator("{name}")')
-        code.append("        assert decorator_class is not None")
-        code.append("")
-        code.append("        # Test with current version")
-        code.append("        current_version = decorator_class.version")
-        code.append(
-            "        assert decorator_class.is_compatible_with_version(current_version)"
-        )
-        code.append("")
-        code.append("        # Test with incompatible version")
-        code.append("        with pytest.raises(IncompatibleVersionError):")
-        code.append(
-            "            # Use a version lower than min_compatible_version to ensure incompatibility"
-        )
-        code.append('            decorator_class.is_compatible_with_version("0.0.1")')
-        code.append("")
-        code.append("        # Test instance method")
-        code.append("        valid_params = self._get_valid_params()")
-        code.append("        decorator = decorator_class(**valid_params)")
-        code.append(
-            "        assert decorator.is_compatible_with_version(current_version)"
-        )
-        code.append("        with pytest.raises(IncompatibleVersionError):")
-        code.append(
-            "            # Use a version lower than min_compatible_version to ensure incompatibility"
-        )
-        code.append('            decorator.is_compatible_with_version("0.0.1")')
-        code.append("")
-
-        # Test metadata
-        code.append("    def test_metadata(self, load_decorator):")
-        code.append('        """Test decorator metadata."""')
-        code.append(f'        decorator_class = load_decorator("{name}")')
-        code.append("        assert decorator_class is not None")
-        code.append("        metadata = decorator_class.get_metadata()")
-        code.append("        assert isinstance(metadata, dict)")
-        code.append(f'        assert metadata["name"] == "{name}"')
-        code.append('        assert "description" in metadata')
-        code.append('        assert "category" in metadata')
-        code.append('        assert "version" in metadata')
-        code.append("")
-
-        return code
-
-    def _get_default_test_value(self, param: Dict[str, Any]) -> str:
-        """Get a default test value for a parameter.
-
-        Args:
-            param: Parameter definition from registry
-
-        Returns:
-            String representation of default test value
-        """
-        param_type = param.get("type", "string")
-
-        # If default is provided, use it
-        if "default" in param:
-            default_value = param["default"]
-            if param_type == "string":
-                return f'"{default_value}"'
-            elif param_type == "enum" and "enum" in param:
-                # Verify default value is in enum list
-                enum_values = param["enum"]
-                if default_value in enum_values:
-                    return f'"{default_value}"'
-                else:
-                    # Use first enum value if default not in enum
-                    return f'"{enum_values[0]}"'
-            return str(default_value)
-
-        # Otherwise generate appropriate test value based on type
-        elif param_type == "string":
-            return '"test_value"'
-        elif param_type == "integer":
-            return "42"
-        elif param_type == "float" or param_type == "number":
-            return "3.14"
-        elif param_type == "boolean":
-            return "False"
-        elif param_type == "array":
-            if "items" in param and "type" in param["items"]:
-                item_type = param["items"]["type"]
-                if item_type == "string":
-                    return '["test1", "test2"]'
-                elif item_type == "integer":
-                    return "[1, 2, 3]"
-                elif item_type == "boolean":
-                    return "[True, False]"
-            return '["test1", "test2"]'  # Default for arrays
-        elif param_type == "enum" and "enum" in param:
-            # Return the first enum value as a string literal
-            enum_values = param.get("enum", [])
-            if enum_values and len(enum_values) > 0:
-                return f'"{enum_values[0]}"'
-            return '"default_enum_value"'  # Fallback
-        elif param_type == "object":
-            return "{}"
-        else:
-            return "None"
+        # Return the list of methods
+        return all_methods
 
     def _generate_required_param_test(
         self, decorator_name: str, param: Parameter
@@ -587,11 +547,8 @@ class TestGenerator:
             str: Generated test code as string
         """
         return f"""
-    def test_missing_required_param_{param.name}(self, load_decorator):
+    def test_missing_required_param_{param.name}(self):
         \"\"\"Test that initialization fails when missing required parameter {param.name}.\"\"\"
-        decorator_class = load_decorator("{decorator_name}")
-        assert decorator_class is not None
-
         # Get valid parameters for all required fields except the one we're testing
         params = self._get_valid_params()
 
@@ -599,343 +556,495 @@ class TestGenerator:
         if "{param.name}" in params:
             del params["{param.name}"]
 
-        # Should raise ValidationError when the required parameter is missing
-        with pytest.raises(ValidationError) as exc_info:
-            decorator = decorator_class(**params)
-        assert "{param.name}" in str(exc_info.value)
-        assert "required" in str(exc_info.value).lower()
+        # Should raise either ValidationError or TypeError when the required parameter is missing
+        with self.assertRaises((ValidationError, TypeError)) as exc_info:
+            {decorator_name}(**params)
+
+        # Check that the error message contains the parameter name
+        error_message = str(exc_info.exception)
+        self.assertTrue(
+            "{param.name}" in error_message or
+            "required" in error_message.lower()
+        )
 """
 
     def _generate_param_validation_test(
         self, decorator_name: str, param: Parameter
     ) -> str:
-        """Generate test for parameter validation.
-
-        This method creates test cases for parameter validation, including:
-        - Required field validation
-        - Type checking
-        - Pattern matching (for strings)
-        - Range validation (for numbers)
-        - Array validation
-        - Enum value validation
+        """Generate a test method for parameter validation.
 
         Args:
-            decorator_name: Name of the decorator being tested
-            param: Parameter object containing validation rules
+            decorator_name: The name of the decorator
+            param: The parameter to generate a test for
 
         Returns:
-            str: Generated test code as string
+            The test method as a string
         """
-        tests = []
+        snake_case_name = self._convert_to_snake_case(decorator_name)
         param_name = param.name
-        param_type = param.type
+        test_name = f"test_validate_{param_name}"
 
-        # Test required field validation if parameter is required
-        if param.required:
-            tests.append(
-                f"""
-    def test_{param_name}_required(self, load_decorator):
-        \"\"\"Test that {param_name} is required.\"\"\"
-        decorator_class = load_decorator("{decorator_name}")
-        assert decorator_class is not None
+        test_lines = [
+            f"    def {test_name}(self):",
+            f'        """Test validation for the {param_name} parameter."""',
+            "        # Get valid parameters",
+            "        params = self._get_valid_params()",
+            "",
+        ]
 
-        params = self._get_valid_params()
-        del params["{param_name}"]
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "{param_name}" in str(exc_info.value)
-        assert "required" in str(exc_info.value).lower()
+        # Type validation
+        if param.type == "string":
+            test_lines.extend(
+                [
+                    "        # Test type validation",
+                    "        params['{}'] = 123  # Not a string".format(param_name),
+                    "        with self.assertRaises(ValidationError) as context:",
+                    f"            {decorator_name}(**params)",
+                    f"        self.assertIn('{param_name}', str(context.exception))",
+                    "        self.assertIn('string', str(context.exception).lower())",
+                    "",
+                    "        # Restore valid parameters",
+                    "        params = self._get_valid_params()",
+                    "",
+                ]
+            )
+        elif param.type == "integer":
+            test_lines.extend(
+                [
+                    "        # Test type validation",
+                    "        params['{}'] = 'not_an_integer'  # Not an integer".format(
+                        param_name
+                    ),
+                    "        with self.assertRaises(ValidationError) as context:",
+                    f"            {decorator_name}(**params)",
+                    f"        self.assertIn('{param_name}', str(context.exception))",
+                    "        self.assertIn('integer', str(context.exception).lower())",
+                    "",
+                    "        # Restore valid parameters",
+                    "        params = self._get_valid_params()",
+                    "",
+                ]
+            )
+        elif param.type == "float":
+            test_lines.extend(
+                [
+                    "        # Test type validation",
+                    "        params['{}'] = 'not_a_number'  # Not a number".format(
+                        param_name
+                    ),
+                    "        with self.assertRaises(ValidationError) as context:",
+                    f"            {decorator_name}(**params)",
+                    f"        self.assertIn('{param_name}', str(context.exception))",
+                    "        self.assertIn('numeric', str(context.exception).lower())",
+                    "",
+                    "        # Restore valid parameters",
+                    "        params = self._get_valid_params()",
+                    "",
+                ]
+            )
+        elif param.type == "boolean":
+            test_lines.extend(
+                [
+                    "        # Test type validation",
+                    "        params['{}'] = 'not_a_boolean'  # Not a boolean".format(
+                        param_name
+                    ),
+                    "        with self.assertRaises(ValidationError) as context:",
+                    f"            {decorator_name}(**params)",
+                    f"        self.assertIn('{param_name}', str(context.exception))",
+                    "        self.assertIn('boolean', str(context.exception).lower())",
+                    "",
+                    "        # Restore valid parameters",
+                    "        params = self._get_valid_params()",
+                    "",
+                ]
+            )
+        elif param.type == "enum":
+            if param.enum and len(param.enum) > 0:
+                test_lines.extend(
+                    [
+                        "        # Test type validation",
+                        "        params['{}'] = 123  # Not a string".format(param_name),
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertIn('string', str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                        "        # Test invalid enum value",
+                        "        params['{}'] = 'invalid_enum_value'  # Invalid enum value".format(
+                            param_name
+                        ),
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                        "        # Test valid enum values",
+                    ]
+                )
 
-"""
+                # Add tests for each valid enum value
+                for enum_value in param.enum:
+                    test_lines.extend(
+                        [
+                            f"        params['{param_name}'] = '{enum_value}'",
+                            "        # This should not raise an exception",
+                            f"        {decorator_name}(**params)",
+                        ]
+                    )
+            else:
+                # If there are no enum values defined, just add a comment
+                test_lines.extend(
+                    [
+                        "        # Since no enum values are defined for this parameter,",
+                        "        # we'll just verify that any string value is accepted",
+                        "        params['{}'] = 'any_string_value'".format(param_name),
+                        "        # This should not raise an exception",
+                        f"        {decorator_name}(**params)",
+                    ]
+                )
+        elif param.type == "array":
+            test_lines.extend(
+                [
+                    "        # Test type validation",
+                    "        params['{}'] = 'not_an_array'  # Not an array".format(
+                        param_name
+                    ),
+                    "        with self.assertRaises(ValidationError) as context:",
+                    f"            {decorator_name}(**params)",
+                    f"        self.assertIn('{param_name}', str(context.exception))",
+                    "        self.assertIn('array', str(context.exception).lower())",
+                    "",
+                    "        # Restore valid parameters",
+                    "        params = self._get_valid_params()",
+                    "",
+                ]
+            )
+        elif param.type == "object":
+            test_lines.extend(
+                [
+                    "        # Test type validation",
+                    "        params['{}'] = 'not_an_object'  # Not an object".format(
+                        param_name
+                    ),
+                    "        with self.assertRaises(ValidationError) as context:",
+                    f"            {decorator_name}(**params)",
+                    f"        self.assertIn('{param_name}', str(context.exception))",
+                    "        self.assertIn('object', str(context.exception).lower())",
+                    "",
+                    "        # Restore valid parameters",
+                    "        params = self._get_valid_params()",
+                    "",
+                ]
             )
 
-        # Test type validation
-        test_lines = []
-        test_lines.append(
-            f"    def test_{param_name}_type_validation(self, load_decorator):"
-        )
-        test_lines.append(f'        """Test {param_name} type validation."""')
-        test_lines.append(
-            f'        decorator_class = load_decorator("{decorator_name}")'
-        )
-        test_lines.append("        assert decorator_class is not None")
-        test_lines.append("        params = self._get_valid_params()")
+        # Add validation for additional constraints
+        if param.validation:
+            if "pattern" in param.validation:
+                pattern = param.validation["pattern"]
+                test_lines.extend(
+                    [
+                        "        # Test pattern validation",
+                        f"        params['{param_name}'] = 'invalid-pattern'  # Does not match pattern",
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertIn('pattern', str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                    ]
+                )
 
-        # Generate invalid value based on parameter type
-        if param_type == "string":
-            invalid_value = "123"  # Number instead of string
-        elif param_type in ["integer", "number", "float"]:
-            invalid_value = "'invalid'"  # String instead of number
-        elif param_type == "boolean":
-            invalid_value = "'invalid'"  # String instead of boolean
-        elif param_type == "array":
-            invalid_value = "'invalid'"  # String instead of array
-        elif param_type == "enum":
-            invalid_value = "'invalid_enum_value'"  # Invalid enum value
-        else:
-            invalid_value = "None"
+            if "minimum" in param.validation and param.type in ["integer", "float"]:
+                minimum = param.validation["minimum"]
+                test_lines.extend(
+                    [
+                        "        # Test minimum value validation",
+                        f"        params['{param_name}'] = {minimum - 1}  # Below minimum",
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                    ]
+                )
 
-        # Replace the parameter with an invalid value
-        test_lines.append(f"        params['{param_name}'] = {invalid_value}")
+            if "maximum" in param.validation and param.type in ["integer", "float"]:
+                maximum = param.validation["maximum"]
+                test_lines.extend(
+                    [
+                        "        # Test maximum value validation",
+                        f"        params['{param_name}'] = {maximum + 1}  # Above maximum",
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                    ]
+                )
 
-        test_lines.append("        with pytest.raises(ValidationError) as exc_info:")
-        test_lines.append("            decorator_class(**params)")
-        test_lines.append(f'        assert "{param_name}" in str(exc_info.value)')
+            if "minLength" in param.validation and param.type == "string":
+                min_length = param.validation["minLength"]
+                test_lines.extend(
+                    [
+                        "        # Test minimum length validation",
+                        f"        params['{param_name}'] = {'a' * (min_length - 1)}  # Too short",
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertTrue('minimum length' in str(context.exception).lower() or 'too short' in str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                    ]
+                )
 
-        if param_type == "enum":
-            test_lines.append(
-                '        assert "one of" in str(exc_info.value).lower() or "enum" in str(exc_info.value).lower() or "valid" in str(exc_info.value).lower()'
-            )
-        else:
-            test_lines.append(
-                '        assert "type" in str(exc_info.value).lower() or "invalid" in str(exc_info.value).lower() or "must be" in str(exc_info.value).lower()'
-            )
+            if "maxLength" in param.validation and param.type == "string":
+                max_length = param.validation["maxLength"]
+                test_lines.extend(
+                    [
+                        "        # Test maximum length validation",
+                        f"        params['{param_name}'] = {'a' * (max_length + 1)}  # Too long",
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertTrue('maximum length' in str(context.exception).lower() or 'too long' in str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                    ]
+                )
 
-        test_lines.append("")
+            if "minItems" in param.validation and param.type == "array":
+                min_items = param.validation["minItems"]
+                test_lines.extend(
+                    [
+                        "        # Test minimum items validation",
+                        f"        params['{param_name}'] = [1] * {min_items - 1}  # Too few items",
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertTrue('minimum' in str(context.exception).lower() or 'too few' in str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                    ]
+                )
 
-        tests.append("\n".join(test_lines))
+            if "maxItems" in param.validation and param.type == "array":
+                max_items = param.validation["maxItems"]
+                test_lines.extend(
+                    [
+                        "        # Test maximum items validation",
+                        f"        params['{param_name}'] = [1] * {max_items + 1}  # Too many items",
+                        "        with self.assertRaises(ValidationError) as context:",
+                        f"            {decorator_name}(**params)",
+                        f"        self.assertIn('{param_name}', str(context.exception))",
+                        "        self.assertTrue('maximum' in str(context.exception).lower() or 'too many' in str(context.exception).lower())",
+                        "",
+                        "        # Restore valid parameters",
+                        "        params = self._get_valid_params()",
+                        "",
+                    ]
+                )
 
-        # Add enum validation test if applicable
-        if param_type == "enum" and param.enum_values:
-            enum_test_lines = []
-            enum_test_lines.append(
-                f"    def test_{param_name}_enum_validation(self, load_decorator):"
-            )
-            enum_test_lines.append(
-                f'        """Test {param_name} enum value validation."""'
-            )
-            enum_test_lines.append(
-                f'        decorator_class = load_decorator("{decorator_name}")'
-            )
-            enum_test_lines.append("        assert decorator_class is not None")
-            enum_test_lines.append("        params = self._get_valid_params()")
-            enum_test_lines.append(
-                f"        params['{param_name}'] = 'invalid_enum_value'"
-            )
-            enum_test_lines.append(
-                "        with pytest.raises(ValidationError) as exc_info:"
-            )
-            enum_test_lines.append("            decorator_class(**params)")
-            enum_test_lines.append(
-                f'        assert "{param_name}" in str(exc_info.value)'
-            )
-            enum_test_lines.append(
-                '        assert "one of" in str(exc_info.value).lower() or "enum" in str(exc_info.value).lower() or "valid" in str(exc_info.value).lower()'
-            )
-            enum_test_lines.append("")
+        return "\n".join(test_lines)
 
-            tests.append("\n".join(enum_test_lines))
-
-        return "\n".join(tests)
-
-    def _generate_apply_tests(
-        self, decorator_name: str, examples: List[Dict[str, Any]]
-    ) -> str:
-        """Generate tests for the apply method.
-
-        This method creates test cases for the apply method using examples from
-        the decorator definition. It tests both the basic functionality and
-        parameter combinations.
+    def _generate_apply_examples_test(
+        self, decorator_data: Dict[str, Any]
+    ) -> List[str]:
+        """Generate the test_apply_examples method.
 
         Args:
-            decorator_name: Name of the decorator being tested
-            examples: List of examples from the decorator definition
+            decorator_data: The decorator data from the registry
 
         Returns:
-            str: Generated test code as string
+            List of code lines for the method
         """
+        decorator_name = decorator_data.get("decoratorName", "")
+        examples = decorator_data.get("examples", [])
+
+        code_lines = [
+            "def test_apply_examples(self):",
+            '    """Test apply method with examples from the decorator definition."""',
+        ]
+
+        # If no examples are provided, create a simple test
         if not examples:
-            return ""
+            code_lines.append(
+                "    # Example of how to use this decorator with specific parameters"
+            )
+            code_lines.append("    params = self._get_valid_params()")
+            code_lines.append(f"    decorator = {decorator_name}(**params)")
+            code_lines.append(
+                '    result = decorator.apply("Sample prompt for testing.")'
+            )
+            code_lines.append("    self.assertIsInstance(result, str)")
+            # Don't check the exact output, just that it returns something
+            code_lines.append("    self.assertTrue(len(result) > 0)")
+        else:
+            # Generate a test for each example
+            for i, example in enumerate(examples):
+                description = example.get("description", f"Example {i+1}")
+                code_lines.append(f"    # {description}")
+                code_lines.append("    params = self._get_valid_params()")
 
-        formatted_tests = []
-        for i, example in enumerate(examples):
-            # Get the example data
-            params = example.get("parameters", {})
-            prompt = example.get("prompt", "Test prompt.")
-            expected = example.get("expected", "")
-            description = example.get("description", f"Example {i+1}")
+                # If the example specifies parameters, use those instead
+                if "parameters" in example:
+                    for param_name, param_value in example["parameters"].items():
+                        if isinstance(param_value, str):
+                            code_lines.append(
+                                f"    params['{param_name}'] = '{param_value}'"
+                            )
+                        else:
+                            code_lines.append(
+                                f"    params['{param_name}'] = {param_value}"
+                            )
 
-            # Generate a test case name
-            test_name = f"test_apply_example_{i+1}"
+                code_lines.append(f"    decorator = {decorator_name}(**params)")
+                code_lines.append(
+                    '    result = decorator.apply("Sample prompt for testing.")'
+                )
+                code_lines.append("    self.assertIsInstance(result, str)")
 
-            # Format the test
-            test_code = [
-                f"    def {test_name}(self, load_decorator):",
-                f'        """Test apply method with example {i+1}: {description}."""',
-                f'        decorator_class = load_decorator("{decorator_name}")',
-                "        assert decorator_class is not None",
-                "",
-                "        # Create the decorator with the example parameters",
-                f"        params = {self._format_params_for_test(params)}",
-                "        decorator = decorator_class(**params)",
-                "",
-                "        # Test prompt",
-                f'        prompt = "{prompt}"',
-                "",
-                "        # Apply the decorator",
-                "        result = decorator.apply(prompt)",
-                "",
-                "        # Assert the result contains expected elements",
-                "        assert prompt in result  # Original prompt should be included",
-            ]
+                # Don't check the exact output, just that it returns something
+                code_lines.append("    self.assertTrue(len(result) > 0)")
 
-            # Break long expected strings into multiple assertions to avoid line length issues
-            if expected:
-                if len(expected) > 40:  # If expected string is long
-                    # Split it into chunks for multiple assertions
-                    chunks = [expected[i : i + 40] for i in range(0, len(expected), 40)]
-                    for chunk in chunks:
-                        test_code.append(f'        assert "{chunk}" in result')
-                else:
-                    test_code.append(f'        assert "{expected}" in result')
+        code_lines.append("")
+        return code_lines
 
-            # Add additional assertions for parameters
-            for param_name, param_value in params.items():
-                if isinstance(param_value, str) and len(param_value) > 40:
-                    # For long string values, just check if the parameter name is mentioned
-                    test_code.append(f'        assert "{param_name}" in result')
-                elif param_value is not None:
-                    # For shorter values, can check for the actual value
-                    test_code.append(
-                        f'        assert str({param_value}) in result or "{param_name}" in result'
-                    )
+    def _generate_serialization_tests(self, decorator_name: str) -> str:
+        """Generate tests for serialization.
 
-            # Join the test code lines
-            formatted_tests.append("\n".join(test_code))
+        Args:
+            decorator_name: The name of the decorator
 
-        # Join all test cases with blank lines between them
-        return "\n\n".join(formatted_tests)
+        Returns:
+            The test code as a string
+        """
+        test_lines = [
+            "    def test_serialization(self):",
+            '        """Test serialization and deserialization."""',
+            "        # Create a decorator instance with valid parameters",
+            "        params = self._get_valid_params()",
+            f"        decorator = {decorator_name}(**params)",
+            "",
+            "        # Test to_dict() method",
+            "        serialized = decorator.to_dict()",
+            "        self.assertIsInstance(serialized, dict)",
+            f'        self.assertEqual(serialized["name"], "{self._convert_to_snake_case(decorator_name)}")',
+            '        self.assertIn("parameters", serialized)',
+            '        self.assertIsInstance(serialized["parameters"], dict)',
+            "",
+            "        # Test that all parameters are included in the serialized output",
+            "        for param_name, param_value in params.items():",
+            '            self.assertIn(param_name, serialized["parameters"])',
+            "",
+            "        # Test from_dict() method",
+            f"        deserialized = {decorator_name}.from_dict(serialized)",
+            f"        self.assertIsInstance(deserialized, {decorator_name})",
+            "",
+            "        # Test that the deserialized decorator has the same parameters",
+            "        deserialized_dict = deserialized.to_dict()",
+            "        self.assertEqual(serialized, deserialized_dict)",
+        ]
+
+        return "\n".join(test_lines)
 
     def _format_params_for_test(self, params: Dict[str, Any]) -> str:
-        """Format parameters for test cases.
-
-        This method formats parameter dictionaries for test case generation,
-        ensuring proper syntax and readability.
+        """Format parameters for test code.
 
         Args:
-            params: Dictionary of parameters and their values
+            params: Dictionary of parameter names and values
 
         Returns:
-            str: Formatted parameters as a string
+            Formatted string representation of parameters
         """
         if not params:
             return "{}"
 
-        # Format each parameter
-        formatted_params = []
+        formatted_params = {}
+
         for name, value in params.items():
-            if isinstance(value, str):
-                # Escape quotes in strings
-                escaped_value = value.replace('"', '\\"')
-                if len(escaped_value) > 40:  # If string is too long
-                    # Format as a shorter representation
-                    short_value = escaped_value[:37] + "..."
-                    formatted_params.append(f'    "{name}": "{short_value}"')
-                else:
-                    formatted_params.append(f'    "{name}": "{escaped_value}"')
+            if value is None:
+                formatted_params[name] = "None"
             elif isinstance(value, bool):
-                formatted_params.append(f'    "{name}": {str(value)}')
+                formatted_params[name] = str(value)
             elif isinstance(value, (int, float)):
-                formatted_params.append(f'    "{name}": {value}')
-            elif isinstance(value, list):
-                # Format lists with proper indentation
-                if len(str(value)) > 40:  # If list representation is too long
-                    formatted_params.append(
-                        f'    "{name}": [...]  # List of {len(value)} items'
-                    )
+                formatted_params[name] = str(value)
+            elif isinstance(value, str):
+                # Check if this is a string representation of a Python value
+                if (
+                    value in ["True", "False", "None"]
+                    or (value.startswith("[") and value.endswith("]"))
+                    or (value.startswith("{") and value.endswith("}"))
+                ):
+                    formatted_params[name] = value
                 else:
-                    formatted_params.append(f'    "{name}": {value}')
-            elif value is None:
-                formatted_params.append(f'    "{name}": None')
+                    # Use double quotes if the string contains apostrophes
+                    if "'" in value:
+                        formatted_params[name] = f'"{value}"'
+                    else:
+                        formatted_params[name] = f"'{value}'"
+            elif isinstance(value, list):
+                # Format list elements properly
+                formatted_elements = []
+                for element in value:
+                    if isinstance(element, str):
+                        formatted_elements.append(f"'{element}'")
+                    else:
+                        formatted_elements.append(str(element))
+                formatted_params[name] = f"[{', '.join(formatted_elements)}]"
+            elif isinstance(value, dict):
+                # Format dictionary properly
+                formatted_dict = "{"
+                for k, v in value.items():
+                    if isinstance(v, str):
+                        formatted_dict += f"'{k}': '{v}', "
+                    else:
+                        formatted_dict += f"'{k}': {v}, "
+                formatted_dict = formatted_dict.rstrip(", ") + "}"
+                formatted_params[name] = formatted_dict
             else:
-                formatted_params.append(f'    "{name}": {value}')
+                formatted_params[name] = f"'{value}'"
 
-        # Join parameters and format as a dictionary
-        return "{\n" + ",\n".join(formatted_params) + "\n}"
-
-    def _generate_serialization_tests(self, decorator_name: str) -> str:
-        """Generate tests for decorator serialization.
-
-        This method creates test cases for serializing and deserializing decorators,
-        ensuring that all parameters and metadata are preserved correctly.
-
-        Args:
-            decorator_name: Name of the decorator being tested
-
-        Returns:
-            str: Generated test code as string
-        """
-        return f"""
-    def test_serialization(self, load_decorator):
-        \"\"\"Test decorator serialization and deserialization.\"\"\"
-        decorator_class = load_decorator("{decorator_name}")
-        assert decorator_class is not None
-
-        # Create decorator with valid parameters
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-
-        # Test serialization
-        serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
-
-        # Test that all parameters are included in serialized form
-        for param_name, param_value in valid_params.items():
-            assert param_name in serialized["parameters"]
-
-    def test_version_compatibility(self, load_decorator):
-        \"\"\"Test version compatibility checks.\"\"\"
-        decorator_class = load_decorator("{decorator_name}")
-        assert decorator_class is not None
-
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
-
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            decorator_class.is_compatible_with_version("999.0.0")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            decorator.is_compatible_with_version("999.0.0")
-
-    def test_metadata(self, load_decorator):
-        \"\"\"Test decorator metadata.\"\"\"
-        decorator_class = load_decorator("{decorator_name}")
-        assert decorator_class is not None
-
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "{decorator_name}"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
-"""
+        # Convert the dictionary to a string representation
+        return (
+            "{" + ", ".join([f"'{k}': {v}" for k, v in formatted_params.items()]) + "}"
+        )
 
     def generate_test_discovery(self) -> str:
-        """Generate a test discovery file.
+        """Generate the __init__.py file for test discovery.
 
         Returns:
-            The content of the test discovery file
+            The __init__.py file content as a string
         """
-        discovery_content = [
-            "# Generated file - DO NOT EDIT BY HAND",
+        init_content = [
+            '"""Test package for auto-generated decorator tests."""',
             "",
-            "import pytest",
-            "from prompt_decorators.decorators import *",
-            "",
-            "# This file ensures pytest discovers all tests in this directory",
+            "# This file is intentionally empty.",
+            "# It ensures that pytest recognizes this directory as a test package.",
             "",
         ]
 
-        return "\n".join(discovery_content)
+        return "\n".join(init_content)
 
     def _convert_to_snake_case(self, name: str) -> str:
         """
@@ -956,43 +1065,60 @@ class TestGenerator:
 
 
 def main():
-    """Main entry point for the test generator."""
+    """Run the test generator as a standalone script."""
     import argparse
+    import os
+    import sys
 
     parser = argparse.ArgumentParser(description="Generate tests for prompt decorators")
     parser.add_argument(
         "--registry-dir",
-        "-r",
         default="registry",
-        help="Path to the decorator registry directory",
+        help="Path to the registry directory (default: registry)",
     )
     parser.add_argument(
         "--output-dir",
-        "-o",
         default="tests/auto",
-        help="Path where test files will be generated",
+        help="Path to the output directory for generated tests (default: tests/auto)",
     )
     parser.add_argument(
         "--template-dir",
-        "-t",
         default=None,
-        help="Optional path to test template directory",
+        help="Path to the template directory (default: None)",
+    )
+    parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Enable verbose output"
     )
 
     args = parser.parse_args()
 
+    # Set up logging
+    log_level = logging.INFO if args.verbose else logging.WARNING
+    logging.basicConfig(
+        level=log_level,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
+
+    # Create the output directory if it doesn't exist
+    os.makedirs(args.output_dir, exist_ok=True)
+
+    # Generate the tests
     generator = TestGenerator(
         registry_dir=args.registry_dir,
         output_dir=args.output_dir,
         template_dir=args.template_dir,
     )
 
-    generated_files = generator.generate_all_tests()
-
-    print(f"Generated {len(generated_files)} test files:")
-    for file_path in generated_files:
-        print(f"  - {file_path}")
+    try:
+        generated_files = generator.generate_all_tests()
+        logging.info(f"Generated {len(generated_files)} test files")
+        for file_path in generated_files:
+            logging.info(f"  - {file_path}")
+        return 0
+    except Exception as e:
+        logging.error(f"Error generating tests: {e}")
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

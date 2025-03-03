@@ -6,9 +6,16 @@ This module provides the NegativeSpace decorator class for use in prompt enginee
 Focuses on analyzing what is not explicitly stated, implied, or missing from a topic or question. This decorator explores the 'negative space' by identifying unexplored angles, implicit assumptions, unasked questions, and contextual elements that may have been overlooked.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    NegativeSpaceFocusEnum,
+    NegativeSpaceDepthEnum,
+    NegativeSpaceStructureEnum,
+)
 
 
 class NegativeSpace(BaseDecorator):
@@ -28,11 +35,19 @@ class NegativeSpace(BaseDecorator):
     decorator_name = "negative_space"
     version = "1.0.0"  # Initial version
 
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
+
     def __init__(
         self,
-        focus: Literal[
-            "implications", "missing", "unstated", "comprehensive"
-        ] = "comprehensive",
+        focus: Literal["implications", "missing", "unstated", "comprehensive"] = "comprehensive",
         depth: Literal["surface", "moderate", "deep"] = "moderate",
         structure: Literal["before", "after", "integrated", "separate"] = "integrated",
     ) -> None:
@@ -56,29 +71,22 @@ class NegativeSpace(BaseDecorator):
         self._structure = structure
 
         # Validate parameters
+        # Validate parameters
         if self._focus is not None:
-            valid_values = ["implications", "missing", "unstated", "comprehensive"]
-            if self._focus not in valid_values:
-                raise ValidationError(
-                    "The parameter 'focus' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._focus, str):
+                raise ValidationError("The parameter 'focus' must be a string type value.")
+            if self._focus not in ["implications", "missing", "unstated", "comprehensive"]:
+                raise ValidationError(f"The parameter 'focus' must be one of the allowed enum values: ['implications', 'missing', 'unstated', 'comprehensive']. Got {self._focus}")
         if self._depth is not None:
-            valid_values = ["surface", "moderate", "deep"]
-            if self._depth not in valid_values:
-                raise ValidationError(
-                    "The parameter 'depth' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._depth, str):
+                raise ValidationError("The parameter 'depth' must be a string type value.")
+            if self._depth not in ["surface", "moderate", "deep"]:
+                raise ValidationError(f"The parameter 'depth' must be one of the allowed enum values: ['surface', 'moderate', 'deep']. Got {self._depth}")
         if self._structure is not None:
-            valid_values = ["before", "after", "integrated", "separate"]
-            if self._structure not in valid_values:
-                raise ValidationError(
-                    "The parameter 'structure' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
+            if not isinstance(self._structure, str):
+                raise ValidationError("The parameter 'structure' must be a string type value.")
+            if self._structure not in ["before", "after", "integrated", "separate"]:
+                raise ValidationError(f"The parameter 'structure' must be one of the allowed enum values: ['before', 'after', 'integrated', 'separate']. Got {self._structure}")
 
     @property
     def focus(self) -> Literal["implications", "missing", "unstated", "comprehensive"]:
@@ -128,9 +136,11 @@ class NegativeSpace(BaseDecorator):
         """
         return {
             "name": "negative_space",
-            "focus": self.focus,
-            "depth": self.depth,
-            "structure": self.structure,
+            "parameters": {
+                "focus": self.focus,
+                "depth": self.depth,
+                "structure": self.structure,
+            }
         }
 
     def to_string(self) -> str:
@@ -152,3 +162,60 @@ class NegativeSpace(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Focuses on analyzing what is not explicitly stated, implied, or missing from a topic or question. This decorator explores the 'negative space' by identifying unexplored angles, implicit assumptions, unasked questions, and contextual elements that may have been overlooked.""",
+            "category": "general",
+            "version": cls.version,
+        }

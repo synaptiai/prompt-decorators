@@ -172,6 +172,28 @@ class BaseDecorator:
                 f"Unexpected parameters: {', '.join(kwargs.keys())}", self.name
             )
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "BaseDecorator":
+        """
+        Create a decorator instance from a dictionary representation.
+
+        Args:
+            data: Dictionary representation of the decorator
+
+        Returns:
+            A new decorator instance
+
+        Raises:
+            ValidationError: If the dictionary is invalid
+        """
+        if "name" not in data:
+            raise ValidationError("Missing 'name' field in decorator data")
+        
+        if "parameters" not in data:
+            raise ValidationError("Missing 'parameters' field in decorator data")
+            
+        return cls(**data.get("parameters", {}))
+
     def apply_to_prompt(self, prompt: str) -> str:
         """
         Apply the decorator to a prompt string.

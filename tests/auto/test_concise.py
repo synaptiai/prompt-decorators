@@ -1,148 +1,151 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the Concise decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.concise import Concise
 
+class TestConcise(unittest.TestCase):
+    """Tests for the Concise decorator.
 
-# Tests for the Concise decorator
-# -------------------------------
-class TestConcise:
-    """Tests for the Concise decorator."""
+    Optimizes the response for brevity and directness, eliminating unnecessary
+    details and verbose language. This decorator is ideal for obtaining quick
+    answers, executive summaries, or essential information when time or space is
+    limited.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
-            "maxWords": 1.0,
-            "bulletPoints": false,
+            "maxWords": 11,
+            "bulletPoints": False,
             "level": "moderate",
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
-        decorator = decorator_class()
-        assert decorator is not None
-        assert decorator.name == "Concise"
-
-    def test_maxWords_type_validation(self, load_decorator):
-        """Test maxWords type validation."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
+    def test_validate_maxWords(self):
+        """Test validation for the maxWords parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["maxWords"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "maxWords" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
 
-    def test_maxWords_min_validation(self, load_decorator):
-        """Test maxWords minimum value validation."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["maxWords"] = 9
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "maxWords" in str(exc_info.value)
-        assert "at least" in str(exc_info.value).lower()
+        # Test type validation
+        params['maxWords'] = 'not_a_number'  # Not a number
+        with self.assertRaises(ValidationError) as context:
+            Concise(**params)
+        self.assertIn('maxWords', str(context.exception))
+        self.assertIn('numeric', str(context.exception).lower())
 
-    def test_maxWords_max_validation(self, load_decorator):
-        """Test maxWords maximum value validation."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["maxWords"] = 501
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "maxWords" in str(exc_info.value)
-        assert "at most" in str(exc_info.value).lower()
 
-    def test_bulletPoints_type_validation(self, load_decorator):
-        """Test bulletPoints type validation."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["bulletPoints"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "bulletPoints" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
+        # Test minimum value validation
+        params['maxWords'] = 9  # Below minimum
+        with self.assertRaises(ValidationError) as context:
+            Concise(**params)
+        self.assertIn('maxWords', str(context.exception))
+        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
 
-    def test_level_type_validation(self, load_decorator):
-        """Test level type validation."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["level"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "level" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_level_enum_validation(self, load_decorator):
-        """Test level enum value validation."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["level"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "level" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test maximum value validation
+        params['maxWords'] = 501  # Above maximum
+        with self.assertRaises(ValidationError) as context:
+            Concise(**params)
+        self.assertIn('maxWords', str(context.exception))
+        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
+
+    def test_validate_bulletPoints(self):
+        """Test validation for the bulletPoints parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test type validation
+        params['bulletPoints'] = 'not_a_boolean'  # Not a boolean
+        with self.assertRaises(ValidationError) as context:
+            Concise(**params)
+        self.assertIn('bulletPoints', str(context.exception))
+        self.assertIn('boolean', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+
+    def test_validate_level(self):
+        """Test validation for the level parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['level'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            Concise(**params)
+        self.assertIn('level', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['level'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            Concise(**params)
+        self.assertIn('level', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['level'] = 'moderate'
+        # This should not raise an exception
+        Concise(**params)
+        params['level'] = 'high'
+        # This should not raise an exception
+        Concise(**params)
+        params['level'] = 'extreme'
+        # This should not raise an exception
+        Concise(**params)
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Basic concise explanation of a complex topic
+        params = self._get_valid_params()
+        decorator = Concise(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # Extremely concise bulleted answer with word limit
+        params = self._get_valid_params()
+        decorator = Concise(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = Concise(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "concise")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = Concise.from_dict(serialized)
+        self.assertIsInstance(deserialized, Concise)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("Concise")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "Concise"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

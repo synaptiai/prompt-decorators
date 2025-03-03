@@ -6,9 +6,15 @@ This module provides the BreakAndBuild decorator class for use in prompt enginee
 Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    BreakAndBuildBreakdownEnum,
+    BreakAndBuildIntensityEnum,
+)
 
 
 class BreakAndBuild(BaseDecorator):
@@ -28,11 +34,19 @@ class BreakAndBuild(BaseDecorator):
     decorator_name = "break_and_build"
     version = "1.0.0"  # Initial version
 
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
+
     def __init__(
         self,
-        breakdown: Literal[
-            "weaknesses", "assumptions", "risks", "comprehensive"
-        ] = "comprehensive",
+        breakdown: Literal["weaknesses", "assumptions", "risks", "comprehensive"] = "comprehensive",
         intensity: Literal["mild", "thorough", "intense"] = "thorough",
         buildRatio: Any = 1,
     ) -> None:
@@ -57,34 +71,27 @@ class BreakAndBuild(BaseDecorator):
         self._buildRatio = buildRatio
 
         # Validate parameters
+        # Validate parameters
         if self._breakdown is not None:
-            valid_values = ["weaknesses", "assumptions", "risks", "comprehensive"]
-            if self._breakdown not in valid_values:
-                raise ValidationError(
-                    "The parameter 'breakdown' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._breakdown, str):
+                raise ValidationError("The parameter 'breakdown' must be a string type value.")
+            if self._breakdown not in ["weaknesses", "assumptions", "risks", "comprehensive"]:
+                raise ValidationError(f"The parameter 'breakdown' must be one of the allowed enum values: ['weaknesses', 'assumptions', 'risks', 'comprehensive']. Got {self._breakdown}")
         if self._intensity is not None:
-            valid_values = ["mild", "thorough", "intense"]
-            if self._intensity not in valid_values:
-                raise ValidationError(
-                    "The parameter 'intensity' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._intensity, str):
+                raise ValidationError("The parameter 'intensity' must be a string type value.")
+            if self._intensity not in ["mild", "thorough", "intense"]:
+                raise ValidationError(f"The parameter 'intensity' must be one of the allowed enum values: ['mild', 'thorough', 'intense']. Got {self._intensity}")
         if self._buildRatio is not None:
-            if not isinstance(self._buildRatio, (int, float)) or isinstance(
-                self._buildRatio, bool
-            ):
-                raise ValidationError(
-                    "The parameter 'buildRatio' must be a numeric value."
-                )
+            if not isinstance(self._buildRatio, (int, float)):
+                raise ValidationError("The parameter 'buildRatio' must be a numeric type value.")
+            if self._buildRatio < 0.5:
+                raise ValidationError("The parameter 'buildRatio' must be greater than or equal to 0.5.")
+            if self._buildRatio > 3:
+                raise ValidationError("The parameter 'buildRatio' must be less than or equal to 3.")
 
     @property
-    def breakdown(
-        self,
-    ) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
+    def breakdown(self) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
         """
         Get the breakdown parameter value.
 
@@ -131,9 +138,11 @@ class BreakAndBuild(BaseDecorator):
         """
         return {
             "name": "break_and_build",
-            "breakdown": self.breakdown,
-            "intensity": self.intensity,
-            "buildRatio": self.buildRatio,
+            "parameters": {
+                "breakdown": self.breakdown,
+                "intensity": self.intensity,
+                "buildRatio": self.buildRatio,
+            }
         }
 
     def to_string(self) -> str:
@@ -155,3 +164,60 @@ class BreakAndBuild(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.""",
+            "category": "general",
+            "version": cls.version,
+        }

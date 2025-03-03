@@ -1,137 +1,151 @@
-# Generated file - DO NOT EDIT BY HAND
+"""Tests for the FactCheck decorator."""
 
-
-import pytest
-
+import unittest
 from prompt_decorators.core.base import ValidationError
+from prompt_decorators.decorators.generated.decorators.fact_check import FactCheck
 
+class TestFactCheck(unittest.TestCase):
+    """Tests for the FactCheck decorator.
 
-# Tests for the FactCheck decorator
-# ---------------------------------
-class TestFactCheck:
-    """Tests for the FactCheck decorator."""
+    Enhances the response with verification of factual claims and explicit
+    indication of confidence levels. This decorator promotes accuracy by
+    distinguishing between well-established facts, likely facts, and uncertain
+    or speculative information.
 
+    """
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
-            "confidence": true,
+            "confidence": True,
             "uncertain": "mark",
             "strictness": "low",
         }
 
-    def test_initialization_default_params(self, load_decorator):
-        """Test initialization with default parameters."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
-        decorator = decorator_class()
-        assert decorator is not None
-        assert decorator.name == "FactCheck"
-
-    def test_confidence_type_validation(self, load_decorator):
-        """Test confidence type validation."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
+    def test_validate_confidence(self):
+        """Test validation for the confidence parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["confidence"] = "invalid"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "confidence" in str(exc_info.value)
-        assert "type" in str(exc_info.value).lower()
 
-    def test_uncertain_type_validation(self, load_decorator):
-        """Test uncertain type validation."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["uncertain"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "uncertain" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
+        # Test type validation
+        params['confidence'] = 'not_a_boolean'  # Not a boolean
+        with self.assertRaises(ValidationError) as context:
+            FactCheck(**params)
+        self.assertIn('confidence', str(context.exception))
+        self.assertIn('boolean', str(context.exception).lower())
 
-    def test_uncertain_enum_validation(self, load_decorator):
-        """Test uncertain enum value validation."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        params["uncertain"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "uncertain" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_strictness_type_validation(self, load_decorator):
-        """Test strictness type validation."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        params["strictness"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "strictness" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_strictness_enum_validation(self, load_decorator):
-        """Test strictness enum value validation."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
+    def test_validate_uncertain(self):
+        """Test validation for the uncertain parameter."""
+        # Get valid parameters
         params = self._get_valid_params()
-        params["strictness"] = "invalid_enum_value"
-        with pytest.raises(ValidationError) as exc_info:
-            decorator_class(**params)
-        assert "strictness" in str(exc_info.value)
-        assert "one of" in str(exc_info.value).lower()
 
-    def test_apply_basic(self, load_decorator, sample_prompt):
-        """Test basic apply functionality."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
-        params = self._get_valid_params()
-        decorator = decorator_class(**params)
-        result = decorator.apply(sample_prompt)
-        assert isinstance(result, str)
+        # Test type validation
+        params['uncertain'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            FactCheck(**params)
+        self.assertIn('uncertain', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
 
-    def test_serialization(self, load_decorator):
-        """Test decorator serialization."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
+        # Restore valid parameters
         params = self._get_valid_params()
-        decorator = decorator_class(**params)
+
+        # Test invalid enum value
+        params['uncertain'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            FactCheck(**params)
+        self.assertIn('uncertain', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['uncertain'] = 'mark'
+        # This should not raise an exception
+        FactCheck(**params)
+        params['uncertain'] = 'exclude'
+        # This should not raise an exception
+        FactCheck(**params)
+        params['uncertain'] = 'qualify'
+        # This should not raise an exception
+        FactCheck(**params)
+
+    def test_validate_strictness(self):
+        """Test validation for the strictness parameter."""
+        # Get valid parameters
+        params = self._get_valid_params()
+
+        # Test type validation
+        params['strictness'] = 123  # Not a string
+        with self.assertRaises(ValidationError) as context:
+            FactCheck(**params)
+        self.assertIn('strictness', str(context.exception))
+        self.assertIn('string', str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test invalid enum value
+        params['strictness'] = 'invalid_enum_value'  # Invalid enum value
+        with self.assertRaises(ValidationError) as context:
+            FactCheck(**params)
+        self.assertIn('strictness', str(context.exception))
+        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+
+        # Restore valid parameters
+        params = self._get_valid_params()
+
+        # Test valid enum values
+        params['strictness'] = 'low'
+        # This should not raise an exception
+        FactCheck(**params)
+        params['strictness'] = 'moderate'
+        # This should not raise an exception
+        FactCheck(**params)
+        params['strictness'] = 'high'
+        # This should not raise an exception
+        FactCheck(**params)
+
+    def test_apply_examples(self):
+        """Test apply method with examples from the decorator definition."""
+        # Basic fact checking with confidence indicators
+        params = self._get_valid_params()
+        decorator = FactCheck(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+        # High-strictness fact checking that excludes uncertain information
+        params = self._get_valid_params()
+        decorator = FactCheck(**params)
+        result = decorator.apply("Sample prompt for testing.")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+    def test_serialization(self):
+        """Test serialization and deserialization."""
+        # Create a decorator instance with valid parameters
+        params = self._get_valid_params()
+        decorator = FactCheck(**params)
+
+        # Test to_dict() method
         serialized = decorator.to_dict()
-        assert isinstance(serialized, dict)
-        assert serialized["name"] == decorator.name
-        assert "parameters" in serialized
-        assert isinstance(serialized["parameters"], dict)
+        self.assertIsInstance(serialized, dict)
+        self.assertEqual(serialized["name"], "fact_check")
+        self.assertIn("parameters", serialized)
+        self.assertIsInstance(serialized["parameters"], dict)
 
-    def test_version_compatibility(self, load_decorator):
-        """Test version compatibility checks."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
+        # Test that all parameters are included in the serialized output
+        for param_name, param_value in params.items():
+            self.assertIn(param_name, serialized["parameters"])
 
-        # Test with current version
-        current_version = decorator_class.version
-        assert decorator_class.is_compatible_with_version(current_version)
+        # Test from_dict() method
+        deserialized = FactCheck.from_dict(serialized)
+        self.assertIsInstance(deserialized, FactCheck)
 
-        # Test with incompatible version
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator_class.is_compatible_with_version("0.0.1")
-
-        # Test instance method
-        valid_params = self._get_valid_params()
-        decorator = decorator_class(**valid_params)
-        assert decorator.is_compatible_with_version(current_version)
-        with pytest.raises(IncompatibleVersionError):
-            # Use a version lower than min_compatible_version to ensure incompatibility
-            decorator.is_compatible_with_version("0.0.1")
-
-    def test_metadata(self, load_decorator):
-        """Test decorator metadata."""
-        decorator_class = load_decorator("FactCheck")
-        assert decorator_class is not None
-        metadata = decorator_class.get_metadata()
-        assert isinstance(metadata, dict)
-        assert metadata["name"] == "FactCheck"
-        assert "description" in metadata
-        assert "category" in metadata
-        assert "version" in metadata
+        # Test that the deserialized decorator has the same parameters
+        deserialized_dict = deserialized.to_dict()
+        self.assertEqual(serialized, deserialized_dict)

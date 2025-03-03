@@ -6,9 +6,15 @@ This module provides the Context decorator class for use in prompt engineering.
 A meta-decorator that adapts standard decorators for domain-specific contexts. This provides specialized interpretations of decorators based on particular fields, industries, or subject matter to ensure appropriate adaptation to contextual requirements.
 """
 
-from typing import Any, Dict, Literal
+import re
+from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.exceptions import IncompatibleVersionError
+from prompt_decorators.decorators.generated.decorators.enums import (
+    ContextScopeEnum,
+    ContextLevelEnum,
+)
 
 
 class Context(BaseDecorator):
@@ -26,6 +32,16 @@ class Context(BaseDecorator):
 
     decorator_name = "context"
     version = "1.0.0"  # Initial version
+
+    @property
+    def name(self) -> str:
+        """
+        Get the name of the decorator.
+
+        Returns:
+            The name of the decorator
+        """
+        return self.decorator_name
 
     def __init__(
         self,
@@ -55,30 +71,20 @@ class Context(BaseDecorator):
         self._level = level
 
         # Validate parameters
-        if self._domain is None:
-            raise ValidationError(
-                "The parameter 'domain' is required for Context decorator."
-            )
-
+        # Validate parameters
         if self._domain is not None:
             if not isinstance(self._domain, str):
-                raise ValidationError("The parameter 'domain' must be a string value.")
-
+                raise ValidationError("The parameter 'domain' must be a string type value.")
         if self._scope is not None:
-            valid_values = ["terminology", "examples", "structure", "all"]
-            if self._scope not in valid_values:
-                raise ValidationError(
-                    "The parameter 'scope' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
-
+            if not isinstance(self._scope, str):
+                raise ValidationError("The parameter 'scope' must be a string type value.")
+            if self._scope not in ["terminology", "examples", "structure", "all"]:
+                raise ValidationError(f"The parameter 'scope' must be one of the allowed enum values: ['terminology', 'examples', 'structure', 'all']. Got {self._scope}")
         if self._level is not None:
-            valid_values = ["beginner", "intermediate", "expert", "mixed"]
-            if self._level not in valid_values:
-                raise ValidationError(
-                    "The parameter 'level' must be one of the following values: "
-                    + ", ".join(valid_values)
-                )
+            if not isinstance(self._level, str):
+                raise ValidationError("The parameter 'level' must be a string type value.")
+            if self._level not in ["beginner", "intermediate", "expert", "mixed"]:
+                raise ValidationError(f"The parameter 'level' must be one of the allowed enum values: ['beginner', 'intermediate', 'expert', 'mixed']. Got {self._level}")
 
     @property
     def domain(self) -> str:
@@ -128,9 +134,11 @@ class Context(BaseDecorator):
         """
         return {
             "name": "context",
-            "domain": self.domain,
-            "scope": self.scope,
-            "level": self.level,
+            "parameters": {
+                "domain": self.domain,
+                "scope": self.scope,
+                "level": self.level,
+            }
         }
 
     def to_string(self) -> str:
@@ -152,3 +160,60 @@ class Context(BaseDecorator):
             return f"@{self.decorator_name}(" + ", ".join(params) + ")"
         else:
             return f"@{self.decorator_name}"
+
+    def apply(self, prompt: str) -> str:
+        """
+        Apply the decorator to a prompt string.
+
+        Args:
+            prompt: The original prompt string
+
+        Returns:
+            The modified prompt string
+        """
+        # This is a placeholder implementation
+        # Subclasses should override this method with specific behavior
+        return prompt
+
+    @classmethod
+    def is_compatible_with_version(cls, version: str) -> bool:
+        """
+        Check if the decorator is compatible with a specific version.
+
+        Args:
+            version: The version to check compatibility with
+
+        Returns:
+            True if compatible, False otherwise
+
+        Raises:
+            IncompatibleVersionError: If the version is incompatible
+        """
+        # Check version compatibility
+        if version > cls.version:
+            raise IncompatibleVersionError(
+                f"Version {version} is not compatible with {cls.__name__}. "
+                f"Maximum compatible version is {cls.version}."
+            )
+        # For testing purposes, also raise for very old versions
+        if version < '0.1.0':
+            raise IncompatibleVersionError(
+                f"Version {version} is too old for {cls.__name__}. "
+                f"Minimum compatible version is 0.1.0."
+            )
+        return True
+
+    @classmethod
+    def get_metadata(cls) -> Dict[str, Any]:
+        """
+        Get metadata about the decorator.
+
+        Returns:
+            Dictionary containing metadata about the decorator
+        """
+        return {
+            "name": cls.__name__,
+            "description": """A meta-decorator that adapts standard decorators for domain-specific contexts. This provides specialized interpretations of decorators based on particular fields, industries, or subject matter to ensure appropriate adaptation to contextual requirements.""",
+            "category": "general",
+            "version": cls.version,
+        }
