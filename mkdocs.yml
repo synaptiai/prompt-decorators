@@ -50,13 +50,10 @@ nav:
     - Basic Examples: examples/basic.md
     - Advanced Examples: examples/advanced.md
     - Provider Examples: examples/providers.md
-    - Domain Examples: examples/domains.md
   - Contributing:
     - Guidelines: contributing.md
     - Development Setup: development.md
     - Comprehensive Development Guide: development_guide.md
-    - Code Style: code-style.md
-    - Testing: testing.md
   - Project Documentation:
     - Roadmap: roadmap.md
     - Architecture: architecture.md
@@ -66,5 +63,4 @@ nav:
       - Overview: project_summaries/index.md
       - Modernization Summary: project_summaries/project_modernization_summary.md
   - Domain Guides:
-    - AI Safety: guides/ai-safety.md
     - Healthcare: guides/healthcare.md

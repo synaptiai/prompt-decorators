@@ -25,11 +25,3 @@ This page documents the code generation system of the Prompt Decorators framewor
       show_root_heading: true
       show_object_full_path: false
       heading_level: 3
-
-## CLI
-
-::: prompt_decorators.generator.cli
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3

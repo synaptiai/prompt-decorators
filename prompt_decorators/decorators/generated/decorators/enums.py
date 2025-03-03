@@ -4,7 +4,8 @@ This module provides enum types used by decorators.
 """
 
 from enum import Enum, auto
-from typing import Dict, List, Optional, Union, Any
+from typing import Any, Dict, List, Optional, Union
+
 
 class AudienceLevelEnum(Enum):
     """The expertise level of the target audience."""
@@ -629,4 +630,3 @@ class ConstraintsVocabularyEnum(Enum):
     technical = auto()
     domain_specific = auto()
     creative = auto()
-

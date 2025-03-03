@@ -4,12 +4,6 @@ This page documents the built-in decorators provided by the Prompt Decorators fr
 
 ## Reasoning
 
-::: prompt_decorators.decorators.reasoning
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
-
 ### Generated Reasoning Decorators
 
 ::: prompt_decorators.decorators.generated.decorators.reasoning
@@ -17,26 +11,26 @@ This page documents the built-in decorators provided by the Prompt Decorators fr
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Reasoning
 
 ::: prompt_decorators.decorators.generated.decorators.step_by_step
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - StepByStep
 
 ::: prompt_decorators.decorators.generated.decorators.tree_of_thought
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - TreeOfThought
 
 ## Format
-
-::: prompt_decorators.decorators.format
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
 
 ### Generated Format Decorators
 
@@ -45,18 +39,24 @@ This page documents the built-in decorators provided by the Prompt Decorators fr
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - OutputFormat
 
 ::: prompt_decorators.decorators.generated.decorators.bullet
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Bullet
 
 ::: prompt_decorators.decorators.generated.decorators.table_format
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - TableFormat
 
 ## Style
 
@@ -67,18 +67,24 @@ This page documents the built-in decorators provided by the Prompt Decorators fr
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Concise
 
 ::: prompt_decorators.decorators.generated.decorators.detailed
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Detailed
 
 ::: prompt_decorators.decorators.generated.decorators.tone
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Tone
 
 ## Verification
 
@@ -89,18 +95,24 @@ This page documents the built-in decorators provided by the Prompt Decorators fr
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - FactCheck
 
 ::: prompt_decorators.decorators.generated.decorators.peer_review
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - PeerReview
 
 ::: prompt_decorators.decorators.generated.decorators.cite_sources
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - CiteSources
 
 ## Meta
 
@@ -111,15 +123,21 @@ This page documents the built-in decorators provided by the Prompt Decorators fr
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Chain
 
 ::: prompt_decorators.decorators.generated.decorators.conditional
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Conditional
 
 ::: prompt_decorators.decorators.generated.decorators.override
     options:
       show_root_heading: true
       show_object_full_path: false
       heading_level: 4
+      members:
+        - Override
