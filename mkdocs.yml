@@ -46,6 +46,10 @@ plugins:
   - search
   - awesome-pages
   - autolinks
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
   - git-revision-date-localized:
       enable_creation_date: true
       fallback_to_build_date: true
@@ -58,8 +62,6 @@ plugins:
             show_source: true
             show_category_heading: true
             show_if_no_docstring: false
-  - minify:
-      minify_html: true
 nav:
   - Home: index.md
   - Getting Started:

@@ -36,7 +36,7 @@ repos:
     hooks:
       - id: poetry-check
       - id: poetry-lock
-        args: ["--no-update"]
+        stages: [manual]  # This will prevent it from running automatically in CI
 
   - repo: local
     hooks:

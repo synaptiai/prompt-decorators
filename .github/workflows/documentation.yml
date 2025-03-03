@@ -36,6 +36,7 @@ jobs:
           pip install poetry
           poetry install
           pip install -r docs/requirements.txt
+          pip install pytest mypy  # Ensure pytest and mypy are available
 
       - name: Verify documentation
         run: |
