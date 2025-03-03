@@ -1,8 +1,10 @@
 """Tests for the Narrative decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.narrative import Narrative
+
 
 class TestNarrative(unittest.TestCase):
     """Tests for the Narrative decorator.
@@ -12,6 +14,7 @@ class TestNarrative(unittest.TestCase):
     engaging, memorable, and contextually rich.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,33 +29,37 @@ class TestNarrative(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['structure'] = 123  # Not a string
+        params["structure"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Narrative(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['structure'] = 'invalid_enum_value'  # Invalid enum value
+        params["structure"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Narrative(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['structure'] = 'classic'
+        params["structure"] = "classic"
         # This should not raise an exception
         Narrative(**params)
-        params['structure'] = 'nonlinear'
+        params["structure"] = "nonlinear"
         # This should not raise an exception
         Narrative(**params)
-        params['structure'] = 'case-study'
+        params["structure"] = "case-study"
         # This should not raise an exception
         Narrative(**params)
 
@@ -62,15 +69,14 @@ class TestNarrative(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['characters'] = 'not_a_boolean'  # Not a boolean
+        params["characters"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Narrative(**params)
-        self.assertIn('characters', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("characters", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_length(self):
         """Test validation for the length parameter."""
@@ -78,33 +84,37 @@ class TestNarrative(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['length'] = 123  # Not a string
+        params["length"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Narrative(**params)
-        self.assertIn('length', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("length", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['length'] = 'invalid_enum_value'  # Invalid enum value
+        params["length"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Narrative(**params)
-        self.assertIn('length', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("length", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['length'] = 'brief'
+        params["length"] = "brief"
         # This should not raise an exception
         Narrative(**params)
-        params['length'] = 'moderate'
+        params["length"] = "moderate"
         # This should not raise an exception
         Narrative(**params)
-        params['length'] = 'extended'
+        params["length"] = "extended"
         # This should not raise an exception
         Narrative(**params)
 
@@ -122,7 +132,6 @@ class TestNarrative(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

@@ -70,13 +70,19 @@ class Chain(BaseDecorator):
         # Validate parameters
         if self._decorators is not None:
             if not isinstance(self._decorators, list):
-                raise ValidationError("The parameter 'decorators' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'decorators' must be an array type value."
+                )
         if self._showSteps is not None:
             if not isinstance(self._showSteps, bool):
-                raise ValidationError("The parameter 'showSteps' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'showSteps' must be a boolean type value."
+                )
         if self._stopOnFailure is not None:
             if not isinstance(self._stopOnFailure, bool):
-                raise ValidationError("The parameter 'stopOnFailure' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'stopOnFailure' must be a boolean type value."
+                )
 
     @property
     def decorators(self) -> List[Any]:
@@ -130,7 +136,7 @@ class Chain(BaseDecorator):
                 "decorators": self.decorators,
                 "showSteps": self.showSteps,
                 "stopOnFailure": self.stopOnFailure,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -188,7 +194,7 @@ class Chain(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

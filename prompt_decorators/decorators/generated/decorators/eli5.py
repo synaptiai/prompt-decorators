@@ -61,7 +61,9 @@ class ELI5(BaseDecorator):
         # Validate parameters
         if self._strictness is not None:
             if not isinstance(self._strictness, bool):
-                raise ValidationError("The parameter 'strictness' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'strictness' must be a boolean type value."
+                )
 
     @property
     def strictness(self) -> bool:
@@ -87,7 +89,7 @@ class ELI5(BaseDecorator):
             "name": "eli5",
             "parameters": {
                 "strictness": self.strictness,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -141,7 +143,7 @@ class ELI5(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -1,8 +1,10 @@
 """Tests for the StepByStep decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.step_by_step import StepByStep
+
 
 class TestStepByStep(unittest.TestCase):
     """Tests for the StepByStep decorator.
@@ -12,6 +14,7 @@ class TestStepByStep(unittest.TestCase):
     into manageable, sequential parts for better understanding.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -24,15 +27,14 @@ class TestStepByStep(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['numbered'] = 'not_a_boolean'  # Not a boolean
+        params["numbered"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             StepByStep(**params)
-        self.assertIn('numbered', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("numbered", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -48,7 +50,6 @@ class TestStepByStep(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

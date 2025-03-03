@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    CustomPriorityEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import CustomPriorityEnum
 
 
 class Custom(BaseDecorator):
@@ -73,15 +71,23 @@ class Custom(BaseDecorator):
         # Validate parameters
         if self._rules is not None:
             if not isinstance(self._rules, str):
-                raise ValidationError("The parameter 'rules' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'rules' must be a string type value."
+                )
         if self._name is not None:
             if not isinstance(self._name, str):
-                raise ValidationError("The parameter 'name' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'name' must be a string type value."
+                )
         if self._priority is not None:
             if not isinstance(self._priority, str):
-                raise ValidationError("The parameter 'priority' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'priority' must be a string type value."
+                )
             if self._priority not in ["override", "supplement", "fallback"]:
-                raise ValidationError(f"The parameter 'priority' must be one of the allowed enum values: ['override', 'supplement', 'fallback']. Got {self._priority}")
+                raise ValidationError(
+                    f"The parameter 'priority' must be one of the allowed enum values: ['override', 'supplement', 'fallback']. Got {self._priority}"
+                )
 
     @property
     def rules(self) -> str:
@@ -135,7 +141,7 @@ class Custom(BaseDecorator):
                 "rules": self.rules,
                 "name": self.name,
                 "priority": self.priority,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -193,7 +199,7 @@ class Custom(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

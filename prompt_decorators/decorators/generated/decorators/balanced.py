@@ -72,19 +72,31 @@ class Balanced(BaseDecorator):
         # Validate parameters
         if self._perspectives is not None:
             if not isinstance(self._perspectives, (int, float)):
-                raise ValidationError("The parameter 'perspectives' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'perspectives' must be a numeric type value."
+                )
             if self._perspectives < 2:
-                raise ValidationError("The parameter 'perspectives' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'perspectives' must be greater than or equal to 2."
+                )
             if self._perspectives > 5:
-                raise ValidationError("The parameter 'perspectives' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'perspectives' must be less than or equal to 5."
+                )
         if self._structure is not None:
             if not isinstance(self._structure, str):
-                raise ValidationError("The parameter 'structure' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'structure' must be a string type value."
+                )
             if self._structure not in ["alternating", "sequential", "comparative"]:
-                raise ValidationError(f"The parameter 'structure' must be one of the allowed enum values: ['alternating', 'sequential', 'comparative']. Got {self._structure}")
+                raise ValidationError(
+                    f"The parameter 'structure' must be one of the allowed enum values: ['alternating', 'sequential', 'comparative']. Got {self._structure}"
+                )
         if self._equal is not None:
             if not isinstance(self._equal, bool):
-                raise ValidationError("The parameter 'equal' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'equal' must be a boolean type value."
+                )
 
     @property
     def perspectives(self) -> Any:
@@ -138,7 +150,7 @@ class Balanced(BaseDecorator):
                 "perspectives": self.perspectives,
                 "structure": self.structure,
                 "equal": self.equal,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -196,7 +208,7 @@ class Balanced(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

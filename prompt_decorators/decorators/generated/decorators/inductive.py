@@ -46,7 +46,9 @@ class Inductive(BaseDecorator):
         self,
         examples: Any = 3,
         confidence: bool = False,
-        structure: Literal["generalization", "causal", "statistical", "analogical"] = "generalization",
+        structure: Literal[
+            "generalization", "causal", "statistical", "analogical"
+        ] = "generalization",
     ) -> None:
         """
         Initialize the Inductive decorator.
@@ -73,19 +75,36 @@ class Inductive(BaseDecorator):
         # Validate parameters
         if self._examples is not None:
             if not isinstance(self._examples, (int, float)):
-                raise ValidationError("The parameter 'examples' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'examples' must be a numeric type value."
+                )
             if self._examples < 2:
-                raise ValidationError("The parameter 'examples' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'examples' must be greater than or equal to 2."
+                )
             if self._examples > 10:
-                raise ValidationError("The parameter 'examples' must be less than or equal to 10.")
+                raise ValidationError(
+                    "The parameter 'examples' must be less than or equal to 10."
+                )
         if self._confidence is not None:
             if not isinstance(self._confidence, bool):
-                raise ValidationError("The parameter 'confidence' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'confidence' must be a boolean type value."
+                )
         if self._structure is not None:
             if not isinstance(self._structure, str):
-                raise ValidationError("The parameter 'structure' must be a string type value.")
-            if self._structure not in ["generalization", "causal", "statistical", "analogical"]:
-                raise ValidationError(f"The parameter 'structure' must be one of the allowed enum values: ['generalization', 'causal', 'statistical', 'analogical']. Got {self._structure}")
+                raise ValidationError(
+                    "The parameter 'structure' must be a string type value."
+                )
+            if self._structure not in [
+                "generalization",
+                "causal",
+                "statistical",
+                "analogical",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'structure' must be one of the allowed enum values: ['generalization', 'causal', 'statistical', 'analogical']. Got {self._structure}"
+                )
 
     @property
     def examples(self) -> Any:
@@ -114,7 +133,9 @@ class Inductive(BaseDecorator):
         return self._confidence
 
     @property
-    def structure(self) -> Literal["generalization", "causal", "statistical", "analogical"]:
+    def structure(
+        self,
+    ) -> Literal["generalization", "causal", "statistical", "analogical"]:
         """
         Get the structure parameter value.
 
@@ -139,7 +160,7 @@ class Inductive(BaseDecorator):
                 "examples": self.examples,
                 "confidence": self.confidence,
                 "structure": self.structure,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -197,7 +218,7 @@ class Inductive(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -45,7 +45,14 @@ class FindGaps(BaseDecorator):
 
     def __init__(
         self,
-        aspects: Literal["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"] = "comprehensive",
+        aspects: Literal[
+            "questions",
+            "resources",
+            "stakeholders",
+            "risks",
+            "dependencies",
+            "comprehensive",
+        ] = "comprehensive",
         depth: Literal["basic", "thorough", "exhaustive"] = "thorough",
         solutions: bool = True,
     ) -> None:
@@ -73,20 +80,46 @@ class FindGaps(BaseDecorator):
         # Validate parameters
         if self._aspects is not None:
             if not isinstance(self._aspects, str):
-                raise ValidationError("The parameter 'aspects' must be a string type value.")
-            if self._aspects not in ["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"]:
-                raise ValidationError(f"The parameter 'aspects' must be one of the allowed enum values: ['questions', 'resources', 'stakeholders', 'risks', 'dependencies', 'comprehensive']. Got {self._aspects}")
+                raise ValidationError(
+                    "The parameter 'aspects' must be a string type value."
+                )
+            if self._aspects not in [
+                "questions",
+                "resources",
+                "stakeholders",
+                "risks",
+                "dependencies",
+                "comprehensive",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'aspects' must be one of the allowed enum values: ['questions', 'resources', 'stakeholders', 'risks', 'dependencies', 'comprehensive']. Got {self._aspects}"
+                )
         if self._depth is not None:
             if not isinstance(self._depth, str):
-                raise ValidationError("The parameter 'depth' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'depth' must be a string type value."
+                )
             if self._depth not in ["basic", "thorough", "exhaustive"]:
-                raise ValidationError(f"The parameter 'depth' must be one of the allowed enum values: ['basic', 'thorough', 'exhaustive']. Got {self._depth}")
+                raise ValidationError(
+                    f"The parameter 'depth' must be one of the allowed enum values: ['basic', 'thorough', 'exhaustive']. Got {self._depth}"
+                )
         if self._solutions is not None:
             if not isinstance(self._solutions, bool):
-                raise ValidationError("The parameter 'solutions' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'solutions' must be a boolean type value."
+                )
 
     @property
-    def aspects(self) -> Literal["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"]:
+    def aspects(
+        self,
+    ) -> Literal[
+        "questions",
+        "resources",
+        "stakeholders",
+        "risks",
+        "dependencies",
+        "comprehensive",
+    ]:
         """
         Get the aspects parameter value.
 
@@ -137,7 +170,7 @@ class FindGaps(BaseDecorator):
                 "aspects": self.aspects,
                 "depth": self.depth,
                 "solutions": self.solutions,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -195,7 +228,7 @@ class FindGaps(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

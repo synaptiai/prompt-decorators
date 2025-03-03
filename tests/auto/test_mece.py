@@ -1,8 +1,10 @@
 """Tests for the MECE decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.mece import MECE
+
 
 class TestMECE(unittest.TestCase):
     """Tests for the MECE decorator.
@@ -13,6 +15,7 @@ class TestMECE(unittest.TestCase):
     clear categorization for decision-making and problem-solving.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +30,40 @@ class TestMECE(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['dimensions'] = 'not_a_number'  # Not a number
+        params["dimensions"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('dimensions', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("dimensions", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['dimensions'] = 1  # Below minimum
+        params["dimensions"] = 1  # Below minimum
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('dimensions', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("dimensions", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['dimensions'] = 6  # Above maximum
+        params["dimensions"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('dimensions', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("dimensions", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_depth(self):
         """Test validation for the depth parameter."""
@@ -63,35 +71,40 @@ class TestMECE(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 'not_a_number'  # Not a number
+        params["depth"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['depth'] = 0  # Below minimum
+        params["depth"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['depth'] = 4  # Above maximum
+        params["depth"] = 4  # Above maximum
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_framework(self):
         """Test validation for the framework parameter."""
@@ -99,39 +112,43 @@ class TestMECE(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['framework'] = 123  # Not a string
+        params["framework"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('framework', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("framework", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['framework'] = 'invalid_enum_value'  # Invalid enum value
+        params["framework"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             MECE(**params)
-        self.assertIn('framework', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("framework", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['framework'] = 'issue tree'
+        params["framework"] = "issue tree"
         # This should not raise an exception
         MECE(**params)
-        params['framework'] = 'value chain'
+        params["framework"] = "value chain"
         # This should not raise an exception
         MECE(**params)
-        params['framework'] = 'business segments'
+        params["framework"] = "business segments"
         # This should not raise an exception
         MECE(**params)
-        params['framework'] = 'stakeholders'
+        params["framework"] = "stakeholders"
         # This should not raise an exception
         MECE(**params)
-        params['framework'] = 'custom'
+        params["framework"] = "custom"
         # This should not raise an exception
         MECE(**params)
 
@@ -149,7 +166,6 @@ class TestMECE(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

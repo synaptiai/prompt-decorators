@@ -1,8 +1,10 @@
 """Tests for the Reasoning decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.reasoning import Reasoning
+
 
 class TestReasoning(unittest.TestCase):
     """Tests for the Reasoning decorator.
@@ -12,6 +14,7 @@ class TestReasoning(unittest.TestCase):
     thought process, making responses more transparent and trustworthy.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -24,33 +27,37 @@ class TestReasoning(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 123  # Not a string
+        params["depth"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Reasoning(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['depth'] = 'invalid_enum_value'  # Invalid enum value
+        params["depth"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Reasoning(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['depth'] = 'basic'
+        params["depth"] = "basic"
         # This should not raise an exception
         Reasoning(**params)
-        params['depth'] = 'moderate'
+        params["depth"] = "moderate"
         # This should not raise an exception
         Reasoning(**params)
-        params['depth'] = 'comprehensive'
+        params["depth"] = "comprehensive"
         # This should not raise an exception
         Reasoning(**params)
 
@@ -68,7 +75,6 @@ class TestReasoning(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

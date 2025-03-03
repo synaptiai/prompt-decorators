@@ -72,17 +72,27 @@ class Uncertainty(BaseDecorator):
         # Validate parameters
         if self._format is not None:
             if not isinstance(self._format, str):
-                raise ValidationError("The parameter 'format' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'format' must be a string type value."
+                )
             if self._format not in ["inline", "section", "confidence"]:
-                raise ValidationError(f"The parameter 'format' must be one of the allowed enum values: ['inline', 'section', 'confidence']. Got {self._format}")
+                raise ValidationError(
+                    f"The parameter 'format' must be one of the allowed enum values: ['inline', 'section', 'confidence']. Got {self._format}"
+                )
         if self._threshold is not None:
             if not isinstance(self._threshold, str):
-                raise ValidationError("The parameter 'threshold' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'threshold' must be a string type value."
+                )
             if self._threshold not in ["low", "medium", "high"]:
-                raise ValidationError(f"The parameter 'threshold' must be one of the allowed enum values: ['low', 'medium', 'high']. Got {self._threshold}")
+                raise ValidationError(
+                    f"The parameter 'threshold' must be one of the allowed enum values: ['low', 'medium', 'high']. Got {self._threshold}"
+                )
         if self._reason is not None:
             if not isinstance(self._reason, bool):
-                raise ValidationError("The parameter 'reason' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'reason' must be a boolean type value."
+                )
 
     @property
     def format(self) -> Literal["inline", "section", "confidence"]:
@@ -136,7 +146,7 @@ class Uncertainty(BaseDecorator):
                 "format": self.format,
                 "threshold": self.threshold,
                 "reason": self.reason,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -194,7 +204,7 @@ class Uncertainty(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -1,8 +1,10 @@
 """Tests for the Extension decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.extension import Extension
+
 
 class TestExtension(unittest.TestCase):
     """Tests for the Extension decorator.
@@ -13,6 +15,7 @@ class TestExtension(unittest.TestCase):
     maintained by communities or organizations.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -20,7 +23,6 @@ class TestExtension(unittest.TestCase):
             "version": "example_value",
             "decorators": [],
         }
-
 
     def test_missing_required_param_source(self):
         """Test that initialization fails when missing required parameter source."""
@@ -34,14 +36,12 @@ class TestExtension(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Extension(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "source" in error_message or 
-            "required" in error_message.lower()
+            "source" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_source(self):
         """Test validation for the source parameter."""
@@ -49,15 +49,14 @@ class TestExtension(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['source'] = 123  # Not a string
+        params["source"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Extension(**params)
-        self.assertIn('source', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("source", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_version(self):
         """Test validation for the version parameter."""
@@ -65,15 +64,14 @@ class TestExtension(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['version'] = 123  # Not a string
+        params["version"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Extension(**params)
-        self.assertIn('version', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("version", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_decorators(self):
         """Test validation for the decorators parameter."""
@@ -81,15 +79,14 @@ class TestExtension(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['decorators'] = 'not_an_array'  # Not an array
+        params["decorators"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             Extension(**params)
-        self.assertIn('decorators', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("decorators", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -105,7 +102,6 @@ class TestExtension(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

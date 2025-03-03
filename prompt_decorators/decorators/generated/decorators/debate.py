@@ -64,14 +64,22 @@ class Debate(BaseDecorator):
         # Validate parameters
         if self._perspectives is not None:
             if not isinstance(self._perspectives, (int, float)):
-                raise ValidationError("The parameter 'perspectives' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'perspectives' must be a numeric type value."
+                )
             if self._perspectives < 2:
-                raise ValidationError("The parameter 'perspectives' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'perspectives' must be greater than or equal to 2."
+                )
             if self._perspectives > 5:
-                raise ValidationError("The parameter 'perspectives' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'perspectives' must be less than or equal to 5."
+                )
         if self._balanced is not None:
             if not isinstance(self._balanced, bool):
-                raise ValidationError("The parameter 'balanced' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'balanced' must be a boolean type value."
+                )
 
     @property
     def perspectives(self) -> Any:
@@ -111,7 +119,7 @@ class Debate(BaseDecorator):
             "parameters": {
                 "perspectives": self.perspectives,
                 "balanced": self.balanced,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -167,7 +175,7 @@ class Debate(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

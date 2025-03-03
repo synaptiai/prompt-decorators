@@ -1,8 +1,10 @@
 """Tests for the Override decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.override import Override
+
 
 class TestOverride(unittest.TestCase):
     """Tests for the Override decorator.
@@ -13,6 +15,7 @@ class TestOverride(unittest.TestCase):
     specific adjustments.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -20,7 +23,6 @@ class TestOverride(unittest.TestCase):
             "parameters": "example_value",
             "behavior": "example_value",
         }
-
 
     def test_missing_required_param_decorator(self):
         """Test that initialization fails when missing required parameter decorator."""
@@ -34,14 +36,12 @@ class TestOverride(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Override(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "decorator" in error_message or 
-            "required" in error_message.lower()
+            "decorator" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_decorator(self):
         """Test validation for the decorator parameter."""
@@ -49,15 +49,14 @@ class TestOverride(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['decorator'] = 123  # Not a string
+        params["decorator"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Override(**params)
-        self.assertIn('decorator', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("decorator", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_parameters(self):
         """Test validation for the parameters parameter."""
@@ -65,15 +64,14 @@ class TestOverride(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['parameters'] = 123  # Not a string
+        params["parameters"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Override(**params)
-        self.assertIn('parameters', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("parameters", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_behavior(self):
         """Test validation for the behavior parameter."""
@@ -81,15 +79,14 @@ class TestOverride(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['behavior'] = 123  # Not a string
+        params["behavior"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Override(**params)
-        self.assertIn('behavior', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("behavior", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -105,7 +102,6 @@ class TestOverride(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

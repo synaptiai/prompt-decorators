@@ -1,8 +1,10 @@
 """Tests for the Precision decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.precision import Precision
+
 
 class TestPrecision(unittest.TestCase):
     """Tests for the Precision decorator.
@@ -12,6 +14,7 @@ class TestPrecision(unittest.TestCase):
     claims, avoiding vague language in favor of concrete specificity.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,33 +29,37 @@ class TestPrecision(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['level'] = 123  # Not a string
+        params["level"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Precision(**params)
-        self.assertIn('level', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("level", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['level'] = 'invalid_enum_value'  # Invalid enum value
+        params["level"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Precision(**params)
-        self.assertIn('level', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("level", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['level'] = 'moderate'
+        params["level"] = "moderate"
         # This should not raise an exception
         Precision(**params)
-        params['level'] = 'high'
+        params["level"] = "high"
         # This should not raise an exception
         Precision(**params)
-        params['level'] = 'scientific'
+        params["level"] = "scientific"
         # This should not raise an exception
         Precision(**params)
 
@@ -62,15 +69,14 @@ class TestPrecision(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['units'] = 'not_a_boolean'  # Not a boolean
+        params["units"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Precision(**params)
-        self.assertIn('units', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("units", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_definitions(self):
         """Test validation for the definitions parameter."""
@@ -78,15 +84,14 @@ class TestPrecision(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['definitions'] = 'not_a_boolean'  # Not a boolean
+        params["definitions"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Precision(**params)
-        self.assertIn('definitions', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("definitions", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -102,7 +107,6 @@ class TestPrecision(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

@@ -1,8 +1,10 @@
 """Tests for the Abductive decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.abductive import Abductive
+
 
 class TestAbductive(unittest.TestCase):
     """Tests for the Abductive decorator.
@@ -13,6 +15,7 @@ class TestAbductive(unittest.TestCase):
     incomplete information.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +30,40 @@ class TestAbductive(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['hypotheses'] = 'not_a_number'  # Not a number
+        params["hypotheses"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Abductive(**params)
-        self.assertIn('hypotheses', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("hypotheses", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['hypotheses'] = 1  # Below minimum
+        params["hypotheses"] = 1  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Abductive(**params)
-        self.assertIn('hypotheses', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("hypotheses", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['hypotheses'] = 6  # Above maximum
+        params["hypotheses"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Abductive(**params)
-        self.assertIn('hypotheses', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("hypotheses", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_criteria(self):
         """Test validation for the criteria parameter."""
@@ -63,15 +71,14 @@ class TestAbductive(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['criteria'] = 'not_an_array'  # Not an array
+        params["criteria"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             Abductive(**params)
-        self.assertIn('criteria', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("criteria", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_rank(self):
         """Test validation for the rank parameter."""
@@ -79,15 +86,14 @@ class TestAbductive(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['rank'] = 'not_a_boolean'  # Not a boolean
+        params["rank"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Abductive(**params)
-        self.assertIn('rank', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("rank", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -103,7 +109,6 @@ class TestAbductive(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

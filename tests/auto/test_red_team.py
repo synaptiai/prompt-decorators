@@ -1,8 +1,10 @@
 """Tests for the RedTeam decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.red_team import RedTeam
+
 
 class TestRedTeam(unittest.TestCase):
     """Tests for the RedTeam decorator.
@@ -13,6 +15,7 @@ class TestRedTeam(unittest.TestCase):
     or arguments.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,33 +30,37 @@ class TestRedTeam(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['strength'] = 123  # Not a string
+        params["strength"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             RedTeam(**params)
-        self.assertIn('strength', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("strength", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['strength'] = 'invalid_enum_value'  # Invalid enum value
+        params["strength"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             RedTeam(**params)
-        self.assertIn('strength', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("strength", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['strength'] = 'moderate'
+        params["strength"] = "moderate"
         # This should not raise an exception
         RedTeam(**params)
-        params['strength'] = 'aggressive'
+        params["strength"] = "aggressive"
         # This should not raise an exception
         RedTeam(**params)
-        params['strength'] = 'steelman'
+        params["strength"] = "steelman"
         # This should not raise an exception
         RedTeam(**params)
 
@@ -63,15 +70,14 @@ class TestRedTeam(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['focus'] = 'not_an_array'  # Not an array
+        params["focus"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             RedTeam(**params)
-        self.assertIn('focus', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("focus", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_constructive(self):
         """Test validation for the constructive parameter."""
@@ -79,15 +85,14 @@ class TestRedTeam(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['constructive'] = 'not_a_boolean'  # Not a boolean
+        params["constructive"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             RedTeam(**params)
-        self.assertIn('constructive', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("constructive", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -103,7 +108,6 @@ class TestRedTeam(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

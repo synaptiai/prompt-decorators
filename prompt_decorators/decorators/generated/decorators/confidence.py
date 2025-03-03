@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ConfidenceScaleEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import ConfidenceScaleEnum
 
 
 class Confidence(BaseDecorator):
@@ -72,19 +70,31 @@ class Confidence(BaseDecorator):
         # Validate parameters
         if self._scale is not None:
             if not isinstance(self._scale, str):
-                raise ValidationError("The parameter 'scale' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'scale' must be a string type value."
+                )
             if self._scale not in ["percent", "qualitative", "stars", "numeric"]:
-                raise ValidationError(f"The parameter 'scale' must be one of the allowed enum values: ['percent', 'qualitative', 'stars', 'numeric']. Got {self._scale}")
+                raise ValidationError(
+                    f"The parameter 'scale' must be one of the allowed enum values: ['percent', 'qualitative', 'stars', 'numeric']. Got {self._scale}"
+                )
         if self._threshold is not None:
             if not isinstance(self._threshold, (int, float)):
-                raise ValidationError("The parameter 'threshold' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'threshold' must be a numeric type value."
+                )
             if self._threshold < 0:
-                raise ValidationError("The parameter 'threshold' must be greater than or equal to 0.")
+                raise ValidationError(
+                    "The parameter 'threshold' must be greater than or equal to 0."
+                )
             if self._threshold > 100:
-                raise ValidationError("The parameter 'threshold' must be less than or equal to 100.")
+                raise ValidationError(
+                    "The parameter 'threshold' must be less than or equal to 100."
+                )
         if self._detailed is not None:
             if not isinstance(self._detailed, bool):
-                raise ValidationError("The parameter 'detailed' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'detailed' must be a boolean type value."
+                )
 
     @property
     def scale(self) -> Literal["percent", "qualitative", "stars", "numeric"]:
@@ -138,7 +148,7 @@ class Confidence(BaseDecorator):
                 "scale": self.scale,
                 "threshold": self.threshold,
                 "detailed": self.detailed,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -196,7 +206,7 @@ class Confidence(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -46,7 +46,9 @@ class BreakAndBuild(BaseDecorator):
 
     def __init__(
         self,
-        breakdown: Literal["weaknesses", "assumptions", "risks", "comprehensive"] = "comprehensive",
+        breakdown: Literal[
+            "weaknesses", "assumptions", "risks", "comprehensive"
+        ] = "comprehensive",
         intensity: Literal["mild", "thorough", "intense"] = "thorough",
         buildRatio: Any = 1,
     ) -> None:
@@ -74,24 +76,45 @@ class BreakAndBuild(BaseDecorator):
         # Validate parameters
         if self._breakdown is not None:
             if not isinstance(self._breakdown, str):
-                raise ValidationError("The parameter 'breakdown' must be a string type value.")
-            if self._breakdown not in ["weaknesses", "assumptions", "risks", "comprehensive"]:
-                raise ValidationError(f"The parameter 'breakdown' must be one of the allowed enum values: ['weaknesses', 'assumptions', 'risks', 'comprehensive']. Got {self._breakdown}")
+                raise ValidationError(
+                    "The parameter 'breakdown' must be a string type value."
+                )
+            if self._breakdown not in [
+                "weaknesses",
+                "assumptions",
+                "risks",
+                "comprehensive",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'breakdown' must be one of the allowed enum values: ['weaknesses', 'assumptions', 'risks', 'comprehensive']. Got {self._breakdown}"
+                )
         if self._intensity is not None:
             if not isinstance(self._intensity, str):
-                raise ValidationError("The parameter 'intensity' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'intensity' must be a string type value."
+                )
             if self._intensity not in ["mild", "thorough", "intense"]:
-                raise ValidationError(f"The parameter 'intensity' must be one of the allowed enum values: ['mild', 'thorough', 'intense']. Got {self._intensity}")
+                raise ValidationError(
+                    f"The parameter 'intensity' must be one of the allowed enum values: ['mild', 'thorough', 'intense']. Got {self._intensity}"
+                )
         if self._buildRatio is not None:
             if not isinstance(self._buildRatio, (int, float)):
-                raise ValidationError("The parameter 'buildRatio' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'buildRatio' must be a numeric type value."
+                )
             if self._buildRatio < 0.5:
-                raise ValidationError("The parameter 'buildRatio' must be greater than or equal to 0.5.")
+                raise ValidationError(
+                    "The parameter 'buildRatio' must be greater than or equal to 0.5."
+                )
             if self._buildRatio > 3:
-                raise ValidationError("The parameter 'buildRatio' must be less than or equal to 3.")
+                raise ValidationError(
+                    "The parameter 'buildRatio' must be less than or equal to 3."
+                )
 
     @property
-    def breakdown(self) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
+    def breakdown(
+        self,
+    ) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
         """
         Get the breakdown parameter value.
 
@@ -142,7 +165,7 @@ class BreakAndBuild(BaseDecorator):
                 "breakdown": self.breakdown,
                 "intensity": self.intensity,
                 "buildRatio": self.buildRatio,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -200,7 +223,7 @@ class BreakAndBuild(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

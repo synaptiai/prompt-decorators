@@ -70,13 +70,19 @@ class Override(BaseDecorator):
         # Validate parameters
         if self._decorator is not None:
             if not isinstance(self._decorator, str):
-                raise ValidationError("The parameter 'decorator' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'decorator' must be a string type value."
+                )
         if self._parameters is not None:
             if not isinstance(self._parameters, str):
-                raise ValidationError("The parameter 'parameters' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'parameters' must be a string type value."
+                )
         if self._behavior is not None:
             if not isinstance(self._behavior, str):
-                raise ValidationError("The parameter 'behavior' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'behavior' must be a string type value."
+                )
 
     @property
     def decorator(self) -> str:
@@ -130,7 +136,7 @@ class Override(BaseDecorator):
                 "decorator": self.decorator,
                 "parameters": self.params,
                 "behavior": self.behavior,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -188,7 +194,7 @@ class Override(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

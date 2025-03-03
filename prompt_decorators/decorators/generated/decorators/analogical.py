@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    AnalogicalDepthEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import AnalogicalDepthEnum
 
 
 class Analogical(BaseDecorator):
@@ -71,19 +69,31 @@ class Analogical(BaseDecorator):
         # Validate parameters
         if self._domain is not None:
             if not isinstance(self._domain, str):
-                raise ValidationError("The parameter 'domain' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'domain' must be a string type value."
+                )
         if self._count is not None:
             if not isinstance(self._count, (int, float)):
-                raise ValidationError("The parameter 'count' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'count' must be a numeric type value."
+                )
             if self._count < 1:
-                raise ValidationError("The parameter 'count' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'count' must be greater than or equal to 1."
+                )
             if self._count > 5:
-                raise ValidationError("The parameter 'count' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'count' must be less than or equal to 5."
+                )
         if self._depth is not None:
             if not isinstance(self._depth, str):
-                raise ValidationError("The parameter 'depth' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'depth' must be a string type value."
+                )
             if self._depth not in ["brief", "moderate", "extended"]:
-                raise ValidationError(f"The parameter 'depth' must be one of the allowed enum values: ['brief', 'moderate', 'extended']. Got {self._depth}")
+                raise ValidationError(
+                    f"The parameter 'depth' must be one of the allowed enum values: ['brief', 'moderate', 'extended']. Got {self._depth}"
+                )
 
     @property
     def domain(self) -> str:
@@ -137,7 +147,7 @@ class Analogical(BaseDecorator):
                 "domain": self.domain,
                 "count": self.count,
                 "depth": self.depth,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -195,7 +205,7 @@ class Analogical(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

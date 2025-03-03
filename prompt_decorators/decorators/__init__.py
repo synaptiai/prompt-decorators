@@ -9,14 +9,14 @@ __all__ = ["Reasoning"]
 __version__ = "0.1.0"
 
 # Import the Reasoning class
-from .reasoning import Reasoning
+from .reasoning import Reasoning  # type: ignore
 
 # Import generated decorators
 try:
     # Try to import all generated decorators
     # Get all exported decorators from the generated package
-    from .generated.decorators import *
-    from .generated.decorators import __all__ as generated_all
+    from .generated.decorators import *  # type: ignore
+    from .generated.decorators import __all__ as generated_all  # type: ignore
 
     # Add to our __all__
     __all__ = ["Reasoning"]

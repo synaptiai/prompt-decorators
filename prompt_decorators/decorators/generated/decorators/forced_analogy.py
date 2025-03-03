@@ -45,7 +45,9 @@ class ForcedAnalogy(BaseDecorator):
     def __init__(
         self,
         source: str,
-        comprehensiveness: Literal["basic", "comprehensive", "detailed"] = "comprehensive",
+        comprehensiveness: Literal[
+            "basic", "comprehensive", "detailed"
+        ] = "comprehensive",
         mappings: Any = 3,
     ) -> None:
         """
@@ -73,19 +75,31 @@ class ForcedAnalogy(BaseDecorator):
         # Validate parameters
         if self._source is not None:
             if not isinstance(self._source, str):
-                raise ValidationError("The parameter 'source' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'source' must be a string type value."
+                )
         if self._comprehensiveness is not None:
             if not isinstance(self._comprehensiveness, str):
-                raise ValidationError("The parameter 'comprehensiveness' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'comprehensiveness' must be a string type value."
+                )
             if self._comprehensiveness not in ["basic", "comprehensive", "detailed"]:
-                raise ValidationError(f"The parameter 'comprehensiveness' must be one of the allowed enum values: ['basic', 'comprehensive', 'detailed']. Got {self._comprehensiveness}")
+                raise ValidationError(
+                    f"The parameter 'comprehensiveness' must be one of the allowed enum values: ['basic', 'comprehensive', 'detailed']. Got {self._comprehensiveness}"
+                )
         if self._mappings is not None:
             if not isinstance(self._mappings, (int, float)):
-                raise ValidationError("The parameter 'mappings' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'mappings' must be a numeric type value."
+                )
             if self._mappings < 1:
-                raise ValidationError("The parameter 'mappings' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'mappings' must be greater than or equal to 1."
+                )
             if self._mappings > 7:
-                raise ValidationError("The parameter 'mappings' must be less than or equal to 7.")
+                raise ValidationError(
+                    "The parameter 'mappings' must be less than or equal to 7."
+                )
 
     @property
     def source(self) -> str:
@@ -139,7 +153,7 @@ class ForcedAnalogy(BaseDecorator):
                 "source": self.source,
                 "comprehensiveness": self.comprehensiveness,
                 "mappings": self.mappings,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -197,7 +211,7 @@ class ForcedAnalogy(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

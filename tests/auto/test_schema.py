@@ -1,8 +1,10 @@
 """Tests for the Schema decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.schema import Schema
+
 
 class TestSchema(unittest.TestCase):
     """Tests for the Schema decorator.
@@ -13,13 +15,13 @@ class TestSchema(unittest.TestCase):
     specific use cases or data processing needs.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
             "schema": "example_value",
             "strict": False,
         }
-
 
     def test_missing_required_param_schema(self):
         """Test that initialization fails when missing required parameter schema."""
@@ -33,14 +35,12 @@ class TestSchema(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Schema(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "schema" in error_message or 
-            "required" in error_message.lower()
+            "schema" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_schema(self):
         """Test validation for the schema parameter."""
@@ -48,15 +48,14 @@ class TestSchema(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['schema'] = 123  # Not a string
+        params["schema"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Schema(**params)
-        self.assertIn('schema', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("schema", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_strict(self):
         """Test validation for the strict parameter."""
@@ -64,15 +63,14 @@ class TestSchema(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['strict'] = 'not_a_boolean'  # Not a boolean
+        params["strict"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Schema(**params)
-        self.assertIn('strict', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("strict", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -88,7 +86,6 @@ class TestSchema(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

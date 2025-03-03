@@ -1,8 +1,10 @@
 """Tests for the Summary decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.summary import Summary
+
 
 class TestSummary(unittest.TestCase):
     """Tests for the Summary decorator.
@@ -13,6 +15,7 @@ class TestSummary(unittest.TestCase):
     topics.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,33 +30,37 @@ class TestSummary(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['length'] = 123  # Not a string
+        params["length"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Summary(**params)
-        self.assertIn('length', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("length", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['length'] = 'invalid_enum_value'  # Invalid enum value
+        params["length"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Summary(**params)
-        self.assertIn('length', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("length", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['length'] = 'short'
+        params["length"] = "short"
         # This should not raise an exception
         Summary(**params)
-        params['length'] = 'medium'
+        params["length"] = "medium"
         # This should not raise an exception
         Summary(**params)
-        params['length'] = 'long'
+        params["length"] = "long"
         # This should not raise an exception
         Summary(**params)
 
@@ -63,35 +70,40 @@ class TestSummary(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['wordCount'] = 'not_a_number'  # Not a number
+        params["wordCount"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Summary(**params)
-        self.assertIn('wordCount', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("wordCount", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['wordCount'] = 9  # Below minimum
+        params["wordCount"] = 9  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Summary(**params)
-        self.assertIn('wordCount', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("wordCount", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['wordCount'] = 501  # Above maximum
+        params["wordCount"] = 501  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Summary(**params)
-        self.assertIn('wordCount', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("wordCount", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_position(self):
         """Test validation for the position parameter."""
@@ -99,33 +111,37 @@ class TestSummary(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['position'] = 123  # Not a string
+        params["position"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Summary(**params)
-        self.assertIn('position', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("position", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['position'] = 'invalid_enum_value'  # Invalid enum value
+        params["position"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Summary(**params)
-        self.assertIn('position', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("position", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['position'] = 'beginning'
+        params["position"] = "beginning"
         # This should not raise an exception
         Summary(**params)
-        params['position'] = 'end'
+        params["position"] = "end"
         # This should not raise an exception
         Summary(**params)
-        params['position'] = 'standalone'
+        params["position"] = "standalone"
         # This should not raise an exception
         Summary(**params)
 
@@ -143,7 +159,6 @@ class TestSummary(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

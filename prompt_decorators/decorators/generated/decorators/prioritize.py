@@ -70,17 +70,27 @@ class Prioritize(BaseDecorator):
         # Validate parameters
         if self._criteria is not None:
             if not isinstance(self._criteria, str):
-                raise ValidationError("The parameter 'criteria' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'criteria' must be a string type value."
+                )
         if self._count is not None:
             if not isinstance(self._count, (int, float)):
-                raise ValidationError("The parameter 'count' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'count' must be a numeric type value."
+                )
             if self._count < 1:
-                raise ValidationError("The parameter 'count' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'count' must be greater than or equal to 1."
+                )
             if self._count > 10:
-                raise ValidationError("The parameter 'count' must be less than or equal to 10.")
+                raise ValidationError(
+                    "The parameter 'count' must be less than or equal to 10."
+                )
         if self._showRationale is not None:
             if not isinstance(self._showRationale, bool):
-                raise ValidationError("The parameter 'showRationale' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'showRationale' must be a boolean type value."
+                )
 
     @property
     def criteria(self) -> str:
@@ -134,7 +144,7 @@ class Prioritize(BaseDecorator):
                 "criteria": self.criteria,
                 "count": self.count,
                 "showRationale": self.showRationale,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -192,7 +202,7 @@ class Prioritize(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

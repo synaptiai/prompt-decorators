@@ -1,8 +1,10 @@
 """Tests for the Chain decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.chain import Chain
+
 
 class TestChain(unittest.TestCase):
     """Tests for the Chain decorator.
@@ -12,6 +14,7 @@ class TestChain(unittest.TestCase):
     transformations by combining multiple simpler decorators in a pipeline.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -19,7 +22,6 @@ class TestChain(unittest.TestCase):
             "showSteps": False,
             "stopOnFailure": True,
         }
-
 
     def test_missing_required_param_decorators(self):
         """Test that initialization fails when missing required parameter decorators."""
@@ -33,14 +35,12 @@ class TestChain(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Chain(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "decorators" in error_message or 
-            "required" in error_message.lower()
+            "decorators" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_decorators(self):
         """Test validation for the decorators parameter."""
@@ -48,15 +48,14 @@ class TestChain(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['decorators'] = 'not_an_array'  # Not an array
+        params["decorators"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             Chain(**params)
-        self.assertIn('decorators', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("decorators", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_showSteps(self):
         """Test validation for the showSteps parameter."""
@@ -64,15 +63,14 @@ class TestChain(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['showSteps'] = 'not_a_boolean'  # Not a boolean
+        params["showSteps"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Chain(**params)
-        self.assertIn('showSteps', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("showSteps", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_stopOnFailure(self):
         """Test validation for the stopOnFailure parameter."""
@@ -80,15 +78,14 @@ class TestChain(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['stopOnFailure'] = 'not_a_boolean'  # Not a boolean
+        params["stopOnFailure"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Chain(**params)
-        self.assertIn('stopOnFailure', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("stopOnFailure", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -104,7 +101,6 @@ class TestChain(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

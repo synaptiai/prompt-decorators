@@ -1,8 +1,10 @@
 """Tests for the Persona decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.persona import Persona
+
 
 class TestPersona(unittest.TestCase):
     """Tests for the Persona decorator.
@@ -12,6 +14,7 @@ class TestPersona(unittest.TestCase):
     personality types would view a situation or topic.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -19,7 +22,6 @@ class TestPersona(unittest.TestCase):
             "traits": [],
             "goals": [],
         }
-
 
     def test_missing_required_param_role(self):
         """Test that initialization fails when missing required parameter role."""
@@ -33,14 +35,10 @@ class TestPersona(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Persona(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
-        self.assertTrue(
-            "role" in error_message or 
-            "required" in error_message.lower()
-        )
-
+        self.assertTrue("role" in error_message or "required" in error_message.lower())
 
     def test_validate_role(self):
         """Test validation for the role parameter."""
@@ -48,15 +46,14 @@ class TestPersona(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['role'] = 123  # Not a string
+        params["role"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Persona(**params)
-        self.assertIn('role', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("role", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_traits(self):
         """Test validation for the traits parameter."""
@@ -64,15 +61,14 @@ class TestPersona(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['traits'] = 'not_an_array'  # Not an array
+        params["traits"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             Persona(**params)
-        self.assertIn('traits', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("traits", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_goals(self):
         """Test validation for the goals parameter."""
@@ -80,15 +76,14 @@ class TestPersona(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['goals'] = 'not_an_array'  # Not an array
+        params["goals"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             Persona(**params)
-        self.assertIn('goals', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("goals", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -104,7 +99,6 @@ class TestPersona(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

@@ -72,19 +72,31 @@ class StressTest(BaseDecorator):
         # Validate parameters
         if self._scenarios is not None:
             if not isinstance(self._scenarios, (int, float)):
-                raise ValidationError("The parameter 'scenarios' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'scenarios' must be a numeric type value."
+                )
             if self._scenarios < 1:
-                raise ValidationError("The parameter 'scenarios' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'scenarios' must be greater than or equal to 1."
+                )
             if self._scenarios > 5:
-                raise ValidationError("The parameter 'scenarios' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'scenarios' must be less than or equal to 5."
+                )
         if self._severity is not None:
             if not isinstance(self._severity, str):
-                raise ValidationError("The parameter 'severity' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'severity' must be a string type value."
+                )
             if self._severity not in ["moderate", "severe", "extreme"]:
-                raise ValidationError(f"The parameter 'severity' must be one of the allowed enum values: ['moderate', 'severe', 'extreme']. Got {self._severity}")
+                raise ValidationError(
+                    f"The parameter 'severity' must be one of the allowed enum values: ['moderate', 'severe', 'extreme']. Got {self._severity}"
+                )
         if self._domain is not None:
             if not isinstance(self._domain, str):
-                raise ValidationError("The parameter 'domain' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'domain' must be a string type value."
+                )
 
     @property
     def scenarios(self) -> Any:
@@ -138,7 +150,7 @@ class StressTest(BaseDecorator):
                 "scenarios": self.scenarios,
                 "severity": self.severity,
                 "domain": self.domain,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -196,7 +208,7 @@ class StressTest(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

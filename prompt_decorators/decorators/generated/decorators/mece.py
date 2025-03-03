@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    MECEFrameworkEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import MECEFrameworkEnum
 
 
 class MECE(BaseDecorator):
@@ -47,7 +45,9 @@ class MECE(BaseDecorator):
         self,
         dimensions: Any = 3,
         depth: Any = 2,
-        framework: Literal["issue tree", "value chain", "business segments", "stakeholders", "custom"] = "custom",
+        framework: Literal[
+            "issue tree", "value chain", "business segments", "stakeholders", "custom"
+        ] = "custom",
     ) -> None:
         """
         Initialize the MECE decorator.
@@ -74,23 +74,45 @@ class MECE(BaseDecorator):
         # Validate parameters
         if self._dimensions is not None:
             if not isinstance(self._dimensions, (int, float)):
-                raise ValidationError("The parameter 'dimensions' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'dimensions' must be a numeric type value."
+                )
             if self._dimensions < 2:
-                raise ValidationError("The parameter 'dimensions' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'dimensions' must be greater than or equal to 2."
+                )
             if self._dimensions > 5:
-                raise ValidationError("The parameter 'dimensions' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'dimensions' must be less than or equal to 5."
+                )
         if self._depth is not None:
             if not isinstance(self._depth, (int, float)):
-                raise ValidationError("The parameter 'depth' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'depth' must be a numeric type value."
+                )
             if self._depth < 1:
-                raise ValidationError("The parameter 'depth' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'depth' must be greater than or equal to 1."
+                )
             if self._depth > 3:
-                raise ValidationError("The parameter 'depth' must be less than or equal to 3.")
+                raise ValidationError(
+                    "The parameter 'depth' must be less than or equal to 3."
+                )
         if self._framework is not None:
             if not isinstance(self._framework, str):
-                raise ValidationError("The parameter 'framework' must be a string type value.")
-            if self._framework not in ["issue tree", "value chain", "business segments", "stakeholders", "custom"]:
-                raise ValidationError(f"The parameter 'framework' must be one of the allowed enum values: ['issue tree', 'value chain', 'business segments', 'stakeholders', 'custom']. Got {self._framework}")
+                raise ValidationError(
+                    "The parameter 'framework' must be a string type value."
+                )
+            if self._framework not in [
+                "issue tree",
+                "value chain",
+                "business segments",
+                "stakeholders",
+                "custom",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'framework' must be one of the allowed enum values: ['issue tree', 'value chain', 'business segments', 'stakeholders', 'custom']. Got {self._framework}"
+                )
 
     @property
     def dimensions(self) -> Any:
@@ -119,7 +141,11 @@ class MECE(BaseDecorator):
         return self._depth
 
     @property
-    def framework(self) -> Literal["issue tree", "value chain", "business segments", "stakeholders", "custom"]:
+    def framework(
+        self,
+    ) -> Literal[
+        "issue tree", "value chain", "business segments", "stakeholders", "custom"
+    ]:
         """
         Get the framework parameter value.
 
@@ -144,7 +170,7 @@ class MECE(BaseDecorator):
                 "dimensions": self.dimensions,
                 "depth": self.depth,
                 "framework": self.framework,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -202,7 +228,7 @@ class MECE(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

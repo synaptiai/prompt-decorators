@@ -1,8 +1,10 @@
 """Tests for the OutputFormat decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.output_format import OutputFormat
+
 
 class TestOutputFormat(unittest.TestCase):
     """Tests for the OutputFormat decorator.
@@ -12,12 +14,12 @@ class TestOutputFormat(unittest.TestCase):
     the response in a consistent way.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
             "format": "json",
         }
-
 
     def test_missing_required_param_format(self):
         """Test that initialization fails when missing required parameter format."""
@@ -31,14 +33,12 @@ class TestOutputFormat(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             OutputFormat(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "format" in error_message or 
-            "required" in error_message.lower()
+            "format" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_format(self):
         """Test validation for the format parameter."""
@@ -46,39 +46,43 @@ class TestOutputFormat(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['format'] = 123  # Not a string
+        params["format"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             OutputFormat(**params)
-        self.assertIn('format', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("format", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['format'] = 'invalid_enum_value'  # Invalid enum value
+        params["format"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             OutputFormat(**params)
-        self.assertIn('format', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("format", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['format'] = 'json'
+        params["format"] = "json"
         # This should not raise an exception
         OutputFormat(**params)
-        params['format'] = 'markdown'
+        params["format"] = "markdown"
         # This should not raise an exception
         OutputFormat(**params)
-        params['format'] = 'yaml'
+        params["format"] = "yaml"
         # This should not raise an exception
         OutputFormat(**params)
-        params['format'] = 'xml'
+        params["format"] = "xml"
         # This should not raise an exception
         OutputFormat(**params)
-        params['format'] = 'plaintext'
+        params["format"] = "plaintext"
         # This should not raise an exception
         OutputFormat(**params)
 
@@ -96,7 +100,6 @@ class TestOutputFormat(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

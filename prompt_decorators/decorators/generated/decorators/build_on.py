@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
 from prompt_decorators.decorators.generated.decorators.enums import (
-    BuildOnReferenceEnum,
     BuildOnApproachEnum,
+    BuildOnReferenceEnum,
 )
 
 
@@ -72,17 +72,27 @@ class BuildOn(BaseDecorator):
         # Validate parameters
         if self._reference is not None:
             if not isinstance(self._reference, str):
-                raise ValidationError("The parameter 'reference' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'reference' must be a string type value."
+                )
             if self._reference not in ["last", "specific", "all"]:
-                raise ValidationError(f"The parameter 'reference' must be one of the allowed enum values: ['last', 'specific', 'all']. Got {self._reference}")
+                raise ValidationError(
+                    f"The parameter 'reference' must be one of the allowed enum values: ['last', 'specific', 'all']. Got {self._reference}"
+                )
         if self._approach is not None:
             if not isinstance(self._approach, str):
-                raise ValidationError("The parameter 'approach' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'approach' must be a string type value."
+                )
             if self._approach not in ["extend", "refine", "contrast", "synthesize"]:
-                raise ValidationError(f"The parameter 'approach' must be one of the allowed enum values: ['extend', 'refine', 'contrast', 'synthesize']. Got {self._approach}")
+                raise ValidationError(
+                    f"The parameter 'approach' must be one of the allowed enum values: ['extend', 'refine', 'contrast', 'synthesize']. Got {self._approach}"
+                )
         if self._preserveStructure is not None:
             if not isinstance(self._preserveStructure, bool):
-                raise ValidationError("The parameter 'preserveStructure' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'preserveStructure' must be a boolean type value."
+                )
 
     @property
     def reference(self) -> Literal["last", "specific", "all"]:
@@ -136,7 +146,7 @@ class BuildOn(BaseDecorator):
                 "reference": self.reference,
                 "approach": self.approach,
                 "preserveStructure": self.preserveStructure,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -194,7 +204,7 @@ class BuildOn(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

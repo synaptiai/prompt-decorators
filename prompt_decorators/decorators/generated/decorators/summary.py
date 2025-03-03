@@ -73,21 +73,35 @@ class Summary(BaseDecorator):
         # Validate parameters
         if self._length is not None:
             if not isinstance(self._length, str):
-                raise ValidationError("The parameter 'length' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'length' must be a string type value."
+                )
             if self._length not in ["short", "medium", "long"]:
-                raise ValidationError(f"The parameter 'length' must be one of the allowed enum values: ['short', 'medium', 'long']. Got {self._length}")
+                raise ValidationError(
+                    f"The parameter 'length' must be one of the allowed enum values: ['short', 'medium', 'long']. Got {self._length}"
+                )
         if self._wordCount is not None:
             if not isinstance(self._wordCount, (int, float)):
-                raise ValidationError("The parameter 'wordCount' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'wordCount' must be a numeric type value."
+                )
             if self._wordCount < 10:
-                raise ValidationError("The parameter 'wordCount' must be greater than or equal to 10.")
+                raise ValidationError(
+                    "The parameter 'wordCount' must be greater than or equal to 10."
+                )
             if self._wordCount > 500:
-                raise ValidationError("The parameter 'wordCount' must be less than or equal to 500.")
+                raise ValidationError(
+                    "The parameter 'wordCount' must be less than or equal to 500."
+                )
         if self._position is not None:
             if not isinstance(self._position, str):
-                raise ValidationError("The parameter 'position' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'position' must be a string type value."
+                )
             if self._position not in ["beginning", "end", "standalone"]:
-                raise ValidationError(f"The parameter 'position' must be one of the allowed enum values: ['beginning', 'end', 'standalone']. Got {self._position}")
+                raise ValidationError(
+                    f"The parameter 'position' must be one of the allowed enum values: ['beginning', 'end', 'standalone']. Got {self._position}"
+                )
 
     @property
     def length(self) -> Literal["short", "medium", "long"]:
@@ -141,7 +155,7 @@ class Summary(BaseDecorator):
                 "length": self.length,
                 "wordCount": self.wordCount,
                 "position": self.position,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -199,7 +213,7 @@ class Summary(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

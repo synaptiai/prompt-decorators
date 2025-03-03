@@ -1,8 +1,10 @@
 """Tests for the Outline decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.outline import Outline
+
 
 class TestOutline(unittest.TestCase):
     """Tests for the Outline decorator.
@@ -12,6 +14,7 @@ class TestOutline(unittest.TestCase):
     structure that highlights relationships between main topics and subtopics.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,35 +29,40 @@ class TestOutline(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 'not_a_number'  # Not a number
+        params["depth"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Outline(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['depth'] = 0  # Below minimum
+        params["depth"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Outline(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['depth'] = 6  # Above maximum
+        params["depth"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Outline(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_style(self):
         """Test validation for the style parameter."""
@@ -62,39 +70,43 @@ class TestOutline(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['style'] = 123  # Not a string
+        params["style"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Outline(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['style'] = 'invalid_enum_value'  # Invalid enum value
+        params["style"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Outline(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['style'] = 'numeric'
+        params["style"] = "numeric"
         # This should not raise an exception
         Outline(**params)
-        params['style'] = 'bullet'
+        params["style"] = "bullet"
         # This should not raise an exception
         Outline(**params)
-        params['style'] = 'roman'
+        params["style"] = "roman"
         # This should not raise an exception
         Outline(**params)
-        params['style'] = 'alpha'
+        params["style"] = "alpha"
         # This should not raise an exception
         Outline(**params)
-        params['style'] = 'mixed'
+        params["style"] = "mixed"
         # This should not raise an exception
         Outline(**params)
 
@@ -104,15 +116,14 @@ class TestOutline(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['detailed'] = 'not_a_boolean'  # Not a boolean
+        params["detailed"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Outline(**params)
-        self.assertIn('detailed', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("detailed", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -128,7 +139,6 @@ class TestOutline(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

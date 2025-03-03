@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    OutlineStyleEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import OutlineStyleEnum
 
 
 class Outline(BaseDecorator):
@@ -72,19 +70,31 @@ class Outline(BaseDecorator):
         # Validate parameters
         if self._depth is not None:
             if not isinstance(self._depth, (int, float)):
-                raise ValidationError("The parameter 'depth' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'depth' must be a numeric type value."
+                )
             if self._depth < 1:
-                raise ValidationError("The parameter 'depth' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'depth' must be greater than or equal to 1."
+                )
             if self._depth > 5:
-                raise ValidationError("The parameter 'depth' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'depth' must be less than or equal to 5."
+                )
         if self._style is not None:
             if not isinstance(self._style, str):
-                raise ValidationError("The parameter 'style' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'style' must be a string type value."
+                )
             if self._style not in ["numeric", "bullet", "roman", "alpha", "mixed"]:
-                raise ValidationError(f"The parameter 'style' must be one of the allowed enum values: ['numeric', 'bullet', 'roman', 'alpha', 'mixed']. Got {self._style}")
+                raise ValidationError(
+                    f"The parameter 'style' must be one of the allowed enum values: ['numeric', 'bullet', 'roman', 'alpha', 'mixed']. Got {self._style}"
+                )
         if self._detailed is not None:
             if not isinstance(self._detailed, bool):
-                raise ValidationError("The parameter 'detailed' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'detailed' must be a boolean type value."
+                )
 
     @property
     def depth(self) -> Any:
@@ -138,7 +148,7 @@ class Outline(BaseDecorator):
                 "depth": self.depth,
                 "style": self.style,
                 "detailed": self.detailed,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -196,7 +206,7 @@ class Outline(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -1,8 +1,10 @@
 """Tests for the RootCause decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.root_cause import RootCause
+
 
 class TestRootCause(unittest.TestCase):
     """Tests for the RootCause decorator.
@@ -13,6 +15,7 @@ class TestRootCause(unittest.TestCase):
     immediate causes.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,33 +29,37 @@ class TestRootCause(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['method'] = 123  # Not a string
+        params["method"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             RootCause(**params)
-        self.assertIn('method', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("method", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['method'] = 'invalid_enum_value'  # Invalid enum value
+        params["method"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             RootCause(**params)
-        self.assertIn('method', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("method", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['method'] = '5whys'
+        params["method"] = "5whys"
         # This should not raise an exception
         RootCause(**params)
-        params['method'] = 'fishbone'
+        params["method"] = "fishbone"
         # This should not raise an exception
         RootCause(**params)
-        params['method'] = 'pareto'
+        params["method"] = "pareto"
         # This should not raise an exception
         RootCause(**params)
 
@@ -62,35 +69,40 @@ class TestRootCause(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 'not_a_number'  # Not a number
+        params["depth"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             RootCause(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['depth'] = 2  # Below minimum
+        params["depth"] = 2  # Below minimum
         with self.assertRaises(ValidationError) as context:
             RootCause(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['depth'] = 8  # Above maximum
+        params["depth"] = 8  # Above maximum
         with self.assertRaises(ValidationError) as context:
             RootCause(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -112,7 +124,6 @@ class TestRootCause(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

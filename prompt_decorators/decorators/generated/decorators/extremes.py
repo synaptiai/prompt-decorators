@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ExtremesVersionsEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import ExtremesVersionsEnum
 
 
 class Extremes(BaseDecorator):
@@ -74,15 +72,23 @@ class Extremes(BaseDecorator):
         # Validate parameters
         if self._versions is not None:
             if not isinstance(self._versions, str):
-                raise ValidationError("The parameter 'versions' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'versions' must be a string type value."
+                )
             if self._versions not in ["radical", "minimal", "both"]:
-                raise ValidationError(f"The parameter 'versions' must be one of the allowed enum values: ['radical', 'minimal', 'both']. Got {self._versions}")
+                raise ValidationError(
+                    f"The parameter 'versions' must be one of the allowed enum values: ['radical', 'minimal', 'both']. Got {self._versions}"
+                )
         if self._dimension is not None:
             if not isinstance(self._dimension, str):
-                raise ValidationError("The parameter 'dimension' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'dimension' must be a string type value."
+                )
         if self._compare is not None:
             if not isinstance(self._compare, bool):
-                raise ValidationError("The parameter 'compare' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'compare' must be a boolean type value."
+                )
 
     @property
     def versions(self) -> Literal["radical", "minimal", "both"]:
@@ -136,7 +142,7 @@ class Extremes(BaseDecorator):
                 "versions": self.versions,
                 "dimension": self.dimension,
                 "compare": self.compare,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -194,7 +200,7 @@ class Extremes(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

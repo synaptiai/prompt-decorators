@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ReasoningDepthEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import ReasoningDepthEnum
 
 
 class Reasoning(BaseDecorator):
@@ -62,9 +60,13 @@ class Reasoning(BaseDecorator):
         # Validate parameters
         if self._depth is not None:
             if not isinstance(self._depth, str):
-                raise ValidationError("The parameter 'depth' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'depth' must be a string type value."
+                )
             if self._depth not in ["basic", "moderate", "comprehensive"]:
-                raise ValidationError(f"The parameter 'depth' must be one of the allowed enum values: ['basic', 'moderate', 'comprehensive']. Got {self._depth}")
+                raise ValidationError(
+                    f"The parameter 'depth' must be one of the allowed enum values: ['basic', 'moderate', 'comprehensive']. Got {self._depth}"
+                )
 
     @property
     def depth(self) -> Literal["basic", "moderate", "comprehensive"]:
@@ -90,7 +92,7 @@ class Reasoning(BaseDecorator):
             "name": "reasoning",
             "parameters": {
                 "depth": self.depth,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -144,7 +146,7 @@ class Reasoning(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -1,8 +1,12 @@
 """Tests for the BreakAndBuild decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators.generated.decorators.break_and_build import BreakAndBuild
+from prompt_decorators.decorators.generated.decorators.break_and_build import (
+    BreakAndBuild,
+)
+
 
 class TestBreakAndBuild(unittest.TestCase):
     """Tests for the BreakAndBuild decorator.
@@ -14,6 +18,7 @@ class TestBreakAndBuild(unittest.TestCase):
     output.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -28,36 +33,40 @@ class TestBreakAndBuild(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['breakdown'] = 123  # Not a string
+        params["breakdown"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             BreakAndBuild(**params)
-        self.assertIn('breakdown', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("breakdown", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['breakdown'] = 'invalid_enum_value'  # Invalid enum value
+        params["breakdown"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             BreakAndBuild(**params)
-        self.assertIn('breakdown', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("breakdown", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['breakdown'] = 'weaknesses'
+        params["breakdown"] = "weaknesses"
         # This should not raise an exception
         BreakAndBuild(**params)
-        params['breakdown'] = 'assumptions'
+        params["breakdown"] = "assumptions"
         # This should not raise an exception
         BreakAndBuild(**params)
-        params['breakdown'] = 'risks'
+        params["breakdown"] = "risks"
         # This should not raise an exception
         BreakAndBuild(**params)
-        params['breakdown'] = 'comprehensive'
+        params["breakdown"] = "comprehensive"
         # This should not raise an exception
         BreakAndBuild(**params)
 
@@ -67,33 +76,37 @@ class TestBreakAndBuild(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['intensity'] = 123  # Not a string
+        params["intensity"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             BreakAndBuild(**params)
-        self.assertIn('intensity', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("intensity", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['intensity'] = 'invalid_enum_value'  # Invalid enum value
+        params["intensity"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             BreakAndBuild(**params)
-        self.assertIn('intensity', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("intensity", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['intensity'] = 'mild'
+        params["intensity"] = "mild"
         # This should not raise an exception
         BreakAndBuild(**params)
-        params['intensity'] = 'thorough'
+        params["intensity"] = "thorough"
         # This should not raise an exception
         BreakAndBuild(**params)
-        params['intensity'] = 'intense'
+        params["intensity"] = "intense"
         # This should not raise an exception
         BreakAndBuild(**params)
 
@@ -103,35 +116,40 @@ class TestBreakAndBuild(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['buildRatio'] = 'not_a_number'  # Not a number
+        params["buildRatio"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             BreakAndBuild(**params)
-        self.assertIn('buildRatio', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("buildRatio", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['buildRatio'] = -0.5  # Below minimum
+        params["buildRatio"] = -0.5  # Below minimum
         with self.assertRaises(ValidationError) as context:
             BreakAndBuild(**params)
-        self.assertIn('buildRatio', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("buildRatio", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['buildRatio'] = 4  # Above maximum
+        params["buildRatio"] = 4  # Above maximum
         with self.assertRaises(ValidationError) as context:
             BreakAndBuild(**params)
-        self.assertIn('buildRatio', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("buildRatio", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -147,7 +165,6 @@ class TestBreakAndBuild(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

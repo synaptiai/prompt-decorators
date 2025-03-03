@@ -1,8 +1,12 @@
 """Tests for the NegativeSpace decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators.generated.decorators.negative_space import NegativeSpace
+from prompt_decorators.decorators.generated.decorators.negative_space import (
+    NegativeSpace,
+)
+
 
 class TestNegativeSpace(unittest.TestCase):
     """Tests for the NegativeSpace decorator.
@@ -13,6 +17,7 @@ class TestNegativeSpace(unittest.TestCase):
     contextual elements that may have been overlooked.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,36 +32,40 @@ class TestNegativeSpace(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['focus'] = 123  # Not a string
+        params["focus"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             NegativeSpace(**params)
-        self.assertIn('focus', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("focus", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['focus'] = 'invalid_enum_value'  # Invalid enum value
+        params["focus"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             NegativeSpace(**params)
-        self.assertIn('focus', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("focus", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['focus'] = 'implications'
+        params["focus"] = "implications"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['focus'] = 'missing'
+        params["focus"] = "missing"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['focus'] = 'unstated'
+        params["focus"] = "unstated"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['focus'] = 'comprehensive'
+        params["focus"] = "comprehensive"
         # This should not raise an exception
         NegativeSpace(**params)
 
@@ -66,33 +75,37 @@ class TestNegativeSpace(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 123  # Not a string
+        params["depth"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             NegativeSpace(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['depth'] = 'invalid_enum_value'  # Invalid enum value
+        params["depth"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             NegativeSpace(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['depth'] = 'surface'
+        params["depth"] = "surface"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['depth'] = 'moderate'
+        params["depth"] = "moderate"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['depth'] = 'deep'
+        params["depth"] = "deep"
         # This should not raise an exception
         NegativeSpace(**params)
 
@@ -102,36 +115,40 @@ class TestNegativeSpace(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['structure'] = 123  # Not a string
+        params["structure"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             NegativeSpace(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['structure'] = 'invalid_enum_value'  # Invalid enum value
+        params["structure"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             NegativeSpace(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['structure'] = 'before'
+        params["structure"] = "before"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['structure'] = 'after'
+        params["structure"] = "after"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['structure'] = 'integrated'
+        params["structure"] = "integrated"
         # This should not raise an exception
         NegativeSpace(**params)
-        params['structure'] = 'separate'
+        params["structure"] = "separate"
         # This should not raise an exception
         NegativeSpace(**params)
 
@@ -149,7 +166,6 @@ class TestNegativeSpace(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

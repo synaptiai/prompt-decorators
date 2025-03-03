@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    StyleShiftAspectEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import StyleShiftAspectEnum
 
 
 class StyleShift(BaseDecorator):
@@ -44,7 +42,9 @@ class StyleShift(BaseDecorator):
 
     def __init__(
         self,
-        aspect: Literal["formality", "persuasion", "urgency", "confidence", "complexity"],
+        aspect: Literal[
+            "formality", "persuasion", "urgency", "confidence", "complexity"
+        ],
         level: Any = 3,
         maintain: List[Any] = None,
     ) -> None:
@@ -73,22 +73,42 @@ class StyleShift(BaseDecorator):
         # Validate parameters
         if self._aspect is not None:
             if not isinstance(self._aspect, str):
-                raise ValidationError("The parameter 'aspect' must be a string type value.")
-            if self._aspect not in ["formality", "persuasion", "urgency", "confidence", "complexity"]:
-                raise ValidationError(f"The parameter 'aspect' must be one of the allowed enum values: ['formality', 'persuasion', 'urgency', 'confidence', 'complexity']. Got {self._aspect}")
+                raise ValidationError(
+                    "The parameter 'aspect' must be a string type value."
+                )
+            if self._aspect not in [
+                "formality",
+                "persuasion",
+                "urgency",
+                "confidence",
+                "complexity",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'aspect' must be one of the allowed enum values: ['formality', 'persuasion', 'urgency', 'confidence', 'complexity']. Got {self._aspect}"
+                )
         if self._level is not None:
             if not isinstance(self._level, (int, float)):
-                raise ValidationError("The parameter 'level' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'level' must be a numeric type value."
+                )
             if self._level < 1:
-                raise ValidationError("The parameter 'level' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'level' must be greater than or equal to 1."
+                )
             if self._level > 5:
-                raise ValidationError("The parameter 'level' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'level' must be less than or equal to 5."
+                )
         if self._maintain is not None:
             if not isinstance(self._maintain, list):
-                raise ValidationError("The parameter 'maintain' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'maintain' must be an array type value."
+                )
 
     @property
-    def aspect(self) -> Literal["formality", "persuasion", "urgency", "confidence", "complexity"]:
+    def aspect(
+        self,
+    ) -> Literal["formality", "persuasion", "urgency", "confidence", "complexity"]:
         """
         Get the aspect parameter value.
 
@@ -139,7 +159,7 @@ class StyleShift(BaseDecorator):
                 "aspect": self.aspect,
                 "level": self.level,
                 "maintain": self.maintain,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -197,7 +217,7 @@ class StyleShift(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -1,8 +1,10 @@
 """Tests for the Audience decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.audience import Audience
+
 
 class TestAudience(unittest.TestCase):
     """Tests for the Audience decorator.
@@ -12,6 +14,7 @@ class TestAudience(unittest.TestCase):
     needs of different audience types, from beginners to technical experts.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,36 +29,40 @@ class TestAudience(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['level'] = 123  # Not a string
+        params["level"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Audience(**params)
-        self.assertIn('level', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("level", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['level'] = 'invalid_enum_value'  # Invalid enum value
+        params["level"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Audience(**params)
-        self.assertIn('level', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("level", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['level'] = 'beginner'
+        params["level"] = "beginner"
         # This should not raise an exception
         Audience(**params)
-        params['level'] = 'intermediate'
+        params["level"] = "intermediate"
         # This should not raise an exception
         Audience(**params)
-        params['level'] = 'expert'
+        params["level"] = "expert"
         # This should not raise an exception
         Audience(**params)
-        params['level'] = 'technical'
+        params["level"] = "technical"
         # This should not raise an exception
         Audience(**params)
 
@@ -65,15 +72,14 @@ class TestAudience(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['domain'] = 123  # Not a string
+        params["domain"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Audience(**params)
-        self.assertIn('domain', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("domain", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_examples(self):
         """Test validation for the examples parameter."""
@@ -81,15 +87,14 @@ class TestAudience(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['examples'] = 'not_a_boolean'  # Not a boolean
+        params["examples"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Audience(**params)
-        self.assertIn('examples', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("examples", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -105,7 +110,6 @@ class TestAudience(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

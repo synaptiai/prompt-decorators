@@ -1,8 +1,10 @@
 """Tests for the Priority decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.priority import Priority
+
 
 class TestPriority(unittest.TestCase):
     """Tests for the Priority decorator.
@@ -13,6 +15,7 @@ class TestPriority(unittest.TestCase):
     last-decorator-wins behavior.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -20,7 +23,6 @@ class TestPriority(unittest.TestCase):
             "explicit": False,
             "mode": "override",
         }
-
 
     def test_missing_required_param_decorators(self):
         """Test that initialization fails when missing required parameter decorators."""
@@ -34,14 +36,12 @@ class TestPriority(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Priority(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "decorators" in error_message or 
-            "required" in error_message.lower()
+            "decorators" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_decorators(self):
         """Test validation for the decorators parameter."""
@@ -49,15 +49,14 @@ class TestPriority(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['decorators'] = 'not_an_array'  # Not an array
+        params["decorators"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             Priority(**params)
-        self.assertIn('decorators', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("decorators", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_explicit(self):
         """Test validation for the explicit parameter."""
@@ -65,15 +64,14 @@ class TestPriority(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['explicit'] = 'not_a_boolean'  # Not a boolean
+        params["explicit"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Priority(**params)
-        self.assertIn('explicit', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("explicit", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_mode(self):
         """Test validation for the mode parameter."""
@@ -81,33 +79,37 @@ class TestPriority(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['mode'] = 123  # Not a string
+        params["mode"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Priority(**params)
-        self.assertIn('mode', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("mode", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['mode'] = 'invalid_enum_value'  # Invalid enum value
+        params["mode"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Priority(**params)
-        self.assertIn('mode', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("mode", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['mode'] = 'override'
+        params["mode"] = "override"
         # This should not raise an exception
         Priority(**params)
-        params['mode'] = 'merge'
+        params["mode"] = "merge"
         # This should not raise an exception
         Priority(**params)
-        params['mode'] = 'cascade'
+        params["mode"] = "cascade"
         # This should not raise an exception
         Priority(**params)
 
@@ -125,7 +127,6 @@ class TestPriority(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

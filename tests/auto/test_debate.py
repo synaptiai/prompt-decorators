@@ -1,8 +1,10 @@
 """Tests for the Debate decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.debate import Debate
+
 
 class TestDebate(unittest.TestCase):
     """Tests for the Debate decorator.
@@ -12,6 +14,7 @@ class TestDebate(unittest.TestCase):
     viewpoints and helps explore complex issues from various angles.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -25,35 +28,40 @@ class TestDebate(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['perspectives'] = 'not_a_number'  # Not a number
+        params["perspectives"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Debate(**params)
-        self.assertIn('perspectives', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("perspectives", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['perspectives'] = 1  # Below minimum
+        params["perspectives"] = 1  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Debate(**params)
-        self.assertIn('perspectives', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("perspectives", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['perspectives'] = 6  # Above maximum
+        params["perspectives"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Debate(**params)
-        self.assertIn('perspectives', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("perspectives", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_balanced(self):
         """Test validation for the balanced parameter."""
@@ -61,15 +69,14 @@ class TestDebate(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['balanced'] = 'not_a_boolean'  # Not a boolean
+        params["balanced"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Debate(**params)
-        self.assertIn('balanced', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("balanced", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -85,7 +92,6 @@ class TestDebate(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

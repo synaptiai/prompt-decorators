@@ -1,8 +1,10 @@
 """Tests for the Analogical decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.analogical import Analogical
+
 
 class TestAnalogical(unittest.TestCase):
     """Tests for the Analogical decorator.
@@ -12,6 +14,7 @@ class TestAnalogical(unittest.TestCase):
     systematically comparing them to more familiar domains or experiences.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,15 +29,14 @@ class TestAnalogical(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['domain'] = 123  # Not a string
+        params["domain"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Analogical(**params)
-        self.assertIn('domain', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("domain", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_count(self):
         """Test validation for the count parameter."""
@@ -42,35 +44,40 @@ class TestAnalogical(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['count'] = 'not_a_number'  # Not a number
+        params["count"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Analogical(**params)
-        self.assertIn('count', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("count", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['count'] = 0  # Below minimum
+        params["count"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Analogical(**params)
-        self.assertIn('count', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("count", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['count'] = 6  # Above maximum
+        params["count"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Analogical(**params)
-        self.assertIn('count', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("count", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_depth(self):
         """Test validation for the depth parameter."""
@@ -78,33 +85,37 @@ class TestAnalogical(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 123  # Not a string
+        params["depth"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Analogical(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['depth'] = 'invalid_enum_value'  # Invalid enum value
+        params["depth"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Analogical(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['depth'] = 'brief'
+        params["depth"] = "brief"
         # This should not raise an exception
         Analogical(**params)
-        params['depth'] = 'moderate'
+        params["depth"] = "moderate"
         # This should not raise an exception
         Analogical(**params)
-        params['depth'] = 'extended'
+        params["depth"] = "extended"
         # This should not raise an exception
         Analogical(**params)
 
@@ -122,7 +133,6 @@ class TestAnalogical(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

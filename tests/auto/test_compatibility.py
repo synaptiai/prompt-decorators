@@ -1,8 +1,12 @@
 """Tests for the Compatibility decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators.generated.decorators.compatibility import Compatibility
+from prompt_decorators.decorators.generated.decorators.compatibility import (
+    Compatibility,
+)
+
 
 class TestCompatibility(unittest.TestCase):
     """Tests for the Compatibility decorator.
@@ -13,6 +17,7 @@ class TestCompatibility(unittest.TestCase):
     model variants.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -20,7 +25,6 @@ class TestCompatibility(unittest.TestCase):
             "fallback": "example_value",
             "behaviors": "example_value",
         }
-
 
     def test_missing_required_param_models(self):
         """Test that initialization fails when missing required parameter models."""
@@ -34,14 +38,12 @@ class TestCompatibility(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Compatibility(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "models" in error_message or 
-            "required" in error_message.lower()
+            "models" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_models(self):
         """Test validation for the models parameter."""
@@ -49,15 +51,14 @@ class TestCompatibility(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['models'] = 'not_an_array'  # Not an array
+        params["models"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             Compatibility(**params)
-        self.assertIn('models', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("models", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_fallback(self):
         """Test validation for the fallback parameter."""
@@ -65,15 +66,14 @@ class TestCompatibility(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['fallback'] = 123  # Not a string
+        params["fallback"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Compatibility(**params)
-        self.assertIn('fallback', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("fallback", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_behaviors(self):
         """Test validation for the behaviors parameter."""
@@ -81,15 +81,14 @@ class TestCompatibility(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['behaviors'] = 123  # Not a string
+        params["behaviors"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Compatibility(**params)
-        self.assertIn('behaviors', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("behaviors", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -105,7 +104,6 @@ class TestCompatibility(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

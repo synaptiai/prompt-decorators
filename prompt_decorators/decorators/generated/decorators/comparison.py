@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ComparisonFormatEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import ComparisonFormatEnum
 
 
 class Comparison(BaseDecorator):
@@ -70,15 +68,23 @@ class Comparison(BaseDecorator):
         # Validate parameters
         if self._aspects is not None:
             if not isinstance(self._aspects, list):
-                raise ValidationError("The parameter 'aspects' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'aspects' must be an array type value."
+                )
         if self._format is not None:
             if not isinstance(self._format, str):
-                raise ValidationError("The parameter 'format' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'format' must be a string type value."
+                )
             if self._format not in ["table", "prose", "bullets"]:
-                raise ValidationError(f"The parameter 'format' must be one of the allowed enum values: ['table', 'prose', 'bullets']. Got {self._format}")
+                raise ValidationError(
+                    f"The parameter 'format' must be one of the allowed enum values: ['table', 'prose', 'bullets']. Got {self._format}"
+                )
         if self._highlight is not None:
             if not isinstance(self._highlight, bool):
-                raise ValidationError("The parameter 'highlight' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'highlight' must be a boolean type value."
+                )
 
     @property
     def aspects(self) -> List[Any]:
@@ -132,7 +138,7 @@ class Comparison(BaseDecorator):
                 "aspects": self.aspects,
                 "format": self.format,
                 "highlight": self.highlight,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -190,7 +196,7 @@ class Comparison(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

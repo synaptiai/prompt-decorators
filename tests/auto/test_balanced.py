@@ -1,8 +1,10 @@
 """Tests for the Balanced decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.balanced import Balanced
+
 
 class TestBalanced(unittest.TestCase):
     """Tests for the Balanced decorator.
@@ -13,6 +15,7 @@ class TestBalanced(unittest.TestCase):
     any particular position.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +30,40 @@ class TestBalanced(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['perspectives'] = 'not_a_number'  # Not a number
+        params["perspectives"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Balanced(**params)
-        self.assertIn('perspectives', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("perspectives", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['perspectives'] = 1  # Below minimum
+        params["perspectives"] = 1  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Balanced(**params)
-        self.assertIn('perspectives', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("perspectives", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['perspectives'] = 6  # Above maximum
+        params["perspectives"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Balanced(**params)
-        self.assertIn('perspectives', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("perspectives", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_structure(self):
         """Test validation for the structure parameter."""
@@ -63,33 +71,37 @@ class TestBalanced(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['structure'] = 123  # Not a string
+        params["structure"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Balanced(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['structure'] = 'invalid_enum_value'  # Invalid enum value
+        params["structure"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Balanced(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['structure'] = 'alternating'
+        params["structure"] = "alternating"
         # This should not raise an exception
         Balanced(**params)
-        params['structure'] = 'sequential'
+        params["structure"] = "sequential"
         # This should not raise an exception
         Balanced(**params)
-        params['structure'] = 'comparative'
+        params["structure"] = "comparative"
         # This should not raise an exception
         Balanced(**params)
 
@@ -99,15 +111,14 @@ class TestBalanced(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['equal'] = 'not_a_boolean'  # Not a boolean
+        params["equal"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Balanced(**params)
-        self.assertIn('equal', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("equal", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -123,7 +134,6 @@ class TestBalanced(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

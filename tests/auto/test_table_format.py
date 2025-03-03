@@ -1,8 +1,10 @@
 """Tests for the TableFormat decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.table_format import TableFormat
+
 
 class TestTableFormat(unittest.TestCase):
     """Tests for the TableFormat decorator.
@@ -13,6 +15,7 @@ class TestTableFormat(unittest.TestCase):
     organization.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -20,7 +23,6 @@ class TestTableFormat(unittest.TestCase):
             "format": "markdown",
             "alignment": "left",
         }
-
 
     def test_missing_required_param_columns(self):
         """Test that initialization fails when missing required parameter columns."""
@@ -34,14 +36,12 @@ class TestTableFormat(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             TableFormat(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "columns" in error_message or 
-            "required" in error_message.lower()
+            "columns" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_columns(self):
         """Test validation for the columns parameter."""
@@ -49,15 +49,14 @@ class TestTableFormat(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['columns'] = 'not_an_array'  # Not an array
+        params["columns"] = "not_an_array"  # Not an array
         with self.assertRaises(ValidationError) as context:
             TableFormat(**params)
-        self.assertIn('columns', str(context.exception))
-        self.assertIn('array', str(context.exception).lower())
+        self.assertIn("columns", str(context.exception))
+        self.assertIn("array", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_format(self):
         """Test validation for the format parameter."""
@@ -65,33 +64,37 @@ class TestTableFormat(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['format'] = 123  # Not a string
+        params["format"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             TableFormat(**params)
-        self.assertIn('format', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("format", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['format'] = 'invalid_enum_value'  # Invalid enum value
+        params["format"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             TableFormat(**params)
-        self.assertIn('format', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("format", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['format'] = 'markdown'
+        params["format"] = "markdown"
         # This should not raise an exception
         TableFormat(**params)
-        params['format'] = 'ascii'
+        params["format"] = "ascii"
         # This should not raise an exception
         TableFormat(**params)
-        params['format'] = 'csv'
+        params["format"] = "csv"
         # This should not raise an exception
         TableFormat(**params)
 
@@ -101,33 +104,37 @@ class TestTableFormat(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['alignment'] = 123  # Not a string
+        params["alignment"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             TableFormat(**params)
-        self.assertIn('alignment', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("alignment", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['alignment'] = 'invalid_enum_value'  # Invalid enum value
+        params["alignment"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             TableFormat(**params)
-        self.assertIn('alignment', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("alignment", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['alignment'] = 'left'
+        params["alignment"] = "left"
         # This should not raise an exception
         TableFormat(**params)
-        params['alignment'] = 'center'
+        params["alignment"] = "center"
         # This should not raise an exception
         TableFormat(**params)
-        params['alignment'] = 'right'
+        params["alignment"] = "right"
         # This should not raise an exception
         TableFormat(**params)
 
@@ -145,7 +152,6 @@ class TestTableFormat(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

@@ -13,8 +13,8 @@ from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
 from prompt_decorators.decorators.generated.decorators.enums import (
     LimitationsDetailEnum,
-    LimitationsPositionEnum,
     LimitationsFocusEnum,
+    LimitationsPositionEnum,
 )
 
 
@@ -73,19 +73,37 @@ class Limitations(BaseDecorator):
         # Validate parameters
         if self._detail is not None:
             if not isinstance(self._detail, str):
-                raise ValidationError("The parameter 'detail' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'detail' must be a string type value."
+                )
             if self._detail not in ["brief", "moderate", "comprehensive"]:
-                raise ValidationError(f"The parameter 'detail' must be one of the allowed enum values: ['brief', 'moderate', 'comprehensive']. Got {self._detail}")
+                raise ValidationError(
+                    f"The parameter 'detail' must be one of the allowed enum values: ['brief', 'moderate', 'comprehensive']. Got {self._detail}"
+                )
         if self._position is not None:
             if not isinstance(self._position, str):
-                raise ValidationError("The parameter 'position' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'position' must be a string type value."
+                )
             if self._position not in ["beginning", "end"]:
-                raise ValidationError(f"The parameter 'position' must be one of the allowed enum values: ['beginning', 'end']. Got {self._position}")
+                raise ValidationError(
+                    f"The parameter 'position' must be one of the allowed enum values: ['beginning', 'end']. Got {self._position}"
+                )
         if self._focus is not None:
             if not isinstance(self._focus, str):
-                raise ValidationError("The parameter 'focus' must be a string type value.")
-            if self._focus not in ["knowledge", "methodology", "context", "biases", "all"]:
-                raise ValidationError(f"The parameter 'focus' must be one of the allowed enum values: ['knowledge', 'methodology', 'context', 'biases', 'all']. Got {self._focus}")
+                raise ValidationError(
+                    "The parameter 'focus' must be a string type value."
+                )
+            if self._focus not in [
+                "knowledge",
+                "methodology",
+                "context",
+                "biases",
+                "all",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'focus' must be one of the allowed enum values: ['knowledge', 'methodology', 'context', 'biases', 'all']. Got {self._focus}"
+                )
 
     @property
     def detail(self) -> Literal["brief", "moderate", "comprehensive"]:
@@ -139,7 +157,7 @@ class Limitations(BaseDecorator):
                 "detail": self.detail,
                 "position": self.position,
                 "focus": self.focus,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -197,7 +215,7 @@ class Limitations(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

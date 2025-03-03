@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    PriorityModeEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import PriorityModeEnum
 
 
 class Priority(BaseDecorator):
@@ -73,15 +71,23 @@ class Priority(BaseDecorator):
         # Validate parameters
         if self._decorators is not None:
             if not isinstance(self._decorators, list):
-                raise ValidationError("The parameter 'decorators' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'decorators' must be an array type value."
+                )
         if self._explicit is not None:
             if not isinstance(self._explicit, bool):
-                raise ValidationError("The parameter 'explicit' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'explicit' must be a boolean type value."
+                )
         if self._mode is not None:
             if not isinstance(self._mode, str):
-                raise ValidationError("The parameter 'mode' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'mode' must be a string type value."
+                )
             if self._mode not in ["override", "merge", "cascade"]:
-                raise ValidationError(f"The parameter 'mode' must be one of the allowed enum values: ['override', 'merge', 'cascade']. Got {self._mode}")
+                raise ValidationError(
+                    f"The parameter 'mode' must be one of the allowed enum values: ['override', 'merge', 'cascade']. Got {self._mode}"
+                )
 
     @property
     def decorators(self) -> List[Any]:
@@ -135,7 +141,7 @@ class Priority(BaseDecorator):
                 "decorators": self.decorators,
                 "explicit": self.explicit,
                 "mode": self.mode,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -193,7 +199,7 @@ class Priority(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

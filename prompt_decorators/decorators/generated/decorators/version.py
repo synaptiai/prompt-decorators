@@ -61,7 +61,9 @@ class Version(BaseDecorator):
         # Validate parameters
         if self._standard is not None:
             if not isinstance(self._standard, str):
-                raise ValidationError("The parameter 'standard' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'standard' must be a string type value."
+                )
 
     @property
     def standard(self) -> str:
@@ -87,7 +89,7 @@ class Version(BaseDecorator):
             "name": "version",
             "parameters": {
                 "standard": self.standard,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -141,7 +143,7 @@ class Version(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

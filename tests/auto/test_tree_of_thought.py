@@ -1,8 +1,12 @@
 """Tests for the TreeOfThought decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators.generated.decorators.tree_of_thought import TreeOfThought
+from prompt_decorators.decorators.generated.decorators.tree_of_thought import (
+    TreeOfThought,
+)
+
 
 class TestTreeOfThought(unittest.TestCase):
     """Tests for the TreeOfThought decorator.
@@ -13,6 +17,7 @@ class TestTreeOfThought(unittest.TestCase):
     reaching conclusions.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +32,40 @@ class TestTreeOfThought(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['branches'] = 'not_a_number'  # Not a number
+        params["branches"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             TreeOfThought(**params)
-        self.assertIn('branches', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("branches", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['branches'] = 1  # Below minimum
+        params["branches"] = 1  # Below minimum
         with self.assertRaises(ValidationError) as context:
             TreeOfThought(**params)
-        self.assertIn('branches', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("branches", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['branches'] = 6  # Above maximum
+        params["branches"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             TreeOfThought(**params)
-        self.assertIn('branches', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("branches", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_depth(self):
         """Test validation for the depth parameter."""
@@ -63,35 +73,40 @@ class TestTreeOfThought(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 'not_a_number'  # Not a number
+        params["depth"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             TreeOfThought(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['depth'] = 0  # Below minimum
+        params["depth"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             TreeOfThought(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['depth'] = 6  # Above maximum
+        params["depth"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             TreeOfThought(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_pruning(self):
         """Test validation for the pruning parameter."""
@@ -99,15 +114,14 @@ class TestTreeOfThought(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['pruning'] = 'not_a_boolean'  # Not a boolean
+        params["pruning"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             TreeOfThought(**params)
-        self.assertIn('pruning', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("pruning", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -123,7 +137,6 @@ class TestTreeOfThought(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

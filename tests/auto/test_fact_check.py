@@ -1,8 +1,10 @@
 """Tests for the FactCheck decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.fact_check import FactCheck
+
 
 class TestFactCheck(unittest.TestCase):
     """Tests for the FactCheck decorator.
@@ -13,6 +15,7 @@ class TestFactCheck(unittest.TestCase):
     or speculative information.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,15 +30,14 @@ class TestFactCheck(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['confidence'] = 'not_a_boolean'  # Not a boolean
+        params["confidence"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             FactCheck(**params)
-        self.assertIn('confidence', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("confidence", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_uncertain(self):
         """Test validation for the uncertain parameter."""
@@ -43,33 +45,37 @@ class TestFactCheck(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['uncertain'] = 123  # Not a string
+        params["uncertain"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             FactCheck(**params)
-        self.assertIn('uncertain', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("uncertain", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['uncertain'] = 'invalid_enum_value'  # Invalid enum value
+        params["uncertain"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             FactCheck(**params)
-        self.assertIn('uncertain', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("uncertain", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['uncertain'] = 'mark'
+        params["uncertain"] = "mark"
         # This should not raise an exception
         FactCheck(**params)
-        params['uncertain'] = 'exclude'
+        params["uncertain"] = "exclude"
         # This should not raise an exception
         FactCheck(**params)
-        params['uncertain'] = 'qualify'
+        params["uncertain"] = "qualify"
         # This should not raise an exception
         FactCheck(**params)
 
@@ -79,33 +85,37 @@ class TestFactCheck(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['strictness'] = 123  # Not a string
+        params["strictness"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             FactCheck(**params)
-        self.assertIn('strictness', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("strictness", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['strictness'] = 'invalid_enum_value'  # Invalid enum value
+        params["strictness"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             FactCheck(**params)
-        self.assertIn('strictness', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("strictness", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['strictness'] = 'low'
+        params["strictness"] = "low"
         # This should not raise an exception
         FactCheck(**params)
-        params['strictness'] = 'moderate'
+        params["strictness"] = "moderate"
         # This should not raise an exception
         FactCheck(**params)
-        params['strictness'] = 'high'
+        params["strictness"] = "high"
         # This should not raise an exception
         FactCheck(**params)
 
@@ -123,7 +133,6 @@ class TestFactCheck(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

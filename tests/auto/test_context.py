@@ -1,8 +1,10 @@
 """Tests for the Context decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.context import Context
+
 
 class TestContext(unittest.TestCase):
     """Tests for the Context decorator.
@@ -13,6 +15,7 @@ class TestContext(unittest.TestCase):
     adaptation to contextual requirements.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -20,7 +23,6 @@ class TestContext(unittest.TestCase):
             "scope": "terminology",
             "level": "beginner",
         }
-
 
     def test_missing_required_param_domain(self):
         """Test that initialization fails when missing required parameter domain."""
@@ -34,14 +36,12 @@ class TestContext(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Context(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "domain" in error_message or 
-            "required" in error_message.lower()
+            "domain" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_domain(self):
         """Test validation for the domain parameter."""
@@ -49,15 +49,14 @@ class TestContext(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['domain'] = 123  # Not a string
+        params["domain"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Context(**params)
-        self.assertIn('domain', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("domain", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_scope(self):
         """Test validation for the scope parameter."""
@@ -65,36 +64,40 @@ class TestContext(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['scope'] = 123  # Not a string
+        params["scope"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Context(**params)
-        self.assertIn('scope', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("scope", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['scope'] = 'invalid_enum_value'  # Invalid enum value
+        params["scope"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Context(**params)
-        self.assertIn('scope', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("scope", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['scope'] = 'terminology'
+        params["scope"] = "terminology"
         # This should not raise an exception
         Context(**params)
-        params['scope'] = 'examples'
+        params["scope"] = "examples"
         # This should not raise an exception
         Context(**params)
-        params['scope'] = 'structure'
+        params["scope"] = "structure"
         # This should not raise an exception
         Context(**params)
-        params['scope'] = 'all'
+        params["scope"] = "all"
         # This should not raise an exception
         Context(**params)
 
@@ -104,36 +107,40 @@ class TestContext(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['level'] = 123  # Not a string
+        params["level"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Context(**params)
-        self.assertIn('level', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("level", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['level'] = 'invalid_enum_value'  # Invalid enum value
+        params["level"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Context(**params)
-        self.assertIn('level', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("level", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['level'] = 'beginner'
+        params["level"] = "beginner"
         # This should not raise an exception
         Context(**params)
-        params['level'] = 'intermediate'
+        params["level"] = "intermediate"
         # This should not raise an exception
         Context(**params)
-        params['level'] = 'expert'
+        params["level"] = "expert"
         # This should not raise an exception
         Context(**params)
-        params['level'] = 'mixed'
+        params["level"] = "mixed"
         # This should not raise an exception
         Context(**params)
 
@@ -151,7 +158,6 @@ class TestContext(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

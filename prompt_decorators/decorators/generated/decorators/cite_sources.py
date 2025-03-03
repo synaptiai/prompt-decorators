@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
 from prompt_decorators.decorators.generated.decorators.enums import (
-    CiteSourcesStyleEnum,
     CiteSourcesFormatEnum,
+    CiteSourcesStyleEnum,
 )
 
 
@@ -73,17 +73,27 @@ class CiteSources(BaseDecorator):
         # Validate parameters
         if self._style is not None:
             if not isinstance(self._style, str):
-                raise ValidationError("The parameter 'style' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'style' must be a string type value."
+                )
             if self._style not in ["inline", "footnote", "endnote"]:
-                raise ValidationError(f"The parameter 'style' must be one of the allowed enum values: ['inline', 'footnote', 'endnote']. Got {self._style}")
+                raise ValidationError(
+                    f"The parameter 'style' must be one of the allowed enum values: ['inline', 'footnote', 'endnote']. Got {self._style}"
+                )
         if self._format is not None:
             if not isinstance(self._format, str):
-                raise ValidationError("The parameter 'format' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'format' must be a string type value."
+                )
             if self._format not in ["APA", "MLA", "Chicago", "Harvard", "IEEE"]:
-                raise ValidationError(f"The parameter 'format' must be one of the allowed enum values: ['APA', 'MLA', 'Chicago', 'Harvard', 'IEEE']. Got {self._format}")
+                raise ValidationError(
+                    f"The parameter 'format' must be one of the allowed enum values: ['APA', 'MLA', 'Chicago', 'Harvard', 'IEEE']. Got {self._format}"
+                )
         if self._comprehensive is not None:
             if not isinstance(self._comprehensive, bool):
-                raise ValidationError("The parameter 'comprehensive' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'comprehensive' must be a boolean type value."
+                )
 
     @property
     def style(self) -> Literal["inline", "footnote", "endnote"]:
@@ -137,7 +147,7 @@ class CiteSources(BaseDecorator):
                 "style": self.style,
                 "format": self.format,
                 "comprehensive": self.comprehensive,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -195,7 +205,7 @@ class CiteSources(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

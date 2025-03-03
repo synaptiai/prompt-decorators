@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    BulletStyleEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import BulletStyleEnum
 
 
 class Bullet(BaseDecorator):
@@ -72,15 +70,23 @@ class Bullet(BaseDecorator):
         # Validate parameters
         if self._style is not None:
             if not isinstance(self._style, str):
-                raise ValidationError("The parameter 'style' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'style' must be a string type value."
+                )
             if self._style not in ["dash", "dot", "arrow", "star", "plus"]:
-                raise ValidationError(f"The parameter 'style' must be one of the allowed enum values: ['dash', 'dot', 'arrow', 'star', 'plus']. Got {self._style}")
+                raise ValidationError(
+                    f"The parameter 'style' must be one of the allowed enum values: ['dash', 'dot', 'arrow', 'star', 'plus']. Got {self._style}"
+                )
         if self._indented is not None:
             if not isinstance(self._indented, bool):
-                raise ValidationError("The parameter 'indented' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'indented' must be a boolean type value."
+                )
         if self._compact is not None:
             if not isinstance(self._compact, bool):
-                raise ValidationError("The parameter 'compact' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'compact' must be a boolean type value."
+                )
 
     @property
     def style(self) -> Literal["dash", "dot", "arrow", "star", "plus"]:
@@ -134,7 +140,7 @@ class Bullet(BaseDecorator):
                 "style": self.style,
                 "indented": self.indented,
                 "compact": self.compact,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -192,7 +198,7 @@ class Bullet(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

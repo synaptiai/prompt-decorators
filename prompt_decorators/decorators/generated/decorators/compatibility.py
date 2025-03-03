@@ -72,13 +72,19 @@ class Compatibility(BaseDecorator):
         # Validate parameters
         if self._models is not None:
             if not isinstance(self._models, list):
-                raise ValidationError("The parameter 'models' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'models' must be an array type value."
+                )
         if self._fallback is not None:
             if not isinstance(self._fallback, str):
-                raise ValidationError("The parameter 'fallback' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'fallback' must be a string type value."
+                )
         if self._behaviors is not None:
             if not isinstance(self._behaviors, str):
-                raise ValidationError("The parameter 'behaviors' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'behaviors' must be a string type value."
+                )
 
     @property
     def models(self) -> List[Any]:
@@ -132,7 +138,7 @@ class Compatibility(BaseDecorator):
                 "models": self.models,
                 "fallback": self.fallback,
                 "behaviors": self.behaviors,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -190,7 +196,7 @@ class Compatibility(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

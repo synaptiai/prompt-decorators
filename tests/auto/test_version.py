@@ -1,8 +1,10 @@
 """Tests for the Version decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.version import Version
+
 
 class TestVersion(unittest.TestCase):
     """Tests for the Version decorator.
@@ -12,12 +14,12 @@ class TestVersion(unittest.TestCase):
     interpretation of decorators according to the specified standard version.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
             "standard": "1.0.0",
         }
-
 
     def test_missing_required_param_standard(self):
         """Test that initialization fails when missing required parameter standard."""
@@ -31,14 +33,12 @@ class TestVersion(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Version(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "standard" in error_message or 
-            "required" in error_message.lower()
+            "standard" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_standard(self):
         """Test validation for the standard parameter."""
@@ -46,15 +46,14 @@ class TestVersion(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['standard'] = 123  # Not a string
+        params["standard"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Version(**params)
-        self.assertIn('standard', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("standard", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -64,7 +63,6 @@ class TestVersion(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

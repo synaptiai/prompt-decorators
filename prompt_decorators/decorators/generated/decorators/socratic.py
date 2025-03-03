@@ -60,11 +60,17 @@ class Socratic(BaseDecorator):
         # Validate parameters
         if self._iterations is not None:
             if not isinstance(self._iterations, (int, float)):
-                raise ValidationError("The parameter 'iterations' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'iterations' must be a numeric type value."
+                )
             if self._iterations < 1:
-                raise ValidationError("The parameter 'iterations' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'iterations' must be greater than or equal to 1."
+                )
             if self._iterations > 5:
-                raise ValidationError("The parameter 'iterations' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'iterations' must be less than or equal to 5."
+                )
 
     @property
     def iterations(self) -> Any:
@@ -90,7 +96,7 @@ class Socratic(BaseDecorator):
             "name": "socratic",
             "parameters": {
                 "iterations": self.iterations,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -144,7 +150,7 @@ class Socratic(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

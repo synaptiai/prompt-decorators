@@ -1,8 +1,10 @@
 """Tests for the Socratic decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.socratic import Socratic
+
 
 class TestSocratic(unittest.TestCase):
     """Tests for the Socratic decorator.
@@ -13,6 +15,7 @@ class TestSocratic(unittest.TestCase):
     deeper understanding.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -25,35 +28,40 @@ class TestSocratic(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['iterations'] = 'not_a_number'  # Not a number
+        params["iterations"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Socratic(**params)
-        self.assertIn('iterations', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("iterations", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['iterations'] = 0  # Below minimum
+        params["iterations"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Socratic(**params)
-        self.assertIn('iterations', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("iterations", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['iterations'] = 6  # Above maximum
+        params["iterations"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Socratic(**params)
-        self.assertIn('iterations', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("iterations", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -69,7 +77,6 @@ class TestSocratic(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

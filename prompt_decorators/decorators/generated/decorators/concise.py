@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ConciseLevelEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import ConciseLevelEnum
 
 
 class Concise(BaseDecorator):
@@ -71,19 +69,31 @@ class Concise(BaseDecorator):
         # Validate parameters
         if self._maxWords is not None:
             if not isinstance(self._maxWords, (int, float)):
-                raise ValidationError("The parameter 'maxWords' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'maxWords' must be a numeric type value."
+                )
             if self._maxWords < 10:
-                raise ValidationError("The parameter 'maxWords' must be greater than or equal to 10.")
+                raise ValidationError(
+                    "The parameter 'maxWords' must be greater than or equal to 10."
+                )
             if self._maxWords > 500:
-                raise ValidationError("The parameter 'maxWords' must be less than or equal to 500.")
+                raise ValidationError(
+                    "The parameter 'maxWords' must be less than or equal to 500."
+                )
         if self._bulletPoints is not None:
             if not isinstance(self._bulletPoints, bool):
-                raise ValidationError("The parameter 'bulletPoints' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'bulletPoints' must be a boolean type value."
+                )
         if self._level is not None:
             if not isinstance(self._level, str):
-                raise ValidationError("The parameter 'level' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'level' must be a string type value."
+                )
             if self._level not in ["moderate", "high", "extreme"]:
-                raise ValidationError(f"The parameter 'level' must be one of the allowed enum values: ['moderate', 'high', 'extreme']. Got {self._level}")
+                raise ValidationError(
+                    f"The parameter 'level' must be one of the allowed enum values: ['moderate', 'high', 'extreme']. Got {self._level}"
+                )
 
     @property
     def maxWords(self) -> Any:
@@ -137,7 +147,7 @@ class Concise(BaseDecorator):
                 "maxWords": self.maxWords,
                 "bulletPoints": self.bulletPoints,
                 "level": self.level,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -195,7 +205,7 @@ class Concise(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

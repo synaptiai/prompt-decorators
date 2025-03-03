@@ -70,21 +70,35 @@ class Deductive(BaseDecorator):
         # Validate parameters
         if self._premises is not None:
             if not isinstance(self._premises, (int, float)):
-                raise ValidationError("The parameter 'premises' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'premises' must be a numeric type value."
+                )
             if self._premises < 1:
-                raise ValidationError("The parameter 'premises' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'premises' must be greater than or equal to 1."
+                )
             if self._premises > 5:
-                raise ValidationError("The parameter 'premises' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'premises' must be less than or equal to 5."
+                )
         if self._formal is not None:
             if not isinstance(self._formal, bool):
-                raise ValidationError("The parameter 'formal' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'formal' must be a boolean type value."
+                )
         if self._steps is not None:
             if not isinstance(self._steps, (int, float)):
-                raise ValidationError("The parameter 'steps' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'steps' must be a numeric type value."
+                )
             if self._steps < 2:
-                raise ValidationError("The parameter 'steps' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'steps' must be greater than or equal to 2."
+                )
             if self._steps > 7:
-                raise ValidationError("The parameter 'steps' must be less than or equal to 7.")
+                raise ValidationError(
+                    "The parameter 'steps' must be less than or equal to 7."
+                )
 
     @property
     def premises(self) -> Any:
@@ -138,7 +152,7 @@ class Deductive(BaseDecorator):
                 "premises": self.premises,
                 "formal": self.formal,
                 "steps": self.steps,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -196,7 +210,7 @@ class Deductive(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

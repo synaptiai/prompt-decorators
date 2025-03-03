@@ -66,10 +66,14 @@ class Schema(BaseDecorator):
         # Validate parameters
         if self._schema is not None:
             if not isinstance(self._schema, str):
-                raise ValidationError("The parameter 'schema' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'schema' must be a string type value."
+                )
         if self._strict is not None:
             if not isinstance(self._strict, bool):
-                raise ValidationError("The parameter 'strict' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'strict' must be a boolean type value."
+                )
 
     @property
     def schema(self) -> str:
@@ -109,7 +113,7 @@ class Schema(BaseDecorator):
             "parameters": {
                 "schema": self.schema,
                 "strict": self.strict,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -165,7 +169,7 @@ class Schema(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

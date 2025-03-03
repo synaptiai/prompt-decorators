@@ -1,8 +1,10 @@
 """Tests for the PeerReview decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.peer_review import PeerReview
+
 
 class TestPeerReview(unittest.TestCase):
     """Tests for the PeerReview decorator.
@@ -13,6 +15,7 @@ class TestPeerReview(unittest.TestCase):
     academic reviewer would.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,39 +30,43 @@ class TestPeerReview(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['criteria'] = 123  # Not a string
+        params["criteria"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             PeerReview(**params)
-        self.assertIn('criteria', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("criteria", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['criteria'] = 'invalid_enum_value'  # Invalid enum value
+        params["criteria"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             PeerReview(**params)
-        self.assertIn('criteria', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("criteria", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['criteria'] = 'accuracy'
+        params["criteria"] = "accuracy"
         # This should not raise an exception
         PeerReview(**params)
-        params['criteria'] = 'methodology'
+        params["criteria"] = "methodology"
         # This should not raise an exception
         PeerReview(**params)
-        params['criteria'] = 'limitations'
+        params["criteria"] = "limitations"
         # This should not raise an exception
         PeerReview(**params)
-        params['criteria'] = 'completeness'
+        params["criteria"] = "completeness"
         # This should not raise an exception
         PeerReview(**params)
-        params['criteria'] = 'all'
+        params["criteria"] = "all"
         # This should not raise an exception
         PeerReview(**params)
 
@@ -69,33 +76,37 @@ class TestPeerReview(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['style'] = 123  # Not a string
+        params["style"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             PeerReview(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['style'] = 'invalid_enum_value'  # Invalid enum value
+        params["style"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             PeerReview(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['style'] = 'constructive'
+        params["style"] = "constructive"
         # This should not raise an exception
         PeerReview(**params)
-        params['style'] = 'critical'
+        params["style"] = "critical"
         # This should not raise an exception
         PeerReview(**params)
-        params['style'] = 'balanced'
+        params["style"] = "balanced"
         # This should not raise an exception
         PeerReview(**params)
 
@@ -105,33 +116,37 @@ class TestPeerReview(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['position'] = 123  # Not a string
+        params["position"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             PeerReview(**params)
-        self.assertIn('position', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("position", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['position'] = 'invalid_enum_value'  # Invalid enum value
+        params["position"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             PeerReview(**params)
-        self.assertIn('position', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("position", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['position'] = 'after'
+        params["position"] = "after"
         # This should not raise an exception
         PeerReview(**params)
-        params['position'] = 'before'
+        params["position"] = "before"
         # This should not raise an exception
         PeerReview(**params)
-        params['position'] = 'alongside'
+        params["position"] = "alongside"
         # This should not raise an exception
         PeerReview(**params)
 
@@ -149,7 +164,6 @@ class TestPeerReview(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

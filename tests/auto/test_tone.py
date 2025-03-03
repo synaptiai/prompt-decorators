@@ -1,8 +1,10 @@
 """Tests for the Tone decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.tone import Tone
+
 
 class TestTone(unittest.TestCase):
     """Tests for the Tone decorator.
@@ -12,12 +14,12 @@ class TestTone(unittest.TestCase):
     and contexts, from formal technical documentation to casual explanations.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
             "style": "formal",
         }
-
 
     def test_missing_required_param_style(self):
         """Test that initialization fails when missing required parameter style."""
@@ -31,14 +33,10 @@ class TestTone(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             Tone(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
-        self.assertTrue(
-            "style" in error_message or 
-            "required" in error_message.lower()
-        )
-
+        self.assertTrue("style" in error_message or "required" in error_message.lower())
 
     def test_validate_style(self):
         """Test validation for the style parameter."""
@@ -46,39 +44,43 @@ class TestTone(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['style'] = 123  # Not a string
+        params["style"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Tone(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['style'] = 'invalid_enum_value'  # Invalid enum value
+        params["style"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Tone(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['style'] = 'formal'
+        params["style"] = "formal"
         # This should not raise an exception
         Tone(**params)
-        params['style'] = 'casual'
+        params["style"] = "casual"
         # This should not raise an exception
         Tone(**params)
-        params['style'] = 'friendly'
+        params["style"] = "friendly"
         # This should not raise an exception
         Tone(**params)
-        params['style'] = 'technical'
+        params["style"] = "technical"
         # This should not raise an exception
         Tone(**params)
-        params['style'] = 'humorous'
+        params["style"] = "humorous"
         # This should not raise an exception
         Tone(**params)
 
@@ -96,7 +98,6 @@ class TestTone(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

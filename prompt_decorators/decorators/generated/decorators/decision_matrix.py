@@ -75,18 +75,28 @@ class DecisionMatrix(BaseDecorator):
         # Validate parameters
         if self._options is not None:
             if not isinstance(self._options, list):
-                raise ValidationError("The parameter 'options' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'options' must be an array type value."
+                )
         if self._criteria is not None:
             if not isinstance(self._criteria, list):
-                raise ValidationError("The parameter 'criteria' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'criteria' must be an array type value."
+                )
         if self._weighted is not None:
             if not isinstance(self._weighted, bool):
-                raise ValidationError("The parameter 'weighted' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'weighted' must be a boolean type value."
+                )
         if self._scale is not None:
             if not isinstance(self._scale, str):
-                raise ValidationError("The parameter 'scale' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'scale' must be a string type value."
+                )
             if self._scale not in ["1-5", "1-10", "qualitative", "percentage"]:
-                raise ValidationError(f"The parameter 'scale' must be one of the allowed enum values: ['1-5', '1-10', 'qualitative', 'percentage']. Got {self._scale}")
+                raise ValidationError(
+                    f"The parameter 'scale' must be one of the allowed enum values: ['1-5', '1-10', 'qualitative', 'percentage']. Got {self._scale}"
+                )
 
     @property
     def options(self) -> List[Any]:
@@ -154,7 +164,7 @@ class DecisionMatrix(BaseDecorator):
                 "criteria": self.criteria,
                 "weighted": self.weighted,
                 "scale": self.scale,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -214,7 +224,7 @@ class DecisionMatrix(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

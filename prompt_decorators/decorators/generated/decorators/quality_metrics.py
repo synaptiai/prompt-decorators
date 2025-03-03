@@ -73,15 +73,23 @@ class QualityMetrics(BaseDecorator):
         # Validate parameters
         if self._metrics is not None:
             if not isinstance(self._metrics, list):
-                raise ValidationError("The parameter 'metrics' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'metrics' must be an array type value."
+                )
         if self._scale is not None:
             if not isinstance(self._scale, str):
-                raise ValidationError("The parameter 'scale' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'scale' must be a string type value."
+                )
             if self._scale not in ["1-5", "1-10", "percentage", "qualitative"]:
-                raise ValidationError(f"The parameter 'scale' must be one of the allowed enum values: ['1-5', '1-10', 'percentage', 'qualitative']. Got {self._scale}")
+                raise ValidationError(
+                    f"The parameter 'scale' must be one of the allowed enum values: ['1-5', '1-10', 'percentage', 'qualitative']. Got {self._scale}"
+                )
         if self._explanation is not None:
             if not isinstance(self._explanation, bool):
-                raise ValidationError("The parameter 'explanation' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'explanation' must be a boolean type value."
+                )
 
     @property
     def metrics(self) -> List[Any]:
@@ -135,7 +143,7 @@ class QualityMetrics(BaseDecorator):
                 "metrics": self.metrics,
                 "scale": self.scale,
                 "explanation": self.explanation,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -193,7 +201,7 @@ class QualityMetrics(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -1,8 +1,10 @@
 """Tests for the StressTest decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.stress_test import StressTest
+
 
 class TestStressTest(unittest.TestCase):
     """Tests for the StressTest decorator.
@@ -13,6 +15,7 @@ class TestStressTest(unittest.TestCase):
     apparent under normal circumstances.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +30,40 @@ class TestStressTest(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['scenarios'] = 'not_a_number'  # Not a number
+        params["scenarios"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             StressTest(**params)
-        self.assertIn('scenarios', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("scenarios", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['scenarios'] = 0  # Below minimum
+        params["scenarios"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             StressTest(**params)
-        self.assertIn('scenarios', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("scenarios", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['scenarios'] = 6  # Above maximum
+        params["scenarios"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             StressTest(**params)
-        self.assertIn('scenarios', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("scenarios", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_severity(self):
         """Test validation for the severity parameter."""
@@ -63,33 +71,37 @@ class TestStressTest(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['severity'] = 123  # Not a string
+        params["severity"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             StressTest(**params)
-        self.assertIn('severity', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("severity", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['severity'] = 'invalid_enum_value'  # Invalid enum value
+        params["severity"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             StressTest(**params)
-        self.assertIn('severity', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("severity", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['severity'] = 'moderate'
+        params["severity"] = "moderate"
         # This should not raise an exception
         StressTest(**params)
-        params['severity'] = 'severe'
+        params["severity"] = "severe"
         # This should not raise an exception
         StressTest(**params)
-        params['severity'] = 'extreme'
+        params["severity"] = "extreme"
         # This should not raise an exception
         StressTest(**params)
 
@@ -99,15 +111,14 @@ class TestStressTest(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['domain'] = 123  # Not a string
+        params["domain"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             StressTest(**params)
-        self.assertIn('domain', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("domain", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -123,7 +134,6 @@ class TestStressTest(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

@@ -1,8 +1,10 @@
 """Tests for the Steelman decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.steelman import Steelman
+
 
 class TestSteelman(unittest.TestCase):
     """Tests for the Steelman decorator.
@@ -13,6 +15,7 @@ class TestSteelman(unittest.TestCase):
     charitable form.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +30,40 @@ class TestSteelman(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['sides'] = 'not_a_number'  # Not a number
+        params["sides"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Steelman(**params)
-        self.assertIn('sides', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("sides", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['sides'] = 0  # Below minimum
+        params["sides"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Steelman(**params)
-        self.assertIn('sides', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("sides", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['sides'] = 6  # Above maximum
+        params["sides"] = 6  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Steelman(**params)
-        self.assertIn('sides', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("sides", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_critique(self):
         """Test validation for the critique parameter."""
@@ -63,15 +71,14 @@ class TestSteelman(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['critique'] = 'not_a_boolean'  # Not a boolean
+        params["critique"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Steelman(**params)
-        self.assertIn('critique', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("critique", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_separation(self):
         """Test validation for the separation parameter."""
@@ -79,15 +86,14 @@ class TestSteelman(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['separation'] = 'not_a_boolean'  # Not a boolean
+        params["separation"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Steelman(**params)
-        self.assertIn('separation', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("separation", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -103,7 +109,6 @@ class TestSteelman(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

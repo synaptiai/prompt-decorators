@@ -73,17 +73,27 @@ class BlindSpots(BaseDecorator):
         # Validate parameters
         if self._categories is not None:
             if not isinstance(self._categories, list):
-                raise ValidationError("The parameter 'categories' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'categories' must be an array type value."
+                )
         if self._depth is not None:
             if not isinstance(self._depth, str):
-                raise ValidationError("The parameter 'depth' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'depth' must be a string type value."
+                )
             if self._depth not in ["basic", "thorough", "comprehensive"]:
-                raise ValidationError(f"The parameter 'depth' must be one of the allowed enum values: ['basic', 'thorough', 'comprehensive']. Got {self._depth}")
+                raise ValidationError(
+                    f"The parameter 'depth' must be one of the allowed enum values: ['basic', 'thorough', 'comprehensive']. Got {self._depth}"
+                )
         if self._position is not None:
             if not isinstance(self._position, str):
-                raise ValidationError("The parameter 'position' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'position' must be a string type value."
+                )
             if self._position not in ["after", "before", "integrated"]:
-                raise ValidationError(f"The parameter 'position' must be one of the allowed enum values: ['after', 'before', 'integrated']. Got {self._position}")
+                raise ValidationError(
+                    f"The parameter 'position' must be one of the allowed enum values: ['after', 'before', 'integrated']. Got {self._position}"
+                )
 
     @property
     def categories(self) -> List[Any]:
@@ -137,7 +147,7 @@ class BlindSpots(BaseDecorator):
                 "categories": self.categories,
                 "depth": self.depth,
                 "position": self.position,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -195,7 +205,7 @@ class BlindSpots(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

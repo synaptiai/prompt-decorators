@@ -1,8 +1,10 @@
 """Tests for the Bullet decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.bullet import Bullet
+
 
 class TestBullet(unittest.TestCase):
     """Tests for the Bullet decorator.
@@ -12,6 +14,7 @@ class TestBullet(unittest.TestCase):
     points, or collections of related items in a clean, concise format.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,39 +29,43 @@ class TestBullet(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['style'] = 123  # Not a string
+        params["style"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Bullet(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['style'] = 'invalid_enum_value'  # Invalid enum value
+        params["style"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Bullet(**params)
-        self.assertIn('style', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("style", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['style'] = 'dash'
+        params["style"] = "dash"
         # This should not raise an exception
         Bullet(**params)
-        params['style'] = 'dot'
+        params["style"] = "dot"
         # This should not raise an exception
         Bullet(**params)
-        params['style'] = 'arrow'
+        params["style"] = "arrow"
         # This should not raise an exception
         Bullet(**params)
-        params['style'] = 'star'
+        params["style"] = "star"
         # This should not raise an exception
         Bullet(**params)
-        params['style'] = 'plus'
+        params["style"] = "plus"
         # This should not raise an exception
         Bullet(**params)
 
@@ -68,15 +75,14 @@ class TestBullet(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['indented'] = 'not_a_boolean'  # Not a boolean
+        params["indented"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Bullet(**params)
-        self.assertIn('indented', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("indented", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_compact(self):
         """Test validation for the compact parameter."""
@@ -84,15 +90,14 @@ class TestBullet(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['compact'] = 'not_a_boolean'  # Not a boolean
+        params["compact"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Bullet(**params)
-        self.assertIn('compact', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("compact", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -108,7 +113,6 @@ class TestBullet(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

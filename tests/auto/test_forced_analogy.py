@@ -1,8 +1,12 @@
 """Tests for the ForcedAnalogy decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators.generated.decorators.forced_analogy import ForcedAnalogy
+from prompt_decorators.decorators.generated.decorators.forced_analogy import (
+    ForcedAnalogy,
+)
+
 
 class TestForcedAnalogy(unittest.TestCase):
     """Tests for the ForcedAnalogy decorator.
@@ -12,6 +16,7 @@ class TestForcedAnalogy(unittest.TestCase):
     make complex or unfamiliar topics more relatable and understandable.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -19,7 +24,6 @@ class TestForcedAnalogy(unittest.TestCase):
             "comprehensiveness": "basic",
             "mappings": 3,
         }
-
 
     def test_missing_required_param_source(self):
         """Test that initialization fails when missing required parameter source."""
@@ -33,14 +37,12 @@ class TestForcedAnalogy(unittest.TestCase):
         # Should raise either ValidationError or TypeError when the required parameter is missing
         with self.assertRaises((ValidationError, TypeError)) as exc_info:
             ForcedAnalogy(**params)
-        
+
         # Check that the error message contains the parameter name
         error_message = str(exc_info.exception)
         self.assertTrue(
-            "source" in error_message or 
-            "required" in error_message.lower()
+            "source" in error_message or "required" in error_message.lower()
         )
-
 
     def test_validate_source(self):
         """Test validation for the source parameter."""
@@ -48,15 +50,14 @@ class TestForcedAnalogy(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['source'] = 123  # Not a string
+        params["source"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             ForcedAnalogy(**params)
-        self.assertIn('source', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("source", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_comprehensiveness(self):
         """Test validation for the comprehensiveness parameter."""
@@ -64,33 +65,37 @@ class TestForcedAnalogy(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['comprehensiveness'] = 123  # Not a string
+        params["comprehensiveness"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             ForcedAnalogy(**params)
-        self.assertIn('comprehensiveness', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("comprehensiveness", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['comprehensiveness'] = 'invalid_enum_value'  # Invalid enum value
+        params["comprehensiveness"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             ForcedAnalogy(**params)
-        self.assertIn('comprehensiveness', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("comprehensiveness", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['comprehensiveness'] = 'basic'
+        params["comprehensiveness"] = "basic"
         # This should not raise an exception
         ForcedAnalogy(**params)
-        params['comprehensiveness'] = 'comprehensive'
+        params["comprehensiveness"] = "comprehensive"
         # This should not raise an exception
         ForcedAnalogy(**params)
-        params['comprehensiveness'] = 'detailed'
+        params["comprehensiveness"] = "detailed"
         # This should not raise an exception
         ForcedAnalogy(**params)
 
@@ -100,35 +105,40 @@ class TestForcedAnalogy(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['mappings'] = 'not_a_number'  # Not a number
+        params["mappings"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             ForcedAnalogy(**params)
-        self.assertIn('mappings', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("mappings", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['mappings'] = 0  # Below minimum
+        params["mappings"] = 0  # Below minimum
         with self.assertRaises(ValidationError) as context:
             ForcedAnalogy(**params)
-        self.assertIn('mappings', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("mappings", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['mappings'] = 8  # Above maximum
+        params["mappings"] = 8  # Above maximum
         with self.assertRaises(ValidationError) as context:
             ForcedAnalogy(**params)
-        self.assertIn('mappings', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("mappings", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -144,7 +154,6 @@ class TestForcedAnalogy(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

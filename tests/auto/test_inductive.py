@@ -1,8 +1,10 @@
 """Tests for the Inductive decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.inductive import Inductive
+
 
 class TestInductive(unittest.TestCase):
     """Tests for the Inductive decorator.
@@ -13,6 +15,7 @@ class TestInductive(unittest.TestCase):
     particular instances.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +30,40 @@ class TestInductive(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['examples'] = 'not_a_number'  # Not a number
+        params["examples"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Inductive(**params)
-        self.assertIn('examples', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("examples", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['examples'] = 1  # Below minimum
+        params["examples"] = 1  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Inductive(**params)
-        self.assertIn('examples', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("examples", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['examples'] = 11  # Above maximum
+        params["examples"] = 11  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Inductive(**params)
-        self.assertIn('examples', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("examples", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_confidence(self):
         """Test validation for the confidence parameter."""
@@ -63,15 +71,14 @@ class TestInductive(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['confidence'] = 'not_a_boolean'  # Not a boolean
+        params["confidence"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Inductive(**params)
-        self.assertIn('confidence', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("confidence", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_structure(self):
         """Test validation for the structure parameter."""
@@ -79,36 +86,40 @@ class TestInductive(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['structure'] = 123  # Not a string
+        params["structure"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Inductive(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['structure'] = 'invalid_enum_value'  # Invalid enum value
+        params["structure"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Inductive(**params)
-        self.assertIn('structure', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("structure", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['structure'] = 'generalization'
+        params["structure"] = "generalization"
         # This should not raise an exception
         Inductive(**params)
-        params['structure'] = 'causal'
+        params["structure"] = "causal"
         # This should not raise an exception
         Inductive(**params)
-        params['structure'] = 'statistical'
+        params["structure"] = "statistical"
         # This should not raise an exception
         Inductive(**params)
-        params['structure'] = 'analogical'
+        params["structure"] = "analogical"
         # This should not raise an exception
         Inductive(**params)
 
@@ -126,7 +137,6 @@ class TestInductive(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

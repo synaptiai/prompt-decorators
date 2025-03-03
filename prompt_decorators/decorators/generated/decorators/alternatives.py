@@ -73,19 +73,31 @@ class Alternatives(BaseDecorator):
         # Validate parameters
         if self._count is not None:
             if not isinstance(self._count, (int, float)):
-                raise ValidationError("The parameter 'count' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'count' must be a numeric type value."
+                )
             if self._count < 2:
-                raise ValidationError("The parameter 'count' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'count' must be greater than or equal to 2."
+                )
             if self._count > 7:
-                raise ValidationError("The parameter 'count' must be less than or equal to 7.")
+                raise ValidationError(
+                    "The parameter 'count' must be less than or equal to 7."
+                )
         if self._diversity is not None:
             if not isinstance(self._diversity, str):
-                raise ValidationError("The parameter 'diversity' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'diversity' must be a string type value."
+                )
             if self._diversity not in ["low", "medium", "high"]:
-                raise ValidationError(f"The parameter 'diversity' must be one of the allowed enum values: ['low', 'medium', 'high']. Got {self._diversity}")
+                raise ValidationError(
+                    f"The parameter 'diversity' must be one of the allowed enum values: ['low', 'medium', 'high']. Got {self._diversity}"
+                )
         if self._comparison is not None:
             if not isinstance(self._comparison, bool):
-                raise ValidationError("The parameter 'comparison' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'comparison' must be a boolean type value."
+                )
 
     @property
     def count(self) -> Any:
@@ -139,7 +151,7 @@ class Alternatives(BaseDecorator):
                 "count": self.count,
                 "diversity": self.diversity,
                 "comparison": self.comparison,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -197,7 +209,7 @@ class Alternatives(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

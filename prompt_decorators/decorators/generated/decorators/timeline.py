@@ -12,9 +12,9 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
 from prompt_decorators.decorators.generated.decorators.enums import (
-    TimelineGranularityEnum,
-    TimelineFormatEnum,
     TimelineDetailsEnum,
+    TimelineFormatEnum,
+    TimelineGranularityEnum,
 )
 
 
@@ -46,7 +46,9 @@ class Timeline(BaseDecorator):
 
     def __init__(
         self,
-        granularity: Literal["day", "month", "year", "decade", "century", "era"] = "year",
+        granularity: Literal[
+            "day", "month", "year", "decade", "century", "era"
+        ] = "year",
         format: Literal["list", "narrative", "table"] = "list",
         details: Literal["minimal", "moderate", "comprehensive"] = "moderate",
     ) -> None:
@@ -73,22 +75,43 @@ class Timeline(BaseDecorator):
         # Validate parameters
         if self._granularity is not None:
             if not isinstance(self._granularity, str):
-                raise ValidationError("The parameter 'granularity' must be a string type value.")
-            if self._granularity not in ["day", "month", "year", "decade", "century", "era"]:
-                raise ValidationError(f"The parameter 'granularity' must be one of the allowed enum values: ['day', 'month', 'year', 'decade', 'century', 'era']. Got {self._granularity}")
+                raise ValidationError(
+                    "The parameter 'granularity' must be a string type value."
+                )
+            if self._granularity not in [
+                "day",
+                "month",
+                "year",
+                "decade",
+                "century",
+                "era",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'granularity' must be one of the allowed enum values: ['day', 'month', 'year', 'decade', 'century', 'era']. Got {self._granularity}"
+                )
         if self._format is not None:
             if not isinstance(self._format, str):
-                raise ValidationError("The parameter 'format' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'format' must be a string type value."
+                )
             if self._format not in ["list", "narrative", "table"]:
-                raise ValidationError(f"The parameter 'format' must be one of the allowed enum values: ['list', 'narrative', 'table']. Got {self._format}")
+                raise ValidationError(
+                    f"The parameter 'format' must be one of the allowed enum values: ['list', 'narrative', 'table']. Got {self._format}"
+                )
         if self._details is not None:
             if not isinstance(self._details, str):
-                raise ValidationError("The parameter 'details' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'details' must be a string type value."
+                )
             if self._details not in ["minimal", "moderate", "comprehensive"]:
-                raise ValidationError(f"The parameter 'details' must be one of the allowed enum values: ['minimal', 'moderate', 'comprehensive']. Got {self._details}")
+                raise ValidationError(
+                    f"The parameter 'details' must be one of the allowed enum values: ['minimal', 'moderate', 'comprehensive']. Got {self._details}"
+                )
 
     @property
-    def granularity(self) -> Literal["day", "month", "year", "decade", "century", "era"]:
+    def granularity(
+        self,
+    ) -> Literal["day", "month", "year", "decade", "century", "era"]:
         """
         Get the granularity parameter value.
 
@@ -139,7 +162,7 @@ class Timeline(BaseDecorator):
                 "granularity": self.granularity,
                 "format": self.format,
                 "details": self.details,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -197,7 +220,7 @@ class Timeline(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

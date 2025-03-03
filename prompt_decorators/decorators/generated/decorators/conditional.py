@@ -71,13 +71,19 @@ class Conditional(BaseDecorator):
         # Validate parameters
         if self._if_param is not None:
             if not isinstance(self._if_param, str):
-                raise ValidationError("The parameter 'if_param' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'if_param' must be a string type value."
+                )
         if self._then is not None:
             if not isinstance(self._then, str):
-                raise ValidationError("The parameter 'then' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'then' must be a string type value."
+                )
         if self._else_param is not None:
             if not isinstance(self._else_param, str):
-                raise ValidationError("The parameter 'else_param' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'else_param' must be a string type value."
+                )
 
     @property
     def if_param(self) -> str:
@@ -131,7 +137,7 @@ class Conditional(BaseDecorator):
                 "if_param": self.if_param,
                 "then": self.then,
                 "else_param": self.else_param,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -189,7 +195,7 @@ class Conditional(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

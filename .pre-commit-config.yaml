@@ -46,7 +46,7 @@ repos:
         language: system
         types: [python]
         exclude: ^(docs/|examples/|scripts/|tests/)
-        args: ["--ignore-missing-imports", "--disallow-untyped-defs", "--disallow-incomplete-defs"]
+        args: ["--config-file=mypy.ini"]
 
       - id: pytest
         name: pytest

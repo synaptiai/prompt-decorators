@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
 from prompt_decorators.decorators.generated.decorators.enums import (
-    NarrativeStructureEnum,
     NarrativeLengthEnum,
+    NarrativeStructureEnum,
 )
 
 
@@ -71,17 +71,27 @@ class Narrative(BaseDecorator):
         # Validate parameters
         if self._structure is not None:
             if not isinstance(self._structure, str):
-                raise ValidationError("The parameter 'structure' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'structure' must be a string type value."
+                )
             if self._structure not in ["classic", "nonlinear", "case-study"]:
-                raise ValidationError(f"The parameter 'structure' must be one of the allowed enum values: ['classic', 'nonlinear', 'case-study']. Got {self._structure}")
+                raise ValidationError(
+                    f"The parameter 'structure' must be one of the allowed enum values: ['classic', 'nonlinear', 'case-study']. Got {self._structure}"
+                )
         if self._characters is not None:
             if not isinstance(self._characters, bool):
-                raise ValidationError("The parameter 'characters' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'characters' must be a boolean type value."
+                )
         if self._length is not None:
             if not isinstance(self._length, str):
-                raise ValidationError("The parameter 'length' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'length' must be a string type value."
+                )
             if self._length not in ["brief", "moderate", "extended"]:
-                raise ValidationError(f"The parameter 'length' must be one of the allowed enum values: ['brief', 'moderate', 'extended']. Got {self._length}")
+                raise ValidationError(
+                    f"The parameter 'length' must be one of the allowed enum values: ['brief', 'moderate', 'extended']. Got {self._length}"
+                )
 
     @property
     def structure(self) -> Literal["classic", "nonlinear", "case-study"]:
@@ -135,7 +145,7 @@ class Narrative(BaseDecorator):
                 "structure": self.structure,
                 "characters": self.characters,
                 "length": self.length,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -193,7 +203,7 @@ class Narrative(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

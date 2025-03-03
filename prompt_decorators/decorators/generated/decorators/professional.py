@@ -67,12 +67,18 @@ class Professional(BaseDecorator):
         # Validate parameters
         if self._industry is not None:
             if not isinstance(self._industry, str):
-                raise ValidationError("The parameter 'industry' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'industry' must be a string type value."
+                )
         if self._formality is not None:
             if not isinstance(self._formality, str):
-                raise ValidationError("The parameter 'formality' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'formality' must be a string type value."
+                )
             if self._formality not in ["standard", "high", "executive"]:
-                raise ValidationError(f"The parameter 'formality' must be one of the allowed enum values: ['standard', 'high', 'executive']. Got {self._formality}")
+                raise ValidationError(
+                    f"The parameter 'formality' must be one of the allowed enum values: ['standard', 'high', 'executive']. Got {self._formality}"
+                )
 
     @property
     def industry(self) -> str:
@@ -112,7 +118,7 @@ class Professional(BaseDecorator):
             "parameters": {
                 "industry": self.industry,
                 "formality": self.formality,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -168,7 +174,7 @@ class Professional(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

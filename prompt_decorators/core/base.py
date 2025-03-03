@@ -188,10 +188,10 @@ class BaseDecorator:
         """
         if "name" not in data:
             raise ValidationError("Missing 'name' field in decorator data")
-        
+
         if "parameters" not in data:
             raise ValidationError("Missing 'parameters' field in decorator data")
-            
+
         return cls(**data.get("parameters", {}))
 
     def apply_to_prompt(self, prompt: str) -> str:

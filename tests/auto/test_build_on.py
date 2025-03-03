@@ -1,8 +1,10 @@
 """Tests for the BuildOn decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.build_on import BuildOn
+
 
 class TestBuildOn(unittest.TestCase):
     """Tests for the BuildOn decorator.
@@ -13,6 +15,7 @@ class TestBuildOn(unittest.TestCase):
     manner.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,33 +30,37 @@ class TestBuildOn(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['reference'] = 123  # Not a string
+        params["reference"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             BuildOn(**params)
-        self.assertIn('reference', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("reference", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['reference'] = 'invalid_enum_value'  # Invalid enum value
+        params["reference"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             BuildOn(**params)
-        self.assertIn('reference', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("reference", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['reference'] = 'last'
+        params["reference"] = "last"
         # This should not raise an exception
         BuildOn(**params)
-        params['reference'] = 'specific'
+        params["reference"] = "specific"
         # This should not raise an exception
         BuildOn(**params)
-        params['reference'] = 'all'
+        params["reference"] = "all"
         # This should not raise an exception
         BuildOn(**params)
 
@@ -63,36 +70,40 @@ class TestBuildOn(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['approach'] = 123  # Not a string
+        params["approach"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             BuildOn(**params)
-        self.assertIn('approach', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("approach", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['approach'] = 'invalid_enum_value'  # Invalid enum value
+        params["approach"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             BuildOn(**params)
-        self.assertIn('approach', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("approach", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['approach'] = 'extend'
+        params["approach"] = "extend"
         # This should not raise an exception
         BuildOn(**params)
-        params['approach'] = 'refine'
+        params["approach"] = "refine"
         # This should not raise an exception
         BuildOn(**params)
-        params['approach'] = 'contrast'
+        params["approach"] = "contrast"
         # This should not raise an exception
         BuildOn(**params)
-        params['approach'] = 'synthesize'
+        params["approach"] = "synthesize"
         # This should not raise an exception
         BuildOn(**params)
 
@@ -102,15 +113,14 @@ class TestBuildOn(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['preserveStructure'] = 'not_a_boolean'  # Not a boolean
+        params["preserveStructure"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             BuildOn(**params)
-        self.assertIn('preserveStructure', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("preserveStructure", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -126,7 +136,6 @@ class TestBuildOn(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

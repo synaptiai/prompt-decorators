@@ -1,8 +1,10 @@
 """Tests for the Professional decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.professional import Professional
+
 
 class TestProfessional(unittest.TestCase):
     """Tests for the Professional decorator.
@@ -13,6 +15,7 @@ class TestProfessional(unittest.TestCase):
     jargon when relevant.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,15 +29,14 @@ class TestProfessional(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['industry'] = 123  # Not a string
+        params["industry"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Professional(**params)
-        self.assertIn('industry', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("industry", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_formality(self):
         """Test validation for the formality parameter."""
@@ -42,33 +44,37 @@ class TestProfessional(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['formality'] = 123  # Not a string
+        params["formality"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Professional(**params)
-        self.assertIn('formality', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("formality", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['formality'] = 'invalid_enum_value'  # Invalid enum value
+        params["formality"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Professional(**params)
-        self.assertIn('formality', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("formality", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['formality'] = 'standard'
+        params["formality"] = "standard"
         # This should not raise an exception
         Professional(**params)
-        params['formality'] = 'high'
+        params["formality"] = "high"
         # This should not raise an exception
         Professional(**params)
-        params['formality'] = 'executive'
+        params["formality"] = "executive"
         # This should not raise an exception
         Professional(**params)
 
@@ -86,7 +92,6 @@ class TestProfessional(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

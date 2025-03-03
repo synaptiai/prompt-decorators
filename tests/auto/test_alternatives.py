@@ -1,8 +1,10 @@
 """Tests for the Alternatives decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.alternatives import Alternatives
+
 
 class TestAlternatives(unittest.TestCase):
     """Tests for the Alternatives decorator.
@@ -12,6 +14,7 @@ class TestAlternatives(unittest.TestCase):
     perspectives rather than providing a single definitive answer.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,35 +29,40 @@ class TestAlternatives(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['count'] = 'not_a_number'  # Not a number
+        params["count"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Alternatives(**params)
-        self.assertIn('count', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("count", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['count'] = 1  # Below minimum
+        params["count"] = 1  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Alternatives(**params)
-        self.assertIn('count', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("count", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['count'] = 8  # Above maximum
+        params["count"] = 8  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Alternatives(**params)
-        self.assertIn('count', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("count", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_diversity(self):
         """Test validation for the diversity parameter."""
@@ -62,33 +70,37 @@ class TestAlternatives(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['diversity'] = 123  # Not a string
+        params["diversity"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Alternatives(**params)
-        self.assertIn('diversity', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("diversity", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['diversity'] = 'invalid_enum_value'  # Invalid enum value
+        params["diversity"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Alternatives(**params)
-        self.assertIn('diversity', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("diversity", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['diversity'] = 'low'
+        params["diversity"] = "low"
         # This should not raise an exception
         Alternatives(**params)
-        params['diversity'] = 'medium'
+        params["diversity"] = "medium"
         # This should not raise an exception
         Alternatives(**params)
-        params['diversity'] = 'high'
+        params["diversity"] = "high"
         # This should not raise an exception
         Alternatives(**params)
 
@@ -98,15 +110,14 @@ class TestAlternatives(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['comparison'] = 'not_a_boolean'  # Not a boolean
+        params["comparison"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Alternatives(**params)
-        self.assertIn('comparison', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("comparison", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -122,7 +133,6 @@ class TestAlternatives(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

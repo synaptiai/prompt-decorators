@@ -69,17 +69,27 @@ class Abductive(BaseDecorator):
         # Validate parameters
         if self._hypotheses is not None:
             if not isinstance(self._hypotheses, (int, float)):
-                raise ValidationError("The parameter 'hypotheses' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'hypotheses' must be a numeric type value."
+                )
             if self._hypotheses < 2:
-                raise ValidationError("The parameter 'hypotheses' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'hypotheses' must be greater than or equal to 2."
+                )
             if self._hypotheses > 5:
-                raise ValidationError("The parameter 'hypotheses' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'hypotheses' must be less than or equal to 5."
+                )
         if self._criteria is not None:
             if not isinstance(self._criteria, list):
-                raise ValidationError("The parameter 'criteria' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'criteria' must be an array type value."
+                )
         if self._rank is not None:
             if not isinstance(self._rank, bool):
-                raise ValidationError("The parameter 'rank' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'rank' must be a boolean type value."
+                )
 
     @property
     def hypotheses(self) -> Any:
@@ -133,7 +143,7 @@ class Abductive(BaseDecorator):
                 "hypotheses": self.hypotheses,
                 "criteria": self.criteria,
                 "rank": self.rank,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -191,7 +201,7 @@ class Abductive(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

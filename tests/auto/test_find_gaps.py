@@ -1,8 +1,10 @@
 """Tests for the FindGaps decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.find_gaps import FindGaps
+
 
 class TestFindGaps(unittest.TestCase):
     """Tests for the FindGaps decorator.
@@ -13,6 +15,7 @@ class TestFindGaps(unittest.TestCase):
     addressing.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,42 +30,46 @@ class TestFindGaps(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['aspects'] = 123  # Not a string
+        params["aspects"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             FindGaps(**params)
-        self.assertIn('aspects', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("aspects", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['aspects'] = 'invalid_enum_value'  # Invalid enum value
+        params["aspects"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             FindGaps(**params)
-        self.assertIn('aspects', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("aspects", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['aspects'] = 'questions'
+        params["aspects"] = "questions"
         # This should not raise an exception
         FindGaps(**params)
-        params['aspects'] = 'resources'
+        params["aspects"] = "resources"
         # This should not raise an exception
         FindGaps(**params)
-        params['aspects'] = 'stakeholders'
+        params["aspects"] = "stakeholders"
         # This should not raise an exception
         FindGaps(**params)
-        params['aspects'] = 'risks'
+        params["aspects"] = "risks"
         # This should not raise an exception
         FindGaps(**params)
-        params['aspects'] = 'dependencies'
+        params["aspects"] = "dependencies"
         # This should not raise an exception
         FindGaps(**params)
-        params['aspects'] = 'comprehensive'
+        params["aspects"] = "comprehensive"
         # This should not raise an exception
         FindGaps(**params)
 
@@ -72,33 +79,37 @@ class TestFindGaps(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['depth'] = 123  # Not a string
+        params["depth"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             FindGaps(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['depth'] = 'invalid_enum_value'  # Invalid enum value
+        params["depth"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             FindGaps(**params)
-        self.assertIn('depth', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("depth", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['depth'] = 'basic'
+        params["depth"] = "basic"
         # This should not raise an exception
         FindGaps(**params)
-        params['depth'] = 'thorough'
+        params["depth"] = "thorough"
         # This should not raise an exception
         FindGaps(**params)
-        params['depth'] = 'exhaustive'
+        params["depth"] = "exhaustive"
         # This should not raise an exception
         FindGaps(**params)
 
@@ -108,15 +119,14 @@ class TestFindGaps(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['solutions'] = 'not_a_boolean'  # Not a boolean
+        params["solutions"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             FindGaps(**params)
-        self.assertIn('solutions', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("solutions", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -132,7 +142,6 @@ class TestFindGaps(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

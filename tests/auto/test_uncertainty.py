@@ -1,8 +1,10 @@
 """Tests for the Uncertainty decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.uncertainty import Uncertainty
+
 
 class TestUncertainty(unittest.TestCase):
     """Tests for the Uncertainty decorator.
@@ -12,6 +14,7 @@ class TestUncertainty(unittest.TestCase):
     confidence versus what is speculative, unknown, or subject to debate.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -26,33 +29,37 @@ class TestUncertainty(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['format'] = 123  # Not a string
+        params["format"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Uncertainty(**params)
-        self.assertIn('format', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("format", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['format'] = 'invalid_enum_value'  # Invalid enum value
+        params["format"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Uncertainty(**params)
-        self.assertIn('format', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("format", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['format'] = 'inline'
+        params["format"] = "inline"
         # This should not raise an exception
         Uncertainty(**params)
-        params['format'] = 'section'
+        params["format"] = "section"
         # This should not raise an exception
         Uncertainty(**params)
-        params['format'] = 'confidence'
+        params["format"] = "confidence"
         # This should not raise an exception
         Uncertainty(**params)
 
@@ -62,33 +69,37 @@ class TestUncertainty(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['threshold'] = 123  # Not a string
+        params["threshold"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Uncertainty(**params)
-        self.assertIn('threshold', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("threshold", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['threshold'] = 'invalid_enum_value'  # Invalid enum value
+        params["threshold"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Uncertainty(**params)
-        self.assertIn('threshold', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("threshold", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['threshold'] = 'low'
+        params["threshold"] = "low"
         # This should not raise an exception
         Uncertainty(**params)
-        params['threshold'] = 'medium'
+        params["threshold"] = "medium"
         # This should not raise an exception
         Uncertainty(**params)
-        params['threshold'] = 'high'
+        params["threshold"] = "high"
         # This should not raise an exception
         Uncertainty(**params)
 
@@ -98,15 +109,14 @@ class TestUncertainty(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['reason'] = 'not_a_boolean'  # Not a boolean
+        params["reason"] = "not_a_boolean"  # Not a boolean
         with self.assertRaises(ValidationError) as context:
             Uncertainty(**params)
-        self.assertIn('reason', str(context.exception))
-        self.assertIn('boolean', str(context.exception).lower())
+        self.assertIn("reason", str(context.exception))
+        self.assertIn("boolean", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -122,7 +132,6 @@ class TestUncertainty(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

@@ -67,13 +67,19 @@ class Persona(BaseDecorator):
         # Validate parameters
         if self._role is not None:
             if not isinstance(self._role, str):
-                raise ValidationError("The parameter 'role' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'role' must be a string type value."
+                )
         if self._traits is not None:
             if not isinstance(self._traits, list):
-                raise ValidationError("The parameter 'traits' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'traits' must be an array type value."
+                )
         if self._goals is not None:
             if not isinstance(self._goals, list):
-                raise ValidationError("The parameter 'goals' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'goals' must be an array type value."
+                )
 
     @property
     def role(self) -> str:
@@ -127,7 +133,7 @@ class Persona(BaseDecorator):
                 "role": self.role,
                 "traits": self.traits,
                 "goals": self.goals,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -185,7 +191,7 @@ class Persona(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

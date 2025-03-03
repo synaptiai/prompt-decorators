@@ -68,21 +68,35 @@ class TreeOfThought(BaseDecorator):
         # Validate parameters
         if self._branches is not None:
             if not isinstance(self._branches, (int, float)):
-                raise ValidationError("The parameter 'branches' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'branches' must be a numeric type value."
+                )
             if self._branches < 2:
-                raise ValidationError("The parameter 'branches' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'branches' must be greater than or equal to 2."
+                )
             if self._branches > 5:
-                raise ValidationError("The parameter 'branches' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'branches' must be less than or equal to 5."
+                )
         if self._depth is not None:
             if not isinstance(self._depth, (int, float)):
-                raise ValidationError("The parameter 'depth' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'depth' must be a numeric type value."
+                )
             if self._depth < 1:
-                raise ValidationError("The parameter 'depth' must be greater than or equal to 1.")
+                raise ValidationError(
+                    "The parameter 'depth' must be greater than or equal to 1."
+                )
             if self._depth > 5:
-                raise ValidationError("The parameter 'depth' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'depth' must be less than or equal to 5."
+                )
         if self._pruning is not None:
             if not isinstance(self._pruning, bool):
-                raise ValidationError("The parameter 'pruning' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'pruning' must be a boolean type value."
+                )
 
     @property
     def branches(self) -> Any:
@@ -136,7 +150,7 @@ class TreeOfThought(BaseDecorator):
                 "branches": self.branches,
                 "depth": self.depth,
                 "pruning": self.pruning,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -194,7 +208,7 @@ class TreeOfThought(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -1,8 +1,10 @@
 """Tests for the Constraints decorator."""
 
 import unittest
+
 from prompt_decorators.core.base import ValidationError
 from prompt_decorators.decorators.generated.decorators.constraints import Constraints
+
 
 class TestConstraints(unittest.TestCase):
     """Tests for the Constraints decorator.
@@ -12,6 +14,7 @@ class TestConstraints(unittest.TestCase):
     precision by requiring the response to work within defined boundaries.
 
     """
+
     def _get_valid_params(self):
         """Get valid parameters for testing."""
         return {
@@ -27,35 +30,40 @@ class TestConstraints(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['wordCount'] = 'not_a_number'  # Not a number
+        params["wordCount"] = "not_a_number"  # Not a number
         with self.assertRaises(ValidationError) as context:
             Constraints(**params)
-        self.assertIn('wordCount', str(context.exception))
-        self.assertIn('numeric', str(context.exception).lower())
+        self.assertIn("wordCount", str(context.exception))
+        self.assertIn("numeric", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test minimum value validation
-        params['wordCount'] = 9  # Below minimum
+        params["wordCount"] = 9  # Below minimum
         with self.assertRaises(ValidationError) as context:
             Constraints(**params)
-        self.assertIn('wordCount', str(context.exception))
-        self.assertTrue('minimum' in str(context.exception).lower() or 'greater than' in str(context.exception).lower())
+        self.assertIn("wordCount", str(context.exception))
+        self.assertTrue(
+            "minimum" in str(context.exception).lower()
+            or "greater than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test maximum value validation
-        params['wordCount'] = 1001  # Above maximum
+        params["wordCount"] = 1001  # Above maximum
         with self.assertRaises(ValidationError) as context:
             Constraints(**params)
-        self.assertIn('wordCount', str(context.exception))
-        self.assertTrue('maximum' in str(context.exception).lower() or 'less than' in str(context.exception).lower())
+        self.assertIn("wordCount", str(context.exception))
+        self.assertTrue(
+            "maximum" in str(context.exception).lower()
+            or "less than" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_timeframe(self):
         """Test validation for the timeframe parameter."""
@@ -63,15 +71,14 @@ class TestConstraints(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['timeframe'] = 123  # Not a string
+        params["timeframe"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Constraints(**params)
-        self.assertIn('timeframe', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("timeframe", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_validate_vocabulary(self):
         """Test validation for the vocabulary parameter."""
@@ -79,36 +86,40 @@ class TestConstraints(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['vocabulary'] = 123  # Not a string
+        params["vocabulary"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Constraints(**params)
-        self.assertIn('vocabulary', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("vocabulary", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test invalid enum value
-        params['vocabulary'] = 'invalid_enum_value'  # Invalid enum value
+        params["vocabulary"] = "invalid_enum_value"  # Invalid enum value
         with self.assertRaises(ValidationError) as context:
             Constraints(**params)
-        self.assertIn('vocabulary', str(context.exception))
-        self.assertTrue('must be one of' in str(context.exception).lower() or 'valid options' in str(context.exception).lower() or 'enum' in str(context.exception).lower())
+        self.assertIn("vocabulary", str(context.exception))
+        self.assertTrue(
+            "must be one of" in str(context.exception).lower()
+            or "valid options" in str(context.exception).lower()
+            or "enum" in str(context.exception).lower()
+        )
 
         # Restore valid parameters
         params = self._get_valid_params()
 
         # Test valid enum values
-        params['vocabulary'] = 'simple'
+        params["vocabulary"] = "simple"
         # This should not raise an exception
         Constraints(**params)
-        params['vocabulary'] = 'technical'
+        params["vocabulary"] = "technical"
         # This should not raise an exception
         Constraints(**params)
-        params['vocabulary'] = 'domain-specific'
+        params["vocabulary"] = "domain-specific"
         # This should not raise an exception
         Constraints(**params)
-        params['vocabulary'] = 'creative'
+        params["vocabulary"] = "creative"
         # This should not raise an exception
         Constraints(**params)
 
@@ -118,15 +129,14 @@ class TestConstraints(unittest.TestCase):
         params = self._get_valid_params()
 
         # Test type validation
-        params['custom'] = 123  # Not a string
+        params["custom"] = 123  # Not a string
         with self.assertRaises(ValidationError) as context:
             Constraints(**params)
-        self.assertIn('custom', str(context.exception))
-        self.assertIn('string', str(context.exception).lower())
+        self.assertIn("custom", str(context.exception))
+        self.assertIn("string", str(context.exception).lower())
 
         # Restore valid parameters
         params = self._get_valid_params()
-
 
     def test_apply_examples(self):
         """Test apply method with examples from the decorator definition."""
@@ -142,7 +152,6 @@ class TestConstraints(unittest.TestCase):
         result = decorator.apply("Sample prompt for testing.")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
-
 
     def test_serialization(self):
         """Test serialization and deserialization."""

@@ -72,15 +72,23 @@ class AsExpert(BaseDecorator):
         # Validate parameters
         if self._domain is not None:
             if not isinstance(self._domain, str):
-                raise ValidationError("The parameter 'domain' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'domain' must be a string type value."
+                )
         if self._experience is not None:
             if not isinstance(self._experience, str):
-                raise ValidationError("The parameter 'experience' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'experience' must be a string type value."
+                )
             if self._experience not in ["junior", "senior", "leading", "pioneering"]:
-                raise ValidationError(f"The parameter 'experience' must be one of the allowed enum values: ['junior', 'senior', 'leading', 'pioneering']. Got {self._experience}")
+                raise ValidationError(
+                    f"The parameter 'experience' must be one of the allowed enum values: ['junior', 'senior', 'leading', 'pioneering']. Got {self._experience}"
+                )
         if self._technical is not None:
             if not isinstance(self._technical, bool):
-                raise ValidationError("The parameter 'technical' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'technical' must be a boolean type value."
+                )
 
     @property
     def domain(self) -> str:
@@ -134,7 +142,7 @@ class AsExpert(BaseDecorator):
                 "domain": self.domain,
                 "experience": self.experience,
                 "technical": self.technical,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -192,7 +200,7 @@ class AsExpert(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

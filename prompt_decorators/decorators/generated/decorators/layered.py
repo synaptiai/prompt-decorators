@@ -45,7 +45,11 @@ class Layered(BaseDecorator):
 
     def __init__(
         self,
-        levels: Literal["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"] = "summary-detail-technical",
+        levels: Literal[
+            "sentence-paragraph-full",
+            "basic-intermediate-advanced",
+            "summary-detail-technical",
+        ] = "summary-detail-technical",
         count: Any = 3,
         progression: Literal["separate", "nested", "incremental"] = "separate",
     ) -> None:
@@ -72,24 +76,48 @@ class Layered(BaseDecorator):
         # Validate parameters
         if self._levels is not None:
             if not isinstance(self._levels, str):
-                raise ValidationError("The parameter 'levels' must be a string type value.")
-            if self._levels not in ["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"]:
-                raise ValidationError(f"The parameter 'levels' must be one of the allowed enum values: ['sentence-paragraph-full', 'basic-intermediate-advanced', 'summary-detail-technical']. Got {self._levels}")
+                raise ValidationError(
+                    "The parameter 'levels' must be a string type value."
+                )
+            if self._levels not in [
+                "sentence-paragraph-full",
+                "basic-intermediate-advanced",
+                "summary-detail-technical",
+            ]:
+                raise ValidationError(
+                    f"The parameter 'levels' must be one of the allowed enum values: ['sentence-paragraph-full', 'basic-intermediate-advanced', 'summary-detail-technical']. Got {self._levels}"
+                )
         if self._count is not None:
             if not isinstance(self._count, (int, float)):
-                raise ValidationError("The parameter 'count' must be a numeric type value.")
+                raise ValidationError(
+                    "The parameter 'count' must be a numeric type value."
+                )
             if self._count < 2:
-                raise ValidationError("The parameter 'count' must be greater than or equal to 2.")
+                raise ValidationError(
+                    "The parameter 'count' must be greater than or equal to 2."
+                )
             if self._count > 5:
-                raise ValidationError("The parameter 'count' must be less than or equal to 5.")
+                raise ValidationError(
+                    "The parameter 'count' must be less than or equal to 5."
+                )
         if self._progression is not None:
             if not isinstance(self._progression, str):
-                raise ValidationError("The parameter 'progression' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'progression' must be a string type value."
+                )
             if self._progression not in ["separate", "nested", "incremental"]:
-                raise ValidationError(f"The parameter 'progression' must be one of the allowed enum values: ['separate', 'nested', 'incremental']. Got {self._progression}")
+                raise ValidationError(
+                    f"The parameter 'progression' must be one of the allowed enum values: ['separate', 'nested', 'incremental']. Got {self._progression}"
+                )
 
     @property
-    def levels(self) -> Literal["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"]:
+    def levels(
+        self,
+    ) -> Literal[
+        "sentence-paragraph-full",
+        "basic-intermediate-advanced",
+        "summary-detail-technical",
+    ]:
         """
         Get the levels parameter value.
 
@@ -140,7 +168,7 @@ class Layered(BaseDecorator):
                 "levels": self.levels,
                 "count": self.count,
                 "progression": self.progression,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -198,7 +226,7 @@ class Layered(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -73,15 +73,23 @@ class Contrarian(BaseDecorator):
         # Validate parameters
         if self._approach is not None:
             if not isinstance(self._approach, str):
-                raise ValidationError("The parameter 'approach' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'approach' must be a string type value."
+                )
             if self._approach not in ["outsider", "skeptic", "devils-advocate"]:
-                raise ValidationError(f"The parameter 'approach' must be one of the allowed enum values: ['outsider', 'skeptic', 'devils-advocate']. Got {self._approach}")
+                raise ValidationError(
+                    f"The parameter 'approach' must be one of the allowed enum values: ['outsider', 'skeptic', 'devils-advocate']. Got {self._approach}"
+                )
         if self._maintain is not None:
             if not isinstance(self._maintain, bool):
-                raise ValidationError("The parameter 'maintain' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'maintain' must be a boolean type value."
+                )
         if self._focus is not None:
             if not isinstance(self._focus, str):
-                raise ValidationError("The parameter 'focus' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'focus' must be a string type value."
+                )
 
     @property
     def approach(self) -> Literal["outsider", "skeptic", "devils-advocate"]:
@@ -135,7 +143,7 @@ class Contrarian(BaseDecorator):
                 "approach": self.approach,
                 "maintain": self.maintain,
                 "focus": self.focus,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -193,7 +201,7 @@ class Contrarian(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

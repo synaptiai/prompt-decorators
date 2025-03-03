@@ -70,13 +70,19 @@ class Extension(BaseDecorator):
         # Validate parameters
         if self._source is not None:
             if not isinstance(self._source, str):
-                raise ValidationError("The parameter 'source' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'source' must be a string type value."
+                )
         if self._version is not None:
             if not isinstance(self._version, str):
-                raise ValidationError("The parameter 'version' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'version' must be a string type value."
+                )
         if self._decorators is not None:
             if not isinstance(self._decorators, list):
-                raise ValidationError("The parameter 'decorators' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'decorators' must be an array type value."
+                )
 
     @property
     def source(self) -> str:
@@ -130,7 +136,7 @@ class Extension(BaseDecorator):
                 "source": self.source,
                 "version": self.version,
                 "decorators": self.decorators,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -188,7 +194,7 @@ class Extension(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

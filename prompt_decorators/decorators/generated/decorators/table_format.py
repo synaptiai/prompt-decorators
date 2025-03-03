@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
 from prompt_decorators.decorators.generated.decorators.enums import (
-    TableFormatFormatEnum,
     TableFormatAlignmentEnum,
+    TableFormatFormatEnum,
 )
 
 
@@ -72,17 +72,27 @@ class TableFormat(BaseDecorator):
         # Validate parameters
         if self._columns is not None:
             if not isinstance(self._columns, list):
-                raise ValidationError("The parameter 'columns' must be an array type value.")
+                raise ValidationError(
+                    "The parameter 'columns' must be an array type value."
+                )
         if self._format is not None:
             if not isinstance(self._format, str):
-                raise ValidationError("The parameter 'format' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'format' must be a string type value."
+                )
             if self._format not in ["markdown", "ascii", "csv"]:
-                raise ValidationError(f"The parameter 'format' must be one of the allowed enum values: ['markdown', 'ascii', 'csv']. Got {self._format}")
+                raise ValidationError(
+                    f"The parameter 'format' must be one of the allowed enum values: ['markdown', 'ascii', 'csv']. Got {self._format}"
+                )
         if self._alignment is not None:
             if not isinstance(self._alignment, str):
-                raise ValidationError("The parameter 'alignment' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'alignment' must be a string type value."
+                )
             if self._alignment not in ["left", "center", "right"]:
-                raise ValidationError(f"The parameter 'alignment' must be one of the allowed enum values: ['left', 'center', 'right']. Got {self._alignment}")
+                raise ValidationError(
+                    f"The parameter 'alignment' must be one of the allowed enum values: ['left', 'center', 'right']. Got {self._alignment}"
+                )
 
     @property
     def columns(self) -> List[Any]:
@@ -136,7 +146,7 @@ class TableFormat(BaseDecorator):
                 "columns": self.columns,
                 "format": self.format,
                 "alignment": self.alignment,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -194,7 +204,7 @@ class TableFormat(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."

@@ -11,9 +11,7 @@ from typing import Any, Dict, List, Literal, Optional, Union, cast
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 from prompt_decorators.core.exceptions import IncompatibleVersionError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    AudienceLevelEnum,
-)
+from prompt_decorators.decorators.generated.decorators.enums import AudienceLevelEnum
 
 
 class Audience(BaseDecorator):
@@ -44,7 +42,9 @@ class Audience(BaseDecorator):
 
     def __init__(
         self,
-        level: Literal["beginner", "intermediate", "expert", "technical"] = "intermediate",
+        level: Literal[
+            "beginner", "intermediate", "expert", "technical"
+        ] = "intermediate",
         domain: str = "general",
         examples: bool = True,
     ) -> None:
@@ -72,15 +72,23 @@ class Audience(BaseDecorator):
         # Validate parameters
         if self._level is not None:
             if not isinstance(self._level, str):
-                raise ValidationError("The parameter 'level' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'level' must be a string type value."
+                )
             if self._level not in ["beginner", "intermediate", "expert", "technical"]:
-                raise ValidationError(f"The parameter 'level' must be one of the allowed enum values: ['beginner', 'intermediate', 'expert', 'technical']. Got {self._level}")
+                raise ValidationError(
+                    f"The parameter 'level' must be one of the allowed enum values: ['beginner', 'intermediate', 'expert', 'technical']. Got {self._level}"
+                )
         if self._domain is not None:
             if not isinstance(self._domain, str):
-                raise ValidationError("The parameter 'domain' must be a string type value.")
+                raise ValidationError(
+                    "The parameter 'domain' must be a string type value."
+                )
         if self._examples is not None:
             if not isinstance(self._examples, bool):
-                raise ValidationError("The parameter 'examples' must be a boolean type value.")
+                raise ValidationError(
+                    "The parameter 'examples' must be a boolean type value."
+                )
 
     @property
     def level(self) -> Literal["beginner", "intermediate", "expert", "technical"]:
@@ -134,7 +142,7 @@ class Audience(BaseDecorator):
                 "level": self.level,
                 "domain": self.domain,
                 "examples": self.examples,
-            }
+            },
         }
 
     def to_string(self) -> str:
@@ -192,7 +200,7 @@ class Audience(BaseDecorator):
                 f"Maximum compatible version is {cls.version}."
             )
         # For testing purposes, also raise for very old versions
-        if version < '0.1.0':
+        if version < "0.1.0":
             raise IncompatibleVersionError(
                 f"Version {version} is too old for {cls.__name__}. "
                 f"Minimum compatible version is 0.1.0."
