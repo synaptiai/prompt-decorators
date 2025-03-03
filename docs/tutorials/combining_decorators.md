@@ -301,4 +301,4 @@ Effective decorator combinations can significantly enhance the quality and consi
 Next steps:
 - Try the examples in this tutorial with your own prompts
 - Explore the [Compatibility Matrix](../compatibility.md) for more information
-- Check out the [Decorator Catalog](../api/decorators/) for all available decorators
+- Check out the [Decorators API Reference](../api/decorators.md) for all available decorators

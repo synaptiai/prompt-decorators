@@ -1,105 +1,60 @@
 # API Reference
 
-This section provides detailed documentation for the Prompt Decorators API. It covers the core classes, built-in decorators, registry system, utilities, and code generation tools.
+This section provides detailed documentation for the Prompt Decorators API. The API is organized into several modules:
 
-## Overview
+## Core
 
-The Prompt Decorators API is organized into several key modules:
+The core module contains the fundamental components of the Prompt Decorators framework:
 
-- **Core**: The foundation of the framework, including base classes and core functionality
-- **Decorators**: Built-in decorators for various prompt engineering techniques
-- **Registry**: The system for discovering, registering, and retrieving decorators
-- **Utilities**: Helper functions and utilities for working with decorators
-- **Generator**: Tools for generating decorator code and managing the registry
+- [Base](modules/core/base.md): Base classes and interfaces for decorators
+- [Registry](modules/core/registry.md): Decorator registration and management
+- [Validation](modules/core/validation.md): Validation of decorator syntax and parameters
+- [Request](modules/core/request.md): Request handling and processing
+- [Exceptions](modules/core/exceptions.md): Exception classes for error handling
+- [Model Specific](modules/core/model_specific.md): Model-specific implementations and adaptations
 
-## Core Module
+## Decorators
 
-The [Core Module](core.md) provides the foundation for the Prompt Decorators framework. It includes:
+The [decorators module](decorators.md) contains all the decorator implementations, organized by category:
 
-- `BaseDecorator`: The abstract base class that all decorators must inherit from
-- `DecoratedRequest`: A class for managing decorated requests with multiple decorators
-- `ParameterSchema`: Utilities for defining and validating decorator parameters
-- `ModelAdaptation`: Tools for adapting decorators to specific LLM models
+- **Reasoning Decorators**: Control how the AI approaches reasoning about a problem
+- **Output Structure Decorators**: Specify the structure and format of the AI's response
+- **Tone and Style Decorators**: Modify the linguistic style and tone of the AI's response
+- **Verification and Quality Decorators**: Focus on ensuring accuracy, balance, and quality
+- **Meta-Decorators**: Modify the behavior of other decorators or provide higher-level control
 
-## Decorators Module
+## Utilities
 
-The [Decorators Module](decorators.md) contains all the built-in decorators provided by the framework. These include:
+The utilities module provides supporting functionality:
 
-- **Reasoning Decorators**: Enhance the reasoning capabilities of LLMs
-- **Output Format Decorators**: Control the format of LLM responses
-- **Persona Decorators**: Add personality and role characteristics to prompts
-- **Instruction Decorators**: Provide specific instructions to the LLM
-- **Context Decorators**: Add context or background information to prompts
+- [Cache](modules/utils/cache.md): Caching mechanisms for improved performance
 
-## Registry Module
+## Generator
 
-The [Registry Module](registry.md) handles the discovery, registration, and retrieval of decorators. It includes:
+The generator module contains code generation utilities:
 
-- `DecoratorRegistry`: The central registry for managing decorators
-- `Discovery`: Tools for discovering decorators at runtime
-- `Compatibility`: Utilities for checking compatibility between decorators
-
-## Utilities Module
-
-The [Utilities Module](utilities.md) provides various helper functions and utilities, including:
-
-- `Cache`: Caching utilities for decorator application
-- `Factory`: Factory functions for creating decorators
-- `JSON Loader`: Utilities for loading decorator definitions from JSON
-- `Model Detection`: Tools for detecting and identifying LLM models
-- `Plugins`: The plugin system for extending the framework
-- `Telemetry`: Optional telemetry features
-
-## Generator Module
-
-The [Generator Module](generator.md) contains tools for generating decorator code and managing the registry, including:
-
-- `Registry`: Tools for managing the decorator registry
-- `Code Generation`: Utilities for generating decorator code
-- `Test Generation`: Tools for generating test code for decorators
-- `CLI`: Command-line interface for code generation
+- [Code Generation](modules/generator/code_gen.md): Generation of decorator code
+- [Test Generation](modules/generator/test_gen.md): Generation of test code
+- [Registry](modules/generator/registry.md): Registry for code generation templates
 
 ## Using the API
 
-Here's a simple example of using the API to create and apply decorators:
+To use the Prompt Decorators API in your code, you typically start by importing the necessary components:
 
 ```python
-from prompt_decorators.core.base import BaseDecorator
-from prompt_decorators.decorators import Reasoning, OutputFormat
-from prompt_decorators.registry import DecoratorRegistry
-
-# Create decorators
-reasoning = Reasoning(style="detailed", show_working=True)
-output_format = OutputFormat(format_type="markdown", pretty_print=True)
-
-# Apply decorators to a prompt
-prompt = "Explain quantum entanglement."
-decorated_prompt = output_format.apply(reasoning.apply(prompt))
-
-# Use the registry to find decorators
-registry = DecoratorRegistry()
-all_decorators = registry.get_all_decorators()
-reasoning_decorators = registry.get_decorators_by_category("reasoning")
-
-# Create a custom decorator
-class MyCustomDecorator(BaseDecorator):
-    def apply(self, prompt: str) -> str:
-        return f"{prompt}\n\nPlease provide a detailed explanation with examples."
-
-    def to_dict(self):
-        return {"type": "MyCustomDecorator"}
-
-    @classmethod
-    def from_dict(cls, data):
-        return cls()
-
-# Register the custom decorator
-registry.register(MyCustomDecorator)
+from prompt_decorators import DecoratorProcessor
+from prompt_decorators.decorators import Reasoning, StepByStep, OutputFormat
 ```
 
-## Next Steps
+Then, you can create a processor and apply decorators to your prompts:
 
-- Explore the [Core Module](core.md) to understand the foundation of the framework
-- Check out the [Decorators Module](decorators.md) to see the built-in decorators
-- Learn about the [Registry Module](registry.md) to understand how decorators are managed
-- See the [Basic Usage Guide](../guide/basic-usage.md) for more examples
+```python
+processor = DecoratorProcessor()
+decorated_prompt = processor.apply([
+    Reasoning(depth="comprehensive"),
+    StepByStep(numbered=True),
+    OutputFormat(format="markdown")
+], "Explain how nuclear fusion works.")
+```
+
+For more detailed examples, see the [Examples](../examples/basic.md) section.

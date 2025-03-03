@@ -311,7 +311,7 @@ Some decorators may have incompatible behaviors. Implementations MUST resolve co
 | `+++Inductive` | `+++Deductive` | Contradictory reasoning methods |
 | `+++Bullet` | `+++OutputFormat(format=json)` | Structural conflict |
 
-### 4.3 Tone and Style Decorators
+### 4.5 Tone and Style Decorators
 
 These decorators modify the linguistic style and tone of the AI's response.
 
@@ -333,7 +333,7 @@ These decorators modify the linguistic style and tone of the AI's response.
 | `+++Remix` | Reframe content for different contexts | `target=[audience]`, `context=[setting]` |
 | `+++Extremes` | Present radical and minimal versions | `versions=[radical\|minimal\|both]` |
 
-### 4.4 Verification and Quality Decorators
+### 4.6 Verification and Quality Decorators
 
 These decorators focus on ensuring the accuracy, balance, and quality of the AI's response.
 
@@ -353,7 +353,7 @@ These decorators focus on ensuring the accuracy, balance, and quality of the AI'
 | `+++BreakAndBuild` | Criticize then reconstruct an idea | `breakdown=[weaknesses\|assumptions\|risks]` |
 | `+++FindGaps` | Identify missing elements in an idea | `aspects=[questions\|resources\|stakeholders\|etc]` |
 
-### 4.5 Meta-Decorators
+### 4.7 Meta-Decorators
 
 These decorators modify the behavior of other decorators or provide higher-level control.
 

@@ -359,9 +359,9 @@ Explain the concept of artificial intelligence.
 
 ## See Also
 
-- [Professional Decorator](Professional.md)
-- [Formal Decorator](Formal.md)
-- [Audience Decorator](Audience.md)
+- [Professional Decorator](../api/decorators/Professional.md)
+- [Tone Decorator](../api/decorators/Tone.md)
+- [Audience Decorator](../api/decorators/Audience.md)
 ```
 
 ## Conclusion
@@ -377,3 +377,11 @@ To further enhance your decorator:
 5. Define compatibility with other decorators
 
 The Prompt Decorators framework makes it easy to create and share custom decorators that enhance LLM interactions in specific ways, allowing for more controlled and consistent prompting across applications.
+
+## Next Steps
+
+Now that you've created your first custom decorator, you can:
+
+- [Learn how to combine decorators](combining_decorators.md)
+- [Explore the decorator registry](../api/decorators.md)
+- [Contribute your decorator to the framework](../contributing.md)

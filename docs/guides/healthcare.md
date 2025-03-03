@@ -317,6 +317,6 @@ By following this guide, healthcare professionals and developers can leverage pr
 ## Additional Resources
 
 - [Prompt Decorators Documentation](../index.md)
-- [HIPAA Compliance Guide](../compliance/hipaa.md)
-- [Medical Accuracy Decorators](../api/medical_decorators.md)
-- [Patient Communication Tutorial](../tutorials/patient_communication.md)
+- [Compliance Guide](../guide/advanced-usage.md#compliance)
+- [Medical Decorators](../api/decorators.md)
+- [Patient Communication](../tutorials/comprehensive_tutorial.md)

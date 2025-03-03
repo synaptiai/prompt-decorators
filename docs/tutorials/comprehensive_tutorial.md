@@ -1,6 +1,6 @@
-# Prompt Decorators Framework: Quickstart Guide
+# Comprehensive Prompt Decorators Tutorial
 
-This guide will help you get started with the Prompt Decorators framework for enhancing your LLM interactions.
+This guide provides a comprehensive overview of the Prompt Decorators framework for enhancing your LLM interactions.
 
 ## Installation
 
@@ -160,8 +160,8 @@ decorated_prompt = decorator.apply(prompt)
 Check out these resources to learn more:
 
 - [Complete API documentation](../api/index.md)
-- [Decorator catalog](../api/decorators/)
-- [Advanced usage tutorials](../tutorials/)
-- [Example scripts](../../examples/)
+- [Decorator catalog](../api/decorators.md)
+- [Advanced usage tutorials](../guide/advanced-usage.md)
+- [Example scripts](../guide/basic-usage.md#examples)
 
-For detailed information on specific decorators, see the generated documentation in the `docs/api/decorators/` directory.
+For detailed information on specific decorators, see the generated documentation in the API reference section.

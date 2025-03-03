@@ -1,51 +1,39 @@
 # Utilities API
 
-This page documents the utility functions and classes provided by the Prompt Decorators framework.
+This page provides an overview of the utility functions and classes provided by the Prompt Decorators framework. For detailed documentation of each component, please refer to the specific module pages.
 
 ## Cache
 
-::: prompt_decorators.utils.cache
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
+Utilities for caching decorator results to improve performance.
+
+- [DecoratorCache](modules/utils/cache.md): A cache implementation for decorator results.
 
 ## Factory
 
-::: prompt_decorators.utils.factory
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
+Utilities for creating decorators dynamically.
+
+- DecoratorFactory: Factory for creating decorators from configuration. *(Documentation coming soon)*
 
 ## JSON Loader
 
-::: prompt_decorators.utils.json_loader
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
+Utilities for loading JSON data.
+
+- JSONLoader: Loader for JSON data from files or strings. *(Documentation coming soon)*
 
 ## Model Detection
 
-::: prompt_decorators.utils.model_detection
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
+Utilities for detecting and working with different LLM models.
+
+- ModelDetector: Detector for identifying LLM models and their capabilities. *(Documentation coming soon)*
 
 ## Plugins
 
-::: prompt_decorators.utils.plugins
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
+Utilities for extending the framework with plugins.
+
+- PluginManager: Manager for loading and using plugins. *(Documentation coming soon)*
 
 ## Telemetry
 
-::: prompt_decorators.utils.telemetry
-    options:
-      show_root_heading: true
-      show_object_full_path: false
-      heading_level: 3
+Utilities for collecting telemetry data.
+
+- TelemetryManager: Manager for collecting and reporting telemetry data. *(Documentation coming soon)*

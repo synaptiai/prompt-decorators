@@ -258,5 +258,5 @@ By following this guide, AI safety researchers and developers can leverage promp
 
 - [Prompt Decorators Documentation](../index.md)
 - [Extension Development Tutorial](../tutorials/extension_development.md)
-- [Custom Safety Decorator Development](../tutorials/custom_safety_decorators.md)
-- [Safety Registry Documentation](../api/registry_safety.md)
+- [Custom Safety Decorators](../tutorials/creating_custom_decorator.md)
+- [Decorator Registry](../api/decorators.md)
