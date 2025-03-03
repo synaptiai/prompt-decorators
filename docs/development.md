@@ -70,4 +70,4 @@ For more detailed information, please refer to:
 - [Development Guide](development_guide.md) - Comprehensive development documentation
 - [Contributing Guide](contributing.md) - How to contribute to the project
 - [Code Standards](DOCSTRING_STANDARDS.md) - Coding standards and docstring guidelines
-- [Project Structure](project_summaries/code_structure_analysis.md) - Analysis of the codebase structure
+- [Project Structure](project_summaries/index.md) - Analysis of the codebase structure

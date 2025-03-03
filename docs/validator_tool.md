@@ -149,4 +149,4 @@ Required fields:
 
 Contributions to the validator tool are welcome! Please ensure your changes maintain backward compatibility and add appropriate tests.
 
-See the [contribution guidelines](../CONTRIBUTING.md) for more information.
+See the [contribution guidelines](contributing.md) for more information.

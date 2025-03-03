@@ -85,7 +85,7 @@ poetry run mypy prompt_decorators
 
 ### Docstring Standards
 
-We follow **Google-style docstrings** for all Python code. Please refer to our [Docstring Standards](../docs/DOCSTRING_STANDARDS.md) for detailed guidelines.
+We follow **Google-style docstrings** for all Python code. Please refer to our [Docstring Standards](DOCSTRING_STANDARDS.md) for detailed guidelines.
 
 To check if your docstrings follow our standards:
 
