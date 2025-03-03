@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Prompt Decorators Logo](https://raw.githubusercontent.com/synaptiai/prompt-decorators/main/docs/assets/logo.png)
+![Prompt Decorators Logo](docs/assets/logo.png)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python Versions](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue)](https://www.python.org/)
