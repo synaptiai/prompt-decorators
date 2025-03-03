@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.decision_matrix`
 
-DecisionMatrix Decorator
+Implementation of the DecisionMatrix decorator.
+
+This module provides the DecisionMatrix decorator class for use in prompt engineering.
 
 Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.
 
@@ -12,23 +14,29 @@ Structures the response as a decision matrix, evaluating options against multipl
 
 Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.
 
+Attributes:
+    options: Specific options or alternatives to evaluate in the matrix. (List[Any])
+    criteria: Evaluation criteria to assess each option against. (List[Any])
+    weighted: Whether to include weights for criteria importance. (bool)
+    scale: Rating scale to use for evaluations. (Literal["1-5", "1-10", "qualitative", "percentage"])
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(options, criteria, weighted=False, scale=DecisionMatrixScaleEnum.VALUE_1_5)`
+- `__init__(options, criteria, weighted=False, scale=1-5) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `criteria`: Evaluation criteria to assess each option against
-- `options`: Specific options or alternatives to evaluate in the matrix
-- `scale`: Rating scale to use for evaluations
-- `weighted`: Whether to include weights for criteria importance
+- `criteria`: Get the criteria parameter value.
+- `name`: Get the name of the decorator.
+- `options`: Get the options parameter value.
+- `scale`: Get the scale parameter value.
+- `weighted`: Get the weighted parameter value.

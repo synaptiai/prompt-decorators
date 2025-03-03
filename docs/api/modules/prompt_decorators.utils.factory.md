@@ -1,6 +1,6 @@
 # Module `prompt_decorators.utils.factory`
 
-Decorator Factory Module
+Decorator Factory Module.
 
 This module provides utilities for creating decorator instances from JSON definitions.
 

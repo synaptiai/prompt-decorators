@@ -54,11 +54,11 @@ decorated_prompt = output_format.apply(reasoning.apply(prompt))
 
 ### API Reference
 
-- [Core](api/core.md) - Core classes and functions
-- [Decorators](api/decorators.md) - Built-in decorators
-- [Registry](api/registry.md) - Decorator registry system
-- [Utilities](api/utilities.md) - Utility functions
-- [Generator](api/generator.md) - Code generation tools
+- [API Overview](api/index.md) - Overview of the API
+- [Core](api/modules/prompt_decorators.core.md) - Core classes and functions
+- [Decorators](api/modules/prompt_decorators.decorators.md) - Built-in decorators
+- [Utilities](api/modules/prompt_decorators.utils.md) - Utility functions
+- [Generator](api/modules/prompt_decorators.generator.md) - Code generation tools
 
 ### Examples
 

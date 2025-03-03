@@ -1,5 +1,5 @@
 # Module `prompt_decorators.decorators`
 
-Decorators package for prompt decorators.
+Decorators package for prompt_decorators.
 
-This package provides the decorator implementations for the prompt decorators framework.
+This package contains all the decorator implementations.

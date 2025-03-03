@@ -1,6 +1,6 @@
 # Module `prompt_decorators.utils.doc_gen`
 
-Documentation Generator Module
+Documentation Generator Module.
 
 This module provides utilities for generating API documentation from code and registry metadata.
 

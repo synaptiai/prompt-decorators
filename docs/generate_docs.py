@@ -13,6 +13,10 @@ Example:
 
     $ python docs/generate_docs.py --format markdown
 
+    Generate markdown documentation with a clean output directory:
+
+    $ python docs/generate_docs.py --format markdown --clean
+
 Returns:
     None: This script doesn't return anything but writes documentation files.
 """
@@ -60,8 +64,25 @@ def main():
         default="markdown",
         help="Output format for documentation",
     )
+    parser.add_argument(
+        "--clean",
+        "-c",
+        action="store_true",
+        help="Clean the output directory before generating documentation",
+    )
 
     args = parser.parse_args()
+
+    # Create the output directory if it doesn't exist
+    output_dir = Path(args.output)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Clean the output directory if requested
+    if args.clean:
+        logger.info(f"Cleaning output directory: {output_dir}")
+        for file in output_dir.glob("**/*"):
+            if file.is_file():
+                file.unlink()
 
     # Create the documentation generator
     generator = DocGenerator(
@@ -74,12 +95,17 @@ def main():
     # Load registry data
     generator.load_registry_data()
 
+    # Merge code and registry documentation
+    merged_docs = generator.merge_code_and_registry_docs()
+
     # Generate documentation
     if args.format == "markdown" or args.format == "both":
         generator.generate_markdown_docs()
+        logger.info(f"Generated Markdown documentation in {output_dir}")
 
     if args.format == "html" or args.format == "both":
         generator.generate_html_docs()
+        logger.info(f"Generated HTML documentation in {output_dir}")
 
     logger.info("Documentation generation complete")
 

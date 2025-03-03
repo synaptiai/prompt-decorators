@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """API Documentation Generator.
 
+DEPRECATED: This script is deprecated in favor of docs/generate_docs.py.
+Please use docs/generate_docs.py instead, which provides the same functionality.
+
 This module generates API documentation for the prompt-decorators project by
 extracting information from docstrings and type annotations. It provides
 a flexible command-line interface with various options for customization.
@@ -64,6 +67,11 @@ def main():
     Returns:
         None
     """
+    logger.warning(
+        "DEPRECATED: This script is deprecated in favor of docs/generate_docs.py. "
+        "Please use docs/generate_docs.py instead, which provides the same functionality."
+    )
+
     parser = argparse.ArgumentParser(description="Generate API documentation")
     parser.add_argument(
         "--package",
@@ -133,6 +141,10 @@ def main():
         logger.info(f"Generated HTML documentation in {output_dir}")
 
     logger.info("Documentation generation complete")
+    logger.warning(
+        "DEPRECATED: This script is deprecated in favor of docs/generate_docs.py. "
+        "Please use docs/generate_docs.py instead, which provides the same functionality."
+    )
 
 
 if __name__ == "__main__":

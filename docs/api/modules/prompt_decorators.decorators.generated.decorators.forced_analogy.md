@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.forced_analogy`
 
-ForcedAnalogy Decorator
+Implementation of the ForcedAnalogy decorator.
+
+This module provides the ForcedAnalogy decorator class for use in prompt engineering.
 
 Explains concepts by specifically comparing them to a particular domain or field. This decorator forces analogies from a specified source domain to make complex or unfamiliar topics more relatable and understandable.
 
@@ -12,22 +14,27 @@ Explains concepts by specifically comparing them to a particular domain or field
 
 Explains concepts by specifically comparing them to a particular domain or field. This decorator forces analogies from a specified source domain to make complex or unfamiliar topics more relatable and understandable.
 
+Attributes:
+    source: The specific domain, field, or context to draw analogies from. (str)
+    comprehensiveness: How comprehensively to map concepts between domains. (Literal["basic", "comprehensive", "detailed"])
+    mappings: Number of distinct concept mappings to create between domains. (Any)
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(source, comprehensiveness=ForcedAnalogyComprehensivenessEnum.COMPREHENSIVE, mappings=3)`
+- `__init__(source, comprehensiveness=comprehensive, mappings=3) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `comprehensiveness`: How comprehensively to map concepts between domains
-- `mappings`: Number of distinct concept mappings to create between domains
-- `source`: The specific domain, field, or context to draw analogies from
+- `comprehensiveness`: Get the comprehensiveness parameter value.
+- `mappings`: Get the mappings parameter value.
+- `name`: Get the name of the decorator.
+- `source`: Get the source parameter value.

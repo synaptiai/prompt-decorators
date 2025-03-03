@@ -1,8 +1,8 @@
 # Module `prompt_decorators.core.request`
 
-API Request Handling Module
+Request handling for prompt decorators.
 
-This module provides utilities for handling API requests with decorators.
+This module provides the DecoratedRequest class for managing decorated prompts.
 
 ## Classes
 

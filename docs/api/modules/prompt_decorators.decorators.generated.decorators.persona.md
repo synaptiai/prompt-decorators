@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.persona`
 
-Persona Decorator
+Implementation of the Persona decorator.
+
+This module provides the Persona decorator class for use in prompt engineering.
 
 Adapts the response to reflect the perspective and concerns of a specific persona. This decorator helps explore how different stakeholders or personality types would view a situation or topic.
 
@@ -12,22 +14,27 @@ Adapts the response to reflect the perspective and concerns of a specific person
 
 Adapts the response to reflect the perspective and concerns of a specific persona. This decorator helps explore how different stakeholders or personality types would view a situation or topic.
 
+Attributes:
+    role: The specific persona or stakeholder role to adopt. (str)
+    traits: Key personality traits or characteristics of the persona. (List[Any])
+    goals: Primary goals or concerns of the persona. (List[Any])
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(role, traits, goals)`
+- `__init__(role, traits, goals) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `goals`: Primary goals or concerns of the persona
-- `role`: The specific persona or stakeholder role to adopt
-- `traits`: Key personality traits or characteristics of the persona
+- `goals`: Get the goals parameter value.
+- `name`: Get the name of the decorator.
+- `role`: Get the role parameter value.
+- `traits`: Get the traits parameter value.

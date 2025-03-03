@@ -5,6 +5,10 @@ This script enhances the DocGenerator class to improve documentation generation.
 It adds additional functionality to ensure that all modules and decorators are
 properly documented.
 
+NOTE: This script is a development tool used to enhance the DocGenerator class.
+It is not part of the regular documentation workflow. For generating documentation,
+please use docs/generate_docs.py instead.
+
 Example:
     Run the script to enhance the DocGenerator:
 
@@ -41,6 +45,12 @@ def enhance_doc_generator() -> bool:
         bool: True if the enhancement succeeds, False otherwise
     """
     logger.info("Enhancing DocGenerator class...")
+    logger.info(
+        "NOTE: This script is a development tool used to enhance the DocGenerator class."
+    )
+    logger.info(
+        "For generating documentation, please use docs/generate_docs.py instead."
+    )
 
     # Path to the DocGenerator class
     doc_gen_path = project_root / "prompt_decorators" / "utils" / "doc_gen.py"

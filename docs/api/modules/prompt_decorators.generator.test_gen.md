@@ -1,7 +1,6 @@
 # Module `prompt_decorators.generator.test_gen`
 
-Test Generator for Prompt Decorators
-
+Test Generator for Prompt Decorators.
 This module generates comprehensive unit tests for all decorators defined in the registry.
 It creates test cases for:
 1. Decorator initialization with valid and invalid parameters
@@ -14,7 +13,16 @@ The generated tests follow pytest conventions and can be run with standard pytes
 
 ## Classes
 
+- [`Parameter`](#class-parameter): Parameter class for test generation.
 - [`TestGenerator`](#class-testgenerator): Generator for decorator unit tests.
+
+### Class `Parameter`
+
+Parameter class for test generation.
+
+#### Methods
+
+- `__init__(name, type=string, required=False, validation, schema, enum, description)`
 
 ### Class `TestGenerator`
 
@@ -30,10 +38,10 @@ Generator for decorator unit tests.
 
 ## Functions
 
-- [`main`](#function-main): Main entry point for the test generator.
+- [`main`](#function-main): Run the test generator as a standalone script.
 
 ### Function `main`
 
 **Signature:** `main()`
 
-Main entry point for the test generator.
+Run the test generator as a standalone script.

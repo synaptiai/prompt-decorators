@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.quality_metrics`
 
-QualityMetrics Decorator
+Implementation of the QualityMetrics decorator.
+
+This module provides the QualityMetrics decorator class for use in prompt engineering.
 
 Applies specific quality measurements to evaluate content against defined criteria. This decorator enhances verification by providing quantifiable assessments of aspects like accuracy, completeness, clarity, or other custom metrics.
 
@@ -12,22 +14,27 @@ Applies specific quality measurements to evaluate content against defined criter
 
 Applies specific quality measurements to evaluate content against defined criteria. This decorator enhances verification by providing quantifiable assessments of aspects like accuracy, completeness, clarity, or other custom metrics.
 
+Attributes:
+    metrics: Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness). (List[Any])
+    scale: Rating scale to use for evaluations. (Literal["1-5", "1-10", "percentage", "qualitative"])
+    explanation: Whether to provide detailed explanations for each metric score. (bool)
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(metrics, scale=QualityMetricsScaleEnum.VALUE_1_5, explanation=True)`
+- `__init__(metrics, scale=1-5, explanation=True) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `explanation`: Whether to provide detailed explanations for each metric score
-- `metrics`: Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness)
-- `scale`: Rating scale to use for evaluations
+- `explanation`: Get the explanation parameter value.
+- `metrics`: Get the metrics parameter value.
+- `name`: Get the name of the decorator.
+- `scale`: Get the scale parameter value.

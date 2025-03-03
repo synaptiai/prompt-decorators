@@ -1,6 +1,6 @@
 # Module `prompt_decorators.core.model_specific`
 
-Model-Specific Decorator Module
+Model-Specific Decorator Module.
 
 This module provides base classes and utilities for model-specific decorator adaptations.
 
@@ -24,22 +24,22 @@ allowing decorators to adjust their behavior based on the model being used.
 - `apply(prompt) -> <class 'str'>`
 - `apply_fallback(prompt) -> <class 'str'>`
 - `apply_for_model(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.model_specific.ModelSpecificDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
 - `is_supported_by_model() -> <class 'bool'>`
 - `set_model(model_id) -> <class 'NoneType'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `transform_response(response) -> <class 'str'>`
 
 ### Class `ModelSpecificDecoratorFactory`
 
 Factory for creating model-specific decorators.
 
 This class provides methods for creating model-specific versions of decorators.
+It allows for customizing decorator behavior based on specific model requirements.
+
+The factory creates decorator instances that are tailored to work optimally with
+particular language models, taking into account their unique capabilities and limitations.
 
 #### Methods
 

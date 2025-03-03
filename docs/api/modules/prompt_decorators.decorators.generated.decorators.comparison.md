@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.comparison`
 
-Comparison Decorator
+Implementation of the Comparison decorator.
+
+This module provides the Comparison decorator class for use in prompt engineering.
 
 Structures the response as a direct comparison between multiple items, concepts, or approaches. This decorator is ideal for highlighting similarities and differences across specific dimensions or criteria.
 
@@ -12,22 +14,27 @@ Structures the response as a direct comparison between multiple items, concepts,
 
 Structures the response as a direct comparison between multiple items, concepts, or approaches. This decorator is ideal for highlighting similarities and differences across specific dimensions or criteria.
 
+Attributes:
+    aspects: Specific aspects or dimensions to compare. (List[Any])
+    format: The presentation format for the comparison. (Literal["table", "prose", "bullets"])
+    highlight: Whether to explicitly emphasize key differences. (bool)
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(aspects, format=ComparisonFormatEnum.TABLE, highlight=True)`
+- `__init__(aspects, format=table, highlight=True) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `aspects`: Specific aspects or dimensions to compare
-- `format`: The presentation format for the comparison
-- `highlight`: Whether to explicitly emphasize key differences
+- `aspects`: Get the aspects parameter value.
+- `format`: Get the format parameter value.
+- `highlight`: Get the highlight parameter value.
+- `name`: Get the name of the decorator.

@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.as_expert`
 
-AsExpert Decorator
+Implementation of the AsExpert decorator.
+
+This module provides the AsExpert decorator class for use in prompt engineering.
 
 Generates responses from the perspective of a specified domain expert or specialist. This decorator provides authoritative content that reflects the knowledge, terminology, and analytical approach of an expert in the specified field.
 
@@ -12,22 +14,27 @@ Generates responses from the perspective of a specified domain expert or special
 
 Generates responses from the perspective of a specified domain expert or specialist. This decorator provides authoritative content that reflects the knowledge, terminology, and analytical approach of an expert in the specified field.
 
+Attributes:
+    domain: The specific field or discipline the expert specializes in. (str)
+    experience: The experience level of the expert. (Literal["junior", "senior", "leading", "pioneering"])
+    technical: Whether to use highly technical language and domain-specific terminology. (bool)
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(domain, experience=AsExpertExperienceEnum.SENIOR, technical=True)`
+- `__init__(domain, experience=senior, technical=True) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `domain`: The specific field or discipline the expert specializes in
-- `experience`: The experience level of the expert
-- `technical`: Whether to use highly technical language and domain-specific terminology
+- `domain`: Get the domain parameter value.
+- `experience`: Get the experience parameter value.
+- `name`: Get the name of the decorator.
+- `technical`: Get the technical parameter value.

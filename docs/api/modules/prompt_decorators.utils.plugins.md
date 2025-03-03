@@ -1,6 +1,6 @@
 # Module `prompt_decorators.utils.plugins`
 
-Plugin System Module
+Plugin System Module.
 
 This module provides a plugin architecture for decorator extensions.
 

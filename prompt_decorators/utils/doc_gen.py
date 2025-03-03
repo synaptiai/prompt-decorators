@@ -92,11 +92,14 @@ class DocGenerator:
                 except Exception as e:
                     logger.warning(f"Error extracting docs from module {modname}: {e}")
 
-            return {
+            # Store the extracted documentation in self.code_docs
+            self.code_docs = {
                 "modules": self.modules_doc,
                 "classes": self.classes_doc,
                 "functions": self.functions_doc,
             }
+
+            return self.code_docs
 
         except Exception as e:
             logger.error(f"Error extracting docs from package {package_name}: {e}")
@@ -457,30 +460,64 @@ class DocGenerator:
 
         Returns:
             Dictionary mapping decorator names to their merged documentation"""
-        if not hasattr(self, "code_docs") or not self.code_docs:
-            logger.warning("Code documentation not available")
-            return {}
-
+        # Initialize with empty dictionaries to ensure keys always exist
         merged_docs = {
-            "modules": self.modules_doc.copy(),
-            "classes": self.classes_doc.copy(),
-            "functions": self.functions_doc.copy(),
+            "modules": {},
+            "classes": {},
+            "functions": {},
             "decorators": {},
         }
+
+        # Create self.code_docs if it doesn't exist
+        if not hasattr(self, "code_docs"):
+            self.code_docs = {
+                "modules": self.modules_doc,
+                "classes": self.classes_doc,
+                "functions": self.functions_doc,
+            }
+
+        if not self.code_docs or not self.code_docs.get("classes"):
+            logger.warning("Code documentation not available")
+            # Still return the structure with empty dictionaries
+            return merged_docs
+
+        # Copy code documentation
+        merged_docs["modules"] = self.code_docs["modules"].copy()
+        merged_docs["classes"] = self.code_docs["classes"].copy()
+        merged_docs["functions"] = self.code_docs["functions"].copy()
 
         # Match registry data with code documentation
         for decorator_name, registry_def in self.registry_data.items():
             # Try to find the corresponding class
-            for _class_path, class_doc in self.classes_doc.items():
-                if class_doc["name"] == decorator_name:
+            found_class = False
+            for class_path, class_doc in self.code_docs["classes"].items():
+                # Check if class name matches decorator name (case-insensitive)
+                if class_doc["name"].lower() == decorator_name.lower():
                     # Merge the data
                     merged_docs["decorators"][decorator_name] = {
                         "code_docs": class_doc,
                         "registry_def": registry_def,
                     }
+                    found_class = True
                     break
-            else:
-                # Class not found, just use registry data
+
+                # Also check if the class is in the decorators module and matches the decorator name
+                if (
+                    class_doc["module"].startswith("prompt_decorators.decorators")
+                    and class_doc["name"].lower() == decorator_name.lower()
+                ):
+                    merged_docs["decorators"][decorator_name] = {
+                        "code_docs": class_doc,
+                        "registry_def": registry_def,
+                    }
+                    found_class = True
+                    break
+
+            # If no matching class was found, just use registry data
+            if not found_class:
+                logger.debug(
+                    f"No code documentation found for decorator: {decorator_name}"
+                )
                 merged_docs["decorators"][decorator_name] = {
                     "code_docs": None,
                     "registry_def": registry_def,
@@ -534,18 +571,26 @@ class DocGenerator:
 
         # Add modules section
         index_content += "## Modules\n\n"
-        for module_path, _module_doc in docs["modules"].items():
-            # Skip internal modules
-            if "._" in module_path:
-                continue
+        if "modules" in docs and docs["modules"]:
+            for module_path, _module_doc in docs["modules"].items():
+                # Skip internal modules
+                if "._" in module_path:
+                    continue
 
-            module_path.split(".")[-1]
-            index_content += f"- [{module_path}](modules/{module_path}.md)\n"
+                module_path.split(".")[-1]
+                index_content += f"- [{module_path}](modules/{module_path}.md)\n"
+        else:
+            index_content += "No modules documented.\n"
 
         # Add decorators section
         index_content += "\n## Decorators\n\n"
-        for decorator_name, _decorator_doc in docs["decorators"].items():
-            index_content += f"- [{decorator_name}](decorators/{decorator_name}.md)\n"
+        if "decorators" in docs and docs["decorators"]:
+            for decorator_name, _decorator_doc in docs["decorators"].items():
+                index_content += (
+                    f"- [{decorator_name}](decorators/{decorator_name}.md)\n"
+                )
+        else:
+            index_content += "No decorators documented.\n"
 
         # Write the index file
         with open(f"{output_dir}/index.md", "w") as f:
@@ -639,9 +684,13 @@ class DocGenerator:
         logger.info(f"Generating markdown for decorator: {decorator_name}")
 
         registry_def = decorator_doc["registry_def"]
-        code_docs = decorator_doc["code_docs"]
+        code_docs = decorator_doc.get("code_docs")
 
         decorator_content = f"# Decorator `{decorator_name}`\n\n"
+
+        # Add a note if this is a placeholder
+        if not code_docs:
+            decorator_content += "> **Note:** This documentation is currently being updated. Some details may be incomplete.\n\n"
 
         # Add version
         if "version" in registry_def:
@@ -652,6 +701,8 @@ class DocGenerator:
             decorator_content += f"{registry_def['description']}\n\n"
         elif code_docs and code_docs.get("docstring"):
             decorator_content += f"{code_docs['docstring']}\n\n"
+        else:
+            decorator_content += "No description available.\n\n"
 
         # Add category
         if "category" in registry_def:
@@ -768,6 +819,15 @@ class DocGenerator:
                     # Add method docstring
                     if method_doc.get("docstring"):
                         decorator_content += f"{method_doc['docstring']}\n\n"
+        else:
+            # Add a placeholder for implementation details
+            decorator_content += "## Implementation\n\n"
+            decorator_content += (
+                "Implementation details will be available in a future update.\n\n"
+            )
+
+        # Create the decorators directory if it doesn't exist
+        os.makedirs(f"{output_dir}/decorators", exist_ok=True)
 
         # Write the decorator file
         with open(f"{output_dir}/decorators/{decorator_name}.md", "w") as f:

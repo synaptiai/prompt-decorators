@@ -48,6 +48,15 @@ poetry run pytest --cov=prompt_decorators
 
 ## Building Documentation
 
+The documentation process involves two steps:
+
+1. Generate API reference documentation from code:
+```bash
+# Generate API documentation (with clean output directory)
+python docs/generate_docs.py --format markdown --clean
+```
+
+2. Build the documentation website:
 ```bash
 # Serve documentation locally
 poetry run mkdocs serve
@@ -55,6 +64,8 @@ poetry run mkdocs serve
 # Build documentation
 poetry run mkdocs build
 ```
+
+For more details on the documentation process, see the [Documentation Workflow](documentation_workflow.md).
 
 ## Code Quality Tools
 
@@ -69,5 +80,6 @@ For more detailed information, please refer to:
 
 - [Development Guide](development_guide.md) - Comprehensive development documentation
 - [Contributing Guide](contributing.md) - How to contribute to the project
+- [Documentation Workflow](documentation_workflow.md) - How to generate and maintain documentation
 - [Code Standards](DOCSTRING_STANDARDS.md) - Coding standards and docstring guidelines
 - [Project Structure](project_summaries/index.md) - Analysis of the codebase structure

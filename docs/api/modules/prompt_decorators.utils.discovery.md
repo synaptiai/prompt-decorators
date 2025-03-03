@@ -1,8 +1,8 @@
 # Module `prompt_decorators.utils.discovery`
 
-Decorator Discovery Module
+Decorator discovery and registration utilities.
 
-This module provides utilities for discovering and registering decorators at runtime.
+This module provides utilities for discovering and registering prompt decorators.
 
 ## Classes
 

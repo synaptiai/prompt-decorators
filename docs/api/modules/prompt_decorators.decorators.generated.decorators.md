@@ -1,5 +1,5 @@
 # Module `prompt_decorators.decorators.generated.decorators`
 
-Generated decorator implementations.
+Decorator Classes
 
-This package contains the auto-generated decorator classes.
+This package provides classes for all decorators in the Prompt Decorators specification.

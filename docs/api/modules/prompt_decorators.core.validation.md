@@ -1,6 +1,6 @@
 # Module `prompt_decorators.core.validation`
 
-Parameter Validation Module
+Parameter Validation Module.
 
 This module provides utilities for validating decorator parameters.
 

@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.output_format`
 
-OutputFormat Decorator
+Implementation of the OutputFormat decorator.
+
+This module provides the OutputFormat decorator class for use in prompt engineering.
 
 Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way.
 
@@ -12,20 +14,23 @@ Specifies the format of the AI's response. This decorator ensures the output fol
 
 Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way.
 
+Attributes:
+    format: The format to use for the response. (Literal["json", "markdown", "yaml", "xml", "plaintext"])
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(format)`
+- `__init__(format) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `format`: The format to use for the response
+- `format`: Get the format parameter value.
+- `name`: Get the name of the decorator.

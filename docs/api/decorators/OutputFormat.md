@@ -67,121 +67,105 @@ Inherits from: `BaseDecorator`
 
 #### `__init__`
 
-**Signature:** `__init__(format_type=text, schema, headers, pretty_print=True, name, version, parameters, metadata)`
+**Signature:** `__init__(format) -> <class 'NoneType'>`
 
-Initialize an OutputFormat decorator.
+Initialize the OutputFormat decorator.
 
 Args:
-    format_type: Type of output format (text, markdown, json, etc.)
-    schema: Optional schema for structured formats (JSON, XML)
-    headers: Optional headers for tabular formats (CSV)
-    pretty_print: Whether to pretty-print the output
-    name: Optional decorator name override
-    version: Optional version override
-    parameters: Optional parameter dictionary (overrides individual parameters)
-    metadata: Optional metadata dictionary
+    format: The format to use for the response
 
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`
 
-Apply the output format decorator to a prompt.
+Apply the decorator to a prompt string.
 
 Args:
-    prompt: The original prompt
+    prompt: The prompt to apply the decorator to
+
 
 Returns:
-    The modified prompt with output format instructions
+    The modified prompt
+
+#### `apply_to_prompt`
+
+**Signature:** `apply_to_prompt(prompt) -> <class 'str'>`
+
+Apply the decorator to a prompt.
+
+Args:
+    prompt: The prompt to decorate
+
+Returns:
+    The decorated prompt
 
 #### `from_dict`
 
 **Signature:** `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 
-Create a decorator from a dictionary.
+Create a decorator instance from a dictionary representation.
 
 Args:
-    data: Dictionary representation of a decorator
+    data: Dictionary representation of the decorator
 
 Returns:
-    New decorator instance
+    A new decorator instance
 
 Raises:
-    ValueError: If the data is invalid or incompatible with this class
-    IncompatibleVersionError: If the version is incompatible
-
-#### `from_json`
-
-**Signature:** `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-
-Create a decorator from a JSON string.
-
-Args:
-    json_str: JSON string representation of a decorator
-
-Returns:
-    New decorator instance
-
-Raises:
-    ValueError: If the JSON is invalid or incompatible with this class
-    json.JSONDecodeError: If the JSON is malformed
-    IncompatibleVersionError: If the version is incompatible
+    ValidationError: If the dictionary is invalid
 
 #### `get_metadata`
 
 **Signature:** `get_metadata() -> typing.Dict[str, typing.Any]`
 
-Get metadata about this decorator class.
+Get metadata about the decorator.
 
 Returns:
-    Dictionary with decorator metadata
-
-#### `get_version`
-
-**Signature:** `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-
-Get the decorator version.
-
-Returns:
-    Version object for the decorator
+    Dictionary containing metadata about the decorator
 
 #### `is_compatible_with_version`
 
-**Signature:** `is_compatible_with_version(version_str) -> <class 'bool'>`
+**Signature:** `is_compatible_with_version(version) -> <class 'bool'>`
 
-Check if this decorator is compatible with the specified version.
+Check if the decorator is compatible with a specific version.
 
 Args:
-    version_str: Version string to check compatibility with
+    version: The version to check compatibility with.
+
 
 Returns:
-    True if compatible, False otherwise
+    True if compatible, False otherwise.
+
+
+Raises:
+    IncompatibleVersionError: If the version is incompatible.
 
 #### `to_dict`
 
 **Signature:** `to_dict() -> typing.Dict[str, typing.Any]`
 
-Convert decorator to a dictionary representation.
+Convert the decorator to a dictionary.
 
 Returns:
     Dictionary representation of the decorator
 
-#### `to_json`
+#### `to_string`
 
-**Signature:** `to_json(indent) -> <class 'str'>`
+**Signature:** `to_string() -> <class 'str'>`
 
-Convert decorator to a JSON string.
-
-Args:
-    indent: Optional indentation for pretty-printing
+Convert the decorator to a string.
 
 Returns:
-    JSON string representation of the decorator
+    String representation of the decorator
 
-#### `validate`
+#### `transform_response`
 
-**Signature:** `validate() -> <class 'NoneType'>`
+**Signature:** `transform_response(response) -> <class 'str'>`
 
-Validate decorator parameters.
+Transform the response from the model.
 
-Raises:
-    ValidationError: If any parameter fails validation
+Args:
+    response: The response to transform
+
+Returns:
+    The transformed response

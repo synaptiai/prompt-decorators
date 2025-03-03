@@ -1,6 +1,6 @@
 # Module `prompt_decorators.utils.telemetry`
 
-Telemetry Module
+Telemetry Module.
 
 This module provides an opt-in telemetry system for tracking decorator usage patterns.
 

@@ -1,8 +1,8 @@
 # Module `prompt_decorators.utils.model_detection`
 
-Model Detection Module
+Model detection and capability utilities.
 
-This module provides utilities for detecting and managing model capabilities.
+This module provides utilities for detecting model capabilities and features.
 
 ## Classes
 
@@ -42,13 +42,13 @@ This class provides utilities for detecting and querying model capabilities.
 
 ## Functions
 
-- [`get_model_detector`](#function-get_model_detector): Get the global model detector.
+- [`get_model_detector`](#function-get_model_detector): Get the global model detector instance.
 
 ### Function `get_model_detector`
 
 **Signature:** `get_model_detector() -> <class 'prompt_decorators.utils.model_detection.ModelDetector'>`
 
-Get the global model detector.
+Get the global model detector instance.
 
 Returns:
     The global model detector instance

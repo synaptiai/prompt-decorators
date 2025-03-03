@@ -1,6 +1,6 @@
 # Module `prompt_decorators.utils.cache`
 
-Decorator Cache Module
+Decorator Cache Module.
 
 This module provides a caching system for decorator definitions and instances.
 
@@ -32,13 +32,13 @@ with support for cache invalidation and metrics.
 
 ## Functions
 
-- [`get_cache`](#function-get_cache): Get the global decorator cache.
+- [`get_cache`](#function-get_cache): Get the global decorator cache instance.
 
 ### Function `get_cache`
 
 **Signature:** `get_cache() -> <class 'prompt_decorators.utils.cache.DecoratorCache'>`
 
-Get the global decorator cache.
+Get the global decorator cache instance.
 
 Returns:
     The global decorator cache instance

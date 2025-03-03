@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.root_cause`
 
-RootCause Decorator
+Implementation of the RootCause decorator.
+
+This module provides the RootCause decorator class for use in prompt engineering.
 
 Structures the response to systematically analyze underlying causes of problems or situations. This decorator applies formal root cause analysis methodologies to identify fundamental factors rather than just symptoms or immediate causes.
 
@@ -12,21 +14,25 @@ Structures the response to systematically analyze underlying causes of problems 
 
 Structures the response to systematically analyze underlying causes of problems or situations. This decorator applies formal root cause analysis methodologies to identify fundamental factors rather than just symptoms or immediate causes.
 
+Attributes:
+    method: The specific root cause analysis methodology to apply. (Literal["fivewhys", "fishbone", "pareto"])
+    depth: Level of detail in the analysis (for fivewhys, represents number of 'why' iterations). (Any)
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(method=RootCauseMethodEnum.VALUE_5WHYS, depth=5)`
+- `__init__(method=fivewhys, depth=5) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `depth`: Level of detail in the analysis (for 5whys, represents number of 'why' iterations)
-- `method`: The specific root cause analysis methodology to apply
+- `depth`: Get the depth parameter value.
+- `method`: Get the method parameter value.
+- `name`: Get the name of the decorator.

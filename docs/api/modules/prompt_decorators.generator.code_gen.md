@@ -1,6 +1,6 @@
 # Module `prompt_decorators.generator.code_gen`
 
-Code Generator Module
+Code Generator Module.
 
 This module generates Python code from decorator definitions in the registry.
 
@@ -15,11 +15,19 @@ Generator for Python code from decorator definitions.
 #### Methods
 
 - `__init__(decorators)`
-- `generate_all() -> typing.Dict[str, str]`
+- `generate_all() -> dict[str, str]`
 
 ## Functions
 
+- [`camel_to_snake`](#function-camel_to_snake): Convert CamelCase to snake_case.
 - [`generate_code`](#function-generate_code): Generate Python code from decorator definitions.
+- [`snake_to_camel`](#function-snake_to_camel): Convert snake_case to CamelCase.
+
+### Function `camel_to_snake`
+
+**Signature:** `camel_to_snake(name) -> <class 'str'>`
+
+Convert CamelCase to snake_case.
 
 ### Function `generate_code`
 
@@ -33,3 +41,12 @@ Args:
 
 Returns:
     Dictionary mapping file paths to generated code
+
+### Function `snake_to_camel`
+
+**Signature:** `snake_to_camel(name) -> <class 'str'>`
+
+Convert snake_case to CamelCase.
+
+If the input is already in camelCase, it will be properly converted to CamelCase
+with the first letter capitalized.

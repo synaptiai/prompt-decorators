@@ -1,6 +1,6 @@
 # Module `prompt_decorators.generator.registry`
 
-Registry Scanner Module
+Registry Scanner Module.
 
 This module scans the registry directory and parses decorator JSON files.
 

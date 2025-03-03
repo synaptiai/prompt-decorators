@@ -1,5 +1,7 @@
 # Module `prompt_decorators.core`
 
-Core package for prompt decorators.
+Core components of the prompt decorators system.
 
-This package provides the core classes and functionality for the prompt decorators framework.
+This package contains the core components and functionality that power the
+prompt decorators system, including the base decorator classes, validation logic,
+request handling, and model-specific adaptations.

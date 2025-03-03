@@ -1,6 +1,6 @@
 # Module `prompt_decorators.utils.compatibility`
 
-Decorator Compatibility Module
+Decorator Compatibility Module.
 
 This module provides utilities for checking compatibility between decorators.
 

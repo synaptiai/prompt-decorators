@@ -1,6 +1,8 @@
 # Module `prompt_decorators.decorators.generated.decorators.cite_sources`
 
-CiteSources Decorator
+Implementation of the CiteSources decorator.
+
+This module provides the CiteSources decorator class for use in prompt engineering.
 
 Structures the response to include citations for claims and information. This decorator enhances credibility by providing references to source material, enabling fact verification and further exploration of topics.
 
@@ -12,22 +14,27 @@ Structures the response to include citations for claims and information. This de
 
 Structures the response to include citations for claims and information. This decorator enhances credibility by providing references to source material, enabling fact verification and further exploration of topics.
 
+Attributes:
+    style: The placement and format of citations within the response. (Literal["inline", "footnote", "endnote"])
+    format: The citation format to use. (Literal["APA", "MLA", "Chicago", "Harvard", "IEEE"])
+    comprehensive: Whether to cite every claim (true) or only major claims (false). (bool)
+
 **Inherits from:** `BaseDecorator`
 
 #### Methods
 
-- `__init__(style=CiteSourcesStyleEnum.INLINE, format=CiteSourcesFormatEnum.APA, comprehensive=False)`
+- `__init__(style=inline, format=APA, comprehensive=False) -> <class 'NoneType'>`
 - `apply(prompt) -> <class 'str'>`
+- `apply_to_prompt(prompt) -> <class 'str'>`
 - `from_dict(data) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
-- `from_json(json_str) -> <class 'prompt_decorators.core.base.BaseDecorator'>`
 - `get_metadata() -> typing.Dict[str, typing.Any]`
-- `get_version() -> <class 'prompt_decorators.core.base.Version'>`
-- `is_compatible_with_version(version_str) -> <class 'bool'>`
+- `is_compatible_with_version(version) -> <class 'bool'>`
 - `to_dict() -> typing.Dict[str, typing.Any]`
-- `to_json(indent) -> <class 'str'>`
-- `validate() -> <class 'NoneType'>`
+- `to_string() -> <class 'str'>`
+- `transform_response(response) -> <class 'str'>`
 #### Properties
 
-- `comprehensive`: Whether to cite every claim (true) or only major claims (false)
-- `format`: The citation format to use
-- `style`: The placement and format of citations within the response
+- `comprehensive`: Get the comprehensive parameter value.
+- `format`: Get the format parameter value.
+- `name`: Get the name of the decorator.
+- `style`: Get the style parameter value.
