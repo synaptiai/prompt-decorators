@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import ForcedAnalogy
 
 
 # Tests for the ForcedAnalogy decorator
@@ -42,7 +42,7 @@ class TestForcedAnalogy:
         decorator_class = load_decorator("ForcedAnalogy")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['source'] = 123
+        params["source"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "source" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestForcedAnalogy:
         decorator_class = load_decorator("ForcedAnalogy")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['comprehensiveness'] = 'invalid_enum_value'
+        params["comprehensiveness"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "comprehensiveness" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestForcedAnalogy:
         decorator_class = load_decorator("ForcedAnalogy")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['comprehensiveness'] = 'invalid_enum_value'
+        params["comprehensiveness"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "comprehensiveness" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestForcedAnalogy:
         decorator_class = load_decorator("ForcedAnalogy")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['mappings'] = 'invalid'
+        params["mappings"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "mappings" in str(exc_info.value)
@@ -86,7 +86,7 @@ class TestForcedAnalogy:
         decorator_class = load_decorator("ForcedAnalogy")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['mappings'] = 0
+        params["mappings"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "mappings" in str(exc_info.value)
@@ -97,7 +97,7 @@ class TestForcedAnalogy:
         decorator_class = load_decorator("ForcedAnalogy")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['mappings'] = 8
+        params["mappings"] = 8
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "mappings" in str(exc_info.value)

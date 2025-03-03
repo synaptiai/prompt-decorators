@@ -6,13 +6,9 @@ This module provides the DecisionMatrix decorator class for use in prompt engine
 Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    DecisionMatrixScaleEnum,
-)
 
 
 class DecisionMatrix(BaseDecorator):
@@ -71,13 +67,17 @@ class DecisionMatrix(BaseDecorator):
 
         if self._weighted is not None:
             if not isinstance(self._weighted, bool):
-                raise ValidationError("The parameter 'weighted' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'weighted' must be a boolean value."
+                )
 
         if self._scale is not None:
             valid_values = ["1-5", "1-10", "qualitative", "percentage"]
             if self._scale not in valid_values:
-                raise ValidationError("The parameter 'scale' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'scale' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def options(self) -> List[Any]:

@@ -6,14 +6,9 @@ This module provides the BlindSpots decorator class for use in prompt engineerin
 Identifies potential cognitive blind spots, unstated assumptions, and overlooked perspectives in the response. This decorator helps mitigate bias by explicitly acknowledging the limitations of one's thinking and analysis.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    BlindSpotsDepthEnum,
-    BlindSpotsPositionEnum,
-)
 
 
 class BlindSpots(BaseDecorator):
@@ -66,13 +61,18 @@ class BlindSpots(BaseDecorator):
         if self._depth is not None:
             valid_values = ["basic", "thorough", "comprehensive"]
             if self._depth not in valid_values:
-                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'depth' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._position is not None:
             valid_values = ["after", "before", "integrated"]
             if self._position not in valid_values:
-                raise ValidationError("The parameter 'position' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'position' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def categories(self) -> List[Any]:

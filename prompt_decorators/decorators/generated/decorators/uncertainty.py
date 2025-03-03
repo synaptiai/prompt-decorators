@@ -6,14 +6,9 @@ This module provides the Uncertainty decorator class for use in prompt engineeri
 Explicitly highlights areas of uncertainty in the response. This decorator promotes intellectual honesty by clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    UncertaintyFormatEnum,
-    UncertaintyThresholdEnum,
-)
 
 
 class Uncertainty(BaseDecorator):
@@ -61,17 +56,22 @@ class Uncertainty(BaseDecorator):
         if self._format is not None:
             valid_values = ["inline", "section", "confidence"]
             if self._format not in valid_values:
-                raise ValidationError("The parameter 'format' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'format' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._threshold is not None:
             valid_values = ["low", "medium", "high"]
             if self._threshold not in valid_values:
-                raise ValidationError("The parameter 'threshold' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'threshold' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._reason is not None:
             if not isinstance(self._reason, bool):
                 raise ValidationError("The parameter 'reason' must be a boolean value.")
-
 
     @property
     def format(self) -> Literal["inline", "section", "confidence"]:

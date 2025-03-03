@@ -6,15 +6,9 @@ This module provides the Limitations decorator class for use in prompt engineeri
 Adds an explicit statement of limitations, caveats, or uncertainties related to the provided information. This decorator promotes intellectual honesty by acknowledging the boundaries of current knowledge, potential biases, or contextual constraints.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    LimitationsDetailEnum,
-    LimitationsPositionEnum,
-    LimitationsFocusEnum,
-)
 
 
 class Limitations(BaseDecorator):
@@ -62,18 +56,26 @@ class Limitations(BaseDecorator):
         if self._detail is not None:
             valid_values = ["brief", "moderate", "comprehensive"]
             if self._detail not in valid_values:
-                raise ValidationError("The parameter 'detail' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'detail' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._position is not None:
             valid_values = ["beginning", "end"]
             if self._position not in valid_values:
-                raise ValidationError("The parameter 'position' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'position' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._focus is not None:
             valid_values = ["knowledge", "methodology", "context", "biases", "all"]
             if self._focus not in valid_values:
-                raise ValidationError("The parameter 'focus' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'focus' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def detail(self) -> Literal["brief", "moderate", "comprehensive"]:

@@ -6,13 +6,9 @@ This module provides the Audience decorator class for use in prompt engineering.
 Adapts the response for a specific audience expertise level. This decorator ensures content is appropriately tailored to the knowledge, vocabulary, and needs of different audience types, from beginners to technical experts.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    AudienceLevelEnum,
-)
 
 
 class Audience(BaseDecorator):
@@ -33,7 +29,9 @@ class Audience(BaseDecorator):
 
     def __init__(
         self,
-        level: Literal["beginner", "intermediate", "expert", "technical"] = "intermediate",
+        level: Literal[
+            "beginner", "intermediate", "expert", "technical"
+        ] = "intermediate",
         domain: str = "general",
         examples: bool = True,
     ) -> None:
@@ -61,7 +59,10 @@ class Audience(BaseDecorator):
         if self._level is not None:
             valid_values = ["beginner", "intermediate", "expert", "technical"]
             if self._level not in valid_values:
-                raise ValidationError("The parameter 'level' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'level' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._domain is not None:
             if not isinstance(self._domain, str):
@@ -69,8 +70,9 @@ class Audience(BaseDecorator):
 
         if self._examples is not None:
             if not isinstance(self._examples, bool):
-                raise ValidationError("The parameter 'examples' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'examples' must be a boolean value."
+                )
 
     @property
     def level(self) -> Literal["beginner", "intermediate", "expert", "technical"]:

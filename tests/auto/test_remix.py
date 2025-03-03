@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Remix
 
 
 # Tests for the Remix decorator
@@ -42,7 +42,7 @@ class TestRemix:
         decorator_class = load_decorator("Remix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['target'] = 123
+        params["target"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "target" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestRemix:
         decorator_class = load_decorator("Remix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['preserve'] = 'invalid_enum_value'
+        params["preserve"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "preserve" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestRemix:
         decorator_class = load_decorator("Remix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['preserve'] = 'invalid_enum_value'
+        params["preserve"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "preserve" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestRemix:
         decorator_class = load_decorator("Remix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['contrast'] = 'invalid'
+        params["contrast"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "contrast" in str(exc_info.value)

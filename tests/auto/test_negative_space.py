@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import NegativeSpace
 
 
 # Tests for the NegativeSpace decorator
@@ -32,7 +32,7 @@ class TestNegativeSpace:
         decorator_class = load_decorator("NegativeSpace")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['focus'] = 'invalid_enum_value'
+        params["focus"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "focus" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestNegativeSpace:
         decorator_class = load_decorator("NegativeSpace")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['focus'] = 'invalid_enum_value'
+        params["focus"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "focus" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestNegativeSpace:
         decorator_class = load_decorator("NegativeSpace")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestNegativeSpace:
         decorator_class = load_decorator("NegativeSpace")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestNegativeSpace:
         decorator_class = load_decorator("NegativeSpace")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestNegativeSpace:
         decorator_class = load_decorator("NegativeSpace")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)

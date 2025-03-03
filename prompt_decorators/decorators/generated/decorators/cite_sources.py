@@ -6,14 +6,9 @@ This module provides the CiteSources decorator class for use in prompt engineeri
 Structures the response to include citations for claims and information. This decorator enhances credibility by providing references to source material, enabling fact verification and further exploration of topics.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    CiteSourcesStyleEnum,
-    CiteSourcesFormatEnum,
-)
 
 
 class CiteSources(BaseDecorator):
@@ -62,17 +57,24 @@ class CiteSources(BaseDecorator):
         if self._style is not None:
             valid_values = ["inline", "footnote", "endnote"]
             if self._style not in valid_values:
-                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'style' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._format is not None:
             valid_values = ["APA", "MLA", "Chicago", "Harvard", "IEEE"]
             if self._format not in valid_values:
-                raise ValidationError("The parameter 'format' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'format' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._comprehensive is not None:
             if not isinstance(self._comprehensive, bool):
-                raise ValidationError("The parameter 'comprehensive' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'comprehensive' must be a boolean value."
+                )
 
     @property
     def style(self) -> Literal["inline", "footnote", "endnote"]:

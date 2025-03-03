@@ -6,15 +6,9 @@ This module provides the PeerReview decorator class for use in prompt engineerin
 Augments the response with a simulated peer review of the content. This decorator enhances critical thinking by evaluating the response's strengths, weaknesses, methodological soundness, and potential improvements as an academic reviewer would.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    PeerReviewCriteriaEnum,
-    PeerReviewStyleEnum,
-    PeerReviewPositionEnum,
-)
 
 
 class PeerReview(BaseDecorator):
@@ -35,7 +29,9 @@ class PeerReview(BaseDecorator):
 
     def __init__(
         self,
-        criteria: Literal["accuracy", "methodology", "limitations", "completeness", "all"] = "all",
+        criteria: Literal[
+            "accuracy", "methodology", "limitations", "completeness", "all"
+        ] = "all",
         style: Literal["constructive", "critical", "balanced"] = "balanced",
         position: Literal["after", "before", "alongside"] = "after",
     ) -> None:
@@ -60,23 +56,39 @@ class PeerReview(BaseDecorator):
 
         # Validate parameters
         if self._criteria is not None:
-            valid_values = ["accuracy", "methodology", "limitations", "completeness", "all"]
+            valid_values = [
+                "accuracy",
+                "methodology",
+                "limitations",
+                "completeness",
+                "all",
+            ]
             if self._criteria not in valid_values:
-                raise ValidationError("The parameter 'criteria' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'criteria' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._style is not None:
             valid_values = ["constructive", "critical", "balanced"]
             if self._style not in valid_values:
-                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'style' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._position is not None:
             valid_values = ["after", "before", "alongside"]
             if self._position not in valid_values:
-                raise ValidationError("The parameter 'position' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'position' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
-    def criteria(self) -> Literal["accuracy", "methodology", "limitations", "completeness", "all"]:
+    def criteria(
+        self,
+    ) -> Literal["accuracy", "methodology", "limitations", "completeness", "all"]:
         """
         Get the criteria parameter value.
 

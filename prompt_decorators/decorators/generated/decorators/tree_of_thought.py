@@ -6,8 +6,7 @@ This module provides the TreeOfThought decorator class for use in prompt enginee
 Organizes the response as a branching exploration of multiple reasoning paths. This decorator enables the AI to consider several possible approaches or hypotheses simultaneously, exploring the implications of each before reaching conclusions.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -55,17 +54,24 @@ class TreeOfThought(BaseDecorator):
 
         # Validate parameters
         if self._branches is not None:
-            if not isinstance(self._branches, (int, float)) or isinstance(self._branches, bool):
-                raise ValidationError("The parameter 'branches' must be a numeric value.")
+            if not isinstance(self._branches, (int, float)) or isinstance(
+                self._branches, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'branches' must be a numeric value."
+                )
 
         if self._depth is not None:
-            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+            if not isinstance(self._depth, (int, float)) or isinstance(
+                self._depth, bool
+            ):
                 raise ValidationError("The parameter 'depth' must be a numeric value.")
 
         if self._pruning is not None:
             if not isinstance(self._pruning, bool):
-                raise ValidationError("The parameter 'pruning' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'pruning' must be a boolean value."
+                )
 
     @property
     def branches(self) -> Any:

@@ -6,13 +6,9 @@ This module provides the Alternatives decorator class for use in prompt engineer
 Presents multiple distinct options, approaches, or solutions to a question or problem. This decorator encourages exploring different paths or perspectives rather than providing a single definitive answer.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    AlternativesDiversityEnum,
-)
 
 
 class Alternatives(BaseDecorator):
@@ -60,18 +56,24 @@ class Alternatives(BaseDecorator):
 
         # Validate parameters
         if self._count is not None:
-            if not isinstance(self._count, (int, float)) or isinstance(self._count, bool):
+            if not isinstance(self._count, (int, float)) or isinstance(
+                self._count, bool
+            ):
                 raise ValidationError("The parameter 'count' must be a numeric value.")
 
         if self._diversity is not None:
             valid_values = ["low", "medium", "high"]
             if self._diversity not in valid_values:
-                raise ValidationError("The parameter 'diversity' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'diversity' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._comparison is not None:
             if not isinstance(self._comparison, bool):
-                raise ValidationError("The parameter 'comparison' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'comparison' must be a boolean value."
+                )
 
     @property
     def count(self) -> Any:

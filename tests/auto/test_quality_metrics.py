@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import QualityMetrics
 
 
 # Tests for the QualityMetrics decorator
@@ -32,7 +32,7 @@ class TestQualityMetrics:
         decorator_class = load_decorator("QualityMetrics")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['metrics'] = 'invalid'
+        params["metrics"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "metrics" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestQualityMetrics:
         decorator_class = load_decorator("QualityMetrics")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scale'] = 'invalid_enum_value'
+        params["scale"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scale" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestQualityMetrics:
         decorator_class = load_decorator("QualityMetrics")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scale'] = 'invalid_enum_value'
+        params["scale"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scale" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestQualityMetrics:
         decorator_class = load_decorator("QualityMetrics")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['explanation'] = 'invalid'
+        params["explanation"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "explanation" in str(exc_info.value)

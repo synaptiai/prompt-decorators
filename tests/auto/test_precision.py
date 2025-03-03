@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Precision
 
 
 # Tests for the Precision decorator
@@ -32,7 +32,7 @@ class TestPrecision:
         decorator_class = load_decorator("Precision")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 'invalid_enum_value'
+        params["level"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestPrecision:
         decorator_class = load_decorator("Precision")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 'invalid_enum_value'
+        params["level"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestPrecision:
         decorator_class = load_decorator("Precision")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['units'] = 'invalid'
+        params["units"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "units" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestPrecision:
         decorator_class = load_decorator("Precision")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['definitions'] = 'invalid'
+        params["definitions"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "definitions" in str(exc_info.value)

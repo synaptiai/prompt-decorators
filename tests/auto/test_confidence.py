@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Confidence
 
 
 # Tests for the Confidence decorator
@@ -32,7 +32,7 @@ class TestConfidence:
         decorator_class = load_decorator("Confidence")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scale'] = 'invalid_enum_value'
+        params["scale"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scale" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestConfidence:
         decorator_class = load_decorator("Confidence")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scale'] = 'invalid_enum_value'
+        params["scale"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scale" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestConfidence:
         decorator_class = load_decorator("Confidence")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['threshold'] = 'invalid'
+        params["threshold"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "threshold" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestConfidence:
         decorator_class = load_decorator("Confidence")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['threshold'] = -1
+        params["threshold"] = -1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "threshold" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestConfidence:
         decorator_class = load_decorator("Confidence")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['threshold'] = 101
+        params["threshold"] = 101
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "threshold" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestConfidence:
         decorator_class = load_decorator("Confidence")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['detailed'] = 'invalid'
+        params["detailed"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "detailed" in str(exc_info.value)

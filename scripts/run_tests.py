@@ -83,14 +83,14 @@ def generate_tests(args):
     success = registry_generate_tests(
         registry_dir=args.registry_dir,
         output_dir=os.path.join(args.test_dir, "auto"),
-        verbose=args.verbose
+        verbose=args.verbose,
     )
-    
+
     if not success:
         print("Error: Test generation failed.")
         sys.exit(1)
-    
-    print(f"Test generation completed successfully.")
+
+    print("Test generation completed successfully.")
 
 
 def run_tests(args):

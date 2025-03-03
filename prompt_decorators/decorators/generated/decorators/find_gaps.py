@@ -6,14 +6,9 @@ This module provides the FindGaps decorator class for use in prompt engineering.
 Identifies missing elements, unanswered questions, or overlooked considerations in an idea, plan, or argument. This decorator helps improve completeness by systematically discovering and highlighting gaps that need addressing.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    FindGapsAspectsEnum,
-    FindGapsDepthEnum,
-)
 
 
 class FindGaps(BaseDecorator):
@@ -34,7 +29,14 @@ class FindGaps(BaseDecorator):
 
     def __init__(
         self,
-        aspects: Literal["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"] = "comprehensive",
+        aspects: Literal[
+            "questions",
+            "resources",
+            "stakeholders",
+            "risks",
+            "dependencies",
+            "comprehensive",
+        ] = "comprehensive",
         depth: Literal["basic", "thorough", "exhaustive"] = "thorough",
         solutions: bool = True,
     ) -> None:
@@ -60,22 +62,45 @@ class FindGaps(BaseDecorator):
 
         # Validate parameters
         if self._aspects is not None:
-            valid_values = ["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"]
+            valid_values = [
+                "questions",
+                "resources",
+                "stakeholders",
+                "risks",
+                "dependencies",
+                "comprehensive",
+            ]
             if self._aspects not in valid_values:
-                raise ValidationError("The parameter 'aspects' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'aspects' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._depth is not None:
             valid_values = ["basic", "thorough", "exhaustive"]
             if self._depth not in valid_values:
-                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'depth' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._solutions is not None:
             if not isinstance(self._solutions, bool):
-                raise ValidationError("The parameter 'solutions' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'solutions' must be a boolean value."
+                )
 
     @property
-    def aspects(self) -> Literal["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"]:
+    def aspects(
+        self,
+    ) -> Literal[
+        "questions",
+        "resources",
+        "stakeholders",
+        "risks",
+        "dependencies",
+        "comprehensive",
+    ]:
         """
         Get the aspects parameter value.
 

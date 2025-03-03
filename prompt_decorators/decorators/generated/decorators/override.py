@@ -6,8 +6,7 @@ This module provides the Override decorator class for use in prompt engineering.
 A meta-decorator that overrides the default parameters or behaviors of other decorators. This enables customization of standard decorators without modifying their definitions, allowing for reuse of established patterns with specific adjustments.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -57,20 +56,27 @@ class Override(BaseDecorator):
 
         # Validate parameters
         if self._decorator is None:
-            raise ValidationError("The parameter 'decorator' is required for Override decorator.")
+            raise ValidationError(
+                "The parameter 'decorator' is required for Override decorator."
+            )
 
         if self._decorator is not None:
             if not isinstance(self._decorator, str):
-                raise ValidationError("The parameter 'decorator' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'decorator' must be a string value."
+                )
 
         if self._parameters is not None:
             if not isinstance(self._parameters, str):
-                raise ValidationError("The parameter 'parameters' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'parameters' must be a string value."
+                )
 
         if self._behavior is not None:
             if not isinstance(self._behavior, str):
-                raise ValidationError("The parameter 'behavior' must be a string value.")
-
+                raise ValidationError(
+                    "The parameter 'behavior' must be a string value."
+                )
 
     @property
     def decorator(self) -> str:

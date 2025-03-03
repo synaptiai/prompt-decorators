@@ -6,8 +6,7 @@ This module provides the Refine decorator class for use in prompt engineering.
 A meta-decorator that iteratively improves the output based on specified criteria or dimensions. This decorator simulates multiple drafts or revisions of content, with each iteration focusing on enhancing particular aspects of the response.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -57,8 +56,12 @@ class Refine(BaseDecorator):
 
         # Validate parameters
         if self._iterations is not None:
-            if not isinstance(self._iterations, (int, float)) or isinstance(self._iterations, bool):
-                raise ValidationError("The parameter 'iterations' must be a numeric value.")
+            if not isinstance(self._iterations, (int, float)) or isinstance(
+                self._iterations, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'iterations' must be a numeric value."
+                )
 
         if self._focus is not None:
             if not isinstance(self._focus, (list, tuple)):
@@ -66,8 +69,9 @@ class Refine(BaseDecorator):
 
         if self._showProcess is not None:
             if not isinstance(self._showProcess, bool):
-                raise ValidationError("The parameter 'showProcess' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'showProcess' must be a boolean value."
+                )
 
     @property
     def iterations(self) -> Any:

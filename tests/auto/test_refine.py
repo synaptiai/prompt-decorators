@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Refine
 
 
 # Tests for the Refine decorator
@@ -32,7 +32,7 @@ class TestRefine:
         decorator_class = load_decorator("Refine")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['iterations'] = 'invalid'
+        params["iterations"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "iterations" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestRefine:
         decorator_class = load_decorator("Refine")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['iterations'] = 0
+        params["iterations"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "iterations" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestRefine:
         decorator_class = load_decorator("Refine")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['iterations'] = 4
+        params["iterations"] = 4
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "iterations" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestRefine:
         decorator_class = load_decorator("Refine")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['focus'] = 'invalid'
+        params["focus"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "focus" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestRefine:
         decorator_class = load_decorator("Refine")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['showProcess'] = 'invalid'
+        params["showProcess"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "showProcess" in str(exc_info.value)

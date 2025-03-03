@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import TreeOfThought
 
 
 # Tests for the TreeOfThought decorator
@@ -32,7 +32,7 @@ class TestTreeOfThought:
         decorator_class = load_decorator("TreeOfThought")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['branches'] = 'invalid'
+        params["branches"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "branches" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestTreeOfThought:
         decorator_class = load_decorator("TreeOfThought")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['branches'] = 1
+        params["branches"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "branches" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestTreeOfThought:
         decorator_class = load_decorator("TreeOfThought")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['branches'] = 6
+        params["branches"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "branches" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestTreeOfThought:
         decorator_class = load_decorator("TreeOfThought")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid'
+        params["depth"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestTreeOfThought:
         decorator_class = load_decorator("TreeOfThought")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 0
+        params["depth"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestTreeOfThought:
         decorator_class = load_decorator("TreeOfThought")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 6
+        params["depth"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -98,7 +98,7 @@ class TestTreeOfThought:
         decorator_class = load_decorator("TreeOfThought")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['pruning'] = 'invalid'
+        params["pruning"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "pruning" in str(exc_info.value)

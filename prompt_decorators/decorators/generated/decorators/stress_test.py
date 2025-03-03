@@ -6,13 +6,9 @@ This module provides the StressTest decorator class for use in prompt engineerin
 Tests the robustness of ideas, theories, plans, or systems by applying extreme conditions, edge cases, and unlikely scenarios. This decorator helps identify vulnerabilities, limitations, and breaking points that might not be apparent under normal circumstances.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    StressTestSeverityEnum,
-)
 
 
 class StressTest(BaseDecorator):
@@ -59,18 +55,24 @@ class StressTest(BaseDecorator):
 
         # Validate parameters
         if self._scenarios is not None:
-            if not isinstance(self._scenarios, (int, float)) or isinstance(self._scenarios, bool):
-                raise ValidationError("The parameter 'scenarios' must be a numeric value.")
+            if not isinstance(self._scenarios, (int, float)) or isinstance(
+                self._scenarios, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'scenarios' must be a numeric value."
+                )
 
         if self._severity is not None:
             valid_values = ["moderate", "severe", "extreme"]
             if self._severity not in valid_values:
-                raise ValidationError("The parameter 'severity' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'severity' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._domain is not None:
             if not isinstance(self._domain, str):
                 raise ValidationError("The parameter 'domain' must be a string value.")
-
 
     @property
     def scenarios(self) -> Any:

@@ -6,13 +6,9 @@ This module provides the Priority decorator class for use in prompt engineering.
 A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    PriorityModeEnum,
-)
 
 
 class Priority(BaseDecorator):
@@ -60,7 +56,9 @@ class Priority(BaseDecorator):
 
         # Validate parameters
         if self._decorators is None:
-            raise ValidationError("The parameter 'decorators' is required for Priority decorator.")
+            raise ValidationError(
+                "The parameter 'decorators' is required for Priority decorator."
+            )
 
         if self._decorators is not None:
             if not isinstance(self._decorators, (list, tuple)):
@@ -68,13 +66,17 @@ class Priority(BaseDecorator):
 
         if self._explicit is not None:
             if not isinstance(self._explicit, bool):
-                raise ValidationError("The parameter 'explicit' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'explicit' must be a boolean value."
+                )
 
         if self._mode is not None:
             valid_values = ["override", "merge", "cascade"]
             if self._mode not in valid_values:
-                raise ValidationError("The parameter 'mode' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'mode' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def decorators(self) -> List[Any]:

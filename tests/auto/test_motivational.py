@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Motivational
 
 
 # Tests for the Motivational decorator
@@ -32,7 +32,7 @@ class TestMotivational:
         decorator_class = load_decorator("Motivational")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['intensity'] = 'invalid_enum_value'
+        params["intensity"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "intensity" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestMotivational:
         decorator_class = load_decorator("Motivational")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['intensity'] = 'invalid_enum_value'
+        params["intensity"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "intensity" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestMotivational:
         decorator_class = load_decorator("Motivational")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['focus'] = 'invalid_enum_value'
+        params["focus"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "focus" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestMotivational:
         decorator_class = load_decorator("Motivational")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['focus'] = 'invalid_enum_value'
+        params["focus"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "focus" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestMotivational:
         decorator_class = load_decorator("Motivational")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['actionable'] = 'invalid'
+        params["actionable"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "actionable" in str(exc_info.value)

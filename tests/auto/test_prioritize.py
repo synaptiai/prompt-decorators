@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Prioritize
 
 
 # Tests for the Prioritize decorator
@@ -32,7 +32,7 @@ class TestPrioritize:
         decorator_class = load_decorator("Prioritize")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['criteria'] = 123
+        params["criteria"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "criteria" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestPrioritize:
         decorator_class = load_decorator("Prioritize")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 'invalid'
+        params["count"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestPrioritize:
         decorator_class = load_decorator("Prioritize")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 0
+        params["count"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestPrioritize:
         decorator_class = load_decorator("Prioritize")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 11
+        params["count"] = 11
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestPrioritize:
         decorator_class = load_decorator("Prioritize")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['showRationale'] = 'invalid'
+        params["showRationale"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "showRationale" in str(exc_info.value)

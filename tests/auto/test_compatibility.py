@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Compatibility
 
 
 # Tests for the Compatibility decorator
@@ -42,7 +42,7 @@ class TestCompatibility:
         decorator_class = load_decorator("Compatibility")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['models'] = 'invalid'
+        params["models"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "models" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestCompatibility:
         decorator_class = load_decorator("Compatibility")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['fallback'] = 123
+        params["fallback"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "fallback" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestCompatibility:
         decorator_class = load_decorator("Compatibility")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['behaviors'] = 123
+        params["behaviors"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "behaviors" in str(exc_info.value)

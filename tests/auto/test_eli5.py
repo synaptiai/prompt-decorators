@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import ELI5
 
 
 # Tests for the ELI5 decorator
@@ -30,7 +30,7 @@ class TestELI5:
         decorator_class = load_decorator("ELI5")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['strictness'] = 'invalid'
+        params["strictness"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "strictness" in str(exc_info.value)

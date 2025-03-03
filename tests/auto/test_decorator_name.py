@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import DecoratorName
 
 
 # Tests for the DecoratorName decorator
@@ -30,7 +30,7 @@ class TestDecoratorName:
         decorator_class = load_decorator("DecoratorName")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['parameterName'] = None
+        params["parameterName"] = None
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "parameterName" in str(exc_info.value)

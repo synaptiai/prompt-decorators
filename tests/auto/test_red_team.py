@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import RedTeam
 
 
 # Tests for the RedTeam decorator
@@ -32,7 +32,7 @@ class TestRedTeam:
         decorator_class = load_decorator("RedTeam")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['strength'] = 'invalid_enum_value'
+        params["strength"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "strength" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestRedTeam:
         decorator_class = load_decorator("RedTeam")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['strength'] = 'invalid_enum_value'
+        params["strength"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "strength" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestRedTeam:
         decorator_class = load_decorator("RedTeam")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['focus'] = 'invalid'
+        params["focus"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "focus" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestRedTeam:
         decorator_class = load_decorator("RedTeam")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['constructive'] = 'invalid'
+        params["constructive"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "constructive" in str(exc_info.value)

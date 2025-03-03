@@ -6,8 +6,7 @@ This module provides the Schema decorator class for use in prompt engineering.
 Defines a custom structure for the AI's response using a specified schema format. This decorator enables precise control over the output structure, ensuring responses follow a consistent, well-defined format optimized for specific use cases or data processing needs.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -53,7 +52,9 @@ class Schema(BaseDecorator):
 
         # Validate parameters
         if self._schema is None:
-            raise ValidationError("The parameter 'schema' is required for Schema decorator.")
+            raise ValidationError(
+                "The parameter 'schema' is required for Schema decorator."
+            )
 
         if self._schema is not None:
             if not isinstance(self._schema, str):
@@ -62,7 +63,6 @@ class Schema(BaseDecorator):
         if self._strict is not None:
             if not isinstance(self._strict, bool):
                 raise ValidationError("The parameter 'strict' must be a boolean value.")
-
 
     @property
     def schema(self) -> str:

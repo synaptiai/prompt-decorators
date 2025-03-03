@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Balanced
 
 
 # Tests for the Balanced decorator
@@ -32,7 +32,7 @@ class TestBalanced:
         decorator_class = load_decorator("Balanced")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['perspectives'] = 'invalid'
+        params["perspectives"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "perspectives" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestBalanced:
         decorator_class = load_decorator("Balanced")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['perspectives'] = 1
+        params["perspectives"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "perspectives" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestBalanced:
         decorator_class = load_decorator("Balanced")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['perspectives'] = 6
+        params["perspectives"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "perspectives" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestBalanced:
         decorator_class = load_decorator("Balanced")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestBalanced:
         decorator_class = load_decorator("Balanced")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestBalanced:
         decorator_class = load_decorator("Balanced")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['equal'] = 'invalid'
+        params["equal"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "equal" in str(exc_info.value)

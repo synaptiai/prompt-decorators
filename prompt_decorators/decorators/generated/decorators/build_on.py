@@ -6,14 +6,9 @@ This module provides the BuildOn decorator class for use in prompt engineering.
 A meta-decorator that builds upon previous context or responses rather than starting from scratch. This enables continuity across interactions, allowing refinement, extension, or alteration of previous outputs in a coherent manner.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    BuildOnReferenceEnum,
-    BuildOnApproachEnum,
-)
 
 
 class BuildOn(BaseDecorator):
@@ -61,17 +56,24 @@ class BuildOn(BaseDecorator):
         if self._reference is not None:
             valid_values = ["last", "specific", "all"]
             if self._reference not in valid_values:
-                raise ValidationError("The parameter 'reference' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'reference' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._approach is not None:
             valid_values = ["extend", "refine", "contrast", "synthesize"]
             if self._approach not in valid_values:
-                raise ValidationError("The parameter 'approach' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'approach' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._preserveStructure is not None:
             if not isinstance(self._preserveStructure, bool):
-                raise ValidationError("The parameter 'preserveStructure' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'preserveStructure' must be a boolean value."
+                )
 
     @property
     def reference(self) -> Literal["last", "specific", "all"]:

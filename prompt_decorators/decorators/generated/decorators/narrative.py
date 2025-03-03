@@ -6,14 +6,9 @@ This module provides the Narrative decorator class for use in prompt engineering
 Structures the response as a story-based delivery with narrative elements. This decorator employs storytelling techniques to make information more engaging, memorable, and contextually rich.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    NarrativeStructureEnum,
-    NarrativeLengthEnum,
-)
 
 
 class Narrative(BaseDecorator):
@@ -60,17 +55,24 @@ class Narrative(BaseDecorator):
         if self._structure is not None:
             valid_values = ["classic", "nonlinear", "case-study"]
             if self._structure not in valid_values:
-                raise ValidationError("The parameter 'structure' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'structure' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._characters is not None:
             if not isinstance(self._characters, bool):
-                raise ValidationError("The parameter 'characters' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'characters' must be a boolean value."
+                )
 
         if self._length is not None:
             valid_values = ["brief", "moderate", "extended"]
             if self._length not in valid_values:
-                raise ValidationError("The parameter 'length' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'length' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def structure(self) -> Literal["classic", "nonlinear", "case-study"]:

@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Bullet
 
 
 # Tests for the Bullet decorator
@@ -32,7 +32,7 @@ class TestBullet:
         decorator_class = load_decorator("Bullet")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestBullet:
         decorator_class = load_decorator("Bullet")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestBullet:
         decorator_class = load_decorator("Bullet")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['indented'] = 'invalid'
+        params["indented"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "indented" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestBullet:
         decorator_class = load_decorator("Bullet")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['compact'] = 'invalid'
+        params["compact"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "compact" in str(exc_info.value)

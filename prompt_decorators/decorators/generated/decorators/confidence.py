@@ -6,13 +6,9 @@ This module provides the Confidence decorator class for use in prompt engineerin
 Enhances the response with explicit indications of confidence levels for different statements or claims. This decorator promotes transparency about knowledge certainty and helps differentiate between well-established facts and more speculative content.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ConfidenceScaleEnum,
-)
 
 
 class Confidence(BaseDecorator):
@@ -61,16 +57,24 @@ class Confidence(BaseDecorator):
         if self._scale is not None:
             valid_values = ["percent", "qualitative", "stars", "numeric"]
             if self._scale not in valid_values:
-                raise ValidationError("The parameter 'scale' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'scale' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._threshold is not None:
-            if not isinstance(self._threshold, (int, float)) or isinstance(self._threshold, bool):
-                raise ValidationError("The parameter 'threshold' must be a numeric value.")
+            if not isinstance(self._threshold, (int, float)) or isinstance(
+                self._threshold, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'threshold' must be a numeric value."
+                )
 
         if self._detailed is not None:
             if not isinstance(self._detailed, bool):
-                raise ValidationError("The parameter 'detailed' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'detailed' must be a boolean value."
+                )
 
     @property
     def scale(self) -> Literal["percent", "qualitative", "stars", "numeric"]:

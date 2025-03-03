@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Layered
 
 
 # Tests for the Layered decorator
@@ -32,7 +32,7 @@ class TestLayered:
         decorator_class = load_decorator("Layered")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['levels'] = 'invalid_enum_value'
+        params["levels"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "levels" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestLayered:
         decorator_class = load_decorator("Layered")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['levels'] = 'invalid_enum_value'
+        params["levels"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "levels" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestLayered:
         decorator_class = load_decorator("Layered")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 'invalid'
+        params["count"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestLayered:
         decorator_class = load_decorator("Layered")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 1
+        params["count"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestLayered:
         decorator_class = load_decorator("Layered")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 6
+        params["count"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestLayered:
         decorator_class = load_decorator("Layered")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['progression'] = 'invalid_enum_value'
+        params["progression"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "progression" in str(exc_info.value)
@@ -98,7 +98,7 @@ class TestLayered:
         decorator_class = load_decorator("Layered")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['progression'] = 'invalid_enum_value'
+        params["progression"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "progression" in str(exc_info.value)

@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Detailed
 
 
 # Tests for the Detailed decorator
@@ -32,7 +32,7 @@ class TestDetailed:
         decorator_class = load_decorator("Detailed")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestDetailed:
         decorator_class = load_decorator("Detailed")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestDetailed:
         decorator_class = load_decorator("Detailed")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['aspects'] = 'invalid'
+        params["aspects"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "aspects" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestDetailed:
         decorator_class = load_decorator("Detailed")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['examples'] = 'invalid'
+        params["examples"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "examples" in str(exc_info.value)

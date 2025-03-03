@@ -6,13 +6,9 @@ This module provides the RedTeam decorator class for use in prompt engineering.
 Applies adversarial analysis to test assumptions, identify vulnerabilities, and strengthen proposals by actively looking for flaws. This decorator simulates how an opponent or critic would evaluate and attack ideas, plans, or arguments.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    RedTeamStrengthEnum,
-)
 
 
 class RedTeam(BaseDecorator):
@@ -62,7 +58,10 @@ class RedTeam(BaseDecorator):
         if self._strength is not None:
             valid_values = ["moderate", "aggressive", "steelman"]
             if self._strength not in valid_values:
-                raise ValidationError("The parameter 'strength' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'strength' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._focus is not None:
             if not isinstance(self._focus, (list, tuple)):
@@ -70,8 +69,9 @@ class RedTeam(BaseDecorator):
 
         if self._constructive is not None:
             if not isinstance(self._constructive, bool):
-                raise ValidationError("The parameter 'constructive' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'constructive' must be a boolean value."
+                )
 
     @property
     def strength(self) -> Literal["moderate", "aggressive", "steelman"]:

@@ -6,13 +6,9 @@ This module provides the Concise decorator class for use in prompt engineering.
 Optimizes the response for brevity and directness, eliminating unnecessary details and verbose language. This decorator is ideal for obtaining quick answers, executive summaries, or essential information when time or space is limited.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ConciseLevelEnum,
-)
 
 
 class Concise(BaseDecorator):
@@ -58,18 +54,26 @@ class Concise(BaseDecorator):
 
         # Validate parameters
         if self._maxWords is not None:
-            if not isinstance(self._maxWords, (int, float)) or isinstance(self._maxWords, bool):
-                raise ValidationError("The parameter 'maxWords' must be a numeric value.")
+            if not isinstance(self._maxWords, (int, float)) or isinstance(
+                self._maxWords, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'maxWords' must be a numeric value."
+                )
 
         if self._bulletPoints is not None:
             if not isinstance(self._bulletPoints, bool):
-                raise ValidationError("The parameter 'bulletPoints' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'bulletPoints' must be a boolean value."
+                )
 
         if self._level is not None:
             valid_values = ["moderate", "high", "extreme"]
             if self._level not in valid_values:
-                raise ValidationError("The parameter 'level' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'level' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def maxWords(self) -> Any:

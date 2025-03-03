@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Timeline
 
 
 # Tests for the Timeline decorator
@@ -32,7 +32,7 @@ class TestTimeline:
         decorator_class = load_decorator("Timeline")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['granularity'] = 'invalid_enum_value'
+        params["granularity"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "granularity" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestTimeline:
         decorator_class = load_decorator("Timeline")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['granularity'] = 'invalid_enum_value'
+        params["granularity"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "granularity" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestTimeline:
         decorator_class = load_decorator("Timeline")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestTimeline:
         decorator_class = load_decorator("Timeline")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestTimeline:
         decorator_class = load_decorator("Timeline")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['details'] = 'invalid_enum_value'
+        params["details"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "details" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestTimeline:
         decorator_class = load_decorator("Timeline")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['details'] = 'invalid_enum_value'
+        params["details"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "details" in str(exc_info.value)

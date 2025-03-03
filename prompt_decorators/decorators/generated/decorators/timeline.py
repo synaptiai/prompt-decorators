@@ -6,15 +6,9 @@ This module provides the Timeline decorator class for use in prompt engineering.
 Organizes information in chronological order, highlighting key events or developments over time. This decorator is ideal for historical accounts, project planning, process evolution, or any topic with a temporal dimension.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    TimelineGranularityEnum,
-    TimelineFormatEnum,
-    TimelineDetailsEnum,
-)
 
 
 class Timeline(BaseDecorator):
@@ -35,7 +29,9 @@ class Timeline(BaseDecorator):
 
     def __init__(
         self,
-        granularity: Literal["day", "month", "year", "decade", "century", "era"] = "year",
+        granularity: Literal[
+            "day", "month", "year", "decade", "century", "era"
+        ] = "year",
         format: Literal["list", "narrative", "table"] = "list",
         details: Literal["minimal", "moderate", "comprehensive"] = "moderate",
     ) -> None:
@@ -62,21 +58,31 @@ class Timeline(BaseDecorator):
         if self._granularity is not None:
             valid_values = ["day", "month", "year", "decade", "century", "era"]
             if self._granularity not in valid_values:
-                raise ValidationError("The parameter 'granularity' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'granularity' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._format is not None:
             valid_values = ["list", "narrative", "table"]
             if self._format not in valid_values:
-                raise ValidationError("The parameter 'format' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'format' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._details is not None:
             valid_values = ["minimal", "moderate", "comprehensive"]
             if self._details not in valid_values:
-                raise ValidationError("The parameter 'details' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'details' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
-    def granularity(self) -> Literal["day", "month", "year", "decade", "century", "era"]:
+    def granularity(
+        self,
+    ) -> Literal["day", "month", "year", "decade", "century", "era"]:
         """
         Get the granularity parameter value.
 

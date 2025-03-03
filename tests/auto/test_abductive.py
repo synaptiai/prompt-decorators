@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Abductive
 
 
 # Tests for the Abductive decorator
@@ -32,7 +32,7 @@ class TestAbductive:
         decorator_class = load_decorator("Abductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['hypotheses'] = 'invalid'
+        params["hypotheses"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "hypotheses" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestAbductive:
         decorator_class = load_decorator("Abductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['hypotheses'] = 1
+        params["hypotheses"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "hypotheses" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestAbductive:
         decorator_class = load_decorator("Abductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['hypotheses'] = 6
+        params["hypotheses"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "hypotheses" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestAbductive:
         decorator_class = load_decorator("Abductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['criteria'] = 'invalid'
+        params["criteria"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "criteria" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestAbductive:
         decorator_class = load_decorator("Abductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['rank'] = 'invalid'
+        params["rank"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "rank" in str(exc_info.value)

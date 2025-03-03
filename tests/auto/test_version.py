@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Version
 
 
 # Tests for the Version decorator
@@ -40,7 +40,7 @@ class TestVersion:
         decorator_class = load_decorator("Version")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['standard'] = 123
+        params["standard"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "standard" in str(exc_info.value)

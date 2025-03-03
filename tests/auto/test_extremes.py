@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Extremes
 
 
 # Tests for the Extremes decorator
@@ -32,7 +32,7 @@ class TestExtremes:
         decorator_class = load_decorator("Extremes")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['versions'] = 'invalid_enum_value'
+        params["versions"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "versions" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestExtremes:
         decorator_class = load_decorator("Extremes")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['versions'] = 'invalid_enum_value'
+        params["versions"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "versions" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestExtremes:
         decorator_class = load_decorator("Extremes")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['dimension'] = 123
+        params["dimension"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "dimension" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestExtremes:
         decorator_class = load_decorator("Extremes")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['compare'] = 'invalid'
+        params["compare"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "compare" in str(exc_info.value)

@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Narrative
 
 
 # Tests for the Narrative decorator
@@ -32,7 +32,7 @@ class TestNarrative:
         decorator_class = load_decorator("Narrative")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestNarrative:
         decorator_class = load_decorator("Narrative")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestNarrative:
         decorator_class = load_decorator("Narrative")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['characters'] = 'invalid'
+        params["characters"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "characters" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestNarrative:
         decorator_class = load_decorator("Narrative")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['length'] = 'invalid_enum_value'
+        params["length"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "length" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestNarrative:
         decorator_class = load_decorator("Narrative")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['length'] = 'invalid_enum_value'
+        params["length"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "length" in str(exc_info.value)

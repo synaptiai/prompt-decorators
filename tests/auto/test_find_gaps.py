@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import FindGaps
 
 
 # Tests for the FindGaps decorator
@@ -32,7 +32,7 @@ class TestFindGaps:
         decorator_class = load_decorator("FindGaps")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['aspects'] = 'invalid_enum_value'
+        params["aspects"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "aspects" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestFindGaps:
         decorator_class = load_decorator("FindGaps")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['aspects'] = 'invalid_enum_value'
+        params["aspects"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "aspects" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestFindGaps:
         decorator_class = load_decorator("FindGaps")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestFindGaps:
         decorator_class = load_decorator("FindGaps")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestFindGaps:
         decorator_class = load_decorator("FindGaps")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['solutions'] = 'invalid'
+        params["solutions"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "solutions" in str(exc_info.value)

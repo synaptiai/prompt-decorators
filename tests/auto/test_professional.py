@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Professional
 
 
 # Tests for the Professional decorator
@@ -31,7 +31,7 @@ class TestProfessional:
         decorator_class = load_decorator("Professional")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['industry'] = 123
+        params["industry"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "industry" in str(exc_info.value)
@@ -42,7 +42,7 @@ class TestProfessional:
         decorator_class = load_decorator("Professional")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['formality'] = 'invalid_enum_value'
+        params["formality"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "formality" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestProfessional:
         decorator_class = load_decorator("Professional")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['formality'] = 'invalid_enum_value'
+        params["formality"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "formality" in str(exc_info.value)

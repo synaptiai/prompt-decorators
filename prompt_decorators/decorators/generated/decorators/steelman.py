@@ -6,8 +6,7 @@ This module provides the Steelman decorator class for use in prompt engineering.
 Presents the strongest possible version of an argument or position, even those the AI might not agree with. This decorator opposes strawman fallacies by ensuring each viewpoint is represented in its most compelling and charitable form.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -57,17 +56,22 @@ class Steelman(BaseDecorator):
 
         # Validate parameters
         if self._sides is not None:
-            if not isinstance(self._sides, (int, float)) or isinstance(self._sides, bool):
+            if not isinstance(self._sides, (int, float)) or isinstance(
+                self._sides, bool
+            ):
                 raise ValidationError("The parameter 'sides' must be a numeric value.")
 
         if self._critique is not None:
             if not isinstance(self._critique, bool):
-                raise ValidationError("The parameter 'critique' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'critique' must be a boolean value."
+                )
 
         if self._separation is not None:
             if not isinstance(self._separation, bool):
-                raise ValidationError("The parameter 'separation' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'separation' must be a boolean value."
+                )
 
     @property
     def sides(self) -> Any:

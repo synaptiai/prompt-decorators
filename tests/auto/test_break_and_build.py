@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import BreakAndBuild
 
 
 # Tests for the BreakAndBuild decorator
@@ -32,7 +32,7 @@ class TestBreakAndBuild:
         decorator_class = load_decorator("BreakAndBuild")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['breakdown'] = 'invalid_enum_value'
+        params["breakdown"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "breakdown" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestBreakAndBuild:
         decorator_class = load_decorator("BreakAndBuild")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['breakdown'] = 'invalid_enum_value'
+        params["breakdown"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "breakdown" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestBreakAndBuild:
         decorator_class = load_decorator("BreakAndBuild")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['intensity'] = 'invalid_enum_value'
+        params["intensity"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "intensity" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestBreakAndBuild:
         decorator_class = load_decorator("BreakAndBuild")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['intensity'] = 'invalid_enum_value'
+        params["intensity"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "intensity" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestBreakAndBuild:
         decorator_class = load_decorator("BreakAndBuild")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['buildRatio'] = 'invalid'
+        params["buildRatio"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "buildRatio" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestBreakAndBuild:
         decorator_class = load_decorator("BreakAndBuild")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['buildRatio'] = -0.5
+        params["buildRatio"] = -0.5
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "buildRatio" in str(exc_info.value)
@@ -98,7 +98,7 @@ class TestBreakAndBuild:
         decorator_class = load_decorator("BreakAndBuild")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['buildRatio'] = 4
+        params["buildRatio"] = 4
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "buildRatio" in str(exc_info.value)

@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Nested
 
 
 # Tests for the Nested decorator
@@ -32,7 +32,7 @@ class TestNested:
         decorator_class = load_decorator("Nested")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid'
+        params["depth"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestNested:
         decorator_class = load_decorator("Nested")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 1
+        params["depth"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestNested:
         decorator_class = load_decorator("Nested")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 6
+        params["depth"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestNested:
         decorator_class = load_decorator("Nested")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestNested:
         decorator_class = load_decorator("Nested")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestNested:
         decorator_class = load_decorator("Nested")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['collapsible'] = 'invalid'
+        params["collapsible"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "collapsible" in str(exc_info.value)

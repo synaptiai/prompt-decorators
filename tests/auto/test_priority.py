@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Priority
 
 
 # Tests for the Priority decorator
@@ -42,7 +42,7 @@ class TestPriority:
         decorator_class = load_decorator("Priority")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['decorators'] = 'invalid'
+        params["decorators"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "decorators" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestPriority:
         decorator_class = load_decorator("Priority")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['explicit'] = 'invalid'
+        params["explicit"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "explicit" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestPriority:
         decorator_class = load_decorator("Priority")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['mode'] = 'invalid_enum_value'
+        params["mode"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "mode" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestPriority:
         decorator_class = load_decorator("Priority")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['mode'] = 'invalid_enum_value'
+        params["mode"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "mode" in str(exc_info.value)

@@ -6,13 +6,9 @@ This module provides the Reasoning decorator class for use in prompt engineering
 Modifies the AI's response to provide explicit reasoning paths before reaching conclusions. This decorator encourages the model to show its thought process, making responses more transparent and trustworthy.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ReasoningDepthEnum,
-)
 
 
 class Reasoning(BaseDecorator):
@@ -51,8 +47,10 @@ class Reasoning(BaseDecorator):
         if self._depth is not None:
             valid_values = ["basic", "moderate", "comprehensive"]
             if self._depth not in valid_values:
-                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'depth' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def depth(self) -> Literal["basic", "moderate", "comprehensive"]:

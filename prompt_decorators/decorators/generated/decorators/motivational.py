@@ -6,14 +6,9 @@ This module provides the Motivational decorator class for use in prompt engineer
 Enhances responses with encouraging, inspiring, and empowering language. This decorator is designed to motivate action, build confidence, and create a positive emotional impact while still delivering substantive content.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    MotivationalIntensityEnum,
-    MotivationalFocusEnum,
-)
 
 
 class Motivational(BaseDecorator):
@@ -35,7 +30,9 @@ class Motivational(BaseDecorator):
     def __init__(
         self,
         intensity: Literal["mild", "moderate", "high"] = "moderate",
-        focus: Literal["achievement", "growth", "resilience", "purpose", "balanced"] = "balanced",
+        focus: Literal[
+            "achievement", "growth", "resilience", "purpose", "balanced"
+        ] = "balanced",
         actionable: bool = True,
     ) -> None:
         """
@@ -62,17 +59,30 @@ class Motivational(BaseDecorator):
         if self._intensity is not None:
             valid_values = ["mild", "moderate", "high"]
             if self._intensity not in valid_values:
-                raise ValidationError("The parameter 'intensity' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'intensity' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._focus is not None:
-            valid_values = ["achievement", "growth", "resilience", "purpose", "balanced"]
+            valid_values = [
+                "achievement",
+                "growth",
+                "resilience",
+                "purpose",
+                "balanced",
+            ]
             if self._focus not in valid_values:
-                raise ValidationError("The parameter 'focus' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'focus' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._actionable is not None:
             if not isinstance(self._actionable, bool):
-                raise ValidationError("The parameter 'actionable' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'actionable' must be a boolean value."
+                )
 
     @property
     def intensity(self) -> Literal["mild", "moderate", "high"]:
@@ -88,7 +98,9 @@ class Motivational(BaseDecorator):
         return self._intensity
 
     @property
-    def focus(self) -> Literal["achievement", "growth", "resilience", "purpose", "balanced"]:
+    def focus(
+        self,
+    ) -> Literal["achievement", "growth", "resilience", "purpose", "balanced"]:
         """
         Get the focus parameter value.
 

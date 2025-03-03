@@ -6,15 +6,9 @@ This module provides the NegativeSpace decorator class for use in prompt enginee
 Focuses on analyzing what is not explicitly stated, implied, or missing from a topic or question. This decorator explores the 'negative space' by identifying unexplored angles, implicit assumptions, unasked questions, and contextual elements that may have been overlooked.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    NegativeSpaceFocusEnum,
-    NegativeSpaceDepthEnum,
-    NegativeSpaceStructureEnum,
-)
 
 
 class NegativeSpace(BaseDecorator):
@@ -36,7 +30,9 @@ class NegativeSpace(BaseDecorator):
 
     def __init__(
         self,
-        focus: Literal["implications", "missing", "unstated", "comprehensive"] = "comprehensive",
+        focus: Literal[
+            "implications", "missing", "unstated", "comprehensive"
+        ] = "comprehensive",
         depth: Literal["surface", "moderate", "deep"] = "moderate",
         structure: Literal["before", "after", "integrated", "separate"] = "integrated",
     ) -> None:
@@ -63,18 +59,26 @@ class NegativeSpace(BaseDecorator):
         if self._focus is not None:
             valid_values = ["implications", "missing", "unstated", "comprehensive"]
             if self._focus not in valid_values:
-                raise ValidationError("The parameter 'focus' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'focus' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._depth is not None:
             valid_values = ["surface", "moderate", "deep"]
             if self._depth not in valid_values:
-                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'depth' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._structure is not None:
             valid_values = ["before", "after", "integrated", "separate"]
             if self._structure not in valid_values:
-                raise ValidationError("The parameter 'structure' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'structure' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def focus(self) -> Literal["implications", "missing", "unstated", "comprehensive"]:

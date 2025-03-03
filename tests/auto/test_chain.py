@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Chain
 
 
 # Tests for the Chain decorator
@@ -42,7 +42,7 @@ class TestChain:
         decorator_class = load_decorator("Chain")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['decorators'] = 'invalid'
+        params["decorators"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "decorators" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestChain:
         decorator_class = load_decorator("Chain")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['showSteps'] = 'invalid'
+        params["showSteps"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "showSteps" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestChain:
         decorator_class = load_decorator("Chain")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['stopOnFailure'] = 'invalid'
+        params["stopOnFailure"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "stopOnFailure" in str(exc_info.value)

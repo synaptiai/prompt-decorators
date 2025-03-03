@@ -6,13 +6,9 @@ This module provides the Inductive decorator class for use in prompt engineering
 Structures the response using inductive reasoning, moving from specific observations to broader generalizations and theories. This decorator emphasizes pattern recognition and the derivation of general principles from particular instances.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    InductiveStructureEnum,
-)
 
 
 class Inductive(BaseDecorator):
@@ -35,7 +31,9 @@ class Inductive(BaseDecorator):
         self,
         examples: Any = 3,
         confidence: bool = False,
-        structure: Literal["generalization", "causal", "statistical", "analogical"] = "generalization",
+        structure: Literal[
+            "generalization", "causal", "statistical", "analogical"
+        ] = "generalization",
     ) -> None:
         """
         Initialize the Inductive decorator.
@@ -60,18 +58,26 @@ class Inductive(BaseDecorator):
 
         # Validate parameters
         if self._examples is not None:
-            if not isinstance(self._examples, (int, float)) or isinstance(self._examples, bool):
-                raise ValidationError("The parameter 'examples' must be a numeric value.")
+            if not isinstance(self._examples, (int, float)) or isinstance(
+                self._examples, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'examples' must be a numeric value."
+                )
 
         if self._confidence is not None:
             if not isinstance(self._confidence, bool):
-                raise ValidationError("The parameter 'confidence' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'confidence' must be a boolean value."
+                )
 
         if self._structure is not None:
             valid_values = ["generalization", "causal", "statistical", "analogical"]
             if self._structure not in valid_values:
-                raise ValidationError("The parameter 'structure' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'structure' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def examples(self) -> Any:
@@ -100,7 +106,9 @@ class Inductive(BaseDecorator):
         return self._confidence
 
     @property
-    def structure(self) -> Literal["generalization", "causal", "statistical", "analogical"]:
+    def structure(
+        self,
+    ) -> Literal["generalization", "causal", "statistical", "analogical"]:
         """
         Get the structure parameter value.
 

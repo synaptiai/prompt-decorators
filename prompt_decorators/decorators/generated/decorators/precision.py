@@ -6,13 +6,9 @@ This module provides the Precision decorator class for use in prompt engineering
 Enhances responses with exact, specific, and precisely defined information. This decorator prioritizes accuracy in measurements, terms, definitions, and claims, avoiding vague language in favor of concrete specificity.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    PrecisionLevelEnum,
-)
 
 
 class Precision(BaseDecorator):
@@ -60,7 +56,10 @@ class Precision(BaseDecorator):
         if self._level is not None:
             valid_values = ["moderate", "high", "scientific"]
             if self._level not in valid_values:
-                raise ValidationError("The parameter 'level' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'level' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._units is not None:
             if not isinstance(self._units, bool):
@@ -68,8 +67,9 @@ class Precision(BaseDecorator):
 
         if self._definitions is not None:
             if not isinstance(self._definitions, bool):
-                raise ValidationError("The parameter 'definitions' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'definitions' must be a boolean value."
+                )
 
     @property
     def level(self) -> Literal["moderate", "high", "scientific"]:

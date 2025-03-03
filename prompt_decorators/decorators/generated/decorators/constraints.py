@@ -6,13 +6,9 @@ This module provides the Constraints decorator class for use in prompt engineeri
 Applies specific limitations to the output format, length, or content. This decorator enforces creative constraints that can enhance focus, brevity, or precision by requiring the response to work within defined boundaries.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ConstraintsVocabularyEnum,
-)
 
 
 class Constraints(BaseDecorator):
@@ -36,7 +32,9 @@ class Constraints(BaseDecorator):
         self,
         wordCount: Any = None,
         timeframe: str = None,
-        vocabulary: Literal["simple", "technical", "domain-specific", "creative"] = None,
+        vocabulary: Literal[
+            "simple", "technical", "domain-specific", "creative"
+        ] = None,
         custom: str = None,
     ) -> None:
         """
@@ -65,22 +63,30 @@ class Constraints(BaseDecorator):
 
         # Validate parameters
         if self._wordCount is not None:
-            if not isinstance(self._wordCount, (int, float)) or isinstance(self._wordCount, bool):
-                raise ValidationError("The parameter 'wordCount' must be a numeric value.")
+            if not isinstance(self._wordCount, (int, float)) or isinstance(
+                self._wordCount, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'wordCount' must be a numeric value."
+                )
 
         if self._timeframe is not None:
             if not isinstance(self._timeframe, str):
-                raise ValidationError("The parameter 'timeframe' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'timeframe' must be a string value."
+                )
 
         if self._vocabulary is not None:
             valid_values = ["simple", "technical", "domain-specific", "creative"]
             if self._vocabulary not in valid_values:
-                raise ValidationError("The parameter 'vocabulary' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'vocabulary' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._custom is not None:
             if not isinstance(self._custom, str):
                 raise ValidationError("The parameter 'custom' must be a string value.")
-
 
     @property
     def wordCount(self) -> Any:
@@ -109,7 +115,9 @@ class Constraints(BaseDecorator):
         return self._timeframe
 
     @property
-    def vocabulary(self) -> Literal["simple", "technical", "domain-specific", "creative"]:
+    def vocabulary(
+        self,
+    ) -> Literal["simple", "technical", "domain-specific", "creative"]:
         """
         Get the vocabulary parameter value.
 

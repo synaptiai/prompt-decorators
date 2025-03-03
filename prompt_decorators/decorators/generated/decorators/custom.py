@@ -6,13 +6,9 @@ This module provides the Custom decorator class for use in prompt engineering.
 A meta-decorator that enables user-defined decorator behaviors through explicit rules or instructions. This provides maximum flexibility for creating specialized behaviors not covered by standard decorators.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    CustomPriorityEnum,
-)
 
 
 class Custom(BaseDecorator):
@@ -60,7 +56,9 @@ class Custom(BaseDecorator):
 
         # Validate parameters
         if self._rules is None:
-            raise ValidationError("The parameter 'rules' is required for Custom decorator.")
+            raise ValidationError(
+                "The parameter 'rules' is required for Custom decorator."
+            )
 
         if self._rules is not None:
             if not isinstance(self._rules, str):
@@ -73,8 +71,10 @@ class Custom(BaseDecorator):
         if self._priority is not None:
             valid_values = ["override", "supplement", "fallback"]
             if self._priority not in valid_values:
-                raise ValidationError("The parameter 'priority' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'priority' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def rules(self) -> str:

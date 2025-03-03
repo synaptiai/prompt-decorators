@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import StepByStep
 
 
 # Tests for the StepByStep decorator
@@ -30,7 +30,7 @@ class TestStepByStep:
         decorator_class = load_decorator("StepByStep")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['numbered'] = 'invalid'
+        params["numbered"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "numbered" in str(exc_info.value)

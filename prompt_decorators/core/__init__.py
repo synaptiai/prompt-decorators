@@ -9,8 +9,8 @@ request handling, and model-specific adaptations.
 from prompt_decorators.core.base import (
     BaseDecorator,
     Parameter,
-    ValidationError,
     ParameterType,
+    ValidationError,
 )
 
 __all__ = [

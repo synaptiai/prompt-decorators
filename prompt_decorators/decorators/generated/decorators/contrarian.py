@@ -6,13 +6,9 @@ This module provides the Contrarian decorator class for use in prompt engineerin
 Generates responses that deliberately challenge conventional wisdom or mainstream perspectives. This decorator encourages critical thinking by presenting counterarguments, alternative interpretations, or challenging established positions on a topic.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ContrarianApproachEnum,
-)
 
 
 class Contrarian(BaseDecorator):
@@ -33,7 +29,9 @@ class Contrarian(BaseDecorator):
 
     def __init__(
         self,
-        approach: Literal["outsider", "skeptic", "devil's-advocate"] = "devil's-advocate",
+        approach: Literal[
+            "outsider", "skeptic", "devil's-advocate"
+        ] = "devil's-advocate",
         maintain: bool = False,
         focus: str = None,
     ) -> None:
@@ -62,16 +60,20 @@ class Contrarian(BaseDecorator):
         if self._approach is not None:
             valid_values = ["outsider", "skeptic", "devil's-advocate"]
             if self._approach not in valid_values:
-                raise ValidationError("The parameter 'approach' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'approach' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._maintain is not None:
             if not isinstance(self._maintain, bool):
-                raise ValidationError("The parameter 'maintain' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'maintain' must be a boolean value."
+                )
 
         if self._focus is not None:
             if not isinstance(self._focus, str):
                 raise ValidationError("The parameter 'focus' must be a string value.")
-
 
     @property
     def approach(self) -> Literal["outsider", "skeptic", "devil's-advocate"]:

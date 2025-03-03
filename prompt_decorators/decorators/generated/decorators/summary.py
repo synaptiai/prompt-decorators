@@ -6,14 +6,9 @@ This module provides the Summary decorator class for use in prompt engineering.
 Provides a condensed summary of information that would otherwise be presented in a more detailed format. This decorator is useful for generating executive summaries, article summaries, or concise overviews of complex topics.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    SummaryLengthEnum,
-    SummaryPositionEnum,
-)
 
 
 class Summary(BaseDecorator):
@@ -62,17 +57,26 @@ class Summary(BaseDecorator):
         if self._length is not None:
             valid_values = ["short", "medium", "long"]
             if self._length not in valid_values:
-                raise ValidationError("The parameter 'length' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'length' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._wordCount is not None:
-            if not isinstance(self._wordCount, (int, float)) or isinstance(self._wordCount, bool):
-                raise ValidationError("The parameter 'wordCount' must be a numeric value.")
+            if not isinstance(self._wordCount, (int, float)) or isinstance(
+                self._wordCount, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'wordCount' must be a numeric value."
+                )
 
         if self._position is not None:
             valid_values = ["beginning", "end", "standalone"]
             if self._position not in valid_values:
-                raise ValidationError("The parameter 'position' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'position' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def length(self) -> Literal["short", "medium", "long"]:

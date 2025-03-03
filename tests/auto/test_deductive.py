@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Deductive
 
 
 # Tests for the Deductive decorator
@@ -32,7 +32,7 @@ class TestDeductive:
         decorator_class = load_decorator("Deductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['premises'] = 'invalid'
+        params["premises"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "premises" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestDeductive:
         decorator_class = load_decorator("Deductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['premises'] = 0
+        params["premises"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "premises" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestDeductive:
         decorator_class = load_decorator("Deductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['premises'] = 6
+        params["premises"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "premises" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestDeductive:
         decorator_class = load_decorator("Deductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['formal'] = 'invalid'
+        params["formal"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "formal" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestDeductive:
         decorator_class = load_decorator("Deductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['steps'] = 'invalid'
+        params["steps"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "steps" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestDeductive:
         decorator_class = load_decorator("Deductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['steps'] = 1
+        params["steps"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "steps" in str(exc_info.value)
@@ -98,7 +98,7 @@ class TestDeductive:
         decorator_class = load_decorator("Deductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['steps'] = 8
+        params["steps"] = 8
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "steps" in str(exc_info.value)

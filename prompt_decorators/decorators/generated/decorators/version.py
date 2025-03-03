@@ -6,8 +6,7 @@ This module provides the Version decorator class for use in prompt engineering.
 Specifies the version of the Prompt Decorators standard to use. This decorator must be the first in any sequence when used, ensuring proper interpretation of decorators according to the specified standard version.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -48,15 +47,23 @@ class Version(BaseDecorator):
 
         # Validate parameters
         if self._standard is None:
-            raise ValidationError("The parameter 'standard' is required for Version decorator.")
+            raise ValidationError(
+                "The parameter 'standard' is required for Version decorator."
+            )
 
         if self._standard is not None:
             if not isinstance(self._standard, str):
-                raise ValidationError("The parameter 'standard' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'standard' must be a string value."
+                )
             import re
-            if not re.match(r"^\d+\.\d+\.\d+$", self._standard):
-                raise ValidationError("The parameter 'standard' value '" + str(self._standard) + "' does not match the required pattern.")
 
+            if not re.match(r"^\d+\.\d+\.\d+$", self._standard):
+                raise ValidationError(
+                    "The parameter 'standard' value '"
+                    + str(self._standard)
+                    + "' does not match the required pattern."
+                )
 
     @property
     def standard(self) -> str:

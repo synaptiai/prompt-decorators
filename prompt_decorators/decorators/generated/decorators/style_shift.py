@@ -6,13 +6,9 @@ This module provides the StyleShift decorator class for use in prompt engineerin
 Modifies specific style characteristics of responses such as formality, persuasiveness, or urgency. This decorator enables fine-tuned control over particular aspects of communication style without changing the overall tone.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    StyleShiftAspectEnum,
-)
 
 
 class StyleShift(BaseDecorator):
@@ -33,7 +29,9 @@ class StyleShift(BaseDecorator):
 
     def __init__(
         self,
-        aspect: Literal["formality", "persuasion", "urgency", "confidence", "complexity"],
+        aspect: Literal[
+            "formality", "persuasion", "urgency", "confidence", "complexity"
+        ],
         level: Any = 3,
         maintain: List[Any] = None,
     ) -> None:
@@ -60,24 +58,38 @@ class StyleShift(BaseDecorator):
 
         # Validate parameters
         if self._aspect is None:
-            raise ValidationError("The parameter 'aspect' is required for StyleShift decorator.")
+            raise ValidationError(
+                "The parameter 'aspect' is required for StyleShift decorator."
+            )
 
         if self._aspect is not None:
-            valid_values = ["formality", "persuasion", "urgency", "confidence", "complexity"]
+            valid_values = [
+                "formality",
+                "persuasion",
+                "urgency",
+                "confidence",
+                "complexity",
+            ]
             if self._aspect not in valid_values:
-                raise ValidationError("The parameter 'aspect' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'aspect' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._level is not None:
-            if not isinstance(self._level, (int, float)) or isinstance(self._level, bool):
+            if not isinstance(self._level, (int, float)) or isinstance(
+                self._level, bool
+            ):
                 raise ValidationError("The parameter 'level' must be a numeric value.")
 
         if self._maintain is not None:
             if not isinstance(self._maintain, (list, tuple)):
                 raise ValidationError("The parameter 'maintain' must be an array.")
 
-
     @property
-    def aspect(self) -> Literal["formality", "persuasion", "urgency", "confidence", "complexity"]:
+    def aspect(
+        self,
+    ) -> Literal["formality", "persuasion", "urgency", "confidence", "complexity"]:
         """
         Get the aspect parameter value.
 

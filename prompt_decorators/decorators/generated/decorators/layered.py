@@ -6,14 +6,9 @@ This module provides the Layered decorator class for use in prompt engineering.
 Presents content at multiple levels of explanation depth, allowing readers to engage with information at their preferred level of detail. This decorator structures responses with progressive disclosure, from high-level summaries to increasingly detailed explanations.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    LayeredLevelsEnum,
-    LayeredProgressionEnum,
-)
 
 
 class Layered(BaseDecorator):
@@ -34,7 +29,11 @@ class Layered(BaseDecorator):
 
     def __init__(
         self,
-        levels: Literal["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"] = "summary-detail-technical",
+        levels: Literal[
+            "sentence-paragraph-full",
+            "basic-intermediate-advanced",
+            "summary-detail-technical",
+        ] = "summary-detail-technical",
         count: Any = 3,
         progression: Literal["separate", "nested", "incremental"] = "separate",
     ) -> None:
@@ -59,22 +58,39 @@ class Layered(BaseDecorator):
 
         # Validate parameters
         if self._levels is not None:
-            valid_values = ["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"]
+            valid_values = [
+                "sentence-paragraph-full",
+                "basic-intermediate-advanced",
+                "summary-detail-technical",
+            ]
             if self._levels not in valid_values:
-                raise ValidationError("The parameter 'levels' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'levels' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._count is not None:
-            if not isinstance(self._count, (int, float)) or isinstance(self._count, bool):
+            if not isinstance(self._count, (int, float)) or isinstance(
+                self._count, bool
+            ):
                 raise ValidationError("The parameter 'count' must be a numeric value.")
 
         if self._progression is not None:
             valid_values = ["separate", "nested", "incremental"]
             if self._progression not in valid_values:
-                raise ValidationError("The parameter 'progression' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'progression' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
-    def levels(self) -> Literal["sentence-paragraph-full", "basic-intermediate-advanced", "summary-detail-technical"]:
+    def levels(
+        self,
+    ) -> Literal[
+        "sentence-paragraph-full",
+        "basic-intermediate-advanced",
+        "summary-detail-technical",
+    ]:
         """
         Get the levels parameter value.
 

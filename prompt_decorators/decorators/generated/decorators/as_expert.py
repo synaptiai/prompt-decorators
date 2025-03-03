@@ -6,13 +6,9 @@ This module provides the AsExpert decorator class for use in prompt engineering.
 Generates responses from the perspective of a specified domain expert or specialist. This decorator provides authoritative content that reflects the knowledge, terminology, and analytical approach of an expert in the specified field.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    AsExpertExperienceEnum,
-)
 
 
 class AsExpert(BaseDecorator):
@@ -59,7 +55,9 @@ class AsExpert(BaseDecorator):
 
         # Validate parameters
         if self._domain is None:
-            raise ValidationError("The parameter 'domain' is required for AsExpert decorator.")
+            raise ValidationError(
+                "The parameter 'domain' is required for AsExpert decorator."
+            )
 
         if self._domain is not None:
             if not isinstance(self._domain, str):
@@ -68,12 +66,16 @@ class AsExpert(BaseDecorator):
         if self._experience is not None:
             valid_values = ["junior", "senior", "leading", "pioneering"]
             if self._experience not in valid_values:
-                raise ValidationError("The parameter 'experience' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'experience' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._technical is not None:
             if not isinstance(self._technical, bool):
-                raise ValidationError("The parameter 'technical' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'technical' must be a boolean value."
+                )
 
     @property
     def domain(self) -> str:

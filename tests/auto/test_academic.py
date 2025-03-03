@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Academic
 
 
 # Tests for the Academic decorator
@@ -31,7 +31,7 @@ class TestAcademic:
         decorator_class = load_decorator("Academic")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -42,7 +42,7 @@ class TestAcademic:
         decorator_class = load_decorator("Academic")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestAcademic:
         decorator_class = load_decorator("Academic")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['citationStyle'] = 'invalid_enum_value'
+        params["citationStyle"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "citationStyle" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestAcademic:
         decorator_class = load_decorator("Academic")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['citationStyle'] = 'invalid_enum_value'
+        params["citationStyle"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "citationStyle" in str(exc_info.value)

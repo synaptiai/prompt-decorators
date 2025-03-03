@@ -6,13 +6,9 @@ This module provides the MECE decorator class for use in prompt engineering.
 Structures the response using the Mutually Exclusive, Collectively Exhaustive framework - a principle where categories have no overlaps and cover all possibilities. This decorator ensures comprehensive analysis with clear categorization for decision-making and problem-solving.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    MECEFrameworkEnum,
-)
 
 
 class MECE(BaseDecorator):
@@ -36,7 +32,9 @@ class MECE(BaseDecorator):
         self,
         dimensions: Any = 3,
         depth: Any = 2,
-        framework: Literal["issue tree", "value chain", "business segments", "stakeholders", "custom"] = "custom",
+        framework: Literal[
+            "issue tree", "value chain", "business segments", "stakeholders", "custom"
+        ] = "custom",
     ) -> None:
         """
         Initialize the MECE decorator.
@@ -61,18 +59,32 @@ class MECE(BaseDecorator):
 
         # Validate parameters
         if self._dimensions is not None:
-            if not isinstance(self._dimensions, (int, float)) or isinstance(self._dimensions, bool):
-                raise ValidationError("The parameter 'dimensions' must be a numeric value.")
+            if not isinstance(self._dimensions, (int, float)) or isinstance(
+                self._dimensions, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'dimensions' must be a numeric value."
+                )
 
         if self._depth is not None:
-            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+            if not isinstance(self._depth, (int, float)) or isinstance(
+                self._depth, bool
+            ):
                 raise ValidationError("The parameter 'depth' must be a numeric value.")
 
         if self._framework is not None:
-            valid_values = ["issue tree", "value chain", "business segments", "stakeholders", "custom"]
+            valid_values = [
+                "issue tree",
+                "value chain",
+                "business segments",
+                "stakeholders",
+                "custom",
+            ]
             if self._framework not in valid_values:
-                raise ValidationError("The parameter 'framework' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'framework' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def dimensions(self) -> Any:
@@ -101,7 +113,11 @@ class MECE(BaseDecorator):
         return self._depth
 
     @property
-    def framework(self) -> Literal["issue tree", "value chain", "business segments", "stakeholders", "custom"]:
+    def framework(
+        self,
+    ) -> Literal[
+        "issue tree", "value chain", "business segments", "stakeholders", "custom"
+    ]:
         """
         Get the framework parameter value.
 

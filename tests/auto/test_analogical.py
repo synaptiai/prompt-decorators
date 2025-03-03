@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Analogical
 
 
 # Tests for the Analogical decorator
@@ -32,7 +32,7 @@ class TestAnalogical:
         decorator_class = load_decorator("Analogical")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['domain'] = 123
+        params["domain"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "domain" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestAnalogical:
         decorator_class = load_decorator("Analogical")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 'invalid'
+        params["count"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestAnalogical:
         decorator_class = load_decorator("Analogical")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 0
+        params["count"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestAnalogical:
         decorator_class = load_decorator("Analogical")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['count'] = 6
+        params["count"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "count" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestAnalogical:
         decorator_class = load_decorator("Analogical")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestAnalogical:
         decorator_class = load_decorator("Analogical")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)

@@ -6,8 +6,7 @@ This module provides the Chain decorator class for use in prompt engineering.
 A meta-decorator that applies multiple decorators in sequence, with each decorator processing the output of the previous one. This enables complex transformations by combining multiple simpler decorators in a pipeline.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -57,7 +56,9 @@ class Chain(BaseDecorator):
 
         # Validate parameters
         if self._decorators is None:
-            raise ValidationError("The parameter 'decorators' is required for Chain decorator.")
+            raise ValidationError(
+                "The parameter 'decorators' is required for Chain decorator."
+            )
 
         if self._decorators is not None:
             if not isinstance(self._decorators, (list, tuple)):
@@ -65,12 +66,15 @@ class Chain(BaseDecorator):
 
         if self._showSteps is not None:
             if not isinstance(self._showSteps, bool):
-                raise ValidationError("The parameter 'showSteps' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'showSteps' must be a boolean value."
+                )
 
         if self._stopOnFailure is not None:
             if not isinstance(self._stopOnFailure, bool):
-                raise ValidationError("The parameter 'stopOnFailure' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'stopOnFailure' must be a boolean value."
+                )
 
     @property
     def decorators(self) -> List[Any]:

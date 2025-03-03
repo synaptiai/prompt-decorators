@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import AsExpert
 
 
 # Tests for the AsExpert decorator
@@ -42,7 +42,7 @@ class TestAsExpert:
         decorator_class = load_decorator("AsExpert")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['domain'] = 123
+        params["domain"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "domain" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestAsExpert:
         decorator_class = load_decorator("AsExpert")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['experience'] = 'invalid_enum_value'
+        params["experience"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "experience" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestAsExpert:
         decorator_class = load_decorator("AsExpert")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['experience'] = 'invalid_enum_value'
+        params["experience"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "experience" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestAsExpert:
         decorator_class = load_decorator("AsExpert")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['technical'] = 'invalid'
+        params["technical"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "technical" in str(exc_info.value)

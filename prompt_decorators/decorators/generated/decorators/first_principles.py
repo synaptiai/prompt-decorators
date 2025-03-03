@@ -6,8 +6,7 @@ This module provides the FirstPrinciples decorator class for use in prompt engin
 Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there. This decorator promotes a deeper understanding by examining the most basic elements of a concept before constructing more complex ideas.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -47,9 +46,10 @@ class FirstPrinciples(BaseDecorator):
 
         # Validate parameters
         if self._depth is not None:
-            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+            if not isinstance(self._depth, (int, float)) or isinstance(
+                self._depth, bool
+            ):
                 raise ValidationError("The parameter 'depth' must be a numeric value.")
-
 
     @property
     def depth(self) -> Any:

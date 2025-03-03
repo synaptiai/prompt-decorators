@@ -6,8 +6,7 @@ This module provides the Socratic decorator class for use in prompt engineering.
 Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -47,9 +46,12 @@ class Socratic(BaseDecorator):
 
         # Validate parameters
         if self._iterations is not None:
-            if not isinstance(self._iterations, (int, float)) or isinstance(self._iterations, bool):
-                raise ValidationError("The parameter 'iterations' must be a numeric value.")
-
+            if not isinstance(self._iterations, (int, float)) or isinstance(
+                self._iterations, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'iterations' must be a numeric value."
+                )
 
     @property
     def iterations(self) -> Any:

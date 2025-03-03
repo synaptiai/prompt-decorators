@@ -6,8 +6,7 @@ This module provides the ELI5 decorator class for use in prompt engineering.
 Adapts the response to explain a concept as if to a 5-year-old child. This decorator simplifies complex topics using basic vocabulary, concrete examples, and relatable analogies to make information accessible to non-experts or those new to a subject.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -49,8 +48,9 @@ class ELI5(BaseDecorator):
         # Validate parameters
         if self._strictness is not None:
             if not isinstance(self._strictness, bool):
-                raise ValidationError("The parameter 'strictness' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'strictness' must be a boolean value."
+                )
 
     @property
     def strictness(self) -> bool:

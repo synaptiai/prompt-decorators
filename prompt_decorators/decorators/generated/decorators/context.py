@@ -6,14 +6,9 @@ This module provides the Context decorator class for use in prompt engineering.
 A meta-decorator that adapts standard decorators for domain-specific contexts. This provides specialized interpretations of decorators based on particular fields, industries, or subject matter to ensure appropriate adaptation to contextual requirements.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ContextScopeEnum,
-    ContextLevelEnum,
-)
 
 
 class Context(BaseDecorator):
@@ -61,7 +56,9 @@ class Context(BaseDecorator):
 
         # Validate parameters
         if self._domain is None:
-            raise ValidationError("The parameter 'domain' is required for Context decorator.")
+            raise ValidationError(
+                "The parameter 'domain' is required for Context decorator."
+            )
 
         if self._domain is not None:
             if not isinstance(self._domain, str):
@@ -70,13 +67,18 @@ class Context(BaseDecorator):
         if self._scope is not None:
             valid_values = ["terminology", "examples", "structure", "all"]
             if self._scope not in valid_values:
-                raise ValidationError("The parameter 'scope' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'scope' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._level is not None:
             valid_values = ["beginner", "intermediate", "expert", "mixed"]
             if self._level not in valid_values:
-                raise ValidationError("The parameter 'level' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'level' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def domain(self) -> str:

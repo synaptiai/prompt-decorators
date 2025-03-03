@@ -6,10 +6,9 @@ This module provides the DecoratorName decorator class for use in prompt enginee
 A detailed description of what the decorator does, its purpose, and how it modifies AI behavior.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
-from prompt_decorators.core.base import BaseDecorator, ValidationError
+from prompt_decorators.core.base import BaseDecorator
 
 
 class DecoratorName(BaseDecorator):
@@ -46,7 +45,6 @@ class DecoratorName(BaseDecorator):
         # Validate parameters
         if self._parameterName is not None:
             pass  # No specific validation for this parameter type
-
 
     @property
     def parameterName(self) -> Any:

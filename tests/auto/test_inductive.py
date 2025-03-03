@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Inductive
 
 
 # Tests for the Inductive decorator
@@ -32,7 +32,7 @@ class TestInductive:
         decorator_class = load_decorator("Inductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['examples'] = 'invalid'
+        params["examples"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "examples" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestInductive:
         decorator_class = load_decorator("Inductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['examples'] = 1
+        params["examples"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "examples" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestInductive:
         decorator_class = load_decorator("Inductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['examples'] = 11
+        params["examples"] = 11
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "examples" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestInductive:
         decorator_class = load_decorator("Inductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['confidence'] = 'invalid'
+        params["confidence"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "confidence" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestInductive:
         decorator_class = load_decorator("Inductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestInductive:
         decorator_class = load_decorator("Inductive")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['structure'] = 'invalid_enum_value'
+        params["structure"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "structure" in str(exc_info.value)

@@ -6,13 +6,9 @@ This module provides the Extremes decorator class for use in prompt engineering.
 Presents content at the extreme ends of a spectrum, showing both a radical, ambitious, or maximalist version alongside a minimal, conservative, or basic version. This decorator helps explore the range of possibilities from the simplest implementation to the most expansive vision.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ExtremesVersionsEnum,
-)
 
 
 class Extremes(BaseDecorator):
@@ -63,16 +59,22 @@ class Extremes(BaseDecorator):
         if self._versions is not None:
             valid_values = ["radical", "minimal", "both"]
             if self._versions not in valid_values:
-                raise ValidationError("The parameter 'versions' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'versions' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._dimension is not None:
             if not isinstance(self._dimension, str):
-                raise ValidationError("The parameter 'dimension' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'dimension' must be a string value."
+                )
 
         if self._compare is not None:
             if not isinstance(self._compare, bool):
-                raise ValidationError("The parameter 'compare' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'compare' must be a boolean value."
+                )
 
     @property
     def versions(self) -> Literal["radical", "minimal", "both"]:

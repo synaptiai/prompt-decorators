@@ -6,13 +6,9 @@ This module provides the Professional decorator class for use in prompt engineer
 Adapts the response to use business-oriented language appropriate for professional contexts. This decorator generates content using formal business terminology, clear and concise phrasing, and industry-appropriate jargon when relevant.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ProfessionalFormalityEnum,
-)
 
 
 class Professional(BaseDecorator):
@@ -55,13 +51,17 @@ class Professional(BaseDecorator):
         # Validate parameters
         if self._industry is not None:
             if not isinstance(self._industry, str):
-                raise ValidationError("The parameter 'industry' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'industry' must be a string value."
+                )
 
         if self._formality is not None:
             valid_values = ["standard", "high", "executive"]
             if self._formality not in valid_values:
-                raise ValidationError("The parameter 'formality' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'formality' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def industry(self) -> str:

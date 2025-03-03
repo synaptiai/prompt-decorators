@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import DecisionMatrix
 
 
 # Tests for the DecisionMatrix decorator
@@ -33,7 +33,7 @@ class TestDecisionMatrix:
         decorator_class = load_decorator("DecisionMatrix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['options'] = 'invalid'
+        params["options"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "options" in str(exc_info.value)
@@ -44,7 +44,7 @@ class TestDecisionMatrix:
         decorator_class = load_decorator("DecisionMatrix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['criteria'] = 'invalid'
+        params["criteria"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "criteria" in str(exc_info.value)
@@ -55,7 +55,7 @@ class TestDecisionMatrix:
         decorator_class = load_decorator("DecisionMatrix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['weighted'] = 'invalid'
+        params["weighted"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "weighted" in str(exc_info.value)
@@ -66,7 +66,7 @@ class TestDecisionMatrix:
         decorator_class = load_decorator("DecisionMatrix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scale'] = 'invalid_enum_value'
+        params["scale"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scale" in str(exc_info.value)
@@ -77,7 +77,7 @@ class TestDecisionMatrix:
         decorator_class = load_decorator("DecisionMatrix")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scale'] = 'invalid_enum_value'
+        params["scale"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scale" in str(exc_info.value)

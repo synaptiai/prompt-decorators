@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Override
 
 
 # Tests for the Override decorator
@@ -42,7 +42,7 @@ class TestOverride:
         decorator_class = load_decorator("Override")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['decorator'] = 123
+        params["decorator"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "decorator" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestOverride:
         decorator_class = load_decorator("Override")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['parameters'] = 123
+        params["parameters"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "parameters" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestOverride:
         decorator_class = load_decorator("Override")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['behavior'] = 123
+        params["behavior"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "behavior" in str(exc_info.value)

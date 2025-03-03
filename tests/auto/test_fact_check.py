@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import FactCheck
 
 
 # Tests for the FactCheck decorator
@@ -32,7 +32,7 @@ class TestFactCheck:
         decorator_class = load_decorator("FactCheck")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['confidence'] = 'invalid'
+        params["confidence"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "confidence" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestFactCheck:
         decorator_class = load_decorator("FactCheck")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['uncertain'] = 'invalid_enum_value'
+        params["uncertain"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "uncertain" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestFactCheck:
         decorator_class = load_decorator("FactCheck")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['uncertain'] = 'invalid_enum_value'
+        params["uncertain"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "uncertain" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestFactCheck:
         decorator_class = load_decorator("FactCheck")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['strictness'] = 'invalid_enum_value'
+        params["strictness"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "strictness" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestFactCheck:
         decorator_class = load_decorator("FactCheck")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['strictness'] = 'invalid_enum_value'
+        params["strictness"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "strictness" in str(exc_info.value)

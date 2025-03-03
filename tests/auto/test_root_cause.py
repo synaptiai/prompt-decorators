@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import RootCause
 
 
 # Tests for the RootCause decorator
@@ -31,7 +31,7 @@ class TestRootCause:
         decorator_class = load_decorator("RootCause")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['method'] = 'invalid_enum_value'
+        params["method"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "method" in str(exc_info.value)
@@ -42,7 +42,7 @@ class TestRootCause:
         decorator_class = load_decorator("RootCause")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['method'] = 'invalid_enum_value'
+        params["method"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "method" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestRootCause:
         decorator_class = load_decorator("RootCause")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid'
+        params["depth"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestRootCause:
         decorator_class = load_decorator("RootCause")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 2
+        params["depth"] = 2
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestRootCause:
         decorator_class = load_decorator("RootCause")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 8
+        params["depth"] = 8
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)

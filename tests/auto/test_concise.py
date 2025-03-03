@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Concise
 
 
 # Tests for the Concise decorator
@@ -32,7 +32,7 @@ class TestConcise:
         decorator_class = load_decorator("Concise")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['maxWords'] = 'invalid'
+        params["maxWords"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "maxWords" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestConcise:
         decorator_class = load_decorator("Concise")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['maxWords'] = 9
+        params["maxWords"] = 9
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "maxWords" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestConcise:
         decorator_class = load_decorator("Concise")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['maxWords'] = 501
+        params["maxWords"] = 501
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "maxWords" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestConcise:
         decorator_class = load_decorator("Concise")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['bulletPoints'] = 'invalid'
+        params["bulletPoints"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "bulletPoints" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestConcise:
         decorator_class = load_decorator("Concise")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 'invalid_enum_value'
+        params["level"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestConcise:
         decorator_class = load_decorator("Concise")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 'invalid_enum_value'
+        params["level"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)

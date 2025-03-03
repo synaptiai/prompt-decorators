@@ -6,8 +6,7 @@ This module provides the StepByStep decorator class for use in prompt engineerin
 Structures the AI's response as a sequence of clearly labeled steps. This decorator helps break down complex processes, explanations, or solutions into manageable, sequential parts for better understanding.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -47,8 +46,9 @@ class StepByStep(BaseDecorator):
         # Validate parameters
         if self._numbered is not None:
             if not isinstance(self._numbered, bool):
-                raise ValidationError("The parameter 'numbered' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'numbered' must be a boolean value."
+                )
 
     @property
     def numbered(self) -> bool:

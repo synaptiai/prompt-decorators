@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import BuildOn
 
 
 # Tests for the BuildOn decorator
@@ -32,7 +32,7 @@ class TestBuildOn:
         decorator_class = load_decorator("BuildOn")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['reference'] = 'invalid_enum_value'
+        params["reference"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "reference" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestBuildOn:
         decorator_class = load_decorator("BuildOn")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['reference'] = 'invalid_enum_value'
+        params["reference"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "reference" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestBuildOn:
         decorator_class = load_decorator("BuildOn")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['approach'] = 'invalid_enum_value'
+        params["approach"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "approach" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestBuildOn:
         decorator_class = load_decorator("BuildOn")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['approach'] = 'invalid_enum_value'
+        params["approach"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "approach" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestBuildOn:
         decorator_class = load_decorator("BuildOn")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['preserveStructure'] = 'invalid'
+        params["preserveStructure"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "preserveStructure" in str(exc_info.value)

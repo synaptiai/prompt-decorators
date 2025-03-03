@@ -6,8 +6,7 @@ This module provides the Extension decorator class for use in prompt engineering
 A meta-decorator that enables loading of community-defined decorators from external sources. This facilitates the use of specialized decorator packages, domain-specific extensions, or custom decorator libraries maintained by communities or organizations.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -57,7 +56,9 @@ class Extension(BaseDecorator):
 
         # Validate parameters
         if self._source is None:
-            raise ValidationError("The parameter 'source' is required for Extension decorator.")
+            raise ValidationError(
+                "The parameter 'source' is required for Extension decorator."
+            )
 
         if self._source is not None:
             if not isinstance(self._source, str):
@@ -70,7 +71,6 @@ class Extension(BaseDecorator):
         if self._decorators is not None:
             if not isinstance(self._decorators, (list, tuple)):
                 raise ValidationError("The parameter 'decorators' must be an array.")
-
 
     @property
     def source(self) -> str:

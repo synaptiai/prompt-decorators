@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import FirstPrinciples
 
 
 # Tests for the FirstPrinciples decorator
@@ -30,7 +30,7 @@ class TestFirstPrinciples:
         decorator_class = load_decorator("FirstPrinciples")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid'
+        params["depth"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -41,7 +41,7 @@ class TestFirstPrinciples:
         decorator_class = load_decorator("FirstPrinciples")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 0
+        params["depth"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -52,7 +52,7 @@ class TestFirstPrinciples:
         decorator_class = load_decorator("FirstPrinciples")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 6
+        params["depth"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)

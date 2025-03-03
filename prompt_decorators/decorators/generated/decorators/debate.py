@@ -6,8 +6,7 @@ This module provides the Debate decorator class for use in prompt engineering.
 Structures the response as a debate between multiple perspectives on a topic. This decorator encourages balanced representation of different viewpoints and helps explore complex issues from various angles.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -51,13 +50,18 @@ class Debate(BaseDecorator):
 
         # Validate parameters
         if self._perspectives is not None:
-            if not isinstance(self._perspectives, (int, float)) or isinstance(self._perspectives, bool):
-                raise ValidationError("The parameter 'perspectives' must be a numeric value.")
+            if not isinstance(self._perspectives, (int, float)) or isinstance(
+                self._perspectives, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'perspectives' must be a numeric value."
+                )
 
         if self._balanced is not None:
             if not isinstance(self._balanced, bool):
-                raise ValidationError("The parameter 'balanced' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'balanced' must be a boolean value."
+                )
 
     @property
     def perspectives(self) -> Any:

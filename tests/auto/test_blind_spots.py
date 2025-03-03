@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import BlindSpots
 
 
 # Tests for the BlindSpots decorator
@@ -32,7 +32,7 @@ class TestBlindSpots:
         decorator_class = load_decorator("BlindSpots")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['categories'] = 'invalid'
+        params["categories"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "categories" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestBlindSpots:
         decorator_class = load_decorator("BlindSpots")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestBlindSpots:
         decorator_class = load_decorator("BlindSpots")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid_enum_value'
+        params["depth"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestBlindSpots:
         decorator_class = load_decorator("BlindSpots")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['position'] = 'invalid_enum_value'
+        params["position"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "position" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestBlindSpots:
         decorator_class = load_decorator("BlindSpots")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['position'] = 'invalid_enum_value'
+        params["position"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "position" in str(exc_info.value)

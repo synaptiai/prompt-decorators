@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Socratic
 
 
 # Tests for the Socratic decorator
@@ -30,7 +30,7 @@ class TestSocratic:
         decorator_class = load_decorator("Socratic")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['iterations'] = 'invalid'
+        params["iterations"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "iterations" in str(exc_info.value)
@@ -41,7 +41,7 @@ class TestSocratic:
         decorator_class = load_decorator("Socratic")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['iterations'] = 0
+        params["iterations"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "iterations" in str(exc_info.value)
@@ -52,7 +52,7 @@ class TestSocratic:
         decorator_class = load_decorator("Socratic")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['iterations'] = 6
+        params["iterations"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "iterations" in str(exc_info.value)

@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import StyleShift
 
 
 # Tests for the StyleShift decorator
@@ -42,7 +42,7 @@ class TestStyleShift:
         decorator_class = load_decorator("StyleShift")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['aspect'] = 'invalid_enum_value'
+        params["aspect"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "aspect" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestStyleShift:
         decorator_class = load_decorator("StyleShift")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['aspect'] = 'invalid_enum_value'
+        params["aspect"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "aspect" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestStyleShift:
         decorator_class = load_decorator("StyleShift")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 'invalid'
+        params["level"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestStyleShift:
         decorator_class = load_decorator("StyleShift")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 0
+        params["level"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)
@@ -86,7 +86,7 @@ class TestStyleShift:
         decorator_class = load_decorator("StyleShift")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 6
+        params["level"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)
@@ -97,7 +97,7 @@ class TestStyleShift:
         decorator_class = load_decorator("StyleShift")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['maintain'] = 'invalid'
+        params["maintain"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "maintain" in str(exc_info.value)

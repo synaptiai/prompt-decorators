@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import TableFormat
 
 
 # Tests for the TableFormat decorator
@@ -42,7 +42,7 @@ class TestTableFormat:
         decorator_class = load_decorator("TableFormat")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['columns'] = 'invalid'
+        params["columns"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "columns" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestTableFormat:
         decorator_class = load_decorator("TableFormat")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestTableFormat:
         decorator_class = load_decorator("TableFormat")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestTableFormat:
         decorator_class = load_decorator("TableFormat")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['alignment'] = 'invalid_enum_value'
+        params["alignment"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "alignment" in str(exc_info.value)
@@ -86,7 +86,7 @@ class TestTableFormat:
         decorator_class = load_decorator("TableFormat")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['alignment'] = 'invalid_enum_value'
+        params["alignment"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "alignment" in str(exc_info.value)

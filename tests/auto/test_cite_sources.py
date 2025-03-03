@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import CiteSources
 
 
 # Tests for the CiteSources decorator
@@ -32,7 +32,7 @@ class TestCiteSources:
         decorator_class = load_decorator("CiteSources")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestCiteSources:
         decorator_class = load_decorator("CiteSources")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['style'] = 'invalid_enum_value'
+        params["style"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "style" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestCiteSources:
         decorator_class = load_decorator("CiteSources")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestCiteSources:
         decorator_class = load_decorator("CiteSources")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestCiteSources:
         decorator_class = load_decorator("CiteSources")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['comprehensive'] = 'invalid'
+        params["comprehensive"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "comprehensive" in str(exc_info.value)

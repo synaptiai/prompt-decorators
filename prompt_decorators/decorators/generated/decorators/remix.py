@@ -6,13 +6,9 @@ This module provides the Remix decorator class for use in prompt engineering.
 Reframes or adapts content for a different context, purpose, or audience than originally intended. This decorator transforms the presentation style while preserving core information, making it accessible and relevant to specific scenarios or demographics.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    RemixPreserveEnum,
-)
 
 
 class Remix(BaseDecorator):
@@ -62,7 +58,9 @@ class Remix(BaseDecorator):
 
         # Validate parameters
         if self._target is None:
-            raise ValidationError("The parameter 'target' is required for Remix decorator.")
+            raise ValidationError(
+                "The parameter 'target' is required for Remix decorator."
+            )
 
         if self._target is not None:
             if not isinstance(self._target, str):
@@ -71,12 +69,16 @@ class Remix(BaseDecorator):
         if self._preserve is not None:
             valid_values = ["facts", "structure", "tone", "comprehensiveness"]
             if self._preserve not in valid_values:
-                raise ValidationError("The parameter 'preserve' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'preserve' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._contrast is not None:
             if not isinstance(self._contrast, bool):
-                raise ValidationError("The parameter 'contrast' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'contrast' must be a boolean value."
+                )
 
     @property
     def target(self) -> str:

@@ -6,8 +6,7 @@ This module provides the Abductive decorator class for use in prompt engineering
 Structures the response using abductive reasoning, developing the most likely explanations for observations or phenomena. This decorator emphasizes inference to the best explanation and hypothetical reasoning to address incomplete information.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -56,8 +55,12 @@ class Abductive(BaseDecorator):
 
         # Validate parameters
         if self._hypotheses is not None:
-            if not isinstance(self._hypotheses, (int, float)) or isinstance(self._hypotheses, bool):
-                raise ValidationError("The parameter 'hypotheses' must be a numeric value.")
+            if not isinstance(self._hypotheses, (int, float)) or isinstance(
+                self._hypotheses, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'hypotheses' must be a numeric value."
+                )
 
         if self._criteria is not None:
             if not isinstance(self._criteria, (list, tuple)):
@@ -66,7 +69,6 @@ class Abductive(BaseDecorator):
         if self._rank is not None:
             if not isinstance(self._rank, bool):
                 raise ValidationError("The parameter 'rank' must be a boolean value.")
-
 
     @property
     def hypotheses(self) -> Any:

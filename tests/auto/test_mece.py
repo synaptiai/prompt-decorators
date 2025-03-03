@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import MECE
 
 
 # Tests for the MECE decorator
@@ -32,7 +32,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['dimensions'] = 'invalid'
+        params["dimensions"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "dimensions" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['dimensions'] = 1
+        params["dimensions"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "dimensions" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['dimensions'] = 6
+        params["dimensions"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "dimensions" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 'invalid'
+        params["depth"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 0
+        params["depth"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -87,7 +87,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['depth'] = 4
+        params["depth"] = 4
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "depth" in str(exc_info.value)
@@ -98,7 +98,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['framework'] = 'invalid_enum_value'
+        params["framework"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "framework" in str(exc_info.value)
@@ -109,7 +109,7 @@ class TestMECE:
         decorator_class = load_decorator("MECE")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['framework'] = 'invalid_enum_value'
+        params["framework"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "framework" in str(exc_info.value)

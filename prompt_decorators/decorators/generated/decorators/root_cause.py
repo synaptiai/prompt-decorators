@@ -6,13 +6,9 @@ This module provides the RootCause decorator class for use in prompt engineering
 Structures the response to systematically analyze underlying causes of problems or situations. This decorator applies formal root cause analysis methodologies to identify fundamental factors rather than just symptoms or immediate causes.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    RootCauseMethodEnum,
-)
 
 
 class RootCause(BaseDecorator):
@@ -57,12 +53,16 @@ class RootCause(BaseDecorator):
         if self._method is not None:
             valid_values = ["5whys", "fishbone", "pareto"]
             if self._method not in valid_values:
-                raise ValidationError("The parameter 'method' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'method' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._depth is not None:
-            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+            if not isinstance(self._depth, (int, float)) or isinstance(
+                self._depth, bool
+            ):
                 raise ValidationError("The parameter 'depth' must be a numeric value.")
-
 
     @property
     def method(self) -> Literal["5whys", "fishbone", "pareto"]:

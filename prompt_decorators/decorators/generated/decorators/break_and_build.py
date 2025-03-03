@@ -6,14 +6,9 @@ This module provides the BreakAndBuild decorator class for use in prompt enginee
 Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    BreakAndBuildBreakdownEnum,
-    BreakAndBuildIntensityEnum,
-)
 
 
 class BreakAndBuild(BaseDecorator):
@@ -35,7 +30,9 @@ class BreakAndBuild(BaseDecorator):
 
     def __init__(
         self,
-        breakdown: Literal["weaknesses", "assumptions", "risks", "comprehensive"] = "comprehensive",
+        breakdown: Literal[
+            "weaknesses", "assumptions", "risks", "comprehensive"
+        ] = "comprehensive",
         intensity: Literal["mild", "thorough", "intense"] = "thorough",
         buildRatio: Any = 1,
     ) -> None:
@@ -63,20 +60,31 @@ class BreakAndBuild(BaseDecorator):
         if self._breakdown is not None:
             valid_values = ["weaknesses", "assumptions", "risks", "comprehensive"]
             if self._breakdown not in valid_values:
-                raise ValidationError("The parameter 'breakdown' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'breakdown' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._intensity is not None:
             valid_values = ["mild", "thorough", "intense"]
             if self._intensity not in valid_values:
-                raise ValidationError("The parameter 'intensity' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'intensity' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._buildRatio is not None:
-            if not isinstance(self._buildRatio, (int, float)) or isinstance(self._buildRatio, bool):
-                raise ValidationError("The parameter 'buildRatio' must be a numeric value.")
-
+            if not isinstance(self._buildRatio, (int, float)) or isinstance(
+                self._buildRatio, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'buildRatio' must be a numeric value."
+                )
 
     @property
-    def breakdown(self) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
+    def breakdown(
+        self,
+    ) -> Literal["weaknesses", "assumptions", "risks", "comprehensive"]:
         """
         Get the breakdown parameter value.
 

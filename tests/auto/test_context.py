@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Context
 
 
 # Tests for the Context decorator
@@ -42,7 +42,7 @@ class TestContext:
         decorator_class = load_decorator("Context")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['domain'] = 123
+        params["domain"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "domain" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestContext:
         decorator_class = load_decorator("Context")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scope'] = 'invalid_enum_value'
+        params["scope"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scope" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestContext:
         decorator_class = load_decorator("Context")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['scope'] = 'invalid_enum_value'
+        params["scope"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "scope" in str(exc_info.value)
@@ -75,7 +75,7 @@ class TestContext:
         decorator_class = load_decorator("Context")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 'invalid_enum_value'
+        params["level"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)
@@ -86,7 +86,7 @@ class TestContext:
         decorator_class = load_decorator("Context")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['level'] = 'invalid_enum_value'
+        params["level"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "level" in str(exc_info.value)

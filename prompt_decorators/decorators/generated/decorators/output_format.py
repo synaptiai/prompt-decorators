@@ -6,13 +6,9 @@ This module provides the OutputFormat decorator class for use in prompt engineer
 Specifies the format of the AI's response. This decorator ensures the output follows a specific format, making it easier to parse, display, or process the response in a consistent way.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    OutputFormatFormatEnum,
-)
 
 
 class OutputFormat(BaseDecorator):
@@ -49,13 +45,17 @@ class OutputFormat(BaseDecorator):
 
         # Validate parameters
         if self._format is None:
-            raise ValidationError("The parameter 'format' is required for OutputFormat decorator.")
+            raise ValidationError(
+                "The parameter 'format' is required for OutputFormat decorator."
+            )
 
         if self._format is not None:
             valid_values = ["json", "markdown", "yaml", "xml", "plaintext"]
             if self._format not in valid_values:
-                raise ValidationError("The parameter 'format' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'format' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def format(self) -> Literal["json", "markdown", "yaml", "xml", "plaintext"]:

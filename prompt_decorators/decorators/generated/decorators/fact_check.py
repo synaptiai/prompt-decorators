@@ -6,14 +6,9 @@ This module provides the FactCheck decorator class for use in prompt engineering
 Enhances the response with verification of factual claims and explicit indication of confidence levels. This decorator promotes accuracy by distinguishing between well-established facts, likely facts, and uncertain or speculative information.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    FactCheckUncertainEnum,
-    FactCheckStrictnessEnum,
-)
 
 
 class FactCheck(BaseDecorator):
@@ -60,18 +55,25 @@ class FactCheck(BaseDecorator):
         # Validate parameters
         if self._confidence is not None:
             if not isinstance(self._confidence, bool):
-                raise ValidationError("The parameter 'confidence' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'confidence' must be a boolean value."
+                )
 
         if self._uncertain is not None:
             valid_values = ["mark", "exclude", "qualify"]
             if self._uncertain not in valid_values:
-                raise ValidationError("The parameter 'uncertain' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'uncertain' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._strictness is not None:
             valid_values = ["low", "moderate", "high"]
             if self._strictness not in valid_values:
-                raise ValidationError("The parameter 'strictness' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'strictness' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def confidence(self) -> bool:

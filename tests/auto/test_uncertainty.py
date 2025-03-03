@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Uncertainty
 
 
 # Tests for the Uncertainty decorator
@@ -32,7 +32,7 @@ class TestUncertainty:
         decorator_class = load_decorator("Uncertainty")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestUncertainty:
         decorator_class = load_decorator("Uncertainty")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['format'] = 'invalid_enum_value'
+        params["format"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "format" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestUncertainty:
         decorator_class = load_decorator("Uncertainty")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['threshold'] = 'invalid_enum_value'
+        params["threshold"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "threshold" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestUncertainty:
         decorator_class = load_decorator("Uncertainty")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['threshold'] = 'invalid_enum_value'
+        params["threshold"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "threshold" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestUncertainty:
         decorator_class = load_decorator("Uncertainty")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['reason'] = 'invalid'
+        params["reason"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "reason" in str(exc_info.value)

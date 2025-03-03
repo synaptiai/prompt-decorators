@@ -6,8 +6,7 @@ This module provides the Prioritize decorator class for use in prompt engineerin
 Structures the response by ranking information according to importance, urgency, or impact. This decorator helps identify the most critical aspects of a topic and presents information in a hierarchical manner from most to least important.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -58,16 +57,21 @@ class Prioritize(BaseDecorator):
         # Validate parameters
         if self._criteria is not None:
             if not isinstance(self._criteria, str):
-                raise ValidationError("The parameter 'criteria' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'criteria' must be a string value."
+                )
 
         if self._count is not None:
-            if not isinstance(self._count, (int, float)) or isinstance(self._count, bool):
+            if not isinstance(self._count, (int, float)) or isinstance(
+                self._count, bool
+            ):
                 raise ValidationError("The parameter 'count' must be a numeric value.")
 
         if self._showRationale is not None:
             if not isinstance(self._showRationale, bool):
-                raise ValidationError("The parameter 'showRationale' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'showRationale' must be a boolean value."
+                )
 
     @property
     def criteria(self) -> str:

@@ -6,13 +6,9 @@ This module provides the Comparison decorator class for use in prompt engineerin
 Structures the response as a direct comparison between multiple items, concepts, or approaches. This decorator is ideal for highlighting similarities and differences across specific dimensions or criteria.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ComparisonFormatEnum,
-)
 
 
 class Comparison(BaseDecorator):
@@ -63,12 +59,16 @@ class Comparison(BaseDecorator):
         if self._format is not None:
             valid_values = ["table", "prose", "bullets"]
             if self._format not in valid_values:
-                raise ValidationError("The parameter 'format' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'format' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._highlight is not None:
             if not isinstance(self._highlight, bool):
-                raise ValidationError("The parameter 'highlight' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'highlight' must be a boolean value."
+                )
 
     @property
     def aspects(self) -> List[Any]:

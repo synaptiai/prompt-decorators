@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Extension
 
 
 # Tests for the Extension decorator
@@ -42,7 +42,7 @@ class TestExtension:
         decorator_class = load_decorator("Extension")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['source'] = 123
+        params["source"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "source" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestExtension:
         decorator_class = load_decorator("Extension")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['version'] = 123
+        params["version"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "version" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestExtension:
         decorator_class = load_decorator("Extension")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['decorators'] = 'invalid'
+        params["decorators"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "decorators" in str(exc_info.value)

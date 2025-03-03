@@ -6,13 +6,9 @@ This module provides the Analogical decorator class for use in prompt engineerin
 Enhances explanations through the use of analogies and metaphors. This decorator helps make complex or abstract concepts more accessible by systematically comparing them to more familiar domains or experiences.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    AnalogicalDepthEnum,
-)
 
 
 class Analogical(BaseDecorator):
@@ -62,14 +58,18 @@ class Analogical(BaseDecorator):
                 raise ValidationError("The parameter 'domain' must be a string value.")
 
         if self._count is not None:
-            if not isinstance(self._count, (int, float)) or isinstance(self._count, bool):
+            if not isinstance(self._count, (int, float)) or isinstance(
+                self._count, bool
+            ):
                 raise ValidationError("The parameter 'count' must be a numeric value.")
 
         if self._depth is not None:
             valid_values = ["brief", "moderate", "extended"]
             if self._depth not in valid_values:
-                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'depth' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def domain(self) -> str:

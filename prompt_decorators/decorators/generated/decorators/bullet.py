@@ -6,13 +6,9 @@ This module provides the Bullet decorator class for use in prompt engineering.
 Formats the response as a bulleted list, making information easier to scan and digest. This decorator is ideal for presenting sequential steps, key points, or collections of related items in a clean, concise format.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    BulletStyleEnum,
-)
 
 
 class Bullet(BaseDecorator):
@@ -61,16 +57,22 @@ class Bullet(BaseDecorator):
         if self._style is not None:
             valid_values = ["dash", "dot", "arrow", "star", "plus"]
             if self._style not in valid_values:
-                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'style' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._indented is not None:
             if not isinstance(self._indented, bool):
-                raise ValidationError("The parameter 'indented' must be a boolean value.")
+                raise ValidationError(
+                    "The parameter 'indented' must be a boolean value."
+                )
 
         if self._compact is not None:
             if not isinstance(self._compact, bool):
-                raise ValidationError("The parameter 'compact' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'compact' must be a boolean value."
+                )
 
     @property
     def style(self) -> Literal["dash", "dot", "arrow", "star", "plus"]:

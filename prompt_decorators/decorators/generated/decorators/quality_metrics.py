@@ -6,13 +6,9 @@ This module provides the QualityMetrics decorator class for use in prompt engine
 Applies specific quality measurements to evaluate content against defined criteria. This decorator enhances verification by providing quantifiable assessments of aspects like accuracy, completeness, clarity, or other custom metrics.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    QualityMetricsScaleEnum,
-)
 
 
 class QualityMetrics(BaseDecorator):
@@ -66,12 +62,16 @@ class QualityMetrics(BaseDecorator):
         if self._scale is not None:
             valid_values = ["1-5", "1-10", "percentage", "qualitative"]
             if self._scale not in valid_values:
-                raise ValidationError("The parameter 'scale' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'scale' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._explanation is not None:
             if not isinstance(self._explanation, bool):
-                raise ValidationError("The parameter 'explanation' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'explanation' must be a boolean value."
+                )
 
     @property
     def metrics(self) -> List[Any]:

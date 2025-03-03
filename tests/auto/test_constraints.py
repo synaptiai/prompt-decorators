@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Constraints
 
 
 # Tests for the Constraints decorator
@@ -33,7 +33,7 @@ class TestConstraints:
         decorator_class = load_decorator("Constraints")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['wordCount'] = 'invalid'
+        params["wordCount"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "wordCount" in str(exc_info.value)
@@ -44,7 +44,7 @@ class TestConstraints:
         decorator_class = load_decorator("Constraints")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['wordCount'] = 9
+        params["wordCount"] = 9
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "wordCount" in str(exc_info.value)
@@ -55,7 +55,7 @@ class TestConstraints:
         decorator_class = load_decorator("Constraints")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['wordCount'] = 1001
+        params["wordCount"] = 1001
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "wordCount" in str(exc_info.value)
@@ -66,7 +66,7 @@ class TestConstraints:
         decorator_class = load_decorator("Constraints")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['timeframe'] = 123
+        params["timeframe"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "timeframe" in str(exc_info.value)
@@ -77,7 +77,7 @@ class TestConstraints:
         decorator_class = load_decorator("Constraints")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['vocabulary'] = 'invalid_enum_value'
+        params["vocabulary"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "vocabulary" in str(exc_info.value)
@@ -88,7 +88,7 @@ class TestConstraints:
         decorator_class = load_decorator("Constraints")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['vocabulary'] = 'invalid_enum_value'
+        params["vocabulary"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "vocabulary" in str(exc_info.value)
@@ -99,7 +99,7 @@ class TestConstraints:
         decorator_class = load_decorator("Constraints")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['custom'] = 123
+        params["custom"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "custom" in str(exc_info.value)

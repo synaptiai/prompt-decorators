@@ -6,14 +6,9 @@ This module provides the TableFormat decorator class for use in prompt engineeri
 Structures the AI's response in a tabular format with defined columns. This decorator is ideal for presenting comparative data, lists of items with attributes, or any information that benefits from clear columnar organization.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    TableFormatFormatEnum,
-    TableFormatAlignmentEnum,
-)
 
 
 class TableFormat(BaseDecorator):
@@ -59,7 +54,9 @@ class TableFormat(BaseDecorator):
 
         # Validate parameters
         if self._columns is None:
-            raise ValidationError("The parameter 'columns' is required for TableFormat decorator.")
+            raise ValidationError(
+                "The parameter 'columns' is required for TableFormat decorator."
+            )
 
         if self._columns is not None:
             if not isinstance(self._columns, (list, tuple)):
@@ -68,13 +65,18 @@ class TableFormat(BaseDecorator):
         if self._format is not None:
             valid_values = ["markdown", "ascii", "csv"]
             if self._format not in valid_values:
-                raise ValidationError("The parameter 'format' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'format' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._alignment is not None:
             valid_values = ["left", "center", "right"]
             if self._alignment not in valid_values:
-                raise ValidationError("The parameter 'alignment' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'alignment' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def columns(self) -> List[Any]:

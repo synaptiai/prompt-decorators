@@ -6,13 +6,9 @@ This module provides the Balanced decorator class for use in prompt engineering.
 Ensures equal representation of different perspectives or viewpoints on a topic. This decorator promotes fairness and comprehensiveness by giving proportional attention to multiple sides of an issue, avoiding bias toward any particular position.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    BalancedStructureEnum,
-)
 
 
 class Balanced(BaseDecorator):
@@ -59,18 +55,24 @@ class Balanced(BaseDecorator):
 
         # Validate parameters
         if self._perspectives is not None:
-            if not isinstance(self._perspectives, (int, float)) or isinstance(self._perspectives, bool):
-                raise ValidationError("The parameter 'perspectives' must be a numeric value.")
+            if not isinstance(self._perspectives, (int, float)) or isinstance(
+                self._perspectives, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'perspectives' must be a numeric value."
+                )
 
         if self._structure is not None:
             valid_values = ["alternating", "sequential", "comparative"]
             if self._structure not in valid_values:
-                raise ValidationError("The parameter 'structure' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'structure' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._equal is not None:
             if not isinstance(self._equal, bool):
                 raise ValidationError("The parameter 'equal' must be a boolean value.")
-
 
     @property
     def perspectives(self) -> Any:

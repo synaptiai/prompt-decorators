@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Conditional
 
 
 # Tests for the Conditional decorator
@@ -42,7 +42,7 @@ class TestConditional:
         decorator_class = load_decorator("Conditional")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['if_param'] = 123
+        params["if_param"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "if_param" in str(exc_info.value)
@@ -62,7 +62,7 @@ class TestConditional:
         decorator_class = load_decorator("Conditional")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['then'] = 123
+        params["then"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "then" in str(exc_info.value)
@@ -73,7 +73,7 @@ class TestConditional:
         decorator_class = load_decorator("Conditional")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['else_param'] = 123
+        params["else_param"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "else_param" in str(exc_info.value)

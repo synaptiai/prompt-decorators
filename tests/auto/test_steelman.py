@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Steelman
 
 
 # Tests for the Steelman decorator
@@ -32,7 +32,7 @@ class TestSteelman:
         decorator_class = load_decorator("Steelman")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['sides'] = 'invalid'
+        params["sides"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "sides" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestSteelman:
         decorator_class = load_decorator("Steelman")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['sides'] = 0
+        params["sides"] = 0
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "sides" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestSteelman:
         decorator_class = load_decorator("Steelman")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['sides'] = 6
+        params["sides"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "sides" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestSteelman:
         decorator_class = load_decorator("Steelman")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['critique'] = 'invalid'
+        params["critique"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "critique" in str(exc_info.value)
@@ -76,7 +76,7 @@ class TestSteelman:
         decorator_class = load_decorator("Steelman")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['separation'] = 'invalid'
+        params["separation"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "separation" in str(exc_info.value)

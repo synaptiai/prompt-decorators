@@ -6,13 +6,9 @@ This module provides the ForcedAnalogy decorator class for use in prompt enginee
 Explains concepts by specifically comparing them to a particular domain or field. This decorator forces analogies from a specified source domain to make complex or unfamiliar topics more relatable and understandable.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    ForcedAnalogyComprehensivenessEnum,
-)
 
 
 class ForcedAnalogy(BaseDecorator):
@@ -34,7 +30,9 @@ class ForcedAnalogy(BaseDecorator):
     def __init__(
         self,
         source: str,
-        comprehensiveness: Literal["basic", "comprehensive", "detailed"] = "comprehensive",
+        comprehensiveness: Literal[
+            "basic", "comprehensive", "detailed"
+        ] = "comprehensive",
         mappings: Any = 3,
     ) -> None:
         """
@@ -60,7 +58,9 @@ class ForcedAnalogy(BaseDecorator):
 
         # Validate parameters
         if self._source is None:
-            raise ValidationError("The parameter 'source' is required for ForcedAnalogy decorator.")
+            raise ValidationError(
+                "The parameter 'source' is required for ForcedAnalogy decorator."
+            )
 
         if self._source is not None:
             if not isinstance(self._source, str):
@@ -69,12 +69,18 @@ class ForcedAnalogy(BaseDecorator):
         if self._comprehensiveness is not None:
             valid_values = ["basic", "comprehensive", "detailed"]
             if self._comprehensiveness not in valid_values:
-                raise ValidationError("The parameter 'comprehensiveness' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'comprehensiveness' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._mappings is not None:
-            if not isinstance(self._mappings, (int, float)) or isinstance(self._mappings, bool):
-                raise ValidationError("The parameter 'mappings' must be a numeric value.")
-
+            if not isinstance(self._mappings, (int, float)) or isinstance(
+                self._mappings, bool
+            ):
+                raise ValidationError(
+                    "The parameter 'mappings' must be a numeric value."
+                )
 
     @property
     def source(self) -> str:

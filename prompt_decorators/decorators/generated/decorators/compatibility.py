@@ -6,8 +6,7 @@ This module provides the Compatibility decorator class for use in prompt enginee
 A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -59,7 +58,9 @@ class Compatibility(BaseDecorator):
 
         # Validate parameters
         if self._models is None:
-            raise ValidationError("The parameter 'models' is required for Compatibility decorator.")
+            raise ValidationError(
+                "The parameter 'models' is required for Compatibility decorator."
+            )
 
         if self._models is not None:
             if not isinstance(self._models, (list, tuple)):
@@ -67,12 +68,15 @@ class Compatibility(BaseDecorator):
 
         if self._fallback is not None:
             if not isinstance(self._fallback, str):
-                raise ValidationError("The parameter 'fallback' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'fallback' must be a string value."
+                )
 
         if self._behaviors is not None:
             if not isinstance(self._behaviors, str):
-                raise ValidationError("The parameter 'behaviors' must be a string value.")
-
+                raise ValidationError(
+                    "The parameter 'behaviors' must be a string value."
+                )
 
     @property
     def models(self) -> List[Any]:

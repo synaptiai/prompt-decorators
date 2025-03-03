@@ -6,13 +6,9 @@ This module provides the Creative decorator class for use in prompt engineering.
 Enhances responses with imaginative, novel, and original content. This decorator encourages divergent thinking, metaphorical language, and unusual connections to generate engaging and non-obvious outputs.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    CreativeLevelEnum,
-)
 
 
 class Creative(BaseDecorator):
@@ -60,7 +56,10 @@ class Creative(BaseDecorator):
         if self._level is not None:
             valid_values = ["moderate", "high", "unconventional"]
             if self._level not in valid_values:
-                raise ValidationError("The parameter 'level' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'level' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._elements is not None:
             if not isinstance(self._elements, (list, tuple)):
@@ -69,7 +68,6 @@ class Creative(BaseDecorator):
         if self._constraints is not None:
             if not isinstance(self._constraints, (list, tuple)):
                 raise ValidationError("The parameter 'constraints' must be an array.")
-
 
     @property
     def level(self) -> Literal["moderate", "high", "unconventional"]:

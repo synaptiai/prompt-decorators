@@ -6,8 +6,7 @@ This module provides the Persona decorator class for use in prompt engineering.
 Adapts the response to reflect the perspective and concerns of a specific persona. This decorator helps explore how different stakeholders or personality types would view a situation or topic.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict, List
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -54,7 +53,9 @@ class Persona(BaseDecorator):
 
         # Validate parameters
         if self._role is None:
-            raise ValidationError("The parameter 'role' is required for Persona decorator.")
+            raise ValidationError(
+                "The parameter 'role' is required for Persona decorator."
+            )
 
         if self._role is not None:
             if not isinstance(self._role, str):
@@ -67,7 +68,6 @@ class Persona(BaseDecorator):
         if self._goals is not None:
             if not isinstance(self._goals, (list, tuple)):
                 raise ValidationError("The parameter 'goals' must be an array.")
-
 
     @property
     def role(self) -> str:

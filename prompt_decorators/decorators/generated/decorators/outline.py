@@ -6,13 +6,9 @@ This module provides the Outline decorator class for use in prompt engineering.
 Structures the response as a hierarchical outline with headings and subheadings. This decorator organizes information in a clear, logical structure that highlights relationships between main topics and subtopics.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    OutlineStyleEnum,
-)
 
 
 class Outline(BaseDecorator):
@@ -59,18 +55,24 @@ class Outline(BaseDecorator):
 
         # Validate parameters
         if self._depth is not None:
-            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+            if not isinstance(self._depth, (int, float)) or isinstance(
+                self._depth, bool
+            ):
                 raise ValidationError("The parameter 'depth' must be a numeric value.")
 
         if self._style is not None:
             valid_values = ["numeric", "bullet", "roman", "alpha", "mixed"]
             if self._style not in valid_values:
-                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'style' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._detailed is not None:
             if not isinstance(self._detailed, bool):
-                raise ValidationError("The parameter 'detailed' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'detailed' must be a boolean value."
+                )
 
     @property
     def depth(self) -> Any:

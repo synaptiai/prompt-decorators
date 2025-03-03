@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Schema
 
 
 # Tests for the Schema decorator
@@ -41,7 +41,7 @@ class TestSchema:
         decorator_class = load_decorator("Schema")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['schema'] = 123
+        params["schema"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "schema" in str(exc_info.value)
@@ -52,7 +52,7 @@ class TestSchema:
         decorator_class = load_decorator("Schema")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['strict'] = 'invalid'
+        params["strict"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "strict" in str(exc_info.value)

@@ -6,13 +6,9 @@ This module provides the Nested decorator class for use in prompt engineering.
 Organizes information in a deeply hierarchical structure with multiple levels of nesting. This decorator is ideal for complex topics with many subcategories, helping to maintain clarity through consistent organization patterns.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    NestedStyleEnum,
-)
 
 
 class Nested(BaseDecorator):
@@ -59,18 +55,24 @@ class Nested(BaseDecorator):
 
         # Validate parameters
         if self._depth is not None:
-            if not isinstance(self._depth, (int, float)) or isinstance(self._depth, bool):
+            if not isinstance(self._depth, (int, float)) or isinstance(
+                self._depth, bool
+            ):
                 raise ValidationError("The parameter 'depth' must be a numeric value.")
 
         if self._style is not None:
             valid_values = ["bullet", "numbered", "mixed"]
             if self._style not in valid_values:
-                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'style' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._collapsible is not None:
             if not isinstance(self._collapsible, bool):
-                raise ValidationError("The parameter 'collapsible' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'collapsible' must be a boolean value."
+                )
 
     @property
     def depth(self) -> Any:

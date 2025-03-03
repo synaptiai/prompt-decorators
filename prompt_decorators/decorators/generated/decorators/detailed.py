@@ -6,13 +6,9 @@ This module provides the Detailed decorator class for use in prompt engineering.
 Enhances the response with comprehensive information, thorough explanations, and rich context. This decorator is ideal for in-depth learning, complex topics requiring nuance, or when completeness is valued over brevity.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, List, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    DetailedDepthEnum,
-)
 
 
 class Detailed(BaseDecorator):
@@ -60,7 +56,10 @@ class Detailed(BaseDecorator):
         if self._depth is not None:
             valid_values = ["moderate", "comprehensive", "exhaustive"]
             if self._depth not in valid_values:
-                raise ValidationError("The parameter 'depth' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'depth' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._aspects is not None:
             if not isinstance(self._aspects, (list, tuple)):
@@ -68,8 +67,9 @@ class Detailed(BaseDecorator):
 
         if self._examples is not None:
             if not isinstance(self._examples, bool):
-                raise ValidationError("The parameter 'examples' must be a boolean value.")
-
+                raise ValidationError(
+                    "The parameter 'examples' must be a boolean value."
+                )
 
     @property
     def depth(self) -> Literal["moderate", "comprehensive", "exhaustive"]:

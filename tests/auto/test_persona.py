@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Persona
 
 
 # Tests for the Persona decorator
@@ -42,7 +42,7 @@ class TestPersona:
         decorator_class = load_decorator("Persona")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['role'] = 123
+        params["role"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "role" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestPersona:
         decorator_class = load_decorator("Persona")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['traits'] = 'invalid'
+        params["traits"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "traits" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestPersona:
         decorator_class = load_decorator("Persona")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['goals'] = 'invalid'
+        params["goals"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "goals" in str(exc_info.value)

@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Contrarian
 
 
 # Tests for the Contrarian decorator
@@ -32,7 +32,7 @@ class TestContrarian:
         decorator_class = load_decorator("Contrarian")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['approach'] = 'invalid_enum_value'
+        params["approach"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "approach" in str(exc_info.value)
@@ -43,7 +43,7 @@ class TestContrarian:
         decorator_class = load_decorator("Contrarian")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['approach'] = 'invalid_enum_value'
+        params["approach"] = "invalid_enum_value"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "approach" in str(exc_info.value)
@@ -54,7 +54,7 @@ class TestContrarian:
         decorator_class = load_decorator("Contrarian")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['maintain'] = 'invalid'
+        params["maintain"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "maintain" in str(exc_info.value)
@@ -65,7 +65,7 @@ class TestContrarian:
         decorator_class = load_decorator("Contrarian")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['focus'] = 123
+        params["focus"] = 123
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "focus" in str(exc_info.value)

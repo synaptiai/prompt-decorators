@@ -6,14 +6,9 @@ This module provides the Academic decorator class for use in prompt engineering.
 Adapts the response to follow scholarly writing conventions appropriate for academic publications. This decorator generates responses with formal language, structured argumentation, and proper citations following established academic citation styles.
 """
 
-import re
-from typing import Any, Dict, List, Literal, Optional, Union, cast
+from typing import Any, Dict, Literal
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
-from prompt_decorators.decorators.generated.decorators.enums import (
-    AcademicStyleEnum,
-    AcademicCitationstyleEnum,
-)
 
 
 class Academic(BaseDecorator):
@@ -57,13 +52,18 @@ class Academic(BaseDecorator):
         if self._style is not None:
             valid_values = ["humanities", "scientific", "legal"]
             if self._style not in valid_values:
-                raise ValidationError("The parameter 'style' must be one of the following values: " + ", ".join(valid_values))
+                raise ValidationError(
+                    "The parameter 'style' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
         if self._citationStyle is not None:
             valid_values = ["APA", "MLA", "Chicago", "Harvard", "IEEE"]
             if self._citationStyle not in valid_values:
-                raise ValidationError("The parameter 'citationStyle' must be one of the following values: " + ", ".join(valid_values))
-
+                raise ValidationError(
+                    "The parameter 'citationStyle' must be one of the following values: "
+                    + ", ".join(valid_values)
+                )
 
     @property
     def style(self) -> Literal["humanities", "scientific", "legal"]:

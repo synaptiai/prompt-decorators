@@ -1,9 +1,9 @@
 # Generated file - DO NOT EDIT BY HAND
 
+
 import pytest
-import json
+
 from prompt_decorators.core.base import ValidationError
-from prompt_decorators.decorators import Debate
 
 
 # Tests for the Debate decorator
@@ -31,7 +31,7 @@ class TestDebate:
         decorator_class = load_decorator("Debate")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['perspectives'] = 'invalid'
+        params["perspectives"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "perspectives" in str(exc_info.value)
@@ -42,7 +42,7 @@ class TestDebate:
         decorator_class = load_decorator("Debate")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['perspectives'] = 1
+        params["perspectives"] = 1
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "perspectives" in str(exc_info.value)
@@ -53,7 +53,7 @@ class TestDebate:
         decorator_class = load_decorator("Debate")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['perspectives'] = 6
+        params["perspectives"] = 6
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "perspectives" in str(exc_info.value)
@@ -64,7 +64,7 @@ class TestDebate:
         decorator_class = load_decorator("Debate")
         assert decorator_class is not None
         params = self._get_valid_params()
-        params['balanced'] = 'invalid'
+        params["balanced"] = "invalid"
         with pytest.raises(ValidationError) as exc_info:
             decorator_class(**params)
         assert "balanced" in str(exc_info.value)

@@ -6,8 +6,7 @@ This module provides the Conditional decorator class for use in prompt engineeri
 A meta-decorator that applies different decorators based on specified conditions. This enables dynamic behavior where the response formatting and approach changes depending on the content, context, or user-specified parameters.
 """
 
-import re
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Dict
 
 from prompt_decorators.core.base import BaseDecorator, ValidationError
 
@@ -58,14 +57,20 @@ class Conditional(BaseDecorator):
 
         # Validate parameters
         if self._if_param is None:
-            raise ValidationError("The parameter 'if_param' is required for Conditional decorator.")
+            raise ValidationError(
+                "The parameter 'if_param' is required for Conditional decorator."
+            )
 
         if self._if_param is not None:
             if not isinstance(self._if_param, str):
-                raise ValidationError("The parameter 'if_param' must be a string value.")
+                raise ValidationError(
+                    "The parameter 'if_param' must be a string value."
+                )
 
         if self._then is None:
-            raise ValidationError("The parameter 'then' is required for Conditional decorator.")
+            raise ValidationError(
+                "The parameter 'then' is required for Conditional decorator."
+            )
 
         if self._then is not None:
             if not isinstance(self._then, str):
@@ -73,8 +78,9 @@ class Conditional(BaseDecorator):
 
         if self._else_param is not None:
             if not isinstance(self._else_param, str):
-                raise ValidationError("The parameter 'else_param' must be a string value.")
-
+                raise ValidationError(
+                    "The parameter 'else_param' must be a string value."
+                )
 
     @property
     def if_param(self) -> str:
