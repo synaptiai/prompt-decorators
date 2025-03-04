@@ -10,6 +10,7 @@ This page provides an overview of the core API components in the Prompt Decorato
 - [Request](modules/prompt_decorators.core.request.md): Request handling for decorated prompts
 - [Exceptions](modules/prompt_decorators.core.exceptions.md): Exception classes for error handling
 
+<a id="model-specific"></a>
 ## Model-Specific Adaptations
 
 The Prompt Decorators framework provides support for model-specific adaptations through the `ModelSpecificDecorator` class. This allows decorators to adapt their behavior based on the capabilities of the target model.
@@ -41,4 +42,4 @@ decorator = CustomModelSpecificDecorator(model_id="gpt-4")
 decorated_prompt = decorator.apply("Explain quantum computing.")
 ```
 
-For more details, see the [Model Specific](modules/prompt_decorators.core.model_specific.md) module documentation. 
+For more details, see the [Model Specific](modules/prompt_decorators.core.model_specific.md) module documentation.

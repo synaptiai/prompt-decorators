@@ -80,7 +80,7 @@ nav:
   - API Reference:
     - Overview: api/index.md
     - Core:
-      - Overview: api/modules/prompt_decorators.core.md
+      - Overview: api/core.md
       - Base: api/modules/prompt_decorators.core.base.md
       - Registry: api/modules/prompt_decorators.core.registry.md
       - Validation: api/modules/prompt_decorators.core.validation.md
@@ -88,7 +88,7 @@ nav:
       - Exceptions: api/modules/prompt_decorators.core.exceptions.md
       - Model Specific: api/modules/prompt_decorators.core.model_specific.md
     - Decorators:
-      - Overview: api/modules/prompt_decorators.decorators.md
+      - Overview: api/decorators.md
       - Reasoning: api/decorators/Reasoning.md
       - StepByStep: api/decorators/StepByStep.md
       - TreeOfThought: api/decorators/TreeOfThought.md
