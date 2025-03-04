@@ -30,6 +30,7 @@
 - [Example Usage](#example-usage)
 - [Getting Started](#getting-started)
 - [Prompt Decorators Specification](#prompt-decorators-specification)
+- [Domain-Specific Extensions](#domain-specific-extensions)
 - [Development](#development)
 - [License](#license)
 - [Contributing](#contributing)
@@ -147,10 +148,34 @@ decorated_prompt = output_format.apply(reasoning.apply(prompt))
 # ...
 ```
 
+### Using Domain-Specific Extensions
+
+```python
+from prompt_decorators.utils.discovery import DecoratorRegistry
+from finance_decorators import register_extensions
+
+# Initialize registry and register finance extensions
+registry = DecoratorRegistry()
+register_extensions(registry)
+
+# Create a prompt with finance decorators
+prompt = """
++++RiskDisclosure.us_investment()
++++FinancialAnalysis.long_term_fundamental()
+Analyze Microsoft (MSFT) as a potential addition to a retirement portfolio.
+"""
+
+# Process the prompt
+processed_prompt = registry.process_prompt(prompt)
+
+# Send to LLM API
+response = llm_api.generate(processed_prompt)
+```
+
 ### Using the Decorator Registry
 
 ```python
-from prompt_decorators.utils import get_registry
+from prompt_decorators.utils.discovery import get_registry
 
 # Get the registry instance
 registry = get_registry()
@@ -169,86 +194,6 @@ for name in reasoning_decorators:
     print(f"- {name}")
 ```
 
-### Using Decorated Requests
-
-```python
-from prompt_decorators.core.request import DecoratedRequest
-
-# Create a decorated request
-request = DecoratedRequest(
-    prompt="Explain quantum mechanics.",
-    decorators=[reasoning, output_format],
-    model="gpt-4",
-    api_params={"temperature": 0.7}
-)
-
-# Apply all decorators
-decorated_prompt = request.apply_decorators()
-
-# Serialize for storage or transmission
-request_json = request.to_json()
-```
-
-### Model-Specific Adaptations
-
-```python
-from prompt_decorators.core import ModelSpecificDecorator
-
-class CustomModelSpecificDecorator(ModelSpecificDecorator):
-    """A model-specific decorator that adapts to different models."""
-
-    name = "CustomModelSpecific"
-    version = "1.0.0"
-
-    def apply_for_model(self, prompt: str) -> str:
-        """Apply model-specific behavior."""
-        if self.model_capabilities.supports_feature("reasoning"):
-            return f"Use your reasoning capabilities to answer: {prompt}"
-        else:
-            return self.apply_fallback(prompt)
-
-    def apply_fallback(self, prompt: str) -> str:
-        """Fallback for models without specific capabilities."""
-        return f"Answer this question step by step: {prompt}"
-
-# Use with a specific model
-decorator = CustomModelSpecificDecorator(model_id="gpt-4")
-decorated_prompt = decorator.apply("Explain quantum computing.")
-```
-
-## 🚦 Getting Started
-
-### Prerequisites
-
-- Python 3.8 or higher
-- pip (Python package installer)
-
-### Installation
-
-```bash
-# Not yet available on PyPI
-git clone https://github.com/synaptiai/prompt-decorators.git
-cd prompt-decorators
-pip install -e .
-```
-
-### Documentation
-
-Comprehensive documentation is available in the `docs/` directory. You can build the documentation site using MkDocs:
-
-```bash
-pip install mkdocs mkdocs-material
-mkdocs serve
-```
-
-Then visit `http://localhost:8000` to view the documentation.
-
-### Generating Decorator Code
-
-```bash
-python scripts/generate_decorators.py
-```
-
 ## 📄 Prompt Decorators Specification
 
 This implementation is based on the [Prompt Decorators Specification](docs/prompt-decorators-specification-v1.0.md), which defines:
@@ -260,6 +205,26 @@ This implementation is based on the [Prompt Decorators Specification](docs/promp
 - Versioning and evolution processes
 
 The specification provides a standardized approach to prompt engineering that can be implemented across different platforms and tools.
+
+## 🌐 Domain-Specific Extensions
+
+Prompt Decorators can be extended with domain-specific decorators tailored to particular fields or industries:
+
+### Available Domain Extensions
+
+- **Finance**: Decorators for financial analysis, risk disclosures, and investment recommendations
+- **Medical**: Decorators for evidence-based medicine, patient education, and clinical documentation
+- **Legal**: Decorators for legal analysis, case citations, and jurisdiction-specific responses
+
+### Creating Your Own Extensions
+
+The framework provides comprehensive tools and documentation for creating your own domain-specific extensions:
+
+- [Domain-Specific Extensions Guide](docs/guides/domain_specific_extensions.md): Detailed guide on creating domain-specific extensions
+- [Extension Development Tutorial](docs/tutorials/extension_development.md): Step-by-step tutorial for developing extensions
+- [Examples](examples/domain_extensions/): Example domain-specific extensions with full source code
+
+Domain-specific extensions allow you to encapsulate domain knowledge, terminology, and best practices into reusable decorators that can be shared with your team or the broader community.
 
 ## 🛠️ Development
 
@@ -281,59 +246,31 @@ The `DecoratorRegistry` class provides runtime discovery and management of decor
 3. Customize the generated code if needed
 4. Add tests using the test generator
 
-## 📜 License
+## 📝 License
 
-This project is licensed under the [Apache License 2.0](LICENSE) - see the LICENSE file for details.
+This project is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more information.
 
-## 👥 Contributing
+## 🤝 Contributing
 
-We welcome contributions from the community! Here's how you can help:
+Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) file for guidelines on how to contribute to this project.
 
-- **Report bugs**: Open an issue if you find a bug
-- **Suggest features**: Have an idea for a new feature? Open an issue to discuss it
-- **Submit pull requests**: Implement new features or fix bugs
+## 🚧 Roadmap
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to this project.
+The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.
 
-### Code of Conduct
+## 🤖 Acknowledgments
 
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+This project would not be possible without the contributions of the following individuals and organizations:
 
-## 🗺️ Roadmap
+- **[Synaptiai](https://synaptiai.com)**: The original creators and maintainers of the framework
+- **[Contributors](https://github.com/synaptiai/prompt-decorators/graphs/contributors)**: All the wonderful people who have contributed to this project
 
-See [ROADMAP.md](docs/roadmap.md) for the development roadmap and upcoming features.
+## 🔢 Code Quality
 
-## 🙏 Acknowledgments
+This project uses a variety of tools and practices to ensure high code quality:
 
-This project was inspired by the need for more structured prompt engineering techniques when working with LLMs. It aims to standardize and simplify the process of creating effective prompts for different use cases and models.
-
-## 🔍 Code Quality
-
-This project uses several tools to maintain high code quality:
-
-- **Pre-commit hooks**: Automated checks run before each commit
-- **Docstring standardization**: Tools to check and fix docstring issues
-- **Type annotations**: Comprehensive type hints throughout the codebase
-- **CI/CD integration**: GitHub Actions workflow for continuous quality checks
-
-### Setting Up Development Environment
-
-1. Install pre-commit:
-   ```bash
-   pip install pre-commit
-   pre-commit install
-   ```
-
-2. Run code quality checks:
-   ```bash
-   # Run all pre-commit hooks
-   pre-commit run --all-files
-
-   # Check docstrings
-   python scripts/check_docstrings.py
-
-   # Fix docstring issues automatically
-   python scripts/fix_docstrings.py
-   ```
-
-For more details, see the [Code Quality Integration](docs/code_quality_integration.md) and [Docstring Standards](docs/DOCSTRING_STANDARDS.md) documentation.
+- **[Code Style](https://github.com/astral-sh/ruff)**: Enforces consistent coding style
+- **[Code Quality and Testing](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Code+Quality+and+Testing%22)**: Continuous integration and testing
+- **[Documentation Verification](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Documentation+Verification%22)**: Ensures documentation accuracy
+- **[Documentation](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Documentation%22)**: Comprehensive documentation site
+- **[Publish to PyPI](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Publish+to+PyPI%22)**: Automated deployment to PyPI

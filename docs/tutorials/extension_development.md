@@ -11,6 +11,7 @@ This tutorial will guide you through the process of developing extensions for th
 - [Testing Your Extension](#testing-your-extension)
 - [Extension Distribution](#extension-distribution)
 - [Advanced Extension Techniques](#advanced-extension-techniques)
+- [Creating Domain-Specific Extensions](#creating-domain-specific-extensions)
 - [Best Practices](#best-practices)
 - [Troubleshooting](#troubleshooting)
 
@@ -522,6 +523,266 @@ class AdvancedHighlighter(BaseDecorator, MarkerComponent, HighlightComponent):
         return highlighted_text
 ```
 
+## Creating Domain-Specific Extensions
+
+Domain-specific extensions allow you to create specialized decorators tailored to particular fields or industries. This section will guide you through the process of creating a cohesive set of decorators for a specific domain.
+
+### Planning Your Domain Extension
+
+1. **Identify Domain Needs**: Determine the unique requirements of your domain:
+   - What specialized behaviors would benefit practitioners in this field?
+   - What domain-specific terminology or formats are commonly used?
+   - What output structures are most valuable for domain experts?
+
+2. **Map Domain Concepts to Decorators**: Create a mapping between domain concepts and potential decorators:
+   - Identify key workflows that could be enhanced
+   - Determine parameters that domain experts would understand
+   - Consider how domain-specific decorators might interact with core decorators
+
+### Example: Medical Domain Extension
+
+Let's create a simple extension package for the medical domain:
+
+```python
+# medical_decorators.py
+from prompt_decorators.base import BaseDecorator
+from typing import List, Optional, Union
+
+class MedicalEvidence(BaseDecorator):
+    """Decorator that ensures responses cite medical evidence according to standards.
+
+    Args:
+        level: The level of evidence required (systematic, rct, cohort, case, expert)
+        recency: Maximum age of cited research in years
+    """
+
+    def __init__(
+        self,
+        level: str = "systematic",
+        recency: int = 5
+    ) -> None:
+        super().__init__()
+        self.level = level
+        self.recency = recency
+
+    def __call__(self, text: str) -> str:
+        # Implementation would modify the prompt to request evidence-based responses
+        # This is a simplified example
+        return f"{text}\n\nPlease provide {self.level}-level medical evidence " \
+               f"from the past {self.recency} years to support all claims."
+
+class PatientFriendly(BaseDecorator):
+    """Decorator that adapts medical information for patient understanding.
+
+    Args:
+        reading_level: Target reading comprehension level
+        include_glossary: Whether to include a glossary of medical terms
+    """
+
+    def __init__(
+        self,
+        reading_level: str = "middle",
+        include_glossary: bool = True
+    ) -> None:
+        super().__init__()
+        self.reading_level = reading_level
+        self.include_glossary = include_glossary
+
+    def __call__(self, text: str) -> str:
+        # Implementation would modify the prompt to request patient-friendly responses
+        # This is a simplified example
+        result = f"{text}\n\nPlease explain this in patient-friendly language " \
+                f"at a {self.reading_level} school reading level."
+
+        if self.include_glossary:
+            result += " Include a brief glossary for any medical terms used."
+
+        return result
+```
+
+### Creating the Extension Package
+
+Now, let's create the extension package JSON file:
+
+```json
+{
+  "name": "medical-decorators",
+  "version": "1.0.0",
+  "description": "Prompt decorators for medical and healthcare applications",
+  "author": {
+    "name": "Healthcare AI Team",
+    "email": "healthcare@example.com",
+    "url": "https://healthcare-ai.example.com"
+  },
+  "license": "MIT",
+  "keywords": ["medical", "healthcare", "evidence-based-medicine", "patient-education"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/medical-decorators"
+  },
+  "decorators": [
+    {
+      "decoratorName": "MedicalEvidence",
+      "version": "1.0.0",
+      "description": "Ensures responses cite medical evidence according to evidence-based medicine standards",
+      "parameters": [
+        {
+          "name": "level",
+          "type": "enum",
+          "description": "The level of evidence required",
+          "enum": ["systematic", "rct", "cohort", "case", "expert"],
+          "default": "systematic",
+          "required": false
+        },
+        {
+          "name": "recency",
+          "type": "number",
+          "description": "Maximum age of cited research in years",
+          "default": 5,
+          "required": false
+        }
+      ],
+      "examples": [
+        {
+          "description": "Request for treatment information with high-quality evidence",
+          "usage": "+++MedicalEvidence(level=systematic, recency=3)\nWhat are the current treatments for type 2 diabetes?",
+          "result": "Provides treatment information citing systematic reviews and meta-analyses from the last 3 years"
+        }
+      ],
+      "compatibility": {
+        "requires": ["CiteSources"],
+        "conflicts": [],
+        "models": ["gpt-4"]
+      }
+    },
+    {
+      "decoratorName": "PatientFriendly",
+      "version": "1.0.0",
+      "description": "Adapts medical information to be understandable by patients without medical background",
+      "parameters": [
+        {
+          "name": "readingLevel",
+          "type": "enum",
+          "description": "Target reading comprehension level",
+          "enum": ["elementary", "middle", "high", "college"],
+          "default": "middle",
+          "required": false
+        },
+        {
+          "name": "includeGlossary",
+          "type": "boolean",
+          "description": "Whether to include a glossary of medical terms",
+          "default": true,
+          "required": false
+        }
+      ],
+      "examples": [
+        {
+          "description": "Explaining a medical condition to a patient",
+          "usage": "+++PatientFriendly(readingLevel=middle, includeGlossary=true)\nExplain what hypertension is and how it affects the body.",
+          "result": "Provides an explanation of hypertension at a middle school reading level with a glossary of medical terms"
+        }
+      ],
+      "compatibility": {
+        "requires": [],
+        "conflicts": ["Technical"],
+        "models": ["gpt-4", "gpt-3.5-turbo"]
+      }
+    }
+  ],
+  "dependencies": {
+    "standard": {
+      "version": "1.0.0"
+    }
+  }
+}
+```
+
+### Packaging and Distribution
+
+To package your domain-specific extension:
+
+1. **Create a Package Structure**:
+   ```
+   medical-decorators/
+   ├── pyproject.toml
+   ├── setup.py
+   ├── README.md
+   ├── medical_decorators/
+   │   ├── __init__.py
+   │   ├── decorators.py
+   │   └── registry_extensions/
+   │       └── medical_decorators.json
+   └── tests/
+       └── test_medical_decorators.py
+   ```
+
+2. **Create a Registration Module**:
+   ```python
+   # __init__.py
+   from prompt_decorators.registry import DecoratorRegistry
+   from .decorators import MedicalEvidence, PatientFriendly
+   import os
+   import json
+
+   def register_extensions(registry: DecoratorRegistry) -> None:
+       """Register medical extensions with the decorator registry."""
+       # Register decorator classes
+       registry.register_decorator_class(MedicalEvidence)
+       registry.register_decorator_class(PatientFriendly)
+
+       # Load registry metadata from JSON
+       current_dir = os.path.dirname(os.path.abspath(__file__))
+       json_path = os.path.join(current_dir, "registry_extensions", "medical_decorators.json")
+
+       with open(json_path, 'r') as f:
+           metadata = json.load(f)
+
+       # Update registry with metadata
+       for decorator in metadata["decorators"]:
+           registry.update_decorator_metadata(decorator["decoratorName"], decorator)
+
+       print(f"Registered medical domain decorators with the registry")
+   ```
+
+3. **Document Domain-Specific Usage**:
+   Create comprehensive documentation that explains:
+   - The domain-specific concepts your decorators address
+   - How to use the decorators in domain-specific workflows
+   - Examples of common use cases in your domain
+   - Any domain-specific best practices
+
+### Using Domain-Specific Extensions
+
+Users can incorporate your domain-specific extensions:
+
+```python
+from prompt_decorators.registry import DecoratorRegistry
+from medical_decorators import register_extensions
+
+# Initialize registry and register medical extensions
+registry = DecoratorRegistry()
+register_extensions(registry)
+
+# Create a prompt with medical decorators
+prompt = """
++++MedicalEvidence(level=rct, recency=3)
++++PatientFriendly(readingLevel=elementary, includeGlossary=true)
+What are the treatment options for childhood asthma?
+"""
+
+# Process the prompt
+processed_prompt = registry.process_prompt(prompt)
+```
+
+### Domain-Specific Extension Best Practices
+
+1. **Use Domain Terminology**: Name decorators and parameters using familiar domain terminology
+2. **Consult Domain Experts**: Work with experts in the field to identify valuable decorator functionality
+3. **Document Domain Context**: Provide context about why certain decorators are valuable in the domain
+4. **Consider Workflows**: Design decorators that fit into existing domain workflows
+5. **Test with Domain Users**: Validate your extensions with actual practitioners in the field
+
 ## Best Practices
 
 When developing extensions, follow these best practices:
@@ -588,11 +849,13 @@ You've now learned how to create custom extensions for the Prompt Decorators fra
 
 Remember that the power of the Prompt Decorators framework comes from its extensibility and composability. Your contributions can help expand the ecosystem and provide valuable tools for other developers.
 
-## What's Next
+## Next Steps
 
-- Learn how to create more complex decorators with state
-- Explore integration with specific LLM APIs
-- Develop domain-specific decorator libraries
-- Contribute to the core framework development
+Now that you've learned how to create and distribute extensions for Prompt Decorators, you might want to explore:
+
+- [Creating more complex decorators](./creating_decorators.md)
+- [Developing domain-specific extensions](../guides/domain_specific_extensions.md)
+- [Integrating with specific LLM APIs](../api_reference.md)
+- [Contributing to the Prompt Decorators project](../../CONTRIBUTING.md)
 
 Happy decorating!

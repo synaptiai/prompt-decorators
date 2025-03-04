@@ -176,5 +176,6 @@ nav:
   - Domain Guides:
     - Healthcare: guides/healthcare.md
     - AI Safety: guides/ai_safety.md
+    - Domain-Specific Extensions: guides/domain_specific_extensions.md
   - Tools:
     - Validator Tool: validator_tool.md
