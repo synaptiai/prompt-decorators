@@ -393,7 +393,13 @@ class CodeGenerator:
 
         # Generate the docstring content
         docstring_content = self._generate_docstring(
-            "Get the name of the decorator.", {"Returns": "The name of the decorator"}
+            "Get the name of the decorator.",
+            {
+                "Args": {
+                    "self": "The decorator instance",
+                },
+                "Returns": "The name of the decorator",
+            },
         )
 
         # Add the docstring with proper indentation
@@ -577,7 +583,12 @@ class CodeGenerator:
         # Generate docstring using the helper method
         metadata_docstring = self._generate_docstring(
             "Get metadata about the decorator.",
-            {"Returns": "Dictionary containing metadata about the decorator"},
+            {
+                "Returns": "Dictionary containing metadata about the decorator",
+                "Args": {
+                    "cls": "The decorator class",
+                },
+            },
         )
 
         # Indent the docstring and append it as a single string

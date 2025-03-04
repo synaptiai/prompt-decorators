@@ -33,6 +33,10 @@ class Constraints(BaseDecorator):
     def name(self) -> str:
         """Get the name of the decorator.
 
+        Args:
+            self: The decorator instance
+
+
         Returns:
             The name of the decorator
 
@@ -258,6 +262,10 @@ class Constraints(BaseDecorator):
 
         Returns:
             Dictionary containing metadata about the decorator
+
+
+        Args:
+            cls: The decorator class
 
         """
         return {

@@ -137,6 +137,10 @@ Get metadata about the decorator.
 Returns:
     Dictionary containing metadata about the decorator
 
+
+Args:
+    cls: The decorator class
+
 #### `is_compatible_with_version`
 
 **Signature:** `is_compatible_with_version(version) -> <class 'bool'>`

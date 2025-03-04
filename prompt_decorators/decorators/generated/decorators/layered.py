@@ -33,6 +33,10 @@ class Layered(BaseDecorator):
     def name(self) -> str:
         """Get the name of the decorator.
 
+        Args:
+            self: The decorator instance
+
+
         Returns:
             The name of the decorator
 
@@ -243,6 +247,10 @@ class Layered(BaseDecorator):
 
         Returns:
             Dictionary containing metadata about the decorator
+
+
+        Args:
+            cls: The decorator class
 
         """
         return {

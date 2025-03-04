@@ -33,6 +33,10 @@ class FactCheck(BaseDecorator):
     def name(self) -> str:
         """Get the name of the decorator.
 
+        Args:
+            self: The decorator instance
+
+
         Returns:
             The name of the decorator
 
@@ -221,6 +225,10 @@ class FactCheck(BaseDecorator):
 
         Returns:
             Dictionary containing metadata about the decorator
+
+
+        Args:
+            cls: The decorator class
 
         """
         return {
