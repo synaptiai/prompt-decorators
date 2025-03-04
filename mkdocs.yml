@@ -47,6 +47,7 @@ plugins:
   - awesome-pages:
       collapse_single_pages: true
       strict: false
+      filename: .pages
   - autolinks
   - minify:
       minify_html: true
@@ -65,6 +66,8 @@ plugins:
             show_source: true
             show_category_heading: true
             show_if_no_docstring: false
+
+# Navigation structure with explicit sections and files
 nav:
   - Home: index.md
   - Getting Started:
@@ -73,130 +76,28 @@ nav:
     - Core Concepts: concepts.md
     - Creating Decorators: creating_decorators.md
     - Compatibility: compatibility.md
-  - User Guide:
-    - Basic Usage: guide/basic-usage.md
-    - Advanced Usage: guide/advanced-usage.md
-    - API Integration: guide/api-integration.md
-    - CLI Usage: guide/cli-usage.md
-    - Troubleshooting: guide/troubleshooting.md
-  - API Reference:
-    - Overview: api/index.md
-    - Core:
-      - Overview: api/core.md
-      - Base: api/modules/prompt_decorators.core.base.md
-      - Registry: api/modules/prompt_decorators.core.registry.md
-      - Validation: api/modules/prompt_decorators.core.validation.md
-      - Request: api/modules/prompt_decorators.core.request.md
-      - Exceptions: api/modules/prompt_decorators.core.exceptions.md
-      - Model Specific: api/modules/prompt_decorators.core.model_specific.md
-    - Decorators:
-      - Overview: api/decorators.md
-      - Reasoning: api/decorators/Reasoning.md
-      - StepByStep: api/decorators/StepByStep.md
-      - TreeOfThought: api/decorators/TreeOfThought.md
-      - FirstPrinciples: api/decorators/FirstPrinciples.md
-      - ELI5: api/decorators/ELI5.md
-      - Tone: api/decorators/Tone.md
-      - Persona: api/decorators/Persona.md
-      - Audience: api/decorators/Audience.md
-      - Creative: api/decorators/Creative.md
-      - Professional: api/decorators/Professional.md
-      - Academic: api/decorators/Academic.md
-      - Concise: api/decorators/Concise.md
-      - Detailed: api/decorators/Detailed.md
-      - OutputFormat: api/decorators/OutputFormat.md
-      - Schema: api/decorators/Schema.md
-      - TableFormat: api/decorators/TableFormat.md
-      - Bullet: api/decorators/Bullet.md
-      - Outline: api/decorators/Outline.md
-      - MECE: api/decorators/MECE.md
-      - Comparison: api/decorators/Comparison.md
-      - DecisionMatrix: api/decorators/DecisionMatrix.md
-      - Timeline: api/decorators/Timeline.md
-      - Summary: api/decorators/Summary.md
-      - Prioritize: api/decorators/Prioritize.md
-      - Layered: api/decorators/Layered.md
-      - Nested: api/decorators/Nested.md
-      - Context: api/decorators/Context.md
-      - Custom: api/decorators/Custom.md
-      - Chain: api/decorators/Chain.md
-      - Override: api/decorators/Override.md
-      - Conditional: api/decorators/Conditional.md
-      - Priority: api/decorators/Priority.md
-      - Version: api/decorators/Version.md
-      - Compatibility: api/decorators/Compatibility.md
-      - Extension: api/decorators/Extension.md
-      - BuildOn: api/decorators/BuildOn.md
-      - Refine: api/decorators/Refine.md
-      - Constraints: api/decorators/Constraints.md
-      - Abductive: api/decorators/Abductive.md
-      - Alternatives: api/decorators/Alternatives.md
-      - Analogical: api/decorators/Analogical.md
-      - AsExpert: api/decorators/AsExpert.md
-      - Balanced: api/decorators/Balanced.md
-      - BlindSpots: api/decorators/BlindSpots.md
-      - BreakAndBuild: api/decorators/BreakAndBuild.md
-      - CiteSources: api/decorators/CiteSources.md
-      - Confidence: api/decorators/Confidence.md
-      - Contrarian: api/decorators/Contrarian.md
-      - Debate: api/decorators/Debate.md
-      - DecoratorName: api/decorators/DecoratorName.md
-      - Deductive: api/decorators/Deductive.md
-      - Extremes: api/decorators/Extremes.md
-      - FactCheck: api/decorators/FactCheck.md
-      - FindGaps: api/decorators/FindGaps.md
-      - ForcedAnalogy: api/decorators/ForcedAnalogy.md
-      - Inductive: api/decorators/Inductive.md
-      - Limitations: api/decorators/Limitations.md
-      - Motivational: api/decorators/Motivational.md
-      - Narrative: api/decorators/Narrative.md
-      - NegativeSpace: api/decorators/NegativeSpace.md
-      - PeerReview: api/decorators/PeerReview.md
-      - Precision: api/decorators/Precision.md
-      - QualityMetrics: api/decorators/QualityMetrics.md
-      - RedTeam: api/decorators/RedTeam.md
-      - Remix: api/decorators/Remix.md
-      - RootCause: api/decorators/RootCause.md
-      - Socratic: api/decorators/Socratic.md
-      - Steelman: api/decorators/Steelman.md
-      - StressTest: api/decorators/StressTest.md
-      - StyleShift: api/decorators/StyleShift.md
-      - Uncertainty: api/decorators/Uncertainty.md
-    - Utilities:
-      - Overview: api/modules/prompt_decorators.utils.md
-      - Cache: api/modules/prompt_decorators.utils.cache.md
-      - Compatibility: api/modules/prompt_decorators.utils.compatibility.md
-      - Discovery: api/modules/prompt_decorators.utils.discovery.md
-      - Documentation: api/modules/prompt_decorators.utils.doc_gen.md
-      - Factory: api/modules/prompt_decorators.utils.factory.md
-      - JSON Loader: api/modules/prompt_decorators.utils.json_loader.md
-      - Model Detection: api/modules/prompt_decorators.utils.model_detection.md
-      - Plugins: api/modules/prompt_decorators.utils.plugins.md
-      - Telemetry: api/modules/prompt_decorators.utils.telemetry.md
-    - Generator:
-      - Overview: api/modules/prompt_decorators.generator.md
-      - Code Generator: api/modules/prompt_decorators.generator.code_gen.md
-      - Test Generator: api/modules/prompt_decorators.generator.test_gen.md
-      - Registry: api/modules/prompt_decorators.generator.registry.md
-    - Modules:
-      - prompt_decorators: api/modules/prompt_decorators.md
-      - prompt_decorators.core: api/modules/prompt_decorators.core.md
-      - prompt_decorators.decorators: api/modules/prompt_decorators.decorators.md
-      - prompt_decorators.decorators.generated: api/modules/prompt_decorators.decorators.generated.md
-  - Examples:
-    - Basic Examples: examples/basic.md
-    - Advanced Examples: examples/advanced.md
-    - Provider Examples: examples/providers.md
   - Tutorials:
     - Creating Custom Decorators: tutorials/creating_custom_decorator.md
     - Combining Decorators: tutorials/combining_decorators.md
     - Extension Development: tutorials/extension_development.md
     - Comprehensive Tutorial: tutorials/comprehensive_tutorial.md
+  - API Reference:
+    - Overview: api/index.md
+    - Core: api/core.md
+    - Decorators: api/decorators.md
+  - Examples:
+    - Basic Examples: examples/basic.md
+    - Advanced Examples: examples/advanced.md
+    - Provider Examples: examples/providers.md
+  - Domain Guides:
+    - Healthcare: guides/healthcare.md
+    - AI Safety: guides/ai_safety.md
+    - Domain-Specific Extensions: guides/domain_specific_extensions.md
   - Contributing:
     - Guidelines: contributing.md
     - Development Setup: development.md
-    - Comprehensive Development Guide: development_guide.md
-    - Documentation Workflow: documentation_workflow.md
+    - Development Guide: development_guide.md
+    - Documentation: documentation_workflow.md
     - Documentation Standards: DOCSTRING_STANDARDS.md
     - Decorator Registry: DECORATOR_REGISTRY.md
     - Type Annotation Improvements: type_annotation_improvements.md
@@ -211,12 +112,5 @@ nav:
     - FAQ: faq.md
     - Glossary: glossary.md
     - Navigation: navigation.md
-    - Project Summaries:
-      - Overview: project_summaries/index.md
-      - Modernization Summary: project_summaries/project_modernization_summary.md
-  - Domain Guides:
-    - Healthcare: guides/healthcare.md
-    - AI Safety: guides/ai_safety.md
-    - Domain-Specific Extensions: guides/domain_specific_extensions.md
   - Tools:
     - Validator Tool: validator_tool.md

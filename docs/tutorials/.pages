@@ -1,0 +1,6 @@
+title: Tutorials
+arrange:
+  - creating_custom_decorator.md
+  - combining_decorators.md
+  - extension_development.md
+  - comprehensive_tutorial.md
