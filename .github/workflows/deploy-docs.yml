@@ -44,6 +44,15 @@ jobs:
           # Verify plugins are installed
           pip list | grep mkdocs
 
+      - name: Debug installed plugins
+        run: |
+          echo "Checking if awesome-pages plugin is installed:"
+          pip show mkdocs-awesome-pages-plugin
+          echo "Checking all installed mkdocs plugins:"
+          pip list | grep mkdocs
+          echo "Running plugin check script:"
+          python scripts/check_mkdocs_plugins.py
+
       - name: Build documentation
         run: |
           mkdocs build
