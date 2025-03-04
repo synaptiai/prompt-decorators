@@ -603,9 +603,9 @@ Remember that the power of the Prompt Decorators framework comes from its extens
 
 Now that you've learned how to create and distribute extensions for Prompt Decorators, you might want to explore:
 
-- [Creating more complex decorators](./creating_decorators.md)
+- [Creating more complex decorators](creating_custom_decorator.md)
 - [Developing domain-specific extensions](../guides/domain_specific_extensions.md)
-- [Integrating with specific LLM APIs](../api_reference.md)
-- [Contributing to the Prompt Decorators project](../../CONTRIBUTING.md)
+- [Integrating with specific LLM APIs](../api/index.md)
+- [Contributing to the Prompt Decorators project](../contributing.md)
 
 Happy decorating!

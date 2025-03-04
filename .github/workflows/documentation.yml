@@ -55,6 +55,11 @@ jobs:
           echo "Ensuring awesome-pages plugin is installed"
           pip install mkdocs-awesome-pages-plugin>=2.9.0
           pip show mkdocs-awesome-pages-plugin
+          # Run our verification script
+          python scripts/verify_awesome_pages.py
+          # Make sure the plugin is in the Python path
+          export PYTHONPATH=$PYTHONPATH:$(pip show mkdocs-awesome-pages-plugin | grep Location | awk '{print $2}')
+          echo "PYTHONPATH=$PYTHONPATH" >> $GITHUB_ENV
 
       - name: Debug installed plugins
         run: |
