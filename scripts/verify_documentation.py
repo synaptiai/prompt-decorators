@@ -13,6 +13,7 @@ Returns:
     int: 0 if all checks pass, 1 otherwise
 """
 
+import json
 import logging
 import os
 import subprocess
@@ -195,13 +196,19 @@ def check_registry_docs() -> bool:
     # Check if each decorator has corresponding documentation
     missing_docs = []
     for registry_file in registry_files:
-        # Extract decorator name from path
-        parts = registry_file.parts
-        if len(parts) >= 3:
-            decorator_name = parts[2]  # registry/category/decorator_name/...
-            doc_path = f"docs/api/decorators/{decorator_name}.md"
-            if not os.path.exists(doc_path):
-                missing_docs.append(decorator_name)
+        try:
+            # Extract decorator name from the JSON file
+            with open(registry_file, "r") as f:
+                data = json.load(f)
+
+            # Check if this is a decorator definition
+            if "decoratorName" in data:
+                decorator_name = data["decoratorName"]
+                doc_path = f"docs/api/decorators/{decorator_name}.md"
+                if not os.path.exists(doc_path):
+                    missing_docs.append(decorator_name)
+        except Exception as e:
+            logger.error(f"Error processing {registry_file}: {e}")
 
     if missing_docs:
         logger.error(f"Missing documentation for decorators: {', '.join(missing_docs)}")
@@ -248,10 +255,26 @@ def check_mkdocs_config() -> bool:
     """
     logger.info("Checking MkDocs configuration...")
 
-    # Run mkdocs build with the --strict flag to catch configuration errors
-    returncode, stdout, stderr = run_command(
-        ["mkdocs", "build", "--strict", "--dry-run"]
-    )
+    # Check if mkdocs is installed
+    returncode, stdout, stderr = run_command(["pip", "show", "mkdocs"])
+    if returncode != 0:
+        logger.warning("mkdocs not installed. Installing...")
+        returncode, stdout, stderr = run_command(
+            [
+                "pip",
+                "install",
+                "mkdocs",
+                "mkdocs-material",
+                "mkdocs-awesome-pages-plugin",
+                "mkdocstrings",
+            ]
+        )
+        if returncode != 0:
+            logger.error(f"Failed to install mkdocs: {stderr}")
+            return False
+
+    # Check the configuration
+    returncode, stdout, stderr = run_command(["mkdocs", "build", "--strict"])
 
     if returncode != 0:
         logger.error(f"MkDocs configuration check failed: {stderr}")
