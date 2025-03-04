@@ -37,8 +37,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
+          # Install all requirements explicitly to ensure they're properly installed
+          pip install mkdocs>=1.5.0
+          pip install mkdocs-material>=9.0.0
+          pip install mkdocs-awesome-pages-plugin>=2.9.0
+          pip install mkdocs-autolinks-plugin>=0.7.0
+          pip install mkdocs-git-revision-date-localized-plugin>=1.2.0
+          pip install mkdocs-minify-plugin>=0.7.0
+          pip install mkdocstrings>=0.24.0
+          pip install mkdocstrings-python>=1.7.0
+          # Install the rest of the requirements
           pip install -r docs/requirements.txt
           pip install pytest mypy  # Ensure pytest and mypy are available
+          
+          # Verify plugins are installed
+          pip list | grep mkdocs
 
       - name: Verify documentation
         run: |
