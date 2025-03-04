@@ -170,6 +170,79 @@ else:
     print("Decorators are compatible!")
 ```
 
+<a id="examples"></a>
+## Common Usage Examples
+
+Here are some common examples of using prompt decorators in different scenarios:
+
+### Educational Content Generation
+
+```python
+from prompt_decorators.decorators import ELI5, StepByStep, OutputFormat
+
+# Create decorators for educational content
+eli5 = ELI5(age=10)
+step_by_step = StepByStep(numbered=True, detail_level="high")
+output_format = OutputFormat(format_type="markdown", pretty_print=True)
+
+# Apply decorators to create educational content
+prompt = "Explain how photosynthesis works."
+decorated_prompt = output_format.apply(step_by_step.apply(eli5.apply(prompt)))
+
+print(decorated_prompt)
+```
+
+### Technical Documentation
+
+```python
+from prompt_decorators.decorators import Detailed, OutputFormat, CiteSources
+
+# Create decorators for technical documentation
+detailed = Detailed(depth=3, examples=True)
+output_format = OutputFormat(format_type="markdown", pretty_print=True)
+cite_sources = CiteSources(required=True, format="apa")
+
+# Apply decorators for technical documentation
+prompt = "Explain RESTful API design principles."
+decorated_prompt = output_format.apply(cite_sources.apply(detailed.apply(prompt)))
+
+print(decorated_prompt)
+```
+
+### Creative Writing
+
+```python
+from prompt_decorators.decorators import Creative, Tone, Persona
+
+# Create decorators for creative writing
+creative = Creative(originality=0.8, metaphors=True)
+tone = Tone(style="whimsical")
+persona = Persona(character="storyteller")
+
+# Apply decorators for creative writing
+prompt = "Write a short story about a journey through space."
+decorated_prompt = persona.apply(tone.apply(creative.apply(prompt)))
+
+print(decorated_prompt)
+```
+
+### Data Analysis
+
+```python
+from prompt_decorators.decorators import Reasoning, OutputFormat, StepByStep
+
+# Create decorators for data analysis
+reasoning = Reasoning(style="analytical", show_working=True)
+step_by_step = StepByStep(numbered=True, detail_level="high")
+output_format = OutputFormat(format_type="markdown", code_blocks=True)
+
+# Apply decorators for data analysis
+prompt = "Analyze this dataset and explain trends: [data description]"
+decorated_prompt = output_format.apply(step_by_step.apply(reasoning.apply(prompt)))
+
+print(decorated_prompt)
+```
+
 ## Next Steps
 
 - Learn about [Advanced Usage](advanced-usage.md)

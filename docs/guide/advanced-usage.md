@@ -247,6 +247,52 @@ processed_prompt = plugin.process("Explain quantum entanglement.")
 print(processed_prompt)
 ```
 
+<a id="compliance"></a>
+## Compliance and Regulatory Considerations
+
+When using prompt decorators in regulated industries, you may need to consider compliance requirements:
+
+```python
+from prompt_decorators.decorators import CiteSources, FactCheck, Limitations
+from prompt_decorators.decorators.generated.decorators.chain import Chain
+
+# Create compliance-focused decorators
+cite_sources = CiteSources(required=True, format="apa")
+fact_check = FactCheck(level="rigorous", highlight_uncertainties=True)
+limitations = Limitations(scope="comprehensive", include_alternatives=True)
+
+# Create a compliance chain
+compliance_chain = Chain(
+    decorators=[cite_sources, fact_check, limitations],
+    name="ComplianceChain"
+)
+
+# Apply to a prompt in a healthcare context
+medical_prompt = "Explain the latest treatments for type 2 diabetes."
+compliant_prompt = compliance_chain.apply(medical_prompt)
+
+print(compliant_prompt)
+```
+
+### Healthcare Compliance
+
+For healthcare applications, consider:
+
+1. **HIPAA Compliance**: Ensure no PHI (Protected Health Information) is included in prompts
+2. **Medical Accuracy**: Use fact-checking decorators to verify medical information
+3. **Disclaimers**: Add appropriate medical disclaimers using the `Limitations` decorator
+4. **Source Citation**: Always cite medical sources using the `CiteSources` decorator
+5. **Audit Trails**: Maintain records of all prompts and responses for compliance auditing
+
+### Financial Services Compliance
+
+For financial applications, consider:
+
+1. **Regulatory Disclosures**: Include required disclosures using custom decorators
+2. **Investment Advice**: Clearly mark limitations when discussing investments
+3. **Risk Statements**: Include appropriate risk statements
+4. **Factual Accuracy**: Verify financial information with fact-checking decorators
+
 ## Next Steps
 
 - Learn about [API Integration](api-integration.md)
