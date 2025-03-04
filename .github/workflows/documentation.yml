@@ -50,8 +50,11 @@ jobs:
           pip install -r docs/requirements.txt
           pip install pytest mypy  # Ensure pytest and mypy are available
 
-          # Verify plugins are installed
-          pip list | grep mkdocs
+      - name: Ensure awesome-pages plugin is installed
+        run: |
+          echo "Ensuring awesome-pages plugin is installed"
+          pip install mkdocs-awesome-pages-plugin>=2.9.0
+          pip show mkdocs-awesome-pages-plugin
 
       - name: Debug installed plugins
         run: |

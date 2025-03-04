@@ -127,6 +127,39 @@ nav:
       - BuildOn: api/decorators/BuildOn.md
       - Refine: api/decorators/Refine.md
       - Constraints: api/decorators/Constraints.md
+      - Abductive: api/decorators/Abductive.md
+      - Alternatives: api/decorators/Alternatives.md
+      - Analogical: api/decorators/Analogical.md
+      - AsExpert: api/decorators/AsExpert.md
+      - Balanced: api/decorators/Balanced.md
+      - BlindSpots: api/decorators/BlindSpots.md
+      - BreakAndBuild: api/decorators/BreakAndBuild.md
+      - CiteSources: api/decorators/CiteSources.md
+      - Confidence: api/decorators/Confidence.md
+      - Contrarian: api/decorators/Contrarian.md
+      - Debate: api/decorators/Debate.md
+      - DecoratorName: api/decorators/DecoratorName.md
+      - Deductive: api/decorators/Deductive.md
+      - Extremes: api/decorators/Extremes.md
+      - FactCheck: api/decorators/FactCheck.md
+      - FindGaps: api/decorators/FindGaps.md
+      - ForcedAnalogy: api/decorators/ForcedAnalogy.md
+      - Inductive: api/decorators/Inductive.md
+      - Limitations: api/decorators/Limitations.md
+      - Motivational: api/decorators/Motivational.md
+      - Narrative: api/decorators/Narrative.md
+      - NegativeSpace: api/decorators/NegativeSpace.md
+      - PeerReview: api/decorators/PeerReview.md
+      - Precision: api/decorators/Precision.md
+      - QualityMetrics: api/decorators/QualityMetrics.md
+      - RedTeam: api/decorators/RedTeam.md
+      - Remix: api/decorators/Remix.md
+      - RootCause: api/decorators/RootCause.md
+      - Socratic: api/decorators/Socratic.md
+      - Steelman: api/decorators/Steelman.md
+      - StressTest: api/decorators/StressTest.md
+      - StyleShift: api/decorators/StyleShift.md
+      - Uncertainty: api/decorators/Uncertainty.md
     - Utilities:
       - Overview: api/modules/prompt_decorators.utils.md
       - Cache: api/modules/prompt_decorators.utils.cache.md
@@ -143,6 +176,11 @@ nav:
       - Code Generator: api/modules/prompt_decorators.generator.code_gen.md
       - Test Generator: api/modules/prompt_decorators.generator.test_gen.md
       - Registry: api/modules/prompt_decorators.generator.registry.md
+    - Modules:
+      - prompt_decorators: api/modules/prompt_decorators.md
+      - prompt_decorators.core: api/modules/prompt_decorators.core.md
+      - prompt_decorators.decorators: api/modules/prompt_decorators.decorators.md
+      - prompt_decorators.decorators.generated: api/modules/prompt_decorators.decorators.generated.md
   - Examples:
     - Basic Examples: examples/basic.md
     - Advanced Examples: examples/advanced.md
@@ -170,6 +208,7 @@ nav:
     - Code Quality Integration: code_quality_integration.md
     - FAQ: faq.md
     - Glossary: glossary.md
+    - Navigation: navigation.md
     - Project Summaries:
       - Overview: project_summaries/index.md
       - Modernization Summary: project_summaries/project_modernization_summary.md

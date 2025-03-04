@@ -30,6 +30,27 @@ def check_plugin(plugin_name):
             # Search is built-in
             return True
 
+        # Special case for awesome-pages
+        if plugin_name == "awesome-pages":
+            package_name = "mkdocs-awesome-pages-plugin"
+            result = subprocess.run(
+                ["pip", "show", package_name], capture_output=True, text=True
+            )
+            if result.returncode == 0:
+                return True
+
+            # Try to install it if missing
+            print(f"Plugin '{plugin_name}' not found. Attempting to install...")
+            install_result = subprocess.run(
+                ["pip", "install", package_name], capture_output=True, text=True
+            )
+            if install_result.returncode == 0:
+                print(f"Successfully installed {package_name}")
+                return True
+            else:
+                print(f"Failed to install {package_name}: {install_result.stderr}")
+                return False
+
         # Try to check if the package is installed using pip
         package_name = f"mkdocs-{plugin_name}-plugin"
         if plugin_name == "mkdocstrings":
