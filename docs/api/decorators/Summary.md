@@ -93,6 +93,10 @@ Args:
     wordCount: Approximate target word count for the summary
     position: Where to position the summary in relation to any full content
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

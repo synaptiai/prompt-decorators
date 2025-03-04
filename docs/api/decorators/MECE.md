@@ -86,6 +86,10 @@ Args:
     depth: Maximum level of hierarchical breakdown within each dimension
     framework: Optional predefined MECE framework to apply
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

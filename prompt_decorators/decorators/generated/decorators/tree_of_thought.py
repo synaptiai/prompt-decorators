@@ -52,6 +52,10 @@ class TreeOfThought(BaseDecorator):
             depth: Maximum depth of reasoning in each branch
             pruning: Whether to eliminate less promising branches early
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

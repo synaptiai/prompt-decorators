@@ -89,6 +89,10 @@ Args:
     threshold: The threshold for flagging uncertain content
     reason: Whether to explain the reason for uncertainty
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

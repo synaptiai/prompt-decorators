@@ -85,6 +85,10 @@ Args:
     domain: Specific knowledge domain or field for domain-specific terminology adaptation
     examples: Whether to include additional examples for clarity
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

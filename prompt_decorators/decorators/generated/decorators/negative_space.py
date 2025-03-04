@@ -59,6 +59,10 @@ class NegativeSpace(BaseDecorator):
             depth: How deeply to explore the negative space
             structure: How to present the negative space analysis
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

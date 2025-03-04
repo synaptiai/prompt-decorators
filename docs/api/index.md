@@ -38,7 +38,6 @@
 - [prompt_decorators.decorators.generated.decorators.custom](modules/prompt_decorators.decorators.generated.decorators.custom.md)
 - [prompt_decorators.decorators.generated.decorators.debate](modules/prompt_decorators.decorators.generated.decorators.debate.md)
 - [prompt_decorators.decorators.generated.decorators.decision_matrix](modules/prompt_decorators.decorators.generated.decorators.decision_matrix.md)
-- [prompt_decorators.decorators.generated.decorators.decorator_name](modules/prompt_decorators.decorators.generated.decorators.decorator_name.md)
 - [prompt_decorators.decorators.generated.decorators.deductive](modules/prompt_decorators.decorators.generated.decorators.deductive.md)
 - [prompt_decorators.decorators.generated.decorators.detailed](modules/prompt_decorators.decorators.generated.decorators.detailed.md)
 - [prompt_decorators.decorators.generated.decorators.eli5](modules/prompt_decorators.decorators.generated.decorators.eli5.md)

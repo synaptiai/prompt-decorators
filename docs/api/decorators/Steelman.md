@@ -77,6 +77,10 @@ Args:
     critique: Whether to include critique after presenting the steel-manned arguments
     separation: Whether to clearly separate the steel-manned presentations from any analysis
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

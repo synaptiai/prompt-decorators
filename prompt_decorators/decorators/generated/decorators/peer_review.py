@@ -59,6 +59,10 @@ class PeerReview(BaseDecorator):
             style: The tone and approach of the peer review
             position: Where to place the peer review relative to the main content
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

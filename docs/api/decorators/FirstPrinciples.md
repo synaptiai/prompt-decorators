@@ -60,6 +60,10 @@ Initialize the FirstPrinciples decorator.
 Args:
     depth: Level of detail in breaking down to fundamental principles
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

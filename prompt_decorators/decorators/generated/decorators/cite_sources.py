@@ -56,6 +56,10 @@ class CiteSources(BaseDecorator):
             format: The citation format to use
             comprehensive: Whether to cite every claim (true) or only major claims (false)
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

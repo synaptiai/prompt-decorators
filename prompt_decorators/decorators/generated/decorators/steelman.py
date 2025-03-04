@@ -52,6 +52,10 @@ class Steelman(BaseDecorator):
             critique: Whether to include critique after presenting the steel-manned arguments
             separation: Whether to clearly separate the steel-manned presentations from any analysis
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

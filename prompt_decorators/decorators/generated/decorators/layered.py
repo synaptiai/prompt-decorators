@@ -60,6 +60,10 @@ class Layered(BaseDecorator):
             count: Number of distinct explanation layers to provide
             progression: How to structure the progression between layers
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

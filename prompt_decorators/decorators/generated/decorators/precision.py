@@ -53,6 +53,10 @@ class Precision(BaseDecorator):
             units: Whether to consistently provide units for all measurements
             definitions: Whether to include precise definitions for key terms
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

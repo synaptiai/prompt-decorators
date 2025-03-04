@@ -88,6 +88,10 @@ Args:
     aspects: Specific aspects or dimensions to explore in detail
     examples: Whether to include detailed examples to illustrate points
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

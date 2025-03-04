@@ -91,6 +91,10 @@ Args:
     format: The citation format to use
     comprehensive: Whether to cite every claim (true) or only major claims (false)
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

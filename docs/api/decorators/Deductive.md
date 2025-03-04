@@ -81,6 +81,10 @@ Args:
     formal: Whether to use formal logical structures with explicit syllogisms
     steps: Number of logical steps to include in the deductive process
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

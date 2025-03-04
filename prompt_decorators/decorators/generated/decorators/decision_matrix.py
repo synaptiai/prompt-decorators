@@ -58,6 +58,10 @@ class DecisionMatrix(BaseDecorator):
             weighted: Whether to include weights for criteria importance
             scale: Rating scale to use for evaluations
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

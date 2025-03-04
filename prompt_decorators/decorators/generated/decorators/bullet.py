@@ -53,6 +53,10 @@ class Bullet(BaseDecorator):
             indented: Whether to allow nested, indented bullet points
             compact: Whether to keep bullet points short and concise (true) or allow longer, more detailed points (false)
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

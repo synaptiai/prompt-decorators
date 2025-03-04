@@ -46,6 +46,10 @@ class ELI5(BaseDecorator):
         Args:
             strictness: Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

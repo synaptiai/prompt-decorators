@@ -56,6 +56,10 @@ class Uncertainty(BaseDecorator):
             threshold: The threshold for flagging uncertain content
             reason: Whether to explain the reason for uncertainty
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

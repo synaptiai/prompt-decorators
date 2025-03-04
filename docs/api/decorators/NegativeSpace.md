@@ -98,6 +98,10 @@ Args:
     depth: How deeply to explore the negative space
     structure: How to present the negative space analysis
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

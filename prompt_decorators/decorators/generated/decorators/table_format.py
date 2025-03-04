@@ -56,6 +56,10 @@ class TableFormat(BaseDecorator):
             format: Format style for the table representation
             alignment: Text alignment within table cells
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

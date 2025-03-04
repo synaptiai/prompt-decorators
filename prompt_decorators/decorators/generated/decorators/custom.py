@@ -53,6 +53,10 @@ class Custom(BaseDecorator):
             name: Optional name for the custom decorator to reference in documentation or explanations
             priority: How to prioritize custom rules relative to other decorators
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

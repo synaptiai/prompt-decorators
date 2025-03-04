@@ -55,6 +55,10 @@ class AsExpert(BaseDecorator):
             experience: The experience level of the expert
             technical: Whether to use highly technical language and domain-specific terminology
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

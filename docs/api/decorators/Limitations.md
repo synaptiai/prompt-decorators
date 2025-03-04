@@ -97,6 +97,10 @@ Args:
     position: Where to place the limitations statement in the response
     focus: The primary aspect to focus on in the limitations
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

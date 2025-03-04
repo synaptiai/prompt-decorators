@@ -56,6 +56,10 @@ class Narrative(BaseDecorator):
             characters: Whether to include character elements in the narrative
             length: The relative length of the narrative
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

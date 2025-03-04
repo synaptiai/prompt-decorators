@@ -77,6 +77,10 @@ Args:
     criteria: Specific criteria to evaluate hypotheses against (e.g., simplicity, explanatory power)
     rank: Whether to explicitly rank hypotheses by likelihood
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

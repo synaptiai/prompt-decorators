@@ -435,7 +435,8 @@ class CodeGenerator:
 
         # Generate docstring using the helper method
         init_docstring = self._generate_docstring(
-            f"Initialize the {name} decorator.", {"Args": args_dict}
+            f"Initialize the {name} decorator.",
+            {"Args": args_dict, "Returns": "None"},
         )
 
         # Indent the docstring and append it as a single string

@@ -93,6 +93,10 @@ Args:
     format: Format style for the table representation
     alignment: Text alignment within table cells
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

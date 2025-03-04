@@ -63,6 +63,10 @@ class FindGaps(BaseDecorator):
             depth: How thoroughly to analyze for gaps
             solutions: Whether to suggest solutions or approaches for addressing the identified gaps
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

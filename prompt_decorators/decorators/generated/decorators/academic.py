@@ -53,6 +53,10 @@ class Academic(BaseDecorator):
             style: The academic discipline style to follow
             format: The citation format to use for references
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

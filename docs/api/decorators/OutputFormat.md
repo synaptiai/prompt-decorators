@@ -74,6 +74,10 @@ Initialize the OutputFormat decorator.
 Args:
     format: The format to use for the response
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

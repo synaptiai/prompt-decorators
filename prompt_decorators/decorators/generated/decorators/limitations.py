@@ -57,6 +57,10 @@ class Limitations(BaseDecorator):
             position: Where to place the limitations statement in the response
             focus: The primary aspect to focus on in the limitations
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -52,6 +52,10 @@ class Chain(BaseDecorator):
             showSteps: Whether to show intermediate outputs after each decorator in the chain
             stopOnFailure: Whether to stop the chain if a decorator fails to apply correctly
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -56,6 +56,10 @@ class Summary(BaseDecorator):
             wordCount: Approximate target word count for the summary
             position: Where to position the summary in relation to any full content
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

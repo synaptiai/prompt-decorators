@@ -90,6 +90,10 @@ Args:
     characters: Whether to include character elements in the narrative
     length: The relative length of the narrative
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

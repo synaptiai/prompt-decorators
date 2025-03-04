@@ -89,6 +89,10 @@ Args:
     style: The academic discipline style to follow
     format: The citation format to use for references
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

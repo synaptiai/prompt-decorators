@@ -47,6 +47,10 @@ class Reasoning(BaseDecorator):
         Args:
             depth: The level of detail in the reasoning process
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

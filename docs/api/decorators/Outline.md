@@ -85,6 +85,10 @@ Args:
     style: Numbering or bullet style for the outline
     detailed: Whether to include brief explanations under each outline point
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

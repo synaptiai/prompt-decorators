@@ -76,6 +76,10 @@ Args:
     showSteps: Whether to show intermediate outputs after each decorator in the chain
     stopOnFailure: Whether to stop the chain if a decorator fails to apply correctly
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

@@ -46,6 +46,10 @@ class FirstPrinciples(BaseDecorator):
         Args:
             depth: Level of detail in breaking down to fundamental principles
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

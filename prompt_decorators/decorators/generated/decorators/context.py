@@ -56,6 +56,10 @@ class Context(BaseDecorator):
             scope: Which aspects of decorators to contextualize
             level: The expertise level to target within the domain
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

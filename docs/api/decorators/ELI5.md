@@ -67,6 +67,10 @@ Initialize the ELI5 decorator.
 Args:
     strictness: Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

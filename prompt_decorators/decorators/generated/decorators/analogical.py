@@ -53,6 +53,10 @@ class Analogical(BaseDecorator):
             count: Number of distinct analogies to provide
             depth: Level of detail in developing the analogy
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

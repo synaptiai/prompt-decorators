@@ -52,6 +52,10 @@ class Prioritize(BaseDecorator):
             count: Number of prioritized items to include
             showRationale: Whether to explain the reasoning behind each priority ranking
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

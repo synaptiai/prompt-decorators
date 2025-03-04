@@ -74,6 +74,10 @@ Args:
     parameters: JSON string specifying the parameters to override (e.g., '{"depth": "comprehensive", "focus": "methodology"}')
     behavior: Optional custom behavior modification instructions that override the standard decorator interpretation
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

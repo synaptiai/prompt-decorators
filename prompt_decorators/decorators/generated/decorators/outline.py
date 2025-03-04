@@ -53,6 +53,10 @@ class Outline(BaseDecorator):
             style: Numbering or bullet style for the outline
             detailed: Whether to include brief explanations under each outline point
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

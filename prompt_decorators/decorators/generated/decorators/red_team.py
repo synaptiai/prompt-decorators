@@ -53,6 +53,10 @@ class RedTeam(BaseDecorator):
             focus: Specific aspects to focus the red team analysis on
             constructive: Whether to include constructive suggestions for improvement after critiques
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

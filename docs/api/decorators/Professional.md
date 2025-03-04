@@ -80,6 +80,10 @@ Args:
     industry: The specific industry context to adapt the language for
     formality: The level of formality to maintain in the response
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

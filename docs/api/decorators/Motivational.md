@@ -96,6 +96,10 @@ Args:
     focus: The primary motivational approach to emphasize
     actionable: Whether to include specific actionable steps or only inspirational content
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

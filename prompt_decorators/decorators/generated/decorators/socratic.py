@@ -46,6 +46,10 @@ class Socratic(BaseDecorator):
         Args:
             iterations: Number of question-answer cycles to include
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

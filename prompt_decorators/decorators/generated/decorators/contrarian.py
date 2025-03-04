@@ -55,6 +55,10 @@ class Contrarian(BaseDecorator):
             maintain: Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)
             focus: Optional specific aspect of the topic to focus contrarian analysis on
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

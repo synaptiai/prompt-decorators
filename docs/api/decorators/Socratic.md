@@ -60,6 +60,10 @@ Initialize the Socratic decorator.
 Args:
     iterations: Number of question-answer cycles to include
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

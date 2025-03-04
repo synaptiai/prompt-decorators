@@ -81,6 +81,10 @@ Args:
     explicit: Whether to explicitly mention overridden behaviors in the response
     mode: How to handle conflicts between decorators
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

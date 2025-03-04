@@ -84,6 +84,10 @@ Args:
     dimension: The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity')
     compare: Whether to include a comparative analysis of the extreme versions
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

@@ -84,6 +84,10 @@ Args:
     structure: How to structure the different perspectives
     equal: Whether to strictly enforce equal word count for each perspective
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

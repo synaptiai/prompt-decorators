@@ -55,6 +55,10 @@ class Alternatives(BaseDecorator):
             diversity: How different or varied the alternatives should be from each other
             comparison: Whether to include a comparative analysis of the alternatives
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

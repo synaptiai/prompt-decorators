@@ -84,6 +84,10 @@ Args:
     threshold: Minimum confidence level for including information (as a percentage)
     detailed: Whether to provide explanations for confidence assessments
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

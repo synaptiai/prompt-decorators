@@ -90,6 +90,10 @@ Args:
     count: Number of distinct explanation layers to provide
     progression: How to structure the progression between layers
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

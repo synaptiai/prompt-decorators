@@ -83,6 +83,10 @@ Args:
     format: The presentation format for the comparison
     highlight: Whether to explicitly emphasize key differences
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

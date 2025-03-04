@@ -52,6 +52,10 @@ class Conditional(BaseDecorator):
             then: The decorator to apply if the condition is true (can be a specific decorator with parameters)
             else_param: The decorator to apply if the condition is false (can be a specific decorator with parameters)
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

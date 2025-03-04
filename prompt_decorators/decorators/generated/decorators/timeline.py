@@ -59,6 +59,10 @@ class Timeline(BaseDecorator):
             format: The presentation format for the timeline
             details: The level of detail to include for each timeline event
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -70,6 +70,10 @@ Args:
     perspectives: Number of different perspectives to include in the debate
     balanced: Whether to ensure equal representation and strength of arguments for each perspective
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

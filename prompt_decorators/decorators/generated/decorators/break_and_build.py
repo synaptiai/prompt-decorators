@@ -58,6 +58,10 @@ class BreakAndBuild(BaseDecorator):
             intensity: How thorough and challenging the breakdown phase should be
             buildRatio: Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

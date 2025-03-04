@@ -60,6 +60,10 @@ class Constraints(BaseDecorator):
             vocabulary: Constraints on vocabulary usage
             custom: Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet')
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

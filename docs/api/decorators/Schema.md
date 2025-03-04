@@ -71,6 +71,10 @@ Args:
     schema: JSON Schema definition or reference to a predefined schema that defines the structure of the response
     strict: Whether to enforce strict schema compliance or allow flexibility
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

@@ -83,6 +83,10 @@ Args:
     diversity: How different or varied the alternatives should be from each other
     comparison: Whether to include a comparative analysis of the alternatives
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

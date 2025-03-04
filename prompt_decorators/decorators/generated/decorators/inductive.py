@@ -57,6 +57,10 @@ class Inductive(BaseDecorator):
             confidence: Whether to explicitly state the confidence level of the inductive conclusions
             structure: The pattern of inductive reasoning to follow
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

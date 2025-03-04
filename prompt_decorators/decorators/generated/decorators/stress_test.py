@@ -55,6 +55,10 @@ class StressTest(BaseDecorator):
             severity: The intensity level of the stress conditions
             domain: Optional specific domain or dimension to stress test (e.g., financial, ethical, scalability)
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

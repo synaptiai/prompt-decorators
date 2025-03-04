@@ -84,6 +84,10 @@ Args:
     scale: Rating scale to use for evaluations
     explanation: Whether to provide detailed explanations for each metric score
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

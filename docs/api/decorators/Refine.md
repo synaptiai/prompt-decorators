@@ -76,6 +76,10 @@ Args:
     focus: Specific aspects to focus on during refinement (e.g., clarity, conciseness, evidence)
     showProcess: Whether to show the intermediate steps in the refinement process
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

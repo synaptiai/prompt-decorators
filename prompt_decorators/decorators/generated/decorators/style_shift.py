@@ -55,6 +55,10 @@ class StyleShift(BaseDecorator):
             level: The intensity level of the style aspect (1-5, where 1 is minimal and 5 is maximal)
             maintain: Style aspects to explicitly maintain while modifying the target aspect
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

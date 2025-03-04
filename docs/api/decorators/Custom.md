@@ -81,6 +81,10 @@ Args:
     name: Optional name for the custom decorator to reference in documentation or explanations
     priority: How to prioritize custom rules relative to other decorators
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

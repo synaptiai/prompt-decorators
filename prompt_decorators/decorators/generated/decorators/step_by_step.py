@@ -46,6 +46,10 @@ class StepByStep(BaseDecorator):
         Args:
             numbered: Whether to number the steps or use bullet points
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

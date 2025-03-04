@@ -72,6 +72,10 @@ Initialize the Tone decorator.
 Args:
     style: The desired tone and style for the response
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

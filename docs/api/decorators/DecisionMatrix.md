@@ -91,6 +91,10 @@ Args:
     weighted: Whether to include weights for criteria importance
     scale: Rating scale to use for evaluations
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

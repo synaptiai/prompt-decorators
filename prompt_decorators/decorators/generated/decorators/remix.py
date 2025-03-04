@@ -53,6 +53,10 @@ class Remix(BaseDecorator):
             preserve: What aspects of the original content to prioritize preserving
             contrast: Whether to highlight differences between the original framing and the remixed version
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

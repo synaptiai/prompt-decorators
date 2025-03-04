@@ -60,6 +60,10 @@ Initialize the StepByStep decorator.
 Args:
     numbered: Whether to number the steps or use bullet points
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

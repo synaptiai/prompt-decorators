@@ -53,6 +53,10 @@ class Comparison(BaseDecorator):
             format: The presentation format for the comparison
             highlight: Whether to explicitly emphasize key differences
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

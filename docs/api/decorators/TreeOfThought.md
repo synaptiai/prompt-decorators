@@ -77,6 +77,10 @@ Args:
     depth: Maximum depth of reasoning in each branch
     pruning: Whether to eliminate less promising branches early
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

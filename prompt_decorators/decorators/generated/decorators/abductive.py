@@ -52,6 +52,10 @@ class Abductive(BaseDecorator):
             criteria: Specific criteria to evaluate hypotheses against (e.g., simplicity, explanatory power)
             rank: Whether to explicitly rank hypotheses by likelihood
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

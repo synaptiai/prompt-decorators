@@ -52,6 +52,10 @@ class Refine(BaseDecorator):
             focus: Specific aspects to focus on during refinement (e.g., clarity, conciseness, evidence)
             showProcess: Whether to show the intermediate steps in the refinement process
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -53,6 +53,10 @@ class Nested(BaseDecorator):
             style: Visual style for hierarchical levels
             collapsible: Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -83,6 +83,10 @@ Args:
     focus: Specific aspects to focus the red team analysis on
     constructive: Whether to include constructive suggestions for improvement after critiques
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

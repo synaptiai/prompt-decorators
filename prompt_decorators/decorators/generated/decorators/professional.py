@@ -52,6 +52,10 @@ class Professional(BaseDecorator):
             industry: The specific industry context to adapt the language for
             formality: The level of formality to maintain in the response
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

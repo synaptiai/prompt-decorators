@@ -83,6 +83,10 @@ Args:
     style: Visual style for hierarchical levels
     collapsible: Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

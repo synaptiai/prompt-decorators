@@ -50,6 +50,10 @@ class RootCause(BaseDecorator):
             method: The specific root cause analysis methodology to apply
             depth: Level of detail in the analysis (for fivewhys, represents number of 'why' iterations)
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -76,6 +76,10 @@ Args:
     version: Specific version of the extension package to use
     decorators: Specific decorators to load from the extension (if empty, loads all decorators from the package)
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

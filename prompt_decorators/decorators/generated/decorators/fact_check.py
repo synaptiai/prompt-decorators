@@ -56,6 +56,10 @@ class FactCheck(BaseDecorator):
             uncertain: How to handle uncertain information
             strictness: The threshold for considering information verified
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -86,6 +86,10 @@ Args:
     bulletPoints: Whether to use bullet points for maximum brevity
     level: The degree of conciseness to apply
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

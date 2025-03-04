@@ -58,6 +58,10 @@ class Motivational(BaseDecorator):
             focus: The primary motivational approach to emphasize
             actionable: Whether to include specific actionable steps or only inspirational content
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

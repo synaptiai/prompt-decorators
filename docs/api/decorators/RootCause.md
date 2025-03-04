@@ -86,6 +86,10 @@ Args:
     method: The specific root cause analysis methodology to apply
     depth: Level of detail in the analysis (for fivewhys, represents number of 'why' iterations)
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

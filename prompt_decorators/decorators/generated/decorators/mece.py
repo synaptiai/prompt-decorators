@@ -55,6 +55,10 @@ class MECE(BaseDecorator):
             depth: Maximum level of hierarchical breakdown within each dimension
             framework: Optional predefined MECE framework to apply
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

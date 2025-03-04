@@ -89,6 +89,10 @@ Args:
     indented: Whether to allow nested, indented bullet points
     compact: Whether to keep bullet points short and concise (true) or allow longer, more detailed points (false)
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

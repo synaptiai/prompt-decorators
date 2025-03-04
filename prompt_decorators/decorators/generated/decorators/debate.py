@@ -49,6 +49,10 @@ class Debate(BaseDecorator):
             perspectives: Number of different perspectives to include in the debate
             balanced: Whether to ensure equal representation and strength of arguments for each perspective
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

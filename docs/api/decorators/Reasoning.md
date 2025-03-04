@@ -66,6 +66,10 @@ Initialize the Reasoning decorator.
 Args:
     depth: The level of detail in the reasoning process
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

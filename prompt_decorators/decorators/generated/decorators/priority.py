@@ -53,6 +53,10 @@ class Priority(BaseDecorator):
             explicit: Whether to explicitly mention overridden behaviors in the response
             mode: How to handle conflicts between decorators
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

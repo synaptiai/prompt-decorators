@@ -49,6 +49,10 @@ class OutputFormat(BaseDecorator):
         Args:
             format: The format to use for the response
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

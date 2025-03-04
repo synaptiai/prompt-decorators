@@ -83,6 +83,10 @@ Args:
     severity: The intensity level of the stress conditions
     domain: Optional specific domain or dimension to stress test (e.g., financial, ethical, scalability)
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

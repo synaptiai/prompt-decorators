@@ -47,6 +47,10 @@ class Tone(BaseDecorator):
         Args:
             style: The desired tone and style for the response
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

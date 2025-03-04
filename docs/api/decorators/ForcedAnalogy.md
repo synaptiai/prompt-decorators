@@ -83,6 +83,10 @@ Args:
     comprehensiveness: How comprehensively to map concepts between domains
     mappings: Number of distinct concept mappings to create between domains
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

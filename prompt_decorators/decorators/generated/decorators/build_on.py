@@ -56,6 +56,10 @@ class BuildOn(BaseDecorator):
             approach: How to build upon the referenced content
             preserveStructure: Whether to maintain the structure of the referenced content
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

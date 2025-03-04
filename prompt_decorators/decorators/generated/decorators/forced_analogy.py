@@ -57,6 +57,10 @@ class ForcedAnalogy(BaseDecorator):
             comprehensiveness: How comprehensively to map concepts between domains
             mappings: Number of distinct concept mappings to create between domains
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

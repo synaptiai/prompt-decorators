@@ -50,6 +50,10 @@ Initialize the Version decorator.
 Args:
     standard: The semantic version of the Prompt Decorators standard to use
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

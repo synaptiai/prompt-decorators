@@ -56,6 +56,10 @@ class BlindSpots(BaseDecorator):
             depth: How thoroughly to analyze for blind spots
             position: Where to place the blind spots analysis
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

@@ -87,6 +87,10 @@ Args:
     elements: Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative)
     constraints: Optional creative constraints to work within
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

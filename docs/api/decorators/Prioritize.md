@@ -77,6 +77,10 @@ Args:
     count: Number of prioritized items to include
     showRationale: Whether to explain the reasoning behind each priority ranking
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

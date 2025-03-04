@@ -88,6 +88,10 @@ Args:
     confidence: Whether to explicitly state the confidence level of the inductive conclusions
     structure: The pattern of inductive reasoning to follow
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

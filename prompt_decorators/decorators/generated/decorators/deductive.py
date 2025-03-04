@@ -52,6 +52,10 @@ class Deductive(BaseDecorator):
             formal: Whether to use formal logical structures with explicit syllogisms
             steps: Number of logical steps to include in the deductive process
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

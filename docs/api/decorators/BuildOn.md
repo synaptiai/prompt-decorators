@@ -91,6 +91,10 @@ Args:
     approach: How to build upon the referenced content
     preserveStructure: Whether to maintain the structure of the referenced content
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

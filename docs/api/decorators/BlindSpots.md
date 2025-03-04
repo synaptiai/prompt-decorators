@@ -89,6 +89,10 @@ Args:
     depth: How thoroughly to analyze for blind spots
     position: Where to place the blind spots analysis
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

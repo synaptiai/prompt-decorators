@@ -53,6 +53,10 @@ class Detailed(BaseDecorator):
             aspects: Specific aspects or dimensions to explore in detail
             examples: Whether to include detailed examples to illustrate points
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

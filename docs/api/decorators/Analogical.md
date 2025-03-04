@@ -84,6 +84,10 @@ Args:
     count: Number of distinct analogies to provide
     depth: Level of detail in developing the analogy
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

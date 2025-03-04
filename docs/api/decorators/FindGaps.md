@@ -93,6 +93,10 @@ Args:
     depth: How thoroughly to analyze for gaps
     solutions: Whether to suggest solutions or approaches for addressing the identified gaps
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

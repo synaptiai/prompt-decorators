@@ -55,6 +55,10 @@ class QualityMetrics(BaseDecorator):
             scale: Rating scale to use for evaluations
             explanation: Whether to provide detailed explanations for each metric score
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

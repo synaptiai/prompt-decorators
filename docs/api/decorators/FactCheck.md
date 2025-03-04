@@ -90,6 +90,10 @@ Args:
     uncertain: How to handle uncertain information
     strictness: The threshold for considering information verified
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

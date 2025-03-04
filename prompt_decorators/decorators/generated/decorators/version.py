@@ -46,6 +46,10 @@ class Version(BaseDecorator):
         Args:
             standard: The semantic version of the Prompt Decorators standard to use
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

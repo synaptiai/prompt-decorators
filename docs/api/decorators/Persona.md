@@ -75,6 +75,10 @@ Args:
     traits: Key personality traits or characteristics of the persona
     goals: Primary goals or concerns of the persona
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

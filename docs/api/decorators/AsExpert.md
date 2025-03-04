@@ -88,6 +88,10 @@ Args:
     experience: The experience level of the expert
     technical: Whether to use highly technical language and domain-specific terminology
 
+
+Returns:
+    None
+
 #### `apply`
 
 **Signature:** `apply(prompt) -> <class 'str'>`

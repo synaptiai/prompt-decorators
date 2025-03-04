@@ -53,6 +53,10 @@ class Confidence(BaseDecorator):
             threshold: Minimum confidence level for including information (as a percentage)
             detailed: Whether to provide explanations for confidence assessments
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

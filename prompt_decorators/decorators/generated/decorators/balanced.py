@@ -55,6 +55,10 @@ class Balanced(BaseDecorator):
             structure: How to structure the different perspectives
             equal: Whether to strictly enforce equal word count for each perspective
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()

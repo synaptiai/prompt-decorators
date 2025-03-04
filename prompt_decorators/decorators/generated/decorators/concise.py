@@ -53,6 +53,10 @@ class Concise(BaseDecorator):
             bulletPoints: Whether to use bullet points for maximum brevity
             level: The degree of conciseness to apply
 
+
+        Returns:
+            None
+
         """
         # Initialize with base values
         super().__init__()
