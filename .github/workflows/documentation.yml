@@ -49,7 +49,7 @@ jobs:
           # Install the rest of the requirements
           pip install -r docs/requirements.txt
           pip install pytest mypy  # Ensure pytest and mypy are available
-          
+
           # Verify plugins are installed
           pip list | grep mkdocs
 

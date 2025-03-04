@@ -63,4 +63,4 @@ This page provides an overview of all available decorators in the Prompt Decorat
 
 ## Using Decorators
 
-For detailed information on how to use these decorators, see the [Basic Usage](../guide/basic-usage.md) and [Advanced Usage](../guide/advanced-usage.md) guides. 
+For detailed information on how to use these decorators, see the [Basic Usage](../guide/basic-usage.md) and [Advanced Usage](../guide/advanced-usage.md) guides.

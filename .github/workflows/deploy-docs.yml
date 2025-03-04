@@ -38,10 +38,10 @@ jobs:
           pip install mkdocstrings-python>=1.7.0
           # Install the rest of the requirements
           pip install -r docs/requirements.txt
-          
+
           # Verify plugins are installed
           pip list | grep mkdocs
 
       - name: Build and deploy documentation
         run: |
-          mkdocs gh-deploy --force 
+          mkdocs gh-deploy --force
