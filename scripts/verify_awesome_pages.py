@@ -31,7 +31,7 @@ def verify_awesome_pages():
             print("Installing mkdocs-awesome-pages-plugin...")
 
             install_result = subprocess.run(
-                ["pip", "install", "mkdocs-awesome-pages-plugin>=2.9.0"],
+                ["pip", "install", "mkdocs-awesome-pages-plugin>=2.10.1"],
                 capture_output=True,
                 text=True,
             )
@@ -81,7 +81,45 @@ def verify_awesome_pages():
             return False
         except Exception as e:
             print(f"ERROR: Failed to validate MkDocs configuration: {e}")
-            return False
+
+            # Try to install the plugin again with explicit version
+            print("Attempting to reinstall the plugin with explicit version...")
+            reinstall_result = subprocess.run(
+                [
+                    "pip",
+                    "install",
+                    "--force-reinstall",
+                    "mkdocs-awesome-pages-plugin==2.10.1",
+                ],
+                capture_output=True,
+                text=True,
+            )
+
+            if reinstall_result.returncode != 0:
+                print(f"ERROR: Failed to reinstall plugin: {reinstall_result.stderr}")
+                return False
+
+            print("Successfully reinstalled the plugin. Verifying again...")
+
+            # Verify the plugin is now properly installed
+            verify_result = subprocess.run(
+                [
+                    "python",
+                    "-c",
+                    "import mkdocs_awesome_pages_plugin; print(mkdocs_awesome_pages_plugin.__version__)",
+                ],
+                capture_output=True,
+                text=True,
+            )
+
+            if verify_result.returncode != 0:
+                print(
+                    f"ERROR: Plugin still not working after reinstall: {verify_result.stderr}"
+                )
+                return False
+
+            print(f"Plugin reinstalled successfully: {verify_result.stdout.strip()}")
+            return True
 
     except Exception as e:
         print(f"ERROR: Unexpected error: {e}")
