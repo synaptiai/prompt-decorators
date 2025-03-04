@@ -6,7 +6,6 @@ mkdocs-git-revision-date-localized-plugin>=1.2.0
 mkdocs-minify-plugin>=0.7.0
 mkdocstrings>=0.24.0
 mkdocstrings-python>=1.7.0
-mkdocstrings-handlers>=0.24.0
 pydantic>=2.0.0
 jsonschema>=4.0.0
 importlib-metadata>=6.0.0
