@@ -92,6 +92,20 @@ You can also run the hooks manually on all files:
 pre-commit run --all-files
 ```
 
+### Fixing Common Issues
+
+If you encounter issues with pre-commit hooks failing due to trailing whitespace, end-of-file newlines, or mixed line endings, you can use our utility script to fix these issues automatically:
+
+```bash
+# Fix issues in staged files
+python scripts/fix_common_issues.py
+
+# Fix issues in all tracked files
+python scripts/fix_common_issues.py --all
+```
+
+This script will automatically fix common issues that cause pre-commit hooks to fail, making the development process smoother.
+
 ## Project Structure
 
 The project follows this structure:
