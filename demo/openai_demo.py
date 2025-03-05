@@ -582,14 +582,12 @@ def run_example(args: Args) -> None:
 
     logger.log_info(f"Running example for decorator: {decorator_name}")
 
-    # Query with the decorator
+    # Query with the decorator and explicitly ignore the return value
     if isinstance(prompt, str):
-        response = query_with_decorators(
-            prompt, cast(List[str], [decorator_str]), args.model
-        )
+        _ = query_with_decorators(prompt, cast(List[str], [decorator_str]), args.model)
     else:
         # Convert prompt to string if it's not already
-        response = query_with_decorators(
+        _ = query_with_decorators(
             str(prompt), cast(List[str], [decorator_str]), args.model
         )
 
@@ -617,9 +615,9 @@ def handle_prompt_and_decorators(args: Args) -> None:
     logger.log_info(f"Running with {len(decorator_list)} decorators")
     logger.log_info(f"Prompt: {prompt}")
 
-    # Query with decorators
+    # Query with decorators and explicitly ignore the return value
     if isinstance(prompt, str):
-        response = query_with_decorators(prompt, decorator_list, args.model)
+        _ = query_with_decorators(prompt, decorator_list, args.model)
     else:
         logger.log_error("Prompt must be a string")
         return
