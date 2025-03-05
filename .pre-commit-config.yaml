@@ -45,7 +45,7 @@ repos:
         entry: mypy
         language: python
         types: [python]
-        exclude: ^(docs/|examples/|scripts/|tests/)
+        exclude: ^(docs/|examples/|scripts/|tests/|demo/)
         args: ["--config-file=mypy.ini"]
 
       - id: pytest
