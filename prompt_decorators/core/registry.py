@@ -30,6 +30,9 @@ class DecoratorRegistry:
     def decorators(self) -> Dict[str, Type[BaseDecorator]]:
         """Get all registered decorators.
 
+        Args:
+            None
+
         Returns:
             Dictionary mapping decorator names to decorator classes
         """
@@ -38,6 +41,9 @@ class DecoratorRegistry:
     @property
     def categories(self) -> Dict[str, Set[str]]:
         """Get all decorator categories and their members.
+
+        Args:
+            None
 
         Returns:
             Dictionary mapping category names to sets of decorator names
@@ -84,6 +90,9 @@ class DecoratorRegistry:
         """Clear the decorator registry.
 
         This is primarily used for testing.
+
+        Args:
+            None
 
         Returns:
             None

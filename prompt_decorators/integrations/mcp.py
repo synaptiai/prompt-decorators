@@ -38,6 +38,9 @@ class DummyFastMCP:
         Args:
             *args: Positional arguments (ignored)
             **kwargs: Keyword arguments (ignored)
+
+        Returns:
+            None
         """
         pass
 
@@ -148,6 +151,12 @@ class DummyFastMCP:
         """Dummy run method that does nothing.
 
         This is a placeholder for the FastMCP.run method.
+
+        Args:
+            None
+
+        Returns:
+            None
         """
         pass
 

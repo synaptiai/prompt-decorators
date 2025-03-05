@@ -29,7 +29,7 @@ class DecoratorParser:
 
         Args:
             registry: Optional decorator registry to use for creating decorators.
-                     If not provided, a new registry will be created.
+            If not provided, a new registry will be created.
         """
         self.registry = registry or DecoratorRegistry()
 
