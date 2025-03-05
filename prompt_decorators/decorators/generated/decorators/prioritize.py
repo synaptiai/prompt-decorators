@@ -25,6 +25,30 @@ class Prioritize(BaseDecorator):
     decorator_name = "prioritize"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please prioritize the information in your response by ranking it"
+        "according to specific criteria. Organize the content hierarchically"
+        "from most to least critical, clearly distinguishing different levels"
+        "of priority.",
+        "parameterMapping": {
+            "criteria": {
+                "format": "Rank the information based specifically on {value}, with the highest {value} items appearing first and lowest appearing last.",
+            },
+            "count": {
+                "format": "Include exactly {value} prioritized items in your response, focusing on those with the highest priority according to the specified criteria.",
+            },
+            "showRationale": {
+                "valueMap": {
+                    "true": "For each prioritized item, provide a clear explanation of the reasoning behind its ranking position.",
+                    "false": "Focus on presenting the prioritized items in order without explaining the rationale for each ranking position.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -237,3 +261,18 @@ class Prioritize(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

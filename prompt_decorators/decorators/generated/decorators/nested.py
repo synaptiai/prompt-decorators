@@ -26,6 +26,34 @@ class Nested(BaseDecorator):
     decorator_name = "nested"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please organize your response in a deeply hierarchical structure with"
+        "clearly defined levels of nesting. Create a logical progression from"
+        "major categories down to granular subcategories, maintaining"
+        "consistent organization patterns throughout.",
+        "parameterMapping": {
+            "depth": {
+                "format": "Structure your response with {value} levels of nesting, where the information hierarchy reveals increasingly specific details at each level.",
+            },
+            "style": {
+                "valueMap": {
+                    "bullet": "Use bullet points (•, ○, ■, □, etc.) consistently throughout all hierarchical levels.",
+                    "numbered": "Use numbered lists (1., 1.1., 1.1.1., etc.) consistently throughout all hierarchical levels.",
+                    "mixed": "Use a mix of formatting styles: numbers for top level (1., 2., etc.), letters for second level (a., b., etc.), and bullets for deeper levels.",
+                },
+            },
+            "collapsible": {
+                "valueMap": {
+                    "true": "Design the hierarchy to work as collapsible sections, where each parent category could expand to show child categories.",
+                    "false": "Present the full hierarchy with all levels visible simultaneously.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -242,3 +270,18 @@ class Nested(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

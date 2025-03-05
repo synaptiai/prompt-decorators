@@ -29,6 +29,35 @@ class Context(BaseDecorator):
     decorator_name = "context"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please adapt your response and the behavior of any other decorators to"
+        "the specific domain context provided.",
+        "parameterMapping": {
+            "domain": {
+                "format": "Apply specialized knowledge, terminology, and conventions appropriate for the {value} domain.",
+            },
+            "scope": {
+                "valueMap": {
+                    "terminology": "Use domain-specific terminology and vocabulary from this field, but keep other aspects generalized.",
+                    "examples": "Use domain-specific examples and cases to illustrate concepts, but keep terminology and structure generalized.",
+                    "structure": "Organize the information according to standard frameworks and structures used in this domain, but keep terminology and examples generalized.",
+                    "all": "Apply domain-specific terminology, examples, and structural organization throughout the entire response.",
+                },
+            },
+            "level": {
+                "valueMap": {
+                    "beginner": "Target the response for newcomers to the field with limited domain knowledge or expertise.",
+                    "intermediate": "Target the response for individuals with moderate familiarity and experience in the domain.",
+                    "expert": "Target the response for specialists and experts with advanced knowledge in the domain.",
+                    "mixed": "Structure the response to be accessible to beginners while also including deeper insights for experts.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +270,18 @@ class Context(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

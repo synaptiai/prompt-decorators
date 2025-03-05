@@ -684,6 +684,146 @@ Implementations that support multiple formats MUST:
 3. Handle conversion errors gracefully with appropriate error messages
 4. Preserve all metadata and parameters during conversion
 
+### 5.6 Decorator Transformation Implementation
+
+Implementations of prompt decorators MUST provide a mechanism for transforming the original prompt according to the decorator's intended behavior. This section describes the standard approach to prompt transformation.
+
+#### 5.6.1 Transformation Models
+
+The transformation model for prompt decorators follows these principles:
+
+1. **Decorator's Purpose**: Each decorator defines a specific modification to the prompt or response behavior.
+2. **Instruction-Based Implementation**: Decorators primarily work by adding specific instructions to the prompt.
+3. **Parameter-Specific Variations**: Parameters modify the instructions according to their values.
+4. **Composition Logic**: Multiple decorators combine in a predictable way.
+
+#### 5.6.2 Standard Implementation Pattern
+
+A compliant implementation of decorator transformation behavior MUST follow this pattern:
+
+```python
+def apply_decorator(prompt, decorator_name, parameters):
+    """
+    Apply a decorator transformation to a prompt.
+
+    Args:
+        prompt: Original prompt text
+        decorator_name: Name of the decorator to apply
+        parameters: Dictionary of parameters
+
+    Returns:
+        Transformed prompt text
+    """
+    # Base implementation for Reasoning decorator
+    if decorator_name == "Reasoning":
+        depth = parameters.get("depth", "moderate")
+
+        # Base instruction
+        instruction = "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion."
+
+        # Parameter-specific modifications
+        if depth == "comprehensive":
+            instruction += " Provide a very thorough and detailed analysis with multiple perspectives."
+        elif depth == "basic":
+            instruction += " Focus on the most important logical steps."
+
+        # Apply transformation (usually prepending)
+        return f"{instruction}\n\n{prompt}"
+
+    # Implementations for other decorators...
+
+    # Default fallback
+    return prompt
+```
+
+#### 5.6.3 Transformation Templates
+
+For consistent behavior across implementations, each decorator SHOULD define a transformation template consisting of:
+
+1. **Base Instruction**: The standard instruction text that implements the decorator's behavior.
+2. **Parameter Mappings**: How each parameter and its possible values modify the instruction.
+3. **Placement Strategy**: How the transformed content is positioned (typically prepended).
+
+Decorators MAY define this information in their registry entries using the `transformationTemplate` property as defined in the registry-entry schema:
+
+```json
+{
+  "transformationTemplate": {
+    "instruction": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "basic": "Focus on the most important logical steps.",
+          "moderate": "Balance detail with clarity in your reasoning.",
+          "comprehensive": "Provide a very thorough and detailed analysis with multiple perspectives."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  }
+}
+```
+
+#### 5.6.4 Composition Rules
+
+When applying multiple decorators, implementations MUST follow these rules:
+
+1. **Order of Application**: Apply decorators in the order they appear in the prompt or decorator list.
+2. **Accumulation**: Instructions from multiple decorators accumulate unless they explicitly override each other.
+3. **Coherence**: The combined instructions must form a coherent set of directives.
+4. **Conflict Resolution**: If decorators have contradictory instructions, the later decorator takes precedence.
+
+Example of composition:
+
+```
+Original:
++++Reasoning(depth=comprehensive)
++++Audience(level=beginner)
+Explain quantum computing.
+
+Transformed:
+Please provide detailed reasoning in your response with thorough analysis.
+Please tailor your response for a beginner audience with minimal technical jargon.
+
+Explain quantum computing.
+```
+
+#### 5.6.5 Implementation Requirements
+
+A compliant decorator implementation MUST:
+
+1. **Parse Decorators**: Correctly extract decorators and their parameters from prompts.
+2. **Apply Transformations**: Transform the prompt according to the decorator's template.
+3. **Support Composition**: Handle multiple decorators correctly.
+4. **Provide Fallbacks**: Gracefully handle unsupported decorators.
+5. **Document Behavior**: Clearly document the transformation behavior for each supported decorator.
+
+#### 5.6.6 Testing and Validation
+
+Implementations SHOULD include tests that validate:
+
+1. Correct transformation of prompts for each supported decorator.
+2. Proper handling of all parameter combinations.
+3. Consistent behavior when composing multiple decorators.
+4. Correct fallback behavior for unsupported decorators or parameters.
+
+Implementations MAY use the `implementationGuidance.examples` property in the registry entry to define test cases for validation:
+
+```json
+{
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard use case",
+        "originalPrompt": "What are the environmental impacts of electric vehicles?",
+        "transformedPrompt": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Provide a very thorough and detailed analysis with multiple perspectives.\n\nWhat are the environmental impacts of electric vehicles?"
+      }
+    ]
+  }
+}
+```
+
 ## 6. Use Cases and Examples
 
 ### 6.1 Research and Analysis

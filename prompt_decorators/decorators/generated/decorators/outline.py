@@ -26,6 +26,34 @@ class Outline(BaseDecorator):
     decorator_name = "outline"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response as a hierarchical outline with headings"
+        "and subheadings to organize the information clearly.",
+        "parameterMapping": {
+            "depth": {
+                "format": "Use a maximum of {value} levels of nesting in the hierarchy.",
+            },
+            "style": {
+                "valueMap": {
+                    "numeric": "Use numeric notation (1, 1.1, 1.1.1, etc.) for all outline levels.",
+                    "bullet": "Use bullet point notation (•, ○, ▪, etc.) for all outline levels.",
+                    "roman": "Use Roman numeral notation (I, II, III, etc. for top level, then A, B, C, etc. for second level).",
+                    "alpha": "Use alphabetical notation (A, B, C, etc. for top level, then 1, 2, 3, etc. for second level).",
+                    "mixed": "Use a mix of notation styles: numbers for level 1, letters for level 2, Roman numerals for level 3, etc.",
+                },
+            },
+            "detailed": {
+                "valueMap": {
+                    "true": "Include a brief explanation or description under each outline point to provide context.",
+                    "false": "Keep the outline concise with headings only, without additional explanations under each point.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -242,3 +270,18 @@ class Outline(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

@@ -25,6 +25,28 @@ class Refine(BaseDecorator):
     decorator_name = "refine"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please apply an iterative refinement process to your response, with"
+        "each iteration improving upon the previous version.",
+        "parameterMapping": {
+            "iterations": {
+                "format": "Perform {value} refinement iterations to improve your response.",
+            },
+            "focus": {
+                "format": "Focus your refinements on improving these specific aspects: {value}.",
+            },
+            "showProcess": {
+                "valueMap": {
+                    "true": "Show each iteration separately in your response, labeling them as 'Draft 1', 'Draft 2', etc., to demonstrate the refinement process.",
+                    "false": "Only provide the final refined response without showing the intermediate steps.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -237,3 +259,18 @@ class Refine(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

@@ -24,6 +24,26 @@ class Schema(BaseDecorator):
     decorator_name = "schema"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response according to the following schema"
+        "definition. Ensure that your content follows this specific structure"
+        "while maintaining the information's accuracy and completeness.",
+        "parameterMapping": {
+            "schema": {
+                "format": "Use this specific schema definition to structure your response: {value}. Make sure your content adheres to all property types and constraints defined in the schema.",
+            },
+            "strict": {
+                "valueMap": {
+                    "true": "Apply the schema definition strictly, ensuring perfect compliance with all property types, required fields, and constraints without any deviations or additional properties.",
+                    "false": "Apply the schema as a general guide, allowing reasonable flexibility while maintaining the core structure. You may include additional helpful information if it enhances understanding.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "override",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -204,3 +224,18 @@ class Schema(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

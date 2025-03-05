@@ -464,68 +464,197 @@ class TestGenerator:
         return code_lines
 
     def _generate_test_methods(self, decorator_data: Dict[str, Any]) -> List[str]:
-        """Generate test methods for a decorator.
+        """Generate the test methods for a decorator.
+
         Args:
-            decorator_data: The decorator data to generate test methods for
+            decorator_data: The decorator data
 
         Returns:
-            List of test methods as strings
+            List of code lines for the test methods
         """
-        decorator_name = decorator_data.get("decoratorName", "")
+        decorator_name = decorator_data["decoratorName"]
+        params = [Parameter(**p) for p in decorator_data.get("parameters", [])]
+        transformation_template = decorator_data.get("transformationTemplate", {})
+        snake_name = self._convert_to_snake_case(decorator_name)
+
+        test_methods = []
+
+        # Test initialization with valid parameters
+        test_methods.append("    def test_initialization_with_valid_parameters(self):")
+        test_methods.append("        # Test with valid parameters")
+        test_methods.append("        params = self.get_valid_params()")
+        test_methods.append(f"        decorator = {decorator_name}(**params)")
+        test_methods.append(f"        self.assertEqual(decorator.name, '{snake_name}')")
+
+        # Add assertions for properties
+        for param in params:
+            param_name = param.name
+            test_methods.append(
+                f"        self.assertEqual(decorator.{param_name}, params.get('{param_name}', {param.get_default_code()}))"
+            )
+        test_methods.append("")
+
+        # Test initialization with no parameters
+        test_methods.append("    def test_initialization_with_no_parameters(self):")
+        test_methods.append(f"        decorator = {decorator_name}()")
+        test_methods.append(f"        self.assertEqual(decorator.name, '{snake_name}')")
+        # Add assertions for default property values
+        for param in params:
+            param_name = param.name
+            test_methods.append(
+                f"        self.assertEqual(decorator.{param_name}, {param.get_default_code()})"
+            )
+        test_methods.append("")
+
+        # Test validation for required parameters
+        for param in params:
+            if param.required:
+                test_methods.append(
+                    self._generate_required_param_test(decorator_name, param)
+                )
+
+        # Test validation rules for parameters
+        for param in params:
+            if param.validation:
+                test_methods.append(
+                    self._generate_param_validation_test(decorator_name, param)
+                )
+
+        # Test transform_prompt if transformation template exists
+        if transformation_template and transformation_template.get("instruction"):
+            test_methods.append(self._generate_transform_test(decorator_data))
+
+            # Test with implementation examples if they exist
+            if (
+                "implementationGuidance" in decorator_data
+                and "examples" in decorator_data["implementationGuidance"]
+            ):
+                test_methods.append(
+                    self._generate_implementation_examples_test(decorator_data)
+                )
+
+        # Add serialization tests
+        test_methods.append(self._generate_serialization_tests(decorator_name))
+
+        # Add apply examples test if examples are available
+        if "examples" in decorator_data:
+            test_methods.extend(self._generate_apply_examples_test(decorator_data))
+
+        return test_methods
+
+    def _generate_transform_test(self, decorator_data: Dict[str, Any]) -> str:
+        """Generate a test for the transform_prompt method.
+
+        Args:
+            decorator_data: The decorator data
+
+        Returns:
+            Code for the transform test method
+        """
+        decorator_name = decorator_data["decoratorName"]
+        transformation_template = decorator_data.get("transformationTemplate", {})
+        instruction = transformation_template.get("instruction", "")
+        placement = transformation_template.get("placement", "prepend")
+
+        # Parameters for the test
         params = decorator_data.get("parameters", [])
-        examples = decorator_data.get("examples", [])
+        param_args = ""
+        if params:
+            param_args = "**self.get_valid_params()"
 
-        all_methods = []
+        test_code = [
+            "    def test_apply_to_prompt(self):",
+            "        # Test that apply_to_prompt correctly transforms the prompt",
+            f"        decorator = {decorator_name}({param_args})",
+            '        test_prompt = "This is a test prompt."',
+            "",
+            "        # Apply the transformation",
+            "        transformed_prompt = decorator.apply_to_prompt(test_prompt)",
+            "",
+            "        # Verify the transformation",
+            "        self.assertIsInstance(transformed_prompt, str)",
+            '        self.assertNotEqual(transformed_prompt, test_prompt, "Prompt should be transformed")',
+        ]
 
-        # Generate tests for required parameters
-        for param in params:
-            if param.get("required", False):
-                param_obj = Parameter(
-                    name=param["name"],
-                    type=param.get("type", "string"),
-                    required=True,
-                    validation=param.get("validation", {}),
-                    schema=param.get("schema", {}),
-                    enum=param.get("enum", []),
+        # Add specific assertions based on placement
+        if placement == "prepend":
+            test_code.append("        # Check that the instruction is prepended")
+            test_code.append(
+                '        self.assertTrue(transformed_prompt.startswith(decorator.transformation_template["instruction"]))'
+            )
+            test_code.append(
+                "        self.assertTrue(test_prompt in transformed_prompt)"
+            )
+        elif placement == "append":
+            test_code.append("        # Check that the instruction is appended")
+            test_code.append(
+                '        self.assertTrue(transformed_prompt.endswith(decorator.transformation_template["instruction"]))'
+            )
+            test_code.append(
+                "        self.assertTrue(test_prompt in transformed_prompt)"
+            )
+        elif placement == "wrap":
+            test_code.append("        # Check that the instruction wraps the prompt")
+            test_code.append(
+                '        self.assertTrue(transformed_prompt.startswith(decorator.transformation_template["instruction"]))'
+            )
+            test_code.append(
+                '        self.assertTrue(transformed_prompt.endswith(decorator.transformation_template["instruction"]))'
+            )
+            test_code.append(
+                "        self.assertTrue(test_prompt in transformed_prompt)"
+            )
+
+        test_code.append("")
+        return "\n".join(test_code)
+
+    def _generate_implementation_examples_test(
+        self, decorator_data: Dict[str, Any]
+    ) -> str:
+        """Generate a test for the implementation examples.
+
+        Args:
+            decorator_data: The decorator data
+
+        Returns:
+            Code for the implementation examples test
+        """
+        decorator_name = decorator_data["decoratorName"]
+        examples = decorator_data["implementationGuidance"]["examples"]
+
+        test_code = [
+            "    def test_implementation_examples(self):",
+            "        # Test implementation examples from the specification",
+        ]
+
+        for i, example in enumerate(examples):
+            if "originalPrompt" in example and "transformedPrompt" in example:
+                original_prompt = example["originalPrompt"].replace('"', '\\"')
+                # We need to check for approximate match as whitespace and formatting might differ
+                test_code.append(
+                    f"        # Example {i+1}: {example.get('context', '')}"
                 )
-                method_code = self._generate_required_param_test(
-                    decorator_name, param_obj
+                test_code.append(f"        decorator = {decorator_name}()")
+                test_code.append(f'        original_prompt = "{original_prompt}"')
+                test_code.append(
+                    "        transformed_prompt = decorator.apply_to_prompt(original_prompt)"
                 )
-                all_methods.append(method_code)
+                test_code.append(
+                    "        # Check that the transformed prompt contains key elements (not exact match due to formatting)"
+                )
 
-        # Generate tests for parameter validation
-        for param in params:
-            param_obj = Parameter(
-                name=param["name"],
-                type=param.get("type", "string"),
-                required=param.get("required", False),
-                validation=param.get("validation", {}),
-                schema=param.get("schema", {}),
-                enum=param.get("enum", []),
-            )
-            method_code = self._generate_param_validation_test(
-                decorator_name, param_obj
-            )
-            all_methods.append(method_code)
+                # Extract key phrases from the expected transformation to check
+                expected_phrases = example["transformedPrompt"].split("\\n\\n")
+                for phrase in expected_phrases:
+                    if phrase.strip() and phrase.strip() != original_prompt.strip():
+                        phrase = phrase.replace('"', '\\"')
+                        test_code.append(
+                            f'        self.assertIn("{phrase.strip()}", transformed_prompt, "Transformed prompt should contain the expected phrases")'
+                        )
 
-        # Generate tests for apply method using examples
-        if examples:
-            apply_test_lines = self._generate_apply_examples_test(decorator_data)
-            # Make sure the apply_examples test is properly indented
-            apply_test_method = "\n".join(apply_test_lines)
-            # Fix indentation by adding 4 spaces to the beginning of each line
-            apply_test_method = apply_test_method.replace(
-                "def test_apply_examples(self):", "    def test_apply_examples(self):"
-            )
-            apply_test_method = apply_test_method.replace("\n    ", "\n        ")
-            all_methods.append(apply_test_method)
+                test_code.append("")
 
-        # Generate tests for serialization
-        serialization_test = self._generate_serialization_tests(decorator_name)
-        all_methods.append(serialization_test)
-
-        # Return the list of methods
-        return all_methods
+        return "\n".join(test_code)
 
     def _generate_required_param_test(
         self, decorator_name: str, param: Parameter

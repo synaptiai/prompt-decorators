@@ -26,6 +26,32 @@ class Audience(BaseDecorator):
     decorator_name = "audience"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please tailor your response for a specific audience expertise level.",
+        "parameterMapping": {
+            "level": {
+                "valueMap": {
+                    "beginner": "Write for beginners with no prior knowledge of the subject. Use simple language, avoid jargon, and explain all technical terms. Start with fundamental concepts.",
+                    "intermediate": "Write for an audience with basic familiarity of the subject. You can use some field-specific terms, but explain more advanced concepts.",
+                    "expert": "Write for a knowledgeable audience with extensive experience in the field. You can use specialized terminology and discuss advanced concepts directly.",
+                    "technical": "Write for technical professionals who need precise, detailed information. Use proper technical terminology, reference standards, and provide implementation details where relevant.",
+                },
+            },
+            "domain": {
+                "format": "The audience has specific interest in the {value} field, so use appropriate concepts and examples from this domain.",
+            },
+            "examples": {
+                "valueMap": {
+                    "true": "Include multiple concrete examples to illustrate key points and enhance understanding.",
+                    "false": "Focus on clear explanations without requiring numerous examples.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -236,3 +262,18 @@ class Audience(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

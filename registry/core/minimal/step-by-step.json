@@ -16,6 +16,51 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please break down your response into clear, sequential steps.",
+    "parameterMapping": {
+      "numbered": {
+        "valueMap": {
+          "true": "Number each step sequentially (Step 1, Step 2, etc.).",
+          "false": "Use bullet points for each step instead of numbers."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation with numbered steps",
+        "originalPrompt": "How do I create a sourdough starter?",
+        "transformedPrompt": "Please break down your response into clear, sequential steps. Number each step sequentially (Step 1, Step 2, etc.).\n\nHow do I create a sourdough starter?"
+      },
+      {
+        "context": "Implementation with bullet points",
+        "originalPrompt": "What's the process for conducting user research?",
+        "transformedPrompt": "Please break down your response into clear, sequential steps. Use bullet points for each step instead of numbers.\n\nWhat's the process for conducting user research?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Reasoning",
+        "relationship": "enhances",
+        "notes": "Combining these decorators produces step-by-step reasoning that is both structured and logical"
+      },
+      {
+        "decorator": "OutputFormat",
+        "relationship": "enhances",
+        "notes": "Can be combined with OutputFormat for structured formatting of the steps"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Please provide a step-by-step guide with each step clearly labeled and explained. Break down the process into clear, manageable steps.",
+        "notes": "This model may need more explicit instructions to create well-structured steps"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Numbered steps for a technical process",

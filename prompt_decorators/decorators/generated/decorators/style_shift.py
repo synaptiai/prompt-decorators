@@ -26,6 +26,31 @@ class StyleShift(BaseDecorator):
     decorator_name = "style_shift"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please modify a specific aspect of your communication style while"
+        "keeping the content and overall tone consistent.",
+        "parameterMapping": {
+            "aspect": {
+                "valueMap": {
+                    "formality": "Adjust the formality level of your response, paying attention to word choice, sentence structure, and adherence to communication conventions.",
+                    "persuasion": "Adjust the persuasiveness of your response, focusing on rhetorical techniques, compelling arguments, and call-to-action elements.",
+                    "urgency": "Adjust the sense of urgency in your response, emphasizing time sensitivity, immediate relevance, and priority framing.",
+                    "confidence": "Adjust the level of confidence expressed in your response, through certainty markers, hedging language, and the strength of assertions.",
+                    "complexity": "Adjust the complexity of your response, considering vocabulary, sentence structure, conceptual depth, and assumed background knowledge.",
+                },
+            },
+            "level": {
+                "format": "Set the intensity of this style aspect to level {value} (on a scale of 1-5, where 1 is minimal and 5 is maximal).",
+            },
+            "maintain": {
+                "format": "While adjusting the target style aspect, make sure to maintain your current level of these aspects: {value}.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -252,3 +277,18 @@ class StyleShift(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

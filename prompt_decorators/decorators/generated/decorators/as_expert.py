@@ -28,6 +28,34 @@ class AsExpert(BaseDecorator):
     decorator_name = "as_expert"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please respond from the perspective of a domain expert in the"
+        "specified field, providing authoritative content that reflects expert"
+        "knowledge, terminology, and analytical approach.",
+        "parameterMapping": {
+            "domain": {
+                "format": "Respond as a specialist in {value}, incorporating field-specific knowledge, methodologies, and frameworks.",
+            },
+            "experience": {
+                "valueMap": {
+                    "junior": "Adopt the perspective of a junior expert with foundational training and some practical experience in the field.",
+                    "senior": "Adopt the perspective of a senior expert with extensive experience and deep knowledge of the field's established principles and practices.",
+                    "leading": "Adopt the perspective of a leading authority in the field with comprehensive expertise and recognition for significant contributions.",
+                    "pioneering": "Adopt the perspective of a pioneering innovator in the field who is at the cutting edge of new developments and paradigm-shifting approaches.",
+                },
+            },
+            "technical": {
+                "valueMap": {
+                    "true": "Use domain-specific terminology, technical language, and specialized concepts appropriate for communication between experts in the field.",
+                    "false": "Use more accessible language while maintaining accuracy, minimizing technical jargon but preserving the essential expert insights.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -236,3 +264,18 @@ class AsExpert(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

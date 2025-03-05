@@ -29,6 +29,37 @@ class Uncertainty(BaseDecorator):
     decorator_name = "uncertainty"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please explicitly highlight areas of uncertainty in your response,"
+        "clearly indicating what is known with confidence versus what is"
+        "speculative, unknown, or subject to debate.",
+        "parameterMapping": {
+            "format": {
+                "valueMap": {
+                    "inline": "Mark uncertain statements directly within the text using phrases like 'may be', 'possibly', 'uncertain', or 'subject to debate' as appropriate.",
+                    "section": "Include a dedicated section at the end titled 'Areas of Uncertainty' that lists and discusses all uncertain aspects of the topic.",
+                    "confidence": "Assign explicit confidence levels (e.g., 'high confidence', 'medium confidence', 'low confidence', 'speculative') to different statements or claims throughout the response.",
+                },
+            },
+            "threshold": {
+                "valueMap": {
+                    "low": "Flag even slightly uncertain information, being extremely cautious about presenting anything as definitive unless it is very well established.",
+                    "medium": "Flag moderately uncertain information while presenting consensus views and well-supported claims with confidence.",
+                    "high": "Only flag highly uncertain or speculative information, treating established scientific theories and widespread expert consensus as certain.",
+                },
+            },
+            "reason": {
+                "valueMap": {
+                    "true": "For each point of uncertainty, briefly explain why it is uncertain (e.g., limited data, conflicting studies, theoretical gaps, etc.).",
+                    "false": "Simply mark uncertain information without explaining the reasons for the uncertainty.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +272,18 @@ class Uncertainty(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

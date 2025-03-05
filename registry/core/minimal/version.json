@@ -17,6 +17,32 @@
       "required": true
     }
   ],
+  "transformationTemplate": {
+    "instruction": "The following prompt uses Prompt Decorators standard version {standard}. Please interpret all decorators according to this version's specifications.",
+    "parameterMapping": {
+      "standard": {
+        "format": "The following prompt uses Prompt Decorators standard version {value}. Please interpret all decorators according to this version's specifications."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Version specification",
+        "originalPrompt": "+++Reasoning(depth=comprehensive)\nExplain quantum entanglement",
+        "transformedPrompt": "The following prompt uses Prompt Decorators standard version 1.0.0. Please interpret all decorators according to this version's specifications.\n\n+++Reasoning(depth=comprehensive)\nExplain quantum entanglement"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "All",
+        "relationship": "requires",
+        "notes": "The Version decorator should always be the first in any sequence when used"
+      }
+    ]
+  },
   "examples": [
     {
       "description": "Specify standard version for compatibility",

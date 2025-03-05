@@ -139,6 +139,14 @@ class BaseDecorator:
     parameters: Dict[str, Parameter] = {}
     conflicts_with: Set[str] = set()
 
+    # Transformation template support
+    transformation_template: Dict[str, Any] = {
+        "instruction": "",
+        "parameterMapping": {},
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     def __init__(self, **kwargs):
         """Initialize a decorator with parameter values.
 
@@ -199,13 +207,14 @@ class BaseDecorator:
             parameters = data["parameters"]
             # Handle parameters as a dictionary (name: value)
             if isinstance(parameters, dict):
-                params = parameters
-            # Handle parameters as a list of dictionaries with name and value fields
+                for name, value in parameters.items():
+                    params[name] = value
+            # Handle parameters as a list of dictionaries (name, value)
             elif isinstance(parameters, list):
                 for param_data in parameters:
                     if "name" not in param_data or "value" not in param_data:
                         raise ValidationError(
-                            "Parameter must have 'name' and 'value' fields"
+                            "Parameter must have name and value fields"
                         )
                     params[param_data["name"]] = param_data["value"]
             else:
@@ -217,14 +226,52 @@ class BaseDecorator:
     def apply_to_prompt(self, prompt: str) -> str:
         """Apply the decorator to a prompt.
 
+        This method uses the transformation_template to transform the prompt
+        according to the decorator's intended behavior.
+
         Args:
             prompt: The prompt to decorate
 
         Returns:
             The decorated prompt
         """
-        # Base implementation does nothing
-        return prompt
+        if not self.transformation_template or not self.transformation_template.get(
+            "instruction"
+        ):
+            # Base implementation if no transformation template is defined
+            return prompt
+
+        # Get the base instruction from the template
+        instruction = self.transformation_template.get("instruction", "")
+
+        # Apply parameter-specific modifications
+        param_mapping = self.transformation_template.get("parameterMapping", {})
+        for param_name, mapping in param_mapping.items():
+            # Get the parameter value using the property getter
+            value = getattr(self, param_name, None)
+            if value is not None and "valueMap" in mapping:
+                # Convert value to string for lookup
+                value_str = str(value).lower()
+                if value_str in mapping["valueMap"]:
+                    # Append the parameter-specific instruction
+                    instruction += f" {mapping['valueMap'][value_str]}"
+
+        # Apply the transformation according to placement strategy
+        placement = self.transformation_template.get("placement", "append")
+        if placement == "prepend":
+            # Instructions before prompt
+            return f"{instruction}\n\n{prompt}"
+        elif placement == "append":
+            # Instructions after prompt
+            return f"{prompt}\n\n{instruction}"
+        elif placement == "replace":
+            return instruction
+        elif placement == "wrap":
+            # Instructions before and after prompt
+            return f"{instruction}\n\n{prompt}\n\n{instruction}"
+        else:
+            # Default to append if placement strategy is not recognized
+            return f"{prompt}\n\n{instruction}"
 
     def transform_response(self, response: str) -> str:
         """Transform the response from the model.

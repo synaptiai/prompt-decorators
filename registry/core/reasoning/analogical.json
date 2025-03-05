@@ -35,6 +35,63 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please explain the concepts using analogies and metaphors that compare them to more familiar domains or experiences.",
+    "parameterMapping": {
+      "domain": {
+        "format": "Draw your analogies specifically from the domain of {value}."
+      },
+      "count": {
+        "format": "Provide exactly {value} distinct analogies to illustrate the concept."
+      },
+      "depth": {
+        "valueMap": {
+          "brief": "Keep each analogy concise, covering only the most essential mappings between the concept and the analogy.",
+          "moderate": "Develop each analogy with balanced detail, explaining key mappings and their relevance.",
+          "extended": "Elaborate each analogy thoroughly, exploring multiple aspects of the mapping and their implications in detail."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Single sports analogy for the immune system",
+        "originalPrompt": "Explain how the immune system works.",
+        "transformedPrompt": "Please explain the concepts using analogies and metaphors that compare them to more familiar domains or experiences. Draw your analogies specifically from the domain of sports. Develop each analogy with balanced detail, explaining key mappings and their relevance.\n\nExplain how the immune system works."
+      },
+      {
+        "context": "Multiple brief analogies for blockchain",
+        "originalPrompt": "Describe how blockchain technology functions.",
+        "transformedPrompt": "Please explain the concepts using analogies and metaphors that compare them to more familiar domains or experiences. Provide exactly 3 distinct analogies to illustrate the concept. Keep each analogy concise, covering only the most essential mappings between the concept and the analogy.\n\nDescribe how blockchain technology functions."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ELI5",
+        "relationship": "enhances",
+        "notes": "Analogical reasoning pairs exceptionally well with ELI5 to create child-friendly explanations through familiar comparisons"
+      },
+      {
+        "decorator": "ForcedAnalogy",
+        "relationship": "enhances",
+        "notes": "ForcedAnalogy can direct the analogical reasoning to specific predefined domains for creative comparisons"
+      },
+      {
+        "decorator": "Precision",
+        "relationship": "conflicts",
+        "notes": "Precision's focus on exactness may conflict with the inherent approximations in analogical reasoning"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Explain this concept through {count} analogy(ies) that compare it to something from {domain}. For each analogy, establish clear mappings between elements of the original concept and the analogy. Make the analogy {depth} in detail to help readers understand the concept through familiar comparisons.",
+        "notes": "This model sometimes generates analogies that are too superficial and may need explicit guidance to develop deeper mappings"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Single analogy from a specific domain",

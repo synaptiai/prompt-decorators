@@ -25,6 +25,30 @@ class Abductive(BaseDecorator):
     decorator_name = "abductive"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please use abductive reasoning to develop the most likely explanations"
+        "for the observations or phenomena described. Focus on inferring the"
+        "best explanation from limited information, clearly presenting"
+        "hypotheses that could account for the available evidence.",
+        "parameterMapping": {
+            "hypotheses": {
+                "format": "Generate exactly {value} distinct alternative hypotheses or explanations that could account for the observations.",
+            },
+            "criteria": {
+                "format": "Evaluate each hypothesis against these specific criteria: {value}. For each criterion, explain how well the hypothesis satisfies it.",
+            },
+            "rank": {
+                "valueMap": {
+                    "true": "Explicitly rank the hypotheses from most to least likely based on how well they explain the observations and meet the evaluation criteria.",
+                    "false": "Present the hypotheses without explicit ranking, focusing on the strengths and limitations of each potential explanation.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -237,3 +261,18 @@ class Abductive(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

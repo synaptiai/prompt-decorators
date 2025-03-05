@@ -24,6 +24,23 @@ class Reasoning(BaseDecorator):
     decorator_name = "reasoning"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please provide detailed reasoning in your response. Show your thought"
+        "process before reaching a conclusion.",
+        "parameterMapping": {
+            "depth": {
+                "valueMap": {
+                    "basic": "Focus on the most important logical steps.",
+                    "moderate": "Balance detail with clarity in your reasoning.",
+                    "comprehensive": "Provide a very thorough and detailed analysis with multiple perspectives.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -184,3 +201,18 @@ class Reasoning(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

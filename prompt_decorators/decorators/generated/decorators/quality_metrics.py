@@ -28,6 +28,35 @@ class QualityMetrics(BaseDecorator):
     decorator_name = "quality_metrics"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please include a quality assessment of your response using specific"
+        "metrics. After presenting your main content, evaluate it against"
+        "defined quality criteria with appropriate ratings and explanations"
+        "where needed.",
+        "parameterMapping": {
+            "metrics": {
+                "format": "Evaluate your response against these specific quality metrics: {value}. For each metric, provide a rating and assess how well the content meets that particular quality standard.",
+            },
+            "scale": {
+                "valueMap": {
+                    "1-5": "Use a 1-5 scale for your ratings, where 1 represents the lowest quality and 5 represents the highest quality.",
+                    "1-10": "Use a 1-10 scale for your ratings, where 1 represents the lowest quality and 10 represents the highest quality.",
+                    "percentage": "Express your ratings as percentages, ranging from 0% (lowest quality) to 100% (highest quality).",
+                    "qualitative": "Use qualitative ratings (poor, fair, good, excellent) rather than numerical scores.",
+                },
+            },
+            "explanation": {
+                "valueMap": {
+                    "true": "For each metric, provide a detailed explanation that justifies the rating, citing specific aspects of the content.",
+                    "false": "Provide ratings for each metric without detailed explanations.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -236,3 +265,18 @@ class QualityMetrics(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

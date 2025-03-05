@@ -28,6 +28,32 @@ class Balanced(BaseDecorator):
     decorator_name = "balanced"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please ensure your response presents a balanced view with equal"
+        "representation of different perspectives on the topic.",
+        "parameterMapping": {
+            "perspectives": {
+                "format": "Include {value} different perspectives or viewpoints on this topic.",
+            },
+            "structure": {
+                "valueMap": {
+                    "alternating": "Present the different perspectives in an alternating point-by-point format, addressing the same aspects from each viewpoint before moving to the next aspect.",
+                    "sequential": "Present each perspective fully and separately in sequence, with clear sections for each viewpoint.",
+                    "comparative": "Present the perspectives in a side-by-side comparative analysis, highlighting agreements and differences across specific dimensions.",
+                },
+            },
+            "equal": {
+                "valueMap": {
+                    "true": "Ensure that each perspective receives equal attention, detail, and word count in your response.",
+                    "false": "Each perspective should be adequately represented, but strict equality in length is not required.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -244,3 +270,18 @@ class Balanced(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

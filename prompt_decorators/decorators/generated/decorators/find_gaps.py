@@ -29,6 +29,40 @@ class FindGaps(BaseDecorator):
     decorator_name = "find_gaps"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please first analyze the main content, then methodically identify"
+        "missing elements, unanswered questions, or overlooked considerations"
+        "that need addressing.",
+        "parameterMapping": {
+            "aspects": {
+                "valueMap": {
+                    "questions": "Focus specifically on identifying unanswered questions and unresolved issues that need clarification.",
+                    "resources": "Focus specifically on identifying missing resources, tools, skills, or capabilities needed for implementation or success.",
+                    "stakeholders": "Focus specifically on identifying overlooked stakeholders, individuals, or groups whose perspectives or needs are not adequately addressed.",
+                    "risks": "Focus specifically on identifying potential risks, threats, and vulnerabilities that have not been adequately considered.",
+                    "dependencies": "Focus specifically on identifying overlooked dependencies, prerequisites, or contingencies that could affect implementation or outcomes.",
+                    "comprehensive": "Comprehensively identify gaps across multiple dimensions, including questions, resources, stakeholders, risks, and dependencies.",
+                },
+            },
+            "depth": {
+                "valueMap": {
+                    "basic": "Conduct a focused analysis to identify the most obvious and critical gaps.",
+                    "thorough": "Conduct a detailed analysis to identify both obvious and subtle gaps that might significantly impact outcomes.",
+                    "exhaustive": "Conduct an extremely comprehensive analysis to identify all possible gaps, including edge cases and minor considerations.",
+                },
+            },
+            "solutions": {
+                "valueMap": {
+                    "true": "For each identified gap, suggest potential solutions, approaches, or strategies to address it.",
+                    "false": "Focus solely on identifying gaps without suggesting solutions or remedies.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -264,3 +298,18 @@ class FindGaps(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

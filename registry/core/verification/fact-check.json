@@ -32,6 +32,65 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information.",
+    "parameterMapping": {
+      "confidence": {
+        "valueMap": {
+          "true": "For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:').",
+          "false": "Maintain factual accuracy but do not explicitly label confidence levels for individual claims."
+        }
+      },
+      "uncertain": {
+        "valueMap": {
+          "mark": "Clearly mark any uncertain or speculative information with appropriate qualifiers (e.g., 'may be', 'some evidence suggests', 'it is theorized').",
+          "exclude": "Only include well-established or highly likely information, omitting speculative or highly uncertain claims entirely.",
+          "qualify": "Include uncertain information but qualify it extensively with context about the limitations of current knowledge."
+        }
+      },
+      "strictness": {
+        "valueMap": {
+          "low": "Apply a lenient standard for verification, allowing inclusion of generally accepted information even without definitive proof.",
+          "moderate": "Apply a balanced verification standard, requiring reliable sources for claims but accepting well-supported consensus views.",
+          "high": "Apply a stringent verification standard, requiring strong evidence and multiple reliable sources for all claims."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic fact checking with confidence indicators",
+        "originalPrompt": "Explain the history and effectiveness of vaccines.",
+        "transformedPrompt": "Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information. For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:'). Clearly mark any uncertain or speculative information with appropriate qualifiers (e.g., 'may be', 'some evidence suggests', 'it is theorized'). Apply a balanced verification standard, requiring reliable sources for claims but accepting well-supported consensus views.\n\nExplain the history and effectiveness of vaccines."
+      },
+      {
+        "context": "High-strictness fact checking excluding uncertain information",
+        "originalPrompt": "Describe what we know about dark matter.",
+        "transformedPrompt": "Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information. For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:'). Only include well-established or highly likely information, omitting speculative or highly uncertain claims entirely. Apply a stringent verification standard, requiring strong evidence and multiple reliable sources for all claims.\n\nDescribe what we know about dark matter."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CiteSource",
+        "relationship": "enhances",
+        "notes": "CiteSource pairs well with FactCheck by providing references for verified claims"
+      },
+      {
+        "decorator": "Uncertainty",
+        "relationship": "enhances",
+        "notes": "Uncertainty complements FactCheck by providing detailed probabilistic assessment of uncertain claims"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Carefully distinguish between facts with strong evidence, facts with moderate evidence, and speculative information. Label your confidence level for each claim (Established fact, Likely, Uncertain). Be precise about what is and isn't well-supported by evidence.",
+        "notes": "This model benefits from more explicit instructions about the need to clearly signal confidence levels"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic fact checking with confidence indicators",

@@ -26,6 +26,32 @@ class Priority(BaseDecorator):
     decorator_name = "priority"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please apply the following decorators with a specific priority"
+        "hierarchy to resolve any conflicts between them.",
+        "parameterMapping": {
+            "decorators": {
+                "format": "Apply these decorators in priority order (highest priority first): {value}.",
+            },
+            "explicit": {
+                "valueMap": {
+                    "true": "When a conflict between decorators occurs, explicitly note in your response which decorator's behavior took precedence.",
+                    "false": "Handle conflicts between decorators without explicitly mentioning the resolution in your response.",
+                },
+            },
+            "mode": {
+                "valueMap": {
+                    "override": "When decorators conflict, completely override lower-priority decorator instructions with those from higher-priority decorators.",
+                    "merge": "When decorators conflict, attempt to merge their instructions by integrating compatible aspects of each.",
+                    "cascade": "When decorators conflict, apply higher-priority decorator instructions first, then apply lower-priority instructions where they don't directly conflict.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +260,18 @@ class Priority(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

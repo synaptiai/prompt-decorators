@@ -25,6 +25,26 @@ class Persona(BaseDecorator):
     decorator_name = "persona"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please respond from the perspective of the specified persona, adapting"
+        "your analysis and viewpoint to reflect how this persona would"
+        "naturally view and respond to the situation or topic.",
+        "parameterMapping": {
+            "role": {
+                "format": "Adopt the perspective and viewpoint of a {value}, considering how someone in this role would approach the topic.",
+            },
+            "traits": {
+                "format": "Incorporate these key personality traits into the persona: {value}. Let these characteristics influence how the persona perceives and reacts to the topic.",
+            },
+            "goals": {
+                "format": "Prioritize these primary goals and concerns that drive the persona's thinking: {value}. Ensure these priorities shape the perspective and recommendations offered.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -229,3 +249,18 @@ class Persona(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

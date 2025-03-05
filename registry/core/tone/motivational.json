@@ -32,6 +32,72 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please enhance your response with encouraging, inspiring, and empowering language. Use a motivational tone that builds confidence and creates a positive emotional impact while still delivering substantive content.",
+    "parameterMapping": {
+      "intensity": {
+        "valueMap": {
+          "mild": "Use a mildly motivational tone with gentle encouragement and moderate positivity, maintaining a balanced and realistic perspective.",
+          "moderate": "Use a moderately motivational tone with clear encouragement, positive framing, and confidence-building language throughout the response.",
+          "high": "Use a highly motivational tone with energetic, enthusiastic, and empowering language throughout, creating strong emotional impact and inspiration."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "achievement": "Focus your motivational approach on accomplishment, success, and reaching goals, emphasizing concrete results and outcomes.",
+          "growth": "Focus your motivational approach on learning, development, and continuous improvement, emphasizing progress over perfection.",
+          "resilience": "Focus your motivational approach on overcoming obstacles, perseverance, and bouncing back from setbacks, emphasizing inner strength.",
+          "purpose": "Focus your motivational approach on meaning, values, and impact, emphasizing the deeper significance of actions and choices.",
+          "balanced": "Take a balanced motivational approach that incorporates elements of achievement, growth, resilience, and purpose in appropriate proportions."
+        }
+      },
+      "actionable": {
+        "valueMap": {
+          "true": "Include specific, actionable steps or concrete recommendations that the person can implement, alongside the motivational content.",
+          "false": "Focus primarily on inspirational and encouraging content without specific action steps or detailed implementation guidance."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Moderately motivational strategies for building healthy habits",
+        "originalPrompt": "What are some strategies for building healthy habits?",
+        "transformedPrompt": "Please enhance your response with encouraging, inspiring, and empowering language. Use a motivational tone that builds confidence and creates a positive emotional impact while still delivering substantive content. Use a moderately motivational tone with clear encouragement, positive framing, and confidence-building language throughout the response. Take a balanced motivational approach that incorporates elements of achievement, growth, resilience, and purpose in appropriate proportions. Include specific, actionable steps or concrete recommendations that the person can implement, alongside the motivational content.\n\nWhat are some strategies for building healthy habits?"
+      },
+      {
+        "context": "High-intensity resilience-focused advice for professional setbacks",
+        "originalPrompt": "How can I overcome setbacks in my professional life?",
+        "transformedPrompt": "Please enhance your response with encouraging, inspiring, and empowering language. Use a motivational tone that builds confidence and creates a positive emotional impact while still delivering substantive content. Use a highly motivational tone with energetic, enthusiastic, and empowering language throughout, creating strong emotional impact and inspiration. Focus your motivational approach on overcoming obstacles, perseverance, and bouncing back from setbacks, emphasizing inner strength. Include specific, actionable steps or concrete recommendations that the person can implement, alongside the motivational content.\n\nHow can I overcome setbacks in my professional life?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Academic",
+        "relationship": "conflicts",
+        "notes": "Academic's formal, objective tone conflicts with Motivational's encouraging, emotionally resonant approach"
+      },
+      {
+        "decorator": "Professional",
+        "relationship": "enhances",
+        "notes": "Professional can be enhanced with mild motivational elements while maintaining appropriate business context"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep works well with Motivational's actionable parameter to create encouraging yet structured guidance"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Use {intensity} motivational language throughout your response. Focus on {focus} as your primary theme. {actionable} Incorporate powerful words, positive framing, and confidence-building phrases. Address challenges honestly but frame them as opportunities for growth. Use second-person perspective (\"you can\", \"your journey\") to make it personal and direct.",
+        "notes": "This model sometimes needs explicit reminders to maintain consistent motivational tone throughout longer responses rather than only at the beginning and end"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic moderately motivational response",

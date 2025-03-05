@@ -29,6 +29,33 @@ class TableFormat(BaseDecorator):
     decorator_name = "table_format"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please present your response in a tabular format with clearly defined"
+        "columns to organize the information effectively.",
+        "parameterMapping": {
+            "columns": {
+                "format": "The table should include the following columns: {value}.",
+            },
+            "format": {
+                "valueMap": {
+                    "markdown": "Format the table using markdown syntax with headers and cell separators (e.g., | Column1 | Column2 |).",
+                    "ascii": "Format the table using ASCII characters for borders and separators to create a plain text table.",
+                    "csv": "Format the table as comma-separated values (CSV) with each row on a new line and values separated by commas.",
+                },
+            },
+            "alignment": {
+                "valueMap": {
+                    "left": "Align all text within cells to the left.",
+                    "center": "Center all text within cells.",
+                    "right": "Align all text within cells to the right.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +268,18 @@ class TableFormat(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

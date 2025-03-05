@@ -26,6 +26,29 @@ class Creative(BaseDecorator):
     decorator_name = "creative"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please provide an imaginative, novel, and original response that uses"
+        "creative language and unexpected connections to engage the reader.",
+        "parameterMapping": {
+            "level": {
+                "valueMap": {
+                    "moderate": "Use creativity to make the content engaging while ensuring it remains accessible and practical. Incorporate creative elements that enhance understanding without overshadowing the substance.",
+                    "high": "Apply significant creative thinking to present the information in fresh, surprising ways. Use vivid language, unexpected angles, and novel framing to create an engaging and memorable response.",
+                    "unconventional": "Push far beyond conventional thinking to create a truly original response. Break traditional patterns, challenge assumptions, and explore highly unusual perspectives or approaches.",
+                },
+            },
+            "elements": {
+                "format": "Specifically incorporate these creative elements in your response: {value}.",
+            },
+            "constraints": {
+                "format": "While being creative, work within these constraints: {value}.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +257,18 @@ class Creative(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

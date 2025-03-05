@@ -29,6 +29,40 @@ class Motivational(BaseDecorator):
     decorator_name = "motivational"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please enhance your response with encouraging, inspiring, and"
+        "empowering language. Use a motivational tone that builds confidence"
+        "and creates a positive emotional impact while still delivering"
+        "substantive content.",
+        "parameterMapping": {
+            "intensity": {
+                "valueMap": {
+                    "mild": "Use a mildly motivational tone with gentle encouragement and moderate positivity, maintaining a balanced and realistic perspective.",
+                    "moderate": "Use a moderately motivational tone with clear encouragement, positive framing, and confidence-building language throughout the response.",
+                    "high": "Use a highly motivational tone with energetic, enthusiastic, and empowering language throughout, creating strong emotional impact and inspiration.",
+                },
+            },
+            "focus": {
+                "valueMap": {
+                    "achievement": "Focus your motivational approach on accomplishment, success, and reaching goals, emphasizing concrete results and outcomes.",
+                    "growth": "Focus your motivational approach on learning, development, and continuous improvement, emphasizing progress over perfection.",
+                    "resilience": "Focus your motivational approach on overcoming obstacles, perseverance, and bouncing back from setbacks, emphasizing inner strength.",
+                    "purpose": "Focus your motivational approach on meaning, values, and impact, emphasizing the deeper significance of actions and choices.",
+                    "balanced": "Take a balanced motivational approach that incorporates elements of achievement, growth, resilience, and purpose in appropriate proportions.",
+                },
+            },
+            "actionable": {
+                "valueMap": {
+                    "true": "Include specific, actionable steps or concrete recommendations that the person can implement, alongside the motivational content.",
+                    "false": "Focus primarily on inspirational and encouraging content without specific action steps or detailed implementation guidance.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -251,3 +285,18 @@ class Motivational(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

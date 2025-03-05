@@ -23,6 +23,27 @@ class FirstPrinciples(BaseDecorator):
     decorator_name = "first_principles"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response using first principles thinking. Break"
+        "down the topic into fundamental truths or axioms that cannot be"
+        "reduced further, then build up your explanation from these"
+        "foundations.",
+        "parameterMapping": {
+            "depth": {
+                "valueMap": {
+                    "1": "Provide a basic breakdown with only the most essential fundamental principles.",
+                    "2": "Break down the topic into key fundamental principles with moderate detail.",
+                    "3": "Provide a thorough analysis of the fundamental principles underlying the topic.",
+                    "4": "Break down the topic extensively into detailed fundamental principles and their relationships.",
+                    "5": "Provide an extremely comprehensive analysis of all fundamental axioms, exploring their origins and interconnections in depth.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -187,3 +208,18 @@ class FirstPrinciples(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

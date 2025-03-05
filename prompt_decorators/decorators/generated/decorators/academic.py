@@ -28,6 +28,33 @@ class Academic(BaseDecorator):
     decorator_name = "academic"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response following scholarly writing conventions"
+        "appropriate for academic publications, using formal language,"
+        "structured argumentation, and proper citations.",
+        "parameterMapping": {
+            "style": {
+                "valueMap": {
+                    "humanities": "Use conventions typical of humanities scholarship, including interpretive analysis, theoretical frameworks, and engagement with cultural, historical, or philosophical contexts.",
+                    "scientific": "Follow scientific writing conventions, including clear methodology descriptions, evidence-based claims, objective tone, and precise technical terminology.",
+                    "legal": "Adopt legal academic writing style, including careful statutory interpretation, case analysis, precedent citation, and attention to doctrinal frameworks.",
+                },
+            },
+            "format": {
+                "valueMap": {
+                    "APA": "Format all citations and references according to APA (American Psychological Association) style, 7th edition.",
+                    "MLA": "Format all citations and references according to MLA (Modern Language Association) style, 9th edition.",
+                    "Chicago": "Format all citations and references according to Chicago style (Chicago Manual of Style), 17th edition.",
+                    "Harvard": "Format all citations and references according to Harvard referencing style.",
+                    "IEEE": "Format all citations and references according to IEEE citation style used in engineering and computer science.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -216,3 +243,18 @@ class Academic(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

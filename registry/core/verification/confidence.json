@@ -35,6 +35,62 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please include explicit indications of your confidence level for different statements or claims in your response.",
+    "parameterMapping": {
+      "scale": {
+        "valueMap": {
+          "percent": "Express confidence levels as percentages (e.g., 95% confidence, 70% confidence).",
+          "qualitative": "Express confidence levels using qualitative descriptors (e.g., high confidence, moderate confidence, low confidence).",
+          "stars": "Express confidence levels using a star rating system (e.g., ⭐⭐⭐⭐⭐ for highest confidence, ⭐ for lowest).",
+          "numeric": "Express confidence levels using a numeric scale from 1-10, where 10 represents the highest confidence."
+        }
+      },
+      "threshold": {
+        "format": "Only include information for which your confidence level is at least {value}%."
+      },
+      "detailed": {
+        "valueMap": {
+          "true": "Provide brief explanations for why certain confidence levels were assigned to specific claims.",
+          "false": "State confidence levels without explaining the reasoning behind the assessments."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Qualitative confidence indicators for dark matter",
+        "originalPrompt": "Explain the current understanding of dark matter.",
+        "transformedPrompt": "Please include explicit indications of your confidence level for different statements or claims in your response. Express confidence levels using qualitative descriptors (e.g., high confidence, moderate confidence, low confidence). Only include information for which your confidence level is at least 50%. State confidence levels without explaining the reasoning behind the assessments.\n\nExplain the current understanding of dark matter."
+      },
+      {
+        "context": "Detailed percentage-based confidence for depression treatments",
+        "originalPrompt": "What are the most effective treatments for depression?",
+        "transformedPrompt": "Please include explicit indications of your confidence level for different statements or claims in your response. Express confidence levels as percentages (e.g., 95% confidence, 70% confidence). Only include information for which your confidence level is at least 80%. Provide brief explanations for why certain confidence levels were assigned to specific claims.\n\nWhat are the most effective treatments for depression?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "FactCheck",
+        "relationship": "enhances",
+        "notes": "FactCheck and Confidence work well together to provide both verification and quantification of certainty"
+      },
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "Limitations complements Confidence by explaining broader constraints where Confidence quantifies specific certainty levels"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "For each claim or statement in your response, indicate how confident you are using {scale} measures. Only include information where your confidence is at least {threshold}%. {detailed}",
+        "notes": "This model sometimes needs more explicit reminders to maintain consistent confidence indicators throughout a long response"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Qualitative confidence indicators for a complex topic",

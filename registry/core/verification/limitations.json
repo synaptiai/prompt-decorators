@@ -33,6 +33,67 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response.",
+    "parameterMapping": {
+      "detail": {
+        "valueMap": {
+          "brief": "Add a concise, focused statement highlighting only the most critical limitations.",
+          "moderate": "Provide a balanced discussion of several important limitations with some supporting context.",
+          "comprehensive": "Include a thorough examination of all significant limitations with detailed explanations and implications."
+        }
+      },
+      "position": {
+        "valueMap": {
+          "beginning": "Place the limitations statement at the beginning of your response, before presenting the main information.",
+          "end": "Place the limitations statement at the end of your response, after presenting the main information."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "knowledge": "Focus primarily on limitations related to the current state of knowledge or understanding in this field.",
+          "methodology": "Focus primarily on limitations in the methodology, research approaches, or analytical techniques used in this area.",
+          "context": "Focus primarily on contextual limitations such as time period, geographical scope, or situational constraints.",
+          "biases": "Focus primarily on potential biases, including research biases, sampling biases, or perspective biases.",
+          "all": "Address a balanced mix of limitations across knowledge gaps, methodological issues, contextual constraints, and potential biases."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Brief methodological limitations at the end",
+        "originalPrompt": "Explain how personality tests predict career success.",
+        "transformedPrompt": "Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response. Add a concise, focused statement highlighting only the most critical limitations. Place the limitations statement at the end of your response, after presenting the main information. Focus primarily on limitations in the methodology, research approaches, or analytical techniques used in this area.\n\nExplain how personality tests predict career success."
+      },
+      {
+        "context": "Comprehensive limitations at the beginning covering all aspects",
+        "originalPrompt": "Describe the current understanding of consciousness.",
+        "transformedPrompt": "Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response. Include a thorough examination of all significant limitations with detailed explanations and implications. Place the limitations statement at the beginning of your response, before presenting the main information. Address a balanced mix of limitations across knowledge gaps, methodological issues, contextual constraints, and potential biases.\n\nDescribe the current understanding of consciousness."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "FactCheck",
+        "relationship": "enhances",
+        "notes": "FactCheck and Limitations work well together to provide both factual accuracy and transparent acknowledgment of knowledge boundaries"
+      },
+      {
+        "decorator": "Confidence",
+        "relationship": "enhances",
+        "notes": "Confidence ratings complement Limitations by quantifying uncertainty where Limitations describes it qualitatively"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Your response must include a clear section on the limitations of the information you're providing. Be honest about what isn't fully understood, potential issues with methodologies, and other important caveats. {position} Make the limitations {detail} and focus on {focus}.",
+        "notes": "This model sometimes needs explicit prompting to acknowledge limitations, especially in domains where it has high confidence"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Brief limitations statement at the end focused on methodology",

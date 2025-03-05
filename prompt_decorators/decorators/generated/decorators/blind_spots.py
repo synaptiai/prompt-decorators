@@ -29,6 +29,35 @@ class BlindSpots(BaseDecorator):
     decorator_name = "blind_spots"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please identify potential cognitive blind spots, unstated assumptions,"
+        "and overlooked perspectives in your response. Explicitly acknowledge"
+        "the limitations and biases that might affect your analysis of the"
+        "topic.",
+        "parameterMapping": {
+            "categories": {
+                "format": "Focus specifically on identifying these categories of blind spots: {value}. For each category, explain how it might influence the analysis.",
+            },
+            "depth": {
+                "valueMap": {
+                    "basic": "Provide a basic assessment of key blind spots, focusing on the most significant limitations without extensive elaboration.",
+                    "thorough": "Conduct a thorough analysis of blind spots, with substantial attention to underlying assumptions and alternative perspectives.",
+                    "comprehensive": "Perform a comprehensive examination of blind spots, including detailed exploration of subtle biases, edge cases, and interconnected limitations.",
+                },
+            },
+            "position": {
+                "valueMap": {
+                    "after": "Present your main analysis first, then follow it with a separate section that identifies blind spots and limitations in your reasoning.",
+                    "before": "Begin with an acknowledgment of potential blind spots and limitations that might affect your analysis, then proceed with your main response.",
+                    "integrated": "Integrate the identification of blind spots throughout your analysis, pointing out limitations and alternative perspectives as they become relevant to each aspect of the topic.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +270,18 @@ class BlindSpots(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

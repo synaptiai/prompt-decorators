@@ -25,6 +25,30 @@ class Deductive(BaseDecorator):
     decorator_name = "deductive"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response using deductive reasoning, moving from"
+        "general principles to specific conclusions. Start with clear premises"
+        "and work methodically through logical steps to reach necessary"
+        "conclusions.",
+        "parameterMapping": {
+            "premises": {
+                "format": "Begin with {value} main premises or general principles that establish the foundation for your reasoning.",
+            },
+            "formal": {
+                "valueMap": {
+                    "true": "Use formal logical structures with explicitly stated syllogisms, clearly identifying major premises, minor premises, and conclusions.",
+                    "false": "Use natural language deductive reasoning without requiring formal syllogisms.",
+                },
+            },
+            "steps": {
+                "format": "Develop your logical argument through {value} distinct, sequential steps, where each builds upon the previous ones.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -245,3 +269,18 @@ class Deductive(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

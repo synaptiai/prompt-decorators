@@ -25,6 +25,25 @@ class Compatibility(BaseDecorator):
     decorator_name = "compatibility"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please apply model-specific adaptations to ensure optimal performance"
+        "on the current language model.",
+        "parameterMapping": {
+            "models": {
+                "format": "Apply the specialized behavior for these specific models: {value}. If the current model is not in this list, use the default or fallback behavior.",
+            },
+            "fallback": {
+                "format": "If the current model is not one of the specified models, fall back to using the {value} decorator instead.",
+            },
+            "behaviors": {
+                "format": "Apply these model-specific behavior adaptations: {value}. Each adaptation should be used only when running on the corresponding model.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "override",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -229,3 +248,18 @@ class Compatibility(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

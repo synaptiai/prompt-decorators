@@ -30,6 +30,41 @@ class NegativeSpace(BaseDecorator):
     decorator_name = "negative_space"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please analyze the 'negative space' surrounding this topic - focusing"
+        "on what is not explicitly stated, implied, or missing. Identify"
+        "unexplored angles, implicit assumptions, unasked questions, and"
+        "overlooked contextual elements.",
+        "parameterMapping": {
+            "focus": {
+                "valueMap": {
+                    "implications": "Focus primarily on the unstated implications and logical consequences that may not be immediately obvious.",
+                    "missing": "Focus primarily on identifying missing elements, overlooked factors, and gaps in the topic or question.",
+                    "unstated": "Focus primarily on unstated assumptions, implicit premises, and underlying beliefs that frame the topic.",
+                    "comprehensive": "Take a comprehensive approach to negative space, addressing implications, missing elements, unstated assumptions, and other overlooked aspects.",
+                },
+            },
+            "depth": {
+                "valueMap": {
+                    "surface": "Provide a surface-level exploration of the negative space, identifying the most obvious unstated elements without extensive analysis.",
+                    "moderate": "Conduct a moderately deep exploration of the negative space, with substantial attention to important unstated elements and their significance.",
+                    "deep": "Perform a deep examination of the negative space, with thorough exploration of subtle, non-obvious unstated elements and their complex interconnections.",
+                },
+            },
+            "structure": {
+                "valueMap": {
+                    "before": "Present the negative space analysis before addressing the explicit content of the topic.",
+                    "after": "First address the explicit content of the topic, then follow with the negative space analysis.",
+                    "integrated": "Integrate the negative space analysis throughout your response, addressing both explicit content and unstated elements in parallel.",
+                    "separate": "Clearly separate the negative space analysis from the explicit content with distinct sections and headings.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -253,3 +288,18 @@ class NegativeSpace(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

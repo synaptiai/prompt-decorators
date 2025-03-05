@@ -29,6 +29,33 @@ class Summary(BaseDecorator):
     decorator_name = "summary"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please provide a condensed summary of the information in your"
+        "response.",
+        "parameterMapping": {
+            "length": {
+                "valueMap": {
+                    "short": "Make the summary very concise (approximately 2-3 sentences) capturing only the most essential points.",
+                    "medium": "Create a moderate-length summary that includes main ideas and key supporting details (approximately 1 paragraph).",
+                    "long": "Provide a comprehensive summary that covers all significant points while still being more condensed than a full explanation (approximately 2-3 paragraphs).",
+                },
+            },
+            "wordCount": {
+                "format": "The summary should be approximately {value} words in length.",
+            },
+            "position": {
+                "valueMap": {
+                    "beginning": "Place the summary at the beginning of your response, before any detailed content.",
+                    "end": "Place the summary at the end of your response, after providing the detailed content.",
+                    "standalone": "Provide only the summary without additional detailed content.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -249,3 +276,18 @@ class Summary(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

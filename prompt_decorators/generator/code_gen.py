@@ -274,6 +274,7 @@ class CodeGenerator:
         params = decorator.get("parameters", [])
         snake_name = self._convert_to_snake_case(name)
         category = self._get_category_from_decorator(decorator)
+        transformation_template = decorator.get("transformationTemplate", {})
 
         # Check if we need to import Literal for enum types
         needs_literal_import = any(param.get("type") == "enum" for param in params)
@@ -386,6 +387,73 @@ class CodeGenerator:
         code.append(f'    decorator_name = "{snake_name}"')
         code.append('    version = "1.0.0"  # Initial version')
         code.append("")
+
+        # Add transformation template if available
+        if transformation_template:
+            # Generate a dictionary representation of the transformation template
+            code.append("    # Transformation template for prompt modification")
+            code.append("    transformation_template = {")
+
+            # Add instruction
+            instruction = transformation_template.get("instruction", "")
+            if instruction:
+                # Escape single quotes in the instruction if using single quotes for quoting
+                if "'" in instruction:
+                    # Use double quotes for strings containing single quotes
+                    formatted_instruction = self._format_long_string(
+                        instruction, indent="        ", quote_style='"'
+                    )
+                else:
+                    formatted_instruction = self._format_long_string(
+                        instruction, indent="        ", quote_style="'"
+                    )
+                code.append('        "instruction": ' + formatted_instruction[0])
+                for line in formatted_instruction[1:]:
+                    code.append(line)
+                code.append(",")
+            else:
+                code.append('        "instruction": "",')
+
+            # Add parameter mapping
+            param_mapping = transformation_template.get("parameterMapping", {})
+            if param_mapping:
+                code.append('        "parameterMapping": {')
+                for param_name, mapping in param_mapping.items():
+                    code.append(f'            "{param_name}": {{')
+
+                    if "valueMap" in mapping:
+                        code.append('                "valueMap": {')
+                        for value, value_instruction in mapping["valueMap"].items():
+                            formatted_value_instruction = self._escape_string(
+                                value_instruction
+                            )
+                            code.append(
+                                f'                    "{value}": "{formatted_value_instruction}",'
+                            )
+                        code.append("                },")
+
+                    if "format" in mapping:
+                        format_str = mapping["format"]
+                        code.append(
+                            f'                "format": "{self._escape_string(format_str)}",'
+                        )
+
+                    code.append("            },")
+                code.append("        },")
+            else:
+                code.append('        "parameterMapping": {},')
+
+            # Add placement and composition behavior
+            placement = transformation_template.get("placement", "prepend")
+            code.append(f'        "placement": "{placement}",')
+
+            composition = transformation_template.get(
+                "compositionBehavior", "accumulate"
+            )
+            code.append(f'        "compositionBehavior": "{composition}"')
+
+            code.append("    }")
+            code.append("")
 
         # Add name property
         code.append("    @property")
@@ -602,6 +670,28 @@ class CodeGenerator:
         code.append(f'            "category": "{category}",')
         code.append('            "version": cls.version,')
         code.append("        }")
+
+        # Add implementation for apply_to_prompt if transformation template exists
+        if transformation_template and transformation_template.get("instruction"):
+            code.extend(
+                [
+                    "    def apply_to_prompt(self, prompt: str) -> str:",
+                    '        """Apply the decorator to a prompt.',
+                    "",
+                    "        This method transforms the prompt using the transformation template.",
+                    "",
+                    "        Args:",
+                    "            prompt: The prompt to decorate",
+                    "",
+                    "        Returns:",
+                    "            The decorated prompt",
+                    "",
+                    '        """',
+                    "        # Use the apply_to_prompt implementation from BaseDecorator",
+                    "        return super().apply_to_prompt(prompt)",
+                    "",
+                ]
+            )
 
         return "\n".join(imports + code)
 
@@ -1386,6 +1476,7 @@ class CodeGenerator:
         description = decorator.get("description", "")
         version = decorator.get("version", "1.0.0")  # Default version
         params = decorator.get("parameters", [])
+        transformation_template = decorator.get("transformationTemplate", {})
 
         # Class definition
         code = [
@@ -1411,6 +1502,73 @@ class CodeGenerator:
         code.append(f'    version = "{version}"  # Initial version')
         code.append("")
 
+        # Add transformation template if available
+        if transformation_template:
+            # Generate a dictionary representation of the transformation template
+            code.append("    # Transformation template for prompt modification")
+            code.append("    transformation_template = {")
+
+            # Add instruction
+            instruction = transformation_template.get("instruction", "")
+            if instruction:
+                # Escape single quotes in the instruction if using single quotes for quoting
+                if "'" in instruction:
+                    # Use double quotes for strings containing single quotes
+                    formatted_instruction = self._format_long_string(
+                        instruction, indent="        ", quote_style='"'
+                    )
+                else:
+                    formatted_instruction = self._format_long_string(
+                        instruction, indent="        ", quote_style="'"
+                    )
+                code.append('        "instruction": ' + formatted_instruction[0])
+                for line in formatted_instruction[1:]:
+                    code.append(line)
+                code.append(",")
+            else:
+                code.append('        "instruction": "",')
+
+            # Add parameter mapping
+            param_mapping = transformation_template.get("parameterMapping", {})
+            if param_mapping:
+                code.append('        "parameterMapping": {')
+                for param_name, mapping in param_mapping.items():
+                    code.append(f'            "{param_name}": {{')
+
+                    if "valueMap" in mapping:
+                        code.append('                "valueMap": {')
+                        for value, value_instruction in mapping["valueMap"].items():
+                            formatted_value_instruction = self._escape_string(
+                                value_instruction
+                            )
+                            code.append(
+                                f'                    "{value}": "{formatted_value_instruction}",'
+                            )
+                        code.append("                },")
+
+                    if "format" in mapping:
+                        format_str = mapping["format"]
+                        code.append(
+                            f'                "format": "{self._escape_string(format_str)}",'
+                        )
+
+                    code.append("            },")
+                code.append("        },")
+            else:
+                code.append('        "parameterMapping": {},')
+
+            # Add placement and composition behavior
+            placement = transformation_template.get("placement", "prepend")
+            code.append(f'        "placement": "{placement}",')
+
+            composition = transformation_template.get(
+                "compositionBehavior", "accumulate"
+            )
+            code.append(f'        "compositionBehavior": "{composition}"')
+
+            code.append("    }")
+            code.append("")
+
         # Add name property
         code.extend(
             [
@@ -1429,6 +1587,28 @@ class CodeGenerator:
                 "",
             ]
         )
+
+        # Add implementation for apply_to_prompt if transformation template exists
+        if transformation_template and transformation_template.get("instruction"):
+            code.extend(
+                [
+                    "    def apply_to_prompt(self, prompt: str) -> str:",
+                    '        """Apply the decorator to a prompt.',
+                    "",
+                    "        This method transforms the prompt using the transformation template.",
+                    "",
+                    "        Args:",
+                    "            prompt: The prompt to decorate",
+                    "",
+                    "        Returns:",
+                    "            The decorated prompt",
+                    "",
+                    '        """',
+                    "        # Use the apply_to_prompt implementation from BaseDecorator",
+                    "        return super().apply_to_prompt(prompt)",
+                    "",
+                ]
+            )
 
         return code
 

@@ -29,6 +29,36 @@ class BreakAndBuild(BaseDecorator):
     decorator_name = "break_and_build"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response in two distinct phases: first,"
+        "critically analyze and break down the idea by identifying flaws,"
+        "assumptions, and weaknesses; then, build it back up with improvements,"
+        "refinements, and solutions that address the identified issues.",
+        "parameterMapping": {
+            "breakdown": {
+                "valueMap": {
+                    "weaknesses": "In the breakdown phase, focus primarily on identifying functional weaknesses, operational gaps, and practical limitations.",
+                    "assumptions": "In the breakdown phase, focus primarily on identifying and questioning underlying assumptions, unstated premises, and taken-for-granted elements.",
+                    "risks": "In the breakdown phase, focus primarily on identifying potential risks, failure modes, and negative scenarios.",
+                    "comprehensive": "In the breakdown phase, conduct a comprehensive critique that addresses weaknesses, assumptions, risks, and any other relevant vulnerabilities.",
+                },
+            },
+            "intensity": {
+                "valueMap": {
+                    "mild": "Keep the breakdown phase constructive and moderate in tone, highlighting issues without overly aggressive critique.",
+                    "thorough": "Make the breakdown phase thorough and substantial, with detailed examination of significant issues.",
+                    "intense": "Make the breakdown phase rigorous and challenging, with incisive critique that explores fundamental flaws and serious concerns.",
+                },
+            },
+            "buildRatio": {
+                "format": "Allocate approximately {value} times as much content to the constructive building phase as to the critical breakdown phase.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -258,3 +288,18 @@ class BreakAndBuild(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

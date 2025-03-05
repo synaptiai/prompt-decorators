@@ -27,6 +27,54 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please evaluate the topic and adapt your response formatting based on the conditional logic specified.",
+    "parameterMapping": {
+      "if_param": {
+        "format": "First, determine if the topic or question can be classified as '{value}'."
+      },
+      "then": {
+        "format": "If the condition is true (the topic IS {if_param}), then apply the following approach: {value}."
+      },
+      "else_param": {
+        "format": "If the condition is false (the topic is NOT {if_param}), then apply the following approach instead: {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Conditional based on complexity",
+        "originalPrompt": "Explain how quantum computing works.",
+        "transformedPrompt": "Please evaluate the topic and adapt your response formatting based on the conditional logic specified. First, determine if the topic or question can be classified as 'complex'. If the condition is true (the topic IS complex), then apply the following approach: StepByStep. If the condition is false (the topic is NOT complex), then apply the following approach instead: Concise.\n\nExplain how quantum computing works."
+      },
+      {
+        "context": "Conditional based on controversy",
+        "originalPrompt": "Discuss the ethical implications of gene editing in humans.",
+        "transformedPrompt": "Please evaluate the topic and adapt your response formatting based on the conditional logic specified. First, determine if the topic or question can be classified as 'controversial'. If the condition is true (the topic IS controversial), then apply the following approach: Debate(perspectives=3). If the condition is false (the topic is NOT controversial), then apply the following approach instead: Reasoning(depth=moderate).\n\nDiscuss the ethical implications of gene editing in humans."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "All",
+        "relationship": "enhances",
+        "notes": "Conditional is a meta-decorator that may use any other decorator as part of its then/else parameters"
+      },
+      {
+        "decorator": "Priority",
+        "relationship": "enhances",
+        "notes": "Priority can be used with Conditional to establish fallback patterns if conditions aren't met"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "This response requires conditional formatting. First, analyze the topic to determine if it qualifies as '{if_param}'. Based on your determination, format your response using either the '{then}' approach (if true) or the '{else_param}' approach (if false).",
+        "notes": "This model may need more explicit instructions about the conditional evaluation process"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic conditional application based on content complexity",

@@ -26,6 +26,24 @@ class OutputFormat(BaseDecorator):
     decorator_name = "output_format"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please format your response according to the specified format.",
+        "parameterMapping": {
+            "format": {
+                "valueMap": {
+                    "json": "Format your response as a valid JSON object. Ensure proper use of quotes, brackets, and commas.",
+                    "markdown": "Format your response using Markdown syntax with appropriate headings, lists, code blocks, and formatting.",
+                    "yaml": "Format your response as YAML with proper indentation and structure.",
+                    "xml": "Format your response as valid XML with proper tags and structure.",
+                    "plaintext": "Format your response as plain text without any special formatting.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "override",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -186,3 +204,18 @@ class OutputFormat(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

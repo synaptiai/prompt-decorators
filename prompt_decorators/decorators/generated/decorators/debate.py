@@ -24,6 +24,26 @@ class Debate(BaseDecorator):
     decorator_name = "debate"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response as a debate between multiple"
+        "perspectives on the topic, presenting different viewpoints and their"
+        "supporting arguments.",
+        "parameterMapping": {
+            "perspectives": {
+                "format": "Include {value} distinct perspectives or viewpoints in the debate, each with their own arguments and reasoning.",
+            },
+            "balanced": {
+                "valueMap": {
+                    "true": "Ensure that each perspective receives equal representation and that arguments for each side are of comparable strength and thoroughness.",
+                    "false": "Present different perspectives based on their merit or prevalence in the discourse, without forcing equal representation.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -212,3 +232,18 @@ class Debate(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

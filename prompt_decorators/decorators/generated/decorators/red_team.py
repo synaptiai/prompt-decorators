@@ -26,6 +26,34 @@ class RedTeam(BaseDecorator):
     decorator_name = "red_team"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please analyze the content from an adversarial perspective, actively"
+        "looking for flaws, vulnerabilities, and weak points. Simulate how a"
+        "critic or opponent would evaluate and challenge the ideas, plans, or"
+        "arguments presented.",
+        "parameterMapping": {
+            "strength": {
+                "valueMap": {
+                    "moderate": "Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective.",
+                    "aggressive": "Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches.",
+                    "steelman": "Apply the most sophisticated possible critique by first strengthening the argument to its best form, then finding its most substantive vulnerabilities.",
+                },
+            },
+            "focus": {
+                "format": "Focus your adversarial analysis specifically on these aspects: {value}.",
+            },
+            "constructive": {
+                "valueMap": {
+                    "true": "After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.",
+                    "false": "Focus solely on identifying weaknesses and vulnerabilities without providing suggestions for improvement.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +262,18 @@ class RedTeam(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

@@ -30,6 +30,61 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences.",
+    "parameterMapping": {
+      "aspects": {
+        "format": "Compare the items specifically across these aspects or dimensions: {value}."
+      },
+      "format": {
+        "valueMap": {
+          "table": "Present the comparison in a tabular format with items as columns (or rows) and comparison aspects as rows (or columns).",
+          "prose": "Present the comparison as flowing paragraphs that discuss each aspect across all items in a narrative style.",
+          "bullets": "Present the comparison as bulleted lists grouped by aspect or by item."
+        }
+      },
+      "highlight": {
+        "valueMap": {
+          "true": "Explicitly emphasize or call attention to key differences between the items being compared.",
+          "false": "Present differences and similarities without special emphasis on either."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Comparing programming frameworks with specific aspects",
+        "originalPrompt": "Compare React, Angular, and Vue for front-end development.",
+        "transformedPrompt": "Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences. Compare the items specifically across these aspects or dimensions: performance, cost, ease of use, ecosystem. Present the comparison in a tabular format with items as columns (or rows) and comparison aspects as rows (or columns). Explicitly emphasize or call attention to key differences between the items being compared.\n\nCompare React, Angular, and Vue for front-end development."
+      },
+      {
+        "context": "Prose comparison of political systems",
+        "originalPrompt": "Compare democracy and authoritarianism as political systems.",
+        "transformedPrompt": "Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences. Present the comparison as flowing paragraphs that discuss each aspect across all items in a narrative style. Present differences and similarities without special emphasis on either.\n\nCompare democracy and authoritarianism as political systems."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "TableFormat",
+        "relationship": "enhances",
+        "notes": "When using table format, TableFormat can provide additional formatting options for the comparison table"
+      },
+      {
+        "decorator": "Balanced",
+        "relationship": "enhances",
+        "notes": "Balanced works well with Comparison to ensure fair treatment of each item being compared"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Create a direct comparison between the items/concepts mentioned in the question. Use {format} format and compare them along {aspects} dimensions. {highlight}",
+        "notes": "This model sometimes needs more explicit structure for complex multi-dimensional comparisons"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic tabular comparison of specific aspects",

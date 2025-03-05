@@ -29,6 +29,37 @@ class Narrative(BaseDecorator):
     decorator_name = "narrative"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response as a story-based delivery that uses"
+        "narrative elements and storytelling techniques to make the information"
+        "engaging, memorable, and contextually rich.",
+        "parameterMapping": {
+            "structure": {
+                "valueMap": {
+                    "classic": "Use a traditional narrative arc with a clear beginning, middle, and end, following a logical progression of setup, conflict/challenge, and resolution.",
+                    "nonlinear": "Use a nonlinear narrative structure that may include flashbacks, flash-forwards, or parallel storylines to present the information from multiple temporal perspectives.",
+                    "case-study": "Structure the response as a real or hypothetical case study that examines specific situations, decisions, and outcomes to illustrate the key points.",
+                },
+            },
+            "characters": {
+                "valueMap": {
+                    "true": "Include character elements such as personas, stakeholders, or representative individuals that the audience can relate to and follow throughout the narrative.",
+                    "false": "Focus on situations, processes, and outcomes without personifying the narrative through specific characters or personas.",
+                },
+            },
+            "length": {
+                "valueMap": {
+                    "brief": "Keep the narrative concise and focused, using storytelling elements economically while still conveying the essential information.",
+                    "moderate": "Develop the narrative with sufficient detail to engage the reader while maintaining a balanced pace and moderate length.",
+                    "extended": "Create a fully developed narrative with rich details, multiple story beats, and thorough exploration of the topic through storytelling.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +272,18 @@ class Narrative(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

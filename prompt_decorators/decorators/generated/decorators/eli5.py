@@ -23,6 +23,22 @@ class ELI5(BaseDecorator):
     decorator_name = "eli5"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please explain this concept as you would to a 5-year-old child. Use"
+        "simple vocabulary, concrete examples, and relatable analogies.",
+        "parameterMapping": {
+            "strictness": {
+                "valueMap": {
+                    "true": "Maintain an extremely simplified approach that a young child would understand, using only basic vocabulary and very concrete analogies. Avoid any technical terms or complex explanations entirely.",
+                    "false": "Keep explanations simple and child-friendly, but you may introduce slightly more advanced concepts when absolutely necessary for understanding, as long as they're explained with simple analogies.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -179,3 +195,18 @@ class ELI5(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

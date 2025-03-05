@@ -111,6 +111,8 @@ Returns:
 
 Apply the decorator to a prompt.
 
+This method transforms the prompt using the transformation template.
+
 Args:
     prompt: The prompt to decorate
 

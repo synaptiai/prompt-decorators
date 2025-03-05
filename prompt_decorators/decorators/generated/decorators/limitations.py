@@ -30,6 +30,38 @@ class Limitations(BaseDecorator):
     decorator_name = "limitations"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please include an explicit statement of limitations, caveats, or"
+        "uncertainties related to the information in your response.",
+        "parameterMapping": {
+            "detail": {
+                "valueMap": {
+                    "brief": "Add a concise, focused statement highlighting only the most critical limitations.",
+                    "moderate": "Provide a balanced discussion of several important limitations with some supporting context.",
+                    "comprehensive": "Include a thorough examination of all significant limitations with detailed explanations and implications.",
+                },
+            },
+            "position": {
+                "valueMap": {
+                    "beginning": "Place the limitations statement at the beginning of your response, before presenting the main information.",
+                    "end": "Place the limitations statement at the end of your response, after presenting the main information.",
+                },
+            },
+            "focus": {
+                "valueMap": {
+                    "knowledge": "Focus primarily on limitations related to the current state of knowledge or understanding in this field.",
+                    "methodology": "Focus primarily on limitations in the methodology, research approaches, or analytical techniques used in this area.",
+                    "context": "Focus primarily on contextual limitations such as time period, geographical scope, or situational constraints.",
+                    "biases": "Focus primarily on potential biases, including research biases, sampling biases, or perspective biases.",
+                    "all": "Address a balanced mix of limitations across knowledge gaps, methodological issues, contextual constraints, and potential biases.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -252,3 +284,18 @@ class Limitations(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

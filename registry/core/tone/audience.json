@@ -31,6 +31,62 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please tailor your response for a specific audience expertise level.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "beginner": "Write for beginners with no prior knowledge of the subject. Use simple language, avoid jargon, and explain all technical terms. Start with fundamental concepts.",
+          "intermediate": "Write for an audience with basic familiarity of the subject. You can use some field-specific terms, but explain more advanced concepts.",
+          "expert": "Write for a knowledgeable audience with extensive experience in the field. You can use specialized terminology and discuss advanced concepts directly.",
+          "technical": "Write for technical professionals who need precise, detailed information. Use proper technical terminology, reference standards, and provide implementation details where relevant."
+        }
+      },
+      "domain": {
+        "format": "The audience has specific interest in the {value} field, so use appropriate concepts and examples from this domain."
+      },
+      "examples": {
+        "valueMap": {
+          "true": "Include multiple concrete examples to illustrate key points and enhance understanding.",
+          "false": "Focus on clear explanations without requiring numerous examples."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Technical audience in cybersecurity",
+        "originalPrompt": "Explain zero-knowledge proofs.",
+        "transformedPrompt": "Please tailor your response for a specific audience expertise level. Write for technical professionals who need precise, detailed information. Use proper technical terminology, reference standards, and provide implementation details where relevant. The audience has specific interest in the cybersecurity field, so use appropriate concepts and examples from this domain. Include multiple concrete examples to illustrate key points and enhance understanding.\n\nExplain zero-knowledge proofs."
+      },
+      {
+        "context": "Beginner audience with examples",
+        "originalPrompt": "How does machine learning work?",
+        "transformedPrompt": "Please tailor your response for a specific audience expertise level. Write for beginners with no prior knowledge of the subject. Use simple language, avoid jargon, and explain all technical terms. Start with fundamental concepts. The audience has specific interest in the general field, so use appropriate concepts and examples from this domain. Include multiple concrete examples to illustrate key points and enhance understanding.\n\nHow does machine learning work?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "ELI5 targets a specific audience level that may contradict the level specified in Audience"
+      },
+      {
+        "decorator": "Technical",
+        "relationship": "enhances",
+        "notes": "Technical can be combined with Audience when level=technical for enhanced technical details"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Adapt your language, terminology, and examples for a specific audience:",
+        "notes": "This model benefits from more direct instructions about audience adaptation"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Technical explanation for experts in a specific field",

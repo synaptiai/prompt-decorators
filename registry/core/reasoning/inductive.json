@@ -35,6 +35,67 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances.",
+    "parameterMapping": {
+      "examples": {
+        "format": "Begin with {value} specific, concrete examples or observations before deriving generalizations from them."
+      },
+      "confidence": {
+        "valueMap": {
+          "true": "Explicitly state the confidence level for each inductive conclusion, acknowledging the inherent uncertainty in generalizing from specific cases.",
+          "false": "Present the inductive conclusions without explicitly stating confidence levels."
+        }
+      },
+      "structure": {
+        "valueMap": {
+          "generalization": "Use generalization induction, where common properties among the examples are used to form a general rule or principle.",
+          "causal": "Apply causal induction, focusing on identifying cause-and-effect relationships across the examples to establish causal patterns.",
+          "statistical": "Employ statistical induction, using quantitative patterns and probabilistic reasoning to derive statistical generalizations from the examples.",
+          "analogical": "Utilize analogical induction, where similarities between examples are used to infer that they likely share other properties as well."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic inductive reasoning about successful startups",
+        "originalPrompt": "What factors contribute to successful startups?",
+        "transformedPrompt": "Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances. Begin with 3 specific, concrete examples or observations before deriving generalizations from them. Present the inductive conclusions without explicitly stating confidence levels. Use generalization induction, where common properties among the examples are used to form a general rule or principle.\n\nWhat factors contribute to successful startups?"
+      },
+      {
+        "context": "Causal inductive reasoning about screen time",
+        "originalPrompt": "How does screen time affect child development?",
+        "transformedPrompt": "Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances. Begin with 5 specific, concrete examples or observations before deriving generalizations from them. Explicitly state the confidence level for each inductive conclusion, acknowledging the inherent uncertainty in generalizing from specific cases. Apply causal induction, focusing on identifying cause-and-effect relationships across the examples to establish causal patterns.\n\nHow does screen time affect child development?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Deductive",
+        "relationship": "conflicts",
+        "notes": "Inductive and Deductive represent opposite reasoning approaches (specific-to-general vs. general-to-specific)"
+      },
+      {
+        "decorator": "Uncertainty",
+        "relationship": "enhances",
+        "notes": "Uncertainty works well with Inductive (especially with confidence=true) to acknowledge the probabilistic nature of inductive conclusions"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can help organize the progression from specific examples to general principles"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Use inductive reasoning to address this question. Start with {examples} specific real-world examples. Analyze these examples to identify patterns. Then use {structure} reasoning to derive general principles or conclusions. {confidence} Make each step in your reasoning explicit and clearly show how you move from specific cases to general insights.",
+        "notes": "This model sometimes needs explicit instruction to avoid jumping directly to conclusions without thoroughly examining specific examples first"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic inductive reasoning from examples to general principles",

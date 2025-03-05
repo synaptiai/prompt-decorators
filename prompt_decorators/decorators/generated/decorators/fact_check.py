@@ -29,6 +29,37 @@ class FactCheck(BaseDecorator):
     decorator_name = "fact_check"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please verify the factual claims in your response and clearly"
+        "distinguish between well-established facts, likely facts, and"
+        "uncertain or speculative information.",
+        "parameterMapping": {
+            "confidence": {
+                "valueMap": {
+                    "true": "For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:').",
+                    "false": "Maintain factual accuracy but do not explicitly label confidence levels for individual claims.",
+                },
+            },
+            "uncertain": {
+                "valueMap": {
+                    "mark": "Clearly mark any uncertain or speculative information with appropriate qualifiers (e.g., 'may be', 'some evidence suggests', 'it is theorized').",
+                    "exclude": "Only include well-established or highly likely information, omitting speculative or highly uncertain claims entirely.",
+                    "qualify": "Include uncertain information but qualify it extensively with context about the limitations of current knowledge.",
+                },
+            },
+            "strictness": {
+                "valueMap": {
+                    "low": "Apply a lenient standard for verification, allowing inclusion of generally accepted information even without definitive proof.",
+                    "moderate": "Apply a balanced verification standard, requiring reliable sources for claims but accepting well-supported consensus views.",
+                    "high": "Apply a stringent verification standard, requiring strong evidence and multiple reliable sources for all claims.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +272,18 @@ class FactCheck(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

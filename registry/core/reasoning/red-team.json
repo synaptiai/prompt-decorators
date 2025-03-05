@@ -30,6 +30,66 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented.",
+    "parameterMapping": {
+      "strength": {
+        "valueMap": {
+          "moderate": "Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective.",
+          "aggressive": "Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches.",
+          "steelman": "Apply the most sophisticated possible critique by first strengthening the argument to its best form, then finding its most substantive vulnerabilities."
+        }
+      },
+      "focus": {
+        "format": "Focus your adversarial analysis specifically on these aspects: {value}."
+      },
+      "constructive": {
+        "valueMap": {
+          "true": "After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.",
+          "false": "Focus solely on identifying weaknesses and vulnerabilities without providing suggestions for improvement."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Moderate red team analysis of a subscription service plan",
+        "originalPrompt": "Here's our plan to launch a new subscription service...",
+        "transformedPrompt": "Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented. Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective. After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.\n\nHere's our plan to launch a new subscription service..."
+      },
+      {
+        "context": "Aggressive focused red team analysis of an authentication system",
+        "originalPrompt": "Review our new authentication system design.",
+        "transformedPrompt": "Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented. Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches. Focus your adversarial analysis specifically on these aspects: [security,scalability,market-fit]. After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.\n\nReview our new authentication system design."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "RedTeam and Limitations work together to identify both external challenges and inherent constraints"
+      },
+      {
+        "decorator": "Steelman",
+        "relationship": "enhances",
+        "notes": "When RedTeam is set to 'steelman' strength, it works particularly well with the Steelman decorator"
+      },
+      {
+        "decorator": "FindGaps",
+        "relationship": "enhances",
+        "notes": "FindGaps complements RedTeam by identifying missing elements while RedTeam challenges existing elements"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Act as a {strength} critic examining this content. Look for all possible problems, weaknesses, and vulnerabilities. {focus} Challenge underlying assumptions. Think about what could go wrong, what's missing, and why this might fail. {constructive} Be thorough and consider multiple angles of attack.",
+        "notes": "This model may need more explicit direction to maintain a consistently critical stance throughout the analysis"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic red team analysis of a business proposal",

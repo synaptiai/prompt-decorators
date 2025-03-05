@@ -36,6 +36,68 @@
       }
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues.",
+    "parameterMapping": {
+      "breakdown": {
+        "valueMap": {
+          "weaknesses": "In the breakdown phase, focus primarily on identifying functional weaknesses, operational gaps, and practical limitations.",
+          "assumptions": "In the breakdown phase, focus primarily on identifying and questioning underlying assumptions, unstated premises, and taken-for-granted elements.",
+          "risks": "In the breakdown phase, focus primarily on identifying potential risks, failure modes, and negative scenarios.",
+          "comprehensive": "In the breakdown phase, conduct a comprehensive critique that addresses weaknesses, assumptions, risks, and any other relevant vulnerabilities."
+        }
+      },
+      "intensity": {
+        "valueMap": {
+          "mild": "Keep the breakdown phase constructive and moderate in tone, highlighting issues without overly aggressive critique.",
+          "thorough": "Make the breakdown phase thorough and substantial, with detailed examination of significant issues.",
+          "intense": "Make the breakdown phase rigorous and challenging, with incisive critique that explores fundamental flaws and serious concerns."
+        }
+      },
+      "buildRatio": {
+        "format": "Allocate approximately {value} times as much content to the constructive building phase as to the critical breakdown phase."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic break and build for plant care subscription",
+        "originalPrompt": "Evaluate this startup idea: a subscription service for plant care.",
+        "transformedPrompt": "Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues. In the breakdown phase, conduct a comprehensive critique that addresses weaknesses, assumptions, risks, and any other relevant vulnerabilities. Make the breakdown phase thorough and substantial, with detailed examination of significant issues. Allocate approximately 1 times as much content to the constructive building phase as to the critical breakdown phase.\n\nEvaluate this startup idea: a subscription service for plant care."
+      },
+      {
+        "context": "Intense assumption-focused analysis of urban congestion policy",
+        "originalPrompt": "Analyze this public policy proposal for reducing urban congestion.",
+        "transformedPrompt": "Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues. In the breakdown phase, focus primarily on identifying and questioning underlying assumptions, unstated premises, and taken-for-granted elements. Make the breakdown phase rigorous and challenging, with incisive critique that explores fundamental flaws and serious concerns. Allocate approximately 2 times as much content to the constructive building phase as to the critical breakdown phase.\n\nAnalyze this public policy proposal for reducing urban congestion."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "RedTeam",
+        "relationship": "enhances",
+        "notes": "RedTeam can strengthen the breakdown phase while BreakAndBuild ensures a constructive rebuilding follows the critique"
+      },
+      {
+        "decorator": "Steelman",
+        "relationship": "enhances",
+        "notes": "Steelman can be applied to the build phase to create the strongest possible version after breaking down the original"
+      },
+      {
+        "decorator": "Prioritize",
+        "relationship": "enhances",
+        "notes": "Prioritize can help focus both the breakdown and build phases on the most important aspects of the topic"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Analyze this idea in two clear sections: \n1. BREAK: {intensity} critique focusing on {breakdown}. Be specific about what doesn't work and why.\n2. BUILD: Create an improved version that addresses all the problems you identified. Make this section approximately {buildRatio}x longer than the BREAK section.\n\nClearly separate these sections with headings.",
+        "notes": "This model may need explicit reminders to ensure that the build phase directly addresses the specific issues identified in the breakdown phase"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic break and build analysis of a business concept",

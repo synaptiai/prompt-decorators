@@ -25,6 +25,25 @@ class Conditional(BaseDecorator):
     decorator_name = "conditional"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please evaluate the topic and adapt your response formatting based on"
+        "the conditional logic specified.",
+        "parameterMapping": {
+            "if_param": {
+                "format": "First, determine if the topic or question can be classified as '{value}'.",
+            },
+            "then": {
+                "format": "If the condition is true (the topic IS {if_param}), then apply the following approach: {value}.",
+            },
+            "else_param": {
+                "format": "If the condition is false (the topic is NOT {if_param}), then apply the following approach instead: {value}.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "override",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -229,3 +248,18 @@ class Conditional(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

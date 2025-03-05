@@ -25,6 +25,25 @@ class Override(BaseDecorator):
     decorator_name = "override"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please apply a customized version of a standard decorator with"
+        "specific modifications to its default parameters or behavior.",
+        "parameterMapping": {
+            "decorator": {
+                "format": "Apply the {value} decorator, but with the following modifications to its standard implementation.",
+            },
+            "parameters": {
+                "format": "Override the default parameters of the decorator with these specific values: {value}.",
+            },
+            "behavior": {
+                "format": "Additionally, modify the standard behavior of the decorator as follows: {value}.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "override",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -233,3 +252,18 @@ class Override(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

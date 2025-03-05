@@ -26,6 +26,29 @@ class Custom(BaseDecorator):
     decorator_name = "custom"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please apply the following custom formatting or behavior rules to your"
+        "response:",
+        "parameterMapping": {
+            "rules": {
+                "format": "{value}",
+            },
+            "name": {
+                "format": "This set of custom rules is called '{value}'.",
+            },
+            "priority": {
+                "valueMap": {
+                    "override": "These custom rules should override any conflicting instructions from other decorators.",
+                    "supplement": "These custom rules should supplement other decorators, but defer to them in case of direct conflicts.",
+                    "fallback": "Apply these custom rules only when no other decorator provides specific guidance on a particular aspect.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +257,18 @@ class Custom(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

@@ -29,6 +29,37 @@ class BuildOn(BaseDecorator):
     decorator_name = "build_on"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please build upon the previous context or response rather than"
+        "starting from scratch, maintaining continuity across the interaction.",
+        "parameterMapping": {
+            "reference": {
+                "valueMap": {
+                    "last": "Build specifically upon the most recent response or context provided.",
+                    "specific": "Build upon the specific part of the previous context mentioned in the current prompt.",
+                    "all": "Consider all previous exchanges in the conversation when building your response.",
+                },
+            },
+            "approach": {
+                "valueMap": {
+                    "extend": "Add new information, examples, or dimensions that extend and complement the existing content.",
+                    "refine": "Improve, correct, or enhance the existing content while preserving its core message.",
+                    "contrast": "Provide alternative perspectives or approaches that contrast with those in the existing content.",
+                    "synthesize": "Combine and integrate ideas from the existing content into a new cohesive whole.",
+                },
+            },
+            "preserveStructure": {
+                "valueMap": {
+                    "true": "Maintain the same organizational structure, format, and overall framework as the referenced content.",
+                    "false": "Feel free to reorganize or restructure the content in a new way that better serves the current purpose.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +272,18 @@ class BuildOn(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

@@ -1,0 +1,6 @@
+# Requirements for the Prompt Decorators OpenAI Demo
+prompt-decorators
+openai
+python-dotenv
+rich  # For pretty terminal output
+typer  # For CLI interface

@@ -26,6 +26,32 @@ class Detailed(BaseDecorator):
     decorator_name = "detailed"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please provide a detailed response with comprehensive information,"
+        "thorough explanations, and rich context.",
+        "parameterMapping": {
+            "depth": {
+                "valueMap": {
+                    "moderate": "Include a good level of detail that covers the main points thoroughly while avoiding excessive information.",
+                    "comprehensive": "Provide extensive detail, covering both main concepts and secondary aspects with thorough explanation of each.",
+                    "exhaustive": "Deliver an extremely detailed analysis that leaves no aspect unexplored, including nuances, edge cases, theoretical foundations, and practical applications.",
+                },
+            },
+            "aspects": {
+                "format": "Pay particular attention to these specific aspects: {value}. Explore each of these dimensions thoroughly.",
+            },
+            "examples": {
+                "valueMap": {
+                    "true": "Include detailed examples, case studies, or illustrations to demonstrate key points and enhance understanding.",
+                    "false": "Focus on explaining concepts without providing specific examples or case studies.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +260,18 @@ class Detailed(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

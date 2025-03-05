@@ -29,6 +29,34 @@ class Layered(BaseDecorator):
     decorator_name = "layered"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please present the information at multiple levels of explanation"
+        "depth, allowing readers to engage with the content at their preferred"
+        "level of detail.",
+        "parameterMapping": {
+            "levels": {
+                "valueMap": {
+                    "sentence-paragraph-full": "Structure the explanation in three distinct formats: first a one-sentence summary, then a single paragraph overview, and finally a full comprehensive explanation.",
+                    "basic-intermediate-advanced": "Provide explanations at three knowledge levels: a basic explanation for beginners, an intermediate explanation with more domain-specific concepts, and an advanced explanation for specialists.",
+                    "summary-detail-technical": "Present the information in increasing technical depth: first a high-level summary, then a detailed explanation, and finally a technical deep-dive with specialized terminology and concepts.",
+                },
+            },
+            "count": {
+                "format": "Provide exactly {value} distinct layers of explanation, each with increasing depth and detail.",
+            },
+            "progression": {
+                "valueMap": {
+                    "separate": "Present each explanation layer as a separate, clearly labeled section with its own heading.",
+                    "nested": "Structure the explanation as a hierarchical nested format, where each layer builds upon and includes the previous layer.",
+                    "incremental": "Present the information incrementally, adding new details and concepts with each layer while referencing previous information.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -263,3 +291,18 @@ class Layered(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

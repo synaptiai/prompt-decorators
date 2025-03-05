@@ -38,6 +38,62 @@
       }
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response using deductive reasoning, moving from general principles to specific conclusions. Start with clear premises and work methodically through logical steps to reach necessary conclusions.",
+    "parameterMapping": {
+      "premises": {
+        "format": "Begin with {value} main premises or general principles that establish the foundation for your reasoning."
+      },
+      "formal": {
+        "valueMap": {
+          "true": "Use formal logical structures with explicitly stated syllogisms, clearly identifying major premises, minor premises, and conclusions.",
+          "false": "Use natural language deductive reasoning without requiring formal syllogisms."
+        }
+      },
+      "steps": {
+        "format": "Develop your logical argument through {value} distinct, sequential steps, where each builds upon the previous ones."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic deductive reasoning about social media regulation",
+        "originalPrompt": "Should social media companies be regulated like utilities?",
+        "transformedPrompt": "Please structure your response using deductive reasoning, moving from general principles to specific conclusions. Start with clear premises and work methodically through logical steps to reach necessary conclusions. Begin with 2 main premises or general principles that establish the foundation for your reasoning. Use natural language deductive reasoning without requiring formal syllogisms. Develop your logical argument through 3 distinct, sequential steps, where each builds upon the previous ones.\n\nShould social media companies be regulated like utilities?"
+      },
+      {
+        "context": "Formal deductive reasoning about AI consciousness",
+        "originalPrompt": "Is artificial intelligence conscious?",
+        "transformedPrompt": "Please structure your response using deductive reasoning, moving from general principles to specific conclusions. Start with clear premises and work methodically through logical steps to reach necessary conclusions. Begin with 2 main premises or general principles that establish the foundation for your reasoning. Use formal logical structures with explicitly stated syllogisms, clearly identifying major premises, minor premises, and conclusions. Develop your logical argument through 5 distinct, sequential steps, where each builds upon the previous ones.\n\nIs artificial intelligence conscious?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Inductive",
+        "relationship": "conflicts",
+        "notes": "Deductive and Inductive represent opposite reasoning approaches (general-to-specific vs. specific-to-general)"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can help organize the deductive reasoning process into clearly labeled steps"
+      },
+      {
+        "decorator": "Academic",
+        "relationship": "enhances",
+        "notes": "Academic pairs well with Deductive for scholarly logical analysis in formal contexts"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Use deductive reasoning to answer this question. Start with {premises} general principles or premises. Follow a logical process through {steps} clear steps from these premises to a conclusion. {formal} Make each step in your reasoning explicit and label it clearly.",
+        "notes": "This model sometimes needs more explicit structure to maintain rigorous deductive reasoning throughout a response"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic deductive reasoning from principles to specific conclusions",

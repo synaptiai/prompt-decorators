@@ -29,6 +29,33 @@ class Constraints(BaseDecorator):
     decorator_name = "constraints"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please craft your response within specific constraints that limit"
+        "aspects of the output format, length, or content.",
+        "parameterMapping": {
+            "wordCount": {
+                "format": "Limit your response to exactly {value} words. Count carefully to ensure you meet this constraint precisely.",
+            },
+            "timeframe": {
+                "format": "Ensure your response describes solutions or content that could be implemented or consumed within a {value} timeframe.",
+            },
+            "vocabulary": {
+                "valueMap": {
+                    "simple": "Use only simple, everyday vocabulary that would be understood by elementary school students. Avoid jargon, technical terms, and complex words.",
+                    "technical": "Use precise technical vocabulary appropriate to the subject matter, including field-specific terminology and concepts.",
+                    "domain-specific": "Employ specialized vocabulary from the relevant domain or field, using terms of art and professional language.",
+                    "creative": "Use varied, vivid, and evocative vocabulary that enhances engagement, including metaphors, sensory language, and uncommon word choices.",
+                },
+            },
+            "custom": {
+                "format": "Apply this additional custom constraint: {value}.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -278,3 +305,18 @@ class Constraints(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

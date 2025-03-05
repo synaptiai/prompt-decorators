@@ -27,6 +27,59 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a debate between multiple perspectives on the topic, presenting different viewpoints and their supporting arguments.",
+    "parameterMapping": {
+      "perspectives": {
+        "format": "Include {value} distinct perspectives or viewpoints in the debate, each with their own arguments and reasoning."
+      },
+      "balanced": {
+        "valueMap": {
+          "true": "Ensure that each perspective receives equal representation and that arguments for each side are of comparable strength and thoroughness.",
+          "false": "Present different perspectives based on their merit or prevalence in the discourse, without forcing equal representation."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Two-sided debate on an ethical issue",
+        "originalPrompt": "Is it ethical to use AI-generated content without disclosure?",
+        "transformedPrompt": "Please structure your response as a debate between multiple perspectives on the topic, presenting different viewpoints and their supporting arguments. Include 2 distinct perspectives or viewpoints in the debate, each with their own arguments and reasoning. Ensure that each perspective receives equal representation and that arguments for each side are of comparable strength and thoroughness.\n\nIs it ethical to use AI-generated content without disclosure?"
+      },
+      {
+        "context": "Three-perspective balanced debate on a policy issue",
+        "originalPrompt": "Should universal basic income be implemented nationally?",
+        "transformedPrompt": "Please structure your response as a debate between multiple perspectives on the topic, presenting different viewpoints and their supporting arguments. Include 3 distinct perspectives or viewpoints in the debate, each with their own arguments and reasoning. Ensure that each perspective receives equal representation and that arguments for each side are of comparable strength and thoroughness.\n\nShould universal basic income be implemented nationally?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Balanced",
+        "relationship": "enhances",
+        "notes": "Balanced complements Debate by ensuring fair treatment of each perspective"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can help organize the debates into clearer sequences of arguments and responses"
+      },
+      {
+        "decorator": "FirstPrinciples",
+        "relationship": "enhances",
+        "notes": "FirstPrinciples helps ground each debate perspective in fundamental assumptions and axioms"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Present {perspectives} different viewpoints on this topic in a debate format. Structure the debate with clear labels for each perspective. Make sure each perspective presents strong arguments, and {balanced}. Ensure that no single perspective dominates the response.",
+        "notes": "This model sometimes needs explicit reminders to maintain quality arguments for perspectives it might not favor"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Two-perspective debate on an ethical issue",

@@ -26,6 +26,32 @@ class Concise(BaseDecorator):
     decorator_name = "concise"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please provide a concise, to-the-point response without unnecessary"
+        "details or verbose language.",
+        "parameterMapping": {
+            "maxWords": {
+                "format": "Limit your entire response to no more than {value} words.",
+            },
+            "bulletPoints": {
+                "valueMap": {
+                    "true": "Use bullet points to present information in the most concise format possible.",
+                    "false": "Use concise paragraphs rather than bullet points.",
+                },
+            },
+            "level": {
+                "valueMap": {
+                    "moderate": "Focus on the most important information while maintaining readability and essential context.",
+                    "high": "Include only key points and critical information, eliminating all non-essential details.",
+                    "extreme": "Provide only the absolute minimum information required to answer the question - be as brief as possible.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -242,3 +268,18 @@ class Concise(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

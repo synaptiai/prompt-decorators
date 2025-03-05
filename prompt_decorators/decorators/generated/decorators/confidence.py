@@ -26,6 +26,33 @@ class Confidence(BaseDecorator):
     decorator_name = "confidence"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please include explicit indications of your confidence level for"
+        "different statements or claims in your response.",
+        "parameterMapping": {
+            "scale": {
+                "valueMap": {
+                    "percent": "Express confidence levels as percentages (e.g., 95% confidence, 70% confidence).",
+                    "qualitative": "Express confidence levels using qualitative descriptors (e.g., high confidence, moderate confidence, low confidence).",
+                    "stars": "Express confidence levels using a star rating system (e.g., ⭐⭐⭐⭐⭐ for highest confidence, ⭐ for lowest).",
+                    "numeric": "Express confidence levels using a numeric scale from 1-10, where 10 represents the highest confidence.",
+                },
+            },
+            "threshold": {
+                "format": "Only include information for which your confidence level is at least {value}%.",
+            },
+            "detailed": {
+                "valueMap": {
+                    "true": "Provide brief explanations for why certain confidence levels were assigned to specific claims.",
+                    "false": "State confidence levels without explaining the reasoning behind the assessments.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -242,3 +269,18 @@ class Confidence(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

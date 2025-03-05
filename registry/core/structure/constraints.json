@@ -38,6 +38,67 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please craft your response within specific constraints that limit aspects of the output format, length, or content.",
+    "parameterMapping": {
+      "wordCount": {
+        "format": "Limit your response to exactly {value} words. Count carefully to ensure you meet this constraint precisely."
+      },
+      "timeframe": {
+        "format": "Ensure your response describes solutions or content that could be implemented or consumed within a {value} timeframe."
+      },
+      "vocabulary": {
+        "valueMap": {
+          "simple": "Use only simple, everyday vocabulary that would be understood by elementary school students. Avoid jargon, technical terms, and complex words.",
+          "technical": "Use precise technical vocabulary appropriate to the subject matter, including field-specific terminology and concepts.",
+          "domain-specific": "Employ specialized vocabulary from the relevant domain or field, using terms of art and professional language.",
+          "creative": "Use varied, vivid, and evocative vocabulary that enhances engagement, including metaphors, sensory language, and uncommon word choices."
+        }
+      },
+      "custom": {
+        "format": "Apply this additional custom constraint: {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Word count constraint for quantum computing explanation",
+        "originalPrompt": "Explain quantum computing principles.",
+        "transformedPrompt": "Please craft your response within specific constraints that limit aspects of the output format, length, or content. Limit your response to exactly 100 words. Count carefully to ensure you meet this constraint precisely.\n\nExplain quantum computing principles."
+      },
+      {
+        "context": "Multiple constraints for futuristic city description",
+        "originalPrompt": "Describe a futuristic city.",
+        "transformedPrompt": "Please craft your response within specific constraints that limit aspects of the output format, length, or content. Limit your response to exactly 200 words. Count carefully to ensure you meet this constraint precisely. Use varied, vivid, and evocative vocabulary that enhances engagement, including metaphors, sensory language, and uncommon word choices. Apply this additional custom constraint: each paragraph must contain exactly three sentences.\n\nDescribe a futuristic city."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Concise",
+        "relationship": "enhances",
+        "notes": "Constraints with wordCount and Concise work well together to enforce brevity in different ways"
+      },
+      {
+        "decorator": "Detailed",
+        "relationship": "conflicts",
+        "notes": "Constraints with low wordCount may conflict with Detailed's aim for comprehensiveness"
+      },
+      {
+        "decorator": "Creative",
+        "relationship": "enhances",
+        "notes": "Constraints often enhance creativity by forcing innovative solutions within limitations"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "You must follow these exact constraints: {wordCount} {timeframe} {vocabulary} {custom}. These are hard requirements - your response will only be valuable if it strictly adheres to these constraints.",
+        "notes": "This model sometimes needs stronger emphasis on constraints to ensure they are followed precisely"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Word count constraint for a complex topic",

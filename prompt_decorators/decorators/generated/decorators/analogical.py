@@ -26,6 +26,29 @@ class Analogical(BaseDecorator):
     decorator_name = "analogical"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please explain the concepts using analogies and metaphors that compare"
+        "them to more familiar domains or experiences.",
+        "parameterMapping": {
+            "domain": {
+                "format": "Draw your analogies specifically from the domain of {value}.",
+            },
+            "count": {
+                "format": "Provide exactly {value} distinct analogies to illustrate the concept.",
+            },
+            "depth": {
+                "valueMap": {
+                    "brief": "Keep each analogy concise, covering only the most essential mappings between the concept and the analogy.",
+                    "moderate": "Develop each analogy with balanced detail, explaining key mappings and their relevance.",
+                    "extended": "Elaborate each analogy thoroughly, exploring multiple aspects of the mapping and their implications in detail.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -242,3 +265,18 @@ class Analogical(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

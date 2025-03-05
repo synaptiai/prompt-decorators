@@ -27,6 +27,26 @@ class Professional(BaseDecorator):
     decorator_name = "professional"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please respond using professional, business-oriented language"
+        "appropriate for formal workplace communication.",
+        "parameterMapping": {
+            "industry": {
+                "format": "Adapt the language and terminology to be appropriate for the {value} industry, using relevant terminology and frameworks where applicable.",
+            },
+            "formality": {
+                "valueMap": {
+                    "standard": "Use standard professional business language that is clear, concise, and respectful without being overly formal.",
+                    "high": "Use a high level of formality with careful attention to precise language, proper business terminology, and structured communication.",
+                    "executive": "Use executive-level communication style with strategic framing, high-level insights, and language appropriate for senior leadership or board presentations.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -211,3 +231,18 @@ class Professional(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

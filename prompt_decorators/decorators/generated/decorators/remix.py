@@ -26,6 +26,35 @@ class Remix(BaseDecorator):
     decorator_name = "remix"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please reframe or adapt this content for a different audience or"
+        "context than might normally be expected. Transform the presentation"
+        "style while preserving core information to make it relevant to the"
+        "specified target audience.",
+        "parameterMapping": {
+            "target": {
+                "format": "Adapt this content specifically for {value}. Consider the background, needs, interests, and communication preferences of this audience when reframing the material.",
+            },
+            "preserve": {
+                "valueMap": {
+                    "facts": "Prioritize preserving the accurate factual content while allowing flexibility in presentation style, structure, and level of detail.",
+                    "structure": "Maintain the original organizational structure and flow of ideas while adapting language, examples, and level of detail.",
+                    "tone": "Keep the original tone and voice consistent while adapting other elements like vocabulary, examples, and level of detail.",
+                    "comprehensiveness": "Ensure all key points and details from the original content are included, even while completely adapting the presentation style.",
+                },
+            },
+            "contrast": {
+                "valueMap": {
+                    "true": "Include an explicit comparison highlighting key differences between how this content would typically be presented versus how it's being adapted for the target audience.",
+                    "false": "Focus solely on the adapted version without explicitly comparing it to how the content might be presented in other contexts.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -239,3 +268,18 @@ class Remix(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

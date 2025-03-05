@@ -29,6 +29,64 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please process this request through a series of transformations, applying each decorator in sequence.",
+    "parameterMapping": {
+      "decorators": {
+        "format": "Apply the following decorators in this exact order: {value}. Each decorator should process the output of the previous one."
+      },
+      "showSteps": {
+        "valueMap": {
+          "true": "Show the intermediate outputs after each decorator in the chain, clearly labeling each step.",
+          "false": "Only show the final output after all decorators have been applied."
+        }
+      },
+      "stopOnFailure": {
+        "valueMap": {
+          "true": "If any decorator in the chain cannot be applied correctly, stop the processing and explain the issue.",
+          "false": "Continue processing even if some decorators cannot be fully applied, making best efforts for each step."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Sequential application of step-by-step and concise decorators",
+        "originalPrompt": "Explain how neural networks learn.",
+        "transformedPrompt": "Please process this request through a series of transformations, applying each decorator in sequence. Apply the following decorators in this exact order: StepByStep, Concise. Each decorator should process the output of the previous one. Only show the final output after all decorators have been applied. If any decorator in the chain cannot be applied correctly, stop the processing and explain the issue.\n\nExplain how neural networks learn."
+      },
+      {
+        "context": "Complex decorator chain with visible intermediate steps",
+        "originalPrompt": "Discuss the ethics of autonomous weapons.",
+        "transformedPrompt": "Please process this request through a series of transformations, applying each decorator in sequence. Apply the following decorators in this exact order: Socratic, Academic, TreeOfThought. Each decorator should process the output of the previous one. Show the intermediate outputs after each decorator in the chain, clearly labeling each step. Continue processing even if some decorators cannot be fully applied, making best efforts for each step.\n\nDiscuss the ethics of autonomous weapons."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "All",
+        "relationship": "enhances",
+        "notes": "Chain can work with any decorators, as it's designed to combine them in sequence"
+      },
+      {
+        "decorator": "Priority",
+        "relationship": "conflicts",
+        "notes": "Priority and Chain represent different approaches to handling multiple decorators (parallel vs. sequential)"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4": {
+        "instruction": "Apply these decorators in sequence: {decorators}. Each decorator processes the output of the previous one. {showSteps} {stopOnFailure}",
+        "notes": "This model handles decorator chains well, but benefits from clear instructions about showing steps or handling failures"
+      },
+      "gpt-3.5-turbo": {
+        "instruction": "Process this request through a series of steps. For each step, apply one of these decorators in this exact order: {decorators}. Make sure to follow the exact order and treat each output as input to the next decorator. {showSteps} {stopOnFailure}",
+        "notes": "This model may need more explicit instructions to maintain the correct sequence of decorators"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic sequential application of decorators",

@@ -25,6 +25,27 @@ class RootCause(BaseDecorator):
     decorator_name = "root_cause"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please analyze the problem using formal root cause analysis to"
+        "identify the underlying fundamental causes rather than just symptoms"
+        "or immediate factors.",
+        "parameterMapping": {
+            "method": {
+                "valueMap": {
+                    "fivewhys": "Use the '5 Whys' technique by repeatedly asking why to drill down to the root cause(s). For each identified factor, ask 'why' to go deeper until reaching fundamental causes.",
+                    "fishbone": "Apply the Fishbone (Ishikawa) diagram approach by categorizing potential causes into major categories (e.g., People, Process, Equipment, Environment, Management, Materials) and analyzing each systematically.",
+                    "pareto": "Use the Pareto principle (80/20 rule) to identify and focus on the vital few causes that likely contribute to most of the problem, prioritizing them by impact.",
+                },
+            },
+            "depth": {
+                "format": "Conduct the analysis with {value} levels of depth, ensuring a thorough investigation of causal chains.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -217,3 +238,18 @@ class RootCause(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

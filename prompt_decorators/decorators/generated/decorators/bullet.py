@@ -26,6 +26,37 @@ class Bullet(BaseDecorator):
     decorator_name = "bullet"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please format your response as a bulleted list to make the information"
+        "easy to scan and digest.",
+        "parameterMapping": {
+            "style": {
+                "valueMap": {
+                    "dash": "Use dash markers (- ) for all bullet points.",
+                    "dot": "Use dot markers (• ) for all bullet points.",
+                    "arrow": "Use arrow markers (→ ) for all bullet points.",
+                    "star": "Use star markers (★ ) for all bullet points.",
+                    "plus": "Use plus markers (+ ) for all bullet points.",
+                },
+            },
+            "indented": {
+                "valueMap": {
+                    "true": "Use hierarchical, indented sub-points where appropriate to show relationships between ideas.",
+                    "false": "Use a flat list structure with no indentation or sub-points.",
+                },
+            },
+            "compact": {
+                "valueMap": {
+                    "true": "Keep each bullet point concise - ideally one line per point.",
+                    "false": "Allow detailed explanations in each bullet point when necessary.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +265,18 @@ class Bullet(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

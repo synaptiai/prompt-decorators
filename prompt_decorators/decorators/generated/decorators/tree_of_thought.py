@@ -25,6 +25,29 @@ class TreeOfThought(BaseDecorator):
     decorator_name = "tree_of_thought"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please explore multiple reasoning paths simultaneously for this"
+        "problem, considering different approaches or hypotheses before"
+        "reaching conclusions.",
+        "parameterMapping": {
+            "branches": {
+                "format": "Generate {value} distinct reasoning branches, each exploring a different approach or hypothesis.",
+            },
+            "depth": {
+                "format": "For each branch, pursue the reasoning to a depth of {value} levels of analysis.",
+            },
+            "pruning": {
+                "valueMap": {
+                    "true": "Evaluate the promise of each branch as you go, and stop pursuing less promising paths to focus on the most viable ones.",
+                    "false": "Fully explore all branches to their complete depth regardless of their apparent promise.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -245,3 +268,18 @@ class TreeOfThought(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

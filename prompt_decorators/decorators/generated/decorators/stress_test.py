@@ -28,6 +28,31 @@ class StressTest(BaseDecorator):
     decorator_name = "stress_test"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please first provide a standard analysis or assessment of the topic,"
+        "then test its robustness by applying challenging conditions, edge"
+        "cases, and unlikely scenarios to identify potential vulnerabilities"
+        "and limitations.",
+        "parameterMapping": {
+            "scenarios": {
+                "format": "Apply {value} distinct stress test scenarios that challenge different aspects of the idea, plan, or system.",
+            },
+            "severity": {
+                "valueMap": {
+                    "moderate": "Apply realistic but challenging conditions that test important aspects without going to extremes.",
+                    "severe": "Apply highly challenging conditions that push the subject to its likely breaking points and reveal significant vulnerabilities.",
+                    "extreme": "Apply worst-case scenarios and highly improbable but catastrophic conditions to find absolute breaking points and critical vulnerabilities.",
+                },
+            },
+            "domain": {
+                "format": "Focus your stress testing specifically on the {value} aspects or dimensions of the subject.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -244,3 +269,18 @@ class StressTest(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

@@ -24,6 +24,24 @@ class Tone(BaseDecorator):
     decorator_name = "tone"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please adjust your writing style and tone for this response.",
+        "parameterMapping": {
+            "style": {
+                "valueMap": {
+                    "formal": "Use a formal, professional tone with proper terminology and minimal contractions. Maintain a structured approach with clear organization.",
+                    "casual": "Use a casual, conversational tone as if speaking to a friend. Feel free to use contractions and a more relaxed writing style.",
+                    "friendly": "Use a warm, approachable tone that builds rapport. Be encouraging and personable while still being informative.",
+                    "technical": "Use precise technical language and terminology appropriate for a knowledgeable audience. Include specific details and technical concepts.",
+                    "humorous": "Incorporate appropriate humor and a light-hearted tone in your response, while still providing accurate information.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -190,3 +208,18 @@ class Tone(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

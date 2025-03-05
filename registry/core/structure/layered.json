@@ -36,6 +36,67 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please present the information at multiple levels of explanation depth, allowing readers to engage with the content at their preferred level of detail.",
+    "parameterMapping": {
+      "levels": {
+        "valueMap": {
+          "sentence-paragraph-full": "Structure the explanation in three distinct formats: first a one-sentence summary, then a single paragraph overview, and finally a full comprehensive explanation.",
+          "basic-intermediate-advanced": "Provide explanations at three knowledge levels: a basic explanation for beginners, an intermediate explanation with more domain-specific concepts, and an advanced explanation for specialists.",
+          "summary-detail-technical": "Present the information in increasing technical depth: first a high-level summary, then a detailed explanation, and finally a technical deep-dive with specialized terminology and concepts."
+        }
+      },
+      "count": {
+        "format": "Provide exactly {value} distinct layers of explanation, each with increasing depth and detail."
+      },
+      "progression": {
+        "valueMap": {
+          "separate": "Present each explanation layer as a separate, clearly labeled section with its own heading.",
+          "nested": "Structure the explanation as a hierarchical nested format, where each layer builds upon and includes the previous layer.",
+          "incremental": "Present the information incrementally, adding new details and concepts with each layer while referencing previous information."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Three-level explanation of blockchain technology",
+        "originalPrompt": "Explain how blockchain technology works.",
+        "transformedPrompt": "Please present the information at multiple levels of explanation depth, allowing readers to engage with the content at their preferred level of detail. Present the information in increasing technical depth: first a high-level summary, then a detailed explanation, and finally a technical deep-dive with specialized terminology and concepts. Provide exactly 3 distinct layers of explanation, each with increasing depth and detail. Present each explanation layer as a separate, clearly labeled section with its own heading.\n\nExplain how blockchain technology works."
+      },
+      {
+        "context": "Multi-layered nested explanation of quantum computing",
+        "originalPrompt": "Describe the principles of quantum computing.",
+        "transformedPrompt": "Please present the information at multiple levels of explanation depth, allowing readers to engage with the content at their preferred level of detail. Provide explanations at three knowledge levels: a basic explanation for beginners, an intermediate explanation with more domain-specific concepts, and an advanced explanation for specialists. Provide exactly 4 distinct layers of explanation, each with increasing depth and detail. Structure the explanation as a hierarchical nested format, where each layer builds upon and includes the previous layer.\n\nDescribe the principles of quantum computing."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Audience",
+        "relationship": "enhances",
+        "notes": "Layered works well with Audience to further tailor each layer to different expertise levels"
+      },
+      {
+        "decorator": "ELI5",
+        "relationship": "enhances",
+        "notes": "ELI5 can be effectively used for the initial layer in a layered explanation"
+      },
+      {
+        "decorator": "Technical",
+        "relationship": "enhances",
+        "notes": "Technical can be used for the deepest layer in a layered explanation"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Provide {count} different levels of explanation about this topic. Use the {levels} approach, with each layer getting progressively more detailed. Structure these {progression}. Make sure to clearly label each layer so readers can choose their preferred depth.",
+        "notes": "This model sometimes needs explicit reminders to create sufficiently distinct layers with meaningful differences in detail"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic three-level explanation of a complex concept",

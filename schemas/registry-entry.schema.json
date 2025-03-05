@@ -105,6 +105,122 @@
         }
       }
     },
+    "transformationTemplate": {
+      "type": "object",
+      "description": "Template for how this decorator transforms prompts",
+      "properties": {
+        "instruction": {
+          "type": "string",
+          "description": "Base instruction text to add to the prompt"
+        },
+        "parameterMapping": {
+          "type": "object",
+          "description": "How parameters modify the base instruction",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "valueMap": {
+                "type": "object",
+                "description": "Maps parameter values to specific instruction additions",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "format": {
+                "type": "string",
+                "description": "Format string for integrating parameter value (e.g., 'with {value} level of detail')"
+              }
+            }
+          }
+        },
+        "placement": {
+          "type": "string",
+          "enum": ["prepend", "append", "replace", "wrap"],
+          "default": "append",
+          "description": "How to place the transformed content relative to the original prompt"
+        },
+        "compositionBehavior": {
+          "type": "string",
+          "enum": ["accumulate", "override", "selective-override"],
+          "default": "accumulate",
+          "description": "How this decorator behaves when composed with others"
+        }
+      },
+      "required": ["instruction"]
+    },
+    "implementationGuidance": {
+      "type": "object",
+      "description": "Guidance for implementing this decorator's behavior",
+      "properties": {
+        "examples": {
+          "type": "array",
+          "description": "Examples of implementation in different contexts",
+          "items": {
+            "type": "object",
+            "properties": {
+              "context": {
+                "type": "string",
+                "description": "Context for this example (e.g., model name, use case)"
+              },
+              "originalPrompt": {
+                "type": "string",
+                "description": "Original prompt before transformation"
+              },
+              "transformedPrompt": {
+                "type": "string",
+                "description": "Prompt after transformation"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Additional implementation notes"
+              }
+            },
+            "required": ["originalPrompt", "transformedPrompt"]
+          }
+        },
+        "compatibilityNotes": {
+          "type": "array",
+          "description": "Notes about compatibility with other decorators",
+          "items": {
+            "type": "object",
+            "properties": {
+              "decorator": {
+                "type": "string",
+                "description": "Name of the related decorator"
+              },
+              "relationship": {
+                "type": "string",
+                "enum": ["enhances", "conflicts", "requires"],
+                "description": "Type of relationship"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Description of the relationship"
+              }
+            },
+            "required": ["decorator", "relationship"]
+          }
+        },
+        "modelSpecificImplementations": {
+          "type": "object",
+          "description": "Model-specific implementation variations",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "instruction": {
+                "type": "string",
+                "description": "Alternative instruction for a specific model"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Notes about this model-specific implementation"
+              }
+            },
+            "required": ["instruction"]
+          }
+        }
+      }
+    },
     "examples": {
       "type": "array",
       "description": "Example usages of the decorator",
@@ -194,6 +310,27 @@
           "required": false
         }
       ],
+      "transformationTemplate": {
+        "instruction": "Please use scientific reasoning methods in your analysis. Approach this question with systematic thinking and evidence-based reasoning.",
+        "parameterMapping": {
+          "discipline": {
+            "valueMap": {
+              "physics": "Apply concepts and principles from physics in your analysis.",
+              "biology": "Consider biological systems and mechanisms in your reasoning.",
+              "chemistry": "Utilize chemistry concepts and molecular understanding in your approach.",
+              "general": "Use general scientific principles across disciplines."
+            }
+          },
+          "rigor": {
+            "valueMap": {
+              "academic": "Maintain rigorous academic standards with precise terminology and thorough methodology.",
+              "educational": "Balance scientific accuracy with explanatory clarity.",
+              "popular": "Make the science accessible to a general audience while maintaining accuracy."
+            }
+          }
+        },
+        "placement": "prepend"
+      },
       "examples": [
         {
           "description": "Basic scientific analysis of a physics problem",

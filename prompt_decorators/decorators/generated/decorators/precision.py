@@ -26,6 +26,37 @@ class Precision(BaseDecorator):
     decorator_name = "precision"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please provide information with a high degree of precision and"
+        "specificity. Use exact measurements, specific terminology, and"
+        "concrete details rather than vague or general statements. Prioritize"
+        "accuracy in all claims and descriptions.",
+        "parameterMapping": {
+            "level": {
+                "valueMap": {
+                    "moderate": "Use moderately precise language with specific details where important, while maintaining accessibility and clarity for a general audience.",
+                    "high": "Use highly precise language throughout the response, with exact figures, specific terminology, and detailed descriptions that leave minimal room for ambiguity.",
+                    "scientific": "Use scientific-grade precision with rigorous accuracy, including error margins where appropriate, precise technical terminology, and specific quantitative measurements.",
+                },
+            },
+            "units": {
+                "valueMap": {
+                    "true": "Always include appropriate units for all measurements and quantities, using standard notation (SI units preferred where applicable).",
+                    "false": "Include units where necessary for clarity, but prioritize readability over comprehensive unit notation.",
+                },
+            },
+            "definitions": {
+                "valueMap": {
+                    "true": "Include precise definitions for key terms and concepts when first introduced, ensuring clarity and exact understanding of specialized vocabulary.",
+                    "false": "Use precise terminology without interrupting the flow with explicit definitions unless absolutely necessary for understanding.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +265,18 @@ class Precision(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

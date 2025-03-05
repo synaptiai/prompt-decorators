@@ -25,6 +25,31 @@ class Chain(BaseDecorator):
     decorator_name = "chain"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please process this request through a series of transformations,"
+        "applying each decorator in sequence.",
+        "parameterMapping": {
+            "decorators": {
+                "format": "Apply the following decorators in this exact order: {value}. Each decorator should process the output of the previous one.",
+            },
+            "showSteps": {
+                "valueMap": {
+                    "true": "Show the intermediate outputs after each decorator in the chain, clearly labeling each step.",
+                    "false": "Only show the final output after all decorators have been applied.",
+                },
+            },
+            "stopOnFailure": {
+                "valueMap": {
+                    "true": "If any decorator in the chain cannot be applied correctly, stop the processing and explain the issue.",
+                    "false": "Continue processing even if some decorators cannot be fully applied, making best efforts for each step.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "override",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -229,3 +254,18 @@ class Chain(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

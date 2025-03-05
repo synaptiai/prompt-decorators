@@ -31,6 +31,60 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please format your response as a bulleted list to make the information easy to scan and digest.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "dash": "Use dash markers (- ) for all bullet points.",
+          "dot": "Use dot markers (• ) for all bullet points.",
+          "arrow": "Use arrow markers (→ ) for all bullet points.",
+          "star": "Use star markers (★ ) for all bullet points.",
+          "plus": "Use plus markers (+ ) for all bullet points."
+        }
+      },
+      "indented": {
+        "valueMap": {
+          "true": "Use hierarchical, indented sub-points where appropriate to show relationships between ideas.",
+          "false": "Use a flat list structure with no indentation or sub-points."
+        }
+      },
+      "compact": {
+        "valueMap": {
+          "true": "Keep each bullet point concise - ideally one line per point.",
+          "false": "Allow detailed explanations in each bullet point when necessary."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard dash bullets with indentation",
+        "originalPrompt": "What are the main factors to consider when buying a laptop?",
+        "transformedPrompt": "Please format your response as a bulleted list to make the information easy to scan and digest. Use dash markers (- ) for all bullet points. Use hierarchical, indented sub-points where appropriate to show relationships between ideas. Allow detailed explanations in each bullet point when necessary.\n\nWhat are the main factors to consider when buying a laptop?"
+      },
+      {
+        "context": "Compact star bullets with no indentation",
+        "originalPrompt": "List the benefits of regular exercise.",
+        "transformedPrompt": "Please format your response as a bulleted list to make the information easy to scan and digest. Use star markers (★ ) for all bullet points. Use a flat list structure with no indentation or sub-points. Keep each bullet point concise - ideally one line per point.\n\nList the benefits of regular exercise."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "OutputFormat",
+        "relationship": "conflicts",
+        "notes": "OutputFormat may specify a structure incompatible with bullet points"
+      },
+      {
+        "decorator": "Outline",
+        "relationship": "conflicts",
+        "notes": "Outline has its own structured format that conflicts with bullet points"
+      }
+    ]
+  },
   "examples": [
     {
       "description": "Basic bulleted list of key points",

@@ -26,6 +26,34 @@ class Extremes(BaseDecorator):
     decorator_name = "extremes"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please present content at the extreme ends of a spectrum, exploring"
+        "the range of possibilities from minimalist to maximalist approaches."
+        "Clearly contrast different versions that represent opposite ends of"
+        "implementation or conceptualization.",
+        "parameterMapping": {
+            "versions": {
+                "valueMap": {
+                    "radical": "Focus exclusively on presenting a radical, ambitious, or maximalist version that pushes boundaries and represents the most expansive vision possible.",
+                    "minimal": "Focus exclusively on presenting a minimal, conservative, or basic version that emphasizes simplicity, feasibility, and immediate implementability.",
+                    "both": "Present both a radical, ambitious version and a minimal, conservative version, clearly contrasting these opposite approaches.",
+                },
+            },
+            "dimension": {
+                "format": "Explore the extremes specifically along the dimension of {value}, focusing on how this particular aspect varies between minimal and maximal implementations.",
+            },
+            "compare": {
+                "valueMap": {
+                    "true": "Include an explicit comparative analysis of the extreme versions, highlighting the trade-offs, advantages, and disadvantages of each approach.",
+                    "false": "Present the extreme versions without explicit comparison, allowing each to stand on its own merits.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +262,18 @@ class Extremes(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

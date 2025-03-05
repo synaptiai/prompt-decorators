@@ -20,6 +20,54 @@
       }
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "1": "Provide a basic breakdown with only the most essential fundamental principles.",
+          "2": "Break down the topic into key fundamental principles with moderate detail.",
+          "3": "Provide a thorough analysis of the fundamental principles underlying the topic.",
+          "4": "Break down the topic extensively into detailed fundamental principles and their relationships.",
+          "5": "Provide an extremely comprehensive analysis of all fundamental axioms, exploring their origins and interconnections in depth."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation with moderate depth",
+        "originalPrompt": "How do electric vehicles work?",
+        "transformedPrompt": "Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations. Provide a thorough analysis of the fundamental principles underlying the topic.\n\nHow do electric vehicles work?"
+      },
+      {
+        "context": "Deep fundamental analysis",
+        "originalPrompt": "What makes machine learning effective?",
+        "transformedPrompt": "Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations. Provide an extremely comprehensive analysis of all fundamental axioms, exploring their origins and interconnections in depth.\n\nWhat makes machine learning effective?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Reasoning",
+        "relationship": "enhances",
+        "notes": "FirstPrinciples provides a specific reasoning approach that complements the general Reasoning decorator"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can organize the first principles analysis into clearer sequential steps"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Start by identifying the most basic, fundamental truths about this topic - the axioms that cannot be broken down further. Then build your explanation step by step from these foundations, showing how complex aspects emerge from these simple principles.",
+        "notes": "This model benefits from more explicit instructions about the process of first principles analysis"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic first principles analysis of a concept",

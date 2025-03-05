@@ -17,6 +17,52 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "basic": "Focus on the most important logical steps.",
+          "moderate": "Balance detail with clarity in your reasoning.",
+          "comprehensive": "Provide a very thorough and detailed analysis with multiple perspectives."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation",
+        "originalPrompt": "What are the implications of artificial intelligence for education?",
+        "transformedPrompt": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Provide a very thorough and detailed analysis with multiple perspectives.\n\nWhat are the implications of artificial intelligence for education?"
+      },
+      {
+        "context": "Basic depth implementation",
+        "originalPrompt": "How does compound interest work?",
+        "transformedPrompt": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Focus on the most important logical steps.\n\nHow does compound interest work?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Concise",
+        "relationship": "conflicts",
+        "notes": "The objectives of comprehensive reasoning and concise responses may contradict each other"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "Combining these decorators produces structured reasoning with clear steps"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Explain your reasoning step by step before giving your final answer. Show your thought process clearly.",
+        "notes": "This model may require more explicit instructions to produce detailed reasoning"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Basic reasoning for a simple question",

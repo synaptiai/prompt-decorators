@@ -28,6 +28,33 @@ class Contrarian(BaseDecorator):
     decorator_name = "contrarian"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please generate a response that deliberately challenges conventional"
+        "wisdom or mainstream perspectives on this topic to encourage critical"
+        "thinking.",
+        "parameterMapping": {
+            "approach": {
+                "valueMap": {
+                    "outsider": "Adopt the perspective of someone completely outside the field or discipline, questioning fundamental assumptions that insiders might take for granted.",
+                    "skeptic": "Take a deeply skeptical stance that questions the evidence, methodology, and logical foundations behind established views.",
+                    "devils-advocate": "Present the strongest possible counterarguments to what would normally be considered the most reasonable position.",
+                },
+            },
+            "maintain": {
+                "valueMap": {
+                    "true": "Maintain the contrarian perspective consistently throughout the entire response without offering a conventional perspective.",
+                    "false": "After thoroughly presenting the contrarian perspective, conclude with a brief balanced view that acknowledges the merits of both conventional and contrarian viewpoints.",
+                },
+            },
+            "focus": {
+                "format": "Focus your contrarian analysis specifically on the {value} aspect of the topic rather than addressing all dimensions.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -236,3 +263,18 @@ class Contrarian(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

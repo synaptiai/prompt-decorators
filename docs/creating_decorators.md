@@ -7,6 +7,10 @@ This guide will walk you through the process of creating new prompt decorators t
 - [Overview](#overview)
 - [Understanding the Schemas](#understanding-the-schemas)
 - [Creating a New Decorator](#creating-a-new-decorator)
+  - [Define the Decorator's Purpose](#1-define-the-decorators-purpose)
+  - [Create a Registry Entry](#2-create-a-registry-entry)
+  - [Implement the Decorator's Behavior](#3-implement-the-decorators-behavior)
+  - [Define Transformation Templates](#4-define-transformation-templates)
 - [Validation](#validation)
 - [Best Practices](#best-practices)
 - [Contributing to the Registry](#contributing-to-the-registry)
@@ -184,6 +188,188 @@ class YourDecorator(BaseDecorator):
         else:
             return "When responding, provide an expert-level analysis..."
 ```
+
+### 4. Define Transformation Templates
+
+Transformation templates specify exactly how a decorator modifies a prompt. They provide a standardized way to implement prompt transformations across different decorator implementations.
+
+#### What are Transformation Templates?
+
+A transformation template defines:
+1. The base instruction to add to the prompt
+2. How each parameter modifies the instruction
+3. Where to place the instruction relative to the original prompt
+4. How the decorator behaves when combined with others
+
+#### Example Transformation Template
+
+Here's an example of a transformation template for a `Reasoning` decorator:
+
+```json
+{
+  "decoratorName": "Reasoning",
+  "version": "1.0.0",
+  "description": "Modifies the AI's response to provide explicit reasoning paths",
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "The level of detail in the reasoning process",
+      "enum": ["basic", "moderate", "comprehensive"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "basic": "Focus on the most important logical steps.",
+          "moderate": "Balance detail with clarity in your reasoning.",
+          "comprehensive": "Provide a very thorough and detailed analysis with multiple perspectives."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  }
+}
+```
+
+#### How Transformation Templates Work
+
+1. **Base Instruction**: The `instruction` field contains the primary directive to add to the prompt.
+
+2. **Parameter Mapping**: The `parameterMapping` field defines how each parameter affects the instruction:
+   - `valueMap`: Maps specific parameter values to additional instructions
+   - `format`: Provides a format string for inserting parameter values
+
+3. **Placement Strategy**: The `placement` field determines where the instruction is placed:
+   - `prepend`: Adds the instruction before the prompt (default)
+   - `append`: Adds the instruction after the prompt
+   - `wrap`: Adds the instruction before and after the prompt
+
+4. **Composition Behavior**: The `compositionBehavior` field determines how the decorator combines with others:
+   - `accumulate`: Instructions from multiple decorators accumulate (default)
+   - `override`: Later decorators override instructions from earlier ones
+   - `selective-override`: Overrides only specific parts of earlier instructions
+
+#### Implementation Guidance
+
+You can also include implementation examples in your registry entry to show exactly how the transformation should work:
+
+```json
+"implementationGuidance": {
+  "examples": [
+    {
+      "context": "Standard implementation",
+      "originalPrompt": "What are the implications of artificial intelligence for education?",
+      "transformedPrompt": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Provide a very thorough and detailed analysis with multiple perspectives.\n\nWhat are the implications of artificial intelligence for education?"
+    },
+    {
+      "context": "Basic depth implementation",
+      "originalPrompt": "How does compound interest work?",
+      "transformedPrompt": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Focus on the most important logical steps.\n\nHow does compound interest work?"
+    }
+  ],
+  "compatibilityNotes": [
+    {
+      "decorator": "Concise",
+      "relationship": "conflicts",
+      "notes": "The objectives of comprehensive reasoning and concise responses contradict each other"
+    }
+  ]
+}
+```
+
+#### Best Practices for Transformation Templates
+
+1. **Clear Instructions**: Write clear, concise instructions that models can easily understand and follow.
+2. **Parameter Context**: Ensure parameter-specific instructions make sense when appended to the base instruction.
+3. **Model Compatibility**: Consider how different models might interpret your instructions.
+4. **Composition**: Design templates that compose well with other decorators.
+5. **Testing**: Test your transformation with various prompts and models to ensure consistent behavior.
+
+#### Example Transformation Flow
+
+Let's walk through a complete example of how a prompt is transformed using decorators:
+
+**Original Prompt:**
+```
+Explain how photosynthesis works.
+```
+
+**Step 1: Apply the Audience Decorator**
+```json
+{
+  "decoratorName": "Audience",
+  "parameters": {
+    "level": "beginner"
+  },
+  "transformationTemplate": {
+    "instruction": "Please tailor your response for the appropriate audience.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "beginner": "Make your explanation accessible to someone with minimal background knowledge. Use simple language and familiar analogies.",
+          "intermediate": "Assume some background knowledge but explain technical concepts. Balance depth with accessibility.",
+          "expert": "Use field-specific terminology and provide detailed technical explanations appropriate for specialists."
+        }
+      }
+    },
+    "placement": "append"
+  }
+}
+```
+<!-- Note: "append" is the default placement strategy, which places instructions after the prompt -->
+
+**Transformed Prompt After Audience Decorator:**
+```
+Explain how photosynthesis works.
+
+Please tailor your response for the appropriate audience. Make your explanation accessible to someone with minimal background knowledge. Use simple language and familiar analogies.
+```
+
+**Step 2: Apply the StepByStep Decorator**
+```json
+{
+  "decoratorName": "StepByStep",
+  "parameters": {
+    "numbered": true
+  },
+  "transformationTemplate": {
+    "instruction": "Break down your explanation into a sequence of discrete steps.",
+    "parameterMapping": {
+      "numbered": {
+        "valueMap": {
+          "true": "Number each step clearly.",
+          "false": "Separate each step with clear headings or transitions."
+        }
+      }
+    },
+    "placement": "prepend"
+  }
+}
+```
+<!-- Note: "prepend" explicitly places instructions before the prompt, overriding the default "append" behavior -->
+
+**Final Transformed Prompt:**
+```
+Break down your explanation into a sequence of discrete steps. Number each step clearly.
+
+Explain how photosynthesis works.
+
+Please tailor your response for the appropriate audience. Make your explanation accessible to someone with minimal background knowledge. Use simple language and familiar analogies.
+```
+
+This example illustrates how:
+1. Each decorator's transformation template specifies how to modify the prompt
+2. The placement strategy determines where instructions are positioned relative to the original prompt
+3. Multiple decorators compose to create a comprehensive set of instructions
+4. Parameter values influence the specific instructions that are applied
+
+The LLM would then process this transformed prompt, incorporating all the instructions into its response generation process.
 
 ## Validation
 

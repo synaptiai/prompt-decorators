@@ -30,6 +30,39 @@ class PeerReview(BaseDecorator):
     decorator_name = "peer_review"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please include a simulated peer review of your response, evaluating"
+        "the content as an academic reviewer would.",
+        "parameterMapping": {
+            "criteria": {
+                "valueMap": {
+                    "accuracy": "Focus the peer review primarily on the factual accuracy and precision of the information presented.",
+                    "methodology": "Focus the peer review primarily on the methodological approach, analytical framework, or reasoning process used.",
+                    "limitations": "Focus the peer review primarily on identifying limitations, gaps, or unaddressed aspects in the analysis.",
+                    "completeness": "Focus the peer review primarily on how thoroughly the topic is covered and whether key elements are missing.",
+                    "all": "Include a comprehensive peer review addressing accuracy, methodology, limitations, and completeness of the content.",
+                },
+            },
+            "style": {
+                "valueMap": {
+                    "constructive": "Maintain a supportive tone in the peer review, emphasizing positive aspects while gently suggesting improvements.",
+                    "critical": "Adopt a rigorously critical stance in the peer review, thoroughly identifying weaknesses and challenging assumptions.",
+                    "balanced": "Provide a balanced peer review that equally addresses strengths and weaknesses with a neutral academic tone.",
+                },
+            },
+            "position": {
+                "valueMap": {
+                    "after": "Present the main content first, followed by the peer review section.",
+                    "before": "Begin with the peer review section, then present the main content.",
+                    "alongside": "Integrate the peer review comments throughout the content, marking them clearly as reviewer notes.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -256,3 +289,18 @@ class PeerReview(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

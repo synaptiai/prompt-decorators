@@ -34,6 +34,65 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please present the strongest possible version of each position or argument related to this topic, ensuring each viewpoint is represented in its most compelling and charitable form, even those you might not personally agree with.",
+    "parameterMapping": {
+      "sides": {
+        "format": "Present the strongest possible version of {value} different viewpoints or positions on this topic."
+      },
+      "critique": {
+        "valueMap": {
+          "true": "After presenting each steel-manned position, provide a balanced critique that evaluates its strengths and weaknesses.",
+          "false": "Focus solely on presenting the strongest versions of each position without providing your own critique or evaluation."
+        }
+      },
+      "separation": {
+        "valueMap": {
+          "true": "Clearly separate the presentation of steel-manned arguments from any subsequent analysis or critique using distinct sections.",
+          "false": "Integrate the presentation of steel-manned arguments with any analysis or critique in a more flowing format."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Steel-manning both sides of universal basic income debate",
+        "originalPrompt": "Is universal basic income a good policy?",
+        "transformedPrompt": "Please present the strongest possible version of each position or argument related to this topic, ensuring each viewpoint is represented in its most compelling and charitable form, even those you might not personally agree with. Present the strongest possible version of 2 different viewpoints or positions on this topic. Focus solely on presenting the strongest versions of each position without providing your own critique or evaluation. Clearly separate the presentation of steel-manned arguments from any subsequent analysis or critique using distinct sections.\n\nIs universal basic income a good policy?"
+      },
+      {
+        "context": "Steel-manning cryptocurrency position with critique",
+        "originalPrompt": "What is the strongest case for cryptocurrency as the future of finance?",
+        "transformedPrompt": "Please present the strongest possible version of each position or argument related to this topic, ensuring each viewpoint is represented in its most compelling and charitable form, even those you might not personally agree with. Present the strongest possible version of 1 different viewpoints or positions on this topic. After presenting each steel-manned position, provide a balanced critique that evaluates its strengths and weaknesses. Clearly separate the presentation of steel-manned arguments from any subsequent analysis or critique using distinct sections.\n\nWhat is the strongest case for cryptocurrency as the future of finance?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Debate",
+        "relationship": "enhances",
+        "notes": "Steelman works effectively with Debate to ensure all positions are presented in their strongest form before being debated"
+      },
+      {
+        "decorator": "Critique",
+        "relationship": "enhances",
+        "notes": "When critique=true, Steelman pairs well with Critique to first present the strongest form of a position, then analyze it critically"
+      },
+      {
+        "decorator": "Balanced",
+        "relationship": "enhances",
+        "notes": "Steelman helps ensure the Balance decorator presents the strongest form of each position when discussing multiple viewpoints"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Present the most compelling and charitable version of {sides} positions on this topic. For each position, include the strongest evidence, most persuasive reasoning, and most thoughtful responses to potential objections. Make each position as convincing as possible, even those you might disagree with. {critique} {separation} Avoid straw-manning any position.",
+        "notes": "This model sometimes needs explicit reminders to avoid unconsciously weakening positions it might not favor"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Steel-manning both sides of a controversial issue",

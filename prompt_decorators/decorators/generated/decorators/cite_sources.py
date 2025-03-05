@@ -29,6 +29,38 @@ class CiteSources(BaseDecorator):
     decorator_name = "cite_sources"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please include citations for factual claims in your response to"
+        "enhance credibility and enable verification.",
+        "parameterMapping": {
+            "style": {
+                "valueMap": {
+                    "inline": "Add citations directly in the text using parenthetical references.",
+                    "footnote": "Use numbered footnotes for citations, with footnotes appearing at the bottom of relevant sections.",
+                    "endnote": "Use numbered endnotes for citations, with all notes appearing in a References section at the end.",
+                },
+            },
+            "format": {
+                "valueMap": {
+                    "APA": "Format citations according to APA style guidelines.",
+                    "MLA": "Format citations according to MLA style guidelines.",
+                    "Chicago": "Format citations according to Chicago Manual of Style guidelines.",
+                    "Harvard": "Format citations according to Harvard referencing style guidelines.",
+                    "IEEE": "Format citations according to IEEE citation style guidelines.",
+                },
+            },
+            "comprehensive": {
+                "valueMap": {
+                    "true": "Cite every factual claim, including commonly known facts.",
+                    "false": "Only cite major claims, specialized knowledge, statistics, and direct quotes.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -241,3 +273,18 @@ class CiteSources(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

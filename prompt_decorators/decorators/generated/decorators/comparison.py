@@ -26,6 +26,33 @@ class Comparison(BaseDecorator):
     decorator_name = "comparison"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response as a direct comparison between multiple"
+        "items, concepts, or approaches, highlighting their similarities and"
+        "differences.",
+        "parameterMapping": {
+            "aspects": {
+                "format": "Compare the items specifically across these aspects or dimensions: {value}.",
+            },
+            "format": {
+                "valueMap": {
+                    "table": "Present the comparison in a tabular format with items as columns (or rows) and comparison aspects as rows (or columns).",
+                    "prose": "Present the comparison as flowing paragraphs that discuss each aspect across all items in a narrative style.",
+                    "bullets": "Present the comparison as bulleted lists grouped by aspect or by item.",
+                },
+            },
+            "highlight": {
+                "valueMap": {
+                    "true": "Explicitly emphasize or call attention to key differences between the items being compared.",
+                    "false": "Present differences and similarities without special emphasis on either.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -234,3 +261,18 @@ class Comparison(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

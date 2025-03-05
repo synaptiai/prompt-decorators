@@ -30,6 +30,40 @@ class Timeline(BaseDecorator):
     decorator_name = "timeline"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please organize your response as a timeline that presents information"
+        "chronologically, highlighting key events or developments over time.",
+        "parameterMapping": {
+            "granularity": {
+                "valueMap": {
+                    "day": "Structure the timeline with day-level precision, including specific dates for events where relevant.",
+                    "month": "Structure the timeline with month-level precision, grouping events by month and year.",
+                    "year": "Structure the timeline with year-level precision, organizing events by year.",
+                    "decade": "Structure the timeline by decades, grouping events into 10-year periods.",
+                    "century": "Structure the timeline by centuries, organizing events into 100-year periods.",
+                    "era": "Structure the timeline by broad historical eras or epochs, labeling each period appropriately.",
+                },
+            },
+            "format": {
+                "valueMap": {
+                    "list": "Present the timeline as a chronological list with clear dates/periods and descriptions for each entry.",
+                    "narrative": "Present the timeline as a flowing narrative that moves chronologically through time while maintaining clear temporal markers.",
+                    "table": "Present the timeline as a table with columns for date/period and description/events.",
+                },
+            },
+            "details": {
+                "valueMap": {
+                    "minimal": "For each timeline entry, include only the most essential information - key events, dates, and primary actors.",
+                    "moderate": "For each timeline entry, include balanced information with important details, context, and significance.",
+                    "comprehensive": "For each timeline entry, provide extensive details including background context, significance, consequences, and connections to other events.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -257,3 +291,18 @@ class Timeline(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

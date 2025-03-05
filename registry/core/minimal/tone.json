@@ -17,6 +17,54 @@
       "required": true
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please adjust your writing style and tone for this response.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "formal": "Use a formal, professional tone with proper terminology and minimal contractions. Maintain a structured approach with clear organization.",
+          "casual": "Use a casual, conversational tone as if speaking to a friend. Feel free to use contractions and a more relaxed writing style.",
+          "friendly": "Use a warm, approachable tone that builds rapport. Be encouraging and personable while still being informative.",
+          "technical": "Use precise technical language and terminology appropriate for a knowledgeable audience. Include specific details and technical concepts.",
+          "humorous": "Incorporate appropriate humor and a light-hearted tone in your response, while still providing accurate information."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Technical style",
+        "originalPrompt": "Explain how cloud computing works.",
+        "transformedPrompt": "Please adjust your writing style and tone for this response. Use precise technical language and terminology appropriate for a knowledgeable audience. Include specific details and technical concepts.\n\nExplain how cloud computing works."
+      },
+      {
+        "context": "Casual style",
+        "originalPrompt": "Why do leaves change color in autumn?",
+        "transformedPrompt": "Please adjust your writing style and tone for this response. Use a casual, conversational tone as if speaking to a friend. Feel free to use contractions and a more relaxed writing style.\n\nWhy do leaves change color in autumn?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "ELI5 requires a specific tone that may contradict certain tone settings"
+      },
+      {
+        "decorator": "Academic",
+        "relationship": "conflicts",
+        "notes": "The Academic decorator enforces a scholarly tone that may conflict with casual or humorous tones"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Please write your response in the following tone and style:",
+        "notes": "This model benefits from more direct tone instructions"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Technical documentation tone",

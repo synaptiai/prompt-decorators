@@ -28,6 +28,35 @@ class Inductive(BaseDecorator):
     decorator_name = "inductive"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response using inductive reasoning, moving from"
+        "specific observations or examples to broader generalizations and"
+        "theories. Focus on pattern recognition and deriving general principles"
+        "from particular instances.",
+        "parameterMapping": {
+            "examples": {
+                "format": "Begin with {value} specific, concrete examples or observations before deriving generalizations from them.",
+            },
+            "confidence": {
+                "valueMap": {
+                    "true": "Explicitly state the confidence level for each inductive conclusion, acknowledging the inherent uncertainty in generalizing from specific cases.",
+                    "false": "Present the inductive conclusions without explicitly stating confidence levels.",
+                },
+            },
+            "structure": {
+                "valueMap": {
+                    "generalization": "Use generalization induction, where common properties among the examples are used to form a general rule or principle.",
+                    "causal": "Apply causal induction, focusing on identifying cause-and-effect relationships across the examples to establish causal patterns.",
+                    "statistical": "Employ statistical induction, using quantitative patterns and probabilistic reasoning to derive statistical generalizations from the examples.",
+                    "analogical": "Utilize analogical induction, where similarities between examples are used to infer that they likely share other properties as well.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -253,3 +282,18 @@ class Inductive(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

@@ -23,6 +23,20 @@ class Version(BaseDecorator):
     decorator_name = "version"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "The following prompt uses Prompt Decorators standard version"
+        "{standard}. Please interpret all decorators according to this"
+        "version's specifications.",
+        "parameterMapping": {
+            "standard": {
+                "format": "The following prompt uses Prompt Decorators standard version {value}. Please interpret all decorators according to this version's specifications.",
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "override",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -179,3 +193,18 @@ class Version(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

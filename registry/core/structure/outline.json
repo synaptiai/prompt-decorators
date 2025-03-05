@@ -35,6 +35,63 @@
       "required": false
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly.",
+    "parameterMapping": {
+      "depth": {
+        "format": "Use a maximum of {value} levels of nesting in the hierarchy."
+      },
+      "style": {
+        "valueMap": {
+          "numeric": "Use numeric notation (1, 1.1, 1.1.1, etc.) for all outline levels.",
+          "bullet": "Use bullet point notation (•, ○, ▪, etc.) for all outline levels.",
+          "roman": "Use Roman numeral notation (I, II, III, etc. for top level, then A, B, C, etc. for second level).",
+          "alpha": "Use alphabetical notation (A, B, C, etc. for top level, then 1, 2, 3, etc. for second level).",
+          "mixed": "Use a mix of notation styles: numbers for level 1, letters for level 2, Roman numerals for level 3, etc."
+        }
+      },
+      "detailed": {
+        "valueMap": {
+          "true": "Include a brief explanation or description under each outline point to provide context.",
+          "false": "Keep the outline concise with headings only, without additional explanations under each point."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard numeric outline",
+        "originalPrompt": "Explain the structure of the United States government.",
+        "transformedPrompt": "Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly. Use a maximum of 3 levels of nesting in the hierarchy. Use numeric notation (1, 1.1, 1.1.1, etc.) for all outline levels. Keep the outline concise with headings only, without additional explanations under each point.\n\nExplain the structure of the United States government."
+      },
+      {
+        "context": "Detailed mixed-style outline",
+        "originalPrompt": "Provide a comprehensive overview of machine learning techniques.",
+        "transformedPrompt": "Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly. Use a maximum of 5 levels of nesting in the hierarchy. Use a mix of notation styles: numbers for level 1, letters for level 2, Roman numerals for level 3, etc. Include a brief explanation or description under each outline point to provide context.\n\nProvide a comprehensive overview of machine learning techniques."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Bullet",
+        "relationship": "conflicts",
+        "notes": "Bullet and Outline both specify different formatting structures that may conflict"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "Outline can complement StepByStep by providing a structured overview of the steps"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-3.5-turbo": {
+        "instruction": "Format your response as an outline with clear hierarchical structure. Use headings and subheadings with consistent formatting for each level.",
+        "notes": "This model may need more explicit instructions about maintaining consistent outline formatting"
+      }
+    }
+  },
   "examples": [
     {
       "description": "Simple numeric outline of a complex topic",

@@ -29,6 +29,37 @@ class DecisionMatrix(BaseDecorator):
     decorator_name = "decision_matrix"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response as a decision matrix that"
+        "systematically evaluates options against multiple criteria to"
+        "facilitate comparison and selection.",
+        "parameterMapping": {
+            "options": {
+                "format": "Evaluate these specific options or alternatives in your matrix: {value}.",
+            },
+            "criteria": {
+                "format": "Assess each option against these specific criteria: {value}.",
+            },
+            "weighted": {
+                "valueMap": {
+                    "true": "Include weight factors for each criterion to reflect their relative importance, and calculate weighted scores for each option.",
+                    "false": "Evaluate all criteria with equal importance, without applying weights to the scores.",
+                },
+            },
+            "scale": {
+                "valueMap": {
+                    "1-5": "Use a 1-5 rating scale for each criterion (where 1 is poor/lowest and 5 is excellent/highest).",
+                    "1-10": "Use a 1-10 rating scale for each criterion (where 1 is poor/lowest and 10 is excellent/highest).",
+                    "qualitative": "Use qualitative ratings (Poor, Fair, Good, Very Good, Excellent) for each criterion.",
+                    "percentage": "Use percentage scores (0-100%) for rating each criterion.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -261,3 +292,18 @@ class DecisionMatrix(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)

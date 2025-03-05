@@ -26,6 +26,33 @@ class MECE(BaseDecorator):
     decorator_name = "mece"
     version = "1.0.0"  # Initial version
 
+    # Transformation template for prompt modification
+    transformation_template = {
+        "instruction": "Please structure your response using the Mutually Exclusive,"
+        "Collectively Exhaustive (MECE) framework, ensuring all categories are"
+        "distinct with no overlaps (mutually exclusive) and together cover all"
+        "possible aspects (collectively exhaustive).",
+        "parameterMapping": {
+            "dimensions": {
+                "format": "Organize your analysis into exactly {value} distinct top-level MECE dimensions or categories.",
+            },
+            "depth": {
+                "format": "For each top-level dimension, provide a hierarchical breakdown with up to {value} sub-levels of categorization.",
+            },
+            "framework": {
+                "valueMap": {
+                    "issue tree": "Use an issue tree framework to break down the topic into a hierarchy of questions and sub-questions, ensuring comprehensive coverage of all relevant issues.",
+                    "value chain": "Apply a value chain framework to analyze the topic across all activities that add value, from inputs to final outputs/outcomes.",
+                    "business segments": "Categorize the analysis using business segments such as products/services, customer segments, geographical regions, and operational functions.",
+                    "stakeholders": "Structure the analysis around all relevant stakeholders, ensuring every entity affected by or influencing the topic is considered.",
+                    "custom": "Develop a custom MECE framework tailored specifically to this topic, with categories that best fit the subject matter.",
+                },
+            },
+        },
+        "placement": "prepend",
+        "compositionBehavior": "accumulate",
+    }
+
     @property
     def name(self) -> str:
         """Get the name of the decorator.
@@ -262,3 +289,18 @@ class MECE(BaseDecorator):
             "category": "general",
             "version": cls.version,
         }
+
+    def apply_to_prompt(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method transforms the prompt using the transformation template.
+
+        Args:
+            prompt: The prompt to decorate
+
+        Returns:
+            The decorated prompt
+
+        """
+        # Use the apply_to_prompt implementation from BaseDecorator
+        return super().apply_to_prompt(prompt)
