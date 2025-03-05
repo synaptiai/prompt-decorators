@@ -10,23 +10,57 @@
   "parameters": [
     {
       "name": "parameterName",
-      "type": "string|number|boolean|enum",
+      "type": "string",
       "description": "Description of what this parameter does",
-      "enum": ["option1", "option2", "option3"],
-      "default": "defaultValue",
       "required": false,
-      "validation": {
-        "minimum": 0,
-        "maximum": 10,
-        "pattern": "^[A-Za-z0-9]+$"
-      }
+      "default": "defaultValue",
+      "enum": ["option1", "option2", "option3"],
+      "min": 0,
+      "max": 10,
+      "pattern": "^[A-Za-z0-9]+$"
     }
   ],
+  "transformationTemplate": {
+    "instruction": "Base instruction text that will be added to the prompt.",
+    "parameterMapping": {
+      "parameterName": {
+        "valueMap": {
+          "option1": "Apply option1 transformation.",
+          "option2": "Apply option2 transformation.",
+          "option3": "Apply option3 transformation."
+        },
+        "format": "with {value} customization"
+      }
+    },
+    "placement": "append",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Example for GPT-4",
+        "originalPrompt": "Tell me about artificial intelligence.",
+        "transformedPrompt": "Tell me about artificial intelligence. [Transformation applied with option1]",
+        "notes": "This demonstrates how the decorator modifies the prompt."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "AnotherDecorator",
+        "relationship": "enhances",
+        "notes": "Works well with AnotherDecorator by adding complementary instructions."
+      }
+    ]
+  },
   "examples": [
     {
       "description": "Example of how to use this decorator with specific parameters",
-      "usage": "+++DecoratorName(parameterName=value)\nUser prompt text goes here",
-      "result": "Expected behavior or output pattern from this decorator"
+      "usage": "+++DecoratorName(parameterName=option1)\nUser prompt text goes here",
+      "result": "Expected behavior or output pattern from this decorator",
+      "prompt": "Tell me about artificial intelligence.",
+      "parameters": {
+        "parameterName": "option1"
+      }
     }
   ],
   "compatibility": {
@@ -38,5 +72,6 @@
       "gpt-4",
       "gpt-3.5-turbo"
     ]
-  }
+  },
+  "category": "Instruction"
 }

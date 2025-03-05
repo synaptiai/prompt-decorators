@@ -435,7 +435,7 @@ def query_with_decorators(
             ):
                 try:
                     # Ensure response_text is str, not None
-                    response_text = decorator.transform_response(response_text)
+                    response_text = str(decorator.transform_response(response_text))
                 except Exception as e:
                     logger.log_error(
                         f"Error transforming response with {decorator.__class__.__name__}: {str(e)}"
