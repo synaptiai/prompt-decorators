@@ -22,15 +22,144 @@ import json
 import logging
 import sys
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Type, Union, cast
+from typing import Any, Callable, Dict, List, Optional, Type, Union, cast
 
+# Set up a global variable to track if MCP is available
+MCP_AVAILABLE = False
+
+
+# Define a FastMCP type that will be either the real FastMCP or our placeholder
+class DummyFastMCP:
+    """Placeholder class for FastMCP when MCP is not installed."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize a dummy instance that does nothing.
+
+        Args:
+            *args: Positional arguments (ignored)
+            **kwargs: Keyword arguments (ignored)
+        """
+        pass
+
+    def tool(self, *args: Any, **kwargs: Any) -> Callable:
+        """Dummy tool decorator that returns the function unchanged.
+
+        Args:
+            *args: Positional arguments (ignored)
+            **kwargs: Keyword arguments (ignored)
+
+        Returns:
+            A function that returns its input unchanged
+        """
+
+        def decorator(func: Callable) -> Callable:
+            """Inner decorator function that returns the function unchanged.
+
+            Args:
+                func: The function to decorate
+
+            Returns:
+                The original function unchanged
+            """
+            return func
+
+        return decorator
+
+    def prompt(self, *args: Any, **kwargs: Any) -> Callable:
+        """Dummy prompt decorator that returns the function unchanged.
+
+        Args:
+            *args: Positional arguments (ignored)
+            **kwargs: Keyword arguments (ignored)
+
+        Returns:
+            A function that returns its input unchanged
+        """
+
+        def decorator(func: Callable) -> Callable:
+            """Inner decorator function that returns the function unchanged.
+
+            Args:
+                func: The function to decorate
+
+            Returns:
+                The original function unchanged
+            """
+            return func
+
+        return decorator
+
+    def prompts_list_handler(self, *args: Any, **kwargs: Any) -> Callable:
+        """Dummy prompts_list_handler decorator that returns the function unchanged.
+
+        Args:
+            *args: Positional arguments (ignored)
+            **kwargs: Keyword arguments (ignored)
+
+        Returns:
+            A function that returns its input unchanged
+        """
+
+        def decorator(func: Callable) -> Callable:
+            """Inner decorator function that returns the function unchanged.
+
+            Args:
+                func: The function to decorate
+
+            Returns:
+                The original function unchanged
+            """
+            return func
+
+        return decorator
+
+    def prompts_get_handler(self, *args: Any, **kwargs: Any) -> Callable:
+        """Dummy prompts_get_handler decorator that returns the function unchanged.
+
+        Args:
+            *args: Positional arguments (ignored)
+            **kwargs: Keyword arguments (ignored)
+
+        Returns:
+            A function that returns its input unchanged
+        """
+
+        def decorator(func: Callable) -> Callable:
+            """Inner decorator function that returns the function unchanged.
+
+            Args:
+                func: The function to decorate
+
+            Returns:
+                The original function unchanged
+            """
+            return func
+
+        return decorator
+
+    async def run_stdio_async(self) -> None:
+        """Dummy async run method that does nothing.
+
+        This is a placeholder for the FastMCP.run_stdio_async method.
+        """
+        pass
+
+    def run(self) -> None:
+        """Dummy run method that does nothing.
+
+        This is a placeholder for the FastMCP.run method.
+        """
+        pass
+
+
+# Try to import the real FastMCP
 try:
     from mcp.server.fastmcp import FastMCP
+
+    MCP_AVAILABLE = True
 except ImportError:
-    raise ImportError(
-        "MCP integration requires the 'mcp' package. "
-        "Install it with 'pip install \"mcp[cli]\"'"
-    )
+    # If not available, use our dummy implementation
+    FastMCP = DummyFastMCP  # type: ignore
 
 from prompt_decorators.core import BaseDecorator
 from prompt_decorators.core.parser import DecoratorParser
@@ -209,7 +338,7 @@ DEFAULT_TEMPLATES = create_default_templates()
 def create_mcp_server(
     name: str = "prompt-decorators-suite",
     templates: Optional[Dict[str, DecoratorTemplate]] = None,
-) -> FastMCP:
+) -> Any:
     """
     Create an MCP server with prompt decorator integration.
 
@@ -219,8 +348,18 @@ def create_mcp_server(
 
     Returns:
         Configured FastMCP server instance
+
+    Raises:
+        ImportError: If the MCP package is not installed but is required for this function
     """
-    # Initialize FastMCP server
+    # Check if MCP is available
+    if not MCP_AVAILABLE:
+        raise ImportError(
+            "MCP integration requires the 'mcp' package to be installed. "
+            "Install it with 'pip install \"mcp[cli]\"'"
+        )
+
+    # Initialize FastMCP server (we know FastMCP is available at this point)
     mcp = FastMCP(name)
 
     # Use provided templates or defaults
@@ -641,6 +780,14 @@ def create_mcp_server(
 
 def main() -> None:
     """Run the MCP server as a standalone application."""
+    # Check if MCP is available
+    if not MCP_AVAILABLE:
+        logger.error(
+            "MCP package is not installed. Cannot run MCP server. "
+            "Install it with 'pip install \"mcp[cli]\"'"
+        )
+        sys.exit(1)
+
     logger.info("Starting Prompt Decorators MCP Server")
 
     # Create the server

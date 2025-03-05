@@ -4,11 +4,21 @@ The Prompt Decorators library provides integration with the [Model Context Proto
 
 ## Installation
 
-To use the MCP integration, you need to install the MCP package:
+The MCP integration is an optional feature that requires the MCP package. You can install it in one of two ways:
+
+1. Install prompt-decorators with the MCP extras:
+
+```bash
+pip install "prompt-decorators[mcp]"
+```
+
+2. Or install the MCP package separately:
 
 ```bash
 pip install "mcp[cli]"
 ```
+
+If you try to use the MCP integration without the MCP package installed, you'll get an informative error message that guides you to install the required package.
 
 ## Usage
 
