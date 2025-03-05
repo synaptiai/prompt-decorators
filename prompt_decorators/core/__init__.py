@@ -10,10 +10,14 @@ from prompt_decorators.core.base import (
     ParameterType,
     ValidationError,
 )
+from prompt_decorators.core.parser import DecoratorParser
+from prompt_decorators.core.registry import DecoratorRegistry
 
 __all__ = [
     "BaseDecorator",
     "Parameter",
     "ValidationError",
     "ParameterType",
+    "DecoratorParser",
+    "DecoratorRegistry",
 ]

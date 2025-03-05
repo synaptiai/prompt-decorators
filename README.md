@@ -104,6 +104,11 @@ The framework currently implements:
    - Generation of decorator classes from registry definitions
    - Test generation for decorators
 
+5. **Integrations**:
+   - **Model Context Protocol (MCP)**: Integration with the [Model Context Protocol](https://github.com/microsoft/model-context-protocol) for standardized LLM interactions
+   - Predefined decorator templates for common use cases
+   - MCP tools for applying decorators and retrieving decorator information
+
 ## 🏗️ Architecture
 
 The framework is organized into several key components:
@@ -191,6 +196,46 @@ reasoning_decorators = registry.find_decorators_by_category("reasoning")
 for name in reasoning_decorators:
     print(f"- {name}")
 ```
+
+### Using the MCP Integration
+
+```python
+from prompt_decorators.integrations.mcp import create_mcp_server
+
+# Create an MCP server with prompt decorator integration
+mcp_server = create_mcp_server("my-decorator-server")
+
+# Run the server
+mcp_server.run()
+```
+
+Connect to the server using an MCP client:
+
+```python
+from mcp.client import MCPClient
+
+# Connect to the MCP server
+client = MCPClient("http://localhost:8000")
+
+# Apply decorators using the +++ syntax
+result = await client.tools.apply_decorators(
+    prompt="+++Reasoning(depth='comprehensive') +++StepByStep() Explain quantum computing."
+)
+
+# Use a predefined template
+template_result = await client.tools.create_decorated_prompt(
+    template_name="detailed-reasoning",
+    prompt="Explain how quantum computing works."
+)
+
+# Use a template through the prompts API
+prompt_response = await client.prompts.get(
+    name="explain-simply",
+    arguments={"prompt": "Explain how nuclear fusion works."}
+)
+```
+
+See the [MCP Integration Documentation](docs/integrations/mcp.md) for more details.
 
 ## 📄 Prompt Decorators Specification
 

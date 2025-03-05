@@ -85,6 +85,9 @@ nav:
     - Overview: api/index.md
     - Core: api/core.md
     - Decorators: api/decorators.md
+  - Integrations:
+    - Overview: integrations/index.md
+    - Model Context Protocol (MCP): integrations/mcp.md
   - Examples:
     - Basic Examples: examples/basic.md
     - Advanced Examples: examples/advanced.md

@@ -13,6 +13,84 @@ _DECORATOR_REGISTRY: Dict[str, Type[BaseDecorator]] = {}
 _DECORATOR_CATEGORIES: Dict[str, Set[str]] = {}
 
 
+class DecoratorRegistry:
+    """Registry class for managing prompt decorators.
+
+    This class provides an object-oriented interface to the decorator registry,
+    allowing for easier management and access to registered decorators.
+    """
+
+    def __init__(self) -> None:
+        """Initialize the decorator registry."""
+        # Use the global registry
+        self._registry = _DECORATOR_REGISTRY
+        self._categories = _DECORATOR_CATEGORIES
+
+    @property
+    def decorators(self) -> Dict[str, Type[BaseDecorator]]:
+        """Get all registered decorators.
+
+        Returns:
+            Dictionary mapping decorator names to decorator classes
+        """
+        return self._registry.copy()
+
+    @property
+    def categories(self) -> Dict[str, Set[str]]:
+        """Get all decorator categories and their members.
+
+        Returns:
+            Dictionary mapping category names to sets of decorator names
+        """
+        return {k: v.copy() for k, v in self._categories.items()}
+
+    def register(
+        self, decorator_class: Type[BaseDecorator], category: str = "unknown"
+    ) -> None:
+        """Register a decorator class.
+
+        Args:
+            decorator_class: The decorator class to register
+            category: Optional category for organizing decorators
+
+        Returns:
+            None
+        """
+        register_decorator(decorator_class, category)
+
+    def get(self, name: str) -> Optional[Type[BaseDecorator]]:
+        """Get a decorator class by name.
+
+        Args:
+            name: Name of the decorator
+
+        Returns:
+            The decorator class if found, None otherwise
+        """
+        return get_decorator(name)
+
+    def get_by_category(self, category: str) -> List[Type[BaseDecorator]]:
+        """Get all decorators in a specific category.
+
+        Args:
+            category: The category name
+
+        Returns:
+            List of decorator classes in the specified category
+        """
+        return get_decorators_by_category(category)
+
+    def clear(self) -> None:
+        """Clear the decorator registry.
+
+        This is primarily used for testing.
+
+        Returns:
+            None
+        """
+        clear_registry()
+
+
 def register_decorator(
     decorator_class: Type[BaseDecorator], category: str = "unknown"
 ) -> None:
