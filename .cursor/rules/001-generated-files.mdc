@@ -1,0 +1,59 @@
+---
+description: MODIFY generator code when issues occur in generated files to ENSURE standards compliance
+globs: prompt_decorators/**/*.py, tests/**/*.py
+---
+
+# Generated Files Management
+
+<version>1.0.0</version>
+
+## Context
+- When working with files that are generated automatically by the codebase
+- When encountering issues in generated Python modules or tests
+- When making changes to the prompt decorator system
+
+## Requirements
+- NEVER edit generated Python files or tests directly, even to fix bugs
+- ALWAYS modify the code generators instead of the generated files
+- ENSURE all generated files pass docstring and linting requirements
+- VERIFY generated Python files and tests produce a fully working module
+- MAINTAIN type safety throughout the generated codebase
+- TEST generator changes by running the generation process and validating output
+
+## Examples
+
+<example>
+# Good practice
+# Issue: A generated decorator has incorrect type annotations
+# Solution: Edit the generator template
+
+# Fix the template in prompt_decorators/generator/templates/decorator.py.jinja2
+def transform_response(self, response: str) -> str:
+    """Transform the response from the model.
+
+    Args:
+        response: The response to transform
+
+    Returns:
+        The transformed response
+    """
+    # Implementation
+</example>
+
+
+<example type="invalid">
+# Bad practice
+# Issue: A generated decorator has incorrect type annotations
+# Solution: Directly editing the generated file
+
+# Directly modifying prompt_decorators/decorators/generated/my_decorator.py
+def transform_response(self, response: str) -> str:  # Fixing return type annotation
+    # Implementation
+</example>
+
+## Additional Guidelines
+- Use proper type annotations in generator templates
+- Follow standard docstring format in templates
+- Ensure generator code validates output against MyPy
+- Include appropriate tests for the generator code itself
+- Document the generation process clearly for other developers

@@ -170,3 +170,6 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 .DS_Store
+
+# Private individual user cursor rules
+.cursor/rules/_*.mdc
