@@ -31,10 +31,10 @@ class DecoratorRegistry:
         """Get all registered decorators.
 
         Args:
-            None
+            self: The instance of the class.
 
         Returns:
-            Dictionary mapping decorator names to decorator classes
+            Dictionary mapping decorator names to decorator classes.
         """
         return self._registry.copy()
 
@@ -43,10 +43,10 @@ class DecoratorRegistry:
         """Get all decorator categories and their members.
 
         Args:
-            None
+            self: The instance of the class.
 
         Returns:
-            Dictionary mapping category names to sets of decorator names
+            Dictionary mapping category names to sets of decorator names.
         """
         return {k: v.copy() for k, v in self._categories.items()}
 
@@ -92,10 +92,10 @@ class DecoratorRegistry:
         This is primarily used for testing.
 
         Args:
-            None
+            self: The instance of the class.
 
         Returns:
-            None
+            None.
         """
         clear_registry()
 

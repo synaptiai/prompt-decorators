@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Pre-push hook to run strict type checking on the demo directory
+# To install: copy this file to .git/hooks/pre-push and make it executable
+
+# Get the repo root directory
+ROOT_DIR=$(git rev-parse --show-toplevel)
+
+# Run the demo type checking script
+echo "Running strict type checking on demo directory..."
+$ROOT_DIR/scripts/check_demo_types.py
+
+# Exit with the script's exit code
+exit $?

@@ -436,14 +436,8 @@ def query_with_decorators(
                 try:
                     # Get the transformed response
                     transformed = decorator.transform_response(response_text)
-                    # Ensure the response is a string type
-                    if transformed is None:
-                        response_text = ""  # Convert None to empty string
-                    else:
-                        # Cast with an explicit annotation to satisfy mypy
-                        response_text: str = str(
-                            transformed
-                        )  # Convert any non-None value to string
+                    # Convert any non-None value to string
+                    response_text = str(transformed)
                 except Exception as e:
                     logger.log_error(
                         f"Error transforming response with {decorator.__class__.__name__}: {str(e)}"

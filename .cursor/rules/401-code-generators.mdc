@@ -1,0 +1,13 @@
+---
+description: ENSURE code generators produce output that meets all linting, type checking, and docstring standards to PREVENT CI failures
+globs: prompt_decorators/generator/*.py, scripts/generate_*.py
+---
+
+# Code Generator Standards
+
+<version>1.0.0</version>
+
+## Context
+- When developing code generators that produce Python modules or tests
+- When modifying generator templates
+- When reviewing or debugging issues with generated code

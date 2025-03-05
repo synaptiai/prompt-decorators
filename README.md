@@ -297,6 +297,16 @@ This project is licensed under the Apache License, Version 2.0. See the [LICENSE
 
 Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) file for guidelines on how to contribute to this project.
 
+### Development Environment
+
+To ensure code quality, the project uses strict type checking in CI. While the `demo/` directory is excluded from pre-commit hooks to reduce development friction, it's still validated in CI with stricter settings.
+
+Before pushing changes:
+1. Run `scripts/check_demo_types.py` to validate the demo directory with the same strict type checking used in CI
+2. Alternatively, install the optional pre-push hook: `cp scripts/git-hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push`
+
+Remember: Always modify generator code (not generated files) when fixing type issues in generated files.
+
 ## 🚧 Roadmap
 
 The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.

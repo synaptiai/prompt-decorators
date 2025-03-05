@@ -24,13 +24,12 @@ class DecoratorParser:
     DECORATOR_PATTERN = r"\+\+\+([A-Za-z0-9_]+)(?:\(([^)]*)\))?"
 
     def __init__(self, registry: Optional[DecoratorRegistry] = None):
-        """Initialize the decorator parser.
+        """
+        Initialize the decorator parser.
 
         Args:
             registry: Optional decorator registry to use for creating decorators.
-
-        Note:
-            If registry is not provided, a new registry will be created.
+                If not provided, a new registry will be created.
         """
         self.registry = registry or DecoratorRegistry()
 

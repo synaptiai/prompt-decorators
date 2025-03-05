@@ -58,7 +58,7 @@ repos:
 
       - id: check-docstrings
         name: check-docstrings
-        entry: python -m scripts.check_docstrings
+        entry: python scripts/standardize_docstrings.py prompt_decorators --check
         language: system
         pass_filenames: false
         always_run: true

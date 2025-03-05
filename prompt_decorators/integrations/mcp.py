@@ -153,10 +153,10 @@ class DummyFastMCP:
         This is a placeholder for the FastMCP.run method.
 
         Args:
-            None
+            self: The instance of the class.
 
         Returns:
-            None
+            None.
         """
         pass
 
