@@ -1,0 +1,1631 @@
+version: 1.0.0
+author:
+  name: "Prompt Decorators Working Group"
+  email: "promptdecoratorspec@synapti.ai"
+  url: "https://synapti.ai"
+
+decorators:
+  - name: CodeGen
+    category: Code Generation
+    description: Generates code snippets or complete solutions with configurable style and documentation level.
+    parameters:
+      - name: language
+        type: enum
+        description: Programming language to generate code in
+        values: [python, javascript, typescript, java, csharp, go, rust]
+        default: inferred
+      - name: style
+        type: enum
+        description: Programming paradigm or coding style to use
+        values: [functional, oop, procedural, reactive, declarative]
+        default: oop
+      - name: comments
+        type: enum
+        description: Level of code documentation to include
+        values: [minimal, moderate, extensive]
+        default: moderate
+      - name: error_handling
+        type: enum
+        description: Level of error handling to include
+        values: [none, basic, comprehensive]
+        default: basic
+    example: |
+      +++CodeGen(language=typescript, style=functional, comments=moderate)
+      Create a utility function that calculates the total price of items in a shopping cart with discounts applied.
+
+  - name: DesignPattern
+    category: Code Generation
+    description: Applies a specific design pattern to generated code, ensuring architectural best practices.
+    parameters:
+      - name: pattern
+        type: enum
+        description: The design pattern to implement
+        values: [singleton, factory, adapter, observer, strategy, command, facade]
+        default: inferred
+      - name: language
+        type: enum
+        description: Programming language to use
+        values: [python, javascript, typescript, java, csharp, go, rust]
+        default: inferred
+      - name: variation
+        type: string
+        description: Specific variation of the pattern
+        default: standard
+    example: |
+      +++DesignPattern(pattern=observer, language=javascript)
+      Create a notification system for an e-commerce application that alerts different parts of the UI when the cart changes.
+
+  - name: Refactor
+    category: Code Generation
+    description: Improves existing code structure while preserving functionality.
+    parameters:
+      - name: goal
+        type: enum
+        description: Primary objective of the refactoring
+        values: [performance, readability, maintainability, security, testability]
+        default: maintainability
+      - name: level
+        type: enum
+        description: Extent of changes to make
+        values: [minor, moderate, major]
+        default: moderate
+      - name: preserve
+        type: enum
+        description: Aspects that must be preserved
+        values: [api, behavior, both]
+        default: both
+    example: |
+      +++Refactor(goal=performance, level=moderate)
+      Refactor this database query function that's causing performance issues.
+
+  - name: Optimize
+    category: Code Generation
+    description: Optimizes code for specific metrics while respecting constraints.
+    parameters:
+      - name: for
+        type: enum
+        description: The primary optimization target
+        values: [speed, memory, readability, size, network]
+        default: speed
+      - name: constraints
+        type: enum
+        description: Limitations that must be respected
+        values: [backwards-compatible, minimal-changes, no-external-dependencies, same-api]
+        default: none
+      - name: priority
+        type: enum
+        description: Trade-off preference when optimizations conflict
+        values: [max-gains, min-risk, balanced]
+        default: balanced
+    example: |
+      +++Optimize(for=memory, constraints=backwards-compatible, priority=min-risk)
+      Optimize this image processing function that's consuming too much memory.
+
+  - name: Interface
+    category: Code Generation
+    description: Generates interface definitions for APIs, libraries, or components.
+    parameters:
+      - name: style
+        type: enum
+        description: Interface paradigm or API style
+        values: [rest, graphql, rpc, soap, class, function, event-driven]
+        default: context-dependent
+      - name: verbosity
+        type: enum
+        description: Level of documentation detail
+        values: [minimal, documented, extensive]
+        default: documented
+      - name: format
+        type: enum
+        description: Output format of the interface
+        values: [code, openapi, schema, typescript]
+        default: context-dependent
+    example: |
+      +++Interface(style=rest, verbosity=extensive, format=openapi)
+      Create an API interface for a user management service with authentication, user profiles, and role management.
+
+  - name: Algorithm
+    category: Code Generation
+    description: Implements specific algorithms with the desired complexity characteristics.
+    parameters:
+      - name: type
+        type: enum
+        description: Algorithm category
+        values: [sorting, search, graph, string, numeric, ml, crypto]
+        default: context-dependent
+      - name: complexity
+        type: enum
+        description: Desired time complexity
+        values: [constant, logarithmic, linear, linearithmic, quadratic, polynomial, exponential]
+        default: best-available
+      - name: approach
+        type: enum
+        description: Algorithm design approach
+        values: [recursive, iterative, divide-conquer, dynamic, greedy]
+        default: most-appropriate
+    example: |
+      +++Algorithm(type=graph, complexity=linear, approach=iterative)
+      Implement an algorithm to find the shortest path between two nodes in an unweighted graph.
+
+  - name: AsyncPattern
+    category: Code Generation
+    description: Handles asynchronous operations with appropriate patterns for the language and environment.
+    parameters:
+      - name: approach
+        type: enum
+        description: Asynchronous programming model to use
+        values: [promises, async-await, observables, callbacks, streams, events]
+        default: language-appropriate
+      - name: error-handling
+        type: enum
+        description: Error handling strategy
+        values: [try-catch, error-first-callbacks, promise-rejection, error-streams]
+        default: approach-appropriate
+      - name: cancellation
+        type: enum
+        description: Support for operation cancellation
+        values: [none, manual, timeout, signal]
+        default: none
+    example: |
+      +++AsyncPattern(approach=async-await, error-handling=try-catch, cancellation=signal)
+      Create a function that fetches user data from multiple APIs in parallel and combines the results.
+
+  - name: TypeDefinition
+    category: Code Generation
+    description: Generates type definitions for improved code safety and documentation.
+    parameters:
+      - name: system
+        type: enum
+        description: Type system or annotation format
+        values: [typescript, flow, jsdoc, python-typing, java-generics]
+        default: language-appropriate
+      - name: strictness
+        type: enum
+        description: Level of type enforcement
+        values: [loose, moderate, strict]
+        default: moderate
+      - name: style
+        type: enum
+        description: Type definition pattern
+        values: [inline, declaration-file, interface-based, type-alias, generics]
+        default: language-convention
+    example: |
+      +++TypeDefinition(system=typescript, strictness=strict, style=interface-based)
+      Define types for an e-commerce application's product catalog and shopping cart.
+
+  - name: TestStrategy
+    category: Testing and Debugging
+    description: Designs comprehensive testing approaches for software components or systems.
+    parameters:
+      - name: level
+        type: enum
+        description: Testing scope level
+        values: [unit, integration, e2e, performance, security]
+        default: unit
+      - name: framework
+        type: enum
+        description: Testing framework to use
+        values: [jest, pytest, junit, mocha, cypress]
+        default: language-appropriate
+      - name: approach
+        type: enum
+        description: Testing methodology
+        values: [tdd, bdd, property, snapshot]
+        default: tdd
+    example: |
+      +++TestStrategy(level=integration, framework=jest, approach=bdd)
+      Design a testing strategy for an authentication service with database and external API dependencies.
+
+  - name: TestCases
+    category: Testing and Debugging
+    description: Generates specific test cases for functionality, edge cases, or regressions.
+    parameters:
+      - name: coverage
+        type: enum
+        description: Types of test cases to generate
+        values: [happy-path, edge-cases, error-conditions, boundary, all]
+        default: happy-path
+      - name: format
+        type: enum
+        description: Output format of the test cases
+        values: [table, code, gherkin]
+        default: code
+      - name: assertions
+        type: enum
+        description: Level of assertion detail
+        values: [basic, comprehensive, advanced]
+        default: comprehensive
+    example: |
+      +++TestCases(coverage=edge-cases, format=code, assertions=comprehensive)
+      Generate test cases for a function that processes date ranges, including edge cases like leap years and timezone transitions.
+
+  - name: BugDiagnosis
+    category: Testing and Debugging
+    description: Diagnoses issues from error messages, logs, or behavioral symptoms.
+    parameters:
+      - name: from
+        type: enum
+        description: Source of diagnostic information
+        values: [stacktrace, behavior, logs, core-dump, screenshot, reproduction]
+        default: input-dependent
+      - name: depth
+        type: enum
+        description: Thoroughness of analysis
+        values: [quick, comprehensive]
+        default: comprehensive
+      - name: output
+        type: enum
+        description: Type of output desired
+        values: [explanation, fix, both]
+        default: both
+    example: |
+      +++BugDiagnosis(from=stacktrace, depth=comprehensive, output=both)
+      I'm getting this error in production - "TypeError: Cannot read property 'settings' of undefined" at UserProfile.js:143.
+
+  - name: CodeReview
+    category: Testing and Debugging
+    description: Performs a review of code quality, identifying issues and suggesting improvements.
+    parameters:
+      - name: focus
+        type: enum
+        description: Aspects to focus on during review
+        values: [security, performance, best-practices, maintainability, all]
+        default: all
+      - name: strictness
+        type: enum
+        description: Level of scrutiny
+        values: [relaxed, standard, strict]
+        default: standard
+      - name: format
+        type: enum
+        description: Review output format
+        values: [comment-style, summary, detailed, inline]
+        default: detailed
+    example: |
+      +++CodeReview(focus=security, strictness=strict, format=detailed)
+      Review this authentication controller for security issues.
+
+  - name: SecurityAudit
+    category: Testing and Debugging
+    description: Performs security-focused analysis following industry standards.
+    parameters:
+      - name: standard
+        type: enum
+        description: Security standard to follow
+        values: [owasp-top10, sans-top25, cwe, nist, gdpr, hipaa]
+        default: owasp-top10
+      - name: risk-level
+        type: enum
+        description: Sensitivity for flagging issues
+        values: [low, medium, high]
+        default: medium
+      - name: scope
+        type: enum
+        description: Areas to evaluate
+        values: [input-validation, authentication, authorization, data-protection, all]
+        default: all
+    example: |
+      +++SecurityAudit(standard=owasp-top10, risk-level=medium, scope=input-validation)
+      Audit this express.js API endpoint for security vulnerabilities.
+
+  - name: MockData
+    category: Testing and Debugging
+    description: Generates test fixtures and mock data for testing.
+    parameters:
+      - name: complexity
+        type: enum
+        description: Sophistication of generated data
+        values: [simple, moderate, complex]
+        default: moderate
+      - name: format
+        type: enum
+        description: Output format of the mock data
+        values: [json, csv, sql, code, graphql]
+        default: json
+      - name: size
+        type: enum
+        description: Amount of mock data to generate
+        values: [small, medium, large]
+        default: medium
+    example: |
+      +++MockData(complexity=complex, format=json, size=medium)
+      Generate mock data for an e-commerce system with users, products, orders, and reviews.
+
+  - name: Reproduce
+    category: Testing and Debugging
+    description: Creates detailed steps to reproduce a reported issue.
+    parameters:
+      - name: environment
+        type: enum
+        description: Target environment for reproduction
+        values: [local, staging, prod, docker, specific-version]
+        default: local
+      - name: detail
+        type: enum
+        description: Level of detail in steps
+        values: [minimal, comprehensive, debug-oriented]
+        default: comprehensive
+      - name: format
+        type: enum
+        description: Output format
+        values: [steps, script, docker-compose, video-script]
+        default: steps
+    example: |
+      +++Reproduce(environment=docker, detail=comprehensive, format=script)
+      Create reproduction steps for a race condition we're seeing in our payment processing service.
+
+  - name: EdgeCases
+    category: Testing and Debugging
+    description: Identifies edge cases and boundary conditions for testing.
+    parameters:
+      - name: focus
+        type: enum
+        description: Types of edge cases to identify
+        values: [input-validation, error-handling, resource-limits, concurrency, all]
+        default: all
+      - name: risk
+        type: enum
+        description: Risk level of edge cases to consider
+        values: [common, rare, extreme]
+        default: common
+      - name: output
+        type: enum
+        description: Format of identified edge cases
+        values: [description, test-cases, examples]
+        default: test-cases
+    example: |
+      +++EdgeCases(focus=concurrency, risk=rare, output=test-cases)
+      Identify edge cases for a multi-user document editing feature.
+
+  - name: Architecture
+    category: Architecture and Design
+    description: Generates architectural designs based on requirements and constraints.
+    parameters:
+      - name: style
+        type: enum
+        description: Architectural pattern
+        values: [microservices, monolith, serverless, event-driven, layered, hexagonal, ddd]
+        default: requirements-dependent
+      - name: detail
+        type: enum
+        description: Level of design detail
+        values: [overview, component, detailed]
+        default: component
+      - name: focus
+        type: enum
+        description: Design emphasis
+        values: [scalability, maintainability, performance, security, cost, balanced]
+        default: balanced
+    example: |
+      +++Architecture(style=microservices, detail=component, focus=scalability)
+      Design an architecture for a video streaming platform that needs to support millions of concurrent users.
+
+  - name: DataModel
+    category: Architecture and Design
+    description: Designs data models, schemas, and database structures.
+    parameters:
+      - name: type
+        type: enum
+        description: Database or persistence paradigm
+        values: [relational, document, graph, key-value, time-series, hybrid]
+        default: context-dependent
+      - name: optimization
+        type: enum
+        description: Performance optimization focus
+        values: [reads, writes, storage, balanced]
+        default: balanced
+      - name: format
+        type: enum
+        description: Output format
+        values: [erd, schema, code, diagram, ddl]
+        default: schema
+    example: |
+      +++DataModel(type=relational, optimization=reads, format=erd)
+      Design a data model for a social media platform with users, posts, comments, and likes.
+
+  - name: SystemDiagram
+    category: Architecture and Design
+    description: Creates architectural diagrams and visual representations.
+    parameters:
+      - name: notation
+        type: enum
+        description: Diagram notation system
+        values: [uml, c4, archimate, informal, flowchart]
+        default: c4
+      - name: level
+        type: enum
+        description: Detail level of the diagram
+        values: [context, container, component, code]
+        default: container
+      - name: focus
+        type: enum
+        description: Diagram emphasis
+        values: [structure, behavior, interaction, deployment]
+        default: structure
+    example: |
+      +++SystemDiagram(notation=c4, level=container, focus=interaction)
+      Create a system diagram showing how a user authentication service interacts with other system components.
+
+  - name: TechStack
+    category: Architecture and Design
+    description: Recommends technology combinations based on requirements.
+    parameters:
+      - name: for
+        type: enum
+        description: Target application type
+        values: [web, mobile, desktop, iot, data, ai, enterprise]
+        default: context-dependent
+      - name: constraints
+        type: enum
+        description: Project limitations
+        values: [budget, scale, team-size, performance, security, timeline]
+        default: none
+      - name: maturity
+        type: enum
+        description: Technology maturity preference
+        values: [bleeding-edge, modern-stable, established, enterprise-proven]
+        default: modern-stable
+    example: |
+      +++TechStack(for=web, constraints=startup-budget, maturity=modern-stable)
+      Recommend a technology stack for a B2B SaaS application with emphasis on rapid development and scalability.
+
+  - name: Scalability
+    category: Architecture and Design
+    description: Designs for various dimensions of system scaling.
+    parameters:
+      - name: dimension
+        type: enum
+        description: Scaling aspect to focus on
+        values: [users, data, transactions, geographic, complexity]
+        default: users
+      - name: target
+        type: enum
+        description: Scale magnitude
+        values: [10x, 100x, 1000x, global]
+        default: 100x
+      - name: approach
+        type: enum
+        description: Scaling strategy
+        values: [horizontal, vertical, hybrid, cloud-native]
+        default: horizontal
+    example: |
+      +++Scalability(dimension=transactions, target=1000x, approach=horizontal)
+      Design a scalable payment processing system that can handle Black Friday-level traffic spikes.
+
+  - name: Tradeoffs
+    category: Architecture and Design
+    description: Analyzes design tradeoffs across multiple dimensions.
+    parameters:
+      - name: axes
+        type: enum
+        description: Dimensions to analyze
+        values: [performance, cost, complexity, maintainability, security, time-to-market]
+        default: performance,cost,complexity,maintainability
+      - name: format
+        type: enum
+        description: Presentation format
+        values: [table, prose, radar-chart, decision-matrix]
+        default: decision-matrix
+      - name: depth
+        type: enum
+        description: Analysis depth
+        values: [overview, detailed, quantitative]
+        default: detailed
+    example: |
+      +++Tradeoffs(axes=performance,cost,security,maintainability, format=decision-matrix)
+      Analyze the tradeoffs between using a managed database service versus self-hosted for a financial application.
+
+  - name: Migration
+    category: Architecture and Design
+    description: Plans migration approaches between system states.
+    parameters:
+      - name: from
+        type: string
+        description: Current state
+        default: context-dependent
+      - name: to
+        type: string
+        description: Target state
+        default: context-dependent
+      - name: approach
+        type: enum
+        description: Migration strategy
+        values: [big-bang, incremental, strangler-fig, parallel-run]
+        default: incremental
+    example: |
+      +++Migration(from=monolith, to=microservices, approach=strangler-fig)
+      Create a migration plan for transitioning our monolithic e-commerce application to microservices.
+
+  - name: API-Design
+    category: Architecture and Design
+    description: Designs API interfaces focusing on specific qualities.
+    parameters:
+      - name: style
+        type: enum
+        description: API architectural style
+        values: [rest, graphql, grpc, soap, websocket, webhook]
+        default: rest
+      - name: focus
+        type: enum
+        description: Design priority
+        values: [consistency, performance, developer-experience, backward-compatibility]
+        default: developer-experience
+      - name: documentation
+        type: enum
+        description: Documentation approach
+        values: [openapi, graphql-schema, protobuf, custom]
+        default: style-appropriate
+    example: |
+      +++API-Design(style=graphql, focus=developer-experience, documentation=graphql-schema)
+      Design a GraphQL API for a content management system that prioritizes a great developer experience.
+
+  - name: Deployment
+    category: DevOps and Infrastructure
+    description: Generates deployment approaches for applications and services.
+    parameters:
+      - name: platform
+        type: enum
+        description: Deployment target
+        values: [aws, azure, gcp, kubernetes, heroku, netlify, vercel, on-prem]
+        default: context-dependent
+      - name: strategy
+        type: enum
+        description: Deployment methodology
+        values: [blue-green, canary, rolling, recreate, custom]
+        default: rolling
+      - name: environment
+        type: enum
+        description: Target environment
+        values: [dev, staging, production, multi-region]
+        default: production
+    example: |
+      +++Deployment(platform=kubernetes, strategy=blue-green, environment=production)
+      Create a deployment plan for our microservices architecture ensuring zero downtime.
+
+  - name: Infrastructure
+    category: DevOps and Infrastructure
+    description: Generates infrastructure as code templates for environment provisioning.
+    parameters:
+      - name: tool
+        type: enum
+        description: Infrastructure as code tool
+        values: [terraform, cloudformation, arm, pulumi, cdk, ansible]
+        default: terraform
+      - name: environment
+        type: enum
+        description: Target environment
+        values: [dev, staging, prod, multi-environment]
+        default: multi-environment
+      - name: approach
+        type: enum
+        description: Infrastructure philosophy
+        values: [immutable, mutable, hybrid]
+        default: immutable
+    example: |
+      +++Infrastructure(tool=terraform, environment=multi-environment, approach=immutable)
+      Create infrastructure as code for a web application with frontend, API, and database tiers.
+
+  - name: CICD
+    category: DevOps and Infrastructure
+    description: Designs continuous integration and delivery pipelines.
+    parameters:
+      - name: tool
+        type: enum
+        description: CI/CD platform or tool
+        values: [github-actions, jenkins, gitlab-ci, azure-devops, circle-ci, argocd]
+        default: github-actions
+      - name: complexity
+        type: enum
+        description: Pipeline sophistication
+        values: [basic, standard, comprehensive, enterprise]
+        default: standard
+      - name: focus
+        type: enum
+        description: Pipeline emphasis
+        values: [speed, reliability, security, compliance, balanced]
+        default: balanced
+    example: |
+      +++CICD(tool=github-actions, complexity=comprehensive, focus=security)
+      Design a CI/CD pipeline for a financial services application with security scanning and compliance checks.
+
+  - name: Monitoring
+    category: DevOps and Infrastructure
+    description: Creates monitoring and alerting setups for systems.
+    parameters:
+      - name: focus
+        type: enum
+        description: Monitoring emphasis
+        values: [performance, errors, security, business-metrics, user-experience, comprehensive]
+        default: comprehensive
+      - name: tools
+        type: enum
+        description: Preferred monitoring tools
+        values: [datadog, prometheus, cloudwatch, newrelic, grafana, elastic, recommend]
+        default: recommend
+      - name: implementation
+        type: enum
+        description: Implementation depth
+        values: [concepts, configuration, full-setup]
+        default: configuration
+    example: |
+      +++Monitoring(focus=performance, tools=prometheus, implementation=configuration)
+      Create a monitoring solution for our microservices architecture focusing on performance metrics and latency.
+
+  - name: Troubleshoot
+    category: DevOps and Infrastructure
+    description: Creates troubleshooting guides for resolving system issues.
+    parameters:
+      - name: component
+        type: enum
+        description: System area
+        values: [network, database, application, infrastructure, security]
+        default: context-dependent
+      - name: format
+        type: enum
+        description: Guide structure
+        values: [decision-tree, step-by-step, flowchart, runbook]
+        default: step-by-step
+      - name: audience
+        type: enum
+        description: Target user
+        values: [developer, sre, support, end-user]
+        default: sre
+    example: |
+      +++Troubleshoot(component=database, format=decision-tree, audience=sre)
+      Create a troubleshooting guide for PostgreSQL performance issues in production.
+
+  - name: SRE
+    category: DevOps and Infrastructure
+    description: Applies Site Reliability Engineering practices.
+    parameters:
+      - name: focus
+        type: enum
+        description: SRE practice area
+        values: [slos, error-budgets, runbooks, postmortems, chaos-eng, automation]
+        default: context-dependent
+      - name: maturity
+        type: enum
+        description: Organization SRE maturity
+        values: [beginner, intermediate, advanced]
+        default: intermediate
+      - name: output
+        type: enum
+        description: Deliverable type
+        values: [implementation, roadmap, assessment]
+        default: implementation
+    example: |
+      +++SRE(focus=slos, maturity=intermediate, output=implementation)
+      Develop SLOs and error budgets for our e-commerce platform focusing on checkout and payment processing.
+
+  - name: Backup
+    category: DevOps and Infrastructure
+    description: Designs backup and recovery strategies.
+    parameters:
+      - name: criticality
+        type: enum
+        description: Data importance level
+        values: [low, medium, high, mission-critical]
+        default: high
+      - name: rpo
+        type: enum
+        description: Recovery Point Objective
+        values: [minutes, hours, days, custom]
+        default: hours
+      - name: rto
+        type: enum
+        description: Recovery Time Objective
+        values: [minutes, hours, days, custom]
+        default: hours
+    example: |
+      +++Backup(criticality=mission-critical, rpo=minutes, rto=minutes)
+      Design a backup and disaster recovery strategy for our financial transaction database.
+
+  - name: Performance
+    category: DevOps and Infrastructure
+    description: Optimizes system performance focusing on specific bottlenecks.
+    parameters:
+      - name: bottleneck
+        type: enum
+        description: Performance limitation area
+        values: [cpu, memory, io, network, database, algorithm]
+        default: context-dependent
+      - name: approach
+        type: enum
+        description: Performance analysis methodology
+        values: [identify, measure, optimize, comprehensive]
+        default: comprehensive
+      - name: constraints
+        type: enum
+        description: Optimization constraints
+        values: [cost, time, complexity, compatibility, none]
+        default: none
+    example: |
+      +++Performance(bottleneck=database, approach=comprehensive, constraints=compatibility)
+      Optimize the performance of our product search functionality which is currently taking 5+ seconds to return results.
+
+  - name: CommitMessage
+    category: Developer Workflow
+    description: Generates structured, informative commit messages.
+    parameters:
+      - name: style
+        type: enum
+        description: Commit message format
+        values: [conventional, detailed, minimal, semantic, custom]
+        default: conventional
+      - name: scope
+        type: enum
+        description: Change scope information
+        values: [include, exclude]
+        default: include
+      - name: issue
+        type: enum
+        description: Include issue references
+        values: [none, reference, close]
+        default: reference
+    example: |
+      +++CommitMessage(style=conventional, scope=include, issue=reference)
+      Generate a commit message for changes that improve error handling in the authentication module, related to issue #143.
+
+  - name: Documentation
+    category: Developer Workflow
+    description: Creates comprehensive documentation for various audiences.
+    parameters:
+      - name: for
+        type: enum
+        description: Documentation target
+        values: [code, api, user, admin, architecture]
+        default: context-dependent
+      - name: format
+        type: enum
+        description: Documentation format
+        values: [markdown, javadoc, jsdoc, openapi, restructuredtext, html, jupyter]
+        default: markdown
+      - name: detail
+        type: enum
+        description: Documentation comprehensiveness
+        values: [minimal, standard, comprehensive]
+        default: standard
+    example: |
+      +++Documentation(for=api, format=markdown, detail=comprehensive)
+      Create documentation for our payment processing API including authentication, endpoints, request/response formats, and error handling.
+
+  - name: Estimation
+    category: Developer Workflow
+    description: Helps with effort estimation for development tasks.
+    parameters:
+      - name: method
+        type: enum
+        description: Estimation approach
+        values: [t-shirt, fibonacci, hours, days]
+        default: fibonacci
+      - name: confidence
+        type: enum
+        description: Estimate type
+        values: [best-case, worst-case, expected, range]
+        default: range
+      - name: factors
+        type: enum
+        description: Considerations to include
+        values: [complexity, risk, unknowns, dependencies, all]
+        default: all
+    example: |
+      +++Estimation(method=fibonacci, confidence=range, factors=all)
+      Estimate the effort required to implement a new authentication system with social login and MFA support.
+
+  - name: Roadmap
+    category: Developer Workflow
+    description: Plans development timelines and feature sequencing.
+    parameters:
+      - name: timeframe
+        type: enum
+        description: Planning horizon
+        values: [sprint, quarter, halfyear, year]
+        default: quarter
+      - name: focus
+        type: enum
+        description: Roadmap emphasis
+        values: [features, technical-debt, security, performance, balanced]
+        default: balanced
+      - name: detail
+        type: enum
+        description: Depth of planning
+        values: [high-level, milestones, detailed]
+        default: milestones
+    example: |
+      +++Roadmap(timeframe=quarter, focus=features, detail=milestones)
+      Create a product roadmap for our e-commerce platform focusing on enhancing the checkout experience.
+
+  - name: CodeStandards
+    category: Developer Workflow
+    description: Applies coding standards and best practices.
+    parameters:
+      - name: standard
+        type: enum
+        description: Code standard type
+        values: [company, language-specific, custom, industry]
+        default: language-specific
+      - name: strictness
+        type: enum
+        description: Enforcement level
+        values: [recommended, required, strict]
+        default: required
+      - name: focus
+        type: enum
+        description: Areas of emphasis
+        values: [formatting, naming, patterns, security, all]
+        default: all
+    example: |
+      +++CodeStandards(standard=language-specific, strictness=required, focus=all)
+      Apply JavaScript best practices to this React component following Airbnb style guide.
+
+  - name: PullRequest
+    category: Developer Workflow
+    description: Generates descriptive pull request templates and descriptions.
+    parameters:
+      - name: detail
+        type: enum
+        description: Description depth
+        values: [minimal, standard, comprehensive]
+        default: standard
+      - name: sections
+        type: enum
+        description: PR sections to include
+        values: [summary, changes, testing, screenshots, dependencies, all]
+        default: all
+      - name: reviewers
+        type: enum
+        description: Guidance for reviewers
+        values: [none, focused, detailed]
+        default: focused
+    example: |
+      +++PullRequest(detail=comprehensive, sections=all, reviewers=detailed)
+      Create a pull request description for a feature that adds social login options to our authentication system.
+
+  - name: ReleaseNotes
+    category: Developer Workflow
+    description: Creates structured release notes for product updates.
+    parameters:
+      - name: audience
+        type: enum
+        description: Target reader
+        values: [users, developers, stakeholders, public]
+        default: users
+      - name: detail
+        type: enum
+        description: Information depth
+        values: [high-level, detailed]
+        default: detailed
+      - name: format
+        type: enum
+        description: Release note structure
+        values: [changelog, narrative, categorized, markdown, html]
+        default: categorized
+    example: |
+      +++ReleaseNotes(audience=users, detail=detailed, format=markdown)
+      Create release notes for version 2.3.0 which includes new payment methods, performance improvements, and bug fixes.
+
+  - name: PostMortem
+    category: Developer Workflow
+    description: Creates incident reviews and postmortem documents.
+    parameters:
+      - name: format
+        type: enum
+        description: Document structure
+        values: [timeline, 5-whys, fishbone, comprehensive]
+        default: comprehensive
+      - name: focus
+        type: enum
+        description: Analysis emphasis
+        values: [what-happened, why, prevention, balanced]
+        default: balanced
+      - name: audience
+        type: enum
+        description: Target readers
+        values: [team, leadership, stakeholders, public]
+        default: team
+    example: |
+      +++PostMortem(format=comprehensive, focus=balanced, audience=team)
+      Create a postmortem for the database outage we experienced yesterday that caused 45 minutes of downtime.
+
+  - name: Explain
+    category: Developer Education
+    description: Explains code or technical concepts with appropriate depth.
+    parameters:
+      - name: level
+        type: enum
+        description: Expertise assumption
+        values: [beginner, intermediate, advanced]
+        default: intermediate
+      - name: approach
+        type: enum
+        description: Explanation style
+        values: [analogy, examples, theory, step-by-step, visual]
+        default: examples
+      - name: focus
+        type: enum
+        description: Explanation emphasis
+        values: [how, why, both]
+        default: both
+    example: |
+      +++Explain(level=intermediate, approach=examples, focus=both)
+      Explain React's useEffect hook and its dependency array.
+
+  - name: Compare
+    category: Developer Education
+    description: Compares different technologies, approaches, or tools.
+    parameters:
+      - name: aspects
+        type: string
+        description: Comparison dimensions
+        default: performance,features,ecosystem,learning-curve
+      - name: format
+        type: enum
+        description: Comparison format
+        values: [table, prose, pros-cons, decision-matrix]
+        default: table
+      - name: bias
+        type: enum
+        description: Fairness control
+        values: [neutral, weighted, opinionated]
+        default: neutral
+    example: |
+      +++Compare(aspects=performance,ecosystem,learning-curve, format=decision-matrix, bias=neutral)
+      Compare React, Vue, and Angular for a new enterprise web application.
+
+  - name: LearningPath
+    category: Developer Education
+    description: Creates step-by-step learning roadmaps.
+    parameters:
+      - name: for
+        type: string
+        description: Learning subject
+        default: context-dependent
+      - name: experience
+        type: enum
+        description: Learner starting point
+        values: [beginner, intermediate, advanced, career-change]
+        default: beginner
+      - name: timeframe
+        type: enum
+        description: Available learning time
+        values: [week, month, quarter, year, self-paced]
+        default: self-paced
+    example: |
+      +++LearningPath(for=react, experience=beginner, timeframe=quarter)
+      Create a learning roadmap for a junior developer to become proficient in React and its ecosystem.
+
+  - name: CodeWalkthrough
+    category: Developer Education
+    description: Provides detailed explanations of code functionality.
+    parameters:
+      - name: focus
+        type: enum
+        description: Walkthrough emphasis
+        values: [how, why, optimization, security]
+        default: how
+      - name: detail
+        type: enum
+        description: Explanation granularity
+        values: [overview, key-parts, line-by-line]
+        default: key-parts
+      - name: audience
+        type: enum
+        description: Target reader
+        values: [junior, peer, senior, non-technical]
+        default: peer
+    example: |
+      +++CodeWalkthrough(focus=how, detail=key-parts, audience=junior)
+      Walk through this authentication middleware explaining how it works.
+
+  - name: BestPractices
+    category: Developer Education
+    description: Summarizes best practices for specific technologies or processes.
+    parameters:
+      - name: for
+        type: string
+        description: Practice domain
+        default: context-dependent
+      - name: context
+        type: enum
+        description: Implementation environment
+        values: [startup, enterprise, personal, open-source]
+        default: enterprise
+      - name: format
+        type: enum
+        description: Output structure
+        values: [list, detailed, examples, cookbook]
+        default: detailed
+    example: |
+      +++BestPractices(for=node.js, context=enterprise, format=examples)
+      Provide best practices for building production-ready Node.js microservices.
+
+  - name: Antipatterns
+    category: Developer Education
+    description: Identifies common mistakes and how to avoid them.
+    parameters:
+      - name: domain
+        type: enum
+        description: Problem area
+        values: [architecture, code, database, process, security]
+        default: context-dependent
+      - name: severity
+        type: enum
+        description: Issue importance filter
+        values: [all, major, critical]
+        default: major
+      - name: format
+        type: enum
+        description: Presentation style
+        values: [examples, explanation, refactoring-guide]
+        default: examples
+    example: |
+      +++Antipatterns(domain=database, severity=critical, format=examples)
+      Identify common antipatterns in MongoDB schema design and how to avoid them.
+
+  - name: TechDebt
+    category: Developer Education
+    description: Analyzes technical debt and provides remediation strategies.
+    parameters:
+      - name: categorization
+        type: enum
+        description: Classification approach
+        values: [martin-fowler, severity, age, custom]
+        default: severity
+      - name: output
+        type: enum
+        description: Analysis result
+        values: [identification, prioritization, remediation, comprehensive]
+        default: comprehensive
+      - name: scope
+        type: enum
+        description: Analysis breadth
+        values: [code, architecture, process, testing, all]
+        default: all
+    example: |
+      +++TechDebt(categorization=severity, output=comprehensive, scope=code)
+      Analyze technical debt in our authentication module and suggest a remediation plan.
+
+  - name: ConceptModel
+    category: Developer Education
+    description: Visualizes relationships between technical concepts.
+    parameters:
+      - name: notation
+        type: enum
+        description: Diagram type
+        values: [mind-map, concept-map, knowledge-graph, informal]
+        default: concept-map
+      - name: complexity
+        type: enum
+        description: Diagram sophistication
+        values: [basic, intermediate, comprehensive]
+        default: intermediate
+      - name: focus
+        type: string
+        description: Central concept
+        default: main-topic
+    example: |
+      +++ConceptModel(notation=concept-map, complexity=intermediate)
+      Create a concept map showing the relationships between key React concepts including components, hooks, state, and context.
+
+  - name: ImplPhase
+    category: Implementation-Focused
+    description: Indicates which phase of implementation the AI should focus on, controlling scope and detail level.
+    parameters:
+      - name: stage
+        type: enum
+        description: Current implementation phase
+        values: [design, scaffold, core, refinement, optimization, documentation]
+        default: core
+      - name: scope
+        type: enum
+        description: Implementation scope boundary
+        values: [function, component, module, service, system]
+        default: component
+      - name: iteration
+        type: number
+        description: Implementation iteration number
+        default: 1
+    example: |
+      +++ImplPhase(stage=scaffold, scope=component, iteration=1)
+      Create the initial structure for a user authentication component with login/register forms.
+
+  - name: CodeContext
+    category: Implementation-Focused
+    description: Provides information about the existing codebase context to ensure proper integration.
+    parameters:
+      - name: project
+        type: string
+        description: Project type or framework
+        default: inferred
+      - name: patterns
+        type: string
+        description: Established code patterns to follow
+        default: inferred
+      - name: conventions
+        type: enum
+        description: Naming and style conventions
+        values: [camelCase, snake_case, PascalCase, kebab-case, custom]
+        default: language-standard
+    example: |
+      +++CodeContext(project=react, patterns=hooks, conventions=camelCase)
+      Implement a shopping cart hook that matches our existing custom hooks pattern.
+
+  - name: StepByStepImpl
+    category: Implementation-Focused
+    description: Requests a step-by-step implementation approach, with explicitly labeled stages.
+    parameters:
+      - name: detail
+        type: enum
+        description: Level of explanation and comments
+        values: [minimal, moderate, comprehensive]
+        default: moderate
+      - name: steps
+        type: string
+        description: Number of implementation steps
+        default: auto
+      - name: output
+        type: enum
+        description: What to include in each step
+        values: [code-only, code-with-explanation, explanation-then-code]
+        default: code-with-explanation
+    example: |
+      +++StepByStepImpl(detail=comprehensive, steps=5, output=explanation-then-code)
+      Implement a JWT authentication middleware for Express.js that verifies tokens and extracts user roles.
+
+  - name: IncrementalBuild
+    category: Implementation-Focused
+    description: Indicates that the code should be built incrementally, with focus on one feature/component at a time.
+    parameters:
+      - name: focus
+        type: enum
+        description: Current implementation focus
+        values: [feature, component, function, integration, refactoring]
+        default: feature
+      - name: dependencies
+        type: enum
+        description: How to handle dependencies
+        values: [mock, stub, implement, import-existing]
+        default: stub
+      - name: completion
+        type: enum
+        description: Expected completion of this increment
+        values: [minimal-viable, functional, robust, production-ready]
+        default: functional
+    example: |
+      +++IncrementalBuild(focus=component, dependencies=mock, completion=minimal-viable)
+      Implement the user profile card component that displays basic user information and an avatar.
+
+  - name: ExtendCode
+    category: Implementation-Focused
+    description: Requests extending or enhancing existing code with new functionality without complete rewrites.
+    parameters:
+      - name: approach
+        type: enum
+        description: How to extend the code
+        values: [add-function, add-method, add-feature, enhance-existing]
+        default: add-feature
+      - name: impact
+        type: enum
+        description: Level of changes to existing code
+        values: [none, minimal, moderate, significant]
+        default: minimal
+      - name: maintain
+        type: enum
+        description: Aspects to maintain
+        values: [api, architecture, naming, performance, all]
+        default: all
+    example: |
+      +++ExtendCode(approach=add-method, impact=minimal, maintain=all)
+      Add a method to this user service class that allows retrieving users by email domain.
+
+  - name: Refine
+    category: Implementation-Focused
+    description: Requests improvements to existing code while maintaining core functionality.
+    parameters:
+      - name: focus
+        type: enum
+        description: Refinement focus area
+        values: [readability, performance, security, error-handling, types]
+        default: readability
+      - name: constraints
+        type: enum
+        description: Limitations on changes
+        values: [preserve-api, preserve-logic, preserve-tests, preserve-all]
+        default: preserve-api
+      - name: approach
+        type: enum
+        description: Refinement approach
+        values: [targeted, comprehensive]
+        default: targeted
+    example: |
+      +++Refine(focus=error-handling, constraints=preserve-api, approach=comprehensive)
+      Improve error handling in this API controller to handle all edge cases and provide clear error messages.
+
+  - name: Iterate
+    category: Implementation-Focused
+    description: Indicates this is an iteration on previously generated code, with specific improvements needed.
+    parameters:
+      - name: version
+        type: number
+        description: Iteration number
+        default: 2
+      - name: feedback
+        type: enum
+        description: Type of feedback addressed
+        values: [review-comments, bug-fixes, performance-issues, feature-requests]
+        default: review-comments
+      - name: priority
+        type: enum
+        description: Implementation priority
+        values: [correctness, completeness, performance, readability]
+        default: correctness
+    example: |
+      +++Iterate(version=2, feedback=review-comments, priority=correctness)
+      Update the authentication middleware based on these code review comments: 1) Token expiration is not properly checked, 2) Error messages are not consistent.
+
+  - name: MemoryConstraint
+    category: Implementation-Focused
+    description: Helps manage implementation within AI context window limitations by focusing on specific code portions.
+    parameters:
+      - name: focus
+        type: enum
+        description: Part of the code to focus on
+        values: [single-function, component, interface, specific-feature]
+        default: component
+      - name: implementation
+        type: enum
+        description: Implementation completeness
+        values: [skeleton, core-logic, full-implementation, with-tests]
+        default: core-logic
+      - name: context
+        type: enum
+        description: How to handle surrounding code
+        values: [ignore, summarize, interface-only, stub]
+        default: summarize
+    example: |
+      +++MemoryConstraint(focus=single-function, implementation=full-implementation, context=interface-only)
+      Implement the user authentication function that verifies credentials against our database.
+
+  - name: ComplexityLevel
+    category: Implementation-Focused
+    description: Specifies the permitted complexity level for the implementation.
+    parameters:
+      - name: code
+        type: enum
+        description: Code complexity limit
+        values: [simple, moderate, complex, necessary-only]
+        default: moderate
+      - name: concepts
+        type: enum
+        description: Conceptual complexity limit
+        values: [beginner-friendly, intermediate, advanced]
+        default: intermediate
+      - name: dependencies
+        type: enum
+        description: External dependency usage
+        values: [none, minimal, standard, whatever-needed]
+        default: standard
+    example: |
+      +++ComplexityLevel(code=simple, concepts=beginner-friendly, dependencies=minimal)
+      Implement a simple date formatter utility that converts between different date formats without external libraries.
+
+  - name: TechDebtControl
+    category: Implementation-Focused
+    description: Guides how technical debt should be handled during implementation.
+    parameters:
+      - name: accept
+        type: enum
+        description: Level of acceptable technical debt
+        values: [none, minimal, moderate, pragmatic]
+        default: minimal
+      - name: document
+        type: enum
+        description: How tech debt should be documented
+        values: [none, comments, todos, issues, comprehensive]
+        default: todos
+      - name: tradeoff
+        type: enum
+        description: What can be traded for quality
+        values: [nothing, completeness, performance, elegance]
+        default: elegance
+    example: |
+      +++TechDebtControl(accept=pragmatic, document=todos, tradeoff=elegance)
+      Implement a quick solution for the file upload feature we need for the demo next week. Note areas that will need improvement.
+
+  - name: SystemIntegration
+    category: Implementation-Focused
+    description: Provides guidance for integrating with existing systems and services.
+    parameters:
+      - name: systems
+        type: string
+        description: External systems to integrate with
+        default: none
+      - name: approach
+        type: enum
+        description: Integration approach
+        values: [adapter, direct, facade, proxy, bridge]
+        default: adapter
+      - name: coupling
+        type: enum
+        description: Desired coupling level
+        values: [loose, moderate, tight]
+        default: loose
+    example: |
+      +++SystemIntegration(systems=payment-gateway,inventory-service, approach=facade, coupling=loose)
+      Implement an order processing service that integrates with our payment gateway and inventory system.
+
+  - name: ImplementationStrategy
+    category: Implementation-Focused
+    description: Guides the overall approach to implementing a feature or component.
+    parameters:
+      - name: approach
+        type: enum
+        description: Implementation methodology
+        values: [tdd, bdd, prototype-first, interface-first, standard]
+        default: standard
+      - name: direction
+        type: enum
+        description: Implementation direction
+        values: [top-down, bottom-up, outside-in, inside-out]
+        default: top-down
+      - name: priority
+        type: enum
+        description: Implementation priority
+        values: [correctness, clarity, performance, completeness]
+        default: correctness
+    example: |
+      +++ImplementationStrategy(approach=tdd, direction=outside-in, priority=correctness)
+      Implement a user registration system starting with the acceptance tests and working inward to the core functionality.
+
+  - name: ErrorStrategy
+    category: Implementation-Focused
+    description: Guides how errors and exceptions should be handled in the implementation.
+    parameters:
+      - name: approach
+        type: enum
+        description: Error handling philosophy
+        values: [defensive, fail-fast, return-result, exceptions, monadic]
+        default: language-standard
+      - name: detail
+        type: enum
+        description: Error detail level
+        values: [minimal, standard, detailed, debug]
+        default: standard
+      - name: recovery
+        type: enum
+        description: Error recovery approach
+        values: [none, retry, fallback, circuit-breaker]
+        default: none
+    example: |
+      +++ErrorStrategy(approach=return-result, detail=detailed, recovery=retry)
+      Implement a file processing service that uses the Result pattern for error handling and includes retry logic for transient errors.
+
+  - name: DebugStrategy
+    category: Systematic Debugging
+    description: Specifies the overall approach to debugging and problem analysis.
+    parameters:
+      - name: approach
+        type: enum
+        description: Debugging methodology
+        values: [systematic, incremental, root-cause, isolation, comparison]
+        default: systematic
+      - name: verbosity
+        type: enum
+        description: Debug output verbosity
+        values: [minimal, standard, verbose, comprehensive]
+        default: standard
+      - name: priority
+        type: enum
+        description: Issue resolution priority
+        values: [functionality, performance, ux, security]
+        default: functionality
+    example: |
+      +++DebugStrategy(approach=root-cause, verbosity=verbose, priority=functionality)
+      Debug the authentication failure that occurs when users attempt to log in with social credentials. Identify the exact point of failure.
+
+  - name: CodeAudit
+    category: Systematic Debugging
+    description: Requests an audit of existing code to identify issues before making changes.
+    parameters:
+      - name: scope
+        type: enum
+        description: Audit scope
+        values: [function, component, module, system, specific-issue]
+        default: component
+      - name: focus
+        type: enum
+        description: Audit focus areas
+        values: [bugs, performance, security, maintainability, all]
+        default: all
+      - name: output
+        type: enum
+        description: Audit output format
+        values: [summary, detailed, categorized, prioritized]
+        default: detailed
+    example: |
+      +++CodeAudit(scope=module, focus=bugs, output=prioritized)
+      Audit the payment processing module to identify potential bugs and issues. Provide a prioritized list of problems found.
+
+  - name: TaskBreakdown
+    category: Systematic Debugging
+    description: Requests identification and prioritization of tasks needed to fix an issue or implement a change.
+    parameters:
+      - name: detail
+        type: enum
+        description: Task breakdown detail level
+        values: [high-level, detailed, comprehensive]
+        default: detailed
+      - name: priority
+        type: enum
+        description: Task prioritization approach
+        values: [dependency-order, impact, effort, risk]
+        default: dependency-order
+      - name: format
+        type: enum
+        description: Task output format
+        values: [list, checklist, kanban, detailed]
+        default: checklist
+    example: |
+      +++TaskBreakdown(detail=comprehensive, priority=risk, format=checklist)
+      Break down the tasks needed to fix the data synchronization issues. Prioritize by risk level and provide a detailed checklist.
+
+  - name: ErrorDiagnosis
+    category: Systematic Debugging
+    description: Focuses on diagnosing and resolving specific errors or bugs.
+    parameters:
+      - name: severity
+        type: enum
+        description: Error severity level
+        values: [minor, significant, major, critical]
+        default: significant
+      - name: persistence
+        type: enum
+        description: Error persistence pattern
+        values: [intermittent, consistent, progressive, environment-specific]
+        default: consistent
+      - name: analysis
+        type: enum
+        description: Analysis depth
+        values: [surface, detailed, root-cause, comprehensive]
+        default: root-cause
+    example: |
+      +++ErrorDiagnosis(severity=major, persistence=intermittent, analysis=comprehensive)
+      The payment processing occasionally fails during high traffic periods. Diagnose the root cause of this intermittent error.
+
+  - name: ChangeVerification
+    category: Systematic Debugging
+    description: Focuses on verifying that changes have the intended effect and don't introduce regressions.
+    parameters:
+      - name: type
+        type: enum
+        description: Verification type
+        values: [functionality, visual, performance, security]
+        default: functionality
+      - name: method
+        type: enum
+        description: Verification method
+        values: [manual-testing, automated-tests, dom-inspection, logging]
+        default: manual-testing
+      - name: coverage
+        type: enum
+        description: Verification coverage
+        values: [changed-only, dependent-areas, comprehensive]
+        default: dependent-areas
+    example: |
+      +++ChangeVerification(type=functionality, method=dom-inspection, coverage=dependent-areas)
+      Verify that the UI updates properly after implementing the sorting functionality. Check all elements that should respond to the sort action.
+
+  - name: LoggingStrategy
+    category: Systematic Debugging
+    description: Defines a strategy for implementing logging to aid debugging and monitoring.
+    parameters:
+      - name: level
+        type: enum
+        description: Logging detail level
+        values: [minimal, standard, verbose, diagnostic]
+        default: standard
+      - name: targets
+        type: enum
+        description: Logging targets
+        values: [console, file, service, all]
+        default: console
+      - name: lifecycle
+        type: enum
+        description: Log lifecycle management
+        values: [temporary, permanent, conditional, togglable]
+        default: temporary
+    example: |
+      +++LoggingStrategy(level=diagnostic, targets=console, lifecycle=togglable)
+      Implement comprehensive logging for the authentication flow that can be enabled/disabled with a debug flag.
+
+  - name: PreciseModification
+    category: Systematic Debugging
+    description: Guides careful, targeted modifications to sensitive parts of the codebase.
+    parameters:
+      - name: sensitivity
+        type: enum
+        description: Code sensitivity level
+        values: [normal, sensitive, critical, fragile]
+        default: sensitive
+      - name: scope
+        type: enum
+        description: Modification scope
+        values: [isolated, contained, minimal, precise]
+        default: minimal
+      - name: validation
+        type: enum
+        description: Required validation approach
+        values: [review, tests, both, comprehensive]
+        default: both
+    example: |
+      +++PreciseModification(sensitivity=fragile, scope=precise, validation=comprehensive)
+      Update the payment processing calculation without affecting any other components. This is a critical system that requires extensive validation.
+
+  - name: OptimizationFocus
+    category: Systematic Debugging
+    description: Guides targeted optimization efforts with specific constraints and goals.
+    parameters:
+      - name: target
+        type: enum
+        description: Optimization target
+        values: [performance, memory, network, size, mobile]
+        default: performance
+      - name: constraints
+        type: enum
+        description: Optimization constraints
+        values: [no-visual-changes, no-functional-changes, both, minimal-changes]
+        default: no-functional-changes
+      - name: approach
+        type: enum
+        description: Optimization approach
+        values: [profiling, code-review, algorithm-improvements, resource-management]
+        default: profiling
+    example: |
+      +++OptimizationFocus(target=mobile, constraints=no-visual-changes, approach=code-review)
+      Optimize the application for mobile devices without changing its design or functionality.
+
+  - name: DependencyAnalysis
+    category: Systematic Debugging
+    description: Focuses on analyzing dependencies and their impacts on a system or component.
+    parameters:
+      - name: type
+        type: enum
+        description: Dependency type
+        values: [code, data, service, all]
+        default: all
+      - name: direction
+        type: enum
+        description: Dependency direction
+        values: [inbound, outbound, both]
+        default: both
+      - name: detail
+        type: enum
+        description: Analysis detail
+        values: [summary, detailed, comprehensive, impact-focused]
+        default: detailed
+    example: |
+      +++DependencyAnalysis(type=all, direction=both, detail=impact-focused)
+      Analyze all dependencies of the user profile component to understand what might be affected by our planned changes.
+
+  - name: RootCauseAnalysis
+    category: Systematic Debugging
+    description: Guides a methodical approach to identify the fundamental cause of an issue.
+    parameters:
+      - name: depth
+        type: enum
+        description: Analysis depth
+        values: [surface, intermediate, deep, comprehensive]
+        default: deep
+      - name: method
+        type: enum
+        description: Analysis method
+        values: [5-whys, fishbone, fault-tree, systematic]
+        default: systematic
+      - name: approach
+        type: enum
+        description: Investigation approach
+        values: [elimination, reproduction, isolation, comparison]
+        default: isolation
+    example: |
+      +++RootCauseAnalysis(depth=comprehensive, method=5-whys, approach=isolation)
+      Determine the root cause of the data inconsistency issue that occurs during concurrent updates.

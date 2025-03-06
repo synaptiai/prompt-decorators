@@ -1,0 +1,29 @@
+# Decorator YAML Format Specification v1.0
+
+# File-level metadata
+version: 1.0.0   # Version of this file format specification
+author:          # Information about the author of these decorators
+  name: string   # [Required] Author name
+  email: string  # [Optional] Author email
+  url: string    # [Optional] Author website
+
+# Main decorator definitions
+decorators:      # [Required] List of decorator definitions
+  - name: string                # [Required] Name of the decorator (without +++)
+    category: string            # [Required] Category the decorator belongs to
+    description: string         # [Required] Detailed description of what the decorator does
+
+    parameters:                 # [Optional] List of parameters this decorator accepts
+      - name: string            # [Required] Parameter name
+        type: string            # [Required] Parameter type (enum, string, boolean, number, array)
+        description: string     # [Required] Description of the parameter
+        values: [string, ...]   # [Required for enum type] List of possible values
+        default: string|number  # [Optional] Default value if not specified
+        required: boolean       # [Optional] Whether parameter is required (default: false)
+
+    example: string             # [Required] Example usage of the decorator in a prompt
+
+    # Optional additional fields
+    conflicts_with: [string, ...] # [Optional] List of decorator names this conflicts with
+    requires: [string, ...]      # [Optional] List of decorator names this requires
+    notes: string                # [Optional] Additional implementation notes
