@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 
 import typer
 
-from ..openai_demo import query_with_decorators
+from ..dynamic_openai_demo import query_with_decorators
 from ..utils.logging import log_decorated_prompt, log_info, log_response
 
 app = typer.Typer()

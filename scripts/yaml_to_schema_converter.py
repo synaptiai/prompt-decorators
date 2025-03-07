@@ -602,11 +602,11 @@ IMPORTANT: Your response must be ONLY the valid JSON schema with no additional t
         """Process a single decorator.
 
         Args:
-            decorator: Decorator definition
-            author: Author information
-            output_dir: Directory to save the generated schema file
-            dry_run: Whether to perform a dry run without saving files
-            force: Whether to overwrite existing files
+            decorator: The decorator to process
+            author: The author information
+            output_dir: The output directory
+            dry_run: Whether to perform a dry run
+            force: Whether to force regeneration
 
         Returns:
             bool: Whether the processing was successful
@@ -614,8 +614,11 @@ IMPORTANT: Your response must be ONLY the valid JSON schema with no additional t
         name = decorator["name"]
         category = decorator.get("category", "uncategorized").lower()
 
+        # Sanitize category name by replacing spaces with underscores
+        sanitized_category = category.replace(" ", "_")
+
         # Create category directory if it doesn't exist
-        category_dir = os.path.join(output_dir, category)
+        category_dir = os.path.join(output_dir, sanitized_category)
         if not dry_run:
             os.makedirs(category_dir, exist_ok=True)
 

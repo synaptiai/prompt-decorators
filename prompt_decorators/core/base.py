@@ -127,14 +127,228 @@ class Parameter(BaseModel):
         return value
 
 
-class BaseDecorator:
+class DecoratorParameter:
+    """
+    Represents a parameter for a decorator.
+
+    This class is used by dynamic decorators to define parameters and validate values.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        description: str,
+        type_: str = "string",
+        required: bool = False,
+        default: Any = None,
+        enum_values: Optional[List[str]] = None,
+        min_value: Optional[Union[int, float]] = None,
+        max_value: Optional[Union[int, float]] = None,
+        min_length: Optional[int] = None,
+        max_length: Optional[int] = None,
+        pattern: Optional[str] = None,
+    ):
+        """
+        Initialize a decorator parameter.
+
+        Args:
+            name: The name of the parameter
+            description: A description of the parameter
+            type_: The type of the parameter (string, integer, float, boolean, enum)
+            required: Whether the parameter is required
+            default: Default value for the parameter
+            enum_values: Possible values for enum type
+            min_value: Minimum value for numeric types
+            max_value: Maximum value for numeric types
+            min_length: Minimum length for string or array types
+            max_length: Maximum length for string or array types
+            pattern: Regex pattern for string validation
+        """
+        self.name = name
+        self.description = description
+        self.type = type_
+        self.required = required
+        self.default = default
+        self.enum_values = enum_values or []
+        self.min_value = min_value
+        self.max_value = max_value
+        self.min_length = min_length
+        self.max_length = max_length
+        self.pattern = pattern
+
+    def validate(self, value: Any) -> Any:
+        """
+        Validate a parameter value against constraints.
+
+        Args:
+            value: The value to validate
+
+        Returns:
+            The validated value (possibly converted to the correct type)
+
+        Raises:
+            ValidationError: If the value is invalid
+        """
+        # Handle None for non-required parameters
+        if value is None:
+            if self.required:
+                raise ValidationError(f"Parameter '{self.name}' is required")
+            return self.default
+
+        # Type validation and conversion
+        if self.type == "string":
+            if not isinstance(value, str):
+                try:
+                    value = str(value)
+                except:
+                    raise ValidationError(
+                        f"Parameter '{self.name}' must be a string, got {type(value).__name__}"
+                    )
+
+            # Length validation
+            if self.min_length is not None and len(value) < self.min_length:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at least {self.min_length} characters"
+                )
+            if self.max_length is not None and len(value) > self.max_length:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at most {self.max_length} characters"
+                )
+
+            # Pattern validation
+            if self.pattern is not None:
+                import re
+
+                if not re.match(self.pattern, value):
+                    raise ValidationError(
+                        f"Parameter '{self.name}' must match pattern '{self.pattern}'"
+                    )
+
+        elif self.type == "integer":
+            try:
+                value = int(value)
+            except (ValueError, TypeError):
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be an integer, got {type(value).__name__}"
+                )
+
+            # Range validation
+            if self.min_value is not None and value < self.min_value:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at least {self.min_value}"
+                )
+            if self.max_value is not None and value > self.max_value:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at most {self.max_value}"
+                )
+
+        elif self.type == "float":
+            try:
+                value = float(value)
+            except (ValueError, TypeError):
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be a float, got {type(value).__name__}"
+                )
+
+            # Range validation
+            if self.min_value is not None and value < self.min_value:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at least {self.min_value}"
+                )
+            if self.max_value is not None and value > self.max_value:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be at most {self.max_value}"
+                )
+
+        elif self.type == "boolean":
+            if isinstance(value, str):
+                if value.lower() in ("true", "yes", "1"):
+                    value = True
+                elif value.lower() in ("false", "no", "0"):
+                    value = False
+                else:
+                    raise ValidationError(
+                        f"Parameter '{self.name}' must be a boolean, got '{value}'"
+                    )
+            else:
+                try:
+                    value = bool(value)
+                except (ValueError, TypeError):
+                    raise ValidationError(
+                        f"Parameter '{self.name}' must be a boolean, got {type(value).__name__}"
+                    )
+
+        elif self.type == "enum":
+            if not self.enum_values:
+                raise ValidationError(
+                    f"No enum values defined for parameter '{self.name}'"
+                )
+
+            if value not in self.enum_values:
+                raise ValidationError(
+                    f"Parameter '{self.name}' must be one of {self.enum_values}, got '{value}'"
+                )
+
+        return value
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert the parameter to a dictionary representation."""
+        result = {
+            "name": self.name,
+            "description": self.description,
+            "type": self.type,
+            "required": self.required,
+        }
+
+        if self.default is not None:
+            result["default"] = self.default
+
+        if self.enum_values:
+            result["enum_values"] = self.enum_values
+
+        if self.min_value is not None:
+            result["min_value"] = self.min_value
+
+        if self.max_value is not None:
+            result["max_value"] = self.max_value
+
+        if self.min_length is not None:
+            result["min_length"] = self.min_length
+
+        if self.max_length is not None:
+            result["max_length"] = self.max_length
+
+        if self.pattern is not None:
+            result["pattern"] = self.pattern
+
+        return result
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "DecoratorParameter":
+        """Create a parameter from a dictionary representation."""
+        return cls(
+            name=data["name"],
+            description=data["description"],
+            type_=data.get("type", "string"),
+            required=data.get("required", False),
+            default=data.get("default"),
+            enum_values=data.get("enum_values"),
+            min_value=data.get("min_value"),
+            max_value=data.get("max_value"),
+            min_length=data.get("min_length"),
+            max_length=data.get("max_length"),
+            pattern=data.get("pattern"),
+        )
+
+
+class DecoratorBase:
     """Base class for all prompt decorators.
 
     This class defines the common interface and behavior for all decorators.
     Subclasses should implement the apply_to_prompt and transform_response methods.
     """
 
-    name: str = "BaseDecorator"
+    name: str = "DecoratorBase"
     description: str = "Base decorator class"
     parameters: Dict[str, Parameter] = {}
     conflicts_with: Set[str] = set()
@@ -175,7 +389,7 @@ class BaseDecorator:
                 setattr(self, f"_{name}", param.default)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "BaseDecorator":
+    def from_dict(cls, data: Dict[str, Any]) -> "DecoratorBase":
         """Create a decorator instance from a dictionary representation.
 
         Args:
@@ -248,47 +462,72 @@ class BaseDecorator:
         param_mapping = self.transformation_template.get("parameterMapping", {})
         for param_name, mapping in param_mapping.items():
             # Get the parameter value using the property getter
-            value = getattr(self, param_name, None)
-            if value is not None and "valueMap" in mapping:
-                # Convert value to string for lookup
-                value_str = str(value).lower()
-                if value_str in mapping["valueMap"]:
-                    # Append the parameter-specific instruction
-                    instruction += f" {mapping['valueMap'][value_str]}"
+            value = getattr(self, f"_{param_name}")
+            if value is None:
+                # Skip None values
+                continue
 
-        # Apply the transformation according to placement strategy
-        placement = self.transformation_template.get("placement", "append")
+            # Apply the mapping
+            if "valueMapping" in mapping:
+                # Apply value mapping if defined
+                value_mapping = mapping["valueMapping"]
+                if str(value) in value_mapping:
+                    instruction = instruction.replace(
+                        f"{{{param_name}}}", str(value_mapping[str(value)])
+                    )
+                else:
+                    instruction = instruction.replace(f"{{{param_name}}}", str(value))
+            else:
+                # Simple replacement
+                instruction = instruction.replace(f"{{{param_name}}}", str(value))
+
+        # Apply the instruction to the prompt based on placement
+        placement = self.transformation_template.get("placement", "prepend")
         if placement == "prepend":
-            # Instructions before prompt
-            return f"{instruction}\n\n{prompt}"
+            return f"{instruction}\n{prompt}"
         elif placement == "append":
-            # Instructions after prompt
-            return f"{prompt}\n\n{instruction}"
+            return f"{prompt}\n{instruction}"
         elif placement == "replace":
             return instruction
-        elif placement == "wrap":
-            # Instructions before and after prompt
-            return f"{instruction}\n\n{prompt}\n\n{instruction}"
         else:
-            # Default to append if placement strategy is not recognized
-            return f"{prompt}\n\n{instruction}"
+            # Default to prepend
+            return f"{instruction}\n{prompt}"
 
     def transform_response(self, response: str) -> str:
-        """Transform the response from the model.
+        """Transform the LLM response according to the decorator's behavior.
+
+        The base implementation returns the response unchanged. Subclasses
+        should override this method if they need to modify the response.
 
         Args:
-            response: The response to transform
+            response: The LLM response to transform
 
         Returns:
             The transformed response
         """
-        # Base implementation does nothing
         return response
 
     def __str__(self) -> str:
-        """Return a string representation of the decorator.
+        """Return a string representation of the decorator."""
+        params = []
+        for name in self.parameters:
+            value = getattr(self, f"_{name}")
+            if value is not None:
+                if isinstance(value, str):
+                    params.append(f"{name}='{value}'")
+                else:
+                    params.append(f"{name}={value}")
+        return f"{self.name}({', '.join(params)})"
+
+    def __call__(self, prompt: str) -> str:
+        """Apply the decorator to a prompt.
+
+        This method is a convenience wrapper around apply_to_prompt.
+
+        Args:
+            prompt: The prompt to decorate
 
         Returns:
-            A string representation
+            The decorated prompt
         """
-        return f"{self.name}()"
+        return self.apply_to_prompt(prompt)

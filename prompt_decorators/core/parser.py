@@ -8,7 +8,7 @@ from prompt text using the +++ syntax.
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from prompt_decorators.core import BaseDecorator
+from prompt_decorators.core.base import DecoratorBase
 from prompt_decorators.core.registry import DecoratorRegistry
 
 
@@ -27,31 +27,33 @@ class DecoratorParser:
         """Initialize the decorator parser.
 
         Args:
-            registry: Optional decorator registry to use for creating decorators.
-
-        Note:
-            If registry is not provided, a new registry will be created.
+            registry: Optional decorator registry to use for creating decorators. If not provided, the global registry will be used.
         """
-        self.registry = registry or DecoratorRegistry()
+        from prompt_decorators.core.registry import get_registry
 
-    def extract_decorators(self, prompt: str) -> Tuple[List[BaseDecorator], str]:
-        """
-        Extract decorator annotations from a prompt.
+        self.registry = registry or get_registry()
+
+    def extract_decorators(self, prompt: str) -> Tuple[List[DecoratorBase], str]:
+        """Extract decorator annotations from a prompt.
+
+        This method extracts all decorator annotations from the prompt text,
+        creates decorator instances for each annotation, and returns both the
+        list of decorators and the cleaned prompt text.
 
         Args:
-            prompt: The prompt text containing decorator annotations.
+            prompt: The prompt text to parse
 
         Returns:
             A tuple containing:
-            - A list of decorator instances extracted from the prompt
-            - The clean prompt text with decorator annotations removed
+                - A list of decorator instances
+                - The prompt text with decorator annotations removed
         """
-        # Find all decorator annotations in the prompt
-        matches = re.finditer(self.DECORATOR_PATTERN, prompt)
-
+        # Find all decorator annotations
+        matches = re.finditer(self.DECORATOR_PATTERN, prompt, re.MULTILINE)
         decorators = []
-        clean_prompt = prompt
+        cleaned_prompt = prompt
 
+        # Process each match
         for match in matches:
             # Extract decorator name and parameters
             decorator_name = match.group(1)
@@ -60,150 +62,89 @@ class DecoratorParser:
             # Parse parameters
             params = self._parse_parameters(params_str)
 
+            # Create decorator instance
             try:
-                # Create decorator instance
                 decorator = self._create_decorator(decorator_name, **params)
                 decorators.append(decorator)
             except Exception as e:
                 # Log error but continue processing
                 import logging
 
-                logging.error(f"Error creating decorator {decorator_name}: {str(e)}")
-                continue
+                logging.getLogger(__name__).warning(
+                    f"Failed to create decorator {decorator_name}: {e}"
+                )
 
             # Remove the decorator annotation from the prompt
-            clean_prompt = clean_prompt.replace(match.group(0), "", 1)
+            cleaned_prompt = cleaned_prompt.replace(match.group(0), "", 1)
 
-        # Clean up any extra whitespace
-        clean_prompt = clean_prompt.strip()
+        # Clean up any leading/trailing whitespace
+        cleaned_prompt = cleaned_prompt.strip()
 
-        return decorators, clean_prompt
+        return decorators, cleaned_prompt
 
-    def _create_decorator(self, decorator_name: str, **params: Any) -> BaseDecorator:
-        """
-        Create a decorator instance by name with the given parameters.
+    def _create_decorator(self, decorator_name: str, **params: Any) -> DecoratorBase:
+        """Create a decorator instance by name.
 
         Args:
             decorator_name: Name of the decorator to create
             **params: Parameters to pass to the decorator constructor
 
         Returns:
-            An instance of the requested decorator
+            A decorator instance
 
         Raises:
             ValueError: If the decorator is not found in the registry
         """
         # Get the decorator class from the registry
-        decorator_class = None
-
-        # Check which type of registry we have and call the appropriate method
-        if hasattr(self.registry, "get"):
-            # Using registry from core/registry.py
+        if isinstance(self.registry, DecoratorRegistry):
+            decorator_class = self.registry.get_decorator(decorator_name)
+        else:
             decorator_class = self.registry.get(decorator_name)
 
-            # If not found, try with lowercase name
-            if decorator_class is None:
-                decorator_class = self.registry.get(decorator_name.lower())
+        if not decorator_class:
+            raise ValueError(f"Decorator not found: {decorator_name}")
 
-            # If still not found, try to find by class name
-            if decorator_class is None:
-                # Get all decorators and find one with matching class name
-                all_decorators = self.registry.decorators
-                for name, cls in all_decorators.items():
-                    if cls.__name__ == decorator_name:
-                        decorator_class = cls
-                        break
-        elif hasattr(self.registry, "get_decorator"):
-            # Using registry from utils/discovery.py
-            decorator_class = self.registry.get_decorator(decorator_name)
-
-            # If not found, try with lowercase name
-            if decorator_class is None:
-                decorator_class = self.registry.get_decorator(decorator_name.lower())
-
-            # If still not found, try to find by class name
-            if decorator_class is None:
-                # Get all decorators and find one with matching class name
-                if hasattr(self.registry, "decorators"):
-                    all_decorators = self.registry.decorators
-                    for name, cls in all_decorators.items():
-                        if cls.__name__ == decorator_name:
-                            decorator_class = cls
-                            break
-
-        if decorator_class is None:
-            raise ValueError(f"Decorator '{decorator_name}' not found in registry")
-
-        # Create and return an instance of the decorator
+        # Create and return the decorator instance
         return decorator_class(**params)
 
     def _parse_parameters(self, params_str: str) -> Dict[str, Any]:
-        """
-        Parse parameter string into a dictionary.
+        """Parse parameter string into a dictionary.
+
+        This method parses a parameter string in the format:
+        param1=value1, param2=value2
 
         Args:
-            params_str: String containing comma-separated key=value pairs.
+            params_str: Parameter string to parse
 
         Returns:
-            Dictionary of parameter names and values.
+            Dictionary of parameter names and values
         """
         if not params_str:
             return {}
 
+        # Regular expression for matching parameters
+        # This handles quoted strings, numbers, booleans, and nested structures
+        param_pattern = r'([a-zA-Z0-9_]+)=(?:"([^"]*)"|(True|False|[0-9]+(?:\.[0-9]+)?|[a-zA-Z0-9_]+))'
+
+        # Find all parameter matches
+        matches = re.finditer(param_pattern, params_str)
         params = {}
 
-        # Split by commas, but respect quotes and nested structures
-        param_parts = []
-        current_part = ""
-        in_quotes = False
-        bracket_level = 0
+        for match in matches:
+            name = match.group(1)
+            # Use the quoted value if available, otherwise use the unquoted value
+            value = match.group(2) if match.group(2) is not None else match.group(3)
 
-        for char in params_str:
-            if char == '"' or char == "'":
-                in_quotes = not in_quotes
-                current_part += char
-            elif char == "," and not in_quotes and bracket_level == 0:
-                param_parts.append(current_part.strip())
-                current_part = ""
-            else:
-                if char == "(" or char == "[" or char == "{":
-                    bracket_level += 1
-                elif char == ")" or char == "]" or char == "}":
-                    bracket_level -= 1
-                current_part += char
+            # Convert value to appropriate type
+            if value == "True":
+                value = True
+            elif value == "False":
+                value = False
+            elif value is not None and re.match(r"^[0-9]+$", value):
+                value = int(value)
+            elif value is not None and re.match(r"^[0-9]+\.[0-9]+$", value):
+                value = float(value)
 
-        if current_part:
-            param_parts.append(current_part.strip())
-
-        # Process each parameter
-        for part in param_parts:
-            if "=" in part:
-                key, value = part.split("=", 1)
-                key = key.strip()
-                value = value.strip()
-
-                # Convert string values to appropriate types
-                if value.lower() == "true":
-                    value_converted: Any = True
-                    value = value_converted
-                elif value.lower() == "false":
-                    value_converted = False
-                    value = value_converted
-                elif value.lower() == "none":
-                    value_converted = None
-                    value = value_converted
-                elif value.isdigit():
-                    value_converted = int(value)
-                    value = value_converted
-                elif value.replace(".", "", 1).isdigit() and value.count(".") == 1:
-                    value_converted = float(value)
-                    value = value_converted
-                elif (value.startswith('"') and value.endswith('"')) or (
-                    value.startswith("'") and value.endswith("'")
-                ):
-                    # Remove quotes from string values
-                    value = value[1:-1]
-
-                params[key] = value
+            params[name] = value
 
         return params

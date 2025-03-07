@@ -8,10 +8,10 @@ from typing import Optional
 
 import typer
 
+from demo.dynamic_openai_demo import app as openai_app
 from demo.examples.advanced import app as advanced_app
 from demo.examples.basic import app as basic_app
 from demo.examples.domain_specific import app as domain_app
-from demo.openai_demo import app as openai_app
 
 # Use absolute imports rather than relative imports
 from demo.utils.logging import log_info

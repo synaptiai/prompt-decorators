@@ -1,68 +1,32 @@
-"""Custom fixtures for prompt-decorators tests.
-
-This file supplements the auto-generated fixtures in tests/auto/conftest.py.
-"""
+"""Pytest configuration for decorator tests."""
 
 import importlib
-import sys
-from typing import Callable, Type
+from typing import Optional, Type
 
 import pytest
 
-from prompt_decorators.core.base import BaseDecorator
+from prompt_decorators.core.base import DecoratorBase
 
 
 @pytest.fixture
-def load_decorator() -> Callable[[str], Type[BaseDecorator]]:
-    """Load a decorator class by name.
+def load_decorator():
+    """Fixture to load a decorator class by name."""
 
-    Args:
-        name: The name of the decorator class to load
-
-    Returns:
-        The decorator class
-    """
-
-    def _load(name: str) -> Type[BaseDecorator]:
-        # First try to import from the generated module
+    def _load_decorator(decorator_name: str) -> Optional[Type[DecoratorBase]]:
         try:
+            # First try to load from core decorators
             module = importlib.import_module(
-                f"prompt_decorators.decorators.generated.decorators.{name.lower()}"
+                f"prompt_decorators.decorators.core.{decorator_name.lower()}"
             )
-            return getattr(module, name)
+            return getattr(module, decorator_name)
         except (ImportError, AttributeError):
-            pass
+            try:
+                # If not found in core, try to load from extension decorators
+                module = importlib.import_module(
+                    f"prompt_decorators.decorators.extensions.{decorator_name.lower()}"
+                )
+                return getattr(module, decorator_name)
+            except (ImportError, AttributeError):
+                return None
 
-        # Then try from the main decorators package
-        try:
-            # Import the decorators module and check for the class
-            import prompt_decorators.decorators as decorators_module
-
-            if hasattr(decorators_module, name):
-                return getattr(decorators_module, name)
-        except (ImportError, AttributeError):
-            pass
-
-        # As a last resort, try to find the decorator class in any loaded module
-        for module_name, module in sys.modules.items():
-            if module_name.startswith("prompt_decorators"):
-                try:
-                    decorator_class = getattr(module, name, None)
-                    if decorator_class and issubclass(decorator_class, BaseDecorator):
-                        return decorator_class
-                except (AttributeError, TypeError):
-                    pass
-
-        raise ValueError(f"Could not find decorator class: {name}")
-
-    return _load
-
-
-@pytest.fixture
-def sample_prompt() -> str:
-    """Provide a sample prompt for testing decorator application.
-
-    Returns:
-        A sample prompt string
-    """
-    return "Write a function to calculate the Fibonacci sequence."
+    return _load_decorator

@@ -1,0 +1,53 @@
+---
+description: ENSURE careful modifications WHEN changing code TO prevent breakage
+globs: **/*.py
+---
+
+# Careful Code Modification
+
+<version>1.0.0</version>
+
+## Context
+- When modifying existing code in this codebase
+- When fixing bugs or implementing new features
+- When the codebase is fragile or has complex dependencies
+
+## Requirements
+- Make surgical, precise modifications targeting only the specific issue
+- Implement proper validation procedures before and after changes
+- Consider the scope and potential side effects of all changes
+- Ensure changes are appropriate for the sensitivity level of the codebase
+- Add thorough tests for any modifications made
+- Document changes clearly with comments explaining the rationale
+
+## Examples
+
+<example>
+# Good: Targeted fix with validation
+def fix_calculation_error(data):
+    # Validate input before processing
+    if not isinstance(data, dict) or 'value' not in data:
+        raise ValueError("Invalid data format")
+
+    # Fix specific calculation issue only
+    corrected_value = data['value'] * 1.05  # Apply 5% correction
+
+    # Return with minimal changes to data structure
+    result = data.copy()
+    result['value'] = corrected_value
+    return result
+</example>
+
+<example type="invalid">
+# Bad: Overly broad changes without validation
+def fix_calculation_error(data):
+    # Completely restructuring data format unnecessarily
+    new_data = {}
+    for key, value in data.items():
+        if key == 'value':
+            new_data[key] = value * 1.05
+        else:
+            new_data[f"modified_{key}"] = process_data(value)
+
+    return new_data  # Returns completely different structure
+</example>
