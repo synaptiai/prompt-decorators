@@ -52,25 +52,10 @@ decorated_prompt = output_format.apply(reasoning.apply(prompt))
 - [CLI Usage](guide/cli-usage.md) - Use the command-line interface
 - [Troubleshooting](guide/troubleshooting.md) - Solve common issues
 
-### API Reference
-
-- [API Overview](api/index.md) - Overview of the API
-- [Core](api/modules/prompt_decorators.core.md) - Core classes and functions
-- [Decorators](api/modules/prompt_decorators.decorators.md) - Built-in decorators
-- [Utilities](api/modules/prompt_decorators.utils.md) - Utility functions
-- [Generator](api/modules/prompt_decorators.generator.md) - Code generation tools
-
-### Examples
-
-- [Basic Examples](examples/basic.md) - Simple usage examples
-- [Advanced Examples](examples/advanced.md) - Complex usage patterns
-- [Provider Examples](examples/providers.md) - Examples with different LLM providers
-
 ### Project Information
 
 - [Contributing](contributing.md) - How to contribute to the project
 - [Development](development.md) - Setting up the development environment
-- [Project Summaries](project_summaries/index.md) - Documentation of modernization and standardization efforts
 - [FAQ](faq.md) - Frequently asked questions
 - [Glossary](glossary.md) - Definitions of key terms
 - [Roadmap](roadmap.md) - Future development plans
@@ -103,9 +88,9 @@ If you need help with Prompt Decorators, you can:
 
 - Check the [FAQ](faq.md) for answers to common questions
 - Read the [Troubleshooting](guide/troubleshooting.md) guide
-- Open an issue on our [GitHub repository](https://github.com/yourusername/prompt-decorators)
+- Open an issue on our [GitHub repository](https://github.com/synaptiai/prompt-decorators)
 - Join our community discussions
 
 ## License
 
-Prompt Decorators is released under the MIT License. See the LICENSE file for details.
+Prompt Decorators is released under the Apache 2.0 License. See the LICENSE file for details.

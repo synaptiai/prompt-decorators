@@ -5,43 +5,40 @@ This module provides integration between Prompt Decorators and the Model Context
 allowing users to apply decorators through MCP tools.
 """
 
-from typing import Any, Dict, Type
+import logging
+import sys
+from typing import Any, Callable, Dict, List, Optional
 
-# Re-export functions from mcp_dynamic.py
-from prompt_decorators.integrations.mcp_dynamic import (
-    MCP_AVAILABLE,
-    DecoratorInfo,
-    TemplateInfo,
-    create_default_templates,
-    create_mcp_server,
+# Configure logging
+logging.basicConfig(level=logging.INFO, stream=sys.stderr)
+logger = logging.getLogger("prompt-decorators-mcp")
+
+# For compatibility with dynamic_decorators_module
+from prompt_decorators.dynamic_decorators_module import (
+    apply_dynamic_decorators,
+    get_available_decorators,
 )
 
-# For backward compatibility
-DecoratorTemplate = TemplateInfo
-
-
-# For backward compatibility
-def load_decorator_classes() -> Dict[str, Type[Any]]:
-    """
-    Dummy function for backward compatibility.
-
-    This function is no longer used in the dynamic decorator implementation.
-    It's provided here for backward compatibility with existing tests.
-
-    Returns:
-        An empty dictionary
-    """
-    from prompt_decorators.core import DecoratorBase
-
-    return {"DummyDecorator": DecoratorBase}
-
+# Core exports
+from prompt_decorators.integrations.mcp.server import (
+    apply_decorators,
+    create_decorated_prompt,
+    get_decorator_details,
+    list_decorators,
+    mcp,
+    run_server,
+)
 
 __all__ = [
-    "MCP_AVAILABLE",
-    "create_mcp_server",
-    "create_default_templates",
-    "load_decorator_classes",
-    "DecoratorInfo",
-    "TemplateInfo",
-    "DecoratorTemplate",
+    # Core functions
+    "mcp",
+    "run_server",
+    # MCP tools
+    "list_decorators",
+    "get_decorator_details",
+    "apply_decorators",
+    "create_decorated_prompt",
+    # For backward compatibility
+    "get_available_decorators",
+    "apply_dynamic_decorators",
 ]

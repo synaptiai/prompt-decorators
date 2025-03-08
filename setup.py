@@ -58,6 +58,15 @@ setup(
         "anthropic": [
             "anthropic>=0.5.0",
         ],
+        "mcp": [
+            "mcp[cli]>=0.1.0",
+        ],
+        "all": [
+            "langchain>=0.0.200",
+            "openai>=1.0.0",
+            "anthropic>=0.5.0",
+            "mcp[cli]>=0.1.0",
+        ],
     },
     classifiers=[
         "Development Status :: 3 - Alpha",
