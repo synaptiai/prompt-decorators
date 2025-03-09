@@ -19,7 +19,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install --with mcp
-          pip install pre-commit mypy pytest
+          # Install required dependencies directly as well, so they're available to pre-commit hooks
+          pip install pre-commit mypy pytest pydantic
+          pip install -e .
       - name: Run pre-commit
         run: pre-commit run --all-files
 

@@ -48,7 +48,7 @@ def create_decorated_prompt(template_name: str, content: str, parameters: Option
     """Create a decorated prompt using a predefined template."""
     # Implementation...
 
-def run_server(verbose: bool = False) -> None:
+def run_server(host: str = "0.0.0.0", port: int = 5000) -> None:
     """Run the MCP server."""
     # Implementation...
 ```
@@ -58,12 +58,13 @@ def run_server(verbose: bool = False) -> None:
 You can run the MCP server using the following command:
 
 ```bash
-python -m prompt_decorators.integrations.mcp [--verbose] [--name NAME]
+python -m prompt_decorators.integrations.mcp [--host HOST] [--port PORT] [--verbose]
 ```
 
 Options:
 - `--verbose`: Enable verbose logging for debugging
-- `--name`: Specify a custom name for the server (default: "Prompt Decorators")
+- `--host`: Specify the host to bind to (default: "0.0.0.0")
+- `--port`: Specify the port to listen on (default: 5000)
 
 ## Tool Details
 

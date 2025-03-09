@@ -3,7 +3,7 @@
 Command-line entry point for running the Prompt Decorators MCP server.
 
 Usage:
-    python -m prompt_decorators.integrations.mcp [--verbose]
+    python -m prompt_decorators.integrations.mcp [--host HOST] [--port PORT] [--verbose]
 """
 
 import argparse
@@ -15,9 +15,8 @@ def main() -> None:
     """Run the Prompt Decorators MCP server."""
     parser = argparse.ArgumentParser(description="Run the Prompt Decorators MCP server")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
-    parser.add_argument(
-        "--name", type=str, default="Prompt Decorators", help="Server name to display"
-    )
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to bind to")
+    parser.add_argument("--port", type=int, default=5000, help="Port to listen on")
     args = parser.parse_args()
 
     # Configure logging level based on verbose flag
@@ -29,13 +28,17 @@ def main() -> None:
     )
 
     logger = logging.getLogger("prompt-decorators-main")
-    logger.info(f"Starting Prompt Decorators MCP server: {args.name}")
+    logger.info(f"Starting Prompt Decorators MCP server on {args.host}:{args.port}")
 
     try:
         # Import and run the server
-        from prompt_decorators.integrations.mcp.server import run_server
+        from prompt_decorators.integrations.mcp.server import MCP_AVAILABLE, run_server
 
-        run_server(verbose=args.verbose)
+        if not MCP_AVAILABLE:
+            logger.error("MCP SDK not installed. Please install with: pip install mcp")
+            sys.exit(1)
+
+        run_server(host=args.host, port=args.port)
     except ImportError as e:
         logger.error(f"Failed to import server: {e}")
         logger.error("Please ensure the MCP SDK is installed: pip install mcp")

@@ -51,10 +51,10 @@ repos:
       - id: pytest
         name: pytest
         entry: python -m pytest
-        language: system
+        language: python
         pass_filenames: false
         always_run: true
-        args: ["tests/"]
+        additional_dependencies: [pytest, pydantic>=2.0.0, jsonschema>=4.0.0, importlib-metadata>=6.0.0, markdown>=3.7]
 
       - id: check-docstrings
         name: check-docstrings

@@ -3,7 +3,7 @@
 Entry point for running the Prompt Decorators MCP server for Claude Desktop.
 
 Usage:
-    python -m prompt_decorators.integrations.mcp.claude_desktop [--verbose]
+    python -m prompt_decorators.integrations.mcp.claude_desktop [--host HOST] [--port PORT] [--verbose]
 """
 
 import argparse
@@ -18,6 +18,8 @@ def main() -> None:
         description="Run the Prompt Decorators MCP server for Claude Desktop"
     )
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    parser.add_argument("--host", type=str, default="0.0.0.0", help="Host to bind to")
+    parser.add_argument("--port", type=int, default=5000, help="Port to listen on")
     args = parser.parse_args()
 
     # Configure logging level based on verbose flag
@@ -51,10 +53,16 @@ def main() -> None:
 
     try:
         # Import and run the server
-        from prompt_decorators.integrations.mcp.server import run_server
+        from prompt_decorators.integrations.mcp.server import MCP_AVAILABLE, run_server
 
-        logger.info("Starting Claude Desktop MCP server")
-        run_server(verbose=args.verbose)
+        if not MCP_AVAILABLE:
+            logger.error(
+                "MCP is not available despite being importable. This is unexpected."
+            )
+            sys.exit(1)
+
+        logger.info(f"Starting Claude Desktop MCP server on {args.host}:{args.port}")
+        run_server(host=args.host, port=args.port)
     except ImportError as e:
         logger.error(f"Failed to import server implementation: {e}")
         sys.exit(1)

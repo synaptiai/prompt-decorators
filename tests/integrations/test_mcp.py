@@ -5,6 +5,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+# Skip all tests in this file if MCP is not installed
+pytest.importorskip(
+    "mcp", reason="MCP SDK not installed. Install with: pip install mcp"
+)
+
 from prompt_decorators.core.dynamic_decorator import DynamicDecorator
 from prompt_decorators.integrations.mcp.server import (
     apply_decorators,
