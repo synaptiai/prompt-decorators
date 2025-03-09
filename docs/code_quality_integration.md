@@ -26,7 +26,7 @@ Configuration is in `pyproject.toml`:
 ```toml
 [tool.ruff]
 line-length = 100
-target-version = "py38"
+target-version = "py311"
 select = ["E", "F", "I", "N", "B", "C4", "SIM", "ERA", "PL"]
 ignore = ["E203", "E501"]
 
@@ -58,7 +58,7 @@ Configuration is in `mypy.ini`:
 
 ```ini
 [mypy]
-python_version = 3.8
+python_version = 3.11
 warn_return_any = True
 warn_unused_configs = True
 disallow_untyped_defs = True
@@ -221,7 +221,7 @@ The project uses GitHub Actions for continuous integration.
 
 #### Test Workflow
 
-The test workflow runs tests on multiple Python versions:
+The test workflow runs tests on Python 3.11:
 
 ```yaml
 name: Tests
@@ -237,7 +237,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, '3.10', '3.11']
+        python-version: ['3.11']
 
     steps:
     - uses: actions/checkout@v3
@@ -248,14 +248,6 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -e ".[test]"
-    - name: Run tests
-      run: |
-        pytest --cov=prompt_decorators
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
 ```
 
 #### Lint Workflow
@@ -279,7 +271,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.11'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -317,7 +309,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.11'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip

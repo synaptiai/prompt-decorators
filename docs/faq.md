@@ -58,7 +58,7 @@ pip install "prompt-decorators[dev,test,docs]"
 
 ### What are the system requirements?
 
-- Python 3.8 or higher
+- Python 3.11 or higher
 - No special hardware requirements
 - Works on Windows, macOS, and Linux
 

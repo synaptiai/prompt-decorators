@@ -19,7 +19,7 @@ There are many ways to contribute to the Prompt Decorators project:
 
 ### Prerequisites
 
-- Python 3.8.1 or higher
+- Python 3.11 or higher
 - Poetry (dependency management)
 - git
 

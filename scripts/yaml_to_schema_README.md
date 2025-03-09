@@ -9,7 +9,7 @@ This directory contains scripts for converting simplified YAML decorator definit
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.11+
 - Anthropic API key
 - Required Python packages:
   - anthropic

@@ -27,7 +27,7 @@ setup(
         "prompt_decorators.registry": ["*.json"],  # Include registry JSON files
     },
     include_package_data=True,
-    python_requires=">=3.8",
+    python_requires=">=3.11",
     install_requires=[
         "pydantic>=2.0.0",
         "typing_extensions>=4.0.0",
@@ -73,9 +73,6 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Software Development :: Libraries :: Python Modules",

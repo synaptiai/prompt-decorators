@@ -5,7 +5,7 @@
 <img src="docs/assets/logo.png" alt="Prompt Decorators Logo" width="400"/>
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Python Versions](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue)](https://www.python.org/)
+[![Python Versions](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/)
 [![Documentation](https://img.shields.io/badge/docs-MkDocs-blue)](https://synaptiai.github.io/prompt-decorators/)
 [![Code Style](https://img.shields.io/badge/code%20style-ruff-black)](https://github.com/astral-sh/ruff)
 

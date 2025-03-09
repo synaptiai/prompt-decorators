@@ -9,7 +9,7 @@ Claude Desktop supports external tools through the MCP protocol, allowing you to
 ## Prerequisites
 
 - Claude Desktop installed on your system
-- Python 3.8 or higher
+- Python 3.11 or higher
 - Prompt Decorators package installed
 - MCP SDK installed (`pip install mcp`)
 
@@ -146,69 +146,4 @@ If Claude Desktop cannot connect to the MCP server:
 
 ### Debugging
 
-You can run the Claude Desktop handler with the `--verbose` flag to get more detailed logging:
-
-```bash
-python -m prompt_decorators.integrations.mcp.claude_desktop --verbose
-```
-
-### Common Issues
-
-#### Module Not Found Errors
-
-If you see "Module not found" errors:
-
-1. Make sure the PYTHONPATH in your configuration points to the directory containing the prompt-decorators package
-2. Try installing the package in development mode:
-   ```bash
-   pip install -e /path/to/prompt-decorators
-   ```
-
-#### Permission Issues
-
-If you encounter permission issues:
-
-1. Make sure the Python executable has permission to run
-2. Check that the working directory is accessible
-3. Consider using a virtual environment if there are conflicts
-
-#### Port Conflicts
-
-If you see port conflict errors:
-
-1. Close other applications that might be using the same port
-2. Restart Claude Desktop
-3. If the issue persists, try restarting your computer
-
-## Advanced Configuration
-
-### Custom Server Name
-
-You can specify a custom name for the server:
-
-```bash
-python -m prompt_decorators.integrations.mcp.claude_desktop --name "My Custom Prompt Decorators"
-```
-
-### Environment Variables
-
-You can add custom environment variables to the configuration file:
-
-```json
-{
-  "env": {
-    "PYTHONPATH": "/path/to/prompt-decorators",
-    "CUSTOM_VAR": "custom_value"
-  }
-}
-```
-
-## Security Considerations
-
-- The MCP server runs as a separate process and has access to the resources available to the user running Claude Desktop
-- It doesn't have access to Claude Desktop's internal state or conversations
-- Communication between Claude Desktop and the MCP server is local and not sent over the internet
-
-## Next Steps
-
-To learn more about the underlying MCP server implementation, see [MCP Server](./server.md).
+You can run the Claude Desktop handler with the `--verbose`

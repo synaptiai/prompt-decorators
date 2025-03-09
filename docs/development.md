@@ -6,7 +6,7 @@ This guide will help you set up a development environment for contributing to th
 
 Before you begin, ensure you have the following installed:
 
-- Python 3.8 or higher
+- Python 3.11 or higher
 - [Git](https://git-scm.com/)
 - [Poetry](https://python-poetry.org/) (recommended) or pip
 
