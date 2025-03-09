@@ -14,8 +14,12 @@ from prompt_decorators.core.base import (
 from prompt_decorators.core.parser import DecoratorParser
 from prompt_decorators.core.registry import DecoratorRegistry
 
+# Add an alias for backward compatibility
+BaseDecorator = DecoratorBase
+
 __all__ = [
     "DecoratorBase",
+    "BaseDecorator",  # Include the alias in __all__
     "DecoratorParameter",
     "Parameter",
     "ValidationError",

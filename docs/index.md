@@ -11,9 +11,9 @@ Key features include:
 - **Modular Prompt Engineering**: Apply specific prompt techniques independently
 - **Decorator Registry**: Discover and use decorators dynamically
 - **Compatibility Checking**: Ensure decorators work well together
-- **Serialization**: Store and retrieve decorated prompts
+- **Dynamic Implementation**: Runtime loading of decorators from definitions
 - **API Integration**: Work with multiple LLM providers
-- **CLI Tools**: Apply decorators from the command line
+- **MCP Integration**: Integration with the Model Context Protocol
 
 ## Quick Start
 
@@ -26,15 +26,22 @@ pip install prompt-decorators
 ### Basic Usage
 
 ```python
-from prompt_decorators.decorators import Reasoning, OutputFormat
+from prompt_decorators import apply_dynamic_decorators, create_decorator_instance
 
-# Create decorators
-reasoning = Reasoning(style="detailed", show_working=True)
-output_format = OutputFormat(format_type="markdown", pretty_print=True)
+# Using inline decorator syntax
+prompt = """
++++Reasoning(depth="comprehensive")
++++OutputFormat(format="markdown")
+Explain quantum entanglement.
+"""
+decorated_prompt = apply_dynamic_decorators(prompt)
 
-# Apply decorators to a prompt
+# Or using programmatic approach
+reasoning = create_decorator_instance("Reasoning", depth="comprehensive")
+output_format = create_decorator_instance("OutputFormat", format="markdown")
+
 prompt = "Explain quantum entanglement."
-decorated_prompt = output_format.apply(reasoning.apply(prompt))
+decorated_prompt = output_format(reasoning(prompt))
 
 # Use the decorated prompt with your favorite LLM API
 # ...
@@ -46,11 +53,9 @@ decorated_prompt = output_format.apply(reasoning.apply(prompt))
 
 - [Installation](installation.md) - How to install the framework
 - [Quickstart](quickstart.md) - Get up and running quickly
-- [Basic Usage](guide/basic-usage.md) - Learn the basics of using decorators
-- [Advanced Usage](guide/advanced-usage.md) - Explore advanced features
-- [API Integration](guide/api-integration.md) - Integrate with LLM APIs
-- [CLI Usage](guide/cli-usage.md) - Use the command-line interface
-- [Troubleshooting](guide/troubleshooting.md) - Solve common issues
+- [Core Concepts](concepts.md) - Core concepts and design philosophy
+- [Creating Decorators](creating_decorators.md) - Create your own decorators
+- [Compatibility](compatibility.md) - Compatibility with different LLM providers
 
 ### Project Information
 
@@ -87,7 +92,7 @@ Work with multiple LLM providers using the same decorator patterns.
 If you need help with Prompt Decorators, you can:
 
 - Check the [FAQ](faq.md) for answers to common questions
-- Read the [Troubleshooting](guide/troubleshooting.md) guide
+- Read the [Troubleshooting](faq.md#troubleshooting) section in the FAQ
 - Open an issue on our [GitHub repository](https://github.com/synaptiai/prompt-decorators)
 - Join our community discussions
 

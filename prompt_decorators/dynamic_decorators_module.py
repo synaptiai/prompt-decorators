@@ -175,7 +175,7 @@ def apply_decorator(decorator_name: str, prompt: str, **kwargs: Any) -> str:
 
 
 def register_decorator(definition: DecoratorDefinition) -> None:
-    """Register a new decorator definition.
+    """Register a decorator definition.
 
     Args:
         definition: Decorator definition
@@ -183,7 +183,16 @@ def register_decorator(definition: DecoratorDefinition) -> None:
     Returns:
         None
     """
-    DynamicDecorator.register_decorator(definition)
+    # Convert DecoratorDefinition to a dictionary with the expected format
+    decorator_dict = {
+        "decoratorName": definition.name,
+        "description": definition.description,
+        "category": definition.category,
+        "parameters": definition.parameters,
+        "transform_function": definition.transform_function,
+        "version": definition.version,
+    }
+    DynamicDecorator.register_decorator(decorator_dict)
 
 
 def extract_decorator_name(decorator_text: str) -> str:

@@ -531,3 +531,7 @@ class DecoratorBase:
             The decorated prompt
         """
         return self.apply_to_prompt(prompt)
+
+
+# Alias DecoratorBase as BaseDecorator for backward compatibility
+BaseDecorator = DecoratorBase

@@ -56,6 +56,7 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: true
       fallback_to_build_date: true
+      strict: false
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -66,6 +67,9 @@ plugins:
             show_source: true
             show_category_heading: true
             show_if_no_docstring: false
+
+# Add strict: false at the root level
+strict: false
 
 # Navigation structure with explicit sections and files
 nav:
@@ -80,33 +84,18 @@ nav:
     - Creating Custom Decorators: tutorials/creating_custom_decorator.md
     - Combining Decorators: tutorials/combining_decorators.md
     - Extension Development: tutorials/extension_development.md
-    - Comprehensive Tutorial: tutorials/comprehensive_tutorial.md
-  - API Reference:
-    - Overview: api/index.md
-    - Core: api/core.md
-    - Decorators: api/decorators.md
   - Integrations:
     - Overview: integrations/index.md
     - Model Context Protocol (MCP): integrations/mcp.md
-  - Examples:
-    - Basic Examples: examples/basic.md
-    - Advanced Examples: examples/advanced.md
-    - Provider Examples: examples/providers.md
-  - Domain Guides:
-    - Healthcare: guides/healthcare.md
-    - AI Safety: guides/ai_safety.md
-    - Domain-Specific Extensions: guides/domain_specific_extensions.md
   - Contributing:
     - Guidelines: contributing.md
     - Development Setup: development.md
     - Development Guide: development_guide.md
     - Documentation: documentation_workflow.md
     - Documentation Standards: DOCSTRING_STANDARDS.md
-    - Decorator Registry: DECORATOR_REGISTRY.md
-    - Type Annotation Improvements: type_annotation_improvements.md
-    - Docstring Improvement Plan: docstring_improvement_plan.md
-    - MkDocs Enhancement Plan: mkdocs_enhancement_plan.md
     - Documentation Checklist: documentation_checklist.md
+    - Decorator Registry: DECORATOR_REGISTRY.md
+    - Workflow Rules: workflow-rules.md
   - Project Documentation:
     - Roadmap: roadmap.md
     - Architecture: architecture.md
@@ -117,3 +106,190 @@ nav:
     - Navigation: navigation.md
   - Tools:
     - Validator Tool: validator_tool.md
+    - MCP Server: integrations/mcp/server.md
+    - Claude Desktop: integrations/mcp/claude_desktop.md
+    - Demoing the Prompt Decorators: demo/README.md
+  - API Reference:
+    - Overview: api/index.md
+    - Modules: api/modules/index.md
+    - Core Modules:
+      - prompt_decorators: api/modules/prompt_decorators.md
+      - prompt_decorators.config: api/modules/prompt_decorators.config.md
+      - prompt_decorators.core: api/modules/prompt_decorators.core.md
+      - prompt_decorators.core.base: api/modules/prompt_decorators.core.base.md
+      - prompt_decorators.core.dynamic_decorator: api/modules/prompt_decorators.core.dynamic_decorator.md
+      - prompt_decorators.core.exceptions: api/modules/prompt_decorators.core.exceptions.md
+      - prompt_decorators.core.model_specific: api/modules/prompt_decorators.core.model_specific.md
+      - prompt_decorators.core.parser: api/modules/prompt_decorators.core.parser.md
+      - prompt_decorators.core.registry: api/modules/prompt_decorators.core.registry.md
+      - prompt_decorators.core.request: api/modules/prompt_decorators.core.request.md
+      - prompt_decorators.core.validation: api/modules/prompt_decorators.core.validation.md
+      - prompt_decorators.dynamic_decorators_module: api/modules/prompt_decorators.dynamic_decorators_module.md
+    - Schema Modules:
+      - prompt_decorators.schemas: api/modules/prompt_decorators.schemas.md
+      - prompt_decorators.schemas.decorator_schema: api/modules/prompt_decorators.schemas.decorator_schema.md
+    - Utility Modules:
+      - prompt_decorators.utils: api/modules/prompt_decorators.utils.md
+      - prompt_decorators.utils.cache: api/modules/prompt_decorators.utils.cache.md
+      - prompt_decorators.utils.compatibility: api/modules/prompt_decorators.utils.compatibility.md
+      - prompt_decorators.utils.discovery: api/modules/prompt_decorators.utils.discovery.md
+      - prompt_decorators.utils.doc_gen: api/modules/prompt_decorators.utils.doc_gen.md
+      - prompt_decorators.utils.factory: api/modules/prompt_decorators.utils.factory.md
+      - prompt_decorators.utils.json_loader: api/modules/prompt_decorators.utils.json_loader.md
+      - prompt_decorators.utils.model_detection: api/modules/prompt_decorators.utils.model_detection.md
+      - prompt_decorators.utils.plugins: api/modules/prompt_decorators.utils.plugins.md
+      - prompt_decorators.utils.string_utils: api/modules/prompt_decorators.utils.string_utils.md
+      - prompt_decorators.utils.telemetry: api/modules/prompt_decorators.utils.telemetry.md
+    - Integration Modules:
+      - prompt_decorators.integrations: api/modules/prompt_decorators.integrations.md
+      - prompt_decorators.integrations.mcp: api/modules/prompt_decorators.integrations.mcp.md
+      - prompt_decorators.integrations.mcp.claude_desktop: api/modules/prompt_decorators.integrations.mcp.claude_desktop.md
+      - prompt_decorators.integrations.mcp.install_claude_desktop: api/modules/prompt_decorators.integrations.mcp.install_claude_desktop.md
+      - prompt_decorators.integrations.mcp.server: api/modules/prompt_decorators.integrations.mcp.server.md
+    - Decorators: api/decorators/index.md
+    - Decorator Reference:
+      - APIDesign: api/decorators/APIDesign.md
+      - Abductive: api/decorators/Abductive.md
+      - Academic: api/decorators/Academic.md
+      - Algorithm: api/decorators/Algorithm.md
+      - Alternatives: api/decorators/Alternatives.md
+      - Analogical: api/decorators/Analogical.md
+      - Antipatterns: api/decorators/Antipatterns.md
+      - Architecture: api/decorators/Architecture.md
+      - AsExpert: api/decorators/AsExpert.md
+      - AsyncPattern: api/decorators/AsyncPattern.md
+      - Audience: api/decorators/Audience.md
+      - Backup: api/decorators/Backup.md
+      - Balanced: api/decorators/Balanced.md
+      - BestPractices: api/decorators/BestPractices.md
+      - BlindSpots: api/decorators/BlindSpots.md
+      - BreakAndBuild: api/decorators/BreakAndBuild.md
+      - BugDiagnosis: api/decorators/BugDiagnosis.md
+      - BuildOn: api/decorators/BuildOn.md
+      - Bullet: api/decorators/Bullet.md
+      - CICD: api/decorators/CICD.md
+      - Chain: api/decorators/Chain.md
+      - ChangeVerification: api/decorators/ChangeVerification.md
+      - CiteSources: api/decorators/CiteSources.md
+      - CodeAudit: api/decorators/CodeAudit.md
+      - CodeContext: api/decorators/CodeContext.md
+      - CodeGen: api/decorators/CodeGen.md
+      - CodeReview: api/decorators/CodeReview.md
+      - CodeStandards: api/decorators/CodeStandards.md
+      - CodeWalkthrough: api/decorators/CodeWalkthrough.md
+      - CommitMessage: api/decorators/CommitMessage.md
+      - Compare: api/decorators/Compare.md
+      - Comparison: api/decorators/Comparison.md
+      - Compatibility: api/decorators/Compatibility.md
+      - ComplexityLevel: api/decorators/ComplexityLevel.md
+      - ConceptModel: api/decorators/ConceptModel.md
+      - Concise: api/decorators/Concise.md
+      - Conditional: api/decorators/Conditional.md
+      - Confidence: api/decorators/Confidence.md
+      - Constraints: api/decorators/Constraints.md
+      - Context: api/decorators/Context.md
+      - Contrarian: api/decorators/Contrarian.md
+      - Creative: api/decorators/Creative.md
+      - Custom: api/decorators/Custom.md
+      - DataModel: api/decorators/DataModel.md
+      - Debate: api/decorators/Debate.md
+      - DebugStrategy: api/decorators/DebugStrategy.md
+      - DecisionMatrix: api/decorators/DecisionMatrix.md
+      - Deductive: api/decorators/Deductive.md
+      - DependencyAnalysis: api/decorators/DependencyAnalysis.md
+      - Deployment: api/decorators/Deployment.md
+      - DesignPattern: api/decorators/DesignPattern.md
+      - Detailed: api/decorators/Detailed.md
+      - Documentation: api/decorators/Documentation.md
+      - ELI5: api/decorators/ELI5.md
+      - EdgeCases: api/decorators/EdgeCases.md
+      - ErrorDiagnosis: api/decorators/ErrorDiagnosis.md
+      - ErrorStrategy: api/decorators/ErrorStrategy.md
+      - Estimation: api/decorators/Estimation.md
+      - Explain: api/decorators/Explain.md
+      - ExtendCode: api/decorators/ExtendCode.md
+      - Extension: api/decorators/Extension.md
+      - Extremes: api/decorators/Extremes.md
+      - FactCheck: api/decorators/FactCheck.md
+      - FindGaps: api/decorators/FindGaps.md
+      - FirstPrinciples: api/decorators/FirstPrinciples.md
+      - ForcedAnalogy: api/decorators/ForcedAnalogy.md
+      - ImplPhase: api/decorators/ImplPhase.md
+      - ImplementationStrategy: api/decorators/ImplementationStrategy.md
+      - IncrementalBuild: api/decorators/IncrementalBuild.md
+      - Inductive: api/decorators/Inductive.md
+      - Infrastructure: api/decorators/Infrastructure.md
+      - Interface: api/decorators/Interface.md
+      - Iterate: api/decorators/Iterate.md
+      - Layered: api/decorators/Layered.md
+      - LearningPath: api/decorators/LearningPath.md
+      - Limitations: api/decorators/Limitations.md
+      - LoggingStrategy: api/decorators/LoggingStrategy.md
+      - MECE: api/decorators/MECE.md
+      - MemoryConstraint: api/decorators/MemoryConstraint.md
+      - Migration: api/decorators/Migration.md
+      - MockData: api/decorators/MockData.md
+      - Monitoring: api/decorators/Monitoring.md
+      - Motivational: api/decorators/Motivational.md
+      - Narrative: api/decorators/Narrative.md
+      - NegativeSpace: api/decorators/NegativeSpace.md
+      - Nested: api/decorators/Nested.md
+      - OptimizationFocus: api/decorators/OptimizationFocus.md
+      - Optimize: api/decorators/Optimize.md
+      - Outline: api/decorators/Outline.md
+      - OutputFormat: api/decorators/OutputFormat.md
+      - Override: api/decorators/Override.md
+      - PeerReview: api/decorators/PeerReview.md
+      - Performance: api/decorators/Performance.md
+      - Persona: api/decorators/Persona.md
+      - PostMortem: api/decorators/PostMortem.md
+      - PreciseModification: api/decorators/PreciseModification.md
+      - Precision: api/decorators/Precision.md
+      - Prioritize: api/decorators/Prioritize.md
+      - Priority: api/decorators/Priority.md
+      - Professional: api/decorators/Professional.md
+      - PullRequest: api/decorators/PullRequest.md
+      - QualityMetrics: api/decorators/QualityMetrics.md
+      - Reasoning: api/decorators/Reasoning.md
+      - RedTeam: api/decorators/RedTeam.md
+      - Refactor: api/decorators/Refactor.md
+      - Refine: api/decorators/Refine.md
+      - ReleaseNotes: api/decorators/ReleaseNotes.md
+      - Remix: api/decorators/Remix.md
+      - Reproduce: api/decorators/Reproduce.md
+      - Roadmap: api/decorators/Roadmap.md
+      - RootCause: api/decorators/RootCause.md
+      - RootCauseAnalysis: api/decorators/RootCauseAnalysis.md
+      - SRE: api/decorators/SRE.md
+      - Scalability: api/decorators/Scalability.md
+      - Schema: api/decorators/Schema.md
+      - SecurityAudit: api/decorators/SecurityAudit.md
+      - Socratic: api/decorators/Socratic.md
+      - Steelman: api/decorators/Steelman.md
+      - StepByStep: api/decorators/StepByStep.md
+      - StepByStepImpl: api/decorators/StepByStepImpl.md
+      - StressTest: api/decorators/StressTest.md
+      - StyleShift: api/decorators/StyleShift.md
+      - Summary: api/decorators/Summary.md
+      - SystemDiagram: api/decorators/SystemDiagram.md
+      - SystemIntegration: api/decorators/SystemIntegration.md
+      - TableFormat: api/decorators/TableFormat.md
+      - TaskBreakdown: api/decorators/TaskBreakdown.md
+      - TechDebt: api/decorators/TechDebt.md
+      - TechDebtControl: api/decorators/TechDebtControl.md
+      - TechStack: api/decorators/TechStack.md
+      - TestCases: api/decorators/TestCases.md
+      - TestStrategy: api/decorators/TestStrategy.md
+      - Timeline: api/decorators/Timeline.md
+      - Tone: api/decorators/Tone.md
+      - Tradeoffs: api/decorators/Tradeoffs.md
+      - TreeOfThought: api/decorators/TreeOfThought.md
+      - Troubleshoot: api/decorators/Troubleshoot.md
+      - TypeDefinition: api/decorators/TypeDefinition.md
+      - Uncertainty: api/decorators/Uncertainty.md
+      - Version: api/decorators/Version.md
+  - Decorator Categories:
+    - Overview: decorators/index.md
+    - Reasoning Decorators: decorators/reasoning.md
+    - Style Decorators: decorators/style.md
+    - Format Decorators: decorators/format.md

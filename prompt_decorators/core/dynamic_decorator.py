@@ -321,6 +321,18 @@ class DynamicDecorator:
         if callable(text_or_func):
             # Define a wrapper function that applies the decorator to the result of the original function
             def wrapper(*args: Any, **kwargs: Any) -> str:
+                """Apply the decorator to the result of the decorated function.
+
+                This wrapper function captures the result of the original function
+                and applies the decorator's transformation to it.
+
+                Args:
+                    *args: Positional arguments to pass to the original function.
+                    **kwargs: Keyword arguments to pass to the original function.
+
+                Returns:
+                    str: The transformed result after applying the decorator.
+                """
                 result = text_or_func(*args, **kwargs)
                 return self.apply(result)
 
@@ -501,25 +513,37 @@ class DynamicDecorator:
         return decorator_class
 
     @classmethod
-    def register_decorator(cls, definition: Any) -> None:
-        """Register a decorator definition.
+    def register_decorator(cls, decorator_def: Dict[str, Any]) -> None:
+        """Register a decorator directly from a dictionary definition.
+
+        This is particularly useful for testing, where you might want to
+        register decorators without loading them from files.
 
         Args:
-            cls: The class object
-            definition: Decorator definition
+            decorator_def: Dictionary containing the decorator definition
 
         Returns:
             None
         """
-        # Convert the definition to a dictionary if it's not already
-        if hasattr(definition, "to_dict"):
-            definition_dict = definition.to_dict()
-        else:
-            definition_dict = definition
+        if not cls._loaded:
+            cls._registry.clear()
+            cls._loaded = True
 
-        # Register the decorator
-        name = definition_dict["name"]
-        cls._registry[name] = definition_dict
+        name = decorator_def.get("decoratorName")
+        if not name:
+            raise ValueError("Decorator definition must include 'decoratorName'")
+
+        cls._registry[name] = {
+            "name": name,
+            "description": decorator_def.get("description", ""),
+            "category": decorator_def.get("category", "General"),
+            "parameters": decorator_def.get("parameters", []),
+            "transform_function": decorator_def.get(
+                "transform_function", decorator_def.get("transformFunction", "")
+            ),
+            "version": decorator_def.get("version", "1.0.0"),
+        }
+        logger.debug(f"Registered decorator: {name}")
 
     @classmethod
     def get_available_decorators(cls) -> List[Any]:

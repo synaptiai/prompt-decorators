@@ -1,0 +1,5 @@
+# QualityMetrics Decorator
+
+Documentation for the QualityMetrics decorator.
+
+This documentation is a placeholder and will be updated in the future.
