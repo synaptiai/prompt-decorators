@@ -256,7 +256,6 @@ def generate_doc_from_registry(
         Markdown documentation for the decorator
     """
     name = registry_data.get("decoratorName", "Unknown")
-    print(f"Generating doc from registry for: {name}")
     description = registry_data.get("description", "No description available.")
     category = "Unknown"  # Default category
     parameters = registry_data.get("parameters", [])
@@ -291,7 +290,6 @@ def generate_doc_from_registry(
 
     # Add parameters section if parameters exist
     if parameters:
-        print(f"Found {len(parameters)} parameters for {name}")
         doc += "## Parameters\n\n"
         doc += "| Parameter | Type | Description | Default |\n"
         doc += "|-----------|------|-------------|--------|\n"
@@ -371,6 +369,65 @@ def generate_doc_from_registry(
 
         doc += "\n"
 
+    # Add implementation guidance if available
+    if impl_guidance:
+        examples = impl_guidance.get("examples", [])
+        if examples and not "modelSpecificImplementations" in doc:
+            doc += "## Implementation Guidance\n\n"
+
+            for i, example in enumerate(examples):
+                context = example.get("context", f"Context {i+1}")
+                original = example.get("originalPrompt", "")
+                transformed = example.get("transformedPrompt", "")
+                notes = example.get("notes", "")
+
+                doc += f"### {context}\n\n"
+
+                if original:
+                    doc += "**Original Prompt:**\n```\n" + original + "\n```\n\n"
+
+                if transformed:
+                    doc += "**Transformed Prompt:**\n```\n" + transformed + "\n```\n\n"
+
+                if notes:
+                    doc += f"**Notes:** {notes}\n\n"
+
+    # Add transformation template information
+    transform_template = registry_data.get("transformationTemplate", {})
+    if transform_template:
+        doc += "## Transformation Details\n\n"
+
+        instruction = transform_template.get("instruction", "")
+        placement = transform_template.get("placement", "")
+        composition = transform_template.get("compositionBehavior", "")
+
+        if instruction:
+            doc += f"**Base Instruction:** {instruction}\n\n"
+
+        if placement:
+            doc += f"**Placement:** {placement}\n\n"
+
+        if composition:
+            doc += f"**Composition Behavior:** {composition}\n\n"
+
+        param_mapping = transform_template.get("parameterMapping", {})
+        if param_mapping:
+            doc += "**Parameter Effects:**\n\n"
+
+            for param_name, mapping in param_mapping.items():
+                doc += f"- `{param_name}`:\n"
+
+                value_map = mapping.get("valueMap", {})
+                if value_map:
+                    for value, effect in value_map.items():
+                        doc += f"  - When set to `{value}`: {effect}\n"
+
+                format_str = mapping.get("format", "")
+                if format_str:
+                    doc += f"  - Format: {format_str}\n"
+
+                doc += "\n"
+
     # Add compatibility section
     compatibility = registry_data.get("compatibility", {})
     if compatibility:
@@ -427,44 +484,6 @@ def generate_doc_from_registry(
                 doc += f"- **{decorator}**: {relation_text} {name} {notes}\n"
 
         doc += "\n"
-
-    # Add transformation template information if requested by users
-    transform_template = registry_data.get("transformationTemplate", {})
-    if transform_template and "advanced" in registry_data.get(
-        "documentation_options", []
-    ):
-        doc += "## Implementation Details\n\n"
-
-        instruction = transform_template.get("instruction", "")
-        placement = transform_template.get("placement", "")
-        composition = transform_template.get("compositionBehavior", "")
-
-        if instruction:
-            doc += f"**Base Instruction:** {instruction}\n\n"
-
-        if placement:
-            doc += f"**Placement:** {placement}\n\n"
-
-        if composition:
-            doc += f"**Composition Behavior:** {composition}\n\n"
-
-        param_mapping = transform_template.get("parameterMapping", {})
-        if param_mapping:
-            doc += "**Parameter Effects:**\n\n"
-
-            for param_name, mapping in param_mapping.items():
-                doc += f"- `{param_name}`:\n"
-
-                value_map = mapping.get("valueMap", {})
-                if value_map:
-                    for value, effect in value_map.items():
-                        doc += f"  - When set to `{value}`: {effect}\n"
-
-                format_str = mapping.get("format", "")
-                if format_str:
-                    doc += f"  - Format: {format_str}\n"
-
-                doc += "\n"
 
     return doc
 
@@ -543,27 +562,12 @@ def generate_decorator_docs() -> None:
     registry = get_registry()
     dynamic_registry = DynamicDecorator._registry
 
-    print(f"Registry from get_registry() has {len(registry)} decorators")
-    print(f"Dynamic registry has {len(dynamic_registry)} decorators")
-
-    # Check specifically for TechDebtControl
-    print(f"TechDebtControl in registry: {'TechDebtControl' in registry}")
-    print(
-        f"TechDebtControl in dynamic registry: {'TechDebtControl' in dynamic_registry}"
-    )
-
     # Use dynamic registry if standard registry is empty
     if not registry and dynamic_registry:
-        print("Using dynamic registry instead")
+        print("Using dynamic registry instead of standard registry")
         registry = dynamic_registry
 
-    print(f"Found {len(registry)} decorators in registry")
     decorators = list(registry.keys())
-
-    # Debug: Print first 5 decorators
-    print(
-        f"First 5 decorators: {decorators[:5] if len(decorators) >= 5 else decorators}"
-    )
 
     # Dictionary to organize decorators by category
     decorators_by_category = {}
@@ -572,13 +576,6 @@ def generate_decorator_docs() -> None:
     for name in registry:
         try:
             decorator_class = registry[name]
-
-            # Debug: Print info for TechDebtControl
-            if name == "TechDebtControl":
-                print(
-                    f"Generating documentation for TechDebtControl: {decorator_class}"
-                )
-                print(f"Type: {type(decorator_class)}")
 
             # Generate documentation
             doc_content = generate_decorator_doc(name, decorator_class)
@@ -596,8 +593,6 @@ def generate_decorator_docs() -> None:
             output_file = API_DECORATORS_DIR / f"{name}.md"
             with open(output_file, "w") as f:
                 f.write(doc_content)
-
-            print(f"Generated documentation for {name}")
         except Exception as e:
             print(f"Error generating documentation for {name}: {e}")
             # Create a placeholder documentation
@@ -625,10 +620,6 @@ def generate_decorator_docs() -> None:
                         if decorator_name.lower() in existing_decorators:
                             continue
 
-                        print(
-                            f"Found additional decorator in registry file: {decorator_name}"
-                        )
-
                         # Generate documentation from registry data
                         doc_content = generate_doc_from_registry(
                             content, str(file_path)
@@ -653,9 +644,6 @@ def generate_decorator_docs() -> None:
                         output_file = API_DECORATORS_DIR / f"{decorator_name}.md"
                         with open(output_file, "w") as doc_file:
                             doc_file.write(doc_content)
-                        print(
-                            f"Generated documentation for {decorator_name} from registry file"
-                        )
             except Exception as e:
                 print(f"Error processing file {file_path}: {e}")
 
@@ -687,6 +675,8 @@ This section provides API reference for all available decorators in the Prompt D
         with open(API_DECORATORS_DIR / "index.md", "w") as f:
             f.write(index_content)
 
+        print("Generated decorator index file")
+
     except Exception as e:
         print(f"Error searching for additional decorators: {e}")
         # Create a basic index file as fallback
@@ -705,9 +695,16 @@ This section provides API reference for all available decorators in the Prompt D
         with open(API_DECORATORS_DIR / "index.md", "w") as f:
             f.write(index_content)
 
+    print("Decorator documentation generation complete")
+
 
 def main() -> None:
-    """Main function to generate documentation."""
+    """Main function to generate documentation.
+
+    This function coordinates the generation of API documentation and decorator documentation.
+    It loads the decorator registry and then calls the appropriate functions to generate
+    documentation for all modules and decorators.
+    """
     parser = argparse.ArgumentParser(
         description="Generate documentation for prompt-decorators"
     )
@@ -728,32 +725,6 @@ def main() -> None:
 
     # Generate decorator documentation
     generate_decorator_docs()
-
-    # Directly generate documentation for TechDebtControl
-    print("Directly generating documentation for TechDebtControl...")
-    tech_debt_path = os.path.join(
-        REGISTRY_DIR, "extensions", "implementation-focused", "techdebtcontrol.json"
-    )
-    if os.path.exists(tech_debt_path):
-        print(f"Found TechDebtControl registry file: {tech_debt_path}")
-        with open(tech_debt_path, "r") as f:
-            try:
-                registry_data = json.load(f)
-                print(f"Successfully loaded TechDebtControl registry data")
-                doc_content = generate_doc_from_registry(registry_data, tech_debt_path)
-                # Define the output directory for API decorators
-                api_decorators_dir = os.path.join("api", "decorators")
-                output_file = os.path.join(api_decorators_dir, "TechDebtControl.md")
-                os.makedirs(os.path.dirname(output_file), exist_ok=True)
-                with open(output_file, "w") as doc_file:
-                    doc_file.write(doc_content)
-                print(
-                    f"Generated documentation for TechDebtControl directly from registry file"
-                )
-            except json.JSONDecodeError as e:
-                print(f"Error parsing JSON in TechDebtControl registry file: {str(e)}")
-    else:
-        print(f"TechDebtControl registry file not found at {tech_debt_path}")
 
     print("Documentation generation complete!")
 
