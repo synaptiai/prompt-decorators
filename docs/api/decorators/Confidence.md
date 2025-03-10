@@ -8,9 +8,9 @@ Enhances the response with explicit indications of confidence levels for differe
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `scale` | enum | The method used to express confidence levels | qualitative |
-| `threshold` | number | Minimum confidence level for including information (as a percentage) | 50 |
-| `detailed` | boolean | Whether to provide explanations for confidence assessments | False |
+| `scale` | `enum` | The method used to express confidence levels | `qualitative` |
+| `threshold` | `number` | Minimum confidence level for including information (as a percentage) | `50` |
+| `detailed` | `boolean` | Whether to provide explanations for confidence assessments | `False` |
 
 ## Scale Options
 

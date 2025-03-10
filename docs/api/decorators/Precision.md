@@ -8,9 +8,9 @@ Enhances responses with exact, specific, and precisely defined information. This
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `level` | enum | The degree of precision to apply | high |
-| `units` | boolean | Whether to consistently provide units for all measurements | True |
-| `definitions` | boolean | Whether to include precise definitions for key terms | False |
+| `level` | `enum` | The degree of precision to apply | `high` |
+| `units` | `boolean` | Whether to consistently provide units for all measurements | `True` |
+| `definitions` | `boolean` | Whether to include precise definitions for key terms | `False` |
 
 ## Level Options
 

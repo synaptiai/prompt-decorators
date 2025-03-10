@@ -8,9 +8,9 @@ Structures the response using inductive reasoning, moving from specific observat
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `examples` | number | Number of specific examples or observations to include before generalizing | 3 |
-| `confidence` | boolean | Whether to explicitly state the confidence level of the inductive conclusions | False |
-| `structure` | enum | The pattern of inductive reasoning to follow | generalization |
+| `examples` | `number` | Number of specific examples or observations to include before generalizing | `3` |
+| `confidence` | `boolean` | Whether to explicitly state the confidence level of the inductive conclusions | `False` |
+| `structure` | `enum` | The pattern of inductive reasoning to follow | `generalization` |
 
 ## Structure Options
 

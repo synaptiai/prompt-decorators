@@ -8,9 +8,9 @@ A meta-decorator that builds upon previous context or responses rather than star
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `reference` | enum | What to build upon from the previous context | last |
-| `approach` | enum | How to build upon the referenced content | extend |
-| `preserveStructure` | boolean | Whether to maintain the structure of the referenced content | True |
+| `reference` | `enum` | What to build upon from the previous context | `last` |
+| `approach` | `enum` | How to build upon the referenced content | `extend` |
+| `preserveStructure` | `boolean` | Whether to maintain the structure of the referenced content | `True` |
 
 ## Reference Options
 

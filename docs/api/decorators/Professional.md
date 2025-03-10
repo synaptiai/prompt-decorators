@@ -8,8 +8,8 @@ Adapts the response to use business-oriented language appropriate for profession
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `industry` | string | The specific industry context to adapt the language for | general |
-| `formality` | enum | The level of formality to maintain in the response | standard |
+| `industry` | `string` | The specific industry context to adapt the language for | `general` |
+| `formality` | `enum` | The level of formality to maintain in the response | `standard` |
 
 ## Formality Options
 

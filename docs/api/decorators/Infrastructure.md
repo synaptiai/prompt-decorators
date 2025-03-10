@@ -8,9 +8,9 @@ Generates infrastructure as code templates for environment provisioning.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `tool` | enum | Infrastructure as code tool | terraform |
-| `environment` | enum | Target environment | multi-environment |
-| `approach` | enum | Infrastructure philosophy | immutable |
+| `tool` | `enum` | Infrastructure as code tool | `terraform` |
+| `environment` | `enum` | Target environment | `multi-environment` |
+| `approach` | `enum` | Infrastructure philosophy | `immutable` |
 
 ## Tool Options
 

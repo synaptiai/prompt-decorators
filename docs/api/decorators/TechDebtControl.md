@@ -8,9 +8,9 @@ Guides how technical debt should be handled during implementation.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `accept` | enum | Level of acceptable technical debt | minimal |
-| `document` | enum | How tech debt should be documented | todos |
-| `tradeoff` | enum | What can be traded for quality | elegance |
+| `accept` | `enum` | Level of acceptable technical debt | `minimal` |
+| `document` | `enum` | How tech debt should be documented | `todos` |
+| `tradeoff` | `enum` | What can be traded for quality | `elegance` |
 
 ## Accept Options
 

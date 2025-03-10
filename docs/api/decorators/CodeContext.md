@@ -8,9 +8,9 @@ Provides information about the existing codebase context to ensure proper integr
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `project` | string | Project type or framework | inferred |
-| `patterns` | string | Established code patterns to follow | inferred |
-| `conventions` | enum | Naming and style conventions | language-standard |
+| `project` | `string` | Project type or framework | `inferred` |
+| `patterns` | `string` | Established code patterns to follow | `inferred` |
+| `conventions` | `enum` | Naming and style conventions | `language-standard` |
 
 ## Conventions Options
 

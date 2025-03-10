@@ -8,9 +8,9 @@ Focuses on analyzing dependencies and their impacts on a system or component.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `type` | enum | Dependency type | all |
-| `direction` | enum | Dependency direction | both |
-| `detail` | enum | Analysis detail | detailed |
+| `type` | `enum` | Dependency type | `all` |
+| `direction` | `enum` | Dependency direction | `both` |
+| `detail` | `enum` | Analysis detail | `detailed` |
 
 ## Type Options
 

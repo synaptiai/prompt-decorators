@@ -8,9 +8,9 @@ Implements specific algorithms with the desired complexity characteristics.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `type` | enum | Algorithm category | context-dependent |
-| `complexity` | enum | Desired time complexity | best-available |
-| `approach` | enum | Algorithm design approach | most-appropriate |
+| `type` | `enum` | Algorithm category | `context-dependent` |
+| `complexity` | `enum` | Desired time complexity | `best-available` |
+| `approach` | `enum` | Algorithm design approach | `most-appropriate` |
 
 ## Type Options
 

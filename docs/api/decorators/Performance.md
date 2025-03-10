@@ -8,9 +8,9 @@ Optimizes system performance focusing on specific bottlenecks.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `bottleneck` | enum | Performance limitation area | context-dependent |
-| `approach` | enum | Performance analysis methodology | comprehensive |
-| `constraints` | enum | Optimization constraints | none |
+| `bottleneck` | `enum` | Performance limitation area | `context-dependent` |
+| `approach` | `enum` | Performance analysis methodology | `comprehensive` |
+| `constraints` | `enum` | Optimization constraints | `none` |
 
 ## Bottleneck Options
 

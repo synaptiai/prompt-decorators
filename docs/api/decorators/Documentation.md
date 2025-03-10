@@ -8,9 +8,9 @@ Creates comprehensive documentation for various audiences.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `for` | enum | Documentation target | code |
-| `format` | enum | Documentation format | markdown |
-| `detail` | enum | Documentation comprehensiveness | standard |
+| `for` | `enum` | Documentation target | `code` |
+| `format` | `enum` | Documentation format | `markdown` |
+| `detail` | `enum` | Documentation comprehensiveness | `standard` |
 
 ## For Options
 

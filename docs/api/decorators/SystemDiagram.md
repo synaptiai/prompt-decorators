@@ -8,9 +8,9 @@ Creates architectural diagrams and visual representations.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `notation` | enum | Diagram notation system | c4 |
-| `level` | enum | Detail level of the diagram | container |
-| `focus` | enum | Diagram emphasis | structure |
+| `notation` | `enum` | Diagram notation system | `c4` |
+| `level` | `enum` | Detail level of the diagram | `container` |
+| `focus` | `enum` | Diagram emphasis | `structure` |
 
 ## Notation Options
 

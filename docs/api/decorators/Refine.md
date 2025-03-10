@@ -8,9 +8,9 @@ A meta-decorator that iteratively improves the output based on specified criteri
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `iterations` | number | Number of refinement cycles to perform | 2 |
-| `focus` | array | Specific aspects to focus on during refinement (e.g., clarity, conciseness, evidence) |  |
-| `showProcess` | boolean | Whether to show the intermediate steps in the refinement process | False |
+| `iterations` | `number` | Number of refinement cycles to perform | `2` |
+| `focus` | `array` | Specific aspects to focus on during refinement (e.g., clarity, conciseness, evidence) | `` |
+| `showProcess` | `boolean` | Whether to show the intermediate steps in the refinement process | `False` |
 
 ## Examples
 

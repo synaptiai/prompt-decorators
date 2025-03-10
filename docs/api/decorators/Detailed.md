@@ -8,9 +8,9 @@ Enhances the response with comprehensive information, thorough explanations, and
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `depth` | enum | The level of detail and comprehensiveness | comprehensive |
-| `aspects` | array | Specific aspects or dimensions to explore in detail |  |
-| `examples` | boolean | Whether to include detailed examples to illustrate points | True |
+| `depth` | `enum` | The level of detail and comprehensiveness | `comprehensive` |
+| `aspects` | `array` | Specific aspects or dimensions to explore in detail | `` |
+| `examples` | `boolean` | Whether to include detailed examples to illustrate points | `True` |
 
 ## Depth Options
 

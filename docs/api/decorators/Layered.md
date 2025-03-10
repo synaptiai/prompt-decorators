@@ -8,9 +8,9 @@ Presents content at multiple levels of explanation depth, allowing readers to en
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `levels` | enum | The granularity of explanation levels to include | summary-detail-technical |
-| `count` | number | Number of distinct explanation layers to provide | 3 |
-| `progression` | enum | How to structure the progression between layers | separate |
+| `levels` | `enum` | The granularity of explanation levels to include | `summary-detail-technical` |
+| `count` | `number` | Number of distinct explanation layers to provide | `3` |
+| `progression` | `enum` | How to structure the progression between layers | `separate` |
 
 ## Levels Options
 

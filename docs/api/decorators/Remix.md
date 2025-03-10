@@ -8,9 +8,9 @@ Reframes or adapts content for a different context, purpose, or audience than or
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `target` | string | The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch') | Required |
-| `preserve` | enum | What aspects of the original content to prioritize preserving | facts |
-| `contrast` | boolean | Whether to highlight differences between the original framing and the remixed version | False |
+| `target` | `string` | The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch') | `Required` |
+| `preserve` | `enum` | What aspects of the original content to prioritize preserving | `facts` |
+| `contrast` | `boolean` | Whether to highlight differences between the original framing and the remixed version | `False` |
 
 ## Preserve Options
 

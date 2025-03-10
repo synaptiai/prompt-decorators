@@ -8,9 +8,9 @@ Generates structured, informative commit messages.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | Commit message format | conventional |
-| `scope` | enum | Change scope information | include |
-| `issue` | enum | Include issue references | reference |
+| `style` | `enum` | Commit message format | `conventional` |
+| `scope` | `enum` | Change scope information | `include` |
+| `issue` | `enum` | Include issue references | `reference` |
 
 ## Style Options
 

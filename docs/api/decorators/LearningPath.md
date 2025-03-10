@@ -8,9 +8,9 @@ Creates step-by-step learning roadmaps.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `for` | string | Learning subject | context-dependent |
-| `experience` | enum | Learner starting point | beginner |
-| `timeframe` | enum | Available learning time | self-paced |
+| `for` | `string` | Learning subject | `context-dependent` |
+| `experience` | `enum` | Learner starting point | `beginner` |
+| `timeframe` | `enum` | Available learning time | `self-paced` |
 
 ## Experience Options
 

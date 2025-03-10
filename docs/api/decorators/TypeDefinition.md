@@ -8,9 +8,9 @@ Generates type definitions for improved code safety and documentation.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `system` | enum | Type system or annotation format | language-appropriate |
-| `strictness` | enum | Level of type enforcement | moderate |
-| `style` | enum | Type definition pattern | language-convention |
+| `system` | `enum` | Type system or annotation format | `language-appropriate` |
+| `strictness` | `enum` | Level of type enforcement | `moderate` |
+| `style` | `enum` | Type definition pattern | `language-convention` |
 
 ## System Options
 

@@ -8,7 +8,7 @@ Specifies the format of the AI's response. This decorator ensures the output fol
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `format` | enum | The format to use for the response | markdown |
+| `format` | `enum` | The format to use for the response | `markdown` |
 
 ## Format Options
 

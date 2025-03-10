@@ -8,9 +8,9 @@ Performs security-focused analysis following industry standards.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `standard` | enum | Security standard to follow | owasp-top10 |
-| `risk-level` | enum | Sensitivity for flagging issues | medium |
-| `scope` | enum | Areas to evaluate | all |
+| `standard` | `enum` | Security standard to follow | `owasp-top10` |
+| `risk-level` | `enum` | Sensitivity for flagging issues | `medium` |
+| `scope` | `enum` | Areas to evaluate | `all` |
 
 ## Standard Options
 

@@ -8,9 +8,9 @@ Summarizes best practices for specific technologies or processes.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `for` | string | Practice domain | context-dependent |
-| `context` | enum | Implementation environment | enterprise |
-| `format` | enum | Output structure | detailed |
+| `for` | `string` | Practice domain | `context-dependent` |
+| `context` | `enum` | Implementation environment | `enterprise` |
+| `format` | `enum` | Output structure | `detailed` |
 
 ## Context Options
 

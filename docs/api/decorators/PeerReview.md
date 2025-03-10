@@ -8,9 +8,9 @@ Augments the response with a simulated peer review of the content. This decorato
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `criteria` | enum | Primary criteria to focus on in the review | all |
-| `style` | enum | The tone and approach of the peer review | balanced |
-| `position` | enum | Where to place the peer review relative to the main content | after |
+| `criteria` | `enum` | Primary criteria to focus on in the review | `all` |
+| `style` | `enum` | The tone and approach of the peer review | `balanced` |
+| `position` | `enum` | Where to place the peer review relative to the main content | `after` |
 
 ## Criteria Options
 

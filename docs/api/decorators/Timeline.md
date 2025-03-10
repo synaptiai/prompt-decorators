@@ -8,9 +8,9 @@ Organizes information in chronological order, highlighting key events or develop
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `granularity` | enum | The level of time detail to include in the timeline | year |
-| `format` | enum | The presentation format for the timeline | list |
-| `details` | enum | The level of detail to include for each timeline event | moderate |
+| `granularity` | `enum` | The level of time detail to include in the timeline | `year` |
+| `format` | `enum` | The presentation format for the timeline | `list` |
+| `details` | `enum` | The level of detail to include for each timeline event | `moderate` |
 
 ## Granularity Options
 

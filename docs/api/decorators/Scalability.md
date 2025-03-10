@@ -8,9 +8,9 @@ Designs for various dimensions of system scaling.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `dimension` | enum | Scaling aspect to focus on | users |
-| `target` | enum | Scale magnitude | 100x |
-| `approach` | enum | Scaling strategy | horizontal |
+| `dimension` | `enum` | Scaling aspect to focus on | `users` |
+| `target` | `enum` | Scale magnitude | `100x` |
+| `approach` | `enum` | Scaling strategy | `horizontal` |
 
 ## Dimension Options
 

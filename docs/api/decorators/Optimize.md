@@ -8,9 +8,9 @@ Optimizes code for specific metrics while respecting constraints.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `for` | enum | The primary optimization target | speed |
-| `constraints` | enum | Limitations that must be respected | none |
-| `priority` | enum | Trade-off preference when optimizations conflict | balanced |
+| `for` | `enum` | The primary optimization target | `speed` |
+| `constraints` | `enum` | Limitations that must be respected | `none` |
+| `priority` | `enum` | Trade-off preference when optimizations conflict | `balanced` |
 
 ## For Options
 

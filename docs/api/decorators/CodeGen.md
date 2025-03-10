@@ -8,10 +8,10 @@ Generates code snippets or complete solutions with configurable style and docume
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `language` | enum | Programming language to generate code in | inferred |
-| `style` | enum | Programming paradigm or coding style to use | oop |
-| `comments` | enum | Level of code documentation to include | moderate |
-| `error_handling` | enum | Level of error handling to include | basic |
+| `language` | `enum` | Programming language to generate code in | `inferred` |
+| `style` | `enum` | Programming paradigm or coding style to use | `oop` |
+| `comments` | `enum` | Level of code documentation to include | `moderate` |
+| `error_handling` | `enum` | Level of error handling to include | `basic` |
 
 ## Language Options
 

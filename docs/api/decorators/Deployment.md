@@ -8,9 +8,9 @@ Generates deployment approaches for applications and services.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `platform` | enum | Deployment target | kubernetes |
-| `strategy` | enum | Deployment methodology | rolling |
-| `environment` | enum | Target environment | production |
+| `platform` | `enum` | Deployment target | `kubernetes` |
+| `strategy` | `enum` | Deployment methodology | `rolling` |
+| `environment` | `enum` | Target environment | `production` |
 
 ## Platform Options
 

@@ -8,8 +8,8 @@ Adapts the response to follow scholarly writing conventions appropriate for acad
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | The academic discipline style to follow | scientific |
-| `format` | enum | The citation format to use for references | APA |
+| `style` | `enum` | The academic discipline style to follow | `scientific` |
+| `format` | `enum` | The citation format to use for references | `APA` |
 
 ## Style Options
 

@@ -8,9 +8,9 @@ Enhances explanations through the use of analogies and metaphors. This decorator
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `domain` | string | Specific domain or context to draw analogies from (if not specified, will choose appropriate domains) | general |
-| `count` | number | Number of distinct analogies to provide | 1 |
-| `depth` | enum | Level of detail in developing the analogy | moderate |
+| `domain` | `string` | Specific domain or context to draw analogies from (if not specified, will choose appropriate domains) | `general` |
+| `count` | `number` | Number of distinct analogies to provide | `1` |
+| `depth` | `enum` | Level of detail in developing the analogy | `moderate` |
 
 ## Depth Options
 

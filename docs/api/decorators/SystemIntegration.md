@@ -8,9 +8,9 @@ Provides guidance for integrating with existing systems and services.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `systems` | string | External systems to integrate with | none |
-| `approach` | enum | Integration approach | adapter |
-| `coupling` | enum | Desired coupling level | loose |
+| `systems` | `string` | External systems to integrate with | `none` |
+| `approach` | `enum` | Integration approach | `adapter` |
+| `coupling` | `enum` | Desired coupling level | `loose` |
 
 ## Approach Options
 

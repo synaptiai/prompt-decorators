@@ -8,9 +8,9 @@ Structures the response by ranking information according to importance, urgency,
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `criteria` | string | The specific criterion to use for prioritization (e.g., importance, urgency, ROI) | importance |
-| `count` | number | Number of prioritized items to include | 5 |
-| `showRationale` | boolean | Whether to explain the reasoning behind each priority ranking | False |
+| `criteria` | `string` | The specific criterion to use for prioritization (e.g., importance, urgency, ROI) | `importance` |
+| `count` | `number` | Number of prioritized items to include | `5` |
+| `showRationale` | `boolean` | Whether to explain the reasoning behind each priority ranking | `False` |
 
 ## Examples
 

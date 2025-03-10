@@ -8,9 +8,9 @@ Structures the response as a story-based delivery with narrative elements. This 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `structure` | enum | The narrative structure to employ | classic |
-| `characters` | boolean | Whether to include character elements in the narrative | True |
-| `length` | enum | The relative length of the narrative | moderate |
+| `structure` | `enum` | The narrative structure to employ | `classic` |
+| `characters` | `boolean` | Whether to include character elements in the narrative | `True` |
+| `length` | `enum` | The relative length of the narrative | `moderate` |
 
 ## Structure Options
 

@@ -8,9 +8,9 @@ Focuses on analyzing what is not explicitly stated, implied, or missing from a t
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | The specific aspect of negative space to emphasize | comprehensive |
-| `depth` | enum | How deeply to explore the negative space | moderate |
-| `structure` | enum | How to present the negative space analysis | integrated |
+| `focus` | `enum` | The specific aspect of negative space to emphasize | `comprehensive` |
+| `depth` | `enum` | How deeply to explore the negative space | `moderate` |
+| `structure` | `enum` | How to present the negative space analysis | `integrated` |
 
 ## Focus Options
 

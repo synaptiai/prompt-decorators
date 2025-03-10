@@ -8,9 +8,9 @@ Identifies common mistakes and how to avoid them.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `domain` | enum | Problem area | context-dependent |
-| `severity` | enum | Issue importance filter | major |
-| `format` | enum | Presentation style | examples |
+| `domain` | `enum` | Problem area | `context-dependent` |
+| `severity` | `enum` | Issue importance filter | `major` |
+| `format` | `enum` | Presentation style | `examples` |
 
 ## Domain Options
 

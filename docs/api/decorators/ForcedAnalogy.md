@@ -8,9 +8,9 @@ Explains concepts by specifically comparing them to a particular domain or field
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `source` | string | The specific domain, field, or context to draw analogies from | Required |
-| `comprehensiveness` | enum | How comprehensively to map concepts between domains | comprehensive |
-| `mappings` | number | Number of distinct concept mappings to create between domains | 3 |
+| `source` | `string` | The specific domain, field, or context to draw analogies from | `Required` |
+| `comprehensiveness` | `enum` | How comprehensively to map concepts between domains | `comprehensive` |
+| `mappings` | `number` | Number of distinct concept mappings to create between domains | `3` |
 
 ## Comprehensiveness Options
 

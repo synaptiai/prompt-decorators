@@ -13,7 +13,7 @@ The Prompt Decorators framework is designed around a modular architecture that e
 
 ## Architectural Diagram
 
-```mermaid
+``` mermaid
 graph TD
     A[User Prompt with Decorators] --> B[Parser]
     B --> C[Decorator Registry]
@@ -61,7 +61,7 @@ The framework includes several validation tools to ensure decorator definition q
 
 The validation system is designed to catch issues early:
 
-```mermaid
+``` mermaid
 graph TD
     A[Decorator Definition] --> B[Schema Validator]
     B -- Valid Schema --> C[Parameter Validator]

@@ -8,9 +8,9 @@ Identifies potential cognitive blind spots, unstated assumptions, and overlooked
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `categories` | array | Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias) |  |
-| `depth` | enum | How thoroughly to analyze for blind spots | thorough |
-| `position` | enum | Where to place the blind spots analysis | after |
+| `categories` | `array` | Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias) | `` |
+| `depth` | `enum` | How thoroughly to analyze for blind spots | `thorough` |
+| `position` | `enum` | Where to place the blind spots analysis | `after` |
 
 ## Depth Options
 

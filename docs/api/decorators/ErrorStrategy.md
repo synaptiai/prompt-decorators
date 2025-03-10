@@ -8,9 +8,9 @@ Guides how errors and exceptions should be handled in the implementation.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `approach` | enum | Error handling philosophy | language-standard |
-| `detail` | enum | Error detail level | standard |
-| `recovery` | enum | Error recovery approach | none |
+| `approach` | `enum` | Error handling philosophy | `language-standard` |
+| `detail` | `enum` | Error detail level | `standard` |
+| `recovery` | `enum` | Error recovery approach | `none` |
 
 ## Approach Options
 

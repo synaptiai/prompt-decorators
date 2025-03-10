@@ -8,9 +8,9 @@ Guides targeted optimization efforts with specific constraints and goals.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `target` | enum | Optimization target | performance |
-| `constraints` | enum | Optimization constraints | no-functional-changes |
-| `approach` | enum | Optimization approach | profiling |
+| `target` | `enum` | Optimization target | `performance` |
+| `constraints` | `enum` | Optimization constraints | `no-functional-changes` |
+| `approach` | `enum` | Optimization approach | `profiling` |
 
 ## Target Options
 

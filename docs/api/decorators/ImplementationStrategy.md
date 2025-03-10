@@ -8,9 +8,9 @@ Guides the overall approach to implementing a feature or component.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `approach` | enum | Implementation methodology | standard |
-| `direction` | enum | Implementation direction | top-down |
-| `priority` | enum | Implementation priority | correctness |
+| `approach` | `enum` | Implementation methodology | `standard` |
+| `direction` | `enum` | Implementation direction | `top-down` |
+| `priority` | `enum` | Implementation priority | `correctness` |
 
 ## Approach Options
 

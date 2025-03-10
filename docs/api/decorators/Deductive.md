@@ -8,9 +8,9 @@ Structures the response using deductive reasoning, moving from general principle
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `premises` | number | Number of main premises to include before deducing conclusions | 2 |
-| `formal` | boolean | Whether to use formal logical structures with explicit syllogisms | False |
-| `steps` | number | Number of logical steps to include in the deductive process | 3 |
+| `premises` | `number` | Number of main premises to include before deducing conclusions | `2` |
+| `formal` | `boolean` | Whether to use formal logical structures with explicit syllogisms | `False` |
+| `steps` | `number` | Number of logical steps to include in the deductive process | `3` |
 
 ## Examples
 

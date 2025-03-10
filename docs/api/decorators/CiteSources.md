@@ -8,9 +8,9 @@ Structures the response to include citations for claims and information. This de
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | The placement and format of citations within the response | inline |
-| `format` | enum | The citation format to use | APA |
-| `comprehensive` | boolean | Whether to cite every claim (true) or only major claims (false) | False |
+| `style` | `enum` | The placement and format of citations within the response | `inline` |
+| `format` | `enum` | The citation format to use | `APA` |
+| `comprehensive` | `boolean` | Whether to cite every claim (true) or only major claims (false) | `False` |
 
 ## Style Options
 

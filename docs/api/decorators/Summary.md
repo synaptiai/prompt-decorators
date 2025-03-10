@@ -8,9 +8,9 @@ Provides a condensed summary of information that would otherwise be presented in
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `length` | enum | Relative length of the summary | medium |
-| `wordCount` | number | Approximate target word count for the summary |  |
-| `position` | enum | Where to position the summary in relation to any full content | standalone |
+| `length` | `enum` | Relative length of the summary | `medium` |
+| `wordCount` | `number` | Approximate target word count for the summary | `` |
+| `position` | `enum` | Where to position the summary in relation to any full content | `standalone` |
 
 ## Length Options
 

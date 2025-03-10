@@ -8,9 +8,9 @@ Enhances responses with encouraging, inspiring, and empowering language. This de
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `intensity` | enum | The level of motivational energy and enthusiasm | moderate |
-| `focus` | enum | The primary motivational approach to emphasize | balanced |
-| `actionable` | boolean | Whether to include specific actionable steps or only inspirational content | True |
+| `intensity` | `enum` | The level of motivational energy and enthusiasm | `moderate` |
+| `focus` | `enum` | The primary motivational approach to emphasize | `balanced` |
+| `actionable` | `boolean` | Whether to include specific actionable steps or only inspirational content | `True` |
 
 ## Intensity Options
 

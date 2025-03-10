@@ -8,9 +8,9 @@ Creates detailed steps to reproduce a reported issue.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `environment` | enum | Target environment for reproduction | local |
-| `detail` | enum | Level of detail in steps | comprehensive |
-| `format` | enum | Output format | steps |
+| `environment` | `enum` | Target environment for reproduction | `local` |
+| `detail` | `enum` | Level of detail in steps | `comprehensive` |
+| `format` | `enum` | Output format | `steps` |
 
 ## Environment Options
 

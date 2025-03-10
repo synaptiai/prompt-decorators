@@ -8,9 +8,9 @@ Creates structured release notes for product updates.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `audience` | enum | Target reader | users |
-| `detail` | enum | Information depth | detailed |
-| `format` | enum | Release note structure | categorized |
+| `audience` | `enum` | Target reader | `users` |
+| `detail` | `enum` | Information depth | `detailed` |
+| `format` | `enum` | Release note structure | `categorized` |
 
 ## Audience Options
 

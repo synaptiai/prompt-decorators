@@ -8,9 +8,9 @@ Generates interface definitions for APIs, libraries, or components.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | Interface paradigm or API style | context-dependent |
-| `verbosity` | enum | Level of documentation detail | documented |
-| `format` | enum | Output format of the interface | context-dependent |
+| `style` | `enum` | Interface paradigm or API style | `context-dependent` |
+| `verbosity` | `enum` | Level of documentation detail | `documented` |
+| `format` | `enum` | Output format of the interface | `context-dependent` |
 
 ## Style Options
 

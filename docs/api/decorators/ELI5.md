@@ -8,7 +8,7 @@ Adapts the response to explain a concept as if to a 5-year-old child. This decor
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `strictness` | boolean | Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary | False |
+| `strictness` | `boolean` | Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary | `False` |
 
 ## Examples
 

@@ -8,9 +8,9 @@ A meta-decorator that specifies model-specific adaptations or fall-back behavior
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `models` | array | List of specific models to adapt for (e.g., gpt-4-turbo, gpt-4o, etc.) | Required |
-| `fallback` | string | Decorator to apply if the current model doesn't match any in the models list |  |
-| `behaviors` | string | JSON string mapping model names to specific adaptations (e.g., '{"gpt-4-turbo": "simplify complex reasoning", "gpt-4o": "maximize detailed analysis"}') |  |
+| `models` | `array` | List of specific models to adapt for (e.g., gpt-4-turbo, gpt-4o, etc.) | `Required` |
+| `fallback` | `string` | Decorator to apply if the current model doesn't match any in the models list | `` |
+| `behaviors` | `string` | JSON string mapping model names to specific adaptations (e.g., '{"gpt-4-turbo": "simplify complex reasoning", "gpt-4o": "maximize detailed analysis"}') | `` |
 
 ## Examples
 

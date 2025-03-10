@@ -8,9 +8,9 @@ A meta-decorator that establishes a precedence hierarchy among multiple decorato
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `decorators` | array | Ordered list of decorators by priority (highest priority first) | Required |
-| `explicit` | boolean | Whether to explicitly mention overridden behaviors in the response | False |
-| `mode` | enum | How to handle conflicts between decorators | override |
+| `decorators` | `array` | Ordered list of decorators by priority (highest priority first) | `Required` |
+| `explicit` | `boolean` | Whether to explicitly mention overridden behaviors in the response | `False` |
+| `mode` | `enum` | How to handle conflicts between decorators | `override` |
 
 ## Mode Options
 

@@ -8,9 +8,9 @@ Designs backup and recovery strategies.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `criticality` | enum | Data importance level | high |
-| `rpo` | enum | Recovery Point Objective | hours |
-| `rto` | enum | Recovery Time Objective | hours |
+| `criticality` | `enum` | Data importance level | `high` |
+| `rpo` | `enum` | Recovery Point Objective | `hours` |
+| `rto` | `enum` | Recovery Time Objective | `hours` |
 
 ## Criticality Options
 

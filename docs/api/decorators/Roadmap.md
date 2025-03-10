@@ -8,9 +8,9 @@ Plans development timelines and feature sequencing.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `timeframe` | enum | Planning horizon | quarter |
-| `focus` | enum | Roadmap emphasis | balanced |
-| `detail` | enum | Depth of planning | milestones |
+| `timeframe` | `enum` | Planning horizon | `quarter` |
+| `focus` | `enum` | Roadmap emphasis | `balanced` |
+| `detail` | `enum` | Depth of planning | `milestones` |
 
 ## Timeframe Options
 

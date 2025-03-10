@@ -8,9 +8,9 @@ Requests an audit of existing code to identify issues before making changes.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `scope` | enum | Audit scope | component |
-| `focus` | enum | Audit focus areas | all |
-| `output` | enum | Audit output format | detailed |
+| `scope` | `enum` | Audit scope | `component` |
+| `focus` | `enum` | Audit focus areas | `all` |
+| `output` | `enum` | Audit output format | `detailed` |
 
 ## Scope Options
 

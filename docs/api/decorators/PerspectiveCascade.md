@@ -8,11 +8,11 @@ Systematically explores a topic through a sequence of diverse, interconnected vi
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `perspectives` | number | Number of distinct perspectives to explore in the cascade | 4 |
-| `domain` | enum | Domain-specific perspective set to use | custom |
-| `integrationLevel` | enum | How tightly to integrate perspectives in the cascade | moderate |
-| `interactionStyle` | enum | How to manage the interaction through perspectives | guided |
-| `customPerspectives` | string | Custom list of perspectives to explore (comma-separated) |  |
+| `perspectives` | `number` | Number of distinct perspectives to explore in the cascade | `4` |
+| `domain` | `enum` | Domain-specific perspective set to use | `custom` |
+| `integrationLevel` | `enum` | How tightly to integrate perspectives in the cascade | `moderate` |
+| `interactionStyle` | `enum` | How to manage the interaction through perspectives | `guided` |
+| `customPerspectives` | `string` | Custom list of perspectives to explore (comma-separated) | `` |
 
 ## Domain Options
 

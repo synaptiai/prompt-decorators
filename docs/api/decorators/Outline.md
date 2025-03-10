@@ -8,9 +8,9 @@ Structures the response as a hierarchical outline with headings and subheadings.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `depth` | number | Maximum nesting level of the outline | 3 |
-| `style` | enum | Numbering or bullet style for the outline | numeric |
-| `detailed` | boolean | Whether to include brief explanations under each outline point | False |
+| `depth` | `number` | Maximum nesting level of the outline | `3` |
+| `style` | `enum` | Numbering or bullet style for the outline | `numeric` |
+| `detailed` | `boolean` | Whether to include brief explanations under each outline point | `False` |
 
 ## Style Options
 

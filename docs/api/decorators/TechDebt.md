@@ -8,9 +8,9 @@ Analyzes technical debt and provides remediation strategies.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `categorization` | enum | Classification approach | severity |
-| `output` | enum | Analysis result | comprehensive |
-| `scope` | enum | Analysis breadth | all |
+| `categorization` | `enum` | Classification approach | `severity` |
+| `output` | `enum` | Analysis result | `comprehensive` |
+| `scope` | `enum` | Analysis breadth | `all` |
 
 ## Categorization Options
 

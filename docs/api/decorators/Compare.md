@@ -8,9 +8,9 @@ Compares different technologies, approaches, or tools.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `aspects` | string | Comparison dimensions | performance,features,ecosystem,learning-curve |
-| `format` | enum | Comparison format | table |
-| `bias` | enum | Fairness control | neutral |
+| `aspects` | `string` | Comparison dimensions | `performance,features,ecosystem,learning-curve` |
+| `format` | `enum` | Comparison format | `table` |
+| `bias` | `enum` | Fairness control | `neutral` |
 
 ## Format Options
 

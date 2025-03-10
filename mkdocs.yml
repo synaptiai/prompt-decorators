@@ -117,7 +117,6 @@ nav:
     - Overview: api/index.md
     - Modules: api/modules/index.md
     - Core Modules:
-      - prompt_decorators: api/modules/prompt_decorators.md
       - prompt_decorators.config: api/modules/prompt_decorators.config.md
       - prompt_decorators.core: api/modules/prompt_decorators.core.md
       - prompt_decorators.core.base: api/modules/prompt_decorators.core.base.md
@@ -146,6 +145,7 @@ nav:
     - Integration Modules:
       - prompt_decorators.integrations: api/modules/prompt_decorators.integrations.md
       - prompt_decorators.integrations.mcp: api/modules/prompt_decorators.integrations.mcp.md
+      - prompt_decorators.integrations.mcp.__main__: api/modules/prompt_decorators.integrations.mcp.__main__.md
       - prompt_decorators.integrations.mcp.claude_desktop: api/modules/prompt_decorators.integrations.mcp.claude_desktop.md
       - prompt_decorators.integrations.mcp.install_claude_desktop: api/modules/prompt_decorators.integrations.mcp.install_claude_desktop.md
       - prompt_decorators.integrations.mcp.server: api/modules/prompt_decorators.integrations.mcp.server.md

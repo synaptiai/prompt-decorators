@@ -8,9 +8,9 @@ Indicates this is an iteration on previously generated code, with specific impro
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `version` | number | Iteration number | 2 |
-| `feedback` | enum | Type of feedback addressed | review-comments |
-| `priority` | enum | Implementation priority | correctness |
+| `version` | `number` | Iteration number | `2` |
+| `feedback` | `enum` | Type of feedback addressed | `review-comments` |
+| `priority` | `enum` | Implementation priority | `correctness` |
 
 ## Feedback Options
 

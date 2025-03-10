@@ -8,10 +8,10 @@ Applies specific limitations to the output format, length, or content. This deco
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `wordCount` | number | Maximum number of words allowed in the response |  |
-| `timeframe` | string | Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week') |  |
-| `vocabulary` | enum | Constraints on vocabulary usage |  |
-| `custom` | string | Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet') |  |
+| `wordCount` | `number` | Maximum number of words allowed in the response | `` |
+| `timeframe` | `string` | Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week') | `` |
+| `vocabulary` | `enum` | Constraints on vocabulary usage | `` |
+| `custom` | `string` | Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet') | `` |
 
 ## Vocabulary Options
 

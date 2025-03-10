@@ -8,9 +8,9 @@ Analyzes design tradeoffs across multiple dimensions.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `axes` | enum | Dimensions to analyze | performance,cost,complexity,maintainability |
-| `format` | enum | Presentation format | decision-matrix |
-| `depth` | enum | Analysis depth | detailed |
+| `axes` | `enum` | Dimensions to analyze | `performance,cost,complexity,maintainability` |
+| `format` | `enum` | Presentation format | `decision-matrix` |
+| `depth` | `enum` | Analysis depth | `detailed` |
 
 ## Axes Options
 

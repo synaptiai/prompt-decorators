@@ -8,9 +8,9 @@ Focuses on verifying that changes have the intended effect and don't introduce r
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `type` | enum | Verification type | functionality |
-| `method` | enum | Verification method | manual-testing |
-| `coverage` | enum | Verification coverage | dependent-areas |
+| `type` | `enum` | Verification type | `functionality` |
+| `method` | `enum` | Verification method | `manual-testing` |
+| `coverage` | `enum` | Verification coverage | `dependent-areas` |
 
 ## Type Options
 

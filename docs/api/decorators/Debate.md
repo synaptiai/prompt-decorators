@@ -8,8 +8,8 @@ Structures the response as a debate between multiple perspectives on a topic. Th
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `perspectives` | number | Number of different perspectives to include in the debate | 2 |
-| `balanced` | boolean | Whether to ensure equal representation and strength of arguments for each perspective | True |
+| `perspectives` | `number` | Number of different perspectives to include in the debate | `2` |
+| `balanced` | `boolean` | Whether to ensure equal representation and strength of arguments for each perspective | `True` |
 
 ## Examples
 

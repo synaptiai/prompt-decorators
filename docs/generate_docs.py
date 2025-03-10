@@ -38,37 +38,163 @@ def ensure_directory(directory: Path) -> None:
     directory.mkdir(parents=True, exist_ok=True)
 
 
-def generate_module_doc(module_name: str, module: Any) -> str:
-    """Generate documentation for a module."""
-    doc = f"# {module_name}\n\n"
+def sanitize_docstring(docstring: str) -> str:
+    """Clean up problematic references in docstrings.
 
+    This function replaces references to external modules like pydantic_core with
+    plain text to avoid cross-reference warnings.
+
+    Args:
+        docstring: The original docstring
+
+    Returns:
+        Sanitized docstring with problematic references fixed
+    """
+    # Replace references to external modules that cause cross-reference warnings
+    replacements = {
+        "[`ValidationError`][pydantic_core.ValidationError]": "`ValidationError`",
+        "[`PydanticSerializationError`][pydantic_core.PydanticSerializationError]": "`PydanticSerializationError`",
+        "pydantic_core.ValidationError": "ValidationError",
+        "pydantic_core.PydanticSerializationError": "PydanticSerializationError",
+    }
+
+    for search, replace in replacements.items():
+        docstring = docstring.replace(search, replace)
+
+    return docstring
+
+
+def generate_module_doc(module_name: str, module: Any) -> str:
+    """Generate documentation for a module.
+
+    Args:
+        module_name: The fully-qualified name of the module
+        module: The imported module object
+
+    Returns:
+        Markdown documentation for the module
+    """
+    # Create short name for display
+    short_name = module_name.split(".")[-1]
+    doc = f"# {short_name}\n\n"
+
+    # Try to extract the module docstring
     if module.__doc__:
-        doc += f"{module.__doc__.strip()}\n\n"
+        # Clean up the docstring (remove indentation and extra whitespace)
+        docstring = inspect.cleandoc(module.__doc__)
+        # Sanitize problematic references
+        docstring = sanitize_docstring(docstring)
+        doc += f"{docstring}\n\n"
     else:
         doc += f"Module documentation for {module_name}.\n\n"
 
-    # Get all classes and functions in the module
+    # Check for __all__ to determine the public API
+    public_api = getattr(module, "__all__", None)
+
+    if public_api:
+        doc += "## Public API\n\n"
+        doc += "This module exports the following components:\n\n"
+
+        for name in public_api:
+            try:
+                obj = getattr(module, name)
+                obj_doc = obj.__doc__ if obj.__doc__ else "No description available"
+                obj_doc = sanitize_docstring(obj_doc).split(".")[0]
+
+                if inspect.isclass(obj):
+                    doc += f"- `{name}`: Class - {obj_doc}\n"
+                elif inspect.isfunction(obj):
+                    doc += f"- `{name}`: Function - {obj_doc}\n"
+                else:
+                    doc += f"- `{name}`: {type(obj).__name__} - {obj_doc}\n"
+            except AttributeError:
+                doc += f"- `{name}`: Not found in module\n"
+
+        doc += "\n"
+
+    # Get all classes, functions, and variables in the module
     classes = []
     functions = []
+    variables = []
 
     for name, obj in inspect.getmembers(module):
-        if name.startswith("_"):
+        # Skip private members
+        if name.startswith("_") and name != "__all__":
             continue
 
-        if inspect.isclass(obj) and obj.__module__ == module.__name__:
-            classes.append((name, obj))
-        elif inspect.isfunction(obj) and obj.__module__ == module.__name__:
-            functions.append((name, obj))
+        # For classes and functions, check if they're defined in this module or imported
+        if inspect.isclass(obj) or inspect.isfunction(obj):
+            obj_module = getattr(obj, "__module__", None)
+
+            # Include if defined in this module or explicitly listed in __all__
+            if obj_module == module.__name__ or (public_api and name in public_api):
+                if inspect.isclass(obj):
+                    classes.append((name, obj, obj_module))
+                else:
+                    functions.append((name, obj, obj_module))
+        # For variables, include if not callable and not a module
+        elif (
+            not callable(obj) and not inspect.ismodule(obj) and not name.startswith("_")
+        ):
+            variables.append((name, obj))
+
+    # Document module variables (constants, etc.)
+    if variables:
+        doc += "## Module Variables\n\n"
+        for name, value in sorted(variables):
+            doc += f"### `{name}`\n\n"
+            doc += f"Type: `{type(value).__name__}`\n\n"
+            try:
+                doc += f"Value: `{repr(value)}`\n\n"
+            except Exception:
+                doc += "Value: `<unable to represent>`\n\n"
 
     # Document classes
     if classes:
         doc += "## Classes\n\n"
-        for name, cls in classes:
-            doc += f"### {name}\n\n"
+        for name, cls, cls_module in sorted(classes):
+            doc += f"### `{name}`\n\n"
+
+            # Indicate if the class is imported
+            if cls_module != module.__name__:
+                doc += f"*Imported from `{cls_module}`*\n\n"
+
             if cls.__doc__:
-                doc += f"{cls.__doc__.strip()}\n\n"
+                doc += f"{inspect.cleandoc(cls.__doc__)}\n\n"
             else:
-                doc += f"Class documentation for {name}.\n\n"
+                doc += f"No documentation available for class `{name}`.\n\n"
+
+            # Document base classes if any
+            if cls.__bases__ and cls.__bases__ != (object,):
+                doc += "**Bases:** "
+                bases = []
+                for base in cls.__bases__:
+                    if base.__name__ != "object":
+                        base_module = base.__module__
+                        bases.append(f"`{base_module}.{base.__name__}`")
+                doc += ", ".join(bases) + "\n\n"
+
+            # Document class attributes
+            class_attrs = []
+            for attr_name, attr_value in cls.__dict__.items():
+                if (
+                    not attr_name.startswith("_")
+                    and not inspect.isfunction(attr_value)
+                    and not inspect.ismethod(attr_value)
+                ):
+                    class_attrs.append((attr_name, attr_value))
+
+            if class_attrs:
+                doc += "#### Attributes\n\n"
+                for attr_name, attr_value in sorted(class_attrs):
+                    doc += f"- `{attr_name}`: `{type(attr_value).__name__}`"
+                    try:
+                        doc += f" = `{repr(attr_value)}`"
+                    except Exception:
+                        # Some objects can't be repr'd safely
+                        pass
+                    doc += "\n"
+                doc += "\n"
 
             # Document methods
             methods = []
@@ -78,37 +204,87 @@ def generate_module_doc(module_name: str, module: Any) -> str:
 
             if methods:
                 doc += "#### Methods\n\n"
-                for method_name, method in methods:
+                for method_name, method in sorted(methods):
                     doc += f"##### `{method_name}`\n\n"
                     if method.__doc__:
-                        doc += f"{method.__doc__.strip()}\n\n"
-                    else:
-                        doc += f"Method documentation for {method_name}.\n\n"
+                        clean_doc = inspect.cleandoc(method.__doc__)
+                        clean_doc = sanitize_docstring(clean_doc)
+                        doc += f"{clean_doc}\n\n"
+
+                    # Document method signature
+                    try:
+                        sig = inspect.signature(method)
+                        doc += f"**Signature:** `{method_name}{sig}`\n\n"
+                    except (ValueError, TypeError):
+                        pass
+
+                    # Document parameters
+                    if sig.parameters:
+                        doc += "**Parameters:**\n\n"
+                        for param_name, param in sig.parameters.items():
+                            if param_name == "self" or param_name == "cls":
+                                continue
+                            doc += f"- `{param_name}`: "
+                            if param.annotation != inspect.Parameter.empty:
+                                doc += f"`{param.annotation.__name__ if hasattr(param.annotation, '__name__') else str(param.annotation)}` "
+                            if param.default != inspect.Parameter.empty:
+                                doc += f"(default: `{param.default}`)"
+                            doc += "\n"
+                        doc += "\n"
+
+                    # Document return type if available
+                    if (
+                        sig.return_annotation != inspect.Signature.empty
+                        and sig.return_annotation != None
+                    ):
+                        doc += f"**Returns:** `{sig.return_annotation.__name__ if hasattr(sig.return_annotation, '__name__') else str(sig.return_annotation)}`\n\n"
 
     # Document functions
     if functions:
         doc += "## Functions\n\n"
-        for name, func in functions:
-            doc += f"### {name}\n\n"
+        for name, func, func_module in sorted(functions):
+            doc += f"### `{name}`\n\n"
+
+            # Indicate if the function is imported
+            if func_module != module.__name__:
+                doc += f"*Imported from `{func_module}`*\n\n"
+
             if func.__doc__:
-                doc += f"{func.__doc__.strip()}\n\n"
+                clean_doc = inspect.cleandoc(func.__doc__)
+                clean_doc = sanitize_docstring(clean_doc)
+                doc += f"{clean_doc}\n\n"
             else:
-                doc += f"Function documentation for {name}.\n\n"
+                doc += f"No documentation available for function `{name}`.\n\n"
+
+            # Document function signature
+            try:
+                sig = inspect.signature(func)
+                doc += f"**Signature:** `{name}{sig}`\n\n"
+            except (ValueError, TypeError):
+                pass
 
             # Document parameters
-            sig = inspect.signature(func)
             if sig.parameters:
-                doc += "#### Parameters\n\n"
+                doc += "**Parameters:**\n\n"
                 for param_name, param in sig.parameters.items():
-                    if param_name == "self":
-                        continue
                     doc += f"- `{param_name}`: "
                     if param.annotation != inspect.Parameter.empty:
-                        doc += f"{param.annotation.__name__ if hasattr(param.annotation, '__name__') else str(param.annotation)} "
+                        doc += f"`{param.annotation.__name__ if hasattr(param.annotation, '__name__') else str(param.annotation)}` "
                     if param.default != inspect.Parameter.empty:
-                        doc += f"(default: {param.default})"
+                        doc += f"(default: `{param.default}`)"
                     doc += "\n"
                 doc += "\n"
+
+            # Document return type if available
+            if (
+                sig.return_annotation != inspect.Signature.empty
+                and sig.return_annotation != None
+            ):
+                doc += f"**Returns:** `{sig.return_annotation.__name__ if hasattr(sig.return_annotation, '__name__') else str(sig.return_annotation)}`\n\n"
+
+    # If no public API was found, add a note
+    if not public_api and not classes and not functions and not variables:
+        doc += "This module does not contain any public classes, functions, or variables.\n"
 
     return doc
 
@@ -144,7 +320,11 @@ def generate_decorator_doc(name: str, decorator_class: Type[DecoratorBase]) -> s
 
     # Fallback to basic documentation from the class
     if decorator_class.__doc__:
-        doc += f"{decorator_class.__doc__.strip()}\n\n"
+        clean_doc = inspect.cleandoc(decorator_class.__doc__)
+        clean_doc = sanitize_docstring(clean_doc)
+        doc += f"{clean_doc}\n\n"
+    elif hasattr(decorator_class, "description"):
+        doc += f"{decorator_class.description}\n\n"
     else:
         doc += f"Documentation for the {name} decorator.\n\n"
 
@@ -184,17 +364,6 @@ def find_decorator_registry_file(decorator_name: str) -> Optional[str]:
     """
     print(f"Finding registry file for: {decorator_name}")
 
-    # Special case for TechDebtControl
-    if decorator_name == "TechDebtControl":
-        tech_debt_path = os.path.join(
-            REGISTRY_DIR, "extensions", "implementation-focused", "techdebtcontrol.json"
-        )
-        print(f"Checking special case path: {tech_debt_path}")
-        print(f"Path exists: {os.path.exists(tech_debt_path)}")
-        if os.path.exists(tech_debt_path):
-            print(f"Found exact match for TechDebtControl: {tech_debt_path}")
-            return tech_debt_path
-
     # Helper to convert CamelCase to kebab-case
     def camel_to_kebab(s):
         # Add hyphen before uppercase letters and convert to lowercase
@@ -209,21 +378,16 @@ def find_decorator_registry_file(decorator_name: str) -> Optional[str]:
         f"{camel_to_kebab(decorator_name)}.json",  # CamelCase to kebab-case
     ]
 
-    print(f"Looking for patterns: {pattern_variants}")
-
     # Search through all registry folders
     for root, _, files in os.walk(REGISTRY_DIR):
         for file in files:
-            print(f"Checking file: {file}")
             if file.lower() in pattern_variants:
-                print(f"Found exact match: {os.path.join(root, file)}")
                 return os.path.join(root, file)
 
             # Check if it's a JSON file with the decorator name in it
             if file.endswith(".json"):
                 try:
                     file_path = os.path.join(root, file)
-                    print(f"Checking content of: {file_path}")
                     with open(file_path, "r") as f:
                         data = json.load(f)
                         if (
@@ -257,6 +421,9 @@ def generate_doc_from_registry(
     """
     name = registry_data.get("decoratorName", "Unknown")
     description = registry_data.get("description", "No description available.")
+    # Sanitize description to remove problematic references
+    description = sanitize_docstring(description)
+
     category = "Unknown"  # Default category
     parameters = registry_data.get("parameters", [])
 
@@ -298,15 +465,15 @@ def generate_doc_from_registry(
             param_name = param.get("name", "")
             param_type = param.get("type", "")
             param_desc = param.get("description", "")
+            # Sanitize parameter descriptions
+            param_desc = sanitize_docstring(param_desc)
             param_default = param.get("default", "")
             required = param.get("required", False)
 
             if required and param_default == "":
                 param_default = "Required"
 
-            doc += (
-                f"| `{param_name}` | {param_type} | {param_desc} | {param_default} |\n"
-            )
+            doc += f"| `{param_name}` | `{param_type}` | {param_desc} | `{param_default}` |\n"
 
         doc += "\n"
 
@@ -328,6 +495,8 @@ def generate_doc_from_registry(
 
                 for value in enum_values:
                     description = value_map.get(value, f"Option: {value}")
+                    # Sanitize enum value descriptions
+                    description = sanitize_docstring(description)
                     doc += f"- `{value}`: {description}\n"
 
                 doc += "\n"
@@ -341,6 +510,9 @@ def generate_doc_from_registry(
             title = example.get("description", f"Example {i+1}")
             usage = example.get("usage", "")
             result = example.get("result", "")
+            # Sanitize example descriptions
+            title = sanitize_docstring(title)
+            result = sanitize_docstring(result)
 
             doc += f"### {title}\n\n"
 
@@ -360,6 +532,9 @@ def generate_doc_from_registry(
         for model_name, implementation in model_specific.items():
             instruction = implementation.get("instruction", "")
             notes = implementation.get("notes", "")
+            # Sanitize model-specific implementation fields
+            instruction = sanitize_docstring(instruction)
+            notes = sanitize_docstring(notes)
 
             doc += f"### {model_name}\n\n"
             if instruction:
@@ -380,6 +555,9 @@ def generate_doc_from_registry(
                 original = example.get("originalPrompt", "")
                 transformed = example.get("transformedPrompt", "")
                 notes = example.get("notes", "")
+                # Sanitize implementation guidance fields
+                context = sanitize_docstring(context)
+                notes = sanitize_docstring(notes)
 
                 doc += f"### {context}\n\n"
 
@@ -400,6 +578,8 @@ def generate_doc_from_registry(
         instruction = transform_template.get("instruction", "")
         placement = transform_template.get("placement", "")
         composition = transform_template.get("compositionBehavior", "")
+        # Sanitize transformation template fields
+        instruction = sanitize_docstring(instruction)
 
         if instruction:
             doc += f"**Base Instruction:** {instruction}\n\n"
@@ -420,6 +600,8 @@ def generate_doc_from_registry(
                 value_map = mapping.get("valueMap", {})
                 if value_map:
                     for value, effect in value_map.items():
+                        # Sanitize parameter effect descriptions
+                        effect = sanitize_docstring(effect)
                         doc += f"  - When set to `{value}`: {effect}\n"
 
                 format_str = mapping.get("format", "")
@@ -469,6 +651,8 @@ def generate_doc_from_registry(
             decorator = note.get("decorator", "")
             relationship = note.get("relationship", "")
             notes = note.get("notes", "")
+            # Sanitize compatibility notes
+            notes = sanitize_docstring(notes)
 
             if decorator and notes:
                 relation_text = ""
@@ -511,47 +695,138 @@ def find_registry_files() -> List[Path]:
 
 def generate_api_docs() -> None:
     """Generate API documentation for all modules in the prompt_decorators package."""
+    print("Generating API documentation...")
     ensure_directory(API_DOCS_DIR)
     ensure_directory(API_MODULES_DIR)
 
-    # Generate index file
+    # Dictionary to organize modules by category
+    modules_by_category = {
+        "Core Modules": [],
+        "Schema Modules": [],
+        "Utility Modules": [],
+        "Integration Modules": [],
+        "Other Modules": [],
+    }
+
+    # Helper function to recursively discover modules
+    def discover_modules(package_name, package_path):
+        discovered = []
+        for _, name, is_pkg in pkgutil.iter_modules([package_path], package_name + "."):
+            if name.endswith("__pycache__"):
+                continue
+
+            discovered.append(name)
+
+            # If this is a package, recurse into it
+            if is_pkg:
+                pkg_path = os.path.join(package_path, name.split(".")[-1])
+                discovered.extend(discover_modules(name, pkg_path))
+
+        return discovered
+
+    # Get all modules in the prompt_decorators package recursively
+    modules = discover_modules(
+        prompt_decorators.__name__, os.path.dirname(prompt_decorators.__file__)
+    )
+
+    # Categorize modules
+    for name in modules:
+        if ".core." in name or name.endswith(".core"):
+            modules_by_category["Core Modules"].append(name)
+        elif ".schemas." in name or name.endswith(".schemas"):
+            modules_by_category["Schema Modules"].append(name)
+        elif ".utils." in name or name.endswith(".utils"):
+            modules_by_category["Utility Modules"].append(name)
+        elif ".integrations." in name or name.endswith(".integrations"):
+            modules_by_category["Integration Modules"].append(name)
+        else:
+            modules_by_category["Other Modules"].append(name)
+
+    # Generate index file with improved formatting and module descriptions
     index_content = """# API Reference
 
-This section contains the API reference for the Prompt Decorators package.
-
-## Modules
+This section contains the API reference for the Prompt Decorators package. It provides detailed documentation for all modules, classes, functions, and properties in the package.
 
 """
 
-    # Get all modules in the prompt_decorators package
-    modules = []
-    for _, name, is_pkg in pkgutil.iter_modules(
-        prompt_decorators.__path__, prompt_decorators.__name__ + "."
-    ):
-        if not name.endswith("__pycache__"):
-            modules.append(name)
+    # Get module descriptions to enrich the index
+    module_descriptions = {}
+    for module_name in modules:
+        try:
+            module = importlib.import_module(module_name)
+            if module.__doc__:
+                first_line = sanitize_docstring(
+                    module.__doc__.strip().split("\n")[0].strip()
+                )
+                module_descriptions[module_name] = first_line
+        except ImportError as e:
+            print(f"  Warning: Could not import {module_name} for description: {e}")
+            module_descriptions[module_name] = "Module documentation"
 
-    # Add core modules to index
-    for module_name in sorted(modules):
-        rel_name = module_name.replace("prompt_decorators.", "")
-        index_content += f"- [{rel_name}](modules/{module_name}.md)\n"
+    # Add modules organized by category
+    for category, category_modules in modules_by_category.items():
+        if not category_modules:
+            continue  # Skip empty categories
+
+        # Add heading with ID attribute for the category (kebab case for the ID)
+        anchor_id = category.lower().replace(" ", "-")
+        index_content += f"## {category} {{#{anchor_id}}}\n\n"
+
+        for module_name in sorted(category_modules):
+            # Use the full module name as the path for the link
+            doc_path = f"{module_name}.md"
+
+            # Add module description if available
+            description = module_descriptions.get(module_name, "")
+            if description:
+                index_content += f"- [{module_name}]({doc_path}): {description}\n"
+            else:
+                index_content += f"- [{module_name}]({doc_path})\n"
+
+        index_content += "\n"
 
     # Write index file
-    with open(API_DOCS_DIR / "index.md", "w") as f:
+    with open(API_MODULES_DIR / "index.md", "w") as f:
         f.write(index_content)
 
     # Generate documentation for each module
     for module_name in modules:
         try:
-            module = importlib.import_module(module_name)
+            print(f"Generating documentation for {module_name}...")
+            # Create module object
+            try:
+                module = importlib.import_module(module_name)
 
-            # Generate and write module documentation
-            doc_content = generate_module_doc(module_name, module)
-            with open(API_MODULES_DIR / f"{module_name}.md", "w") as f:
+                # Generate and write module documentation
+                doc_content = generate_module_doc(module_name, module)
+                module_filename = f"{module_name}.md"
+                with open(API_MODULES_DIR / module_filename, "w") as f:
+                    f.write(doc_content)
+                print(f"  Documentation for {module_name} generated successfully")
+            except ImportError as e:
+                print(f"  Error importing {module_name}: {e}")
+                # Create a minimal placeholder documentation
+                short_name = module_name.split(".")[-1]
+                doc_content = f"# {short_name}\n\n"
+                doc_content += f"Module documentation for {module_name}.\n\n"
+                doc_content += "This module could not be imported for documentation generation. Please check for any import errors.\n"
+                module_filename = f"{module_name}.md"
+                with open(API_MODULES_DIR / module_filename, "w") as f:
+                    f.write(doc_content)
+        except Exception as e:
+            print(f"  Error generating documentation for {module_name}: {e}")
+            # Create an error documentation
+            short_name = module_name.split(".")[-1]
+            doc_content = f"# {short_name}\n\n"
+            doc_content += f"Module documentation for {module_name}.\n\n"
+            doc_content += (
+                f"An error occurred while generating documentation: {str(e)}\n"
+            )
+            module_filename = f"{module_name}.md"
+            with open(API_MODULES_DIR / module_filename, "w") as f:
                 f.write(doc_content)
 
-        except ImportError as e:
-            print(f"Error importing {module_name}: {e}")
+    print(f"API documentation generated for {len(modules)} modules")
 
 
 def generate_decorator_docs() -> None:
@@ -655,8 +930,48 @@ This section provides API reference for all available decorators in the Prompt D
 ## Decorators by Category
 
 """
-        # Sort categories
-        sorted_categories = sorted(decorators_by_category.keys())
+        # Get the core categories we want to highlight at the top
+        core_categories = ["Core", "Minimal", "Reasoning", "Structure"]
+        special_categories = {
+            "Core": "Core Decorators",
+            "Reasoning": "Reasoning Process Decorators",
+            "Structure": "Output Structure Decorators",
+        }
+
+        # Add descriptions for special categories
+        category_descriptions = {
+            "Core Decorators": "The essential decorators that form the foundation of the prompt decorators system.",
+            "Reasoning Process Decorators": "Decorators that control or influence the reasoning process used in prompt responses.",
+            "Output Structure Decorators": "Decorators that control the structure of the output generated from prompts.",
+        }
+
+        # First add the special categories
+        for base_category in core_categories:
+            if base_category in decorators_by_category:
+                display_category = special_categories.get(base_category, base_category)
+                # Add heading with ID for special categories
+                kebab_id = display_category.lower().replace(" ", "-")
+                index_content += f"### {display_category} {{#{kebab_id}}}\n\n"
+
+                # Add description if available
+                if display_category in category_descriptions:
+                    index_content += f"{category_descriptions[display_category]}\n\n"
+
+                # Sort decorators within category
+                sorted_decorators = sorted(decorators_by_category[base_category])
+
+                # Add links to each decorator
+                for decorator in sorted_decorators:
+                    index_content += f"- [{decorator}]({decorator}.md)\n"
+
+                index_content += "\n"
+
+        # Sort remaining categories
+        sorted_categories = [
+            cat
+            for cat in sorted(decorators_by_category.keys())
+            if cat not in core_categories
+        ]
 
         for category in sorted_categories:
             # Add category heading
@@ -698,6 +1013,53 @@ This section provides API reference for all available decorators in the Prompt D
     print("Decorator documentation generation complete")
 
 
+def generate_api_index() -> None:
+    """Generate the main API index file that links to module and decorator documentation."""
+    print("Generating API index file...")
+
+    # Create content for the API index
+    api_index_content = """# API Reference
+
+## Overview
+
+This section contains the API reference for the Prompt Decorators package. It provides detailed documentation for all modules, classes, functions, and properties in the package.
+
+The API is organized into the following sections:
+
+- **[Modules](modules/index.md)**: Documentation for all Python modules in the package
+  - [Core Modules](modules/index.md#core-modules): Core functionality of prompt decorators
+  - [Schema Modules](modules/index.md#schema-modules): Data models and schemas
+  - [Utility Modules](modules/index.md#utility-modules): Helper functions and utilities
+  - [Integration Modules](modules/index.md#integration-modules): Integrations with other systems
+
+- **[Decorators](decorators/index.md)**: Documentation for all available prompt decorators
+  - [Minimal Decorators](decorators/index.md#minimal): Essential decorators for basic functionality
+  - [Reasoning Process Decorators](decorators/index.md#reasoning-process-decorators): Decorators for controlling reasoning processes
+  - [Output Structure Decorators](decorators/index.md#output-structure-decorators): Decorators for controlling output structure
+  - [And more...](decorators/index.md)
+
+## Usage Example
+
+```python
+from prompt_decorators import transform_prompt
+
+# Transform a prompt using decorators
+transformed_prompt = transform_prompt(
+    "What are the environmental impacts of electric vehicles?",
+    ["+++StepByStep(numbered=true)", "+++Reasoning(depth=comprehensive)"]
+)
+```
+
+For more examples, see the [Quick Start](../quickstart.md) guide.
+"""
+
+    # Write the index file
+    with open(API_DOCS_DIR / "index.md", "w") as f:
+        f.write(api_index_content)
+
+    print("API index file generated successfully")
+
+
 def main() -> None:
     """Main function to generate documentation.
 
@@ -722,6 +1084,9 @@ def main() -> None:
     # Generate API documentation
     print("Generating API documentation...")
     generate_api_docs()
+
+    # Generate main API index
+    generate_api_index()
 
     # Generate decorator documentation
     generate_decorator_docs()

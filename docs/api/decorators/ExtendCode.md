@@ -8,9 +8,9 @@ Requests extending or enhancing existing code with new functionality without com
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `approach` | enum | How to extend the code | add-feature |
-| `impact` | enum | Level of changes to existing code | minimal |
-| `maintain` | enum | Aspects to maintain | all |
+| `approach` | `enum` | How to extend the code | `add-feature` |
+| `impact` | `enum` | Level of changes to existing code | `minimal` |
+| `maintain` | `enum` | Aspects to maintain | `all` |
 
 ## Approach Options
 

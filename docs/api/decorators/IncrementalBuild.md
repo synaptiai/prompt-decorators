@@ -8,9 +8,9 @@ Indicates that the code should be built incrementally, with focus on one feature
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | Current implementation focus | feature |
-| `dependencies` | enum | How to handle dependencies | stub |
-| `completion` | enum | Expected completion of this increment | functional |
+| `focus` | `enum` | Current implementation focus | `feature` |
+| `dependencies` | `enum` | How to handle dependencies | `stub` |
+| `completion` | `enum` | Expected completion of this increment | `functional` |
 
 ## Focus Options
 

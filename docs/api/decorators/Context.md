@@ -8,9 +8,9 @@ A meta-decorator that adapts standard decorators for domain-specific contexts. T
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `domain` | string | The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education') | Required |
-| `scope` | enum | Which aspects of decorators to contextualize | all |
-| `level` | enum | The expertise level to target within the domain | mixed |
+| `domain` | `string` | The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education') | `Required` |
+| `scope` | `enum` | Which aspects of decorators to contextualize | `all` |
+| `level` | `enum` | The expertise level to target within the domain | `mixed` |
 
 ## Scope Options
 

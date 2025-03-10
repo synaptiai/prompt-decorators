@@ -8,9 +8,9 @@ Enhances the response with verification of factual claims and explicit indicatio
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `confidence` | boolean | Whether to include explicit confidence levels for claims | True |
-| `uncertain` | enum | How to handle uncertain information | mark |
-| `strictness` | enum | The threshold for considering information verified | moderate |
+| `confidence` | `boolean` | Whether to include explicit confidence levels for claims | `True` |
+| `uncertain` | `enum` | How to handle uncertain information | `mark` |
+| `strictness` | `enum` | The threshold for considering information verified | `moderate` |
 
 ## Uncertain Options
 

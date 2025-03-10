@@ -8,9 +8,9 @@ A meta-decorator that overrides the default parameters or behaviors of other dec
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `decorator` | string | The specific decorator whose behavior to override | Required |
-| `parameters` | string | JSON string specifying the parameters to override (e.g., '{"depth": "comprehensive", "focus": "methodology"}') |  |
-| `behavior` | string | Optional custom behavior modification instructions that override the standard decorator interpretation |  |
+| `decorator` | `string` | The specific decorator whose behavior to override | `Required` |
+| `parameters` | `string` | JSON string specifying the parameters to override (e.g., '{"depth": "comprehensive", "focus": "methodology"}') | `` |
+| `behavior` | `string` | Optional custom behavior modification instructions that override the standard decorator interpretation | `` |
 
 ## Examples
 

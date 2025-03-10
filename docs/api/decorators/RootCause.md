@@ -8,8 +8,8 @@ Structures the response to systematically analyze underlying causes of problems 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `method` | enum | The specific root cause analysis methodology to apply | fivewhys |
-| `depth` | number | Level of detail in the analysis (for fivewhys, represents number of 'why' iterations) | 5 |
+| `method` | `enum` | The specific root cause analysis methodology to apply | `fivewhys` |
+| `depth` | `number` | Level of detail in the analysis (for fivewhys, represents number of 'why' iterations) | `5` |
 
 ## Method Options
 

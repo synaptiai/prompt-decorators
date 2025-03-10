@@ -8,8 +8,8 @@ Defines a custom structure for the AI's response using a specified schema format
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `schema` | string | JSON Schema definition or reference to a predefined schema that defines the structure of the response | Required |
-| `strict` | boolean | Whether to enforce strict schema compliance or allow flexibility | False |
+| `schema` | `string` | JSON Schema definition or reference to a predefined schema that defines the structure of the response | `Required` |
+| `strict` | `boolean` | Whether to enforce strict schema compliance or allow flexibility | `False` |
 
 ## Examples
 

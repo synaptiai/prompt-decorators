@@ -8,9 +8,9 @@ Adapts the response for a specific audience expertise level. This decorator ensu
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `level` | enum | The expertise level of the target audience | intermediate |
-| `domain` | string | Specific knowledge domain or field for domain-specific terminology adaptation | general |
-| `examples` | boolean | Whether to include additional examples for clarity | True |
+| `level` | `enum` | The expertise level of the target audience | `intermediate` |
+| `domain` | `string` | Specific knowledge domain or field for domain-specific terminology adaptation | `general` |
+| `examples` | `boolean` | Whether to include additional examples for clarity | `True` |
 
 ## Level Options
 

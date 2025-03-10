@@ -54,7 +54,7 @@ Reference these schemas in your JSON files:
 
 ## Schema Relationships
 
-```mermaid
+``` mermaid
 graph TD
     A[decorator.schema.json] --> B[api-request.schema.json]
     A --> C[registry-entry.schema.json]

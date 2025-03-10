@@ -8,9 +8,9 @@ Performs a review of code quality, identifying issues and suggesting improvement
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | Aspects to focus on during review | all |
-| `strictness` | enum | Level of scrutiny | standard |
-| `format` | enum | Review output format | detailed |
+| `focus` | `enum` | Aspects to focus on during review | `all` |
+| `strictness` | `enum` | Level of scrutiny | `standard` |
+| `format` | `enum` | Review output format | `detailed` |
 
 ## Focus Options
 

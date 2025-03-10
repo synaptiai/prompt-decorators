@@ -8,9 +8,9 @@ Indicates which phase of implementation the AI should focus on, controlling scop
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `stage` | enum | Current implementation phase | core |
-| `scope` | enum | Implementation scope boundary | component |
-| `iteration` | number | Implementation iteration number | 1 |
+| `stage` | `enum` | Current implementation phase | `core` |
+| `scope` | `enum` | Implementation scope boundary | `component` |
+| `iteration` | `number` | Implementation iteration number | `1` |
 
 ## Stage Options
 

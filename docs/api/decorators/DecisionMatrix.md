@@ -8,10 +8,10 @@ Structures the response as a decision matrix, evaluating options against multipl
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `options` | array | Specific options or alternatives to evaluate in the matrix |  |
-| `criteria` | array | Evaluation criteria to assess each option against |  |
-| `weighted` | boolean | Whether to include weights for criteria importance | False |
-| `scale` | enum | Rating scale to use for evaluations | 1-5 |
+| `options` | `array` | Specific options or alternatives to evaluate in the matrix | `` |
+| `criteria` | `array` | Evaluation criteria to assess each option against | `` |
+| `weighted` | `boolean` | Whether to include weights for criteria importance | `False` |
+| `scale` | `enum` | Rating scale to use for evaluations | `1-5` |
 
 ## Scale Options
 

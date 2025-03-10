@@ -52,7 +52,6 @@ jobs:
           pip install mkdocs-minify-plugin>=0.7.0
           pip install mkdocstrings>=0.24.0
           pip install mkdocstrings-python>=1.7.0
-          pip install mermaid2>=10.0.2
           pip install mike
           # Install any additional requirements
           if [ -f docs/requirements.txt ]; then

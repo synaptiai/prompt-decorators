@@ -8,9 +8,9 @@ Applies adversarial analysis to test assumptions, identify vulnerabilities, and 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `strength` | enum | How aggressive or challenging the red team analysis should be | moderate |
-| `focus` | array | Specific aspects to focus the red team analysis on |  |
-| `constructive` | boolean | Whether to include constructive suggestions for improvement after critiques | True |
+| `strength` | `enum` | How aggressive or challenging the red team analysis should be | `moderate` |
+| `focus` | `array` | Specific aspects to focus the red team analysis on | `` |
+| `constructive` | `boolean` | Whether to include constructive suggestions for improvement after critiques | `True` |
 
 ## Strength Options
 

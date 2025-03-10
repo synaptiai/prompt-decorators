@@ -8,9 +8,9 @@ Adapts the response to reflect the perspective and concerns of a specific person
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `role` | string | The specific persona or stakeholder role to adopt | Required |
-| `traits` | array | Key personality traits or characteristics of the persona |  |
-| `goals` | array | Primary goals or concerns of the persona |  |
+| `role` | `string` | The specific persona or stakeholder role to adopt | `Required` |
+| `traits` | `array` | Key personality traits or characteristics of the persona | `` |
+| `goals` | `array` | Primary goals or concerns of the persona | `` |
 
 ## Examples
 

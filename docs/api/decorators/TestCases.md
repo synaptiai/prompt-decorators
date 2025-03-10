@@ -8,9 +8,9 @@ Generates specific test cases for functionality, edge cases, or regressions.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `coverage` | enum | Types of test cases to generate | happy-path |
-| `format` | enum | Output format of the test cases | code |
-| `assertions` | enum | Level of assertion detail | comprehensive |
+| `coverage` | `enum` | Types of test cases to generate | `happy-path` |
+| `format` | `enum` | Output format of the test cases | `code` |
+| `assertions` | `enum` | Level of assertion detail | `comprehensive` |
 
 ## Coverage Options
 

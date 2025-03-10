@@ -8,9 +8,9 @@ Optimizes the response for brevity and directness, eliminating unnecessary detai
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `maxWords` | number | Maximum word count for the entire response |  |
-| `bulletPoints` | boolean | Whether to use bullet points for maximum brevity | False |
-| `level` | enum | The degree of conciseness to apply | moderate |
+| `maxWords` | `number` | Maximum word count for the entire response | `` |
+| `bulletPoints` | `boolean` | Whether to use bullet points for maximum brevity | `False` |
+| `level` | `enum` | The degree of conciseness to apply | `moderate` |
 
 ## Level Options
 

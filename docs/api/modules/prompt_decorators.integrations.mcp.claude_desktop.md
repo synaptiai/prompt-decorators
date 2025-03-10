@@ -1,5 +1,14 @@
 # claude_desktop
 
-Module documentation for prompt_decorators.integrations.mcp.claude_desktop.
+Entry point for running the Prompt Decorators MCP server for Claude Desktop.
 
-This documentation is a placeholder and will be updated in the future.
+Usage:
+    python -m prompt_decorators.integrations.mcp.claude_desktop [--host HOST] [--port PORT] [--verbose]
+
+## Functions
+
+### `main`
+
+Run the Prompt Decorators MCP server for Claude Desktop.
+
+**Signature:** `main() -> None`

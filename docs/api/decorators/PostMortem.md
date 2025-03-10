@@ -8,9 +8,9 @@ Creates incident reviews and postmortem documents.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `format` | enum | Document structure | comprehensive |
-| `focus` | enum | Analysis emphasis | balanced |
-| `audience` | enum | Target readers | team |
+| `format` | `enum` | Document structure | `comprehensive` |
+| `focus` | `enum` | Analysis emphasis | `balanced` |
+| `audience` | `enum` | Target readers | `team` |
 
 ## Format Options
 

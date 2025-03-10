@@ -8,9 +8,9 @@ Organizes information in a deeply hierarchical structure with multiple levels of
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `depth` | number | Maximum nesting level of the hierarchy | 3 |
-| `style` | enum | Visual style for hierarchical levels | mixed |
-| `collapsible` | boolean | Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations) | False |
+| `depth` | `number` | Maximum nesting level of the hierarchy | `3` |
+| `style` | `enum` | Visual style for hierarchical levels | `mixed` |
+| `collapsible` | `boolean` | Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations) | `False` |
 
 ## Style Options
 

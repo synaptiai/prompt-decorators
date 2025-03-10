@@ -8,9 +8,9 @@ Organizes the response as a branching exploration of multiple reasoning paths. T
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `branches` | number | Number of different reasoning branches to explore | 3 |
-| `depth` | number | Maximum depth of reasoning in each branch | 3 |
-| `pruning` | boolean | Whether to eliminate less promising branches early | False |
+| `branches` | `number` | Number of different reasoning branches to explore | `3` |
+| `depth` | `number` | Maximum depth of reasoning in each branch | `3` |
+| `pruning` | `boolean` | Whether to eliminate less promising branches early | `False` |
 
 ## Examples
 

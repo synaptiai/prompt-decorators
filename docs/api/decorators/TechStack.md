@@ -8,9 +8,9 @@ Recommends technology combinations based on requirements.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `for` | enum | Target application type | web |
-| `constraints` | enum | Project limitations | none |
-| `maturity` | enum | Technology maturity preference | modern-stable |
+| `for` | `enum` | Target application type | `web` |
+| `constraints` | `enum` | Project limitations | `none` |
+| `maturity` | `enum` | Technology maturity preference | `modern-stable` |
 
 ## For Options
 

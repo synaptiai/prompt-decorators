@@ -8,9 +8,9 @@ A meta-decorator that enables loading of community-defined decorators from exter
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `source` | string | URI or identifier for the extension package (e.g., URL, namespace, or registry identifier) | Required |
-| `version` | string | Specific version of the extension package to use |  |
-| `decorators` | array | Specific decorators to load from the extension (if empty, loads all decorators from the package) |  |
+| `source` | `string` | URI or identifier for the extension package (e.g., URL, namespace, or registry identifier) | `Required` |
+| `version` | `string` | Specific version of the extension package to use | `` |
+| `decorators` | `array` | Specific decorators to load from the extension (if empty, loads all decorators from the package) | `` |
 
 ## Examples
 

@@ -8,9 +8,9 @@ Requests identification and prioritization of tasks needed to fix an issue or im
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `detail` | enum | Task breakdown detail level | detailed |
-| `priority` | enum | Task prioritization approach | dependency-order |
-| `format` | enum | Task output format | checklist |
+| `detail` | `enum` | Task breakdown detail level | `detailed` |
+| `priority` | `enum` | Task prioritization approach | `dependency-order` |
+| `format` | `enum` | Task output format | `checklist` |
 
 ## Detail Options
 

@@ -8,7 +8,7 @@ Adjusts the writing style and tone of the AI's response. This decorator helps en
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | The desired tone and style for the response | formal |
+| `style` | `enum` | The desired tone and style for the response | `formal` |
 
 ## Style Options
 

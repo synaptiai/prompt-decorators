@@ -8,9 +8,9 @@ Formats the response as a bulleted list, making information easier to scan and d
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | The visual marker used for bullet points | dash |
-| `indented` | boolean | Whether to allow nested, indented bullet points | True |
-| `compact` | boolean | Whether to keep bullet points short and concise (true) or allow longer, more detailed points (false) | False |
+| `style` | `enum` | The visual marker used for bullet points | `dash` |
+| `indented` | `boolean` | Whether to allow nested, indented bullet points | `True` |
+| `compact` | `boolean` | Whether to keep bullet points short and concise (true) or allow longer, more detailed points (false) | `False` |
 
 ## Style Options
 

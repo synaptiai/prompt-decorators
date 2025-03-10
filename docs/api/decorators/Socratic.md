@@ -8,7 +8,7 @@ Structures the response as a series of questions that guide the user through a p
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `iterations` | number | Number of question-answer cycles to include | 3 |
+| `iterations` | `number` | Number of question-answer cycles to include | `3` |
 
 ## Examples
 

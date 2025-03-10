@@ -8,9 +8,9 @@ Enhances responses with imaginative, novel, and original content. This decorator
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `level` | enum | The degree of creative thinking to apply | high |
-| `elements` | array | Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative) |  |
-| `constraints` | array | Optional creative constraints to work within |  |
+| `level` | `enum` | The degree of creative thinking to apply | `high` |
+| `elements` | `array` | Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative) | `` |
+| `constraints` | `array` | Optional creative constraints to work within | `` |
 
 ## Level Options
 

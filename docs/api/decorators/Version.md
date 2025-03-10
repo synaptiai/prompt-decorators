@@ -8,7 +8,7 @@ Specifies the version of the Prompt Decorators standard to use. This decorator m
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `standard` | string | The semantic version of the Prompt Decorators standard to use | 1.0.0 |
+| `standard` | `string` | The semantic version of the Prompt Decorators standard to use | `1.0.0` |
 
 ## Examples
 

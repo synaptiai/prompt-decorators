@@ -8,7 +8,7 @@ Modifies the AI's response to provide explicit reasoning paths before reaching c
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `depth` | enum | The level of detail in the reasoning process | moderate |
+| `depth` | `enum` | The level of detail in the reasoning process | `moderate` |
 
 ## Depth Options
 

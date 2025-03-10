@@ -8,9 +8,9 @@ Generates test fixtures and mock data for testing.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `complexity` | enum | Sophistication of generated data | moderate |
-| `format` | enum | Output format of the mock data | json |
-| `size` | enum | Amount of mock data to generate | medium |
+| `complexity` | `enum` | Sophistication of generated data | `moderate` |
+| `format` | `enum` | Output format of the mock data | `json` |
+| `size` | `enum` | Amount of mock data to generate | `medium` |
 
 ## Complexity Options
 

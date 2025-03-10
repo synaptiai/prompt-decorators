@@ -8,9 +8,9 @@ Structures the response using abductive reasoning, developing the most likely ex
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `hypotheses` | number | Number of alternative hypotheses or explanations to generate | 3 |
-| `criteria` | array | Specific criteria to evaluate hypotheses against (e.g., simplicity, explanatory power) |  |
-| `rank` | boolean | Whether to explicitly rank hypotheses by likelihood | True |
+| `hypotheses` | `number` | Number of alternative hypotheses or explanations to generate | `3` |
+| `criteria` | `array` | Specific criteria to evaluate hypotheses against (e.g., simplicity, explanatory power) | `` |
+| `rank` | `boolean` | Whether to explicitly rank hypotheses by likelihood | `True` |
 
 ## Examples
 

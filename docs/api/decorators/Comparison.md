@@ -8,9 +8,9 @@ Structures the response as a direct comparison between multiple items, concepts,
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `aspects` | array | Specific aspects or dimensions to compare |  |
-| `format` | enum | The presentation format for the comparison | table |
-| `highlight` | boolean | Whether to explicitly emphasize key differences | True |
+| `aspects` | `array` | Specific aspects or dimensions to compare | `` |
+| `format` | `enum` | The presentation format for the comparison | `table` |
+| `highlight` | `boolean` | Whether to explicitly emphasize key differences | `True` |
 
 ## Format Options
 

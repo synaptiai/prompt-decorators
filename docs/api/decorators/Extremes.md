@@ -8,9 +8,9 @@ Presents content at the extreme ends of a spectrum, showing both a radical, ambi
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `versions` | enum | Which extreme versions to include | both |
-| `dimension` | string | The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity') | ambition |
-| `compare` | boolean | Whether to include a comparative analysis of the extreme versions | True |
+| `versions` | `enum` | Which extreme versions to include | `both` |
+| `dimension` | `string` | The specific dimension along which to explore extremes (e.g., 'cost', 'time', 'ambition', 'complexity') | `ambition` |
+| `compare` | `boolean` | Whether to include a comparative analysis of the extreme versions | `True` |
 
 ## Versions Options
 

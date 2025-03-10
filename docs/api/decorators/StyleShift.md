@@ -8,9 +8,9 @@ Modifies specific style characteristics of responses such as formality, persuasi
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `aspect` | enum | The specific style aspect to modify | Required |
-| `level` | number | The intensity level of the style aspect (1-5, where 1 is minimal and 5 is maximal) | 3 |
-| `maintain` | array | Style aspects to explicitly maintain while modifying the target aspect |  |
+| `aspect` | `enum` | The specific style aspect to modify | `Required` |
+| `level` | `number` | The intensity level of the style aspect (1-5, where 1 is minimal and 5 is maximal) | `3` |
+| `maintain` | `array` | Style aspects to explicitly maintain while modifying the target aspect | `` |
 
 ## Aspect Options
 

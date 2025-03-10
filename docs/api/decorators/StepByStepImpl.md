@@ -8,9 +8,9 @@ Requests a step-by-step implementation approach, with explicitly labeled stages.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `detail` | enum | Level of explanation and comments | moderate |
-| `steps` | string | Number of implementation steps | auto |
-| `output` | enum | What to include in each step | code-with-explanation |
+| `detail` | `enum` | Level of explanation and comments | `moderate` |
+| `steps` | `string` | Number of implementation steps | `auto` |
+| `output` | `enum` | What to include in each step | `code-with-explanation` |
 
 ## Detail Options
 

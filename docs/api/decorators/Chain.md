@@ -8,9 +8,9 @@ A meta-decorator that applies multiple decorators in sequence, with each decorat
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `decorators` | array | Ordered list of decorators to apply in sequence | Required |
-| `showSteps` | boolean | Whether to show intermediate outputs after each decorator in the chain | False |
-| `stopOnFailure` | boolean | Whether to stop the chain if a decorator fails to apply correctly | True |
+| `decorators` | `array` | Ordered list of decorators to apply in sequence | `Required` |
+| `showSteps` | `boolean` | Whether to show intermediate outputs after each decorator in the chain | `False` |
+| `stopOnFailure` | `boolean` | Whether to stop the chain if a decorator fails to apply correctly | `True` |
 
 ## Examples
 

@@ -8,9 +8,9 @@ Helps with effort estimation for development tasks.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `method` | enum | Estimation approach | fibonacci |
-| `confidence` | enum | Estimate type | range |
-| `factors` | enum | Considerations to include | all |
+| `method` | `enum` | Estimation approach | `fibonacci` |
+| `confidence` | `enum` | Estimate type | `range` |
+| `factors` | `enum` | Considerations to include | `all` |
 
 ## Method Options
 

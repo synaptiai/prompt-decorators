@@ -8,9 +8,9 @@ Explicitly highlights areas of uncertainty in the response. This decorator promo
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `format` | enum | How to format uncertainty indications in the response | inline |
-| `threshold` | enum | The threshold for flagging uncertain content | medium |
-| `reason` | boolean | Whether to explain the reason for uncertainty | False |
+| `format` | `enum` | How to format uncertainty indications in the response | `inline` |
+| `threshold` | `enum` | The threshold for flagging uncertain content | `medium` |
+| `reason` | `boolean` | Whether to explain the reason for uncertainty | `False` |
 
 ## Format Options
 

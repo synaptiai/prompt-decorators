@@ -8,9 +8,9 @@ Guides careful, targeted modifications to sensitive parts of the codebase.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `sensitivity` | enum | Code sensitivity level | sensitive |
-| `scope` | enum | Modification scope | minimal |
-| `validation` | enum | Required validation approach | both |
+| `sensitivity` | `enum` | Code sensitivity level | `sensitive` |
+| `scope` | `enum` | Modification scope | `minimal` |
+| `validation` | `enum` | Required validation approach | `both` |
 
 ## Sensitivity Options
 

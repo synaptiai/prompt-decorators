@@ -8,9 +8,9 @@ Defines a strategy for implementing logging to aid debugging and monitoring.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `level` | enum | Logging detail level | standard |
-| `targets` | enum | Logging targets | console |
-| `lifecycle` | enum | Log lifecycle management | temporary |
+| `level` | `enum` | Logging detail level | `standard` |
+| `targets` | `enum` | Logging targets | `console` |
+| `lifecycle` | `enum` | Log lifecycle management | `temporary` |
 
 ## Level Options
 

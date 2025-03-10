@@ -8,9 +8,9 @@ A meta-decorator that enables user-defined decorator behaviors through explicit 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `rules` | string | Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items') | Required |
-| `name` | string | Optional name for the custom decorator to reference in documentation or explanations |  |
-| `priority` | enum | How to prioritize custom rules relative to other decorators | override |
+| `rules` | `string` | Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items') | `Required` |
+| `name` | `string` | Optional name for the custom decorator to reference in documentation or explanations | `` |
+| `priority` | `enum` | How to prioritize custom rules relative to other decorators | `override` |
 
 ## Priority Options
 

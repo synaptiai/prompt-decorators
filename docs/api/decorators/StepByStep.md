@@ -8,7 +8,7 @@ Structures the AI's response as a sequence of clearly labeled steps. This decora
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `numbered` | boolean | Whether to number the steps or use bullet points | True |
+| `numbered` | `boolean` | Whether to number the steps or use bullet points | `True` |
 
 ## Examples
 

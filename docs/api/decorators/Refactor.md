@@ -8,9 +8,9 @@ Improves existing code structure while preserving functionality.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `goal` | enum | Primary objective of the refactoring | maintainability |
-| `level` | enum | Extent of changes to make | moderate |
-| `preserve` | enum | Aspects that must be preserved | both |
+| `goal` | `enum` | Primary objective of the refactoring | `maintainability` |
+| `level` | `enum` | Extent of changes to make | `moderate` |
+| `preserve` | `enum` | Aspects that must be preserved | `both` |
 
 ## Goal Options
 

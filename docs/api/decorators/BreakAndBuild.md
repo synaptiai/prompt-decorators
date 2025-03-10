@@ -8,9 +8,9 @@ Structures responses in two distinct phases: first critically analyzing and 'bre
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `breakdown` | enum | Primary approach for the critical breakdown phase | comprehensive |
-| `intensity` | enum | How thorough and challenging the breakdown phase should be | thorough |
-| `buildRatio` | number | Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique) | 1 |
+| `breakdown` | `enum` | Primary approach for the critical breakdown phase | `comprehensive` |
+| `intensity` | `enum` | How thorough and challenging the breakdown phase should be | `thorough` |
+| `buildRatio` | `number` | Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique) | `1` |
 
 ## Breakdown Options
 

@@ -8,9 +8,9 @@ Designs data models, schemas, and database structures.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `type` | enum | Database or persistence paradigm | context-dependent |
-| `optimization` | enum | Performance optimization focus | balanced |
-| `format` | enum | Output format | schema |
+| `type` | `enum` | Database or persistence paradigm | `context-dependent` |
+| `optimization` | `enum` | Performance optimization focus | `balanced` |
+| `format` | `enum` | Output format | `schema` |
 
 ## Type Options
 

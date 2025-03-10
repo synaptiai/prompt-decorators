@@ -8,9 +8,9 @@ A meta-decorator that applies different decorators based on specified conditions
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `if_param` | string | The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}') | Required |
-| `then` | string | The decorator to apply if the condition is true (can be a specific decorator with parameters) | Required |
-| `else_param` | string | The decorator to apply if the condition is false (can be a specific decorator with parameters) |  |
+| `if_param` | `string` | The condition to evaluate (e.g., 'technical', 'complex', 'controversial', or a parameter like '{param}') | `Required` |
+| `then` | `string` | The decorator to apply if the condition is true (can be a specific decorator with parameters) | `Required` |
+| `else_param` | `string` | The decorator to apply if the condition is false (can be a specific decorator with parameters) | `` |
 
 ## Examples
 

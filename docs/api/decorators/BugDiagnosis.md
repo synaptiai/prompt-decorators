@@ -8,9 +8,9 @@ Diagnoses issues from error messages, logs, or behavioral symptoms.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `from` | enum | Source of diagnostic information | input-dependent |
-| `depth` | enum | Thoroughness of analysis | comprehensive |
-| `output` | enum | Type of output desired | both |
+| `from` | `enum` | Source of diagnostic information | `input-dependent` |
+| `depth` | `enum` | Thoroughness of analysis | `comprehensive` |
+| `output` | `enum` | Type of output desired | `both` |
 
 ## From Options
 

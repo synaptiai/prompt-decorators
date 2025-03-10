@@ -49,7 +49,7 @@ The Prompt Decorators documentation is organized into several main sections:
 
 ## Documentation Map
 
-```mermaid
+``` mermaid
 graph TD
     A[Home] --> B[Getting Started]
     A --> C[Tutorials]

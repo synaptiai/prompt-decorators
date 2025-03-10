@@ -8,9 +8,9 @@ Generates architectural designs based on requirements and constraints.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | Architectural pattern | requirements-dependent |
-| `detail` | enum | Level of design detail | component |
-| `focus` | enum | Design emphasis | balanced |
+| `style` | `enum` | Architectural pattern | `requirements-dependent` |
+| `detail` | `enum` | Level of design detail | `component` |
+| `focus` | `enum` | Design emphasis | `balanced` |
 
 ## Style Options
 

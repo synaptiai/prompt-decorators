@@ -8,9 +8,9 @@ Plans migration approaches between system states.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `from` | string | Current state | context-dependent |
-| `to` | string | Target state | context-dependent |
-| `approach` | enum | Migration strategy | incremental |
+| `from` | `string` | Current state | `context-dependent` |
+| `to` | `string` | Target state | `context-dependent` |
+| `approach` | `enum` | Migration strategy | `incremental` |
 
 ## Approach Options
 

@@ -8,9 +8,9 @@ Presents multiple distinct options, approaches, or solutions to a question or pr
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `count` | number | Number of alternative options or approaches to generate | 3 |
-| `diversity` | enum | How different or varied the alternatives should be from each other | medium |
-| `comparison` | boolean | Whether to include a comparative analysis of the alternatives | False |
+| `count` | `number` | Number of alternative options or approaches to generate | `3` |
+| `diversity` | `enum` | How different or varied the alternatives should be from each other | `medium` |
+| `comparison` | `boolean` | Whether to include a comparative analysis of the alternatives | `False` |
 
 ## Diversity Options
 

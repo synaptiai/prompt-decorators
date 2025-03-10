@@ -8,9 +8,9 @@ Identifies edge cases and boundary conditions for testing.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | Types of edge cases to identify | all |
-| `risk` | enum | Risk level of edge cases to consider | common |
-| `output` | enum | Format of identified edge cases | test-cases |
+| `focus` | `enum` | Types of edge cases to identify | `all` |
+| `risk` | `enum` | Risk level of edge cases to consider | `common` |
+| `output` | `enum` | Format of identified edge cases | `test-cases` |
 
 ## Focus Options
 

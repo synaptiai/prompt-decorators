@@ -8,9 +8,9 @@ Specifies the permitted complexity level for the implementation.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `code` | enum | Code complexity limit | moderate |
-| `concepts` | enum | Conceptual complexity limit | intermediate |
-| `dependencies` | enum | External dependency usage | standard |
+| `code` | `enum` | Code complexity limit | `moderate` |
+| `concepts` | `enum` | Conceptual complexity limit | `intermediate` |
+| `dependencies` | `enum` | External dependency usage | `standard` |
 
 ## Code Options
 

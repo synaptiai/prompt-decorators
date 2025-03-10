@@ -8,9 +8,9 @@ Applies specific quality measurements to evaluate content against defined criter
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `metrics` | array | Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness) |  |
-| `scale` | enum | Rating scale to use for evaluations | 1-5 |
-| `explanation` | boolean | Whether to provide detailed explanations for each metric score | True |
+| `metrics` | `array` | Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness) | `` |
+| `scale` | `enum` | Rating scale to use for evaluations | `1-5` |
+| `explanation` | `boolean` | Whether to provide detailed explanations for each metric score | `True` |
 
 ## Scale Options
 

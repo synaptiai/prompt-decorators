@@ -8,7 +8,7 @@ Structures the response by breaking down complex topics into their fundamental t
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `depth` | number | Level of detail in breaking down to fundamental principles | 3 |
+| `depth` | `number` | Level of detail in breaking down to fundamental principles | `3` |
 
 ## Examples
 

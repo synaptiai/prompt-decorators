@@ -8,9 +8,9 @@ Generates responses that deliberately challenge conventional wisdom or mainstrea
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `approach` | enum | The specific contrarian approach to take | devils-advocate |
-| `maintain` | boolean | Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false) | False |
-| `focus` | string | Optional specific aspect of the topic to focus contrarian analysis on |  |
+| `approach` | `enum` | The specific contrarian approach to take | `devils-advocate` |
+| `maintain` | `boolean` | Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false) | `False` |
+| `focus` | `string` | Optional specific aspect of the topic to focus contrarian analysis on | `` |
 
 ## Approach Options
 

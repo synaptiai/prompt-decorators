@@ -8,9 +8,9 @@ Specifies the overall approach to debugging and problem analysis.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `approach` | enum | Debugging methodology | systematic |
-| `verbosity` | enum | Debug output verbosity | standard |
-| `priority` | enum | Issue resolution priority | functionality |
+| `approach` | `enum` | Debugging methodology | `systematic` |
+| `verbosity` | `enum` | Debug output verbosity | `standard` |
+| `priority` | `enum` | Issue resolution priority | `functionality` |
 
 ## Approach Options
 

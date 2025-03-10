@@ -8,9 +8,9 @@ Applies coding standards and best practices.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `standard` | enum | Code standard type | language-specific |
-| `strictness` | enum | Enforcement level | required |
-| `focus` | enum | Areas of emphasis | all |
+| `standard` | `enum` | Code standard type | `language-specific` |
+| `strictness` | `enum` | Enforcement level | `required` |
+| `focus` | `enum` | Areas of emphasis | `all` |
 
 ## Standard Options
 

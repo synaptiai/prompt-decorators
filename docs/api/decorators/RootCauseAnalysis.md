@@ -8,9 +8,9 @@ Guides a methodical approach to identify the fundamental cause of an issue.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `depth` | enum | Analysis depth | deep |
-| `method` | enum | Analysis method | systematic |
-| `approach` | enum | Investigation approach | isolation |
+| `depth` | `enum` | Analysis depth | `deep` |
+| `method` | `enum` | Analysis method | `systematic` |
+| `approach` | `enum` | Investigation approach | `isolation` |
 
 ## Depth Options
 

@@ -8,9 +8,9 @@ Creates monitoring and alerting setups for systems.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | Monitoring emphasis | comprehensive |
-| `tools` | enum | Preferred monitoring tools | recommend |
-| `implementation` | enum | Implementation depth | configuration |
+| `focus` | `enum` | Monitoring emphasis | `comprehensive` |
+| `tools` | `enum` | Preferred monitoring tools | `recommend` |
+| `implementation` | `enum` | Implementation depth | `configuration` |
 
 ## Focus Options
 

@@ -8,9 +8,9 @@ Designs comprehensive testing approaches for software components or systems.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `level` | enum | Testing scope level | unit |
-| `framework` | enum | Testing framework to use | language-appropriate |
-| `approach` | enum | Testing methodology | tdd |
+| `level` | `enum` | Testing scope level | `unit` |
+| `framework` | `enum` | Testing framework to use | `language-appropriate` |
+| `approach` | `enum` | Testing methodology | `tdd` |
 
 ## Level Options
 

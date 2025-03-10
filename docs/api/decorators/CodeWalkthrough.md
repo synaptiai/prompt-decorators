@@ -8,9 +8,9 @@ Provides detailed explanations of code functionality.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | Walkthrough emphasis | how |
-| `detail` | enum | Explanation granularity | key-parts |
-| `audience` | enum | Target reader | peer |
+| `focus` | `enum` | Walkthrough emphasis | `how` |
+| `detail` | `enum` | Explanation granularity | `key-parts` |
+| `audience` | `enum` | Target reader | `peer` |
 
 ## Focus Options
 

@@ -8,9 +8,9 @@ Focuses on diagnosing and resolving specific errors or bugs.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `severity` | enum | Error severity level | significant |
-| `persistence` | enum | Error persistence pattern | consistent |
-| `analysis` | enum | Analysis depth | root-cause |
+| `severity` | `enum` | Error severity level | `significant` |
+| `persistence` | `enum` | Error persistence pattern | `consistent` |
+| `analysis` | `enum` | Analysis depth | `root-cause` |
 
 ## Severity Options
 

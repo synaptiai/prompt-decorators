@@ -8,9 +8,9 @@ Explains code or technical concepts with appropriate depth.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `level` | enum | Expertise assumption | intermediate |
-| `approach` | enum | Explanation style | examples |
-| `focus` | enum | Explanation emphasis | both |
+| `level` | `enum` | Expertise assumption | `intermediate` |
+| `approach` | `enum` | Explanation style | `examples` |
+| `focus` | `enum` | Explanation emphasis | `both` |
 
 ## Level Options
 

@@ -8,9 +8,9 @@ Generates responses from the perspective of a specified domain expert or special
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `domain` | string | The specific field or discipline the expert specializes in | Required |
-| `experience` | enum | The experience level of the expert | senior |
-| `technical` | boolean | Whether to use highly technical language and domain-specific terminology | True |
+| `domain` | `string` | The specific field or discipline the expert specializes in | `Required` |
+| `experience` | `enum` | The experience level of the expert | `senior` |
+| `technical` | `boolean` | Whether to use highly technical language and domain-specific terminology | `True` |
 
 ## Experience Options
 

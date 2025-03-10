@@ -8,9 +8,9 @@ Presents the strongest possible version of an argument or position, even those t
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `sides` | number | Number of different viewpoints to steel-man | 2 |
-| `critique` | boolean | Whether to include critique after presenting the steel-manned arguments | False |
-| `separation` | boolean | Whether to clearly separate the steel-manned presentations from any analysis | True |
+| `sides` | `number` | Number of different viewpoints to steel-man | `2` |
+| `critique` | `boolean` | Whether to include critique after presenting the steel-manned arguments | `False` |
+| `separation` | `boolean` | Whether to clearly separate the steel-manned presentations from any analysis | `True` |
 
 ## Examples
 

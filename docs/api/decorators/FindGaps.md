@@ -8,9 +8,9 @@ Identifies missing elements, unanswered questions, or overlooked considerations 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `aspects` | enum | The specific types of gaps to focus on finding | comprehensive |
-| `depth` | enum | How thoroughly to analyze for gaps | thorough |
-| `solutions` | boolean | Whether to suggest solutions or approaches for addressing the identified gaps | True |
+| `aspects` | `enum` | The specific types of gaps to focus on finding | `comprehensive` |
+| `depth` | `enum` | How thoroughly to analyze for gaps | `thorough` |
+| `solutions` | `boolean` | Whether to suggest solutions or approaches for addressing the identified gaps | `True` |
 
 ## Aspects Options
 

@@ -8,9 +8,9 @@ Structures the response using the Mutually Exclusive, Collectively Exhaustive fr
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `dimensions` | number | Number of top-level MECE dimensions to use for categorization | 3 |
-| `depth` | number | Maximum level of hierarchical breakdown within each dimension | 2 |
-| `framework` | enum | Optional predefined MECE framework to apply | custom |
+| `dimensions` | `number` | Number of top-level MECE dimensions to use for categorization | `3` |
+| `depth` | `number` | Maximum level of hierarchical breakdown within each dimension | `2` |
+| `framework` | `enum` | Optional predefined MECE framework to apply | `custom` |
 
 ## Framework Options
 

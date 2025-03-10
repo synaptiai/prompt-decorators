@@ -8,9 +8,9 @@ Applies a specific design pattern to generated code, ensuring architectural best
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `pattern` | enum | The design pattern to implement | inferred |
-| `language` | enum | Programming language to use | inferred |
-| `variation` | string | Specific variation of the pattern | standard |
+| `pattern` | `enum` | The design pattern to implement | `inferred` |
+| `language` | `enum` | Programming language to use | `inferred` |
+| `variation` | `string` | Specific variation of the pattern | `standard` |
 
 ## Pattern Options
 

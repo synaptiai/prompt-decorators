@@ -4,6 +4,54 @@ This section provides API reference for all available decorators in the Prompt D
 
 ## Decorators by Category
 
+### Minimal {#minimal}
+
+- [OutputFormat](OutputFormat.md)
+- [Reasoning](Reasoning.md)
+- [StepByStep](StepByStep.md)
+- [Tone](Tone.md)
+- [Version](Version.md)
+
+### Reasoning Process Decorators {#reasoning-process-decorators}
+
+Decorators that control or influence the reasoning process used in prompt responses.
+
+- [Abductive](Abductive.md)
+- [Analogical](Analogical.md)
+- [BlindSpots](BlindSpots.md)
+- [Contrarian](Contrarian.md)
+- [Debate](Debate.md)
+- [Deductive](Deductive.md)
+- [FirstPrinciples](FirstPrinciples.md)
+- [ForcedAnalogy](ForcedAnalogy.md)
+- [Inductive](Inductive.md)
+- [NegativeSpace](NegativeSpace.md)
+- [PerspectiveCascade](PerspectiveCascade.md)
+- [RedTeam](RedTeam.md)
+- [RootCause](RootCause.md)
+- [Socratic](Socratic.md)
+- [TemporalResonance](TemporalResonance.md)
+- [TreeOfThought](TreeOfThought.md)
+
+### Output Structure Decorators {#output-structure-decorators}
+
+Decorators that control the structure of the output generated from prompts.
+
+- [Alternatives](Alternatives.md)
+- [Bullet](Bullet.md)
+- [Comparison](Comparison.md)
+- [Constraints](Constraints.md)
+- [DecisionMatrix](DecisionMatrix.md)
+- [Layered](Layered.md)
+- [MECE](MECE.md)
+- [Nested](Nested.md)
+- [Outline](Outline.md)
+- [Prioritize](Prioritize.md)
+- [Schema](Schema.md)
+- [Summary](Summary.md)
+- [TableFormat](TableFormat.md)
+- [Timeline](Timeline.md)
+
 ### Architecture And Design
 
 - [APIDesign](APIDesign.md)
@@ -86,50 +134,6 @@ This section provides API reference for all available decorators in the Prompt D
 - [Override](Override.md)
 - [Priority](Priority.md)
 - [Refine](Refine.md)
-
-### Minimal
-
-- [OutputFormat](OutputFormat.md)
-- [Reasoning](Reasoning.md)
-- [StepByStep](StepByStep.md)
-- [Tone](Tone.md)
-- [Version](Version.md)
-
-### Reasoning
-
-- [Abductive](Abductive.md)
-- [Analogical](Analogical.md)
-- [BlindSpots](BlindSpots.md)
-- [Contrarian](Contrarian.md)
-- [Debate](Debate.md)
-- [Deductive](Deductive.md)
-- [FirstPrinciples](FirstPrinciples.md)
-- [ForcedAnalogy](ForcedAnalogy.md)
-- [Inductive](Inductive.md)
-- [NegativeSpace](NegativeSpace.md)
-- [PerspectiveCascade](PerspectiveCascade.md)
-- [RedTeam](RedTeam.md)
-- [RootCause](RootCause.md)
-- [Socratic](Socratic.md)
-- [TemporalResonance](TemporalResonance.md)
-- [TreeOfThought](TreeOfThought.md)
-
-### Structure
-
-- [Alternatives](Alternatives.md)
-- [Bullet](Bullet.md)
-- [Comparison](Comparison.md)
-- [Constraints](Constraints.md)
-- [DecisionMatrix](DecisionMatrix.md)
-- [Layered](Layered.md)
-- [MECE](MECE.md)
-- [Nested](Nested.md)
-- [Outline](Outline.md)
-- [Prioritize](Prioritize.md)
-- [Schema](Schema.md)
-- [Summary](Summary.md)
-- [TableFormat](TableFormat.md)
-- [Timeline](Timeline.md)
 
 ### Systematic Debugging
 

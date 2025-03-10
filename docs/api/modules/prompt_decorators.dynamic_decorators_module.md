@@ -1,4 +1,4 @@
-# prompt_decorators.dynamic_decorators_module
+# dynamic_decorators_module
 
 Dynamic Prompt Decorators Module.
 
@@ -13,9 +13,28 @@ Features:
 - Parameter validation against schema
 - Support for decorator composition
 
+## Public API
+
+This module exports the following components:
+
+- `DynamicDecorator`: Class - Dynamic decorator class for prompt transformations
+- `DecoratorDefinition`: Class - Class representing a decorator definition
+- `load_decorator_definitions`: Function - Load decorator definitions from the registry
+- `get_available_decorators`: Function - Get a list of all available decorators
+- `create_decorator_instance`: Function - Create a decorator instance by name
+- `create_decorator_class`: Function - Create a decorator class from a definition
+- `apply_dynamic_decorators`: Function - Apply decorators to a prompt using the +++ syntax
+- `apply_decorator`: Function - Apply a decorator to a prompt
+- `register_decorator`: Function - Register a decorator definition
+- `extract_decorator_name`: Function - Extract the decorator name from decorator text
+- `parse_decorator_text`: Function - Parse decorator text into name and parameters
+- `create_decorator`: Function - Create a decorator instance by name (alias for create_decorator_instance)
+- `list_available_decorators`: Function - List all available decorator names
+- `transform_prompt`: Function - Transform a prompt using a list of decorator strings
+
 ## Classes
 
-### DecoratorDefinition
+### `DecoratorDefinition`
 
 Class representing a decorator definition.
 
@@ -25,183 +44,304 @@ Class representing a decorator definition.
 
 Initialize a decorator definition.
 
-        Args:
-            name: Name of the decorator
-            description: Description of the decorator
-            category: Category of the decorator
-            parameters: List of parameter definitions
-            transform_function: JavaScript function for transforming prompts
-            version: Version of the decorator
+Args:
+    name: Name of the decorator
+    description: Description of the decorator
+    category: Category of the decorator
+    parameters: List of parameter definitions
+    transform_function: JavaScript function for transforming prompts
+    version: Version of the decorator
+
+**Signature:** `__init__(self, name: str, description: str, category: str, parameters: List[Dict[str, Any]], transform_function: str, version: str = '1.0.0')`
+
+**Parameters:**
+
+- `name`: `str`
+- `description`: `str`
+- `category`: `str`
+- `parameters`: `List`
+- `transform_function`: `str`
+- `version`: `str` (default: `1.0.0`)
 
 ##### `to_dict`
 
 Convert the definition to a dictionary.
 
+**Signature:** `to_dict(self) -> Dict[str, Any]`
+
+**Parameters:**
+
+
+**Returns:** `Dict`
+
+### `DynamicDecorator`
+
+*Imported from `prompt_decorators.core.dynamic_decorator`*
+
+Dynamic decorator class for prompt transformations.
+
+This class provides a dynamic approach to loading and applying prompt decorators
+from registry definitions. Instead of generating individual decorator classes for each
+decorator in the registry, this class loads decorator definitions at runtime directly
+from the JSON files in the registry.
+
+#### Attributes
+
+- `from_definition`: `classmethod` = `<classmethod(<function DynamicDecorator.from_definition at 0x1064c5080>)>`
+- `get_available_decorators`: `classmethod` = `<classmethod(<function DynamicDecorator.get_available_decorators at 0x1064c51c0>)>`
+- `load_registry`: `classmethod` = `<classmethod(<function DynamicDecorator.load_registry at 0x1064c4fe0>)>`
+- `register_decorator`: `classmethod` = `<classmethod(<function DynamicDecorator.register_decorator at 0x1064c5120>)>`
+
+#### Methods
+
+##### `__init__`
+
+Initialize a dynamic decorator.
+
+Args:
+    name: Name of the decorator to load
+    **kwargs: Parameters for the decorator
+
+Raises:
+    ValueError: If the decorator is not found in the registry
+
+Returns:
+    None
+
+**Signature:** `__init__(self, name: str, **kwargs: Any) -> None`
+
+**Parameters:**
+
+- `name`: `str`
+- `kwargs`: `Any`
+
+##### `apply`
+
+Apply the decorator to a text.
+
+Args:
+    text: Text to transform
+
+Returns:
+    Transformed text
+
+**Signature:** `apply(self, text: str) -> str`
+
+**Parameters:**
+
+- `text`: `str`
+
+**Returns:** `str`
+
 ## Functions
 
-### apply_decorator
+### `apply_decorator`
 
 Apply a decorator to a prompt.
 
-    Args:
-        decorator_name: Name of the decorator
-        prompt: The prompt text
-        **kwargs: Parameters for the decorator
+Args:
+    decorator_name: Name of the decorator
+    prompt: The prompt text
+    **kwargs: Parameters for the decorator
 
-    Returns:
-        The transformed prompt
+Returns:
+    The transformed prompt
 
-#### Parameters
+**Signature:** `apply_decorator(decorator_name: str, prompt: str, **kwargs: Any) -> str`
 
-- `decorator_name`: str
-- `prompt`: str
-- `kwargs`: Any
+**Parameters:**
 
-### apply_dynamic_decorators
+- `decorator_name`: `str`
+- `prompt`: `str`
+- `kwargs`: `Any`
+
+**Returns:** `str`
+
+### `apply_dynamic_decorators`
 
 Apply decorators to a prompt using the +++ syntax.
 
-    Args:
-        prompt: The prompt text with decorator syntax
+Args:
+    prompt: The prompt text with decorator syntax
 
-    Returns:
-        The transformed prompt
+Returns:
+    The transformed prompt
 
-#### Parameters
+**Signature:** `apply_dynamic_decorators(prompt: str) -> str`
 
-- `prompt`: str
+**Parameters:**
 
-### create_decorator
+- `prompt`: `str`
+
+**Returns:** `str`
+
+### `create_decorator`
 
 Create a decorator instance by name (alias for create_decorator_instance).
 
-    This function is maintained for backward compatibility with demo code.
+This function is maintained for backward compatibility with demo code.
 
-    Args:
-        name: Name of the decorator
-        **kwargs: Parameters for the decorator
+Args:
+    name: Name of the decorator
+    **kwargs: Parameters for the decorator
 
-    Returns:
-        A decorator instance
+Returns:
+    A decorator instance
 
-    Raises:
-        ValueError: If the decorator is not found
+Raises:
+    ValueError: If the decorator is not found
 
-#### Parameters
+**Signature:** `create_decorator(name: str, **kwargs: Any) -> prompt_decorators.core.dynamic_decorator.DynamicDecorator`
 
-- `name`: str
-- `kwargs`: Any
+**Parameters:**
 
-### create_decorator_class
+- `name`: `str`
+- `kwargs`: `Any`
+
+**Returns:** `DynamicDecorator`
+
+### `create_decorator_class`
 
 Create a decorator class from a definition.
 
-    Args:
-        definition: Decorator definition
+Args:
+    definition: Decorator definition
 
-    Returns:
-        A decorator class
+Returns:
+    A decorator class
 
-#### Parameters
+**Signature:** `create_decorator_class(definition: prompt_decorators.dynamic_decorators_module.DecoratorDefinition) -> type`
 
-- `definition`: DecoratorDefinition
+**Parameters:**
 
-### create_decorator_instance
+- `definition`: `DecoratorDefinition`
+
+**Returns:** `type`
+
+### `create_decorator_instance`
 
 Create a decorator instance by name.
 
-    Args:
-        name: Name of the decorator
-        **kwargs: Parameters for the decorator
+Args:
+    name: Name of the decorator
+    **kwargs: Parameters for the decorator
 
-    Returns:
-        A decorator instance
+Returns:
+    A decorator instance
 
-    Raises:
-        ValueError: If the decorator is not found
+Raises:
+    ValueError: If the decorator is not found
 
-#### Parameters
+**Signature:** `create_decorator_instance(name: str, **kwargs: Any) -> prompt_decorators.core.dynamic_decorator.DynamicDecorator`
 
-- `name`: str
-- `kwargs`: Any
+**Parameters:**
 
-### extract_decorator_name
+- `name`: `str`
+- `kwargs`: `Any`
+
+**Returns:** `DynamicDecorator`
+
+### `extract_decorator_name`
 
 Extract the decorator name from decorator text.
 
-    Args:
-        decorator_text: Text containing a decorator definition
+Args:
+    decorator_text: Text containing a decorator definition
 
-    Returns:
-        The decorator name
+Returns:
+    The decorator name
 
-#### Parameters
+**Signature:** `extract_decorator_name(decorator_text: str) -> str`
 
-- `decorator_text`: str
+**Parameters:**
 
-### get_available_decorators
+- `decorator_text`: `str`
+
+**Returns:** `str`
+
+### `get_available_decorators`
 
 Get a list of all available decorators.
 
-    Returns:
-        List of decorator definitions
+Returns:
+    List of decorator definitions
 
-### list_available_decorators
+**Signature:** `get_available_decorators() -> List[prompt_decorators.dynamic_decorators_module.DecoratorDefinition]`
+
+**Returns:** `List`
+
+### `list_available_decorators`
 
 List all available decorator names.
 
-    This function is maintained for backward compatibility with demo code.
+This function is maintained for backward compatibility with demo code.
 
-    Returns:
-        A list of decorator names
+Returns:
+    A list of decorator names
 
-### load_decorator_definitions
+**Signature:** `list_available_decorators() -> List[str]`
+
+**Returns:** `List`
+
+### `load_decorator_definitions`
 
 Load decorator definitions from the registry.
 
-### parse_decorator_text
+**Signature:** `load_decorator_definitions() -> None`
+
+### `parse_decorator_text`
 
 Parse decorator text into name and parameters.
 
-    Args:
-        decorator_text: Text containing a decorator definition
+Args:
+    decorator_text: Text containing a decorator definition
 
-    Returns:
-        Tuple of (name, parameters)
+Returns:
+    Tuple of (name, parameters)
 
-#### Parameters
+**Signature:** `parse_decorator_text(decorator_text: str) -> tuple`
 
-- `decorator_text`: str
+**Parameters:**
 
-### register_decorator
+- `decorator_text`: `str`
+
+**Returns:** `tuple`
+
+### `register_decorator`
 
 Register a decorator definition.
 
-    Args:
-        definition: Decorator definition
+Args:
+    definition: Decorator definition
 
-    Returns:
-        None
+Returns:
+    None
 
-#### Parameters
+**Signature:** `register_decorator(definition: prompt_decorators.dynamic_decorators_module.DecoratorDefinition) -> None`
 
-- `definition`: DecoratorDefinition
+**Parameters:**
 
-### transform_prompt
+- `definition`: `DecoratorDefinition`
+
+### `transform_prompt`
 
 Transform a prompt using a list of decorator strings.
 
-    This function is a wrapper around the core transform_prompt function
-    to ensure backward compatibility with the demo.
+This function is a wrapper around the core transform_prompt function
+to ensure backward compatibility with the demo.
 
-    Args:
-        prompt: The prompt to transform
-        decorators: List of decorator strings
+Args:
+    prompt: The prompt to transform
+    decorators: List of decorator strings
 
-    Returns:
-        The transformed prompt
+Returns:
+    The transformed prompt
 
-#### Parameters
+**Signature:** `transform_prompt(prompt: str, decorators: List[str]) -> str`
 
-- `prompt`: str
-- `decorators`: List
+**Parameters:**
+
+- `prompt`: `str`
+- `decorators`: `List`
+
+**Returns:** `str`

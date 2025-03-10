@@ -8,9 +8,9 @@ Adds an explicit statement of limitations, caveats, or uncertainties related to 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `detail` | enum | The level of detail in the limitations statement | moderate |
-| `position` | enum | Where to place the limitations statement in the response | end |
-| `focus` | enum | The primary aspect to focus on in the limitations | all |
+| `detail` | `enum` | The level of detail in the limitations statement | `moderate` |
+| `position` | `enum` | Where to place the limitations statement in the response | `end` |
+| `focus` | `enum` | The primary aspect to focus on in the limitations | `all` |
 
 ## Detail Options
 

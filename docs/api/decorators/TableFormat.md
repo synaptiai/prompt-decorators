@@ -8,9 +8,9 @@ Structures the AI's response in a tabular format with defined columns. This deco
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `columns` | array | List of column names for the table | Required |
-| `format` | enum | Format style for the table representation | markdown |
-| `alignment` | enum | Text alignment within table cells | left |
+| `columns` | `array` | List of column names for the table | `Required` |
+| `format` | `enum` | Format style for the table representation | `markdown` |
+| `alignment` | `enum` | Text alignment within table cells | `left` |
 
 ## Format Options
 

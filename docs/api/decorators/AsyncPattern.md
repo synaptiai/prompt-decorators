@@ -8,9 +8,9 @@ Handles asynchronous operations with appropriate patterns for the language and e
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `approach` | enum | Asynchronous programming model to use | language-appropriate |
-| `error-handling` | enum | Error handling strategy | approach-appropriate |
-| `cancellation` | enum | Support for operation cancellation | none |
+| `approach` | `enum` | Asynchronous programming model to use | `language-appropriate` |
+| `error-handling` | `enum` | Error handling strategy | `approach-appropriate` |
+| `cancellation` | `enum` | Support for operation cancellation | `none` |
 
 ## Approach Options
 

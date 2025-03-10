@@ -8,9 +8,9 @@ Creates troubleshooting guides for resolving system issues.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `component` | enum | System area | application |
-| `format` | enum | Guide structure | step-by-step |
-| `audience` | enum | Target user | sre |
+| `component` | `enum` | System area | `application` |
+| `format` | `enum` | Guide structure | `step-by-step` |
+| `audience` | `enum` | Target user | `sre` |
 
 ## Component Options
 

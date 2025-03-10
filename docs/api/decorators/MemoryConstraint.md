@@ -8,9 +8,9 @@ Helps manage implementation within AI context window limitations by focusing on 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | Part of the code to focus on | component |
-| `implementation` | enum | Implementation completeness | core-logic |
-| `context` | enum | How to handle surrounding code | summarize |
+| `focus` | `enum` | Part of the code to focus on | `component` |
+| `implementation` | `enum` | Implementation completeness | `core-logic` |
+| `context` | `enum` | How to handle surrounding code | `summarize` |
 
 ## Focus Options
 

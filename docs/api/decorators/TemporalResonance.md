@@ -8,11 +8,11 @@ Analyzes topics across multiple time horizons to identify patterns, principles, 
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `horizons` | number | Number of distinct time horizons to explore | 3 |
-| `resonancePoints` | number | Number of resonance points to identify across time horizons | 3 |
-| `futureScenarios` | number | Number of potential future scenarios to consider | 3 |
-| `domain` | enum | Specific domain context for the temporal analysis | general |
-| `depth` | enum | Depth of historical analysis and future projection | moderate |
+| `horizons` | `number` | Number of distinct time horizons to explore | `3` |
+| `resonancePoints` | `number` | Number of resonance points to identify across time horizons | `3` |
+| `futureScenarios` | `number` | Number of potential future scenarios to consider | `3` |
+| `domain` | `enum` | Specific domain context for the temporal analysis | `general` |
+| `depth` | `enum` | Depth of historical analysis and future projection | `moderate` |
 
 ## Domain Options
 

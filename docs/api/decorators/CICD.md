@@ -8,9 +8,9 @@ Designs continuous integration and delivery pipelines.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `tool` | enum | CI/CD platform or tool | github-actions |
-| `complexity` | enum | Pipeline sophistication | standard |
-| `focus` | enum | Pipeline emphasis | balanced |
+| `tool` | `enum` | CI/CD platform or tool | `github-actions` |
+| `complexity` | `enum` | Pipeline sophistication | `standard` |
+| `focus` | `enum` | Pipeline emphasis | `balanced` |
 
 ## Tool Options
 

@@ -8,9 +8,9 @@ Applies Site Reliability Engineering practices.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `focus` | enum | SRE practice area | context-dependent |
-| `maturity` | enum | Organization SRE maturity | intermediate |
-| `output` | enum | Deliverable type | implementation |
+| `focus` | `enum` | SRE practice area | `context-dependent` |
+| `maturity` | `enum` | Organization SRE maturity | `intermediate` |
+| `output` | `enum` | Deliverable type | `implementation` |
 
 ## Focus Options
 

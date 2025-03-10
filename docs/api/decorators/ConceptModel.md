@@ -8,9 +8,9 @@ Visualizes relationships between technical concepts.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `notation` | enum | Diagram type | concept-map |
-| `complexity` | enum | Diagram sophistication | intermediate |
-| `focus` | string | Central concept | main-topic |
+| `notation` | `enum` | Diagram type | `concept-map` |
+| `complexity` | `enum` | Diagram sophistication | `intermediate` |
+| `focus` | `string` | Central concept | `main-topic` |
 
 ## Notation Options
 

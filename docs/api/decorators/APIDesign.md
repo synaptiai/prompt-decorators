@@ -8,9 +8,9 @@ Designs API interfaces focusing on specific qualities.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `style` | enum | API architectural style | rest |
-| `focus` | enum | Design priority | developer-experience |
-| `documentation` | enum | Documentation approach | style-appropriate |
+| `style` | `enum` | API architectural style | `rest` |
+| `focus` | `enum` | Design priority | `developer-experience` |
+| `documentation` | `enum` | Documentation approach | `style-appropriate` |
 
 ## Style Options
 

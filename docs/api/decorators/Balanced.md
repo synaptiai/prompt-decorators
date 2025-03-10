@@ -8,9 +8,9 @@ Ensures equal representation of different perspectives or viewpoints on a topic.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `perspectives` | number | Number of different perspectives to include | 2 |
-| `structure` | enum | How to structure the different perspectives | sequential |
-| `equal` | boolean | Whether to strictly enforce equal word count for each perspective | True |
+| `perspectives` | `number` | Number of different perspectives to include | `2` |
+| `structure` | `enum` | How to structure the different perspectives | `sequential` |
+| `equal` | `boolean` | Whether to strictly enforce equal word count for each perspective | `True` |
 
 ## Structure Options
 

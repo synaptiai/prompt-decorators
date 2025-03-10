@@ -8,9 +8,9 @@ Generates descriptive pull request templates and descriptions.
 
 | Parameter | Type | Description | Default |
 |-----------|------|-------------|--------|
-| `detail` | enum | Description depth | standard |
-| `sections` | enum | PR sections to include | all |
-| `reviewers` | enum | Guidance for reviewers | focused |
+| `detail` | `enum` | Description depth | `standard` |
+| `sections` | `enum` | PR sections to include | `all` |
+| `reviewers` | `enum` | Guidance for reviewers | `focused` |
 
 ## Detail Options
 
