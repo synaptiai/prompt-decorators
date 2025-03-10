@@ -1120,43 +1120,7 @@ Implementations claiming conformance with this standard SHOULD implement these t
 4. **Error Handling**: Test handling of malformed decorators
 5. **Edge Cases**: Test boundary conditions for parameter values
 
-### 9.2 Test Suite
-
-A reference test suite is available at `https://github.com/prompt-decorators/test-suite` with:
-
-1. Test cases for each core decorator
-2. Composition test cases
-3. Error handling scenarios
-4. Performance benchmarks
-
-### 9.3 Validation Tools
-
-These tools are available to validate decorator implementations:
-
-1. **Decorator Validator**: Command-line tool to validate decorator syntax
-2. **Behavior Test Framework**: Framework for testing decorator effects
-3. **Compatibility Scanner**: Tool to check for decorator conflicts
-
-## 10. Implementation Timeline
-
-### 10.1 Phased Approach
-
-Implementations are encouraged to follow this phased approach:
-
-1. **Phase 1 (Core Support)**: Implement the five core decorators
-2. **Phase 2 (Extended Support)**: Add support for common reasoning and output decorators
-3. **Phase 3 (Full Support)**: Implement all standard decorators
-4. **Phase 4 (Extensions)**: Support domain-specific extensions
-
-### 10.2 Versioning Timeline
-
-The standard will evolve according to this timeline:
-
-1. **v1.0 (Initial Release)**: Core specification with minimal set of decorators
-2. **v1.x (Minor Updates)**: Clarifications and additional decorators
-3. **v2.0 (Major Update)**: Enhanced composition, additional parameters, and expanded categories
-
-## 11. References
+## 10. References
 
 1. Gamma, E., Helm, R., Johnson, R., & Vlissides, J. (1994). [Design Patterns: Elements of Reusable Object-Oriented Software](https://en.wikipedia.org/wiki/Design_Patterns).
 2. Python Software Foundation. (2021). [PEP 318 – Decorators for Functions and Methods](https://peps.python.org/pep-0318/).

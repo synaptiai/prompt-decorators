@@ -77,38 +77,26 @@ The Prompt Decorators framework addresses these challenges through:
 - **🧩 Dynamic loading**: Runtime decorator loading from definition files
 - **🔍 Runtime decorator discovery**: Dynamic discovery and registration of decorators
 
-## 🚀 Implemented Functionality
+## 💡 Implemented Functionality
 
-The framework currently implements:
+- **✅ Core Decorator Registry**: Load decorators from standardized JSON definitions
+- **✅ Decorator Application**: Apply decorators to prompts with parameter validation
+- **✅ Sophisticated Transformation**: Convert decorator parameters into prompt adjustments
+- **✅ Multiple Input Formats**: Support for Python functions, strings, and JSON
+- **✅ Parameter validation and type checking**: Robust validation of decorator parameters
+- **✅ Standard Decorators**: Implementation of the standard decorators defined in the specification
+- **✅ Extension Framework**: Support for domain-specific decorator extensions
+- **✅ Documentation Generation**: Automated documentation generation from decorator definitions
 
-1. **Core Decorators**:
-   - `Reasoning`: Enhances reasoning capabilities in responses
-   - `StepByStep`: Breaks down reasoning into sequential steps
-   - `TreeOfThought`: Explores multiple reasoning paths
-   - `FirstPrinciples`: Applies first principles reasoning
-   - `OutputFormat`: Controls the format of the output (markdown, JSON, etc.)
-   - `Tone`: Adjusts the tone of the response
-   - And many more...
+## 📊 Implementation Status
 
-2. **Registry System**:
-   - JSON-based decorator definitions
-   - Metadata for documentation and compatibility
-   - Versioning and dependency management
+The Prompt Decorators project is currently in active development.
 
-3. **Documentation System**:
-   - Comprehensive markdown documentation
-   - Integration with MkDocs for documentation site
-   - API reference documentation
+For a detailed breakdown of implementation status, see our [Implementation Status](docs/implementation-status.md) document.
 
-4. **Dynamic Implementation**:
-   - Runtime loading of decorators from definitions
-   - No code generation required
-   - Flexible extension mechanism
+### 🚧 Roadmap
 
-5. **Integrations**:
-   - **Model Context Protocol (MCP)**: Integration with the [Model Context Protocol](https://github.com/microsoft/model-context-protocol) for standardized LLM interactions
-   - **Claude Desktop**: Specialized integration for Anthropic's Claude Desktop application
-   - MCP tools for applying decorators and retrieving decorator information
+The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.
 
 ## 🏗️ Architecture
 
@@ -144,8 +132,6 @@ The framework is organized into several key components:
    - Documentation scripts for generating, verifying, and enhancing documentation
    - Validation scripts for checking docstrings and code quality
    - Development tools for common tasks
-
-The system uses a dynamic implementation approach where decorators are defined in registry files (typically JSON) and loaded at runtime, rather than generating code. This provides more flexibility and simplifies the extension process.
 
 ## 🚀 Getting Started
 
@@ -201,31 +187,10 @@ This project is licensed under the Apache License, Version 2.0. See the [LICENSE
 
 Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) file for guidelines on how to contribute to this project.
 
-### Development Environment
-
-To ensure code quality, the project uses strict type checking in CI. While the `demo/` directory is excluded from pre-commit hooks to reduce development friction, it's still validated in CI with stricter settings.
-
-Before pushing changes:
-1. Run `scripts/check_demo_types.py` to validate the demo directory with the same strict type checking used in CI
-2. Alternatively, install the optional pre-push hook: `cp scripts/git-hooks/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push`
-
-## 🚧 Roadmap
-
-The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.
-
 ## 🤖 Acknowledgments
 
 This project would not be possible without the contributions of the following individuals and organizations:
 
-- **[Synaptiai](https://synaptiai.com)**: The original creators and maintainers of the framework
+- **[Mostapha Kalami Heris](https://kalami.medium.com)**: For his article on [Prompt Decorators: A Simple Way to Improve AI Responses](https://kalami.medium.com/prompt-decorators-a-simple-way-to-improve-ai-responses-c3f3c2579a8c), which inspired this specification and repository
+- **[Synaptiai](https://synapti.ai)**: The creators and maintainers of this framework and specification
 - **[Contributors](https://github.com/synaptiai/prompt-decorators/graphs/contributors)**: All the wonderful people who have contributed to this project
-
-## 🔢 Code Quality
-
-This project uses a variety of tools and practices to ensure high code quality:
-
-- **[Code Style](https://github.com/astral-sh/ruff)**: Enforces consistent coding style
-- **[Code Quality and Testing](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Code+Quality+and+Testing%22)**: Continuous integration and testing
-- **[Documentation Verification](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Documentation+Verification%22)**: Ensures documentation accuracy
-- **[Documentation](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Documentation%22)**: Comprehensive documentation site
-- **[Publish to PyPI](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Publish+to+PyPI%22)**: Automated deployment to PyPI
