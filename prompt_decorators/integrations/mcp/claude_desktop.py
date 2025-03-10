@@ -2,7 +2,7 @@
 """Entry point for running the Prompt Decorators MCP server for Claude Desktop.
 
 Usage:
-    python -m prompt_decorators.integrations.mcp.claude_desktop [--host HOST] [--port PORT] [--verbose]
+    python -m prompt_decorators.integrations.mcp.claude_desktop [`--host HOST`] [`--port PORT`] [`--verbose`]
 """
 
 import argparse

@@ -18,7 +18,7 @@ Subclasses should implement the apply_to_prompt and transform_response methods.
 
 - `conflicts_with`: `set` = `set()`
 - `description`: `str` = `'Base decorator class'`
-- `from_dict`: `classmethod` = `<classmethod(<function DecoratorBase.from_dict at 0x10651f4c0>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function DecoratorBase.from_dict at 0x105acf4c0>)>`
 - `name`: `str` = `'DecoratorBase'`
 - `parameters`: `dict` = `{}`
 - `transformation_template`: `dict` = `{'instruction': '', 'parameterMapping': {}, 'placement': 'prepend', 'compositionBehavior': 'accumulate'}`
@@ -94,7 +94,7 @@ Subclasses should implement the apply_to_prompt and transform_response methods.
 
 - `conflicts_with`: `set` = `set()`
 - `description`: `str` = `'Base decorator class'`
-- `from_dict`: `classmethod` = `<classmethod(<function DecoratorBase.from_dict at 0x10651f4c0>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function DecoratorBase.from_dict at 0x105acf4c0>)>`
 - `name`: `str` = `'DecoratorBase'`
 - `parameters`: `dict` = `{}`
 - `transformation_template`: `dict` = `{'instruction': '', 'parameterMapping': {}, 'placement': 'prepend', 'compositionBehavior': 'accumulate'}`
@@ -167,7 +167,7 @@ This class is used by dynamic decorators to define parameters and validate value
 
 #### Attributes
 
-- `from_dict`: `classmethod` = `<classmethod(<function DecoratorParameter.from_dict at 0x10651f380>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function DecoratorParameter.from_dict at 0x105acf380>)>`
 
 #### Methods
 

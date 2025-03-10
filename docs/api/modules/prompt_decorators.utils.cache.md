@@ -10,7 +10,7 @@ This module provides a caching system for decorator definitions and instances.
 
 Type: `DecoratorCache`
 
-Value: `<prompt_decorators.utils.cache.DecoratorCache object at 0x11ae49cd0>`
+Value: `<prompt_decorators.utils.cache.DecoratorCache object at 0x1073d5710>`
 
 ### `logger`
 

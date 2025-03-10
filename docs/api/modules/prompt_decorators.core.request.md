@@ -12,8 +12,8 @@ Class representing a request decorated with prompt decorators.
 
 #### Attributes
 
-- `from_dict`: `classmethod` = `<classmethod(<function DecoratedRequest.from_dict at 0x1066699e0>)>`
-- `from_json`: `classmethod` = `<classmethod(<function DecoratedRequest.from_json at 0x106669a80>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function DecoratedRequest.from_dict at 0x105c199e0>)>`
+- `from_json`: `classmethod` = `<classmethod(<function DecoratedRequest.from_json at 0x105c19a80>)>`
 
 #### Methods
 

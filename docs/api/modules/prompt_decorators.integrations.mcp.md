@@ -30,7 +30,7 @@ Value: `<Logger prompt-decorators-mcp (INFO)>`
 
 Type: `FastMCP`
 
-Value: `<mcp.server.fastmcp.server.FastMCP object at 0x106695a10>`
+Value: `<mcp.server.fastmcp.server.FastMCP object at 0x10716a710>`
 
 ## Functions
 

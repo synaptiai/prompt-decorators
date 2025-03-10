@@ -31,7 +31,7 @@ allowing decorators to adjust their behavior based on the model being used.
 
 #### Attributes
 
-- `from_dict`: `classmethod` = `<classmethod(<function ModelSpecificDecorator.from_dict at 0x106668fe0>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function ModelSpecificDecorator.from_dict at 0x105c18d60>)>`
 
 #### Methods
 
@@ -217,7 +217,7 @@ particular language models, taking into account their unique capabilities and li
 
 #### Attributes
 
-- `create_for_model`: `staticmethod` = `<staticmethod(<function ModelSpecificDecoratorFactory.create_for_model at 0x106668c20>)>`
+- `create_for_model`: `staticmethod` = `<staticmethod(<function ModelSpecificDecoratorFactory.create_for_model at 0x105c18c20>)>`
 
 #### Methods
 

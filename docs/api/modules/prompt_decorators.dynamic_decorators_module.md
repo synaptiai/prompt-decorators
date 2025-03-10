@@ -87,10 +87,10 @@ from the JSON files in the registry.
 
 #### Attributes
 
-- `from_definition`: `classmethod` = `<classmethod(<function DynamicDecorator.from_definition at 0x1064c5080>)>`
-- `get_available_decorators`: `classmethod` = `<classmethod(<function DynamicDecorator.get_available_decorators at 0x1064c51c0>)>`
-- `load_registry`: `classmethod` = `<classmethod(<function DynamicDecorator.load_registry at 0x1064c4fe0>)>`
-- `register_decorator`: `classmethod` = `<classmethod(<function DynamicDecorator.register_decorator at 0x1064c5120>)>`
+- `from_definition`: `classmethod` = `<classmethod(<function DynamicDecorator.from_definition at 0x105a75080>)>`
+- `get_available_decorators`: `classmethod` = `<classmethod(<function DynamicDecorator.get_available_decorators at 0x105a751c0>)>`
+- `load_registry`: `classmethod` = `<classmethod(<function DynamicDecorator.load_registry at 0x105a74fe0>)>`
+- `register_decorator`: `classmethod` = `<classmethod(<function DynamicDecorator.register_decorator at 0x105a75120>)>`
 
 #### Methods
 

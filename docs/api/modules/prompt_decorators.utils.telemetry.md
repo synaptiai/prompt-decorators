@@ -16,7 +16,7 @@ Value: `<Logger prompt_decorators.utils.telemetry (INFO)>`
 
 Type: `TelemetryManager`
 
-Value: `<prompt_decorators.utils.telemetry.TelemetryManager object at 0x11b15f110>`
+Value: `<prompt_decorators.utils.telemetry.TelemetryManager object at 0x1075dec90>`
 
 ## Classes
 

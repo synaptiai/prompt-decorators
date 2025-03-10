@@ -13,7 +13,7 @@ Schema for decorator definitions.
 
 #### Attributes
 
-- `from_dict`: `classmethod` = `<classmethod(<function DecoratorSchema.from_dict at 0x1064c4ae0>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function DecoratorSchema.from_dict at 0x105a74ae0>)>`
 
 #### Methods
 
@@ -57,7 +57,7 @@ Schema for decorator parameters.
 
 #### Attributes
 
-- `from_dict`: `classmethod` = `<classmethod(<function ParameterSchema.from_dict at 0x1064c4900>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function ParameterSchema.from_dict at 0x105a74900>)>`
 
 #### Methods
 

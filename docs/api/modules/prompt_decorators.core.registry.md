@@ -16,8 +16,8 @@ allowing for easier management and access to registered decorators.
 
 #### Attributes
 
-- `categories`: `property` = `<property object at 0x106517e20>`
-- `decorators`: `property` = `<property object at 0x106517dd0>`
+- `categories`: `property` = `<property object at 0x105ac72e0>`
+- `decorators`: `property` = `<property object at 0x105ac7100>`
 
 #### Methods
 

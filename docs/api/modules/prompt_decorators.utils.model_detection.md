@@ -23,7 +23,7 @@ such as supported decorator features and parameter types.
 
 #### Attributes
 
-- `from_dict`: `classmethod` = `<classmethod(<function ModelCapabilities.from_dict at 0x106404fe0>)>`
+- `from_dict`: `classmethod` = `<classmethod(<function ModelCapabilities.from_dict at 0x1059b6480>)>`
 
 #### Methods
 

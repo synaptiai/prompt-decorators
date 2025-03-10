@@ -16,7 +16,7 @@ Value: `<Logger prompt_decorators.utils.plugins (INFO)>`
 
 Type: `PluginManager`
 
-Value: `<prompt_decorators.utils.plugins.PluginManager object at 0x11b153010>`
+Value: `<prompt_decorators.utils.plugins.PluginManager object at 0x10744f610>`
 
 ## Classes
 
