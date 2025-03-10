@@ -4,9 +4,9 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "prompt-decorators"
-version = "0.1.0"
-description = "A framework for managing prompt decorators to enhance interactions with language models"
-authors = ["Your Name <your.email@example.com>"]
+version = "0.3.0"
+description = "A framework for defining, managing, and applying prompt decorators to enhance interactions with LLMs"
+authors = ["Daniel Bentes <promptdecorators@synapti.ai>"]
 readme = "README.md"
 license = "Apache-2.0"
 classifiers = [
@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 [tool.poetry.urls]
-Documentation = "https://github.com/synaptiai/prompt-decorators/docs"
+Documentation = "https://synaptiai.github.io/prompt-decorators/"
 Source = "https://github.com/synaptiai/prompt-decorators"
 "Issue Tracker" = "https://github.com/synaptiai/prompt-decorators/issues"
 

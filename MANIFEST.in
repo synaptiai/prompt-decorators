@@ -12,6 +12,9 @@ recursive-include prompt_decorators *.json
 recursive-include prompt_decorators/registry *.json
 recursive-include prompt_decorators/templates *.j2
 recursive-include prompt_decorators/schemas *.json
+recursive-include registry *.json
+recursive-include registry/core *.json
+recursive-include registry/extensions *.json
 
 recursive-include tests *.py
 recursive-include examples *.py

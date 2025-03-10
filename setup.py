@@ -14,7 +14,7 @@ with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as f:
 # Define package metadata
 setup(
     name="prompt-decorators",
-    version="0.1.0",
+    version="0.3.0",
     description="A framework for defining, managing, and applying prompt decorators to enhance interactions with LLMs",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -41,12 +41,16 @@ setup(
             "black>=23.0.0",
             "isort>=5.0.0",
             "mypy>=1.0.0",
-            "ruff>=0.0.267",
+            "ruff>=0.1.0",
+            "pre-commit>=4.1.0",
         ],
         "docs": [
-            "mkdocs>=1.4.0",
+            "mkdocs>=1.5.0",
             "mkdocs-material>=9.0.0",
-            "mkdocstrings>=0.22.0",
+            "mkdocs-awesome-pages-plugin>=2.9.0",
+            "mkdocs-autolinks-plugin>=0.7.0",
+            "mkdocs-git-revision-date-localized-plugin>=1.2.0",
+            "mkdocstrings>=0.24.0",
             "mkdocstrings-python>=1.0.0",
         ],
         "langchain": [
@@ -71,7 +75,7 @@ setup(
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.11",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",

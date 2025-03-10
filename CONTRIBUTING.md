@@ -292,7 +292,7 @@ For feature requests:
 
 ## License
 
-By contributing to this project, you agree that your contributions will be licensed under the same [MIT License](LICENSE) that covers the project.
+By contributing to this project, you agree that your contributions will be licensed under the same [Apache License, Version 2.0](LICENSE) that covers the project.
 
 Thank you for contributing to Prompt Decorators!
 

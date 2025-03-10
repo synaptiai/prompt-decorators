@@ -147,6 +147,52 @@ The framework is organized into several key components:
 
 The system uses a dynamic implementation approach where decorators are defined in registry files (typically JSON) and loaded at runtime, rather than generating code. This provides more flexibility and simplifies the extension process.
 
+## 🚀 Getting Started
+
+### Installation
+
+You can install the package from PyPI:
+
+```bash
+pip install prompt-decorators
+```
+
+For additional functionality, you can install optional dependencies:
+
+```bash
+# For Model Context Protocol (MCP) integration
+pip install "prompt-decorators[mcp]"
+
+# For development and testing
+pip install "prompt-decorators[dev,test]"
+
+# For documentation
+pip install "prompt-decorators[docs]"
+
+# For all optional dependencies
+pip install "prompt-decorators[all]"
+```
+
+### Basic Usage
+
+```python
+import prompt_decorators as pd
+
+# Load available decorators
+pd.load_decorator_definitions()
+
+# Create a decorator instance
+reasoning = pd.create_decorator_instance("Reasoning", depth="comprehensive")
+
+# Apply the decorator to a prompt
+prompt = "Explain the concept of prompt engineering."
+decorated_prompt = reasoning.apply(prompt)
+
+print(decorated_prompt)
+```
+
+For more detailed examples and usage instructions, please refer to the [documentation](https://synaptiai.github.io/prompt-decorators/).
+
 ## 📝 License
 
 This project is licensed under the Apache License, Version 2.0. See the [LICENSE](LICENSE) file for more information.
