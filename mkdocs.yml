@@ -67,6 +67,8 @@ plugins:
             show_source: true
             show_category_heading: true
             show_if_no_docstring: false
+  - mermaid2:
+      version: 10.0.2
 
 # Add strict: false at the root level
 strict: false
@@ -291,8 +293,3 @@ nav:
       - TypeDefinition: api/decorators/TypeDefinition.md
       - Uncertainty: api/decorators/Uncertainty.md
       - Version: api/decorators/Version.md
-  - Decorator Categories:
-    - Overview: decorators/index.md
-    - Reasoning Decorators: decorators/reasoning.md
-    - Style Decorators: decorators/style.md
-    - Format Decorators: decorators/format.md

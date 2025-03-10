@@ -48,6 +48,7 @@ mkdocs-awesome-pages-plugin = "^2.9.0"
 mkdocs-autolinks-plugin = "^0.7.0"
 mkdocs-git-revision-date-localized-plugin = "^1.2.0"
 mkdocstrings = "^0.24.0"
+mkdocs-mermaid2-plugin = "^1.1.1"
 
 [tool.poetry.group.langchain.dependencies]
 langchain = ">=0.0.200"

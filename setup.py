@@ -52,6 +52,7 @@ setup(
             "mkdocs-git-revision-date-localized-plugin>=1.2.0",
             "mkdocstrings>=0.24.0",
             "mkdocstrings-python>=1.0.0",
+            "mermaid2>=10.0.2",
         ],
         "langchain": [
             "langchain>=0.0.200",

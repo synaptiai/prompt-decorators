@@ -125,6 +125,7 @@ The framework is organized into several key components:
 4. **Documentation** (`docs/`):
    - `generate_docs.py`: Official documentation generator for decorators and API reference
    - Documentation standards, workflows, and guidelines
+   - Mermaid diagrams for visualizing architecture and processes
 
 5. **Integrations** (`prompt_decorators/integrations/`):
    - `mcp/`: Integration with the Model Context Protocol

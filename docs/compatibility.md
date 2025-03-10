@@ -4,7 +4,7 @@ This guide explains compatibility considerations for the Prompt Decorators frame
 
 ## LLM Provider Compatibility
 
-The Prompt Decorators framework is designed to work with any LLM provider, as it transforms decorators into natural language instructions that any model can understand. However, there are important considerations for each provider.
+The Prompt Decorators framework is designed to work with any LLM provider, as it transforms decorators into natural language instructions that any model can understand. However, there might be important considerations for each provider.
 
 ### OpenAI
 
@@ -34,7 +34,6 @@ response = openai.chat.completions.create(
 
 #### Considerations
 - gpt-4o and newer models have the best understanding of complex instructions
-- Token limits may restrict the use of many decorators simultaneously
 - Add an explicit `system` message to set baseline behavior
 
 ### Anthropic Claude
@@ -68,7 +67,6 @@ message = client.messages.create(
 
 #### Considerations
 - Claude models excel at following structured instructions
-- Claude has larger context windows, allowing for more complex decorations
 - Use the [Claude Desktop integration](integrations/mcp/claude_desktop.md) for seamless experience
 
 ### Other Providers
