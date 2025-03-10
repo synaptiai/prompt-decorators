@@ -47,6 +47,53 @@ Delivers a relaxed, conversational explanation of atmospheric optics
 **Notes:** This model benefits from more direct tone instructions
 
 
+## Implementation Guidance
+
+### Technical style
+
+**Original Prompt:**
+```
+Explain how cloud computing works.
+```
+
+**Transformed Prompt:**
+```
+Please adjust your writing style and tone for this response. Use precise technical language and terminology appropriate for a knowledgeable audience. Include specific details and technical concepts.
+
+Explain how cloud computing works.
+```
+
+### Casual style
+
+**Original Prompt:**
+```
+Why do leaves change color in autumn?
+```
+
+**Transformed Prompt:**
+```
+Please adjust your writing style and tone for this response. Use a casual, conversational tone as if speaking to a friend. Feel free to use contractions and a more relaxed writing style.
+
+Why do leaves change color in autumn?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please adjust your writing style and tone for this response.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `style`:
+  - When set to `formal`: Use a formal, professional tone with proper terminology and minimal contractions. Maintain a structured approach with clear organization.
+  - When set to `casual`: Use a casual, conversational tone as if speaking to a friend. Feel free to use contractions and a more relaxed writing style.
+  - When set to `friendly`: Use a warm, approachable tone that builds rapport. Be encouraging and personable while still being informative.
+  - When set to `technical`: Use precise technical language and terminology appropriate for a knowledgeable audience. Include specific details and technical concepts.
+  - When set to `humorous`: Incorporate appropriate humor and a light-hearted tone in your response, while still providing accurate information.
+
 ## Compatibility
 
 - **Requires**: None

@@ -63,6 +63,68 @@ The model will focus on improving execution speed with balanced risk approach an
 **Notes:** More explicit instruction format works better with this model.
 
 
+## Implementation Guidance
+
+### Python code optimization
+
+**Original Prompt:**
+```
+Optimize this image processing function that's consuming too much memory:
+
+def process_image(image):
+    result = []
+    for x in range(image.width):
+        for y in range(image.height):
+            pixel = image.get_pixel(x, y)
+            result.append(transform_pixel(pixel))
+    return result
+```
+
+**Transformed Prompt:**
+```
+Optimize the code for memory usage and efficiency while respecting maintaining backward compatibility. When optimizations conflict, prioritize minimal risk approaches even if the optimization gains are smaller.
+
+Optimize this image processing function that's consuming too much memory:
+
+def process_image(image):
+    result = []
+    for x in range(image.width):
+        for y in range(image.height):
+            pixel = image.get_pixel(x, y)
+            result.append(transform_pixel(pixel))
+    return result
+```
+
+**Notes:** The decorator prepends specific optimization instructions while preserving the original request.
+
+## Transformation Details
+
+**Base Instruction:** Optimize the code for {for} while respecting the following constraints: {constraints}. When optimizations conflict, prioritize {priority}.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `for`:
+  - When set to `speed`: execution speed and performance
+  - When set to `memory`: memory usage and efficiency
+  - When set to `readability`: code clarity and maintainability
+  - When set to `size`: code size and compactness
+  - When set to `network`: network efficiency and reduced data transfer
+
+- `constraints`:
+  - When set to `backwards-compatible`: maintaining backward compatibility
+  - When set to `minimal-changes`: making minimal changes to the original code
+  - When set to `no-external-dependencies`: using no additional external dependencies
+  - When set to `same-api`: preserving the same API interface
+
+- `priority`:
+  - When set to `max-gains`: maximum optimization gains even if it involves more risk
+  - When set to `min-risk`: minimal risk approaches even if the optimization gains are smaller
+  - When set to `balanced`: a balanced approach between optimization gains and risk
+
 ## Compatibility
 
 - **Requires**: None

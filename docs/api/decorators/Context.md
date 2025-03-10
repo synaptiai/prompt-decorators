@@ -65,6 +65,69 @@ Uses the Reasoning and ELI5 decorators with programming-appropriate examples spe
 **Notes:** This model handles domain adaptation well but benefits from clear guidance about which aspects to contextualize
 
 
+## Implementation Guidance
+
+### Medical domain contextualization for step-by-step explanation
+
+**Original Prompt:**
+```
++++StepByStep
++++Detailed
+Explain how vaccines are developed.
+```
+
+**Transformed Prompt:**
+```
+Please adapt your response and the behavior of any other decorators to the specific domain context provided. Apply specialized knowledge, terminology, and conventions appropriate for the medicine domain. Apply domain-specific terminology, examples, and structural organization throughout the entire response. Structure the response to be accessible to beginners while also including deeper insights for experts.
+
++++StepByStep
++++Detailed
+Explain how vaccines are developed.
+```
+
+### Programming domain with beginner-focused examples
+
+**Original Prompt:**
+```
++++Reasoning
++++ELI5
+Explain how databases work.
+```
+
+**Transformed Prompt:**
+```
+Please adapt your response and the behavior of any other decorators to the specific domain context provided. Apply specialized knowledge, terminology, and conventions appropriate for the programming domain. Use domain-specific examples and cases to illustrate concepts, but keep terminology and structure generalized. Target the response for newcomers to the field with limited domain knowledge or expertise.
+
++++Reasoning
++++ELI5
+Explain how databases work.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please adapt your response and the behavior of any other decorators to the specific domain context provided.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `domain`:
+  - Format: Apply specialized knowledge, terminology, and conventions appropriate for the {value} domain.
+
+- `scope`:
+  - When set to `terminology`: Use domain-specific terminology and vocabulary from this field, but keep other aspects generalized.
+  - When set to `examples`: Use domain-specific examples and cases to illustrate concepts, but keep terminology and structure generalized.
+  - When set to `structure`: Organize the information according to standard frameworks and structures used in this domain, but keep terminology and examples generalized.
+  - When set to `all`: Apply domain-specific terminology, examples, and structural organization throughout the entire response.
+
+- `level`:
+  - When set to `beginner`: Target the response for newcomers to the field with limited domain knowledge or expertise.
+  - When set to `intermediate`: Target the response for individuals with moderate familiarity and experience in the domain.
+  - When set to `expert`: Target the response for specialists and experts with advanced knowledge in the domain.
+  - When set to `mixed`: Structure the response to be accessible to beginners while also including deeper insights for experts.
+
 ## Compatibility
 
 - **Requires**: None

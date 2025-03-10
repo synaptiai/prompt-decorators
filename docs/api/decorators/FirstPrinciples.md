@@ -39,6 +39,53 @@ Provides an extensive breakdown of machine learning starting from mathematical f
 **Notes:** This model benefits from more explicit instructions about the process of first principles analysis
 
 
+## Implementation Guidance
+
+### Standard implementation with moderate depth
+
+**Original Prompt:**
+```
+How do electric vehicles work?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations. Provide a thorough analysis of the fundamental principles underlying the topic.
+
+How do electric vehicles work?
+```
+
+### Deep fundamental analysis
+
+**Original Prompt:**
+```
+What makes machine learning effective?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations. Provide an extremely comprehensive analysis of all fundamental axioms, exploring their origins and interconnections in depth.
+
+What makes machine learning effective?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `depth`:
+  - When set to `1`: Provide a basic breakdown with only the most essential fundamental principles.
+  - When set to `2`: Break down the topic into key fundamental principles with moderate detail.
+  - When set to `3`: Provide a thorough analysis of the fundamental principles underlying the topic.
+  - When set to `4`: Break down the topic extensively into detailed fundamental principles and their relationships.
+  - When set to `5`: Provide an extremely comprehensive analysis of all fundamental axioms, exploring their origins and interconnections in depth.
+
 ## Compatibility
 
 - **Requires**: None

@@ -47,6 +47,53 @@ Returns a nicely formatted markdown document with headings, code blocks, and lis
 **Notes:** This model may need more explicit formatting instructions to produce properly formatted output
 
 
+## Implementation Guidance
+
+### JSON format implementation
+
+**Original Prompt:**
+```
+List the top 5 programming languages and their key features.
+```
+
+**Transformed Prompt:**
+```
+Please format your response according to the specified format. Format your response as a valid JSON object. Ensure proper use of quotes, brackets, and commas.
+
+List the top 5 programming languages and their key features.
+```
+
+### Markdown format implementation
+
+**Original Prompt:**
+```
+Write a tutorial on setting up a React project.
+```
+
+**Transformed Prompt:**
+```
+Please format your response according to the specified format. Format your response using Markdown syntax with appropriate headings, lists, code blocks, and formatting.
+
+Write a tutorial on setting up a React project.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please format your response according to the specified format.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `format`:
+  - When set to `json`: Format your response as a valid JSON object. Ensure proper use of quotes, brackets, and commas.
+  - When set to `markdown`: Format your response using Markdown syntax with appropriate headings, lists, code blocks, and formatting.
+  - When set to `yaml`: Format your response as YAML with proper indentation and structure.
+  - When set to `xml`: Format your response as valid XML with proper tags and structure.
+  - When set to `plaintext`: Format your response as plain text without any special formatting.
+
 ## Compatibility
 
 - **Requires**: None

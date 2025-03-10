@@ -61,6 +61,51 @@ The model will provide a high-level kanban board of tasks organized by dependenc
 **Notes:** For models with more limited context windows, the instruction is simplified while maintaining the core functionality.
 
 
+## Implementation Guidance
+
+### Software debugging scenario
+
+**Original Prompt:**
+```
+Fix the data synchronization issues in our application.
+```
+
+**Transformed Prompt:**
+```
+Break down this task into discrete steps or components. Identify the key tasks needed to address this issue. Provide a comprehensive breakdown with detailed subtasks, considerations, and potential challenges for each step. Prioritize tasks based on risk level, addressing high-risk items first. Present the tasks as a checklist with checkable items.
+
+Fix the data synchronization issues in our application.
+```
+
+**Notes:** The decorator adds structure to a vague request by asking for specific task breakdown with prioritization.
+
+## Transformation Details
+
+**Base Instruction:** Break down this task into discrete steps or components. Identify the key tasks needed to address this issue.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `detail`:
+  - When set to `high-level`: Provide a high-level breakdown of the main tasks required.
+  - When set to `detailed`: Provide a detailed breakdown of tasks with subtasks where appropriate.
+  - When set to `comprehensive`: Provide a comprehensive breakdown with detailed subtasks, considerations, and potential challenges for each step.
+
+- `priority`:
+  - When set to `dependency-order`: Order tasks based on dependencies, with prerequisite tasks first.
+  - When set to `impact`: Prioritize tasks based on their impact on resolving the overall issue.
+  - When set to `effort`: Prioritize tasks based on effort required, starting with quick wins.
+  - When set to `risk`: Prioritize tasks based on risk level, addressing high-risk items first.
+
+- `format`:
+  - When set to `list`: Present the tasks as a numbered list.
+  - When set to `checklist`: Present the tasks as a checklist with checkable items.
+  - When set to `kanban`: Organize tasks into 'To Do', 'In Progress', and 'Done' categories.
+  - When set to `detailed`: Present each task with a title, description, priority level, and estimated effort.
+
 ## Compatibility
 
 - **Requires**: None

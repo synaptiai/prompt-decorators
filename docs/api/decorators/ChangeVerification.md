@@ -61,6 +61,51 @@ The model will provide guidance on how to verify the performance impact of datab
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Web development
+
+**Original Prompt:**
+```
+How should I test the new sorting feature?
+```
+
+**Transformed Prompt:**
+```
+Verify the changes to ensure they have the intended effect and don't introduce regressions. Focus on verifying the functional behavior of the changes. Use manual testing procedures to verify the changes. Verify the changed components and any dependent areas that might be affected.
+
+How should I test the new sorting feature?
+```
+
+**Notes:** The decorator adds specific verification instructions based on the parameters.
+
+## Transformation Details
+
+**Base Instruction:** Verify the changes to ensure they have the intended effect and don't introduce regressions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `type`:
+  - When set to `functionality`: Focus on verifying the functional behavior of the changes.
+  - When set to `visual`: Focus on verifying the visual appearance and UI elements affected by the changes.
+  - When set to `performance`: Focus on verifying the performance impact of the changes.
+  - When set to `security`: Focus on verifying the security implications of the changes.
+
+- `method`:
+  - When set to `manual-testing`: Use manual testing procedures to verify the changes.
+  - When set to `automated-tests`: Use automated tests to verify the changes.
+  - When set to `dom-inspection`: Inspect the DOM structure to verify the changes.
+  - When set to `logging`: Use logging and debug output to verify the changes.
+
+- `coverage`:
+  - When set to `changed-only`: Verify only the specific components that were changed.
+  - When set to `dependent-areas`: Verify the changed components and any dependent areas that might be affected.
+  - When set to `comprehensive`: Perform a comprehensive verification across the entire system.
+
 ## Compatibility
 
 - **Requires**: None

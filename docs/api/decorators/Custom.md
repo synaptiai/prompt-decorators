@@ -47,6 +47,57 @@ Analyzes social media's impact on politics using dual contrasting perspectives f
 **Notes:** This model handles custom instructions well but benefits from clear guidance about how to resolve conflicts with other decorators
 
 
+## Implementation Guidance
+
+### Basic custom formatting rule for paragraph beginnings
+
+**Original Prompt:**
+```
+Explain how search engines work.
+```
+
+**Transformed Prompt:**
+```
+Please apply the following custom formatting or behavior rules to your response: every paragraph must start with a word that begins with the letter A. These custom rules should override any conflicting instructions from other decorators.
+
+Explain how search engines work.
+```
+
+### Complex custom behavior with named reference for dual perspectives
+
+**Original Prompt:**
+```
+Analyze the impact of social media on politics.
+```
+
+**Transformed Prompt:**
+```
+Please apply the following custom formatting or behavior rules to your response: present two contrasting viewpoints on each main point, label them as 'Perspective A' and 'Perspective B', and then provide a synthesis. This set of custom rules is called 'DualPerspective'. These custom rules should supplement other decorators, but defer to them in case of direct conflicts.
+
+Analyze the impact of social media on politics.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please apply the following custom formatting or behavior rules to your response:
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `rules`:
+  - Format: {value}
+
+- `name`:
+  - Format: This set of custom rules is called '{value}'.
+
+- `priority`:
+  - When set to `override`: These custom rules should override any conflicting instructions from other decorators.
+  - When set to `supplement`: These custom rules should supplement other decorators, but defer to them in case of direct conflicts.
+  - When set to `fallback`: Apply these custom rules only when no other decorator provides specific guidance on a particular aspect.
+
 ## Compatibility
 
 - **Requires**: None

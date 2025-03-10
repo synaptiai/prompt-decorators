@@ -61,6 +61,51 @@ The model will provide an optimized, advanced implementation using standard libr
 **Notes:** More explicit phrasing works better with this model.
 
 
+## Implementation Guidance
+
+### Web development task
+
+**Original Prompt:**
+```
+Create a function to validate email addresses.
+```
+
+**Transformed Prompt:**
+```
+Please implement this with appropriate complexity constraints. Use simple, straightforward code structures. Avoid complex algorithms or patterns. Use only basic concepts that beginners would understand. Explain any non-trivial concepts. Use only essential dependencies. Prefer standard libraries when possible.
+
+Create a function to validate email addresses.
+```
+
+**Notes:** The transformed prompt guides the model to create a simple implementation with minimal dependencies that would be understandable to beginners.
+
+## Transformation Details
+
+**Base Instruction:** Please implement this with appropriate complexity constraints.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `code`:
+  - When set to `simple`: Use simple, straightforward code structures. Avoid complex algorithms or patterns.
+  - When set to `moderate`: Balance simplicity with efficiency. Use standard patterns where appropriate.
+  - When set to `complex`: Optimize for performance and scalability. Use advanced patterns when beneficial.
+  - When set to `necessary-only`: Use only the complexity that is absolutely necessary for the task.
+
+- `concepts`:
+  - When set to `beginner-friendly`: Use only basic concepts that beginners would understand. Explain any non-trivial concepts.
+  - When set to `intermediate`: You can use intermediate-level concepts that most practitioners would be familiar with.
+  - When set to `advanced`: You can use advanced concepts and techniques appropriate for experienced developers.
+
+- `dependencies`:
+  - When set to `none`: Do not use any external dependencies or libraries.
+  - When set to `minimal`: Use only essential dependencies. Prefer standard libraries when possible.
+  - When set to `standard`: Use common, well-established dependencies as needed.
+  - When set to `whatever-needed`: Use any dependencies that would make the implementation better, regardless of number.
+
 ## Compatibility
 
 - **Requires**: None

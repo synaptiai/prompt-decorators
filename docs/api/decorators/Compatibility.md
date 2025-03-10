@@ -43,6 +43,61 @@ Applies the Academic decorator but adapts how quantum field theory is explained 
 **Notes:** This model can effectively implement complex model-specific adaptation logic across different decorator combinations
 
 
+## Implementation Guidance
+
+### GPT-4 specific complex reasoning with StepByStep fallback
+
+**Original Prompt:**
+```
++++Compatibility(models=[gpt-4], fallback=StepByStep)
++++TreeOfThought(branches=3, depth=3)
+Solve this complex optimization problem.
+```
+
+**Transformed Prompt:**
+```
+Please apply model-specific adaptations to ensure optimal performance on the current language model. Apply the specialized behavior for these specific models: [gpt-4]. If the current model is not in this list, use the default or fallback behavior. If the current model is not one of the specified models, fall back to using the StepByStep decorator instead.
+
++++TreeOfThought(branches=3, depth=3)
+Solve this complex optimization problem.
+```
+
+### Model-specific explanations for quantum field theory
+
+**Original Prompt:**
+```
++++Compatibility(models=[gpt-4,gpt-3.5-turbo], behaviors={"gpt-4":"use full mathematical notation and derivations", "gpt-3.5-turbo":"use simplified equations and more intuitive explanations"})
++++Academic(style=scientific)
+Explain quantum field theory.
+```
+
+**Transformed Prompt:**
+```
+Please apply model-specific adaptations to ensure optimal performance on the current language model. Apply the specialized behavior for these specific models: [gpt-4,gpt-3.5-turbo]. If the current model is not in this list, use the default or fallback behavior. Apply these model-specific behavior adaptations: {"gpt-4":"use full mathematical notation and derivations", "gpt-3.5-turbo":"use simplified equations and more intuitive explanations"}. Each adaptation should be used only when running on the corresponding model.
+
++++Academic(style=scientific)
+Explain quantum field theory.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please apply model-specific adaptations to ensure optimal performance on the current language model.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `models`:
+  - Format: Apply the specialized behavior for these specific models: {value}. If the current model is not in this list, use the default or fallback behavior.
+
+- `fallback`:
+  - Format: If the current model is not one of the specified models, fall back to using the {value} decorator instead.
+
+- `behaviors`:
+  - Format: Apply these model-specific behavior adaptations: {value}. Each adaptation should be used only when running on the corresponding model.
+
 ## Compatibility
 
 - **Requires**: None

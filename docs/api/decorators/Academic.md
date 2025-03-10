@@ -54,6 +54,58 @@ Provides a literary analysis of Hamlet using humanities-appropriate terminology 
 **Notes:** This model sometimes needs more explicit guidance to maintain consistent academic tone and proper citation formats throughout
 
 
+## Implementation Guidance
+
+### Scientific academic response with APA citations
+
+**Original Prompt:**
+```
+Discuss the evidence for climate change.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response following scholarly writing conventions appropriate for academic publications, using formal language, structured argumentation, and proper citations. Follow scientific writing conventions, including clear methodology descriptions, evidence-based claims, objective tone, and precise technical terminology. Format all citations and references according to APA (American Psychological Association) style, 7th edition.
+
+Discuss the evidence for climate change.
+```
+
+### Humanities academic response with MLA citations
+
+**Original Prompt:**
+```
+Analyze the themes in Shakespeare's Hamlet.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response following scholarly writing conventions appropriate for academic publications, using formal language, structured argumentation, and proper citations. Use conventions typical of humanities scholarship, including interpretive analysis, theoretical frameworks, and engagement with cultural, historical, or philosophical contexts. Format all citations and references according to MLA (Modern Language Association) style, 9th edition.
+
+Analyze the themes in Shakespeare's Hamlet.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response following scholarly writing conventions appropriate for academic publications, using formal language, structured argumentation, and proper citations.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `style`:
+  - When set to `humanities`: Use conventions typical of humanities scholarship, including interpretive analysis, theoretical frameworks, and engagement with cultural, historical, or philosophical contexts.
+  - When set to `scientific`: Follow scientific writing conventions, including clear methodology descriptions, evidence-based claims, objective tone, and precise technical terminology.
+  - When set to `legal`: Adopt legal academic writing style, including careful statutory interpretation, case analysis, precedent citation, and attention to doctrinal frameworks.
+
+- `format`:
+  - When set to `APA`: Format all citations and references according to APA (American Psychological Association) style, 7th edition.
+  - When set to `MLA`: Format all citations and references according to MLA (Modern Language Association) style, 9th edition.
+  - When set to `Chicago`: Format all citations and references according to Chicago style (Chicago Manual of Style), 17th edition.
+  - When set to `Harvard`: Format all citations and references according to Harvard referencing style.
+  - When set to `IEEE`: Format all citations and references according to IEEE citation style used in engineering and computer science.
+
 ## Compatibility
 
 - **Requires**: None

@@ -55,6 +55,62 @@ Delivers a detailed account of WWII with comprehensive footnote citations in Chi
 **Notes:** This model may need more explicit instructions about proper citation formatting
 
 
+## Implementation Guidance
+
+### Standard implementation with APA inline citations
+
+**Original Prompt:**
+```
+Explain the evidence for climate change.
+```
+
+**Transformed Prompt:**
+```
+Please include citations for factual claims in your response to enhance credibility and enable verification. Add citations directly in the text using parenthetical references. Format citations according to APA style guidelines. Only cite major claims, specialized knowledge, statistics, and direct quotes.
+
+Explain the evidence for climate change.
+```
+
+### Comprehensive Chicago footnotes
+
+**Original Prompt:**
+```
+Describe the major events of World War II.
+```
+
+**Transformed Prompt:**
+```
+Please include citations for factual claims in your response to enhance credibility and enable verification. Use numbered footnotes for citations, with footnotes appearing at the bottom of relevant sections. Format citations according to Chicago Manual of Style guidelines. Cite every factual claim, including commonly known facts.
+
+Describe the major events of World War II.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please include citations for factual claims in your response to enhance credibility and enable verification.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `style`:
+  - When set to `inline`: Add citations directly in the text using parenthetical references.
+  - When set to `footnote`: Use numbered footnotes for citations, with footnotes appearing at the bottom of relevant sections.
+  - When set to `endnote`: Use numbered endnotes for citations, with all notes appearing in a References section at the end.
+
+- `format`:
+  - When set to `APA`: Format citations according to APA style guidelines.
+  - When set to `MLA`: Format citations according to MLA style guidelines.
+  - When set to `Chicago`: Format citations according to Chicago Manual of Style guidelines.
+  - When set to `Harvard`: Format citations according to Harvard referencing style guidelines.
+  - When set to `IEEE`: Format citations according to IEEE citation style guidelines.
+
+- `comprehensive`:
+  - When set to `true`: Cite every factual claim, including commonly known facts.
+  - When set to `false`: Only cite major claims, specialized knowledge, statistics, and direct quotes.
+
 ## Compatibility
 
 - **Requires**: None

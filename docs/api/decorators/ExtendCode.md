@@ -72,6 +72,53 @@ Enhances the error handling with minimal changes while ensuring performance is n
 **Notes:** Simpler instruction format works better with GPT-3.5 Turbo's context window limitations.
 
 
+## Implementation Guidance
+
+### Adding a method to a user service class
+
+**Original Prompt:**
+```
+Add a method to this user service class that allows retrieving users by email domain.
+```
+
+**Transformed Prompt:**
+```
+Extend the existing code with new functionality. Focus on adding to the codebase rather than rewriting it. Add a new method to an existing class or object that implements the requested functionality. Make minimal changes to existing code, focusing on additions rather than modifications. Maintain all aspects of the existing code including API, architecture, naming conventions, and performance characteristics.
+
+Add a method to this user service class that allows retrieving users by email domain.
+```
+
+**Notes:** The decorator prepends instructions to maintain code style and minimize changes while adding the requested functionality.
+
+## Transformation Details
+
+**Base Instruction:** Extend the existing code with new functionality. Focus on adding to the codebase rather than rewriting it.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `approach`:
+  - When set to `add-function`: Add a new standalone function that implements the requested functionality.
+  - When set to `add-method`: Add a new method to an existing class or object that implements the requested functionality.
+  - When set to `add-feature`: Implement a new feature by extending the existing code structure.
+  - When set to `enhance-existing`: Enhance existing functionality without adding new functions or methods.
+
+- `impact`:
+  - When set to `none`: Make no changes to existing code, only add new code.
+  - When set to `minimal`: Make minimal changes to existing code, focusing on additions rather than modifications.
+  - When set to `moderate`: Make moderate changes to existing code where necessary to support the new functionality.
+  - When set to `significant`: Make significant changes to existing code if needed to properly implement the requested functionality.
+
+- `maintain`:
+  - When set to `api`: Maintain the existing API contracts and interfaces.
+  - When set to `architecture`: Maintain the existing architectural patterns and structure.
+  - When set to `naming`: Maintain the existing naming conventions and style.
+  - When set to `performance`: Maintain the existing performance characteristics.
+  - When set to `all`: Maintain all aspects of the existing code including API, architecture, naming conventions, and performance characteristics.
+
 ## Compatibility
 
 - **Requires**: None

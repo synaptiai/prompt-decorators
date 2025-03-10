@@ -39,6 +39,49 @@ Provides an extended series of 5 question-answer cycles to explore epistemology
 **Notes:** This model benefits from more explicit instructions on the question-answer structure
 
 
+## Implementation Guidance
+
+### Standard implementation with 3 iterations
+
+**Original Prompt:**
+```
+What is justice?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a Socratic dialogue that guides through the topic using thought-provoking questions followed by answers. Include approximately 3 question-answer cycles in your exploration.
+
+What is justice?
+```
+
+### Extended exploration with 5 iterations
+
+**Original Prompt:**
+```
+How do we know what we know?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a Socratic dialogue that guides through the topic using thought-provoking questions followed by answers. Include approximately 5 question-answer cycles in your exploration.
+
+How do we know what we know?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response as a Socratic dialogue that guides through the topic using thought-provoking questions followed by answers.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `iterations`:
+  - Format: Include approximately {value} question-answer cycles in your exploration.
+
 ## Compatibility
 
 - **Requires**: None

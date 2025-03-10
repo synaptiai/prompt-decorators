@@ -49,6 +49,61 @@ Delivers a 200-word description of a futuristic city using creative vocabulary, 
 **Notes:** This model sometimes needs stronger emphasis on constraints to ensure they are followed precisely
 
 
+## Implementation Guidance
+
+### Word count constraint for quantum computing explanation
+
+**Original Prompt:**
+```
+Explain quantum computing principles.
+```
+
+**Transformed Prompt:**
+```
+Please craft your response within specific constraints that limit aspects of the output format, length, or content. Limit your response to exactly 100 words. Count carefully to ensure you meet this constraint precisely.
+
+Explain quantum computing principles.
+```
+
+### Multiple constraints for futuristic city description
+
+**Original Prompt:**
+```
+Describe a futuristic city.
+```
+
+**Transformed Prompt:**
+```
+Please craft your response within specific constraints that limit aspects of the output format, length, or content. Limit your response to exactly 200 words. Count carefully to ensure you meet this constraint precisely. Use varied, vivid, and evocative vocabulary that enhances engagement, including metaphors, sensory language, and uncommon word choices. Apply this additional custom constraint: each paragraph must contain exactly three sentences.
+
+Describe a futuristic city.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please craft your response within specific constraints that limit aspects of the output format, length, or content.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `wordCount`:
+  - Format: Limit your response to exactly {value} words. Count carefully to ensure you meet this constraint precisely.
+
+- `timeframe`:
+  - Format: Ensure your response describes solutions or content that could be implemented or consumed within a {value} timeframe.
+
+- `vocabulary`:
+  - When set to `simple`: Use only simple, everyday vocabulary that would be understood by elementary school students. Avoid jargon, technical terms, and complex words.
+  - When set to `technical`: Use precise technical vocabulary appropriate to the subject matter, including field-specific terminology and concepts.
+  - When set to `domain-specific`: Employ specialized vocabulary from the relevant domain or field, using terms of art and professional language.
+  - When set to `creative`: Use varied, vivid, and evocative vocabulary that enhances engagement, including metaphors, sensory language, and uncommon word choices.
+
+- `custom`:
+  - Format: Apply this additional custom constraint: {value}.
+
 ## Compatibility
 
 - **Requires**: None

@@ -47,6 +47,59 @@ Delivers a scientifically precise explanation of photosynthesis with exact units
 **Notes:** This model may need explicit reminders to maintain precision throughout, especially for longer responses or complex topics
 
 
+## Implementation Guidance
+
+### Precise explanation of vaccine function
+
+**Original Prompt:**
+```
+Explain how vaccines work.
+```
+
+**Transformed Prompt:**
+```
+Please provide information with a high degree of precision and specificity. Use exact measurements, specific terminology, and concrete details rather than vague or general statements. Prioritize accuracy in all claims and descriptions. Use highly precise language throughout the response, with exact figures, specific terminology, and detailed descriptions that leave minimal room for ambiguity. Always include appropriate units for all measurements and quantities, using standard notation (SI units preferred where applicable). Use precise terminology without interrupting the flow with explicit definitions unless absolutely necessary for understanding.
+
+Explain how vaccines work.
+```
+
+### Scientific precision for photosynthesis explanation
+
+**Original Prompt:**
+```
+Describe the process of photosynthesis.
+```
+
+**Transformed Prompt:**
+```
+Please provide information with a high degree of precision and specificity. Use exact measurements, specific terminology, and concrete details rather than vague or general statements. Prioritize accuracy in all claims and descriptions. Use scientific-grade precision with rigorous accuracy, including error margins where appropriate, precise technical terminology, and specific quantitative measurements. Always include appropriate units for all measurements and quantities, using standard notation (SI units preferred where applicable). Include precise definitions for key terms and concepts when first introduced, ensuring clarity and exact understanding of specialized vocabulary.
+
+Describe the process of photosynthesis.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please provide information with a high degree of precision and specificity. Use exact measurements, specific terminology, and concrete details rather than vague or general statements. Prioritize accuracy in all claims and descriptions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `level`:
+  - When set to `moderate`: Use moderately precise language with specific details where important, while maintaining accessibility and clarity for a general audience.
+  - When set to `high`: Use highly precise language throughout the response, with exact figures, specific terminology, and detailed descriptions that leave minimal room for ambiguity.
+  - When set to `scientific`: Use scientific-grade precision with rigorous accuracy, including error margins where appropriate, precise technical terminology, and specific quantitative measurements.
+
+- `units`:
+  - When set to `true`: Always include appropriate units for all measurements and quantities, using standard notation (SI units preferred where applicable).
+  - When set to `false`: Include units where necessary for clarity, but prioritize readability over comprehensive unit notation.
+
+- `definitions`:
+  - When set to `true`: Include precise definitions for key terms and concepts when first introduced, ensuring clarity and exact understanding of specialized vocabulary.
+  - When set to `false`: Use precise terminology without interrupting the flow with explicit definitions unless absolutely necessary for understanding.
+
 ## Compatibility
 
 - **Requires**: None

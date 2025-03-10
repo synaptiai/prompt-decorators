@@ -63,6 +63,53 @@ A social media platform architecture that focuses on user scalability, designed 
 **Notes:** Simplified instruction format works better with GPT-3.5 Turbo's context handling.
 
 
+## Implementation Guidance
+
+### Web application architecture
+
+**Original Prompt:**
+```
+Design a payment processing system that can handle Black Friday-level traffic spikes.
+```
+
+**Transformed Prompt:**
+```
+Design a system architecture that addresses scalability concerns. Consider appropriate scaling strategies and techniques. Focus on scaling transaction processing capabilities with considerations for throughput, concurrency, and consistency. Design for massive growth, approximately 1000 times current scale. Utilize horizontal scaling approaches by adding more machines or instances to distribute load.
+
+Design a payment processing system that can handle Black Friday-level traffic spikes.
+```
+
+**Notes:** The decorator adds specific guidance on transaction scaling for high-volume scenarios using horizontal scaling approaches.
+
+## Transformation Details
+
+**Base Instruction:** Design a system architecture that addresses scalability concerns. Consider appropriate scaling strategies and techniques.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `dimension`:
+  - When set to `users`: Focus on scaling to support a growing user base with considerations for authentication, session management, and user experience.
+  - When set to `data`: Focus on scaling data storage and retrieval systems with considerations for database sharding, replication, and data access patterns.
+  - When set to `transactions`: Focus on scaling transaction processing capabilities with considerations for throughput, concurrency, and consistency.
+  - When set to `geographic`: Focus on scaling across geographic regions with considerations for latency, data sovereignty, and regional availability.
+  - When set to `complexity`: Focus on scaling to handle increasing system complexity with considerations for modularity, service boundaries, and technical debt.
+
+- `target`:
+  - When set to `10x`: Design for moderate growth, approximately 10 times current scale.
+  - When set to `100x`: Design for significant growth, approximately 100 times current scale.
+  - When set to `1000x`: Design for massive growth, approximately 1000 times current scale.
+  - When set to `global`: Design for global-scale deployment with virtually unlimited growth potential.
+
+- `approach`:
+  - When set to `horizontal`: Utilize horizontal scaling approaches by adding more machines or instances to distribute load.
+  - When set to `vertical`: Utilize vertical scaling approaches by increasing the resources (CPU, memory, storage) of existing machines.
+  - When set to `hybrid`: Utilize a hybrid scaling approach that combines both horizontal and vertical scaling strategies as appropriate.
+  - When set to `cloud-native`: Utilize cloud-native architectures and services designed specifically for elastic scaling.
+
 ## Compatibility
 
 - **Requires**: None

@@ -60,6 +60,61 @@ Refines specifically the risk analysis section from the previous content with mo
 **Notes:** This model handles contextual building well but benefits from clear instructions about which aspects to preserve
 
 
+## Implementation Guidance
+
+### Basic extension of previous response
+
+**Original Prompt:**
+```
+Add more detail about implementation challenges.
+```
+
+**Transformed Prompt:**
+```
+Please build upon the previous context or response rather than starting from scratch, maintaining continuity across the interaction. Build specifically upon the most recent response or context provided. Add new information, examples, or dimensions that extend and complement the existing content. Maintain the same organizational structure, format, and overall framework as the referenced content.
+
+Add more detail about implementation challenges.
+```
+
+### Specific refinement with structural changes
+
+**Original Prompt:**
+```
+Improve the section on risk analysis with more quantitative measures.
+```
+
+**Transformed Prompt:**
+```
+Please build upon the previous context or response rather than starting from scratch, maintaining continuity across the interaction. Build upon the specific part of the previous context mentioned in the current prompt. Improve, correct, or enhance the existing content while preserving its core message. Feel free to reorganize or restructure the content in a new way that better serves the current purpose.
+
+Improve the section on risk analysis with more quantitative measures.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please build upon the previous context or response rather than starting from scratch, maintaining continuity across the interaction.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `reference`:
+  - When set to `last`: Build specifically upon the most recent response or context provided.
+  - When set to `specific`: Build upon the specific part of the previous context mentioned in the current prompt.
+  - When set to `all`: Consider all previous exchanges in the conversation when building your response.
+
+- `approach`:
+  - When set to `extend`: Add new information, examples, or dimensions that extend and complement the existing content.
+  - When set to `refine`: Improve, correct, or enhance the existing content while preserving its core message.
+  - When set to `contrast`: Provide alternative perspectives or approaches that contrast with those in the existing content.
+  - When set to `synthesize`: Combine and integrate ideas from the existing content into a new cohesive whole.
+
+- `preserveStructure`:
+  - When set to `true`: Maintain the same organizational structure, format, and overall framework as the referenced content.
+  - When set to `false`: Feel free to reorganize or restructure the content in a new way that better serves the current purpose.
+
 ## Compatibility
 
 - **Requires**: None

@@ -55,6 +55,62 @@ Delivers highly energetic and inspiring advice for professional resilience, emph
 **Notes:** This model sometimes needs explicit reminders to maintain consistent motivational tone throughout longer responses rather than only at the beginning and end
 
 
+## Implementation Guidance
+
+### Moderately motivational strategies for building healthy habits
+
+**Original Prompt:**
+```
+What are some strategies for building healthy habits?
+```
+
+**Transformed Prompt:**
+```
+Please enhance your response with encouraging, inspiring, and empowering language. Use a motivational tone that builds confidence and creates a positive emotional impact while still delivering substantive content. Use a moderately motivational tone with clear encouragement, positive framing, and confidence-building language throughout the response. Take a balanced motivational approach that incorporates elements of achievement, growth, resilience, and purpose in appropriate proportions. Include specific, actionable steps or concrete recommendations that the person can implement, alongside the motivational content.
+
+What are some strategies for building healthy habits?
+```
+
+### High-intensity resilience-focused advice for professional setbacks
+
+**Original Prompt:**
+```
+How can I overcome setbacks in my professional life?
+```
+
+**Transformed Prompt:**
+```
+Please enhance your response with encouraging, inspiring, and empowering language. Use a motivational tone that builds confidence and creates a positive emotional impact while still delivering substantive content. Use a highly motivational tone with energetic, enthusiastic, and empowering language throughout, creating strong emotional impact and inspiration. Focus your motivational approach on overcoming obstacles, perseverance, and bouncing back from setbacks, emphasizing inner strength. Include specific, actionable steps or concrete recommendations that the person can implement, alongside the motivational content.
+
+How can I overcome setbacks in my professional life?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please enhance your response with encouraging, inspiring, and empowering language. Use a motivational tone that builds confidence and creates a positive emotional impact while still delivering substantive content.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `intensity`:
+  - When set to `mild`: Use a mildly motivational tone with gentle encouragement and moderate positivity, maintaining a balanced and realistic perspective.
+  - When set to `moderate`: Use a moderately motivational tone with clear encouragement, positive framing, and confidence-building language throughout the response.
+  - When set to `high`: Use a highly motivational tone with energetic, enthusiastic, and empowering language throughout, creating strong emotional impact and inspiration.
+
+- `focus`:
+  - When set to `achievement`: Focus your motivational approach on accomplishment, success, and reaching goals, emphasizing concrete results and outcomes.
+  - When set to `growth`: Focus your motivational approach on learning, development, and continuous improvement, emphasizing progress over perfection.
+  - When set to `resilience`: Focus your motivational approach on overcoming obstacles, perseverance, and bouncing back from setbacks, emphasizing inner strength.
+  - When set to `purpose`: Focus your motivational approach on meaning, values, and impact, emphasizing the deeper significance of actions and choices.
+  - When set to `balanced`: Take a balanced motivational approach that incorporates elements of achievement, growth, resilience, and purpose in appropriate proportions.
+
+- `actionable`:
+  - When set to `true`: Include specific, actionable steps or concrete recommendations that the person can implement, alongside the motivational content.
+  - When set to `false`: Focus primarily on inspirational and encouraging content without specific action steps or detailed implementation guidance.
+
 ## Compatibility
 
 - **Requires**: None

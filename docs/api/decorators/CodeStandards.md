@@ -77,6 +77,52 @@ The model will apply company-specific formatting standards to the Python code wi
 **Notes:** Keep instructions more concise for GPT-3.5.
 
 
+## Implementation Guidance
+
+### JavaScript/React development
+
+**Original Prompt:**
+```
+Refactor this React component to be more efficient.
+```
+
+**Transformed Prompt:**
+```
+Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability. Follow the idiomatic standards and best practices specific to the programming language. Enforce standards as requirements with minimal exceptions. Apply comprehensive standards covering formatting, naming, patterns, and security.
+
+Refactor this React component to be more efficient.
+```
+
+**Notes:** The decorator adds specific guidance about JavaScript and React best practices.
+
+## Transformation Details
+
+**Base Instruction:** Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `standard`:
+  - When set to `company`: Apply company-specific coding standards and conventions.
+  - When set to `language-specific`: Follow the idiomatic standards and best practices specific to the programming language.
+  - When set to `custom`: Apply the custom coding standards as specified.
+  - When set to `industry`: Follow industry-standard coding practices and patterns.
+
+- `strictness`:
+  - When set to `recommended`: Apply standards as recommendations, allowing for reasonable exceptions.
+  - When set to `required`: Enforce standards as requirements with minimal exceptions.
+  - When set to `strict`: Strictly enforce all standards with no exceptions.
+
+- `focus`:
+  - When set to `formatting`: Focus on code formatting, indentation, and style.
+  - When set to `naming`: Focus on naming conventions for variables, functions, and classes.
+  - When set to `patterns`: Focus on design patterns and architectural standards.
+  - When set to `security`: Focus on security best practices and vulnerability prevention.
+  - When set to `all`: Apply comprehensive standards covering formatting, naming, patterns, and security.
+
 ## Compatibility
 
 - **Requires**: None

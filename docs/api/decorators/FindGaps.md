@@ -56,6 +56,63 @@ Provides an exhaustive analysis of overlooked or inadequately considered stakeho
 **Notes:** This model sometimes needs more explicit instruction to go beyond surface-level analysis and identify non-obvious gaps
 
 
+## Implementation Guidance
+
+### Basic comprehensive gap analysis of a business plan
+
+**Original Prompt:**
+```
+We plan to launch our SaaS product with these features and marketing channels...
+```
+
+**Transformed Prompt:**
+```
+Please first analyze the main content, then methodically identify missing elements, unanswered questions, or overlooked considerations that need addressing. Comprehensively identify gaps across multiple dimensions, including questions, resources, stakeholders, risks, and dependencies. Conduct a detailed analysis to identify both obvious and subtle gaps that might significantly impact outcomes. For each identified gap, suggest potential solutions, approaches, or strategies to address it.
+
+We plan to launch our SaaS product with these features and marketing channels...
+```
+
+### Exhaustive stakeholder-focused gap analysis without solutions
+
+**Original Prompt:**
+```
+Here's our urban redevelopment proposal...
+```
+
+**Transformed Prompt:**
+```
+Please first analyze the main content, then methodically identify missing elements, unanswered questions, or overlooked considerations that need addressing. Focus specifically on identifying overlooked stakeholders, individuals, or groups whose perspectives or needs are not adequately addressed. Conduct an extremely comprehensive analysis to identify all possible gaps, including edge cases and minor considerations. Focus solely on identifying gaps without suggesting solutions or remedies.
+
+Here's our urban redevelopment proposal...
+```
+
+## Transformation Details
+
+**Base Instruction:** Please first analyze the main content, then methodically identify missing elements, unanswered questions, or overlooked considerations that need addressing.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `aspects`:
+  - When set to `questions`: Focus specifically on identifying unanswered questions and unresolved issues that need clarification.
+  - When set to `resources`: Focus specifically on identifying missing resources, tools, skills, or capabilities needed for implementation or success.
+  - When set to `stakeholders`: Focus specifically on identifying overlooked stakeholders, individuals, or groups whose perspectives or needs are not adequately addressed.
+  - When set to `risks`: Focus specifically on identifying potential risks, threats, and vulnerabilities that have not been adequately considered.
+  - When set to `dependencies`: Focus specifically on identifying overlooked dependencies, prerequisites, or contingencies that could affect implementation or outcomes.
+  - When set to `comprehensive`: Comprehensively identify gaps across multiple dimensions, including questions, resources, stakeholders, risks, and dependencies.
+
+- `depth`:
+  - When set to `basic`: Conduct a focused analysis to identify the most obvious and critical gaps.
+  - When set to `thorough`: Conduct a detailed analysis to identify both obvious and subtle gaps that might significantly impact outcomes.
+  - When set to `exhaustive`: Conduct an extremely comprehensive analysis to identify all possible gaps, including edge cases and minor considerations.
+
+- `solutions`:
+  - When set to `true`: For each identified gap, suggest potential solutions, approaches, or strategies to address it.
+  - When set to `false`: Focus solely on identifying gaps without suggesting solutions or remedies.
+
 ## Compatibility
 
 - **Requires**: None

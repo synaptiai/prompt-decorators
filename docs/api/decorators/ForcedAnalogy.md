@@ -47,6 +47,57 @@ Provides a detailed explanation of CRISPR through cooking analogies, with 5 dist
 **Notes:** This model may need explicit reminders to stay within the specified source domain and to clearly label which concept maps to which analogy
 
 
+## Implementation Guidance
+
+### Using sports analogies to explain blockchain
+
+**Original Prompt:**
+```
+Explain how blockchain technology works.
+```
+
+**Transformed Prompt:**
+```
+Please explain this topic using analogies drawn specifically from a particular domain. Create explicit comparisons that map concepts from the topic to elements, processes, or ideas from the specified source domain. Use analogies specifically from the domain of sports. Draw all your comparisons and metaphors from this domain to explain the target concepts. Develop well-rounded analogies that cover the major components and processes, with moderately detailed mappings between domains. Create exactly 3 distinct concept mappings between the target domain and the source domain. Each mapping should connect a specific element from the topic to a corresponding element in the sports domain.
+
+Explain how blockchain technology works.
+```
+
+### Detailed cooking analogies for CRISPR gene editing
+
+**Original Prompt:**
+```
+Describe how CRISPR gene editing works.
+```
+
+**Transformed Prompt:**
+```
+Please explain this topic using analogies drawn specifically from a particular domain. Create explicit comparisons that map concepts from the topic to elements, processes, or ideas from the specified source domain. Use analogies specifically from the domain of cooking. Draw all your comparisons and metaphors from this domain to explain the target concepts. Construct elaborate, nuanced analogies with detailed mappings that capture subtle aspects, edge cases, and complexities of the topic. Create exactly 5 distinct concept mappings between the target domain and the source domain. Each mapping should connect a specific element from the topic to a corresponding element in the cooking domain.
+
+Describe how CRISPR gene editing works.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please explain this topic using analogies drawn specifically from a particular domain. Create explicit comparisons that map concepts from the topic to elements, processes, or ideas from the specified source domain.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `source`:
+  - Format: Use analogies specifically from the domain of {value}. Draw all your comparisons and metaphors from this domain to explain the target concepts.
+
+- `comprehensiveness`:
+  - When set to `basic`: Create simple, straightforward analogies with clear one-to-one mappings between the most fundamental concepts.
+  - When set to `comprehensive`: Develop well-rounded analogies that cover the major components and processes, with moderately detailed mappings between domains.
+  - When set to `detailed`: Construct elaborate, nuanced analogies with detailed mappings that capture subtle aspects, edge cases, and complexities of the topic.
+
+- `mappings`:
+  - Format: Create exactly {value} distinct concept mappings between the target domain and the source domain. Each mapping should connect a specific element from the topic to a corresponding element in the {source} domain.
+
 ## Compatibility
 
 - **Requires**: None

@@ -49,6 +49,62 @@ Generates a weighted decision matrix comparing the specified programming languag
 **Notes:** This model sometimes needs more explicit instructions about formatting the matrix clearly and providing final scores
 
 
+## Implementation Guidance
+
+### Simple smartphone comparison
+
+**Original Prompt:**
+```
+What smartphone should I buy?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a decision matrix that systematically evaluates options against multiple criteria to facilitate comparison and selection. Use a 1-5 rating scale for each criterion (where 1 is poor/lowest and 5 is excellent/highest). Evaluate all criteria with equal importance, without applying weights to the scores.
+
+What smartphone should I buy?
+```
+
+### Detailed programming language comparison with weights
+
+**Original Prompt:**
+```
+Which programming language should I learn next?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a decision matrix that systematically evaluates options against multiple criteria to facilitate comparison and selection. Evaluate these specific options or alternatives in your matrix: Python, JavaScript, Go, Rust. Assess each option against these specific criteria: learning curve, performance, ecosystem, job market. Include weight factors for each criterion to reflect their relative importance, and calculate weighted scores for each option. Use a 1-10 rating scale for each criterion (where 1 is poor/lowest and 10 is excellent/highest).
+
+Which programming language should I learn next?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response as a decision matrix that systematically evaluates options against multiple criteria to facilitate comparison and selection.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `options`:
+  - Format: Evaluate these specific options or alternatives in your matrix: {value}.
+
+- `criteria`:
+  - Format: Assess each option against these specific criteria: {value}.
+
+- `weighted`:
+  - When set to `true`: Include weight factors for each criterion to reflect their relative importance, and calculate weighted scores for each option.
+  - When set to `false`: Evaluate all criteria with equal importance, without applying weights to the scores.
+
+- `scale`:
+  - When set to `1-5`: Use a 1-5 rating scale for each criterion (where 1 is poor/lowest and 5 is excellent/highest).
+  - When set to `1-10`: Use a 1-10 rating scale for each criterion (where 1 is poor/lowest and 10 is excellent/highest).
+  - When set to `qualitative`: Use qualitative ratings (Poor, Fair, Good, Very Good, Excellent) for each criterion.
+  - When set to `percentage`: Use percentage scores (0-100%) for rating each criterion.
+
 ## Compatibility
 
 - **Requires**: None

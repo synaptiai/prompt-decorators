@@ -47,6 +47,58 @@ Implements a cascading priority where Academic style dominates, with Creative el
 **Notes:** Even GPT-4 sometimes needs explicit reminders about priority order when multiple decorators have complex interactions
 
 
+## Implementation Guidance
+
+### Simple priority between conflicting decorators
+
+**Original Prompt:**
+```
+Explain quantum computing.
+```
+
+**Transformed Prompt:**
+```
+Please apply the following decorators with a specific priority hierarchy to resolve any conflicts between them. Apply these decorators in priority order (highest priority first): Concise, Detailed. When decorators conflict, completely override lower-priority decorator instructions with those from higher-priority decorators. Handle conflicts between decorators without explicitly mentioning the resolution in your response.
+
+Explain quantum computing.
+```
+
+### Complex cascading priority with explicit notes
+
+**Original Prompt:**
+```
+Explain the water cycle.
+```
+
+**Transformed Prompt:**
+```
+Please apply the following decorators with a specific priority hierarchy to resolve any conflicts between them. Apply these decorators in priority order (highest priority first): Academic, Creative, StepByStep. When decorators conflict, apply higher-priority decorator instructions first, then apply lower-priority instructions where they don't directly conflict. When a conflict between decorators occurs, explicitly note in your response which decorator's behavior took precedence.
+
+Explain the water cycle.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please apply the following decorators with a specific priority hierarchy to resolve any conflicts between them.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `decorators`:
+  - Format: Apply these decorators in priority order (highest priority first): {value}.
+
+- `explicit`:
+  - When set to `true`: When a conflict between decorators occurs, explicitly note in your response which decorator's behavior took precedence.
+  - When set to `false`: Handle conflicts between decorators without explicitly mentioning the resolution in your response.
+
+- `mode`:
+  - When set to `override`: When decorators conflict, completely override lower-priority decorator instructions with those from higher-priority decorators.
+  - When set to `merge`: When decorators conflict, attempt to merge their instructions by integrating compatible aspects of each.
+  - When set to `cascade`: When decorators conflict, apply higher-priority decorator instructions first, then apply lower-priority instructions where they don't directly conflict.
+
 ## Compatibility
 
 - **Requires**: None

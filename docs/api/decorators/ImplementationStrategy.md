@@ -63,6 +63,53 @@ The implementation will start with a working prototype, using a top-down approac
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Web application development
+
+**Original Prompt:**
+```
+Implement a user registration system.
+```
+
+**Transformed Prompt:**
+```
+When implementing this solution, follow a structured approach that emphasizes methodical development. Use Test-Driven Development (TDD) by writing tests before implementing functionality. Start with external interfaces and work inward toward core functionality. Prioritize correctness and accuracy above all other concerns.
+
+Implement a user registration system.
+```
+
+**Notes:** This transformation guides the implementation toward a TDD approach with outside-in direction and correctness as the priority.
+
+## Transformation Details
+
+**Base Instruction:** When implementing this solution, follow a structured approach that emphasizes methodical development.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `approach`:
+  - When set to `tdd`: Use Test-Driven Development (TDD) by writing tests before implementing functionality.
+  - When set to `bdd`: Apply Behavior-Driven Development (BDD) focusing on business requirements and scenarios.
+  - When set to `prototype-first`: Create a working prototype before refining the implementation.
+  - When set to `interface-first`: Define interfaces and contracts before implementing the underlying functionality.
+  - When set to `standard`: Follow standard development practices with a balanced approach.
+
+- `direction`:
+  - When set to `top-down`: Start with high-level components and work down to implementation details.
+  - When set to `bottom-up`: Begin with foundational components and build upward to higher-level functionality.
+  - When set to `outside-in`: Start with external interfaces and work inward toward core functionality.
+  - When set to `inside-out`: Begin with core functionality and expand outward to external interfaces.
+
+- `priority`:
+  - When set to `correctness`: Prioritize correctness and accuracy above all other concerns.
+  - When set to `clarity`: Focus on code clarity and maintainability as the primary goal.
+  - When set to `performance`: Optimize for performance as a key consideration throughout development.
+  - When set to `completeness`: Ensure comprehensive feature coverage before refining implementation.
+
 ## Compatibility
 
 - **Requires**: None

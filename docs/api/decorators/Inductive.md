@@ -48,6 +48,59 @@ Presents 5 specific observations about screen time and child development, infers
 **Notes:** This model sometimes needs explicit instruction to avoid jumping directly to conclusions without thoroughly examining specific examples first
 
 
+## Implementation Guidance
+
+### Basic inductive reasoning about successful startups
+
+**Original Prompt:**
+```
+What factors contribute to successful startups?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances. Begin with 3 specific, concrete examples or observations before deriving generalizations from them. Present the inductive conclusions without explicitly stating confidence levels. Use generalization induction, where common properties among the examples are used to form a general rule or principle.
+
+What factors contribute to successful startups?
+```
+
+### Causal inductive reasoning about screen time
+
+**Original Prompt:**
+```
+How does screen time affect child development?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances. Begin with 5 specific, concrete examples or observations before deriving generalizations from them. Explicitly state the confidence level for each inductive conclusion, acknowledging the inherent uncertainty in generalizing from specific cases. Apply causal induction, focusing on identifying cause-and-effect relationships across the examples to establish causal patterns.
+
+How does screen time affect child development?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `examples`:
+  - Format: Begin with {value} specific, concrete examples or observations before deriving generalizations from them.
+
+- `confidence`:
+  - When set to `true`: Explicitly state the confidence level for each inductive conclusion, acknowledging the inherent uncertainty in generalizing from specific cases.
+  - When set to `false`: Present the inductive conclusions without explicitly stating confidence levels.
+
+- `structure`:
+  - When set to `generalization`: Use generalization induction, where common properties among the examples are used to form a general rule or principle.
+  - When set to `causal`: Apply causal induction, focusing on identifying cause-and-effect relationships across the examples to establish causal patterns.
+  - When set to `statistical`: Employ statistical induction, using quantitative patterns and probabilistic reasoning to derive statistical generalizations from the examples.
+  - When set to `analogical`: Utilize analogical induction, where similarities between examples are used to infer that they likely share other properties as well.
+
 ## Compatibility
 
 - **Requires**: None

@@ -47,6 +47,58 @@ Delivers a set of extremely concise bullet points covering only the most critica
 **Notes:** This model may need more explicit instructions about brevity requirements
 
 
+## Implementation Guidance
+
+### Basic concise explanation
+
+**Original Prompt:**
+```
+Explain how blockchain technology works.
+```
+
+**Transformed Prompt:**
+```
+Please provide a concise, to-the-point response without unnecessary details or verbose language. Focus on the most important information while maintaining readability and essential context. Use concise paragraphs rather than bullet points.
+
+Explain how blockchain technology works.
+```
+
+### Extremely concise bullet points with word limit
+
+**Original Prompt:**
+```
+What are the key factors in successful project management?
+```
+
+**Transformed Prompt:**
+```
+Please provide a concise, to-the-point response without unnecessary details or verbose language. Limit your entire response to no more than 50 words. Use bullet points to present information in the most concise format possible. Provide only the absolute minimum information required to answer the question - be as brief as possible.
+
+What are the key factors in successful project management?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please provide a concise, to-the-point response without unnecessary details or verbose language.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `maxWords`:
+  - Format: Limit your entire response to no more than {value} words.
+
+- `bulletPoints`:
+  - When set to `true`: Use bullet points to present information in the most concise format possible.
+  - When set to `false`: Use concise paragraphs rather than bullet points.
+
+- `level`:
+  - When set to `moderate`: Focus on the most important information while maintaining readability and essential context.
+  - When set to `high`: Include only key points and critical information, eliminating all non-essential details.
+  - When set to `extreme`: Provide only the absolute minimum information required to answer the question - be as brief as possible.
+
 ## Compatibility
 
 - **Requires**: None

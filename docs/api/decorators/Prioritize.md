@@ -41,6 +41,56 @@ Provides 7 marketing strategies ranked by return on investment, with explanation
 **Notes:** This model may need explicit reminders to maintain strict ordering throughout the response and to avoid adding unprioritized items after the ranked list
 
 
+## Implementation Guidance
+
+### Prioritizing mobile app design factors
+
+**Original Prompt:**
+```
+What factors should be considered when designing a mobile app?
+```
+
+**Transformed Prompt:**
+```
+Please prioritize the information in your response by ranking it according to specific criteria. Organize the content hierarchically from most to least critical, clearly distinguishing different levels of priority. Rank the information based specifically on importance, with the highest importance items appearing first and lowest appearing last. Include exactly 5 prioritized items in your response, focusing on those with the highest priority according to the specified criteria. Focus on presenting the prioritized items in order without explaining the rationale for each ranking position.
+
+What factors should be considered when designing a mobile app?
+```
+
+### Prioritizing marketing strategies by ROI with rationale
+
+**Original Prompt:**
+```
+What marketing strategies should our startup focus on?
+```
+
+**Transformed Prompt:**
+```
+Please prioritize the information in your response by ranking it according to specific criteria. Organize the content hierarchically from most to least critical, clearly distinguishing different levels of priority. Rank the information based specifically on ROI, with the highest ROI items appearing first and lowest appearing last. Include exactly 7 prioritized items in your response, focusing on those with the highest priority according to the specified criteria. For each prioritized item, provide a clear explanation of the reasoning behind its ranking position.
+
+What marketing strategies should our startup focus on?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please prioritize the information in your response by ranking it according to specific criteria. Organize the content hierarchically from most to least critical, clearly distinguishing different levels of priority.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `criteria`:
+  - Format: Rank the information based specifically on {value}, with the highest {value} items appearing first and lowest appearing last.
+
+- `count`:
+  - Format: Include exactly {value} prioritized items in your response, focusing on those with the highest priority according to the specified criteria.
+
+- `showRationale`:
+  - When set to `true`: For each prioritized item, provide a clear explanation of the reasoning behind its ranking position.
+  - When set to `false`: Focus on presenting the prioritized items in order without explaining the rationale for each ranking position.
+
 ## Compatibility
 
 - **Requires**: None

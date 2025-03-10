@@ -62,6 +62,52 @@ A concise list of essential steps needed to observe the dropdown menu bug in a l
 **Notes:** Simpler instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### Bug reproduction for web application
+
+**Original Prompt:**
+```
+Create reproduction steps for a race condition we're seeing in our payment processing service.
+```
+
+**Transformed Prompt:**
+```
+Create detailed steps to reproduce the reported issue. Focus on clarity and completeness so that someone else can follow these steps to observe the same behavior. Provide reproduction steps using Docker containers. Provide detailed steps including setup, execution, and verification of the issue. Format the reproduction as a script that can be executed to reproduce the issue.
+
+Create reproduction steps for a race condition we're seeing in our payment processing service.
+```
+
+**Notes:** The decorator adds specific instructions about environment (Docker), detail level (comprehensive), and format (script) to guide the reproduction creation.
+
+## Transformation Details
+
+**Base Instruction:** Create detailed steps to reproduce the reported issue. Focus on clarity and completeness so that someone else can follow these steps to observe the same behavior.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `environment`:
+  - When set to `local`: Provide reproduction steps for a local development environment.
+  - When set to `staging`: Provide reproduction steps specifically for a staging environment.
+  - When set to `prod`: Provide reproduction steps that can be safely executed in a production environment.
+  - When set to `docker`: Provide reproduction steps using Docker containers.
+  - When set to `specific-version`: Provide reproduction steps for a specific software version, noting version dependencies.
+
+- `detail`:
+  - When set to `minimal`: Provide only the essential steps needed to reproduce the issue.
+  - When set to `comprehensive`: Provide detailed steps including setup, execution, and verification of the issue.
+  - When set to `debug-oriented`: Provide extremely detailed steps with debugging information, logging points, and state verification throughout the process.
+
+- `format`:
+  - When set to `steps`: Format the reproduction as numbered steps with clear instructions.
+  - When set to `script`: Format the reproduction as a script that can be executed to reproduce the issue.
+  - When set to `docker-compose`: Format the reproduction as a docker-compose configuration and associated commands.
+  - When set to `video-script`: Format the reproduction as a script for creating a demonstration video, including visual cues and narration points.
+
 ## Compatibility
 
 - **Requires**: None

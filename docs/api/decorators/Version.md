@@ -22,6 +22,37 @@ Explain quantum entanglement
 
 Ensures decorators are interpreted according to version 1.0.0 of the standard
 
+## Implementation Guidance
+
+### Version specification
+
+**Original Prompt:**
+```
++++Reasoning(depth=comprehensive)
+Explain quantum entanglement
+```
+
+**Transformed Prompt:**
+```
+The following prompt uses Prompt Decorators standard version 1.0.0. Please interpret all decorators according to this version's specifications.
+
++++Reasoning(depth=comprehensive)
+Explain quantum entanglement
+```
+
+## Transformation Details
+
+**Base Instruction:** The following prompt uses Prompt Decorators standard version {standard}. Please interpret all decorators according to this version's specifications.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `standard`:
+  - Format: The following prompt uses Prompt Decorators standard version {value}. Please interpret all decorators according to this version's specifications.
+
 ## Compatibility
 
 - **Requires**: None

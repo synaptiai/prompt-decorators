@@ -75,6 +75,48 @@ Update README with installation instructions
 **Notes:** Simplified instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### Git commit for a bug fix
+
+**Original Prompt:**
+```
+Generate a commit message for changes that fix a login error in the authentication module.
+```
+
+**Transformed Prompt:**
+```
+Generate a commit message that is clear, concise, and follows best practices for version control. The message should effectively communicate the changes made in the commit. Follow the Conventional Commits format (type(scope): description) with types like feat, fix, docs, style, refactor, test, chore. Include the scope of the change in parentheses after the type (e.g., feat(auth): add login functionality). Reference related issues at the end of the commit message (e.g., 'Related to #123'). Generate a commit message for changes that fix a login error in the authentication module.
+```
+
+**Notes:** The decorator adds specific instructions for formatting the commit message according to conventional commits style.
+
+## Transformation Details
+
+**Base Instruction:** Generate a commit message that is clear, concise, and follows best practices for version control. The message should effectively communicate the changes made in the commit.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `style`:
+  - When set to `conventional`: Follow the Conventional Commits format (type(scope): description) with types like feat, fix, docs, style, refactor, test, chore.
+  - When set to `detailed`: Create a detailed commit message with a summary line followed by a blank line and a more detailed explanatory text.
+  - When set to `minimal`: Create a brief, to-the-point commit message focusing only on the essential change.
+  - When set to `semantic`: Use semantic versioning principles to indicate the nature and impact of changes.
+  - When set to `custom`: Format the commit message according to the specific requirements provided in the prompt.
+
+- `scope`:
+  - When set to `include`: Include the scope of the change in parentheses after the type (e.g., feat(auth): add login functionality).
+  - When set to `exclude`: Omit the scope information from the commit message.
+
+- `issue`:
+  - When set to `none`: Do not include any issue references in the commit message.
+  - When set to `reference`: Reference related issues at the end of the commit message (e.g., 'Related to #123').
+  - When set to `close`: Include closing keywords for issues (e.g., 'Closes #123', 'Fixes #123').
+
 ## Compatibility
 
 - **Requires**: None

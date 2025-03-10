@@ -43,6 +43,61 @@ Loads only the ClinicalCase and EvidenceBased decorators from version 2.1.0 of t
 **Notes:** This model handles extension loading well but requires clear indications of which decorators come from the extension
 
 
+## Implementation Guidance
+
+### Loading scientific package for dark matter explanation
+
+**Original Prompt:**
+```
++++Extension(source=https://decorator-registry.ai/scientific-pack.json)
++++ScientificReasoning(discipline=physics)
+Explain dark matter.
+```
+
+**Transformed Prompt:**
+```
+Please load and apply specialized decorators from an external source to enhance your response capabilities. Load the extension package from this source: https://decorator-registry.ai/scientific-pack.json.
+
++++ScientificReasoning(discipline=physics)
+Explain dark matter.
+```
+
+### Loading specific medical decorators for diabetes treatment
+
+**Original Prompt:**
+```
++++Extension(source=medical-decorators, version=2.1.0, decorators=[ClinicalCase,EvidenceBased])
++++ClinicalCase(format=SOAP)
+Describe the treatment approach for Type 2 diabetes.
+```
+
+**Transformed Prompt:**
+```
+Please load and apply specialized decorators from an external source to enhance your response capabilities. Load the extension package from this source: medical-decorators. Use version 2.1.0 of the extension package. Load only these specific decorators from the package: ClinicalCase,EvidenceBased.
+
++++ClinicalCase(format=SOAP)
+Describe the treatment approach for Type 2 diabetes.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please load and apply specialized decorators from an external source to enhance your response capabilities.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `source`:
+  - Format: Load the extension package from this source: {value}.
+
+- `version`:
+  - Format: Use version {value} of the extension package.
+
+- `decorators`:
+  - Format: Load only these specific decorators from the package: {value}.
+
 ## Compatibility
 
 - **Requires**: None

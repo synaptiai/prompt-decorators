@@ -61,6 +61,51 @@ The model will provide a quick assessment focusing on the most likely causes for
 **Notes:** Less capable models may need more explicit instructions to perform thorough debugging analysis.
 
 
+## Implementation Guidance
+
+### JavaScript error diagnosis
+
+**Original Prompt:**
+```
+I'm getting this error in production - "TypeError: Cannot read property 'settings' of undefined" at UserProfile.js:143.
+```
+
+**Transformed Prompt:**
+```
+Analyze the provided information and diagnose the bug or issue. Focus your analysis on the provided stack trace to identify the error source. Conduct a thorough analysis considering multiple potential causes and solutions, with detailed explanations. Provide both a detailed explanation of the cause and specific steps to fix the issue.
+
+I'm getting this error in production - "TypeError: Cannot read property 'settings' of undefined" at UserProfile.js:143.
+```
+
+**Notes:** The decorator adds specific instructions for analyzing a JavaScript TypeError based on a stack trace.
+
+## Transformation Details
+
+**Base Instruction:** Analyze the provided information and diagnose the bug or issue. Identify the root cause and potential solutions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `from`:
+  - When set to `stacktrace`: Focus your analysis on the provided stack trace to identify the error source.
+  - When set to `behavior`: Analyze the described unexpected behavior to determine what's causing it.
+  - When set to `logs`: Examine the log entries to identify patterns or anomalies that indicate the issue.
+  - When set to `core-dump`: Analyze the core dump information to identify memory issues or crashes.
+  - When set to `screenshot`: Examine the visual evidence to identify UI/UX issues or rendering problems.
+  - When set to `reproduction`: Analyze the steps to reproduce to identify where the process is failing.
+
+- `depth`:
+  - When set to `quick`: Provide a rapid assessment focusing on the most likely cause and solution.
+  - When set to `comprehensive`: Conduct a thorough analysis considering multiple potential causes and solutions, with detailed explanations.
+
+- `output`:
+  - When set to `explanation`: Focus on explaining what's causing the issue and why it's happening.
+  - When set to `fix`: Focus on providing concrete steps to fix the issue.
+  - When set to `both`: Provide both a detailed explanation of the cause and specific steps to fix the issue.
+
 ## Compatibility
 
 - **Requires**: None

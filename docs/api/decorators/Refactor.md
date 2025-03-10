@@ -70,6 +70,59 @@ The model will perform extensive refactoring to address security vulnerabilities
 **Notes:** More explicit instructions help GPT-3.5 maintain the refactoring constraints.
 
 
+## Implementation Guidance
+
+### Python function refactoring
+
+**Original Prompt:**
+```
+Can you help me improve this function?
+
+def get_user_data(id):
+  data = db.query("SELECT * FROM users WHERE id = " + id)
+  return data
+```
+
+**Transformed Prompt:**
+```
+Refactor the provided code to improve its structure while preserving its functionality. Focus on making the code more maintainable. Perform a balanced refactoring that addresses key issues without completely rewriting the code. Preserve both the API and behavior of the code during refactoring.
+
+Can you help me improve this function?
+
+def get_user_data(id):
+  data = db.query("SELECT * FROM users WHERE id = " + id)
+  return data
+```
+
+**Notes:** The refactoring should address the SQL injection vulnerability while maintaining the function signature and behavior.
+
+## Transformation Details
+
+**Base Instruction:** Refactor the provided code to improve its structure while preserving its functionality. Focus on making the code more maintainable.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `goal`:
+  - When set to `performance`: Refactor the code to optimize for performance. Look for inefficient algorithms, unnecessary computations, and opportunities for caching or parallelization.
+  - When set to `readability`: Refactor the code to improve readability. Focus on clear naming, consistent formatting, and logical organization of code elements.
+  - When set to `maintainability`: Refactor the code to enhance maintainability. Reduce complexity, improve modularity, and ensure the code follows best practices and design patterns.
+  - When set to `security`: Refactor the code to address security concerns. Identify and fix potential vulnerabilities, implement proper input validation, and follow security best practices.
+  - When set to `testability`: Refactor the code to improve testability. Make functions more modular, reduce dependencies, and ensure components can be tested in isolation.
+
+- `level`:
+  - When set to `minor`: Make minimal changes to the code structure while addressing the main issues.
+  - When set to `moderate`: Perform a balanced refactoring that addresses key issues without completely rewriting the code.
+  - When set to `major`: Conduct a comprehensive refactoring that may involve significant restructuring of the code.
+
+- `preserve`:
+  - When set to `api`: Ensure the public API (function signatures, return values, etc.) remains unchanged during refactoring.
+  - When set to `behavior`: Maintain the exact same behavior and output for all inputs, even if the API changes.
+  - When set to `both`: Preserve both the API and behavior of the code during refactoring.
+
 ## Compatibility
 
 - **Requires**: None

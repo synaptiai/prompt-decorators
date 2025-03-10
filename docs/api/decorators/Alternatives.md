@@ -47,6 +47,58 @@ Presents five highly diverse approaches to reducing urban carbon emissions, foll
 **Notes:** This model sometimes needs more explicit instructions about maintaining meaningful differences between alternatives
 
 
+## Implementation Guidance
+
+### Basic alternative approaches to improving public speaking
+
+**Original Prompt:**
+```
+How can I improve my public speaking skills?
+```
+
+**Transformed Prompt:**
+```
+Please provide multiple distinct options, approaches, or solutions to this question or problem rather than a single definitive answer. Present exactly 3 different alternatives. Generate alternatives that offer substantively different approaches while still being practical and conventional. Present each alternative independently without explicitly comparing them to each other.
+
+How can I improve my public speaking skills?
+```
+
+### Diverse alternatives for reducing carbon emissions with comparative analysis
+
+**Original Prompt:**
+```
+What are some ways to reduce carbon emissions in urban areas?
+```
+
+**Transformed Prompt:**
+```
+Please provide multiple distinct options, approaches, or solutions to this question or problem rather than a single definitive answer. Present exactly 5 different alternatives. Generate alternatives that are radically different from each other, exploring unconventional approaches and diverse paradigms. After presenting all alternatives, include a comparative analysis that evaluates their relative strengths, weaknesses, and suitability for different contexts or priorities.
+
+What are some ways to reduce carbon emissions in urban areas?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please provide multiple distinct options, approaches, or solutions to this question or problem rather than a single definitive answer.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `count`:
+  - Format: Present exactly {value} different alternatives.
+
+- `diversity`:
+  - When set to `low`: Generate alternatives that are variations on the same fundamental approach with different implementations or emphases.
+  - When set to `medium`: Generate alternatives that offer substantively different approaches while still being practical and conventional.
+  - When set to `high`: Generate alternatives that are radically different from each other, exploring unconventional approaches and diverse paradigms.
+
+- `comparison`:
+  - When set to `true`: After presenting all alternatives, include a comparative analysis that evaluates their relative strengths, weaknesses, and suitability for different contexts or priorities.
+  - When set to `false`: Present each alternative independently without explicitly comparing them to each other.
+
 ## Compatibility
 
 - **Requires**: None

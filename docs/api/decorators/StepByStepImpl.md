@@ -53,6 +53,47 @@ The model will provide a step-by-step implementation with minimal comments, focu
 **Notes:** For GPT-3.5 Turbo, more explicit instructions about the step structure may be needed.
 
 
+## Implementation Guidance
+
+### Web Development Implementation
+
+**Original Prompt:**
+```
+Implement a JWT authentication middleware for Express.js that verifies tokens and extracts user roles.
+```
+
+**Transformed Prompt:**
+```
+Please provide a step-by-step implementation approach with explicitly labeled stages. Include detailed explanations and comprehensive comments for each part of the implementation. For each step, first explain the concept or approach, then provide the implementation code.
+
+Implement a JWT authentication middleware for Express.js that verifies tokens and extracts user roles.
+```
+
+**Notes:** This example shows the decorator applied with comprehensive detail and explanation-then-code format.
+
+## Transformation Details
+
+**Base Instruction:** Please provide a step-by-step implementation approach with explicitly labeled stages.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `detail`:
+  - When set to `minimal`: Keep explanations and comments minimal, focusing on essential information only.
+  - When set to `moderate`: Provide balanced explanations and comments that clarify the implementation without being excessive.
+  - When set to `comprehensive`: Include detailed explanations and comprehensive comments for each part of the implementation.
+
+- `steps`:
+  - Format: Organize the implementation into {value} distinct steps.
+
+- `output`:
+  - When set to `code-only`: Present only the code for each step, with minimal explanation.
+  - When set to `code-with-explanation`: For each step, present the code along with explanations of what it does.
+  - When set to `explanation-then-code`: For each step, first explain the concept or approach, then provide the implementation code.
+
 ## Compatibility
 
 - **Requires**: None

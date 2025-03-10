@@ -61,6 +61,51 @@ Generates concise, business-focused release notes in a narrative style, emphasiz
 **Notes:** Simpler instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### Software product update
+
+**Original Prompt:**
+```
+Create release notes for version 2.3.0 which includes new payment methods, performance improvements, and bug fixes.
+```
+
+**Transformed Prompt:**
+```
+Create structured release notes for the product update. Focus on clarity and organization. Target the release notes for end users, focusing on benefits and user-facing changes. Include comprehensive details about all changes, including minor improvements and fixes. Organize changes into categories (Features, Improvements, Fixes, etc.).
+
+Create release notes for version 2.3.0 which includes new payment methods, performance improvements, and bug fixes.
+```
+
+**Notes:** The decorator adds structure and guidance for creating professional release notes tailored to the specified audience and format.
+
+## Transformation Details
+
+**Base Instruction:** Create structured release notes for the product update. Focus on clarity and organization.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `audience`:
+  - When set to `users`: Target the release notes for end users, focusing on benefits and user-facing changes.
+  - When set to `developers`: Target the release notes for developers, including technical details and API changes.
+  - When set to `stakeholders`: Target the release notes for business stakeholders, emphasizing business impact and strategic value.
+  - When set to `public`: Target the release notes for public consumption, balancing technical details with accessible language.
+
+- `detail`:
+  - When set to `high-level`: Provide a concise overview of major changes without extensive details.
+  - When set to `detailed`: Include comprehensive details about all changes, including minor improvements and fixes.
+
+- `format`:
+  - When set to `changelog`: Structure as a traditional changelog with version numbers and dated entries.
+  - When set to `narrative`: Present as a narrative story highlighting the evolution and improvements.
+  - When set to `categorized`: Organize changes into categories (Features, Improvements, Fixes, etc.).
+  - When set to `markdown`: Format using Markdown syntax for easy integration with documentation systems.
+  - When set to `html`: Format using HTML for web publication with appropriate tags and structure.
+
 ## Compatibility
 
 - **Requires**: None

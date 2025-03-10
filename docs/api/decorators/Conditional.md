@@ -41,6 +41,55 @@ Determines that gene editing ethics is controversial, so it applies the Debate d
 **Notes:** This model may need more explicit instructions about the conditional evaluation process
 
 
+## Implementation Guidance
+
+### Conditional based on complexity
+
+**Original Prompt:**
+```
+Explain how quantum computing works.
+```
+
+**Transformed Prompt:**
+```
+Please evaluate the topic and adapt your response formatting based on the conditional logic specified. First, determine if the topic or question can be classified as 'complex'. If the condition is true (the topic IS complex), then apply the following approach: StepByStep. If the condition is false (the topic is NOT complex), then apply the following approach instead: Concise.
+
+Explain how quantum computing works.
+```
+
+### Conditional based on controversy
+
+**Original Prompt:**
+```
+Discuss the ethical implications of gene editing in humans.
+```
+
+**Transformed Prompt:**
+```
+Please evaluate the topic and adapt your response formatting based on the conditional logic specified. First, determine if the topic or question can be classified as 'controversial'. If the condition is true (the topic IS controversial), then apply the following approach: Debate(perspectives=3). If the condition is false (the topic is NOT controversial), then apply the following approach instead: Reasoning(depth=moderate).
+
+Discuss the ethical implications of gene editing in humans.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please evaluate the topic and adapt your response formatting based on the conditional logic specified.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `if_param`:
+  - Format: First, determine if the topic or question can be classified as '{value}'.
+
+- `then`:
+  - Format: If the condition is true (the topic IS {if_param}), then apply the following approach: {value}.
+
+- `else_param`:
+  - Format: If the condition is false (the topic is NOT {if_param}), then apply the following approach instead: {value}.
+
 ## Compatibility
 
 - **Requires**: None

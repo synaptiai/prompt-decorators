@@ -63,6 +63,53 @@ Generates AWS CloudFormation template optimized for development with cost-saving
 **Notes:** Simplified instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### Web application infrastructure
+
+**Original Prompt:**
+```
+Create infrastructure as code for a web application with frontend, API, and database tiers.
+```
+
+**Transformed Prompt:**
+```
+Generate infrastructure as code using best practices for the specified tool, environment, and approach. Use Terraform HCL syntax and modules to define the infrastructure. Design with environment promotion in mind, using variables or parameters to differentiate environments. Design infrastructure to be replaced rather than modified when changes are needed.
+
+Create infrastructure as code for a web application with frontend, API, and database tiers.
+```
+
+**Notes:** The decorator adds specific guidance based on the selected IaC tool, environment strategy, and infrastructure approach.
+
+## Transformation Details
+
+**Base Instruction:** Generate infrastructure as code using best practices for the specified tool, environment, and approach.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `tool`:
+  - When set to `terraform`: Use Terraform HCL syntax and modules to define the infrastructure.
+  - When set to `cloudformation`: Use AWS CloudFormation YAML/JSON templates to define the infrastructure.
+  - When set to `arm`: Use Azure Resource Manager templates to define the infrastructure.
+  - When set to `pulumi`: Use Pulumi with appropriate programming language to define the infrastructure.
+  - When set to `cdk`: Use Cloud Development Kit with appropriate programming language to define the infrastructure.
+  - When set to `ansible`: Use Ansible playbooks and roles to define the infrastructure.
+
+- `environment`:
+  - When set to `dev`: Optimize for development speed and cost efficiency.
+  - When set to `staging`: Create a production-like environment with reduced resources.
+  - When set to `prod`: Optimize for reliability, security, and performance.
+  - When set to `multi-environment`: Design with environment promotion in mind, using variables or parameters to differentiate environments.
+
+- `approach`:
+  - When set to `immutable`: Design infrastructure to be replaced rather than modified when changes are needed.
+  - When set to `mutable`: Design infrastructure that can be updated in place.
+  - When set to `hybrid`: Use a combination of immutable and mutable approaches as appropriate.
+
 ## Compatibility
 
 - **Requires**: None

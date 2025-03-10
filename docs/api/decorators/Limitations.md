@@ -60,6 +60,62 @@ Begins with a thorough discussion of the limitations in our understanding of con
 **Notes:** This model sometimes needs explicit prompting to acknowledge limitations, especially in domains where it has high confidence
 
 
+## Implementation Guidance
+
+### Brief methodological limitations at the end
+
+**Original Prompt:**
+```
+Explain how personality tests predict career success.
+```
+
+**Transformed Prompt:**
+```
+Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response. Add a concise, focused statement highlighting only the most critical limitations. Place the limitations statement at the end of your response, after presenting the main information. Focus primarily on limitations in the methodology, research approaches, or analytical techniques used in this area.
+
+Explain how personality tests predict career success.
+```
+
+### Comprehensive limitations at the beginning covering all aspects
+
+**Original Prompt:**
+```
+Describe the current understanding of consciousness.
+```
+
+**Transformed Prompt:**
+```
+Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response. Include a thorough examination of all significant limitations with detailed explanations and implications. Place the limitations statement at the beginning of your response, before presenting the main information. Address a balanced mix of limitations across knowledge gaps, methodological issues, contextual constraints, and potential biases.
+
+Describe the current understanding of consciousness.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `detail`:
+  - When set to `brief`: Add a concise, focused statement highlighting only the most critical limitations.
+  - When set to `moderate`: Provide a balanced discussion of several important limitations with some supporting context.
+  - When set to `comprehensive`: Include a thorough examination of all significant limitations with detailed explanations and implications.
+
+- `position`:
+  - When set to `beginning`: Place the limitations statement at the beginning of your response, before presenting the main information.
+  - When set to `end`: Place the limitations statement at the end of your response, after presenting the main information.
+
+- `focus`:
+  - When set to `knowledge`: Focus primarily on limitations related to the current state of knowledge or understanding in this field.
+  - When set to `methodology`: Focus primarily on limitations in the methodology, research approaches, or analytical techniques used in this area.
+  - When set to `context`: Focus primarily on contextual limitations such as time period, geographical scope, or situational constraints.
+  - When set to `biases`: Focus primarily on potential biases, including research biases, sampling biases, or perspective biases.
+  - When set to `all`: Address a balanced mix of limitations across knowledge gaps, methodological issues, contextual constraints, and potential biases.
+
 ## Compatibility
 
 - **Requires**: None

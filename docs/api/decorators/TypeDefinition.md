@@ -63,6 +63,53 @@ The model will generate Python code with appropriate type annotations from the t
 **Notes:** GPT-4 has stronger capabilities for understanding complex type systems and can handle more nuanced type definitions.
 
 
+## Implementation Guidance
+
+### TypeScript e-commerce application
+
+**Original Prompt:**
+```
+Define types for an e-commerce application's product catalog and shopping cart.
+```
+
+**Transformed Prompt:**
+```
+Generate type definitions for the code according to the specified parameters. Focus on creating clear, well-structured types that enhance code safety and documentation. Use TypeScript's static type system with interfaces, type aliases, and generics as appropriate. Enforce rigorous type checking with no implicit conversions and exhaustive type coverage. Prefer interfaces over other type constructs when possible.
+
+Define types for an e-commerce application's product catalog and shopping cart.
+```
+
+**Notes:** The decorator adds specific instructions for TypeScript with strict type checking and interface-based style.
+
+## Transformation Details
+
+**Base Instruction:** Generate type definitions for the code according to the specified parameters. Focus on creating clear, well-structured types that enhance code safety and documentation.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `system`:
+  - When set to `typescript`: Use TypeScript's static type system with interfaces, type aliases, and generics as appropriate.
+  - When set to `flow`: Apply Flow type annotations with appropriate syntax and features.
+  - When set to `jsdoc`: Create JSDoc comments with type annotations for JavaScript code.
+  - When set to `python-typing`: Implement Python's typing module annotations for type hints.
+  - When set to `java-generics`: Use Java's generic type system with appropriate class and interface definitions.
+
+- `strictness`:
+  - When set to `loose`: Allow some type flexibility and implicit conversions where reasonable.
+  - When set to `moderate`: Balance type safety with pragmatic flexibility, using union types where appropriate.
+  - When set to `strict`: Enforce rigorous type checking with no implicit conversions and exhaustive type coverage.
+
+- `style`:
+  - When set to `inline`: Define types directly within the code as inline annotations.
+  - When set to `declaration-file`: Create separate declaration files for type definitions.
+  - When set to `interface-based`: Prefer interfaces over other type constructs when possible.
+  - When set to `type-alias`: Use type aliases as the primary means of type definition.
+  - When set to `generics`: Leverage generic types extensively for maximum reusability.
+
 ## Compatibility
 
 - **Requires**: None

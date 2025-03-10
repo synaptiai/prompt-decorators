@@ -49,6 +49,60 @@ Creates a 5-level deep outline using mixed notation (numbers, letters, roman num
 **Notes:** This model may need more explicit instructions about maintaining consistent outline formatting
 
 
+## Implementation Guidance
+
+### Standard numeric outline
+
+**Original Prompt:**
+```
+Explain the structure of the United States government.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly. Use a maximum of 3 levels of nesting in the hierarchy. Use numeric notation (1, 1.1, 1.1.1, etc.) for all outline levels. Keep the outline concise with headings only, without additional explanations under each point.
+
+Explain the structure of the United States government.
+```
+
+### Detailed mixed-style outline
+
+**Original Prompt:**
+```
+Provide a comprehensive overview of machine learning techniques.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly. Use a maximum of 5 levels of nesting in the hierarchy. Use a mix of notation styles: numbers for level 1, letters for level 2, Roman numerals for level 3, etc. Include a brief explanation or description under each outline point to provide context.
+
+Provide a comprehensive overview of machine learning techniques.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `depth`:
+  - Format: Use a maximum of {value} levels of nesting in the hierarchy.
+
+- `style`:
+  - When set to `numeric`: Use numeric notation (1, 1.1, 1.1.1, etc.) for all outline levels.
+  - When set to `bullet`: Use bullet point notation (•, ○, ▪, etc.) for all outline levels.
+  - When set to `roman`: Use Roman numeral notation (I, II, III, etc. for top level, then A, B, C, etc. for second level).
+  - When set to `alpha`: Use alphabetical notation (A, B, C, etc. for top level, then 1, 2, 3, etc. for second level).
+  - When set to `mixed`: Use a mix of notation styles: numbers for level 1, letters for level 2, Roman numerals for level 3, etc.
+
+- `detailed`:
+  - When set to `true`: Include a brief explanation or description under each outline point to provide context.
+  - When set to `false`: Keep the outline concise with headings only, without additional explanations under each point.
+
 ## Compatibility
 
 - **Requires**: None

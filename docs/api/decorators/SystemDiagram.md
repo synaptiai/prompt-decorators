@@ -72,6 +72,53 @@ Creates an informal context diagram showing the e-commerce platform and its conn
 **Notes:** GPT-4 has enhanced capabilities for structured outputs that can be converted to diagrams.
 
 
+## Implementation Guidance
+
+### Software Architecture Design
+
+**Original Prompt:**
+```
+Create a system diagram showing how a user authentication service interacts with other system components.
+```
+
+**Transformed Prompt:**
+```
+Create a system diagram that visually represents the architecture or design described. Use clear notation and appropriate level of detail. Follow the C4 model notation for the diagram. Show containers (applications, data stores, microservices) within the system. Focus on interactions and communications between system elements.
+
+Create a system diagram showing how a user authentication service interacts with other system components.
+```
+
+**Notes:** The decorator adds specific instructions about the diagram notation, level, and focus before the original prompt.
+
+## Transformation Details
+
+**Base Instruction:** Create a system diagram that visually represents the architecture or design described. Use clear notation and appropriate level of detail.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `notation`:
+  - When set to `uml`: Use UML (Unified Modeling Language) notation for the diagram.
+  - When set to `c4`: Follow the C4 model notation for the diagram.
+  - When set to `archimate`: Apply ArchiMate notation standards to the diagram.
+  - When set to `informal`: Create an informal, easy-to-understand diagram without strict notation rules.
+  - When set to `flowchart`: Use standard flowchart notation for the diagram.
+
+- `level`:
+  - When set to `context`: Focus on the context level showing the system and its relationships with users and other systems.
+  - When set to `container`: Show containers (applications, data stores, microservices) within the system.
+  - When set to `component`: Break down into components showing the major structural building blocks and their interactions.
+  - When set to `code`: Provide code-level details showing classes, interfaces, and relationships.
+
+- `focus`:
+  - When set to `structure`: Emphasize the structural elements and their relationships.
+  - When set to `behavior`: Highlight the behavioral aspects and processes within the system.
+  - When set to `interaction`: Focus on interactions and communications between system elements.
+  - When set to `deployment`: Show the deployment architecture and infrastructure components.
+
 ## Compatibility
 
 - **Requires**: None

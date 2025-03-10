@@ -47,6 +47,57 @@ Delivers an unconventional explanation of quantum computing through an engaging 
 **Notes:** This model sometimes needs explicit encouragement to break from conventional patterns in its responses
 
 
+## Implementation Guidance
+
+### Creative explanation of the internet
+
+**Original Prompt:**
+```
+Explain how the internet works.
+```
+
+**Transformed Prompt:**
+```
+Please provide an imaginative, novel, and original response that uses creative language and unexpected connections to engage the reader. Apply significant creative thinking to present the information in fresh, surprising ways. Use vivid language, unexpected angles, and novel framing to create an engaging and memorable response.
+
+Explain how the internet works.
+```
+
+### Highly unconventional quantum computing explanation with specific elements and constraints
+
+**Original Prompt:**
+```
+Describe the principles of quantum computing.
+```
+
+**Transformed Prompt:**
+```
+Please provide an imaginative, novel, and original response that uses creative language and unexpected connections to engage the reader. Push far beyond conventional thinking to create a truly original response. Break traditional patterns, challenge assumptions, and explore highly unusual perspectives or approaches. Specifically incorporate these creative elements in your response: metaphor, narrative, wordplay. While being creative, work within these constraints: must reference nature.
+
+Describe the principles of quantum computing.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please provide an imaginative, novel, and original response that uses creative language and unexpected connections to engage the reader.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `level`:
+  - When set to `moderate`: Use creativity to make the content engaging while ensuring it remains accessible and practical. Incorporate creative elements that enhance understanding without overshadowing the substance.
+  - When set to `high`: Apply significant creative thinking to present the information in fresh, surprising ways. Use vivid language, unexpected angles, and novel framing to create an engaging and memorable response.
+  - When set to `unconventional`: Push far beyond conventional thinking to create a truly original response. Break traditional patterns, challenge assumptions, and explore highly unusual perspectives or approaches.
+
+- `elements`:
+  - Format: Specifically incorporate these creative elements in your response: {value}.
+
+- `constraints`:
+  - Format: While being creative, work within these constraints: {value}.
+
 ## Compatibility
 
 - **Requires**: None

@@ -81,6 +81,56 @@ A high-level overview of an event-driven architecture optimized for security, sh
 **Notes:** GPT-4 can handle more complex architectural descriptions and provide more detailed diagrams and rationales.
 
 
+## Implementation Guidance
+
+### Web application architecture
+
+**Original Prompt:**
+```
+Design an architecture for a video streaming platform that needs to support millions of concurrent users.
+```
+
+**Transformed Prompt:**
+```
+Generate an architectural design that addresses the requirements and constraints. Consider trade-offs and justify your design decisions. Design using a microservices architecture with loosely coupled, independently deployable services. Detail the component-level design including interfaces, responsibilities, and interactions. Optimize the architecture for scalability, ensuring it can handle increasing loads and users.
+
+Design an architecture for a video streaming platform that needs to support millions of concurrent users.
+```
+
+**Notes:** The decorator adds specific architectural guidance focusing on microservices, component-level detail, and scalability optimization.
+
+## Transformation Details
+
+**Base Instruction:** Generate an architectural design that addresses the requirements and constraints. Consider trade-offs and justify your design decisions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `style`:
+  - When set to `microservices`: Design using a microservices architecture with loosely coupled, independently deployable services.
+  - When set to `monolith`: Design using a monolithic architecture with a unified codebase and deployment unit.
+  - When set to `serverless`: Design using a serverless architecture with function-as-a-service components.
+  - When set to `event-driven`: Design using an event-driven architecture with asynchronous communication patterns.
+  - When set to `layered`: Design using a layered architecture with clear separation of concerns between layers.
+  - When set to `hexagonal`: Design using a hexagonal (ports and adapters) architecture to separate business logic from external concerns.
+  - When set to `ddd`: Design using Domain-Driven Design principles with bounded contexts and a ubiquitous language.
+
+- `detail`:
+  - When set to `overview`: Provide a high-level architectural overview with major components and their relationships.
+  - When set to `component`: Detail the component-level design including interfaces, responsibilities, and interactions.
+  - When set to `detailed`: Create a detailed design including data structures, APIs, deployment considerations, and implementation guidance.
+
+- `focus`:
+  - When set to `scalability`: Optimize the architecture for scalability, ensuring it can handle increasing loads and users.
+  - When set to `maintainability`: Optimize the architecture for maintainability, ensuring it can be easily understood and modified.
+  - When set to `performance`: Optimize the architecture for performance, minimizing latency and maximizing throughput.
+  - When set to `security`: Optimize the architecture for security, protecting against threats and vulnerabilities.
+  - When set to `cost`: Optimize the architecture for cost-efficiency, minimizing resource usage and operational expenses.
+  - When set to `balanced`: Balance all quality attributes including scalability, maintainability, performance, security, and cost.
+
 ## Compatibility
 
 - **Requires**: None

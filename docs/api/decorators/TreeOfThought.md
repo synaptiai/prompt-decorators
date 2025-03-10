@@ -47,6 +47,56 @@ Starts with five different approaches to climate change, explores each in depth,
 **Notes:** This model may need additional structure to manage multiple reasoning branches effectively
 
 
+## Implementation Guidance
+
+### Multi-branch exploration of a scientific question
+
+**Original Prompt:**
+```
+What might explain the Fermi Paradox?
+```
+
+**Transformed Prompt:**
+```
+Please explore multiple reasoning paths simultaneously for this problem, considering different approaches or hypotheses before reaching conclusions. Generate 3 distinct reasoning branches, each exploring a different approach or hypothesis. For each branch, pursue the reasoning to a depth of 3 levels of analysis. Fully explore all branches to their complete depth regardless of their apparent promise.
+
+What might explain the Fermi Paradox?
+```
+
+### Deep analysis with pruning for a complex problem
+
+**Original Prompt:**
+```
+How might we solve the climate change crisis?
+```
+
+**Transformed Prompt:**
+```
+Please explore multiple reasoning paths simultaneously for this problem, considering different approaches or hypotheses before reaching conclusions. Generate 5 distinct reasoning branches, each exploring a different approach or hypothesis. For each branch, pursue the reasoning to a depth of 5 levels of analysis. Evaluate the promise of each branch as you go, and stop pursuing less promising paths to focus on the most viable ones.
+
+How might we solve the climate change crisis?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please explore multiple reasoning paths simultaneously for this problem, considering different approaches or hypotheses before reaching conclusions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `branches`:
+  - Format: Generate {value} distinct reasoning branches, each exploring a different approach or hypothesis.
+
+- `depth`:
+  - Format: For each branch, pursue the reasoning to a depth of {value} levels of analysis.
+
+- `pruning`:
+  - When set to `true`: Evaluate the promise of each branch as you go, and stop pursuing less promising paths to focus on the most viable ones.
+  - When set to `false`: Fully explore all branches to their complete depth regardless of their apparent promise.
+
 ## Compatibility
 
 - **Requires**: None

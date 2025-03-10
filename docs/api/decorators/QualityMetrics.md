@@ -48,6 +48,59 @@ Delivers the policy proposal, followed by qualitative assessments (poor/fair/goo
 **Notes:** This model may need explicit instructions to be sufficiently critical in its self-assessment rather than defaulting to consistently high ratings
 
 
+## Implementation Guidance
+
+### Financial market trend analysis with standard metrics
+
+**Original Prompt:**
+```
+My analysis of the financial market trends is as follows...
+```
+
+**Transformed Prompt:**
+```
+Please include a quality assessment of your response using specific metrics. After presenting your main content, evaluate it against defined quality criteria with appropriate ratings and explanations where needed. Use a 1-5 scale for your ratings, where 1 represents the lowest quality and 5 represents the highest quality. For each metric, provide a detailed explanation that justifies the rating, citing specific aspects of the content.
+
+My analysis of the financial market trends is as follows...
+```
+
+### Urban housing policy proposal with custom qualitative metrics
+
+**Original Prompt:**
+```
+Here's my policy proposal for urban housing...
+```
+
+**Transformed Prompt:**
+```
+Please include a quality assessment of your response using specific metrics. After presenting your main content, evaluate it against defined quality criteria with appropriate ratings and explanations where needed. Evaluate your response against these specific quality metrics: [factual accuracy,predictive value,consideration of alternatives,logical flow]. For each metric, provide a rating and assess how well the content meets that particular quality standard. Use qualitative ratings (poor, fair, good, excellent) rather than numerical scores. For each metric, provide a detailed explanation that justifies the rating, citing specific aspects of the content.
+
+Here's my policy proposal for urban housing...
+```
+
+## Transformation Details
+
+**Base Instruction:** Please include a quality assessment of your response using specific metrics. After presenting your main content, evaluate it against defined quality criteria with appropriate ratings and explanations where needed.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `metrics`:
+  - Format: Evaluate your response against these specific quality metrics: {value}. For each metric, provide a rating and assess how well the content meets that particular quality standard.
+
+- `scale`:
+  - When set to `1-5`: Use a 1-5 scale for your ratings, where 1 represents the lowest quality and 5 represents the highest quality.
+  - When set to `1-10`: Use a 1-10 scale for your ratings, where 1 represents the lowest quality and 10 represents the highest quality.
+  - When set to `percentage`: Express your ratings as percentages, ranging from 0% (lowest quality) to 100% (highest quality).
+  - When set to `qualitative`: Use qualitative ratings (poor, fair, good, excellent) rather than numerical scores.
+
+- `explanation`:
+  - When set to `true`: For each metric, provide a detailed explanation that justifies the rating, citing specific aspects of the content.
+  - When set to `false`: Provide ratings for each metric without detailed explanations.
+
 ## Compatibility
 
 - **Requires**: None

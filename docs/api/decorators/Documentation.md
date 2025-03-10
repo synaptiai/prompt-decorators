@@ -80,6 +80,71 @@ The model will generate standard JSDoc documentation for the JavaScript utility 
 **Notes:** Claude models respond well to clear structure guidance in documentation tasks.
 
 
+## Implementation Guidance
+
+### API Documentation
+
+**Original Prompt:**
+```
+Create documentation for our payment processing API.
+```
+
+**Transformed Prompt:**
+```
+Create API documentation that includes endpoints, request/response formats, authentication, and error handling. Format the documentation in Markdown syntax. Include standard level of detail with examples and explanations.
+
+Create documentation for our payment processing API.
+```
+
+**Notes:** The decorator adds specific guidance on what elements to include in API documentation.
+
+### Code Documentation
+
+**Original Prompt:**
+```
+Document this Python class for calculating mortgage payments.
+```
+
+**Transformed Prompt:**
+```
+Create code documentation that explains the implementation details, functions, classes, and methods. Format the documentation in reStructuredText syntax. Include exhaustive details, examples, edge cases, and cross-references.
+
+Document this Python class for calculating mortgage payments.
+```
+
+**Notes:** The decorator specifies the format and level of detail for code documentation.
+
+## Transformation Details
+
+**Base Instruction:** Create comprehensive documentation based on the provided content.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `for`:
+  - When set to `code`: Create code documentation that explains the implementation details, functions, classes, and methods.
+  - When set to `api`: Create API documentation that includes endpoints, request/response formats, authentication, and error handling.
+  - When set to `user`: Create user documentation that explains how to use the product or service from an end-user perspective.
+  - When set to `admin`: Create administrator documentation that explains how to configure, manage, and troubleshoot the system.
+  - When set to `architecture`: Create architecture documentation that explains the system design, components, and their interactions.
+
+- `format`:
+  - When set to `markdown`: Format the documentation in Markdown syntax.
+  - When set to `javadoc`: Format the documentation in Javadoc syntax.
+  - When set to `jsdoc`: Format the documentation in JSDoc syntax.
+  - When set to `openapi`: Format the documentation following OpenAPI specification.
+  - When set to `restructuredtext`: Format the documentation in reStructuredText syntax.
+  - When set to `html`: Format the documentation in HTML.
+  - When set to `jupyter`: Format the documentation as a Jupyter notebook with explanatory cells.
+
+- `detail`:
+  - When set to `minimal`: Include only essential information with brief descriptions.
+  - When set to `standard`: Include standard level of detail with examples and explanations.
+  - When set to `comprehensive`: Include exhaustive details, examples, edge cases, and cross-references.
+
 ## Compatibility
 
 - **Requires**: None

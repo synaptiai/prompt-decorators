@@ -55,6 +55,58 @@ A comprehensive year-long advanced learning path for machine learning that cover
 **Notes:** Simplified instruction with more direct language for models with smaller context windows.
 
 
+## Implementation Guidance
+
+### Creating a learning path for React
+
+**Original Prompt:**
+```
+Create a learning roadmap for a junior developer to become proficient in React and its ecosystem.
+```
+
+**Transformed Prompt:**
+```
+Create a structured learning path for React with the following characteristics:
+- Tailored for a beginner level learner
+- Designed to be completed within a quarter timeframe
+- Include specific resources, practice exercises, and milestones
+- Organize content in a logical progression from fundamentals to advanced topics
+
+Create a learning roadmap for a junior developer to become proficient in React and its ecosystem.
+```
+
+**Notes:** The decorator prepends specific instructions for creating a structured learning path with clear parameters.
+
+## Transformation Details
+
+**Base Instruction:** Create a structured learning path for {for} with the following characteristics:
+- Tailored for a {experience} level learner
+- Designed to be completed within a {timeframe} timeframe
+- Include specific resources, practice exercises, and milestones
+- Organize content in a logical progression from fundamentals to advanced topics
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `for`:
+  - Format: {value}
+
+- `experience`:
+  - When set to `beginner`: complete beginner with no prior knowledge
+  - When set to `intermediate`: learner with basic understanding seeking to deepen knowledge
+  - When set to `advanced`: experienced practitioner looking to master advanced concepts
+  - When set to `career-change`: professional transitioning from another field
+
+- `timeframe`:
+  - When set to `week`: one week (intensive crash course)
+  - When set to `month`: one month (focused daily learning)
+  - When set to `quarter`: three months (steady consistent progress)
+  - When set to `year`: one year (comprehensive mastery program)
+  - When set to `self-paced`: flexible self-paced schedule
+
 ## Compatibility
 
 - **Requires**: None

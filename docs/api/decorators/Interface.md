@@ -79,6 +79,79 @@ Generates TypeScript interfaces and classes for a task management system with st
 **Notes:** Claude models may benefit from more emphasis on comprehensive documentation.
 
 
+## Implementation Guidance
+
+### REST API design
+
+**Original Prompt:**
+```
+Create an API interface for a user management service with authentication, user profiles, and role management.
+```
+
+**Transformed Prompt:**
+```
+Generate an interface definition with the following characteristics:
+Interface style: rest
+Documentation level: extensive
+Output format: openapi
+
+Create an API interface for a user management service with authentication, user profiles, and role management.
+```
+
+**Notes:** The decorator transforms the prompt to specify REST API design with extensive documentation in OpenAPI format.
+
+### Class interface design
+
+**Original Prompt:**
+```
+Design a data structure for managing a shopping cart.
+```
+
+**Transformed Prompt:**
+```
+Generate an interface definition with the following characteristics:
+Interface style: class
+Documentation level: documented
+Output format: typescript
+
+Design a data structure for managing a shopping cart.
+```
+
+**Notes:** The decorator transforms the prompt to specify a class-based interface with standard documentation in TypeScript.
+
+## Transformation Details
+
+**Base Instruction:** Generate an interface definition with the following characteristics:
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `style`:
+  - When set to `rest`: Use REST API design principles with appropriate HTTP methods and resource-based URLs.
+  - When set to `graphql`: Design a GraphQL schema with types, queries, and mutations.
+  - When set to `rpc`: Create an RPC-style interface with clearly defined methods and parameters.
+  - When set to `soap`: Define a SOAP web service interface with XML schema definitions.
+  - When set to `class`: Design an object-oriented class interface with methods and properties.
+  - When set to `function`: Create a functional programming interface with pure functions.
+  - When set to `event-driven`: Design an event-driven interface with events, subscribers, and handlers.
+  - Format: Interface style: {value}
+
+- `verbosity`:
+  - When set to `minimal`: Include only essential documentation with brief descriptions.
+  - When set to `documented`: Provide standard documentation with descriptions for all elements and parameters.
+  - When set to `extensive`: Include comprehensive documentation with examples, edge cases, and implementation notes.
+  - Format: Documentation level: {value}
+
+- `format`:
+  - When set to `code`: Output as implementation code in the most appropriate language.
+  - When set to `openapi`: Output as an OpenAPI/Swagger specification.
+  - When set to `schema`: Output as a schema definition (JSON Schema, XML Schema, etc.).
+  - When set to `typescript`: Output as TypeScript interface definitions.
+  - Format: Output format: {value}
+
 ## Compatibility
 
 - **Requires**: None

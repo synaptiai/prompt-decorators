@@ -40,6 +40,53 @@ Presents three balanced perspectives on UBI in a debate format, ensuring equal r
 **Notes:** This model sometimes needs explicit reminders to maintain quality arguments for perspectives it might not favor
 
 
+## Implementation Guidance
+
+### Two-sided debate on an ethical issue
+
+**Original Prompt:**
+```
+Is it ethical to use AI-generated content without disclosure?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a debate between multiple perspectives on the topic, presenting different viewpoints and their supporting arguments. Include 2 distinct perspectives or viewpoints in the debate, each with their own arguments and reasoning. Ensure that each perspective receives equal representation and that arguments for each side are of comparable strength and thoroughness.
+
+Is it ethical to use AI-generated content without disclosure?
+```
+
+### Three-perspective balanced debate on a policy issue
+
+**Original Prompt:**
+```
+Should universal basic income be implemented nationally?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a debate between multiple perspectives on the topic, presenting different viewpoints and their supporting arguments. Include 3 distinct perspectives or viewpoints in the debate, each with their own arguments and reasoning. Ensure that each perspective receives equal representation and that arguments for each side are of comparable strength and thoroughness.
+
+Should universal basic income be implemented nationally?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response as a debate between multiple perspectives on the topic, presenting different viewpoints and their supporting arguments.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `perspectives`:
+  - Format: Include {value} distinct perspectives or viewpoints in the debate, each with their own arguments and reasoning.
+
+- `balanced`:
+  - When set to `true`: Ensure that each perspective receives equal representation and that arguments for each side are of comparable strength and thoroughness.
+  - When set to `false`: Present different perspectives based on their merit or prevalence in the discourse, without forcing equal representation.
+
 ## Compatibility
 
 - **Requires**: None

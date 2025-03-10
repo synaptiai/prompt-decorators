@@ -76,6 +76,69 @@ C# implementation of a thread-safe Singleton pattern for a logging service using
 **Notes:** More detailed instructions work better with Claude models.
 
 
+## Implementation Guidance
+
+### Observer pattern in JavaScript
+
+**Original Prompt:**
+```
+Create a notification system for an e-commerce application that alerts different parts of the UI when the cart changes.
+```
+
+**Transformed Prompt:**
+```
+Apply the observer design pattern in javascript to the following code generation task. Use the standard variation of this pattern where appropriate.
+
+Implement the Observer pattern to define a one-to-many dependency between objects using javascript syntax and conventions. Consider implementing the standard variation of this pattern if appropriate for the use case.
+
+Create a notification system for an e-commerce application that alerts different parts of the UI when the cart changes.
+```
+
+**Notes:** The Observer pattern is ideal for this scenario as it allows multiple UI components to subscribe to cart change events.
+
+### Singleton pattern in Python
+
+**Original Prompt:**
+```
+Create a database connection manager for a web application.
+```
+
+**Transformed Prompt:**
+```
+Apply the singleton design pattern in python to the following code generation task. Use the standard variation of this pattern where appropriate.
+
+Implement a Singleton pattern to ensure only one instance of the class exists throughout the application using python syntax and conventions. Consider implementing the standard variation of this pattern if appropriate for the use case.
+
+Create a database connection manager for a web application.
+```
+
+**Notes:** The Singleton pattern ensures only one database connection pool is created, preventing resource exhaustion.
+
+## Transformation Details
+
+**Base Instruction:** Apply the {pattern} design pattern in {language} to the following code generation task. Use the {variation} variation of this pattern where appropriate.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `pattern`:
+  - When set to `singleton`: Implement a Singleton pattern to ensure only one instance of the class exists throughout the application.
+  - When set to `factory`: Use a Factory pattern to create objects without specifying the exact class of object that will be created.
+  - When set to `adapter`: Implement an Adapter pattern to allow incompatible interfaces to work together.
+  - When set to `observer`: Use the Observer pattern to define a one-to-many dependency between objects.
+  - When set to `strategy`: Implement the Strategy pattern to define a family of algorithms and make them interchangeable.
+  - When set to `command`: Use the Command pattern to encapsulate a request as an object.
+  - When set to `facade`: Implement a Facade pattern to provide a simplified interface to a complex subsystem.
+
+- `language`:
+  - Format: using {value} syntax and conventions
+
+- `variation`:
+  - Format: Consider implementing the {value} variation of this pattern if appropriate for the use case.
+
 ## Compatibility
 
 - **Requires**: None

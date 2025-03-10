@@ -49,6 +49,59 @@ Provides a 4-dimension MECE analysis of a four-day work week using a stakeholder
 **Notes:** This model sometimes struggles with maintaining true MECE principles and may need explicit reminders to check for category overlaps or gaps
 
 
+## Implementation Guidance
+
+### MECE analysis of market expansion factors
+
+**Original Prompt:**
+```
+What factors should we consider when expanding to a new market?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using the Mutually Exclusive, Collectively Exhaustive (MECE) framework, ensuring all categories are distinct with no overlaps (mutually exclusive) and together cover all possible aspects (collectively exhaustive). Organize your analysis into exactly 3 distinct top-level MECE dimensions or categories. For each top-level dimension, provide a hierarchical breakdown with up to 2 sub-levels of categorization. Develop a custom MECE framework tailored specifically to this topic, with categories that best fit the subject matter.
+
+What factors should we consider when expanding to a new market?
+```
+
+### Stakeholder-focused MECE analysis of work week change
+
+**Original Prompt:**
+```
+Analyze the implications of implementing a four-day work week.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using the Mutually Exclusive, Collectively Exhaustive (MECE) framework, ensuring all categories are distinct with no overlaps (mutually exclusive) and together cover all possible aspects (collectively exhaustive). Organize your analysis into exactly 4 distinct top-level MECE dimensions or categories. For each top-level dimension, provide a hierarchical breakdown with up to 3 sub-levels of categorization. Structure the analysis around all relevant stakeholders, ensuring every entity affected by or influencing the topic is considered.
+
+Analyze the implications of implementing a four-day work week.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response using the Mutually Exclusive, Collectively Exhaustive (MECE) framework, ensuring all categories are distinct with no overlaps (mutually exclusive) and together cover all possible aspects (collectively exhaustive).
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `dimensions`:
+  - Format: Organize your analysis into exactly {value} distinct top-level MECE dimensions or categories.
+
+- `depth`:
+  - Format: For each top-level dimension, provide a hierarchical breakdown with up to {value} sub-levels of categorization.
+
+- `framework`:
+  - When set to `issue tree`: Use an issue tree framework to break down the topic into a hierarchy of questions and sub-questions, ensuring comprehensive coverage of all relevant issues.
+  - When set to `value chain`: Apply a value chain framework to analyze the topic across all activities that add value, from inputs to final outputs/outcomes.
+  - When set to `business segments`: Categorize the analysis using business segments such as products/services, customer segments, geographical regions, and operational functions.
+  - When set to `stakeholders`: Structure the analysis around all relevant stakeholders, ensuring every entity affected by or influencing the topic is considered.
+  - When set to `custom`: Develop a custom MECE framework tailored specifically to this topic, with categories that best fit the subject matter.
+
 ## Compatibility
 
 - **Requires**: None

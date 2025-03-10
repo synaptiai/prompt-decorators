@@ -41,6 +41,55 @@ Provides a detailed analysis of the monolith-to-microservices transition from th
 **Notes:** This model sometimes needs reminders to maintain consistent persona characteristics throughout longer responses
 
 
+## Implementation Guidance
+
+### Customer perspective on subscription model
+
+**Original Prompt:**
+```
+What are the implications of implementing a new subscription model?
+```
+
+**Transformed Prompt:**
+```
+Please respond from the perspective of the specified persona, adapting your analysis and viewpoint to reflect how this persona would naturally view and respond to the situation or topic. Adopt the perspective and viewpoint of a customer, considering how someone in this role would approach the topic.
+
+What are the implications of implementing a new subscription model?
+```
+
+### Detailed senior engineer persona evaluating architecture change
+
+**Original Prompt:**
+```
+Evaluate the proposal to switch from monolith to microservices.
+```
+
+**Transformed Prompt:**
+```
+Please respond from the perspective of the specified persona, adapting your analysis and viewpoint to reflect how this persona would naturally view and respond to the situation or topic. Adopt the perspective and viewpoint of a senior software engineer, considering how someone in this role would approach the topic. Incorporate these key personality traits into the persona: [pragmatic,detail-oriented,experienced]. Let these characteristics influence how the persona perceives and reacts to the topic. Prioritize these primary goals and concerns that drive the persona's thinking: [code quality,maintainability,efficiency]. Ensure these priorities shape the perspective and recommendations offered.
+
+Evaluate the proposal to switch from monolith to microservices.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please respond from the perspective of the specified persona, adapting your analysis and viewpoint to reflect how this persona would naturally view and respond to the situation or topic.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `role`:
+  - Format: Adopt the perspective and viewpoint of a {value}, considering how someone in this role would approach the topic.
+
+- `traits`:
+  - Format: Incorporate these key personality traits into the persona: {value}. Let these characteristics influence how the persona perceives and reacts to the topic.
+
+- `goals`:
+  - Format: Prioritize these primary goals and concerns that drive the persona's thinking: {value}. Ensure these priorities shape the perspective and recommendations offered.
+
 ## Compatibility
 
 - **Requires**: None

@@ -63,6 +63,53 @@ A step-by-step troubleshooting guide for VPN connection issues, designed for sup
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Database troubleshooting for SREs
+
+**Original Prompt:**
+```
+Create a troubleshooting guide for PostgreSQL performance issues in production.
+```
+
+**Transformed Prompt:**
+```
+Create a comprehensive troubleshooting guide that helps identify and resolve issues. The guide should be clear, methodical, and focused on practical solutions. Address database issues including performance problems, query optimization, data integrity, and availability. Present a sequential, ordered list of troubleshooting steps with clear instructions at each stage. Design for Site Reliability Engineers with focus on system-level diagnostics and operational concerns.
+
+Create a troubleshooting guide for PostgreSQL performance issues in production.
+```
+
+**Notes:** The decorator adds specific guidance on the type of troubleshooting content to create, tailored to the specified component, format, and audience.
+
+## Transformation Details
+
+**Base Instruction:** Create a comprehensive troubleshooting guide that helps identify and resolve issues. The guide should be clear, methodical, and focused on practical solutions.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `component`:
+  - When set to `network`: Focus on network-related issues such as connectivity, latency, DNS problems, and routing.
+  - When set to `database`: Address database issues including performance problems, query optimization, data integrity, and availability.
+  - When set to `application`: Cover application-level problems including bugs, performance bottlenecks, error handling, and service integration.
+  - When set to `infrastructure`: Examine infrastructure concerns like server health, resource utilization, scaling issues, and deployment problems.
+  - When set to `security`: Focus on security vulnerabilities, access control issues, authentication problems, and potential breaches.
+
+- `format`:
+  - When set to `decision-tree`: Structure the guide as a decision tree with clear branching paths based on symptoms and diagnostic results.
+  - When set to `step-by-step`: Present a sequential, ordered list of troubleshooting steps with clear instructions at each stage.
+  - When set to `flowchart`: Organize the troubleshooting process as a visual flowchart with decision points and action steps.
+  - When set to `runbook`: Create a detailed operational runbook with procedures, commands, and expected outputs for each scenario.
+
+- `audience`:
+  - When set to `developer`: Target the guide for software developers with appropriate technical depth and code-level details.
+  - When set to `sre`: Design for Site Reliability Engineers with focus on system-level diagnostics and operational concerns.
+  - When set to `support`: Create for support personnel with clear escalation paths and customer-facing considerations.
+  - When set to `end-user`: Simplify for end-users with minimal technical jargon and focus on user interface interactions.
+
 ## Compatibility
 
 - **Requires**: None

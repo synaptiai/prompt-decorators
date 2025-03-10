@@ -64,6 +64,54 @@ The model will examine the authentication component with a focus on security vul
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Code review for a payment processing system
+
+**Original Prompt:**
+```
+Refactor this payment processing code to improve performance.
+```
+
+**Transformed Prompt:**
+```
+Before making any changes, please perform a code audit to identify potential issues. Conduct a thorough audit of the complete module. Analyze for performance bottlenecks, inefficient algorithms, and resource usage issues. Deliver a comprehensive report with detailed explanations of each issue.
+
+Refactor this payment processing code to improve performance.
+```
+
+**Notes:** The decorator adds instructions to first audit the code before proceeding with the requested refactoring.
+
+## Transformation Details
+
+**Base Instruction:** Before making any changes, please perform a code audit to identify potential issues.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `scope`:
+  - When set to `function`: Focus your audit on the specific function provided.
+  - When set to `component`: Examine the entire component for issues.
+  - When set to `module`: Conduct a thorough audit of the complete module.
+  - When set to `system`: Perform a system-wide audit to identify issues across all components.
+  - When set to `specific-issue`: Focus your audit specifically on the issue described.
+
+- `focus`:
+  - When set to `bugs`: Concentrate on identifying logical errors, edge cases, and potential runtime exceptions.
+  - When set to `performance`: Analyze for performance bottlenecks, inefficient algorithms, and resource usage issues.
+  - When set to `security`: Identify security vulnerabilities, injection risks, and data protection concerns.
+  - When set to `maintainability`: Evaluate code quality, documentation, and adherence to best practices.
+  - When set to `all`: Examine all aspects including bugs, performance, security, and maintainability.
+
+- `output`:
+  - When set to `summary`: Provide a concise summary of the key issues found.
+  - When set to `detailed`: Deliver a comprehensive report with detailed explanations of each issue.
+  - When set to `categorized`: Organize findings by category (bugs, performance, security, etc.).
+  - When set to `prioritized`: Present issues in order of importance, with critical issues first.
+
 ## Compatibility
 
 - **Requires**: None

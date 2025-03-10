@@ -48,6 +48,59 @@ Transforms the technical software architecture description into a board-appropri
 **Notes:** This model may need explicit reminders to maintain the core information while significantly transforming the presentation style
 
 
+## Implementation Guidance
+
+### Neural networks explanation for high school students
+
+**Original Prompt:**
+```
+Explain how neural networks function in artificial intelligence.
+```
+
+**Transformed Prompt:**
+```
+Please reframe or adapt this content for a different audience or context than might normally be expected. Transform the presentation style while preserving core information to make it relevant to the specified target audience. Adapt this content specifically for high school students. Consider the background, needs, interests, and communication preferences of this audience when reframing the material. Prioritize preserving the accurate factual content while allowing flexibility in presentation style, structure, and level of detail. Focus solely on the adapted version without explicitly comparing it to how the content might be presented in other contexts.
+
+Explain how neural networks function in artificial intelligence.
+```
+
+### Technical software architecture for board presentation
+
+**Original Prompt:**
+```
+Describe the technical details of our new software architecture.
+```
+
+**Transformed Prompt:**
+```
+Please reframe or adapt this content for a different audience or context than might normally be expected. Transform the presentation style while preserving core information to make it relevant to the specified target audience. Adapt this content specifically for board presentation. Consider the background, needs, interests, and communication preferences of this audience when reframing the material. Ensure all key points and details from the original content are included, even while completely adapting the presentation style. Include an explicit comparison highlighting key differences between how this content would typically be presented versus how it's being adapted for the target audience.
+
+Describe the technical details of our new software architecture.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please reframe or adapt this content for a different audience or context than might normally be expected. Transform the presentation style while preserving core information to make it relevant to the specified target audience.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `target`:
+  - Format: Adapt this content specifically for {value}. Consider the background, needs, interests, and communication preferences of this audience when reframing the material.
+
+- `preserve`:
+  - When set to `facts`: Prioritize preserving the accurate factual content while allowing flexibility in presentation style, structure, and level of detail.
+  - When set to `structure`: Maintain the original organizational structure and flow of ideas while adapting language, examples, and level of detail.
+  - When set to `tone`: Keep the original tone and voice consistent while adapting other elements like vocabulary, examples, and level of detail.
+  - When set to `comprehensiveness`: Ensure all key points and details from the original content are included, even while completely adapting the presentation style.
+
+- `contrast`:
+  - When set to `true`: Include an explicit comparison highlighting key differences between how this content would typically be presented versus how it's being adapted for the target audience.
+  - When set to `false`: Focus solely on the adapted version without explicitly comparing it to how the content might be presented in other contexts.
+
 ## Compatibility
 
 - **Requires**: None

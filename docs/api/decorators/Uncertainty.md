@@ -53,6 +53,60 @@ Provides information about fusion energy's environmental impacts followed by a d
 **Notes:** This model sometimes needs stronger prompting to acknowledge uncertainty in topics where it has high confidence
 
 
+## Implementation Guidance
+
+### Inline uncertainty markers in AGI timeline explanation
+
+**Original Prompt:**
+```
+Explain the potential timeline for achieving artificial general intelligence.
+```
+
+**Transformed Prompt:**
+```
+Please explicitly highlight areas of uncertainty in your response, clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate. Mark uncertain statements directly within the text using phrases like 'may be', 'possibly', 'uncertain', or 'subject to debate' as appropriate. Flag moderately uncertain information while presenting consensus views and well-supported claims with confidence. Simply mark uncertain information without explaining the reasons for the uncertainty.
+
+Explain the potential timeline for achieving artificial general intelligence.
+```
+
+### Dedicated uncertainty section with reasoning for fusion energy
+
+**Original Prompt:**
+```
+What are the environmental impacts of fusion energy?
+```
+
+**Transformed Prompt:**
+```
+Please explicitly highlight areas of uncertainty in your response, clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate. Include a dedicated section at the end titled 'Areas of Uncertainty' that lists and discusses all uncertain aspects of the topic. Flag even slightly uncertain information, being extremely cautious about presenting anything as definitive unless it is very well established. For each point of uncertainty, briefly explain why it is uncertain (e.g., limited data, conflicting studies, theoretical gaps, etc.).
+
+What are the environmental impacts of fusion energy?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please explicitly highlight areas of uncertainty in your response, clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `format`:
+  - When set to `inline`: Mark uncertain statements directly within the text using phrases like 'may be', 'possibly', 'uncertain', or 'subject to debate' as appropriate.
+  - When set to `section`: Include a dedicated section at the end titled 'Areas of Uncertainty' that lists and discusses all uncertain aspects of the topic.
+  - When set to `confidence`: Assign explicit confidence levels (e.g., 'high confidence', 'medium confidence', 'low confidence', 'speculative') to different statements or claims throughout the response.
+
+- `threshold`:
+  - When set to `low`: Flag even slightly uncertain information, being extremely cautious about presenting anything as definitive unless it is very well established.
+  - When set to `medium`: Flag moderately uncertain information while presenting consensus views and well-supported claims with confidence.
+  - When set to `high`: Only flag highly uncertain or speculative information, treating established scientific theories and widespread expert consensus as certain.
+
+- `reason`:
+  - When set to `true`: For each point of uncertainty, briefly explain why it is uncertain (e.g., limited data, conflicting studies, theoretical gaps, etc.).
+  - When set to `false`: Simply mark uncertain information without explaining the reasons for the uncertainty.
+
 ## Compatibility
 
 - **Requires**: None

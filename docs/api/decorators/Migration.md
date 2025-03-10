@@ -48,6 +48,46 @@ A migration plan for transitioning from SQL to NoSQL databases using a parallel-
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Software Architecture Planning
+
+**Original Prompt:**
+```
+Create a migration plan for transitioning our monolithic e-commerce application to microservices.
+```
+
+**Transformed Prompt:**
+```
+Create a detailed migration plan that addresses the transition from the current state to the target state. Include key considerations, risks, timeline estimates, and resource requirements. The current state is: monolith. The target state is: microservices. Use a strangler-fig migration approach, where the new system gradually replaces the old one.
+
+Create a migration plan for transitioning our monolithic e-commerce application to microservices.
+```
+
+**Notes:** The decorator adds specific migration context and approach guidance to the original prompt.
+
+## Transformation Details
+
+**Base Instruction:** Create a detailed migration plan that addresses the transition from the current state to the target state. Include key considerations, risks, timeline estimates, and resource requirements.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `from`:
+  - Format: The current state is: {value}.
+
+- `to`:
+  - Format: The target state is: {value}.
+
+- `approach`:
+  - When set to `big-bang`: Use a big-bang migration approach, where the entire system is replaced at once.
+  - When set to `incremental`: Use an incremental migration approach, where components are migrated one by one over time.
+  - When set to `strangler-fig`: Use a strangler-fig migration approach, where the new system gradually replaces the old one.
+  - When set to `parallel-run`: Use a parallel-run migration approach, where both systems operate simultaneously until the migration is complete.
+
 ## Compatibility
 
 - **Requires**: None

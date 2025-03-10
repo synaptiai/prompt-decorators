@@ -62,6 +62,52 @@ Delivers a phased roadmap for introducing chaos engineering practices to an orga
 **Notes:** Simplified instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### Cloud infrastructure reliability
+
+**Original Prompt:**
+```
+How can we improve our AWS infrastructure reliability?
+```
+
+**Transformed Prompt:**
+```
+Apply Site Reliability Engineering practices to this task. Consider reliability, scalability, and operational excellence in your response. Focus on defining appropriate Service Level Objectives (SLOs) that balance reliability with innovation velocity. Offer more sophisticated SRE strategies for organizations with established but evolving SRE practices. Provide specific, actionable implementation guidance with concrete examples and code where appropriate.
+
+How can we improve our AWS infrastructure reliability?
+```
+
+**Notes:** This example shows how the decorator adds SRE context with a focus on SLOs for an intermediate organization seeking implementation guidance.
+
+## Transformation Details
+
+**Base Instruction:** Apply Site Reliability Engineering practices to this task. Consider reliability, scalability, and operational excellence in your response.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `focus`:
+  - When set to `slos`: Focus on defining appropriate Service Level Objectives (SLOs) that balance reliability with innovation velocity.
+  - When set to `error-budgets`: Implement error budgets to quantify acceptable service disruption and guide development priorities.
+  - When set to `runbooks`: Develop clear, actionable runbooks for operational procedures and incident response.
+  - When set to `postmortems`: Create blameless postmortem processes to learn from incidents and prevent recurrence.
+  - When set to `chaos-eng`: Apply chaos engineering principles to proactively identify system weaknesses.
+  - When set to `automation`: Prioritize automation to reduce toil and increase operational efficiency.
+
+- `maturity`:
+  - When set to `beginner`: Provide foundational SRE concepts and implementation steps suitable for organizations new to SRE practices.
+  - When set to `intermediate`: Offer more sophisticated SRE strategies for organizations with established but evolving SRE practices.
+  - When set to `advanced`: Present cutting-edge SRE approaches for organizations with mature SRE functions seeking optimization.
+
+- `output`:
+  - When set to `implementation`: Provide specific, actionable implementation guidance with concrete examples and code where appropriate.
+  - When set to `roadmap`: Develop a phased approach to implementing or improving the specified SRE practices over time.
+  - When set to `assessment`: Evaluate current practices against SRE best practices and identify gaps and improvement opportunities.
+
 ## Compatibility
 
 - **Requires**: None

@@ -45,6 +45,51 @@ Delivers an in-depth analysis covering multiple aspects and their interconnectio
 **Notes:** This model may require more explicit instructions to produce detailed reasoning
 
 
+## Implementation Guidance
+
+### Standard implementation
+
+**Original Prompt:**
+```
+What are the implications of artificial intelligence for education?
+```
+
+**Transformed Prompt:**
+```
+Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Provide a very thorough and detailed analysis with multiple perspectives.
+
+What are the implications of artificial intelligence for education?
+```
+
+### Basic depth implementation
+
+**Original Prompt:**
+```
+How does compound interest work?
+```
+
+**Transformed Prompt:**
+```
+Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Focus on the most important logical steps.
+
+How does compound interest work?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `depth`:
+  - When set to `basic`: Focus on the most important logical steps.
+  - When set to `moderate`: Balance detail with clarity in your reasoning.
+  - When set to `comprehensive`: Provide a very thorough and detailed analysis with multiple perspectives.
+
 ## Compatibility
 
 - **Requires**: None

@@ -71,6 +71,68 @@ A basic analysis using the fishbone diagram approach to categorize potential imm
 **Notes:** Simplified instruction format for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Software debugging
+
+**Original Prompt:**
+```
+Why is my application crashing when multiple users log in simultaneously?
+```
+
+**Transformed Prompt:**
+```
+Perform a root cause analysis to identify the fundamental cause of the issue. Focus on methodical investigation rather than symptoms. Perform a thorough analysis to uncover underlying systemic issues. Follow a structured, step-by-step approach to eliminate possible causes. Isolate components or variables to determine their contribution to the issue.
+
+Why is my application crashing when multiple users log in simultaneously?
+```
+
+**Notes:** The decorator adds structured analysis guidance before the original question.
+
+### Business process troubleshooting
+
+**Original Prompt:**
+```
+Help me understand why our order fulfillment process is experiencing delays.
+```
+
+**Transformed Prompt:**
+```
+Perform a root cause analysis to identify the fundamental cause of the issue. Focus on methodical investigation rather than symptoms. Conduct an exhaustive investigation examining all possible factors and their interactions. Use the 5 Whys technique, repeatedly asking why to drill down to the root cause. Systematically rule out potential causes until the root cause is identified.
+
+Help me understand why our order fulfillment process is experiencing delays.
+```
+
+**Notes:** Parameters are set to comprehensive depth, 5-whys method, and elimination approach.
+
+## Transformation Details
+
+**Base Instruction:** Perform a root cause analysis to identify the fundamental cause of the issue. Focus on methodical investigation rather than symptoms.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `depth`:
+  - When set to `surface`: Conduct a basic analysis to identify immediate causes.
+  - When set to `intermediate`: Investigate beyond immediate causes to identify contributing factors.
+  - When set to `deep`: Perform a thorough analysis to uncover underlying systemic issues.
+  - When set to `comprehensive`: Conduct an exhaustive investigation examining all possible factors and their interactions.
+
+- `method`:
+  - When set to `5-whys`: Use the 5 Whys technique, repeatedly asking why to drill down to the root cause.
+  - When set to `fishbone`: Apply the fishbone (Ishikawa) diagram approach to categorize potential causes.
+  - When set to `fault-tree`: Employ fault tree analysis to identify combinations of events leading to the issue.
+  - When set to `systematic`: Follow a structured, step-by-step approach to eliminate possible causes.
+
+- `approach`:
+  - When set to `elimination`: Systematically rule out potential causes until the root cause is identified.
+  - When set to `reproduction`: Attempt to reproduce the issue under controlled conditions to identify triggers.
+  - When set to `isolation`: Isolate components or variables to determine their contribution to the issue.
+  - When set to `comparison`: Compare working and non-working systems to identify differences.
+
 ## Compatibility
 
 - **Requires**: None

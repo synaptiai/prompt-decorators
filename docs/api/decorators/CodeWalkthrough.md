@@ -70,6 +70,51 @@ A non-technical overview explaining why the payment processing code is designed 
 **Notes:** Simplified instruction format works better with GPT-3.5-turbo.
 
 
+## Implementation Guidance
+
+### JavaScript authentication middleware
+
+**Original Prompt:**
+```
+Walk through this authentication middleware explaining how it works.
+```
+
+**Transformed Prompt:**
+```
+Provide a walkthrough explanation of the code. Focus on making the explanation clear and educational. Explain how the code works, focusing on its mechanics and implementation details. Focus on explaining the key components and important sections of the code. Explain the code as you would to a peer developer with similar experience.
+
+Walk through this authentication middleware explaining how it works.
+```
+
+**Notes:** The decorator adds specific instructions for explaining code functionality with appropriate focus, detail level, and audience adaptation.
+
+## Transformation Details
+
+**Base Instruction:** Provide a walkthrough explanation of the code. Focus on making the explanation clear and educational.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `focus`:
+  - When set to `how`: Explain how the code works, focusing on its mechanics and implementation details.
+  - When set to `why`: Explain why the code is designed this way, focusing on design decisions and rationale.
+  - When set to `optimization`: Explain how the code is optimized, focusing on performance considerations and efficiency.
+  - When set to `security`: Explain the security aspects of the code, focusing on potential vulnerabilities and safeguards.
+
+- `detail`:
+  - When set to `overview`: Provide a high-level overview of the code structure and functionality.
+  - When set to `key-parts`: Focus on explaining the key components and important sections of the code.
+  - When set to `line-by-line`: Provide a detailed line-by-line explanation of how the code works.
+
+- `audience`:
+  - When set to `junior`: Explain the code for a junior developer with basic programming knowledge.
+  - When set to `peer`: Explain the code as you would to a peer developer with similar experience.
+  - When set to `senior`: Explain the code with advanced concepts and patterns for a senior developer.
+  - When set to `non-technical`: Explain the code in simple terms for someone without technical background.
+
 ## Compatibility
 
 - **Requires**: None

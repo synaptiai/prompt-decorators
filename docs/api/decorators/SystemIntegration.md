@@ -53,6 +53,52 @@ Guides implementation of direct database integration with tight coupling for per
 **Notes:** Simplified instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### E-commerce application
+
+**Original Prompt:**
+```
+Implement an order processing service that integrates with our payment gateway and inventory system.
+```
+
+**Transformed Prompt:**
+```
+Consider the following system integration requirements when developing your solution:
+Integrate with the following systems: payment-gateway,inventory-service.
+Create a facade to provide a simplified interface to the complex subsystems.
+Maintain loose coupling to minimize dependencies between systems.
+
+Implement an order processing service that integrates with our payment gateway and inventory system.
+```
+
+**Notes:** The decorator adds specific integration guidance while preserving the original implementation request.
+
+## Transformation Details
+
+**Base Instruction:** Consider the following system integration requirements when developing your solution:
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `systems`:
+  - Format: Integrate with the following systems: {value}.
+
+- `approach`:
+  - When set to `adapter`: Use an adapter pattern to create a compatible interface between systems.
+  - When set to `direct`: Implement direct integration with minimal abstraction layers.
+  - When set to `facade`: Create a facade to provide a simplified interface to the complex subsystems.
+  - When set to `proxy`: Implement a proxy pattern to control access to the external systems.
+  - When set to `bridge`: Use a bridge pattern to decouple abstraction from implementation.
+
+- `coupling`:
+  - When set to `loose`: Maintain loose coupling to minimize dependencies between systems.
+  - When set to `moderate`: Balance coupling with performance considerations.
+  - When set to `tight`: Implement tight coupling where performance is critical.
+
 ## Compatibility
 
 - **Requires**: None

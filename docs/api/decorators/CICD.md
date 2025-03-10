@@ -71,6 +71,53 @@ Designs an advanced GitLab CI/CD configuration with detailed compliance reportin
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Web application development
+
+**Original Prompt:**
+```
+Design a CI/CD pipeline for a financial services application with security scanning and compliance checks.
+```
+
+**Transformed Prompt:**
+```
+Design a CI/CD pipeline with the following specifications:
+Using github-actions as the CI/CD platform
+Design a comprehensive pipeline with extensive testing, security scanning, and multi-environment deployments.
+Emphasize security with thorough scanning, vulnerability checks, and secure deployment practices.
+
+Design a CI/CD pipeline for a financial services application with security scanning and compliance checks.
+```
+
+**Notes:** The decorator adds specific CI/CD tool information and emphasizes security aspects for financial applications.
+
+## Transformation Details
+
+**Base Instruction:** Design a CI/CD pipeline with the following specifications:
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `tool`:
+  - Format: Using {value} as the CI/CD platform
+
+- `complexity`:
+  - When set to `basic`: Create a simple pipeline with essential build and deploy steps.
+  - When set to `standard`: Implement a standard pipeline with testing, building, and deployment stages.
+  - When set to `comprehensive`: Design a comprehensive pipeline with extensive testing, security scanning, and multi-environment deployments.
+  - When set to `enterprise`: Architect an enterprise-grade pipeline with advanced features including canary deployments, automated rollbacks, and detailed compliance reporting.
+
+- `focus`:
+  - When set to `speed`: Optimize the pipeline for fast feedback and rapid deployments.
+  - When set to `reliability`: Prioritize reliability with robust testing and validation steps.
+  - When set to `security`: Emphasize security with thorough scanning, vulnerability checks, and secure deployment practices.
+  - When set to `compliance`: Ensure compliance with industry standards and regulations through appropriate checks and documentation.
+  - When set to `balanced`: Balance speed, reliability, security, and compliance considerations.
+
 ## Compatibility
 
 - **Requires**: None

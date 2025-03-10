@@ -63,6 +63,56 @@ The model will create a complete, high-quality authentication system with no tec
 **Notes:** Simplified format works better with GPT-3.5's context handling.
 
 
+## Implementation Guidance
+
+### Web development sprint with tight deadline
+
+**Original Prompt:**
+```
+Implement a file upload feature for our web application.
+```
+
+**Transformed Prompt:**
+```
+When implementing this solution, consider the following technical debt guidelines:
+Prioritize shipping working code. Technical debt is acceptable if it helps meet immediate business needs.
+Use TODO comments to mark areas of technical debt that need future improvement.
+Focus on functional correctness over code elegance or perfect architecture.
+
+Implement a file upload feature for our web application.
+```
+
+**Notes:** The decorator sets clear expectations about technical debt tolerance for time-sensitive features.
+
+## Transformation Details
+
+**Base Instruction:** When implementing this solution, consider the following technical debt guidelines:
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `accept`:
+  - When set to `none`: Do not introduce any technical debt. Implement a complete, high-quality solution even if it takes longer.
+  - When set to `minimal`: Minimize technical debt. Only accept small compromises that can be easily addressed later.
+  - When set to `moderate`: Accept a moderate amount of technical debt where necessary to meet deadlines, but keep it manageable.
+  - When set to `pragmatic`: Prioritize shipping working code. Technical debt is acceptable if it helps meet immediate business needs.
+
+- `document`:
+  - When set to `none`: No documentation of technical debt is required.
+  - When set to `comments`: Document technical debt with inline code comments where compromises were made.
+  - When set to `todos`: Use TODO comments to mark areas of technical debt that need future improvement.
+  - When set to `issues`: Create formal issue tickets for each piece of technical debt introduced.
+  - When set to `comprehensive`: Provide comprehensive documentation including inline comments, TODOs, and a separate technical debt register with prioritization.
+
+- `tradeoff`:
+  - When set to `nothing`: Do not trade off any aspect of quality.
+  - When set to `completeness`: It's acceptable to implement a partial solution now and complete it later.
+  - When set to `performance`: Optimize for correctness first; performance optimizations can come later.
+  - When set to `elegance`: Focus on functional correctness over code elegance or perfect architecture.
+
 ## Compatibility
 
 - **Requires**: None

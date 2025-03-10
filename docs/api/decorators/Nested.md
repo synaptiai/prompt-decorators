@@ -47,6 +47,58 @@ Creates a 5-level deep bullet-point hierarchy of programming paradigms, designed
 **Notes:** This model may need additional guidance to maintain consistent depth across all branches of the hierarchy
 
 
+## Implementation Guidance
+
+### Nested taxonomy explanation
+
+**Original Prompt:**
+```
+Explain the classification of living organisms.
+```
+
+**Transformed Prompt:**
+```
+Please organize your response in a deeply hierarchical structure with clearly defined levels of nesting. Create a logical progression from major categories down to granular subcategories, maintaining consistent organization patterns throughout. Structure your response with 3 levels of nesting, where the information hierarchy reveals increasingly specific details at each level. Use a mix of formatting styles: numbers for top level (1., 2., etc.), letters for second level (a., b., etc.), and bullets for deeper levels. Present the full hierarchy with all levels visible simultaneously.
+
+Explain the classification of living organisms.
+```
+
+### Collapsible programming paradigms overview
+
+**Original Prompt:**
+```
+Provide a comprehensive overview of programming paradigms.
+```
+
+**Transformed Prompt:**
+```
+Please organize your response in a deeply hierarchical structure with clearly defined levels of nesting. Create a logical progression from major categories down to granular subcategories, maintaining consistent organization patterns throughout. Structure your response with 5 levels of nesting, where the information hierarchy reveals increasingly specific details at each level. Use bullet points (•, ○, ■, □, etc.) consistently throughout all hierarchical levels. Design the hierarchy to work as collapsible sections, where each parent category could expand to show child categories.
+
+Provide a comprehensive overview of programming paradigms.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please organize your response in a deeply hierarchical structure with clearly defined levels of nesting. Create a logical progression from major categories down to granular subcategories, maintaining consistent organization patterns throughout.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `depth`:
+  - Format: Structure your response with {value} levels of nesting, where the information hierarchy reveals increasingly specific details at each level.
+
+- `style`:
+  - When set to `bullet`: Use bullet points (•, ○, ■, □, etc.) consistently throughout all hierarchical levels.
+  - When set to `numbered`: Use numbered lists (1., 1.1., 1.1.1., etc.) consistently throughout all hierarchical levels.
+  - When set to `mixed`: Use a mix of formatting styles: numbers for top level (1., 2., etc.), letters for second level (a., b., etc.), and bullets for deeper levels.
+
+- `collapsible`:
+  - When set to `true`: Design the hierarchy to work as collapsible sections, where each parent category could expand to show child categories.
+  - When set to `false`: Present the full hierarchy with all levels visible simultaneously.
+
 ## Compatibility
 
 - **Requires**: None

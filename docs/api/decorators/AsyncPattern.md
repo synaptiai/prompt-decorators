@@ -79,6 +79,73 @@ The model will generate code using Observable patterns (like RxJS) with error st
 **Notes:** GPT-4 has better understanding of advanced asynchronous patterns and can implement them more reliably.
 
 
+## Implementation Guidance
+
+### JavaScript/TypeScript
+
+**Original Prompt:**
+```
+Create a function that fetches user data from multiple APIs in parallel and combines the results.
+```
+
+**Transformed Prompt:**
+```
+When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. Use async/await as the primary asynchronous pattern. Implement try/catch for error handling. Support signal cancellation for asynchronous operations.
+
+Create a function that fetches user data from multiple APIs in parallel and combines the results.
+```
+
+**Notes:** The implementation uses async/await with Promise.all for parallel fetching, try/catch blocks for error handling, and accepts an AbortSignal parameter for cancellation.
+
+### Python
+
+**Original Prompt:**
+```
+Create a function that fetches user data from multiple APIs in parallel and combines the results.
+```
+
+**Transformed Prompt:**
+```
+When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. Use async/await as the primary asynchronous pattern. Implement try/catch for error handling. Support signal cancellation for asynchronous operations.
+
+Create a function that fetches user data from multiple APIs in parallel and combines the results.
+```
+
+**Notes:** The implementation uses Python's asyncio with async/await, try/except blocks, and cancellation tokens from asyncio.
+
+## Transformation Details
+
+**Base Instruction:** When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `approach`:
+  - When set to `promises`: Implement using Promise-based patterns for asynchronous operations.
+  - When set to `async-await`: Use async/await syntax for cleaner asynchronous code.
+  - When set to `observables`: Implement using Observable patterns for reactive asynchronous streams.
+  - When set to `callbacks`: Use callback functions to handle asynchronous operations.
+  - When set to `streams`: Implement using stream-based asynchronous processing.
+  - When set to `events`: Use event-based asynchronous programming model.
+  - Format: Use {value} as the primary asynchronous pattern.
+
+- `error-handling`:
+  - When set to `try-catch`: Handle errors using try/catch blocks around asynchronous operations.
+  - When set to `error-first-callbacks`: Follow the error-first callback pattern where the first parameter is an error object.
+  - When set to `promise-rejection`: Use promise rejection handling with .catch() or try/catch with async/await.
+  - When set to `error-streams`: Handle errors through dedicated error streams or channels.
+  - Format: Implement {value} for error handling.
+
+- `cancellation`:
+  - When set to `none`: No cancellation mechanism is required.
+  - When set to `manual`: Implement manual cancellation through boolean flags or state tracking.
+  - When set to `timeout`: Include timeout-based cancellation for asynchronous operations.
+  - When set to `signal`: Use AbortController or similar signal-based cancellation mechanisms.
+  - Format: Support {value} cancellation for asynchronous operations.
+
 ## Compatibility
 
 - **Requires**: None

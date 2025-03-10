@@ -41,6 +41,56 @@ Presents formal logical syllogisms about consciousness and intelligence, proceed
 **Notes:** This model sometimes needs more explicit structure to maintain rigorous deductive reasoning throughout a response
 
 
+## Implementation Guidance
+
+### Basic deductive reasoning about social media regulation
+
+**Original Prompt:**
+```
+Should social media companies be regulated like utilities?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using deductive reasoning, moving from general principles to specific conclusions. Start with clear premises and work methodically through logical steps to reach necessary conclusions. Begin with 2 main premises or general principles that establish the foundation for your reasoning. Use natural language deductive reasoning without requiring formal syllogisms. Develop your logical argument through 3 distinct, sequential steps, where each builds upon the previous ones.
+
+Should social media companies be regulated like utilities?
+```
+
+### Formal deductive reasoning about AI consciousness
+
+**Original Prompt:**
+```
+Is artificial intelligence conscious?
+```
+
+**Transformed Prompt:**
+```
+Please structure your response using deductive reasoning, moving from general principles to specific conclusions. Start with clear premises and work methodically through logical steps to reach necessary conclusions. Begin with 2 main premises or general principles that establish the foundation for your reasoning. Use formal logical structures with explicitly stated syllogisms, clearly identifying major premises, minor premises, and conclusions. Develop your logical argument through 5 distinct, sequential steps, where each builds upon the previous ones.
+
+Is artificial intelligence conscious?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response using deductive reasoning, moving from general principles to specific conclusions. Start with clear premises and work methodically through logical steps to reach necessary conclusions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `premises`:
+  - Format: Begin with {value} main premises or general principles that establish the foundation for your reasoning.
+
+- `formal`:
+  - When set to `true`: Use formal logical structures with explicitly stated syllogisms, clearly identifying major premises, minor premises, and conclusions.
+  - When set to `false`: Use natural language deductive reasoning without requiring formal syllogisms.
+
+- `steps`:
+  - Format: Develop your logical argument through {value} distinct, sequential steps, where each builds upon the previous ones.
+
 ## Compatibility
 
 - **Requires**: None

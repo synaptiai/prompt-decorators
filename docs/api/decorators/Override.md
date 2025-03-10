@@ -41,6 +41,55 @@ Uses the Debate decorator structure for discussing gene editing ethics, but modi
 **Notes:** This model handles behavior overrides well but benefits from explicit instructions about which aspects of behavior to preserve
 
 
+## Implementation Guidance
+
+### Basic parameter override for StepByStep
+
+**Original Prompt:**
+```
+Explain how to bake bread.
+```
+
+**Transformed Prompt:**
+```
+Please apply a customized version of a standard decorator with specific modifications to its default parameters or behavior. Apply the StepByStep decorator, but with the following modifications to its standard implementation. Override the default parameters of the decorator with these specific values: {"numbered": true, "steps": 7}.
+
+Explain how to bake bread.
+```
+
+### Complex behavior override for Debate
+
+**Original Prompt:**
+```
+Discuss the ethics of gene editing.
+```
+
+**Transformed Prompt:**
+```
+Please apply a customized version of a standard decorator with specific modifications to its default parameters or behavior. Apply the Debate decorator, but with the following modifications to its standard implementation. Override the default parameters of the decorator with these specific values: {"perspectives": 2}. Additionally, modify the standard behavior of the decorator as follows: instead of presenting neutral perspectives, adopt strongly opposing viewpoints with clear advocacy for each position.
+
+Discuss the ethics of gene editing.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please apply a customized version of a standard decorator with specific modifications to its default parameters or behavior.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `decorator`:
+  - Format: Apply the {value} decorator, but with the following modifications to its standard implementation.
+
+- `parameters`:
+  - Format: Override the default parameters of the decorator with these specific values: {value}.
+
+- `behavior`:
+  - Format: Additionally, modify the standard behavior of the decorator as follows: {value}.
+
 ## Compatibility
 
 - **Requires**: None

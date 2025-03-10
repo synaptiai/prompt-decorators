@@ -48,6 +48,59 @@ Discusses only high-confidence (80%+) depression treatments with percentage indi
 **Notes:** This model sometimes needs more explicit reminders to maintain consistent confidence indicators throughout a long response
 
 
+## Implementation Guidance
+
+### Qualitative confidence indicators for dark matter
+
+**Original Prompt:**
+```
+Explain the current understanding of dark matter.
+```
+
+**Transformed Prompt:**
+```
+Please include explicit indications of your confidence level for different statements or claims in your response. Express confidence levels using qualitative descriptors (e.g., high confidence, moderate confidence, low confidence). Only include information for which your confidence level is at least 50%. State confidence levels without explaining the reasoning behind the assessments.
+
+Explain the current understanding of dark matter.
+```
+
+### Detailed percentage-based confidence for depression treatments
+
+**Original Prompt:**
+```
+What are the most effective treatments for depression?
+```
+
+**Transformed Prompt:**
+```
+Please include explicit indications of your confidence level for different statements or claims in your response. Express confidence levels as percentages (e.g., 95% confidence, 70% confidence). Only include information for which your confidence level is at least 80%. Provide brief explanations for why certain confidence levels were assigned to specific claims.
+
+What are the most effective treatments for depression?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please include explicit indications of your confidence level for different statements or claims in your response.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `scale`:
+  - When set to `percent`: Express confidence levels as percentages (e.g., 95% confidence, 70% confidence).
+  - When set to `qualitative`: Express confidence levels using qualitative descriptors (e.g., high confidence, moderate confidence, low confidence).
+  - When set to `stars`: Express confidence levels using a star rating system (e.g., ⭐⭐⭐⭐⭐ for highest confidence, ⭐ for lowest).
+  - When set to `numeric`: Express confidence levels using a numeric scale from 1-10, where 10 represents the highest confidence.
+
+- `threshold`:
+  - Format: Only include information for which your confidence level is at least {value}%.
+
+- `detailed`:
+  - When set to `true`: Provide brief explanations for why certain confidence levels were assigned to specific claims.
+  - When set to `false`: State confidence levels without explaining the reasoning behind the assessments.
+
 ## Compatibility
 
 - **Requires**: None

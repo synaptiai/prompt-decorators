@@ -55,6 +55,49 @@ The model will understand this is an iteration focused on performance issues, wi
 **Notes:** Simpler phrasing works better with this model.
 
 
+## Implementation Guidance
+
+### Web development
+
+**Original Prompt:**
+```
+Create an authentication middleware for Express.js
+```
+
+**Transformed Prompt:**
+```
+This is iteration 2 of the code implementation. Please focus on addressing the following feedback: code review comments, with priority on ensuring code correctness.
+
+Create an authentication middleware for Express.js
+```
+
+**Notes:** The decorator indicates this is a follow-up request to improve previously generated code.
+
+## Transformation Details
+
+**Base Instruction:** This is iteration {version} of the code implementation. Please focus on addressing the following feedback: {feedback}, with priority on {priority}.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `version`:
+  - Format: {value}
+
+- `feedback`:
+  - When set to `review-comments`: code review comments
+  - When set to `bug-fixes`: bug fixes
+  - When set to `performance-issues`: performance issues
+  - When set to `feature-requests`: feature requests
+
+- `priority`:
+  - When set to `correctness`: ensuring code correctness
+  - When set to `completeness`: ensuring feature completeness
+  - When set to `performance`: optimizing performance
+  - When set to `readability`: improving code readability
+
 ## Compatibility
 
 - **Requires**: None

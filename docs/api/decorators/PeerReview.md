@@ -61,6 +61,63 @@ Delivers an analysis of the Stanford prison experiment methodology with a parall
 **Notes:** This model sometimes needs explicit prompting to maintain appropriate critical distance between the content creation and review aspects
 
 
+## Implementation Guidance
+
+### Basic peer review of dark matter content
+
+**Original Prompt:**
+```
+Explain the current understanding of dark matter in astrophysics.
+```
+
+**Transformed Prompt:**
+```
+Please include a simulated peer review of your response, evaluating the content as an academic reviewer would. Focus the peer review primarily on the factual accuracy and precision of the information presented. Provide a balanced peer review that equally addresses strengths and weaknesses with a neutral academic tone. Present the main content first, followed by the peer review section.
+
+Explain the current understanding of dark matter in astrophysics.
+```
+
+### Critical comprehensive review alongside content
+
+**Original Prompt:**
+```
+Analyze the methodology used in Stanford's prison experiment.
+```
+
+**Transformed Prompt:**
+```
+Please include a simulated peer review of your response, evaluating the content as an academic reviewer would. Include a comprehensive peer review addressing accuracy, methodology, limitations, and completeness of the content. Adopt a rigorously critical stance in the peer review, thoroughly identifying weaknesses and challenging assumptions. Integrate the peer review comments throughout the content, marking them clearly as reviewer notes.
+
+Analyze the methodology used in Stanford's prison experiment.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please include a simulated peer review of your response, evaluating the content as an academic reviewer would.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `criteria`:
+  - When set to `accuracy`: Focus the peer review primarily on the factual accuracy and precision of the information presented.
+  - When set to `methodology`: Focus the peer review primarily on the methodological approach, analytical framework, or reasoning process used.
+  - When set to `limitations`: Focus the peer review primarily on identifying limitations, gaps, or unaddressed aspects in the analysis.
+  - When set to `completeness`: Focus the peer review primarily on how thoroughly the topic is covered and whether key elements are missing.
+  - When set to `all`: Include a comprehensive peer review addressing accuracy, methodology, limitations, and completeness of the content.
+
+- `style`:
+  - When set to `constructive`: Maintain a supportive tone in the peer review, emphasizing positive aspects while gently suggesting improvements.
+  - When set to `critical`: Adopt a rigorously critical stance in the peer review, thoroughly identifying weaknesses and challenging assumptions.
+  - When set to `balanced`: Provide a balanced peer review that equally addresses strengths and weaknesses with a neutral academic tone.
+
+- `position`:
+  - When set to `after`: Present the main content first, followed by the peer review section.
+  - When set to `before`: Begin with the peer review section, then present the main content.
+  - When set to `alongside`: Integrate the peer review comments throughout the content, marking them clearly as reviewer notes.
+
 ## Compatibility
 
 - **Requires**: None

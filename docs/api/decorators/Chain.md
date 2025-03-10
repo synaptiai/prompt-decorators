@@ -47,6 +47,57 @@ Shows the progression of applying Socratic questioning, then academic tone, then
 **Notes:** This model may need more explicit instructions to maintain the correct sequence of decorators
 
 
+## Implementation Guidance
+
+### Sequential application of step-by-step and concise decorators
+
+**Original Prompt:**
+```
+Explain how neural networks learn.
+```
+
+**Transformed Prompt:**
+```
+Please process this request through a series of transformations, applying each decorator in sequence. Apply the following decorators in this exact order: StepByStep, Concise. Each decorator should process the output of the previous one. Only show the final output after all decorators have been applied. If any decorator in the chain cannot be applied correctly, stop the processing and explain the issue.
+
+Explain how neural networks learn.
+```
+
+### Complex decorator chain with visible intermediate steps
+
+**Original Prompt:**
+```
+Discuss the ethics of autonomous weapons.
+```
+
+**Transformed Prompt:**
+```
+Please process this request through a series of transformations, applying each decorator in sequence. Apply the following decorators in this exact order: Socratic, Academic, TreeOfThought. Each decorator should process the output of the previous one. Show the intermediate outputs after each decorator in the chain, clearly labeling each step. Continue processing even if some decorators cannot be fully applied, making best efforts for each step.
+
+Discuss the ethics of autonomous weapons.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please process this request through a series of transformations, applying each decorator in sequence.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `decorators`:
+  - Format: Apply the following decorators in this exact order: {value}. Each decorator should process the output of the previous one.
+
+- `showSteps`:
+  - When set to `true`: Show the intermediate outputs after each decorator in the chain, clearly labeling each step.
+  - When set to `false`: Only show the final output after all decorators have been applied.
+
+- `stopOnFailure`:
+  - When set to `true`: If any decorator in the chain cannot be applied correctly, stop the processing and explain the issue.
+  - When set to `false`: Continue processing even if some decorators cannot be fully applied, making best efforts for each step.
+
 ## Compatibility
 
 - **Requires**: None

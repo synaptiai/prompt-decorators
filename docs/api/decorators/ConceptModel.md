@@ -60,6 +60,48 @@ A simple mind map with programming paradigms as the central node, branching out 
 **Notes:** Claude models can create effective text-based visualizations.
 
 
+## Implementation Guidance
+
+### Technical education
+
+**Original Prompt:**
+```
+Explain the relationships between key React concepts including components, hooks, state, and context.
+```
+
+**Transformed Prompt:**
+```
+Create a concept map with labeled relationships between concepts. Include important secondary concepts and relationships in addition to primary ones. Center the diagram around the concept of main-topic.
+
+Explain the relationships between key React concepts including components, hooks, state, and context.
+```
+
+**Notes:** The decorator transforms a simple explanation request into a request for a visual concept map.
+
+## Transformation Details
+
+**Base Instruction:** Create a visual representation of the relationships between concepts. Use a structured approach to show connections and hierarchies between ideas.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `notation`:
+  - When set to `mind-map`: Organize the information as a mind map with a central concept and branching ideas.
+  - When set to `concept-map`: Create a concept map with labeled relationships between concepts.
+  - When set to `knowledge-graph`: Develop a knowledge graph with nodes representing concepts and edges showing relationships.
+  - When set to `informal`: Use an informal diagram style that best represents the relationships between concepts.
+
+- `complexity`:
+  - When set to `basic`: Keep the diagram simple with only key concepts and primary relationships.
+  - When set to `intermediate`: Include important secondary concepts and relationships in addition to primary ones.
+  - When set to `comprehensive`: Create a detailed diagram capturing all relevant concepts, sub-concepts, and their interconnections.
+
+- `focus`:
+  - Format: Center the diagram around the concept of {value}.
+
 ## Compatibility
 
 - **Requires**: None

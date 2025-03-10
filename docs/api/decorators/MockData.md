@@ -61,6 +61,51 @@ Returns SQL insert statements for a small set of simple blog data including auth
 **Notes:** Simpler instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### E-commerce application testing
+
+**Original Prompt:**
+```
+Generate mock data for an e-commerce system with users, products, orders, and reviews.
+```
+
+**Transformed Prompt:**
+```
+Generate mock data according to the specified parameters. The data should be realistic but not real. Generate mock data with reasonable complexity including relationships and varied field values. Output the mock data in JSON format. Generate a medium-sized dataset of 10-20 records per entity.
+
+Generate mock data for an e-commerce system with users, products, orders, and reviews.
+```
+
+**Notes:** The decorator adds specific instructions about the complexity, format, and size of the mock data to generate.
+
+## Transformation Details
+
+**Base Instruction:** Generate mock data according to the specified parameters. The data should be realistic but not real.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `complexity`:
+  - When set to `simple`: Create basic mock data with minimal fields and simple relationships.
+  - When set to `moderate`: Generate mock data with reasonable complexity including relationships and varied field values.
+  - When set to `complex`: Produce sophisticated mock data with complex relationships, edge cases, and realistic variations.
+
+- `format`:
+  - When set to `json`: Output the mock data in JSON format.
+  - When set to `csv`: Output the mock data in CSV format.
+  - When set to `sql`: Output the mock data as SQL insert statements.
+  - When set to `code`: Output the mock data as code objects in a programming language appropriate to the context.
+  - When set to `graphql`: Output the mock data in GraphQL format.
+
+- `size`:
+  - When set to `small`: Generate a small sample of 3-5 records per entity.
+  - When set to `medium`: Generate a medium-sized dataset of 10-20 records per entity.
+  - When set to `large`: Generate a large dataset of 50-100 records per entity.
+
 ## Compatibility
 
 - **Requires**: None

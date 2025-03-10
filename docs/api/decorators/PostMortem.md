@@ -62,6 +62,52 @@ A timeline-based postmortem focused on prevention strategies, formatted for lead
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Software development team
+
+**Original Prompt:**
+```
+Create a postmortem for the database outage we experienced yesterday that caused 45 minutes of downtime.
+```
+
+**Transformed Prompt:**
+```
+Create a detailed postmortem document that analyzes the incident, identifies root causes, and proposes preventive measures. Create a comprehensive postmortem covering timeline, root cause analysis, impact assessment, and future prevention. Provide balanced coverage of what happened, why it happened, and how to prevent recurrence. Write for the technical team with appropriate technical details.
+
+Create a postmortem for the database outage we experienced yesterday that caused 45 minutes of downtime.
+```
+
+**Notes:** The decorator adds structure and guidance for creating a comprehensive postmortem document tailored to the technical team.
+
+## Transformation Details
+
+**Base Instruction:** Create a detailed postmortem document that analyzes the incident, identifies root causes, and proposes preventive measures.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `format`:
+  - When set to `timeline`: Structure the postmortem as a chronological timeline of events.
+  - When set to `5-whys`: Use the 5 Whys technique to identify the root cause by repeatedly asking why the problem occurred.
+  - When set to `fishbone`: Organize the analysis using a fishbone (Ishikawa) diagram approach to categorize potential causes.
+  - When set to `comprehensive`: Create a comprehensive postmortem covering timeline, root cause analysis, impact assessment, and future prevention.
+
+- `focus`:
+  - When set to `what-happened`: Focus primarily on documenting what happened during the incident in detail.
+  - When set to `why`: Emphasize root cause analysis and why the incident occurred.
+  - When set to `prevention`: Concentrate on preventive measures and future safeguards.
+  - When set to `balanced`: Provide balanced coverage of what happened, why it happened, and how to prevent recurrence.
+
+- `audience`:
+  - When set to `team`: Write for the technical team with appropriate technical details.
+  - When set to `leadership`: Format for leadership with executive summary and business impact.
+  - When set to `stakeholders`: Address concerns of all stakeholders with both technical and business perspectives.
+  - When set to `public`: Create a public-facing document that explains the incident without revealing sensitive details.
+
 ## Compatibility
 
 - **Requires**: None

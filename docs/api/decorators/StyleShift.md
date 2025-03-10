@@ -49,6 +49,59 @@ Delivers a description of product launch preparation steps with heightened sense
 **Notes:** This model may need more explicit examples of the target style aspect at the specified level to maintain consistency throughout the response
 
 
+## Implementation Guidance
+
+### Highly formal explanation maintaining normal complexity
+
+**Original Prompt:**
+```
+Explain the process of photosynthesis.
+```
+
+**Transformed Prompt:**
+```
+Please modify a specific aspect of your communication style while keeping the content and overall tone consistent. Adjust the formality level of your response, paying attention to word choice, sentence structure, and adherence to communication conventions. Set the intensity of this style aspect to level 5 (on a scale of 1-5, where 1 is minimal and 5 is maximal). While adjusting the target style aspect, make sure to maintain your current level of these aspects: [complexity].
+
+Explain the process of photosynthesis.
+```
+
+### Increased urgency for product launch preparation
+
+**Original Prompt:**
+```
+Describe the steps needed to prepare for the upcoming product launch.
+```
+
+**Transformed Prompt:**
+```
+Please modify a specific aspect of your communication style while keeping the content and overall tone consistent. Adjust the sense of urgency in your response, emphasizing time sensitivity, immediate relevance, and priority framing. Set the intensity of this style aspect to level 4 (on a scale of 1-5, where 1 is minimal and 5 is maximal).
+
+Describe the steps needed to prepare for the upcoming product launch.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please modify a specific aspect of your communication style while keeping the content and overall tone consistent.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `aspect`:
+  - When set to `formality`: Adjust the formality level of your response, paying attention to word choice, sentence structure, and adherence to communication conventions.
+  - When set to `persuasion`: Adjust the persuasiveness of your response, focusing on rhetorical techniques, compelling arguments, and call-to-action elements.
+  - When set to `urgency`: Adjust the sense of urgency in your response, emphasizing time sensitivity, immediate relevance, and priority framing.
+  - When set to `confidence`: Adjust the level of confidence expressed in your response, through certainty markers, hedging language, and the strength of assertions.
+  - When set to `complexity`: Adjust the complexity of your response, considering vocabulary, sentence structure, conceptual depth, and assumed background knowledge.
+
+- `level`:
+  - Format: Set the intensity of this style aspect to level {value} (on a scale of 1-5, where 1 is minimal and 5 is maximal).
+
+- `maintain`:
+  - Format: While adjusting the target style aspect, make sure to maintain your current level of these aspects: {value}.
+
 ## Compatibility
 
 - **Requires**: None

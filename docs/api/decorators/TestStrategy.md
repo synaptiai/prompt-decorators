@@ -73,6 +73,55 @@ A performance testing strategy using JUnit to measure throughput, response time,
 **Notes:** More explicit instruction for models with less context understanding.
 
 
+## Implementation Guidance
+
+### Web application testing
+
+**Original Prompt:**
+```
+Design a testing strategy for an authentication service with database and external API dependencies.
+```
+
+**Transformed Prompt:**
+```
+Design a testing strategy for the following, considering best practices for software quality assurance. Focus on integration tests that verify interactions between components. Use Jest as the testing framework. Use Behavior-Driven Development with descriptive scenarios that reflect user requirements.
+
+Design a testing strategy for an authentication service with database and external API dependencies.
+```
+
+**Notes:** This example shows how the decorator adds specific guidance for integration testing with Jest using BDD methodology.
+
+## Transformation Details
+
+**Base Instruction:** Design a testing strategy for the following, considering best practices for software quality assurance.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `level`:
+  - When set to `unit`: Focus on unit testing individual components in isolation.
+  - When set to `integration`: Design integration tests that verify interactions between components.
+  - When set to `e2e`: Create end-to-end tests that validate complete user workflows.
+  - When set to `performance`: Develop performance tests to measure system responsiveness and stability under load.
+  - When set to `security`: Implement security tests to identify vulnerabilities and ensure data protection.
+
+- `framework`:
+  - When set to `jest`: Use Jest as the testing framework.
+  - When set to `pytest`: Implement tests using the pytest framework.
+  - When set to `junit`: Develop tests with the JUnit framework.
+  - When set to `mocha`: Create tests using the Mocha framework.
+  - When set to `cypress`: Build tests with the Cypress framework.
+  - When set to `language-appropriate`: Select an appropriate testing framework based on the implementation language.
+
+- `approach`:
+  - When set to `tdd`: Follow Test-Driven Development methodology (write tests before implementation).
+  - When set to `bdd`: Use Behavior-Driven Development with descriptive scenarios that reflect user requirements.
+  - When set to `property`: Implement property-based testing to verify invariants across many generated inputs.
+  - When set to `snapshot`: Utilize snapshot testing to detect unexpected UI or data structure changes.
+
 ## Compatibility
 
 - **Requires**: None

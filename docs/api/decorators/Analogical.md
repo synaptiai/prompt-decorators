@@ -47,6 +47,57 @@ Provides three different brief analogies for blockchain from different domains (
 **Notes:** This model sometimes generates analogies that are too superficial and may need explicit guidance to develop deeper mappings
 
 
+## Implementation Guidance
+
+### Single sports analogy for the immune system
+
+**Original Prompt:**
+```
+Explain how the immune system works.
+```
+
+**Transformed Prompt:**
+```
+Please explain the concepts using analogies and metaphors that compare them to more familiar domains or experiences. Draw your analogies specifically from the domain of sports. Develop each analogy with balanced detail, explaining key mappings and their relevance.
+
+Explain how the immune system works.
+```
+
+### Multiple brief analogies for blockchain
+
+**Original Prompt:**
+```
+Describe how blockchain technology functions.
+```
+
+**Transformed Prompt:**
+```
+Please explain the concepts using analogies and metaphors that compare them to more familiar domains or experiences. Provide exactly 3 distinct analogies to illustrate the concept. Keep each analogy concise, covering only the most essential mappings between the concept and the analogy.
+
+Describe how blockchain technology functions.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please explain the concepts using analogies and metaphors that compare them to more familiar domains or experiences.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `domain`:
+  - Format: Draw your analogies specifically from the domain of {value}.
+
+- `count`:
+  - Format: Provide exactly {value} distinct analogies to illustrate the concept.
+
+- `depth`:
+  - When set to `brief`: Keep each analogy concise, covering only the most essential mappings between the concept and the analogy.
+  - When set to `moderate`: Develop each analogy with balanced detail, explaining key mappings and their relevance.
+  - When set to `extended`: Elaborate each analogy thoroughly, exploring multiple aspects of the mapping and their implications in detail.
+
 ## Compatibility
 
 - **Requires**: None

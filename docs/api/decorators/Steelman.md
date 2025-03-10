@@ -41,6 +41,57 @@ Provides the most compelling possible argument for cryptocurrency as the future 
 **Notes:** This model sometimes needs explicit reminders to avoid unconsciously weakening positions it might not favor
 
 
+## Implementation Guidance
+
+### Steel-manning both sides of universal basic income debate
+
+**Original Prompt:**
+```
+Is universal basic income a good policy?
+```
+
+**Transformed Prompt:**
+```
+Please present the strongest possible version of each position or argument related to this topic, ensuring each viewpoint is represented in its most compelling and charitable form, even those you might not personally agree with. Present the strongest possible version of 2 different viewpoints or positions on this topic. Focus solely on presenting the strongest versions of each position without providing your own critique or evaluation. Clearly separate the presentation of steel-manned arguments from any subsequent analysis or critique using distinct sections.
+
+Is universal basic income a good policy?
+```
+
+### Steel-manning cryptocurrency position with critique
+
+**Original Prompt:**
+```
+What is the strongest case for cryptocurrency as the future of finance?
+```
+
+**Transformed Prompt:**
+```
+Please present the strongest possible version of each position or argument related to this topic, ensuring each viewpoint is represented in its most compelling and charitable form, even those you might not personally agree with. Present the strongest possible version of 1 different viewpoints or positions on this topic. After presenting each steel-manned position, provide a balanced critique that evaluates its strengths and weaknesses. Clearly separate the presentation of steel-manned arguments from any subsequent analysis or critique using distinct sections.
+
+What is the strongest case for cryptocurrency as the future of finance?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please present the strongest possible version of each position or argument related to this topic, ensuring each viewpoint is represented in its most compelling and charitable form, even those you might not personally agree with.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `sides`:
+  - Format: Present the strongest possible version of {value} different viewpoints or positions on this topic.
+
+- `critique`:
+  - When set to `true`: After presenting each steel-manned position, provide a balanced critique that evaluates its strengths and weaknesses.
+  - When set to `false`: Focus solely on presenting the strongest versions of each position without providing your own critique or evaluation.
+
+- `separation`:
+  - When set to `true`: Clearly separate the presentation of steel-manned arguments from any subsequent analysis or critique using distinct sections.
+  - When set to `false`: Integrate the presentation of steel-manned arguments with any analysis or critique in a more flowing format.
+
 ## Compatibility
 
 - **Requires**: None

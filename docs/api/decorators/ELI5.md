@@ -39,6 +39,50 @@ Provides an extremely simplified explanation of the internet using only basic vo
 **Notes:** This model sometimes needs reminders to maintain the simplified level throughout longer responses
 
 
+## Implementation Guidance
+
+### Basic ELI5 explanation of nuclear fusion
+
+**Original Prompt:**
+```
+Explain how nuclear fusion works.
+```
+
+**Transformed Prompt:**
+```
+Please explain this concept as you would to a 5-year-old child. Use simple vocabulary, concrete examples, and relatable analogies. Keep explanations simple and child-friendly, but you may introduce slightly more advanced concepts when absolutely necessary for understanding, as long as they're explained with simple analogies.
+
+Explain how nuclear fusion works.
+```
+
+### Strict ELI5 explanation of the internet
+
+**Original Prompt:**
+```
+How does the internet work?
+```
+
+**Transformed Prompt:**
+```
+Please explain this concept as you would to a 5-year-old child. Use simple vocabulary, concrete examples, and relatable analogies. Maintain an extremely simplified approach that a young child would understand, using only basic vocabulary and very concrete analogies. Avoid any technical terms or complex explanations entirely.
+
+How does the internet work?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please explain this concept as you would to a 5-year-old child. Use simple vocabulary, concrete examples, and relatable analogies.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `strictness`:
+  - When set to `true`: Maintain an extremely simplified approach that a young child would understand, using only basic vocabulary and very concrete analogies. Avoid any technical terms or complex explanations entirely.
+  - When set to `false`: Keep explanations simple and child-friendly, but you may introduce slightly more advanced concepts when absolutely necessary for understanding, as long as they're explained with simple analogies.
+
 ## Compatibility
 
 - **Requires**: None

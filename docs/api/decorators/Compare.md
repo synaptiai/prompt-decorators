@@ -54,6 +54,48 @@ A tabular comparison of PostgreSQL, MongoDB, and MySQL across the specified aspe
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Technology comparison
+
+**Original Prompt:**
+```
+Compare React, Vue, and Angular for a new enterprise web application.
+```
+
+**Transformed Prompt:**
+```
+Compare the following items across multiple dimensions. Provide a thorough analysis that highlights similarities and differences. Compare across these specific aspects: performance,ecosystem,learning-curve. Present the comparison in a decision matrix that scores each item across all aspects, with a final recommendation. Maintain a neutral, objective stance throughout the comparison.
+
+Compare React, Vue, and Angular for a new enterprise web application.
+```
+
+**Notes:** The decorator adds specific comparison instructions while maintaining the original request.
+
+## Transformation Details
+
+**Base Instruction:** Compare the following items across multiple dimensions. Provide a thorough analysis that highlights similarities and differences.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `aspects`:
+  - Format: Compare across these specific aspects: {value}.
+
+- `format`:
+  - When set to `table`: Present the comparison in a clear, tabular format with items as columns and aspects as rows.
+  - When set to `prose`: Present the comparison as flowing paragraphs that discuss each aspect across all items.
+  - When set to `pros-cons`: For each item, list the pros and cons relative to the alternatives.
+  - When set to `decision-matrix`: Create a decision matrix that scores each item across all aspects, with a final recommendation.
+
+- `bias`:
+  - When set to `neutral`: Maintain a neutral, objective stance throughout the comparison.
+  - When set to `weighted`: Weight the importance of different aspects based on common industry priorities.
+  - When set to `opinionated`: Include your assessment of which option is superior for different use cases.
+
 ## Compatibility
 
 - **Requires**: None

@@ -77,6 +77,66 @@ A detailed review covering all aspects (security, performance, best practices, m
 **Notes:** Claude models may benefit from more structured review instructions.
 
 
+## Implementation Guidance
+
+### Security review of authentication code
+
+**Original Prompt:**
+```
+Review this authentication controller code:
+
+function login(username, password) {
+  if(username === 'admin' && password === 'password123') {
+    return generateToken(username);
+  }
+  return null;
+}
+```
+
+**Transformed Prompt:**
+```
+Perform a code review on the provided code. Identify issues and suggest improvements. Focus specifically on security vulnerabilities, input validation, authentication issues, and potential exploits. Apply a strict level of scrutiny, identifying all potential issues regardless of severity. Present a comprehensive review with sections for different types of issues and detailed explanations.
+
+Review this authentication controller code:
+
+function login(username, password) {
+  if(username === 'admin' && password === 'password123') {
+    return generateToken(username);
+  }
+  return null;
+}
+```
+
+**Notes:** The decorator adds specific instructions for a security-focused code review with strict scrutiny and detailed output format.
+
+## Transformation Details
+
+**Base Instruction:** Perform a code review on the provided code. Identify issues and suggest improvements.
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `focus`:
+  - When set to `security`: Focus specifically on security vulnerabilities, input validation, authentication issues, and potential exploits.
+  - When set to `performance`: Focus specifically on performance bottlenecks, inefficient algorithms, and optimization opportunities.
+  - When set to `best-practices`: Focus specifically on adherence to coding standards, design patterns, and industry best practices.
+  - When set to `maintainability`: Focus specifically on code readability, documentation, modularity, and long-term maintenance concerns.
+  - When set to `all`: Review all aspects including security, performance, best practices, and maintainability.
+
+- `strictness`:
+  - When set to `relaxed`: Apply a relaxed level of scrutiny, focusing only on major issues.
+  - When set to `standard`: Apply a standard level of scrutiny, balancing thoroughness with pragmatism.
+  - When set to `strict`: Apply a strict level of scrutiny, identifying all potential issues regardless of severity.
+
+- `format`:
+  - When set to `comment-style`: Present the review as code comments that could be directly added to the source.
+  - When set to `summary`: Present a concise summary of findings with key points only.
+  - When set to `detailed`: Present a comprehensive review with sections for different types of issues and detailed explanations.
+  - When set to `inline`: Present the review as inline comments within the code itself.
+
 ## Compatibility
 
 - **Requires**: None

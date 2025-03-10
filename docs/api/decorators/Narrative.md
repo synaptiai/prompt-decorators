@@ -53,6 +53,60 @@ Presents a concise case study narrative about social media's impact on mental he
 **Notes:** This model sometimes needs reminder to maintain factual accuracy while employing narrative techniques
 
 
+## Implementation Guidance
+
+### Classic narrative explanation of the stock market
+
+**Original Prompt:**
+```
+Explain how the stock market works.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a story-based delivery that uses narrative elements and storytelling techniques to make the information engaging, memorable, and contextually rich. Use a traditional narrative arc with a clear beginning, middle, and end, following a logical progression of setup, conflict/challenge, and resolution. Include character elements such as personas, stakeholders, or representative individuals that the audience can relate to and follow throughout the narrative. Develop the narrative with sufficient detail to engage the reader while maintaining a balanced pace and moderate length.
+
+Explain how the stock market works.
+```
+
+### Brief case study of social media impact without characters
+
+**Original Prompt:**
+```
+Describe the impact of social media on mental health.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a story-based delivery that uses narrative elements and storytelling techniques to make the information engaging, memorable, and contextually rich. Structure the response as a real or hypothetical case study that examines specific situations, decisions, and outcomes to illustrate the key points. Focus on situations, processes, and outcomes without personifying the narrative through specific characters or personas. Keep the narrative concise and focused, using storytelling elements economically while still conveying the essential information.
+
+Describe the impact of social media on mental health.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response as a story-based delivery that uses narrative elements and storytelling techniques to make the information engaging, memorable, and contextually rich.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `structure`:
+  - When set to `classic`: Use a traditional narrative arc with a clear beginning, middle, and end, following a logical progression of setup, conflict/challenge, and resolution.
+  - When set to `nonlinear`: Use a nonlinear narrative structure that may include flashbacks, flash-forwards, or parallel storylines to present the information from multiple temporal perspectives.
+  - When set to `case-study`: Structure the response as a real or hypothetical case study that examines specific situations, decisions, and outcomes to illustrate the key points.
+
+- `characters`:
+  - When set to `true`: Include character elements such as personas, stakeholders, or representative individuals that the audience can relate to and follow throughout the narrative.
+  - When set to `false`: Focus on situations, processes, and outcomes without personifying the narrative through specific characters or personas.
+
+- `length`:
+  - When set to `brief`: Keep the narrative concise and focused, using storytelling elements economically while still conveying the essential information.
+  - When set to `moderate`: Develop the narrative with sufficient detail to engage the reader while maintaining a balanced pace and moderate length.
+  - When set to `extended`: Create a fully developed narrative with rich details, multiple story beats, and thorough exploration of the topic through storytelling.
+
 ## Compatibility
 
 - **Requires**: None

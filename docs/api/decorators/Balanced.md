@@ -47,6 +47,58 @@ Provides a balanced side-by-side comparison of four different perspectives on AI
 **Notes:** This model may need more explicit reminders about maintaining balance throughout the response
 
 
+## Implementation Guidance
+
+### Basic balanced view with two perspectives
+
+**Original Prompt:**
+```
+Discuss the pros and cons of nuclear energy.
+```
+
+**Transformed Prompt:**
+```
+Please ensure your response presents a balanced view with equal representation of different perspectives on the topic. Include 2 different perspectives or viewpoints on this topic. Present each perspective fully and separately in sequence, with clear sections for each viewpoint. Ensure that each perspective receives equal attention, detail, and word count in your response.
+
+Discuss the pros and cons of nuclear energy.
+```
+
+### Comparative analysis of multiple perspectives
+
+**Original Prompt:**
+```
+What are the different views on artificial intelligence regulation?
+```
+
+**Transformed Prompt:**
+```
+Please ensure your response presents a balanced view with equal representation of different perspectives on the topic. Include 4 different perspectives or viewpoints on this topic. Present the perspectives in a side-by-side comparative analysis, highlighting agreements and differences across specific dimensions. Ensure that each perspective receives equal attention, detail, and word count in your response.
+
+What are the different views on artificial intelligence regulation?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please ensure your response presents a balanced view with equal representation of different perspectives on the topic.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `perspectives`:
+  - Format: Include {value} different perspectives or viewpoints on this topic.
+
+- `structure`:
+  - When set to `alternating`: Present the different perspectives in an alternating point-by-point format, addressing the same aspects from each viewpoint before moving to the next aspect.
+  - When set to `sequential`: Present each perspective fully and separately in sequence, with clear sections for each viewpoint.
+  - When set to `comparative`: Present the perspectives in a side-by-side comparative analysis, highlighting agreements and differences across specific dimensions.
+
+- `equal`:
+  - When set to `true`: Ensure that each perspective receives equal attention, detail, and word count in your response.
+  - When set to `false`: Each perspective should be adequately represented, but strict equality in length is not required.
+
 ## Compatibility
 
 - **Requires**: None

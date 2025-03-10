@@ -71,6 +71,68 @@ The model will create a high-performance function with minimal logging sent to a
 **Notes:** Simplified instruction format works better with GPT-3.5 Turbo.
 
 
+## Implementation Guidance
+
+### Node.js application
+
+**Original Prompt:**
+```
+Write a user authentication function for my Express app.
+```
+
+**Transformed Prompt:**
+```
+Implement a logging strategy for the code or system being discussed. Implement diagnostic logging that captures comprehensive details about internal operations, variable states, and system interactions for troubleshooting purposes. Direct logs to the console or standard output. Implement logging that can be dynamically enabled or disabled at runtime.
+
+Write a user authentication function for my Express app.
+```
+
+**Notes:** The transformed prompt instructs the model to include diagnostic-level logging in the authentication function with console output that can be toggled on/off.
+
+### Python backend service
+
+**Original Prompt:**
+```
+Create a data processing pipeline that handles CSV imports.
+```
+
+**Transformed Prompt:**
+```
+Implement a logging strategy for the code or system being discussed. Implement verbose logging that captures detailed information about application flow, state changes, and all significant events. Write logs to persistent files with appropriate rotation and management. Implement conditional logging that activates based on environment variables or configuration.
+
+Create a data processing pipeline that handles CSV imports.
+```
+
+**Notes:** The transformed prompt adds instructions for verbose file-based logging with conditional activation based on environment settings.
+
+## Transformation Details
+
+**Base Instruction:** Implement a logging strategy for the code or system being discussed.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `level`:
+  - When set to `minimal`: Implement minimal logging that captures only critical events and errors.
+  - When set to `standard`: Implement standard logging that captures important application events, errors, and basic flow information.
+  - When set to `verbose`: Implement verbose logging that captures detailed information about application flow, state changes, and all significant events.
+  - When set to `diagnostic`: Implement diagnostic logging that captures comprehensive details about internal operations, variable states, and system interactions for troubleshooting purposes.
+
+- `targets`:
+  - When set to `console`: Direct logs to the console or standard output.
+  - When set to `file`: Write logs to persistent files with appropriate rotation and management.
+  - When set to `service`: Send logs to a dedicated logging service or aggregator.
+  - When set to `all`: Implement multiple logging targets including console, file, and service integration.
+
+- `lifecycle`:
+  - When set to `temporary`: Implement logging as a temporary measure that can be easily removed when no longer needed.
+  - When set to `permanent`: Implement logging as a permanent part of the system architecture.
+  - When set to `conditional`: Implement conditional logging that activates based on environment variables or configuration.
+  - When set to `togglable`: Implement logging that can be dynamically enabled or disabled at runtime.
+
 ## Compatibility
 
 - **Requires**: None

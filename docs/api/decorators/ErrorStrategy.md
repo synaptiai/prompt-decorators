@@ -78,6 +78,75 @@ A database service that uses exceptions for error handling and implements a circ
 **Notes:** Can handle more nuanced error handling approaches like monadic patterns.
 
 
+## Implementation Guidance
+
+### Java backend service
+
+**Original Prompt:**
+```
+Implement a file processing service.
+```
+
+**Transformed Prompt:**
+```
+Implement error handling with the following strategy:
+Use a Result/Either pattern to explicitly handle success and error cases.
+Provide detailed error information including context, cause, and potential solutions.
+Implement retry logic for transient failures.
+
+Implement a file processing service.
+```
+
+**Notes:** For Java, consider using libraries like Vavr for Result types or Spring Retry for retry mechanisms.
+
+### JavaScript frontend
+
+**Original Prompt:**
+```
+Create a data fetching component.
+```
+
+**Transformed Prompt:**
+```
+Implement error handling with the following strategy:
+Use exception handling mechanisms for error management.
+Include standard error information with type, message, and basic context.
+Do not implement automatic recovery mechanisms.
+
+Create a data fetching component.
+```
+
+**Notes:** In JavaScript, consider using try/catch with async/await or Promise.catch() for handling asynchronous errors.
+
+## Transformation Details
+
+**Base Instruction:** Implement error handling with the following strategy:
+
+**Placement:** prepend
+
+**Composition Behavior:** override
+
+**Parameter Effects:**
+
+- `approach`:
+  - When set to `defensive`: Use defensive programming techniques to prevent errors from occurring.
+  - When set to `fail-fast`: Fail immediately when errors are detected to prevent cascading failures.
+  - When set to `return-result`: Use a Result/Either pattern to explicitly handle success and error cases.
+  - When set to `exceptions`: Use exception handling mechanisms for error management.
+  - When set to `monadic`: Apply monadic error handling patterns for functional composition.
+
+- `detail`:
+  - When set to `minimal`: Provide minimal error information, focusing on essential details only.
+  - When set to `standard`: Include standard error information with type, message, and basic context.
+  - When set to `detailed`: Provide detailed error information including context, cause, and potential solutions.
+  - When set to `debug`: Include comprehensive debug information with stack traces and internal state.
+
+- `recovery`:
+  - When set to `none`: Do not implement automatic recovery mechanisms.
+  - When set to `retry`: Implement retry logic for transient failures.
+  - When set to `fallback`: Provide fallback mechanisms when primary operations fail.
+  - When set to `circuit-breaker`: Implement circuit breaker pattern to prevent cascading failures.
+
 ## Compatibility
 
 - **Requires**: None

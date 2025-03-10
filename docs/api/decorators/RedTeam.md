@@ -47,6 +47,58 @@ Aggressively challenges the authentication system design, specifically targeting
 **Notes:** This model may need more explicit direction to maintain a consistently critical stance throughout the analysis
 
 
+## Implementation Guidance
+
+### Moderate red team analysis of a subscription service plan
+
+**Original Prompt:**
+```
+Here's our plan to launch a new subscription service...
+```
+
+**Transformed Prompt:**
+```
+Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented. Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective. After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.
+
+Here's our plan to launch a new subscription service...
+```
+
+### Aggressive focused red team analysis of an authentication system
+
+**Original Prompt:**
+```
+Review our new authentication system design.
+```
+
+**Transformed Prompt:**
+```
+Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented. Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches. Focus your adversarial analysis specifically on these aspects: [security,scalability,market-fit]. After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.
+
+Review our new authentication system design.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `strength`:
+  - When set to `moderate`: Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective.
+  - When set to `aggressive`: Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches.
+  - When set to `steelman`: Apply the most sophisticated possible critique by first strengthening the argument to its best form, then finding its most substantive vulnerabilities.
+
+- `focus`:
+  - Format: Focus your adversarial analysis specifically on these aspects: {value}.
+
+- `constructive`:
+  - When set to `true`: After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.
+  - When set to `false`: Focus solely on identifying weaknesses and vulnerabilities without providing suggestions for improvement.
+
 ## Compatibility
 
 - **Requires**: None

@@ -48,6 +48,59 @@ Explains machine learning concepts in simple terms with multiple illustrative ex
 **Notes:** This model benefits from more direct instructions about audience adaptation
 
 
+## Implementation Guidance
+
+### Technical audience in cybersecurity
+
+**Original Prompt:**
+```
+Explain zero-knowledge proofs.
+```
+
+**Transformed Prompt:**
+```
+Please tailor your response for a specific audience expertise level. Write for technical professionals who need precise, detailed information. Use proper technical terminology, reference standards, and provide implementation details where relevant. The audience has specific interest in the cybersecurity field, so use appropriate concepts and examples from this domain. Include multiple concrete examples to illustrate key points and enhance understanding.
+
+Explain zero-knowledge proofs.
+```
+
+### Beginner audience with examples
+
+**Original Prompt:**
+```
+How does machine learning work?
+```
+
+**Transformed Prompt:**
+```
+Please tailor your response for a specific audience expertise level. Write for beginners with no prior knowledge of the subject. Use simple language, avoid jargon, and explain all technical terms. Start with fundamental concepts. The audience has specific interest in the general field, so use appropriate concepts and examples from this domain. Include multiple concrete examples to illustrate key points and enhance understanding.
+
+How does machine learning work?
+```
+
+## Transformation Details
+
+**Base Instruction:** Please tailor your response for a specific audience expertise level.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `level`:
+  - When set to `beginner`: Write for beginners with no prior knowledge of the subject. Use simple language, avoid jargon, and explain all technical terms. Start with fundamental concepts.
+  - When set to `intermediate`: Write for an audience with basic familiarity of the subject. You can use some field-specific terms, but explain more advanced concepts.
+  - When set to `expert`: Write for a knowledgeable audience with extensive experience in the field. You can use specialized terminology and discuss advanced concepts directly.
+  - When set to `technical`: Write for technical professionals who need precise, detailed information. Use proper technical terminology, reference standards, and provide implementation details where relevant.
+
+- `domain`:
+  - Format: The audience has specific interest in the {value} field, so use appropriate concepts and examples from this domain.
+
+- `examples`:
+  - When set to `true`: Include multiple concrete examples to illustrate key points and enhance understanding.
+  - When set to `false`: Focus on clear explanations without requiring numerous examples.
+
 ## Compatibility
 
 - **Requires**: None

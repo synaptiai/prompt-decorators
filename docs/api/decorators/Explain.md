@@ -61,6 +61,51 @@ A beginner-friendly explanation of public key cryptography using analogies, focu
 **Notes:** Slightly simplified instruction for models with less context capacity.
 
 
+## Implementation Guidance
+
+### Explaining a programming concept
+
+**Original Prompt:**
+```
+Explain React's useEffect hook and its dependency array.
+```
+
+**Transformed Prompt:**
+```
+Explain the following concept or code clearly and thoroughly. Explain this to someone with moderate familiarity with the subject area. Include concrete examples to illustrate the concept. Cover both how it works and why it exists or is designed this way.
+
+Explain React's useEffect hook and its dependency array.
+```
+
+**Notes:** The transformation adds context about the target audience level, preferred explanation approach, and what aspects to focus on.
+
+## Transformation Details
+
+**Base Instruction:** Explain the following concept or code clearly and thoroughly.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `level`:
+  - When set to `beginner`: Explain this as if to someone new to the field, avoiding jargon and using simple concepts.
+  - When set to `intermediate`: Explain this to someone with moderate familiarity with the subject area.
+  - When set to `advanced`: Provide an in-depth technical explanation suitable for experts in the field.
+
+- `approach`:
+  - When set to `analogy`: Use relevant analogies to make the concept more relatable.
+  - When set to `examples`: Include concrete examples to illustrate the concept.
+  - When set to `theory`: Focus on the theoretical foundations and principles.
+  - When set to `step-by-step`: Break down the explanation into clear sequential steps.
+  - When set to `visual`: Describe visual representations or diagrams that would help understand the concept.
+
+- `focus`:
+  - When set to `how`: Focus on how it works and practical implementation details.
+  - When set to `why`: Focus on why it exists and the underlying rationale.
+  - When set to `both`: Cover both how it works and why it exists or is designed this way.
+
 ## Compatibility
 
 - **Requires**: None

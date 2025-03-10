@@ -58,6 +58,60 @@ Clearly separate these sections with headings.
 **Notes:** This model may need explicit reminders to ensure that the build phase directly addresses the specific issues identified in the breakdown phase
 
 
+## Implementation Guidance
+
+### Basic break and build for plant care subscription
+
+**Original Prompt:**
+```
+Evaluate this startup idea: a subscription service for plant care.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues. In the breakdown phase, conduct a comprehensive critique that addresses weaknesses, assumptions, risks, and any other relevant vulnerabilities. Make the breakdown phase thorough and substantial, with detailed examination of significant issues. Allocate approximately 1 times as much content to the constructive building phase as to the critical breakdown phase.
+
+Evaluate this startup idea: a subscription service for plant care.
+```
+
+### Intense assumption-focused analysis of urban congestion policy
+
+**Original Prompt:**
+```
+Analyze this public policy proposal for reducing urban congestion.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues. In the breakdown phase, focus primarily on identifying and questioning underlying assumptions, unstated premises, and taken-for-granted elements. Make the breakdown phase rigorous and challenging, with incisive critique that explores fundamental flaws and serious concerns. Allocate approximately 2 times as much content to the constructive building phase as to the critical breakdown phase.
+
+Analyze this public policy proposal for reducing urban congestion.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `breakdown`:
+  - When set to `weaknesses`: In the breakdown phase, focus primarily on identifying functional weaknesses, operational gaps, and practical limitations.
+  - When set to `assumptions`: In the breakdown phase, focus primarily on identifying and questioning underlying assumptions, unstated premises, and taken-for-granted elements.
+  - When set to `risks`: In the breakdown phase, focus primarily on identifying potential risks, failure modes, and negative scenarios.
+  - When set to `comprehensive`: In the breakdown phase, conduct a comprehensive critique that addresses weaknesses, assumptions, risks, and any other relevant vulnerabilities.
+
+- `intensity`:
+  - When set to `mild`: Keep the breakdown phase constructive and moderate in tone, highlighting issues without overly aggressive critique.
+  - When set to `thorough`: Make the breakdown phase thorough and substantial, with detailed examination of significant issues.
+  - When set to `intense`: Make the breakdown phase rigorous and challenging, with incisive critique that explores fundamental flaws and serious concerns.
+
+- `buildRatio`:
+  - Format: Allocate approximately {value} times as much content to the constructive building phase as to the critical breakdown phase.
+
 ## Compatibility
 
 - **Requires**: None

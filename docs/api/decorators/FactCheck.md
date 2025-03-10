@@ -53,6 +53,60 @@ Presents only well-established scientific facts about dark matter, excluding spe
 **Notes:** This model benefits from more explicit instructions about the need to clearly signal confidence levels
 
 
+## Implementation Guidance
+
+### Basic fact checking with confidence indicators
+
+**Original Prompt:**
+```
+Explain the history and effectiveness of vaccines.
+```
+
+**Transformed Prompt:**
+```
+Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information. For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:'). Clearly mark any uncertain or speculative information with appropriate qualifiers (e.g., 'may be', 'some evidence suggests', 'it is theorized'). Apply a balanced verification standard, requiring reliable sources for claims but accepting well-supported consensus views.
+
+Explain the history and effectiveness of vaccines.
+```
+
+### High-strictness fact checking excluding uncertain information
+
+**Original Prompt:**
+```
+Describe what we know about dark matter.
+```
+
+**Transformed Prompt:**
+```
+Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information. For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:'). Only include well-established or highly likely information, omitting speculative or highly uncertain claims entirely. Apply a stringent verification standard, requiring strong evidence and multiple reliable sources for all claims.
+
+Describe what we know about dark matter.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `confidence`:
+  - When set to `true`: For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:').
+  - When set to `false`: Maintain factual accuracy but do not explicitly label confidence levels for individual claims.
+
+- `uncertain`:
+  - When set to `mark`: Clearly mark any uncertain or speculative information with appropriate qualifiers (e.g., 'may be', 'some evidence suggests', 'it is theorized').
+  - When set to `exclude`: Only include well-established or highly likely information, omitting speculative or highly uncertain claims entirely.
+  - When set to `qualify`: Include uncertain information but qualify it extensively with context about the limitations of current knowledge.
+
+- `strictness`:
+  - When set to `low`: Apply a lenient standard for verification, allowing inclusion of generally accepted information even without definitive proof.
+  - When set to `moderate`: Apply a balanced verification standard, requiring reliable sources for claims but accepting well-supported consensus views.
+  - When set to `high`: Apply a stringent verification standard, requiring strong evidence and multiple reliable sources for all claims.
+
 ## Compatibility
 
 - **Requires**: None

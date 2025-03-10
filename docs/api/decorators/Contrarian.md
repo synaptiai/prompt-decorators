@@ -47,6 +47,58 @@ Provides a consistently skeptical analysis of climate model methodologies, quest
 **Notes:** This model sometimes needs more explicit instruction to maintain a truly challenging stance rather than reverting to conventional views
 
 
+## Implementation Guidance
+
+### Basic devil's advocate with balanced conclusion on renewable energy
+
+**Original Prompt:**
+```
+Why is renewable energy considered the future of power generation?
+```
+
+**Transformed Prompt:**
+```
+Please generate a response that deliberately challenges conventional wisdom or mainstream perspectives on this topic to encourage critical thinking. Present the strongest possible counterarguments to what would normally be considered the most reasonable position. After thoroughly presenting the contrarian perspective, conclude with a brief balanced view that acknowledges the merits of both conventional and contrarian viewpoints.
+
+Why is renewable energy considered the future of power generation?
+```
+
+### Maintained skeptical stance focused on methodology of climate models
+
+**Original Prompt:**
+```
+Discuss the reliability of climate models in predicting future global temperatures.
+```
+
+**Transformed Prompt:**
+```
+Please generate a response that deliberately challenges conventional wisdom or mainstream perspectives on this topic to encourage critical thinking. Take a deeply skeptical stance that questions the evidence, methodology, and logical foundations behind established views. Maintain the contrarian perspective consistently throughout the entire response without offering a conventional perspective. Focus your contrarian analysis specifically on the methodology aspect of the topic rather than addressing all dimensions.
+
+Discuss the reliability of climate models in predicting future global temperatures.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please generate a response that deliberately challenges conventional wisdom or mainstream perspectives on this topic to encourage critical thinking.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `approach`:
+  - When set to `outsider`: Adopt the perspective of someone completely outside the field or discipline, questioning fundamental assumptions that insiders might take for granted.
+  - When set to `skeptic`: Take a deeply skeptical stance that questions the evidence, methodology, and logical foundations behind established views.
+  - When set to `devils-advocate`: Present the strongest possible counterarguments to what would normally be considered the most reasonable position.
+
+- `maintain`:
+  - When set to `true`: Maintain the contrarian perspective consistently throughout the entire response without offering a conventional perspective.
+  - When set to `false`: After thoroughly presenting the contrarian perspective, conclude with a brief balanced view that acknowledges the merits of both conventional and contrarian viewpoints.
+
+- `focus`:
+  - Format: Focus your contrarian analysis specifically on the {value} aspect of the topic rather than addressing all dimensions.
+
 ## Compatibility
 
 - **Requires**: None

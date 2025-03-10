@@ -75,6 +75,72 @@ Provides conceptual guidance on monitoring business KPIs for a SaaS product, inc
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Microservices Architecture
+
+**Original Prompt:**
+```
+Create a monitoring solution for our microservices architecture focusing on performance metrics and latency.
+```
+
+**Transformed Prompt:**
+```
+Create a monitoring and alerting setup for the described system. Focus on providing practical, implementable monitoring solutions. Emphasize performance metrics, throughput, and latency monitoring. Use Prometheus and associated tools for metrics collection and alerting. Include specific configuration examples and implementation details.
+
+Create a monitoring solution for our microservices architecture focusing on performance metrics and latency.
+```
+
+**Notes:** This example shows how the decorator adds specific guidance for performance monitoring in a microservices context using Prometheus.
+
+### E-commerce Platform
+
+**Original Prompt:**
+```
+How should we monitor our e-commerce platform?
+```
+
+**Transformed Prompt:**
+```
+Create a monitoring and alerting setup for the described system. Focus on providing practical, implementable monitoring solutions. Provide a balanced monitoring approach covering all critical aspects of the system. Suggest the most appropriate monitoring tools based on the system requirements. Include specific configuration examples and implementation details.
+
+How should we monitor our e-commerce platform?
+```
+
+**Notes:** This example uses default values to provide a comprehensive monitoring approach with tool recommendations.
+
+## Transformation Details
+
+**Base Instruction:** Create a monitoring and alerting setup for the described system. Focus on providing practical, implementable monitoring solutions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `focus`:
+  - When set to `performance`: Emphasize performance metrics, throughput, and latency monitoring.
+  - When set to `errors`: Prioritize error detection, logging, and exception tracking.
+  - When set to `security`: Focus on security-related monitoring, intrusion detection, and vulnerability scanning.
+  - When set to `business-metrics`: Concentrate on business KPIs and metrics that align with organizational goals.
+  - When set to `user-experience`: Monitor user interactions, satisfaction metrics, and frontend performance.
+  - When set to `comprehensive`: Provide a balanced monitoring approach covering all critical aspects of the system.
+
+- `tools`:
+  - When set to `datadog`: Implement the solution using Datadog as the primary monitoring platform.
+  - When set to `prometheus`: Use Prometheus and associated tools for metrics collection and alerting.
+  - When set to `cloudwatch`: Leverage AWS CloudWatch for monitoring and alerting capabilities.
+  - When set to `newrelic`: Build the monitoring solution around New Relic's observability platform.
+  - When set to `grafana`: Utilize Grafana for dashboarding, with appropriate data sources for collection.
+  - When set to `elastic`: Implement using the Elastic Stack (Elasticsearch, Logstash, Kibana).
+  - When set to `recommend`: Suggest the most appropriate monitoring tools based on the system requirements.
+
+- `implementation`:
+  - When set to `concepts`: Provide a high-level conceptual overview of the monitoring approach.
+  - When set to `configuration`: Include specific configuration examples and implementation details.
+  - When set to `full-setup`: Deliver comprehensive setup instructions with code samples and deployment guidance.
+
 ## Compatibility
 
 - **Requires**: None

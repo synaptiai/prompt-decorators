@@ -61,6 +61,63 @@ First explains current AI safety approaches, then provides a separate deep analy
 **Notes:** This model may need explicit reminders to distinguish between negative space analysis and standard critical thinking analysis
 
 
+## Implementation Guidance
+
+### Comprehensive negative space analysis of social media impact
+
+**Original Prompt:**
+```
+Discuss the impact of social media on society.
+```
+
+**Transformed Prompt:**
+```
+Please analyze the 'negative space' surrounding this topic - focusing on what is not explicitly stated, implied, or missing. Identify unexplored angles, implicit assumptions, unasked questions, and overlooked contextual elements. Take a comprehensive approach to negative space, addressing implications, missing elements, unstated assumptions, and other overlooked aspects. Conduct a moderately deep exploration of the negative space, with substantial attention to important unstated elements and their significance. Integrate the negative space analysis throughout your response, addressing both explicit content and unstated elements in parallel.
+
+Discuss the impact of social media on society.
+```
+
+### Deep analysis of missing elements in AI safety approaches
+
+**Original Prompt:**
+```
+Explain the current approaches to artificial intelligence safety.
+```
+
+**Transformed Prompt:**
+```
+Please analyze the 'negative space' surrounding this topic - focusing on what is not explicitly stated, implied, or missing. Identify unexplored angles, implicit assumptions, unasked questions, and overlooked contextual elements. Focus primarily on identifying missing elements, overlooked factors, and gaps in the topic or question. Perform a deep examination of the negative space, with thorough exploration of subtle, non-obvious unstated elements and their complex interconnections. First address the explicit content of the topic, then follow with the negative space analysis.
+
+Explain the current approaches to artificial intelligence safety.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please analyze the 'negative space' surrounding this topic - focusing on what is not explicitly stated, implied, or missing. Identify unexplored angles, implicit assumptions, unasked questions, and overlooked contextual elements.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `focus`:
+  - When set to `implications`: Focus primarily on the unstated implications and logical consequences that may not be immediately obvious.
+  - When set to `missing`: Focus primarily on identifying missing elements, overlooked factors, and gaps in the topic or question.
+  - When set to `unstated`: Focus primarily on unstated assumptions, implicit premises, and underlying beliefs that frame the topic.
+  - When set to `comprehensive`: Take a comprehensive approach to negative space, addressing implications, missing elements, unstated assumptions, and other overlooked aspects.
+
+- `depth`:
+  - When set to `surface`: Provide a surface-level exploration of the negative space, identifying the most obvious unstated elements without extensive analysis.
+  - When set to `moderate`: Conduct a moderately deep exploration of the negative space, with substantial attention to important unstated elements and their significance.
+  - When set to `deep`: Perform a deep examination of the negative space, with thorough exploration of subtle, non-obvious unstated elements and their complex interconnections.
+
+- `structure`:
+  - When set to `before`: Present the negative space analysis before addressing the explicit content of the topic.
+  - When set to `after`: First address the explicit content of the topic, then follow with the negative space analysis.
+  - When set to `integrated`: Integrate the negative space analysis throughout your response, addressing both explicit content and unstated elements in parallel.
+  - When set to `separate`: Clearly separate the negative space analysis from the explicit content with distinct sections and headings.
+
 ## Compatibility
 
 - **Requires**: None

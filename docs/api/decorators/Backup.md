@@ -62,6 +62,56 @@ Provides a cost-effective backup approach for non-critical development systems.
 **Notes:** For smaller models, more explicit instructions about backup components may be needed.
 
 
+## Implementation Guidance
+
+### Financial database backup planning
+
+**Original Prompt:**
+```
+Design a backup and disaster recovery strategy for our financial transaction database.
+```
+
+**Transformed Prompt:**
+```
+Design a backup and recovery strategy with the following requirements:
+
+The data is mission-critical. Implement enterprise-grade backup and recovery solutions with redundancy.
+Recovery Point Objective (RPO): Minutes - Data loss must be limited to minutes or less.
+Recovery Time Objective (RTO): Minutes - Systems must be restored within minutes after failure.
+
+Design a backup and disaster recovery strategy for our financial transaction database.
+```
+
+**Notes:** For financial systems, the decorator automatically applies the highest levels of protection and fastest recovery times.
+
+## Transformation Details
+
+**Base Instruction:** Design a backup and recovery strategy with the following requirements:
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `criticality`:
+  - When set to `low`: The data has low criticality. Basic backup measures are sufficient.
+  - When set to `medium`: The data has medium criticality. Standard backup practices should be implemented.
+  - When set to `high`: The data has high criticality. Robust backup solutions are required.
+  - When set to `mission-critical`: The data is mission-critical. Implement enterprise-grade backup and recovery solutions with redundancy.
+
+- `rpo`:
+  - When set to `minutes`: Recovery Point Objective (RPO): Minutes - Data loss must be limited to minutes or less.
+  - When set to `hours`: Recovery Point Objective (RPO): Hours - Data loss of up to a few hours is acceptable.
+  - When set to `days`: Recovery Point Objective (RPO): Days - Data loss of up to a few days is acceptable.
+  - When set to `custom`: Recovery Point Objective (RPO): Custom - Consider specific business requirements for acceptable data loss.
+
+- `rto`:
+  - When set to `minutes`: Recovery Time Objective (RTO): Minutes - Systems must be restored within minutes after failure.
+  - When set to `hours`: Recovery Time Objective (RTO): Hours - Systems can be down for a few hours during recovery.
+  - When set to `days`: Recovery Time Objective (RTO): Days - Systems can be down for a few days during recovery.
+  - When set to `custom`: Recovery Time Objective (RTO): Custom - Consider specific business requirements for acceptable downtime.
+
 ## Compatibility
 
 - **Requires**: None

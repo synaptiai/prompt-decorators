@@ -71,6 +71,52 @@ A comprehensive analysis of the progressive memory leak, including root causes, 
 **Notes:** Simplified instruction for models with less diagnostic capability.
 
 
+## Implementation Guidance
+
+### Software debugging scenario
+
+**Original Prompt:**
+```
+The payment processing occasionally fails during high traffic periods. Diagnose the root cause of this intermittent error.
+```
+
+**Transformed Prompt:**
+```
+Diagnose the described error or bug with a systematic debugging approach. Identify potential causes and suggest solutions. Focus on diagnosing this intermittent issue, considering timing patterns and triggering conditions. Consider this a major issue with substantial impact on system functionality. Deliver a comprehensive analysis covering all aspects including root causes, contributing factors, and systemic implications.
+
+The payment processing occasionally fails during high traffic periods. Diagnose the root cause of this intermittent error.
+```
+
+**Notes:** The decorator adds specific guidance for approaching the error diagnosis based on the parameters provided.
+
+## Transformation Details
+
+**Base Instruction:** Diagnose the described error or bug with a systematic debugging approach. Identify potential causes and suggest solutions.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `severity`:
+  - When set to `minor`: Treat this as a minor issue that may have limited impact.
+  - When set to `significant`: Approach this as a significant issue that requires careful attention.
+  - When set to `major`: Consider this a major issue with substantial impact on system functionality.
+  - When set to `critical`: Treat this as a critical issue requiring immediate resolution.
+
+- `persistence`:
+  - When set to `intermittent`: Focus on diagnosing this intermittent issue, considering timing patterns and triggering conditions.
+  - When set to `consistent`: Analyze this consistent issue that occurs reliably under specific conditions.
+  - When set to `progressive`: Examine this progressive issue that worsens over time or with increased usage.
+  - When set to `environment-specific`: Investigate this environment-specific issue that only manifests in particular contexts.
+
+- `analysis`:
+  - When set to `surface`: Provide a surface-level analysis identifying the most obvious potential causes.
+  - When set to `detailed`: Conduct a detailed analysis examining multiple factors and their interactions.
+  - When set to `root-cause`: Perform a root-cause analysis to identify the fundamental source of the issue.
+  - When set to `comprehensive`: Deliver a comprehensive analysis covering all aspects including root causes, contributing factors, and systemic implications.
+
 ## Compatibility
 
 - **Requires**: None

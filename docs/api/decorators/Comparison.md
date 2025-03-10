@@ -47,6 +47,58 @@ Delivers a flowing prose comparison between democracy and authoritarianism, cove
 **Notes:** This model sometimes needs more explicit structure for complex multi-dimensional comparisons
 
 
+## Implementation Guidance
+
+### Comparing programming frameworks with specific aspects
+
+**Original Prompt:**
+```
+Compare React, Angular, and Vue for front-end development.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences. Compare the items specifically across these aspects or dimensions: performance, cost, ease of use, ecosystem. Present the comparison in a tabular format with items as columns (or rows) and comparison aspects as rows (or columns). Explicitly emphasize or call attention to key differences between the items being compared.
+
+Compare React, Angular, and Vue for front-end development.
+```
+
+### Prose comparison of political systems
+
+**Original Prompt:**
+```
+Compare democracy and authoritarianism as political systems.
+```
+
+**Transformed Prompt:**
+```
+Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences. Present the comparison as flowing paragraphs that discuss each aspect across all items in a narrative style. Present differences and similarities without special emphasis on either.
+
+Compare democracy and authoritarianism as political systems.
+```
+
+## Transformation Details
+
+**Base Instruction:** Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `aspects`:
+  - Format: Compare the items specifically across these aspects or dimensions: {value}.
+
+- `format`:
+  - When set to `table`: Present the comparison in a tabular format with items as columns (or rows) and comparison aspects as rows (or columns).
+  - When set to `prose`: Present the comparison as flowing paragraphs that discuss each aspect across all items in a narrative style.
+  - When set to `bullets`: Present the comparison as bulleted lists grouped by aspect or by item.
+
+- `highlight`:
+  - When set to `true`: Explicitly emphasize or call attention to key differences between the items being compared.
+  - When set to `false`: Present differences and similarities without special emphasis on either.
+
 ## Compatibility
 
 - **Requires**: None

@@ -63,6 +63,53 @@ The model will implement a robust user authentication system, including all nece
 **Notes:** Simplified instruction for models with more limited context windows.
 
 
+## Implementation Guidance
+
+### Web development
+
+**Original Prompt:**
+```
+Implement a user profile card component that displays basic user information and an avatar.
+```
+
+**Transformed Prompt:**
+```
+Implement code incrementally, focusing on one part at a time. Build the solution step by step, ensuring each increment is testable before moving to the next. Focus on building a specific UI or functional component that can be integrated later. Use mock objects or functions for all dependencies that aren't the focus of this increment. Implement only the core functionality needed to demonstrate the concept.
+
+Implement a user profile card component that displays basic user information and an avatar.
+```
+
+**Notes:** The transformation adds specific guidance on how to approach the implementation incrementally.
+
+## Transformation Details
+
+**Base Instruction:** Implement code incrementally, focusing on one part at a time. Build the solution step by step, ensuring each increment is testable before moving to the next.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `focus`:
+  - When set to `feature`: Focus on implementing a complete feature with all necessary components.
+  - When set to `component`: Focus on building a specific UI or functional component that can be integrated later.
+  - When set to `function`: Focus on implementing a specific function or method with well-defined inputs and outputs.
+  - When set to `integration`: Focus on integrating previously implemented components or features.
+  - When set to `refactoring`: Focus on improving existing code without changing functionality.
+
+- `dependencies`:
+  - When set to `mock`: Use mock objects or functions for all dependencies that aren't the focus of this increment.
+  - When set to `stub`: Create minimal stub implementations for dependencies that return hardcoded values.
+  - When set to `implement`: Implement all dependencies as part of this increment.
+  - When set to `import-existing`: Use existing implementations for dependencies where available.
+
+- `completion`:
+  - When set to `minimal-viable`: Implement only the core functionality needed to demonstrate the concept.
+  - When set to `functional`: Implement a complete solution that works for the main use cases.
+  - When set to `robust`: Implement a solution that handles edge cases and includes error handling.
+  - When set to `production-ready`: Implement a fully tested solution with documentation and optimizations.
+
 ## Compatibility
 
 - **Requires**: None

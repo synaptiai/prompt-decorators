@@ -67,6 +67,57 @@ A comprehensive recommendation of enterprise-proven mobile technologies with str
 **Notes:** More explicit instruction for models with less context understanding.
 
 
+## Implementation Guidance
+
+### Web application recommendation
+
+**Original Prompt:**
+```
+Recommend a technology stack for a B2B SaaS application with emphasis on rapid development and scalability.
+```
+
+**Transformed Prompt:**
+```
+Recommend a technology stack that is appropriate for the specified requirements. Include specific technologies, frameworks, and tools that work well together. Explain why each component is suitable for the requirements. Focus on web development technologies, frameworks, and hosting solutions. Prioritize technologies that can handle significant growth in users, data, or traffic. Recommend modern technologies that are stable and have good community support.
+
+Recommend a technology stack for a B2B SaaS application with emphasis on rapid development and scalability.
+```
+
+**Notes:** The decorator adds specific guidance about the type of application, constraints, and technology maturity preferences.
+
+## Transformation Details
+
+**Base Instruction:** Recommend a technology stack that is appropriate for the specified requirements. Include specific technologies, frameworks, and tools that work well together. Explain why each component is suitable for the requirements.
+
+**Placement:** prepend
+
+**Composition Behavior:** accumulate
+
+**Parameter Effects:**
+
+- `for`:
+  - When set to `web`: Focus on web development technologies, frameworks, and hosting solutions.
+  - When set to `mobile`: Focus on mobile app development frameworks, languages, and deployment platforms.
+  - When set to `desktop`: Focus on desktop application frameworks, languages, and distribution methods.
+  - When set to `iot`: Focus on IoT device programming, connectivity solutions, and data processing.
+  - When set to `data`: Focus on data storage, processing, analysis, and visualization technologies.
+  - When set to `ai`: Focus on AI/ML frameworks, model deployment, and supporting infrastructure.
+  - When set to `enterprise`: Focus on enterprise-grade technologies with strong support and integration capabilities.
+
+- `constraints`:
+  - When set to `budget`: Prioritize cost-effective or open-source solutions that minimize licensing and operational costs.
+  - When set to `scale`: Prioritize technologies that can handle significant growth in users, data, or traffic.
+  - When set to `team-size`: Consider the learning curve and required expertise for the recommended technologies.
+  - When set to `performance`: Emphasize high-performance technologies and optimization strategies.
+  - When set to `security`: Prioritize technologies with strong security features and established security practices.
+  - When set to `timeline`: Recommend technologies that enable rapid development and deployment.
+
+- `maturity`:
+  - When set to `bleeding-edge`: Include cutting-edge technologies that may still be in beta or early adoption phases.
+  - When set to `modern-stable`: Recommend modern technologies that are stable and have good community support.
+  - When set to `established`: Focus on well-established technologies with proven track records.
+  - When set to `enterprise-proven`: Recommend only technologies with enterprise support, extensive documentation, and long-term stability guarantees.
+
 ## Compatibility
 
 - **Requires**: None
