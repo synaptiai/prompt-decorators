@@ -13,7 +13,7 @@
 [![Documentation](https://github.com/synaptiai/prompt-decorators/workflows/Documentation/badge.svg)](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Documentation%22)
 [![Publish to PyPI](https://github.com/synaptiai/prompt-decorators/workflows/Publish%20to%20PyPI/badge.svg)](https://github.com/synaptiai/prompt-decorators/actions?query=workflow%3A%22Publish+to+PyPI%22)
 
-**A Python framework implementing the Prompt Decorators Specification for enhancing interactions with Large Language Models (LLMs) through standardized, composable prompt modifications.**
+**Prompt Decorators is a comprehensive framework that standardizes how prompts for Large Language Models (LLMs) are enhanced, structured, and transformed. This repository contains both the official Prompt Decorators Specification and its complete Python reference implementation.**
 
 [Documentation](https://synaptiai.github.io/prompt-decorators/) •
 [Prompt Decorators Specification](/docs/prompt-decorators-specification-v1.0.md)
@@ -23,8 +23,12 @@
 ## 📋 Table of Contents
 
 - [Overview](#overview)
-- [Background & Motivation](#background--motivation)
-- [Implemented Functionality](#implemented-functionality)
+  - [What Are Prompt Decorators?](#what-are-prompt-decorators)
+  - [Key Components](#key-components)
+  - [Background & Motivation](#background--motivation)
+  - [Challenges in Prompt Engineering](#challenges-in-prompt-engineering)
+  - [Benefits of Prompt Decorators](#benefits-of-prompt-decorators)
+  - [Key Features](#key-features)
 - [Implementation Status](#implementation-status)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
@@ -35,7 +39,23 @@
 
 ## 🔍 Overview
 
-Prompt Decorators is a powerful and flexible framework that enables systematic modification of prompts to achieve specific behaviors in LLM responses. Based on the [Prompt Decorators Specification](docs/prompt-decorators-specification-v1.0.md), it provides a structured way to define, combine, and apply decorators to prompts.
+### What Are Prompt Decorators?
+
+Prompt Decorators introduces a standardized annotation system inspired by software design patterns that allows users to modify LLM behavior through simple, composable "decorators." By prefixing prompts with annotations like `+++Reasoning`, `+++StepByStep`, or `+++OutputFormat`, users can consistently control how AI models process and respond to their requests across different platforms and implementations.
+
+This project addresses the growing complexity of AI interactions by providing:
+
+1. **The Specification**: A formal standard that defines decorator syntax, behavior, and extension mechanisms
+2. **The Python Implementation**: A production-ready reference implementation with comprehensive tooling
+3. **MCP Integration**: A Model Context Protocol server that enables prompt decorator functionality in tools like Claude Desktop
+
+### Key Components
+
+- **📝 Specification**: The formal [Prompt Decorators Specification (v1.0)](/docs/prompt-decorators-specification-v1.0.md) defining the standard
+- **🛠️ Core Framework**: A Python implementation with registry-based decorator management
+- **🧩 140+ Decorators**: A comprehensive library of pre-built decorators covering reasoning, formatting, and more
+- **🔌 MCP Server**: Integration with the Model Context Protocol for use with desktop AI applications
+- **📚 Extensive Documentation**: API references, guides, and examples for both users and developers
 
 ### Background & Motivation
 
@@ -54,6 +74,16 @@ Current prompt engineering suffers from several limitations:
 - **Undocumented Behavior**: Expected model behavior is often implicit rather than explicit
 
 ### Benefits of Prompt Decorators
+
+Prompt Decorators solves key challenges in prompt engineering:
+
+- **Inconsistency**: Provides a standard syntax and behavior across different LLM platforms
+- **Verbosity**: Replaces lengthy instructions with concise annotations
+- **Cognitive Overhead**: Simplifies prompt crafting with reusable patterns
+- **Lack of Composability**: Enables clean combination of multiple instruction paradigms
+- **Undocumented Behavior**: Explicitly defines expected model responses
+
+Whether you're crafting prompts for specific reasoning patterns, structuring outputs in particular formats, or ensuring consistent responses across different models, Prompt Decorators provides a systematic approach that makes prompt engineering more modular, reusable, and maintainable.
 
 The Prompt Decorators framework addresses these challenges through:
 
@@ -74,7 +104,11 @@ The Prompt Decorators framework addresses these challenges through:
 - **🧩 Dynamic loading**: Runtime decorator loading from definition files
 - **🔍 Runtime decorator discovery**: Dynamic discovery and registration of decorators
 
-## 💡 Implemented Functionality
+## 💡 Implementation Status
+
+The Prompt Decorators project is currently in active development.
+
+### Implemented Functionality
 
 - **✅ Core Decorator Registry**: Load decorators from standardized JSON definitions
 - **✅ Decorator Application**: Apply decorators to prompts with parameter validation
@@ -85,13 +119,9 @@ The Prompt Decorators framework addresses these challenges through:
 - **✅ Extension Framework**: Support for domain-specific decorator extensions
 - **✅ Documentation Generation**: Automated documentation generation from decorator definitions
 
-## 📊 Implementation Status
-
-The Prompt Decorators project is currently in active development.
-
 For a detailed breakdown of implementation status, see our [Implementation Status](docs/implementation-status.md) document.
 
-### 🚧 Roadmap
+### Roadmap
 
 The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.
 
