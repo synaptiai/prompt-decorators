@@ -23,18 +23,15 @@
 ## 📋 Table of Contents
 
 - [Overview](#overview)
+- [Background & Motivation](#background--motivation)
 - [Implemented Functionality](#implemented-functionality)
-- [Architecture](#architecture)
-- [Example Usage](#example-usage)
+- [Implementation Status](#implementation-status)
 - [Getting Started](#getting-started)
-- [Prompt Decorators Specification](#prompt-decorators-specification)
-- [Domain-Specific Extensions](#domain-specific-extensions)
-- [Development](#development)
+  - [Installation](#installation)
+  - [Basic Usage](#basic-usage)
 - [License](#license)
 - [Contributing](#contributing)
-- [Roadmap](#roadmap)
 - [Acknowledgments](#acknowledgments)
-- [Code Quality](#code-quality)
 
 ## 🔍 Overview
 
@@ -98,45 +95,6 @@ For a detailed breakdown of implementation status, see our [Implementation Statu
 
 The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.
 
-## 🏗️ Architecture
-
-The framework is organized into several key components:
-
-1. **Core** (`prompt_decorators/core/`):
-   - `base.py`: Contains `DecoratorBase` abstract base class that defines the decorator interface
-   - `dynamic_decorator.py`: Implements the dynamic decorator functionality
-   - `registry.py`: Manages the decorator registry
-   - `parser.py`: Parses decorator annotations in text
-   - `validation.py`: Validates decorator parameters
-   - `model_specific.py`: Adapts decorators for specific LLM models
-   - `request.py`: Handles API requests with decorators
-
-2. **Schemas** (`prompt_decorators/schemas/`):
-   - `decorator_schema.py`: Defines schemas for decorator definitions
-   - JSON schemas for validation
-
-3. **Utils** (`prompt_decorators/utils/`):
-   - `discovery.py`: Runtime decorator discovery and registration
-   - `compatibility.py`: Checks compatibility between decorators
-   - `cache.py`: Caching utilities for decorator responses
-   - `string_utils.py`: String manipulation utilities
-   - `json_loader.py`: Loads decorator definitions from JSON files
-
-4. **Documentation** (`docs/`):
-   - `generate_docs.py`: Official documentation generator for decorators and API reference
-   - Documentation standards, workflows, and guidelines
-   - Mermaid diagrams for visualizing architecture and processes
-
-5. **Integrations** (`prompt_decorators/integrations/`):
-   - `mcp/`: Integration with the Model Context Protocol
-   - `mcp/server.py`: MCP server implementation
-   - `mcp/claude_desktop.py`: Integration with Claude Desktop
-
-6. **Scripts** (`scripts/`):
-   - Documentation scripts for generating, verifying, and enhancing documentation
-   - Validation scripts for checking docstrings and code quality
-   - Development tools for common tasks
-
 ## 🚀 Getting Started
 
 ### Installation
@@ -181,7 +139,7 @@ decorated_prompt = reasoning.apply(prompt)
 print(decorated_prompt)
 ```
 
-For more detailed examples and usage instructions, please refer to the [documentation](https://synaptiai.github.io/prompt-decorators/).
+For more detailed examples and usage instructions, please refer to the [official documentation](https://synaptiai.github.io/prompt-decorators/).
 
 ## 📝 License
 

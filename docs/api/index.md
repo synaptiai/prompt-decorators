@@ -1,16 +1,40 @@
 # API Reference
 
+## Table of Contents
+
+- [Overview](#overview)
+- [API Structure](#api-structure)
+  - [Modules](#modules)
+    - [Core Modules](modules/index.md#core-modules)
+    - [Schema Modules](modules/index.md#schema-modules)
+    - [Utility Modules](modules/index.md#utility-modules)
+    - [Integration Modules](modules/index.md#integration-modules)
+    - [Other Modules](modules/index.md#other-modules)
+  - [Decorators](#decorators)
+    - [Minimal](decorators/index.md#minimal)
+    - [Reasoning Process Decorators](decorators/index.md#reasoning-process-decorators)
+    - [Output Structure Decorators](decorators/index.md#output-structure-decorators)
+    - [Tone](decorators/index.md#tone)
+    - [Verification](decorators/index.md#verification)
+- [Usage Example](#usage-example)
+
 ## Overview
 
 This section contains the API reference for the Prompt Decorators package. It provides detailed documentation for all modules, classes, functions, and properties in the package.
 
+## API Structure
+
 The API is organized into the following sections:
+
+### Modules {#modules}
 
 - **[Modules](modules/index.md)**: Documentation for all Python modules in the package
   - [Core Modules](modules/index.md#core-modules): Core functionality of prompt decorators
   - [Schema Modules](modules/index.md#schema-modules): Data models and schemas
   - [Utility Modules](modules/index.md#utility-modules): Helper functions and utilities
   - [Integration Modules](modules/index.md#integration-modules): Integrations with other systems
+
+### Decorators {#decorators}
 
 - **[Decorators](decorators/index.md)**: Documentation for all available prompt decorators
   - [Minimal Decorators](decorators/index.md#minimal): Essential decorators for basic functionality

@@ -2,6 +2,14 @@
 
 This section contains the API reference for the Prompt Decorators package. It provides detailed documentation for all modules, classes, functions, and properties in the package.
 
+## Table of Contents
+
+- [Core Modules](#core-modules)
+- [Schema Modules](#schema-modules)
+- [Utility Modules](#utility-modules)
+- [Integration Modules](#integration-modules)
+- [Other Modules](#other-modules)
+
 ## Core Modules {#core-modules}
 
 - [prompt_decorators.core](prompt_decorators.core.md): Core components of the prompt decorators system.

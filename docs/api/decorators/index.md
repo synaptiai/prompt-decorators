@@ -2,6 +2,23 @@
 
 This section provides API reference for all available decorators in the Prompt Decorators package.
 
+## Table of Contents
+
+- [Minimal](#minimal)
+- [Reasoning Process Decorators](#reasoning-process-decorators)
+- [Output Structure Decorators](#output-structure-decorators)
+- [Architecture And Design](#architecture-and-design)
+- [Code Generation](#code-generation)
+- [Developer Education](#developer-education)
+- [Developer Workflow](#developer-workflow)
+- [Devops And Infrastructure](#devops-and-infrastructure)
+- [Implementation-Focused](#implementation-focused)
+- [Meta](#meta)
+- [Systematic Debugging](#systematic-debugging)
+- [Testing And Debugging](#testing-and-debugging)
+- [Tone](#tone)
+- [Verification](#verification)
+
 ## Decorators by Category
 
 ### Minimal {#minimal}

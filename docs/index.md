@@ -2,6 +2,24 @@
 
 Welcome to the Prompt Decorators documentation! This framework provides a structured way to enhance prompts for Large Language Models (LLMs) through the application of modular, reusable "decorators."
 
+## Table of Contents
+
+- [What is Prompt Decorators?](#what-is-prompt-decorators)
+- [Quick Start](#quick-start)
+  - [Installation](#installation)
+  - [Basic Usage](#basic-usage)
+- [Documentation](#documentation)
+  - [Guides](#guides)
+  - [Project Information](#project-information)
+- [Why Use Prompt Decorators?](#why-use-prompt-decorators)
+  - [Modularity](#modularity)
+  - [Reusability](#reusability)
+  - [Standardization](#standardization)
+  - [Experimentation](#experimentation)
+  - [Compatibility](#compatibility)
+- [Getting Help](#getting-help)
+- [License](#license)
+
 ## What is Prompt Decorators?
 
 Prompt Decorators is a Python framework that allows you to apply various "decorators" to your prompts, each adding specific functionality or behavior. This approach makes prompt engineering more modular, reusable, and maintainable.
