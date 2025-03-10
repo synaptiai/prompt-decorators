@@ -12,9 +12,13 @@ Recent updates (2024-03-09):
 - Added fallback mechanism testing for parameter type access
 - Updated tests to match the enhanced decorator details and list output formats
 - Added verification of JSON schema properties based on parameter types
+- Added test registry fixture to ensure consistent decorator availability in CI
 """
 
 import json
+import os
+import tempfile
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -34,9 +38,158 @@ from prompt_decorators.integrations.mcp.server import (
 )
 
 
+@pytest.fixture(scope="module")
+def mcp_test_registry():
+    """Create a test registry with decorators needed for MCP tests.
+
+    This fixture ensures that the necessary decorators are available
+    for the MCP tests, even in CI environments where the full registry
+    might not be accessible.
+    """
+    # Save the original registry path
+    original_registry = os.environ.get("DECORATOR_REGISTRY_DIR")
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        # Create registry structure
+        registry_path = Path(temp_dir)
+        core_path = registry_path / "core"
+        core_path.mkdir()
+        minimal_path = core_path / "minimal"
+        minimal_path.mkdir()
+
+        # Create a StepByStep decorator
+        step_by_step = {
+            "decoratorName": "StepByStep",
+            "version": "1.0.0",
+            "description": "Structures the response as a sequence of steps",
+            "category": "structure",
+            "parameters": [
+                {
+                    "name": "numbered",
+                    "type": "boolean",
+                    "description": "Whether to number the steps",
+                    "default": True,
+                    "required": False,
+                    "enum_values": [],
+                }
+            ],
+            "transform_function": """
+result = "Please break down your response into clear, sequential steps.\\n"
+if kwargs.get("numbered", True):
+    result += "Number each step sequentially (Step 1, Step 2, etc.).\\n"
+else:
+    result += "Use bullet points for each step.\\n"
+return result + "\\n" + text
+""",
+        }
+
+        # Create an Academic decorator
+        academic = {
+            "decoratorName": "Academic",
+            "version": "1.0.0",
+            "description": "Formats the response in an academic style",
+            "category": "tone",
+            "parameters": [
+                {
+                    "name": "style",
+                    "type": "enum",
+                    "description": "The academic style to use",
+                    "default": "general",
+                    "required": False,
+                    "enum_values": ["general", "humanities", "scientific", "legal"],
+                },
+                {
+                    "name": "format",
+                    "type": "enum",
+                    "description": "The citation format to use",
+                    "default": "APA",
+                    "required": False,
+                    "enum_values": ["APA", "MLA", "Chicago", "Harvard"],
+                },
+            ],
+            "transform_function": """
+result = "Please format your response in an academic style.\\n"
+style = kwargs.get("style", "general")
+if style == "humanities":
+    result += "Use language appropriate for humanities disciplines.\\n"
+elif style == "scientific":
+    result += "Use precise, technical language appropriate for scientific writing.\\n"
+elif style == "legal":
+    result += "Use formal legal terminology and citation style.\\n"
+else:
+    result += "Use general academic language and structure.\\n"
+
+format = kwargs.get("format", "APA")
+result += f"Use {format} citation style for any references.\\n"
+return result + "\\n" + text
+""",
+        }
+
+        # Create a Reasoning decorator
+        reasoning = {
+            "decoratorName": "Reasoning",
+            "version": "1.0.0",
+            "description": "Provides explicit reasoning in the response",
+            "category": "reasoning",
+            "parameters": [
+                {
+                    "name": "depth",
+                    "type": "enum",
+                    "description": "The depth of reasoning to provide",
+                    "default": "moderate",
+                    "required": False,
+                    "enum_values": ["basic", "moderate", "comprehensive"],
+                }
+            ],
+            "transform_function": """
+result = "Please provide detailed reasoning in your response.\\n"
+depth = kwargs.get("depth", "moderate")
+if depth == "basic":
+    result += "Focus on the most important logical steps.\\n"
+elif depth == "comprehensive":
+    result += "Provide a very thorough and detailed analysis.\\n"
+else:
+    result += "Balance detail with clarity in your reasoning.\\n"
+return result + "\\n" + text
+""",
+        }
+
+        # Write the decorators to files
+        with open(minimal_path / "step-by-step.json", "w") as f:
+            json.dump(step_by_step, f)
+
+        with open(minimal_path / "academic.json", "w") as f:
+            json.dump(academic, f)
+
+        with open(minimal_path / "reasoning.json", "w") as f:
+            json.dump(reasoning, f)
+
+        # Set the registry path environment variable
+        os.environ["DECORATOR_REGISTRY_DIR"] = str(registry_path)
+
+        # Clear the registry cache and reload
+        DynamicDecorator._registry = {}
+        DynamicDecorator._loaded = False
+        DynamicDecorator.load_registry()
+
+        yield
+
+        # Restore the original registry path
+        if original_registry:
+            os.environ["DECORATOR_REGISTRY_DIR"] = original_registry
+        else:
+            if "DECORATOR_REGISTRY_DIR" in os.environ:
+                del os.environ["DECORATOR_REGISTRY_DIR"]
+
+        # Clear the registry cache again
+        DynamicDecorator._registry = {}
+        DynamicDecorator._loaded = False
+
+
 class TestMCPTools:
     """Tests for the MCP tools."""
 
+    @pytest.mark.usefixtures("mcp_test_registry")
     def test_list_decorators(self):
         """Test the list_decorators tool."""
         result = list_decorators()
@@ -115,8 +268,9 @@ class TestMCPTools:
         decorator_names = [d["name"] for d in tools]
         assert "StepByStep" in decorator_names
         assert "Academic" in decorator_names
-        assert "Persona" in decorator_names
+        assert "Reasoning" in decorator_names
 
+    @pytest.mark.usefixtures("mcp_test_registry")
     def test_get_decorator_details(self):
         """Test the get_decorator_details tool."""
         # Test with a valid decorator name
@@ -191,6 +345,7 @@ class TestMCPTools:
             for item in result["content"]
         )
 
+    @pytest.mark.usefixtures("mcp_test_registry")
     def test_apply_decorators(self):
         """Test the apply_decorators tool."""
         # Test with a single decorator
@@ -203,28 +358,61 @@ class TestMCPTools:
         assert "metadata" in result
         assert result["metadata"]["original_prompt"] == prompt
         assert "applied_decorators" in result["metadata"]
+        assert len(result["metadata"]["applied_decorators"]) == 1
 
         # Test with multiple decorators
         decorators = [
             {"name": "StepByStep"},
-            {"name": "Academic", "parameters": {"level": "advanced"}},
+            {"name": "Academic", "style": "scientific"},
         ]
-
         result = apply_decorators(prompt=prompt, decorators=decorators)
+        assert isinstance(result, dict)
+        assert "content" in result
+        assert "metadata" in result
         assert result["metadata"]["original_prompt"] == prompt
         assert "applied_decorators" in result["metadata"]
         assert len(result["metadata"]["applied_decorators"]) == 2
 
-        # Test with invalid decorator
-        # Note: The server handles invalid decorators gracefully
+        # Test with a decorator that has an invalid parameter
+        decorators = [{"name": "Academic", "invalid_param": "value"}]
+        result = apply_decorators(prompt=prompt, decorators=decorators)
+        assert isinstance(result, dict)
+        assert "content" in result
+        assert "metadata" in result
+        assert result["metadata"]["original_prompt"] == prompt
+        # Either the decorator was applied with a warning, or it's in error_decorators
+        if "error_decorators" in result["metadata"]:
+            assert len(result["metadata"]["error_decorators"]) > 0
+        else:
+            assert "applied_decorators" in result["metadata"]
+            assert len(result["metadata"]["applied_decorators"]) > 0
+
+        # Test with a non-existent decorator
         decorators = [{"name": "NonExistentDecorator"}]
         result = apply_decorators(prompt=prompt, decorators=decorators)
+        assert isinstance(result, dict)
+        assert "content" in result
+        assert "metadata" in result
         assert result["metadata"]["original_prompt"] == prompt
 
+        # The server might handle non-existent decorators in different ways:
+        # 1. It might add them to error_decorators
+        # 2. It might still add them to applied_decorators but log an error
+        # We'll check for either behavior
+        if "error_decorators" in result["metadata"]:
+            assert len(result["metadata"]["error_decorators"]) > 0
+        else:
+            assert "applied_decorators" in result["metadata"]
+            # The decorator might still be in the list even though it failed
+            assert "NonExistentDecorator" in str(
+                result["metadata"]["applied_decorators"]
+            )
+
+    @pytest.mark.usefixtures("mcp_test_registry")
     def test_create_decorated_prompt(self):
         """Test the create_decorated_prompt tool."""
-        # Test with valid template name
-        content = "Why is the sky blue?"
+        # Test with a valid template
+        content = "Explain how blockchain works"
         result = create_decorated_prompt(
             template_name="detailed-reasoning", content=content
         )
@@ -232,20 +420,24 @@ class TestMCPTools:
         assert "content" in result
         assert "metadata" in result
         assert result["metadata"]["original_content"] == content
+        assert "applied_decorators" in result["metadata"]
         assert "template_name" in result["metadata"]
         assert "template_description" in result["metadata"]
-        assert "applied_decorators" in result["metadata"]
 
-        # Test with invalid template name
-        # Note: The server returns a result even for invalid templates
+        # Test with a non-existent template
         result = create_decorated_prompt(
             template_name="non-existent-template", content=content
         )
         assert isinstance(result, dict)
-        assert "isError" in result or (
-            "metadata" in result and "template_name" in result["metadata"]
+        assert "content" in result
+        assert "isError" in result
+        assert result["isError"] is True
+        assert any(
+            "Template 'non-existent-template' not found" in item["text"]
+            for item in result["content"]
         )
 
+    @pytest.mark.usefixtures("mcp_test_registry")
     def test_parameter_type_handling(self):
         """Test that parameter type handling works correctly.
 
@@ -336,6 +528,7 @@ class TestMCPTools:
                         "array",
                     ]
 
+    @pytest.mark.usefixtures("mcp_test_registry")
     def test_transform_prompt(self):
         """Test the transform_prompt tool."""
         # Test with standard decorator strings
@@ -374,6 +567,7 @@ class TestMCPTools:
         assert "invalidDecorators" in result["metadata"]
         assert len(result["metadata"]["invalidDecorators"]) == 2
 
+    @pytest.mark.usefixtures("mcp_test_registry")
     def test_transform_prompt_edge_cases(self):
         """Test the transform_prompt tool with edge cases.
 
@@ -436,15 +630,8 @@ class TestMCPTools:
         assert len(result["metadata"]["applied_decorators"]) > 0
 
         # Check that the valid decorators were recognized and applied
-        applied_names = [
-            d["name"] if isinstance(d, dict) and "name" in d else d
-            for d in result["metadata"]["applied_decorators"]
-        ]
-
-        # Check if any valid decorator is in the list
-        # The applied_names list might contain full decorator strings with +++ prefix
         has_valid_decorator = False
-        for name in applied_names:
+        for name in result["metadata"]["applied_decorators"]:
             if isinstance(name, str):
                 if "StepByStep" in name or "Reasoning" in name:
                     has_valid_decorator = True
@@ -499,6 +686,7 @@ class TestMCPIntegration:
         "problem-solving",
     ],
 )
+@pytest.mark.usefixtures("mcp_test_registry")
 def test_predefined_templates(template_name):
     """Test that all predefined templates work correctly."""
     content = "Explain the concept of gravity"

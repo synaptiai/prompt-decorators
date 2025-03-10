@@ -112,14 +112,27 @@ def test_decorator_with_dynamic_registration():
         },
     }
 
-    # Register the decorator
-    DynamicDecorator.register_decorator(decorator_def)
+    # Save the original registry state
+    original_registry = DynamicDecorator._registry.copy()
+    original_loaded = DynamicDecorator._loaded
 
-    # Create an instance and apply it
-    decorator = DynamicDecorator("DynamicTest", format="markdown")
-    result = decorator("Explain data structures.")
+    try:
+        # Clear the registry and set loaded to True to prevent reloading
+        DynamicDecorator._registry = {}
+        DynamicDecorator._loaded = True
 
-    # Check the result
-    assert "Format the output as follows:" in result
-    assert "Markdown format with headings and lists." in result
-    assert "Explain data structures." in result
+        # Register the decorator
+        DynamicDecorator.register_decorator(decorator_def)
+
+        # Create an instance and apply it
+        decorator = DynamicDecorator("DynamicTest", format="markdown")
+        result = decorator("Test content")
+
+        # Check that the transformation was applied
+        assert "Format the output as follows:" in result
+        assert "Markdown format with headings and lists." in result
+        assert "Test content" in result
+    finally:
+        # Restore the original registry state
+        DynamicDecorator._registry = original_registry
+        DynamicDecorator._loaded = original_loaded

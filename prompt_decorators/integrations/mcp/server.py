@@ -106,6 +106,10 @@ except ImportError:
             )
 
 
+# Create the MCP server instance regardless of MCP availability
+# When MCP is not available, this will be a dummy instance
+mcp = FastMCP("Prompt Decorators")
+
 # Only import decorator modules if MCP is available
 if MCP_AVAILABLE:
     from prompt_decorators.core.dynamic_decorator import (
@@ -119,9 +123,6 @@ if MCP_AVAILABLE:
 
     # Make sure decorators are loaded
     load_decorator_definitions()
-
-    # Create the MCP server
-    mcp = FastMCP("Prompt Decorators")
 
     @mcp.tool()
     def list_decorators() -> Dict[str, Any]:

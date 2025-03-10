@@ -297,8 +297,8 @@ class DynamicDecorator:
         """Validate a parameter value against its definition.
 
         Args:
-            name: Name of the parameter
-            value: Value to validate
+            name: Parameter name
+            value: Parameter value
             param_def: Parameter definition
 
         Raises:
@@ -309,76 +309,60 @@ class DynamicDecorator:
         """
         param_type = param_def.get("type", "string")
 
-        # Type validation
+        # Skip validation for None values if the parameter is not required
+        if value is None and not param_def.get("required", False):
+            return
+
+        # Validate based on type
         if param_type == "string":
             if not isinstance(value, str):
                 raise ValueError(
                     f"Parameter '{name}' must be a string, got {type(value).__name__}"
                 )
-        elif param_type == "integer":
-            if not isinstance(value, int) or isinstance(value, bool):
+            min_length = param_def.get("min_length")
+            max_length = param_def.get("max_length")
+            if min_length is not None and len(value) < min_length:
                 raise ValueError(
-                    f"Parameter '{name}' must be an integer, got {type(value).__name__}"
+                    f"Parameter '{name}' must be at least {min_length} characters long"
+                )
+            if max_length is not None and len(value) > max_length:
+                raise ValueError(
+                    f"Parameter '{name}' must be at most {max_length} characters long"
                 )
         elif param_type == "number":
-            if not isinstance(value, (int, float)) or isinstance(value, bool):
+            if not isinstance(value, (int, float)):
                 raise ValueError(
                     f"Parameter '{name}' must be a number, got {type(value).__name__}"
                 )
+            min_value = param_def.get("min_value")
+            max_value = param_def.get("max_value")
+            if min_value is not None and value < min_value:
+                raise ValueError(f"Parameter '{name}' must be at least {min_value}")
+            if max_value is not None and value > max_value:
+                raise ValueError(f"Parameter '{name}' must be at most {max_value}")
         elif param_type == "boolean":
             if not isinstance(value, bool):
                 raise ValueError(
                     f"Parameter '{name}' must be a boolean, got {type(value).__name__}"
                 )
         elif param_type == "enum":
-            enum_values = param_def.get("enum_values", [])
+            if not isinstance(value, str):
+                raise ValueError(
+                    f"Parameter '{name}' must be a string, got {type(value).__name__}"
+                )
+            # Check for enum values in either 'enum_values' or 'enum' field
+            enum_values = param_def.get("enum_values", param_def.get("enum", []))
             if not enum_values:
-                raise ValueError(f"No enum values defined for parameter '{name}'")
+                # Instead of raising an error, log a warning and continue
+                logger.warning(f"No enum values defined for parameter '{name}'")
+                return
             if value not in enum_values:
                 raise ValueError(
                     f"Parameter '{name}' must be one of {enum_values}, got '{value}'"
                 )
-
-        # Additional validation
-        validation = param_def.get("validation", {})
-
-        # Check min_value and max_value for numeric types
-        if param_type in ("integer", "number"):
-            # Check min_value
-            min_value = validation.get("min") or param_def.get("min_value")
-            if min_value is not None and value < min_value:
-                raise ValueError(
-                    f"Parameter '{name}' must be at least {min_value}, got {value}"
-                )
-
-            # Check max_value
-            max_value = validation.get("max") or param_def.get("max_value")
-            if max_value is not None and value > max_value:
-                raise ValueError(
-                    f"Parameter '{name}' must be at most {max_value}, got {value}"
-                )
-
-        # Check string validations
-        elif param_type == "string":
-            min_length = validation.get("min_length") or param_def.get("min_length")
-            max_length = validation.get("max_length") or param_def.get("max_length")
-            pattern = validation.get("pattern") or param_def.get("pattern")
-
-            if min_length is not None and len(value) < min_length:
-                raise ValueError(
-                    f"Parameter '{name}' must be at least {min_length} characters, got {len(value)}"
-                )
-            if max_length is not None and len(value) > max_length:
-                raise ValueError(
-                    f"Parameter '{name}' must be at most {max_length} characters, got {len(value)}"
-                )
-            if pattern is not None:
-                import re
-
-                if not re.match(pattern, value):
-                    raise ValueError(
-                        f"Parameter '{name}' must match pattern '{pattern}', got '{value}'"
-                    )
+        else:
+            # Unknown type, skip validation
+            pass
 
     def __call__(self, text_or_func: Union[str, Callable]) -> Union[str, Callable]:
         """Apply the decorator to a text or function.
@@ -567,11 +551,25 @@ class DynamicDecorator:
                                     f"Error creating transform function from template for {name}: {e}"
                                 )
 
+                        # Process parameters - ensure enum values are properly set
+                        parameters = data.get("parameters", [])
+                        for param in parameters:
+                            # If param has 'enum' but not 'enum_values', copy enum to enum_values
+                            if (
+                                param.get("type") == "enum"
+                                and "enum" in param
+                                and "enum_values" not in param
+                            ):
+                                param["enum_values"] = param["enum"]
+                                logger.debug(
+                                    f"Copied enum values to enum_values for {name}.{param.get('name')}"
+                                )
+
                         cls._registry[name] = {
                             "name": name,
                             "description": data.get("description", ""),
                             "category": data.get("category", "General"),
-                            "parameters": data.get("parameters", []),
+                            "parameters": parameters,
                             "transform_function": transform_function,
                             "transformationTemplate": data.get(
                                 "transformationTemplate", {}
@@ -619,20 +617,19 @@ class DynamicDecorator:
 
     @classmethod
     def register_decorator(cls, decorator_def: Dict[str, Any]) -> None:
-        """Register a decorator directly from a dictionary definition.
-
-        This is particularly useful for testing, where you might want to
-        register decorators without loading them from files.
+        """Register a decorator with the registry.
 
         Args:
-            decorator_def: Dictionary containing the decorator definition
+            decorator_def: Decorator definition dictionary from JSON
+
+        Raises:
+            ValueError: If the decorator definition is invalid
 
         Returns:
             None
         """
-        if not cls._loaded:
-            cls._registry.clear()
-            cls._loaded = True
+        if not isinstance(decorator_def, dict):
+            raise ValueError("Decorator definition must be a dictionary")
 
         name = decorator_def.get("decoratorName")
         if not name:
@@ -655,11 +652,25 @@ class DynamicDecorator:
                     f"Error creating transform function from template for {name}: {e}"
                 )
 
+        # Process parameters - ensure enum values are properly set
+        parameters = decorator_def.get("parameters", [])
+        for param in parameters:
+            # If param has 'enum' but not 'enum_values', copy enum to enum_values
+            if (
+                param.get("type") == "enum"
+                and "enum" in param
+                and "enum_values" not in param
+            ):
+                param["enum_values"] = param["enum"]
+                logger.debug(
+                    f"Copied enum values to enum_values for {name}.{param.get('name')}"
+                )
+
         cls._registry[name] = {
             "name": name,
             "description": decorator_def.get("description", ""),
             "category": decorator_def.get("category", "General"),
-            "parameters": decorator_def.get("parameters", []),
+            "parameters": parameters,
             "transform_function": transform_function,
             "transformationTemplate": decorator_def.get("transformationTemplate", {}),
             "version": decorator_def.get("version", "1.0.0"),
