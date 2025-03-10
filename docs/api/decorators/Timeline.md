@@ -55,7 +55,7 @@ Provides a flowing narrative account of the Apollo 11 mission with month/day dat
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a chronological timeline that shows the sequence of events or developments. Include clear time markers ({granularity} level) and organize the information in {format} format. For each entry, provide {details} level of detail.
 
@@ -124,7 +124,7 @@ What were the major events of the Apollo 11 mission?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

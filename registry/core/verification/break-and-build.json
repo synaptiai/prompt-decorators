@@ -92,7 +92,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Analyze this idea in two clear sections: \n1. BREAK: {intensity} critique focusing on {breakdown}. Be specific about what doesn't work and why.\n2. BUILD: Create an improved version that addresses all the problems you identified. Make this section approximately {buildRatio}x longer than the BREAK section.\n\nClearly separate these sections with headings.",
         "notes": "This model may need explicit reminders to ensure that the build phase directly addresses the specific issues identified in the breakdown phase"
       }
@@ -116,8 +116,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

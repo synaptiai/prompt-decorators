@@ -85,7 +85,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Carefully distinguish between facts with strong evidence, facts with moderate evidence, and speculative information. Label your confidence level for each claim (Established fact, Likely, Uncertain). Be precise about what is and isn't well-supported by evidence.",
         "notes": "This model benefits from more explicit instructions about the need to clearly signal confidence levels"
       }
@@ -109,8 +109,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

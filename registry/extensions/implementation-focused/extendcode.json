@@ -103,9 +103,9 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Add new functionality to the existing code without rewriting it. Follow the existing code style and patterns. For approach={approach}, impact={impact}, maintain={maintain}.",
-        "notes": "Simpler instruction format works better with GPT-3.5 Turbo's context window limitations."
+        "notes": "Simpler instruction format works better with gpt-4 Turbo's context window limitations."
       }
     }
   },
@@ -135,9 +135,9 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
       "claude-instant"
     ]
   }

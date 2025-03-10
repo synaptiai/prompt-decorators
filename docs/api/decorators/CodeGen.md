@@ -71,11 +71,11 @@ Produces Java code with only essential comments for complex logic.
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Write code to solve this problem. Use {language} and follow {style} programming style with {comments} comments and {error_handling} error handling.
 
-**Notes:** Simplified instruction format works better with GPT-3.5 Turbo's context window limitations.
+**Notes:** Simplified instruction format works better with gpt-4 Turbo's context window limitations.
 
 
 ## Implementation Guidance
@@ -130,7 +130,7 @@ Create a utility function that calculates the total price of items in a shopping
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

@@ -55,7 +55,7 @@ A detailed 2-4 week sprint plan focusing specifically on technical debt remediat
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a development roadmap with clear timelines and priorities as specified below:
 
@@ -115,7 +115,7 @@ Create a product roadmap for our e-commerce platform focusing on enhancing the c
 
 - **Requires**: None
 - **Conflicts**: QuickSolution, Brainstorm
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, gemini-pro
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, gemini-pro
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

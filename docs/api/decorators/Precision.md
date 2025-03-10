@@ -40,7 +40,7 @@ Delivers a scientifically precise explanation of photosynthesis with exact units
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Provide information with {level} precision. Use exact numbers, specific terminology, and avoid vague language. {units} {definitions} For every claim, aim for the highest possible accuracy and specificity. If you're uncertain about a precise value, acknowledge the uncertainty rather than giving approximate information.
 
@@ -104,7 +104,7 @@ Describe the process of photosynthesis.
 
 - **Requires**: None
 - **Conflicts**: ELI5
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

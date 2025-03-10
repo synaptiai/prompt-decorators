@@ -63,11 +63,11 @@ A non-technical overview explaining why the payment processing code is designed 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Explain this code in detail. Make sure to cover how it works, focusing on {focus}. Provide a {detail} explanation suitable for a {audience} developer.
 
-**Notes:** Simplified instruction format works better with GPT-3.5-turbo.
+**Notes:** Simplified instruction format works better with gpt-4-turbo.
 
 
 ## Implementation Guidance
@@ -119,7 +119,7 @@ Walk through this authentication middleware explaining how it works.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

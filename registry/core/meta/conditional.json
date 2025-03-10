@@ -69,7 +69,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "This response requires conditional formatting. First, analyze the topic to determine if it qualifies as '{if_param}'. Based on your determination, format your response using either the '{then}' approach (if true) or the '{else_param}' approach (if false).",
         "notes": "This model may need more explicit instructions about the conditional evaluation process"
       }
@@ -93,7 +93,7 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4"
+      "gpt-4o"
     ]
   }
 }

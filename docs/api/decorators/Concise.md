@@ -40,7 +40,7 @@ Delivers a set of extremely concise bullet points covering only the most critica
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Be extremely brief and direct. Focus only on essential information and eliminate all unnecessary words. Get straight to the point.
 
@@ -103,7 +103,7 @@ What are the key factors in successful project management?
 
 - **Requires**: None
 - **Conflicts**: Detailed
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

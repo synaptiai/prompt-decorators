@@ -72,7 +72,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Use formal business language appropriate for a professional {industry} context. Maintain {formality} level of formality. Ensure proper structure, avoid colloquialisms, and use industry-appropriate terminology where relevant.",
         "notes": "This model sometimes needs explicit reminders to maintain consistent professional tone throughout longer responses"
       }
@@ -96,8 +96,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

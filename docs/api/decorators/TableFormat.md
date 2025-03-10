@@ -46,7 +46,7 @@ Generates a CSV-formatted table containing detailed information about each plane
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a table with these columns: {columns}. Use {format} formatting and make sure all columns are properly aligned and formatted consistently.
 
@@ -110,7 +110,7 @@ List the planets in our solar system with their key characteristics.
 
 - **Requires**: None
 - **Conflicts**: OutputFormat
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

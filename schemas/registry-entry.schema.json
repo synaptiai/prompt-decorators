@@ -344,7 +344,7 @@
         "minStandardVersion": "1.0.0",
         "maxStandardVersion": "2.0.0",
         "models": [
-          "gpt-4"
+          "gpt-4o"
         ]
       }
     }

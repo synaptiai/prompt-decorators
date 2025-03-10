@@ -75,7 +75,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "Follow these custom instructions for your response: {rules}. {name} Apply these custom rules with {priority} priority relative to other formatting guidance.",
         "notes": "This model handles custom instructions well but benefits from clear guidance about how to resolve conflicts with other decorators"
       }
@@ -99,7 +99,7 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4"
+      "gpt-4o"
     ]
   }
 }

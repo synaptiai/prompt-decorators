@@ -86,7 +86,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Adjust the {aspect} of your response to level {level}/5 (where 1 is minimal and 5 is maximal). {maintain} Pay special attention to word choice, sentence structure, and tone that reflects this specific style adjustment. Keep all other aspects of your communication style consistent.",
         "notes": "This model may need more explicit examples of the target style aspect at the specified level to maintain consistency throughout the response"
       }
@@ -110,8 +110,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

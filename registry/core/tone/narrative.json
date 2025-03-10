@@ -90,7 +90,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Present this information as a {length} {structure} story. {characters} Use narrative elements like setting, plot development, and thematic threads to explain the concepts. Make the information engaging while ensuring accuracy.",
         "notes": "This model sometimes needs reminder to maintain factual accuracy while employing narrative techniques"
       }
@@ -114,8 +114,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

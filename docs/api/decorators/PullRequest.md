@@ -55,7 +55,7 @@ Generates a concise PR description focusing only on the changes made to fix the 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a pull request description with the following sections and level of detail:
 
@@ -112,7 +112,7 @@ Create a pull request description for a feature that adds social login options t
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

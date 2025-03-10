@@ -54,7 +54,7 @@ The response will provide a comprehensive refactoring guide for identifying and 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Identify and explain common antipatterns and mistakes to avoid. For each antipattern, explain: 1) What it is, 2) Why it's problematic, 3) How to identify it, and 4) How to fix or avoid it.
 
@@ -108,7 +108,7 @@ Identify common antipatterns in MongoDB schema design. Focus on critical issues 
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, claude-instant
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, claude-instant
 - **Standard Version**: 1.0.0 - 1.0.0
 
 ## Related Decorators

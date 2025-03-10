@@ -99,7 +99,7 @@ List the benefits of regular exercise.
 
 - **Requires**: None
 - **Conflicts**: OutputFormat
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

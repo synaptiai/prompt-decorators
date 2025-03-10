@@ -40,7 +40,7 @@ Aggressively challenges the authentication system design, specifically targeting
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Act as a {strength} critic examining this content. Look for all possible problems, weaknesses, and vulnerabilities. {focus} Challenge underlying assumptions. Think about what could go wrong, what's missing, and why this might fail. {constructive} Be thorough and consider multiple angles of attack.
 
@@ -103,7 +103,7 @@ Review our new authentication system design.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

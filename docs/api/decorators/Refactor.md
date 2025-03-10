@@ -63,11 +63,11 @@ The model will perform extensive refactoring to address security vulnerabilities
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Refactor this code to improve its {goal} while making {level} changes and preserving {preserve}. Don't rewrite it completely - focus on structural improvements.
 
-**Notes:** More explicit instructions help GPT-3.5 maintain the refactoring constraints.
+**Notes:** More explicit instructions help gpt-4 maintain the refactoring constraints.
 
 
 ## Implementation Guidance
@@ -127,7 +127,7 @@ def get_user_data(id):
 
 - **Requires**: None
 - **Conflicts**: Rewrite, GenerateFromScratch
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Minimum Standard Version**: 1.0.0
 
 ## Related Decorators

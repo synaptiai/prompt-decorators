@@ -92,7 +92,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Create a MECE (Mutually Exclusive, Collectively Exhaustive) analysis with {dimensions} main categories that don't overlap and together cover everything about this topic. Use the {framework} approach. For each main category, break it down into {depth} levels of sub-categories. Make sure there are no gaps in your analysis and no overlaps between categories.",
         "notes": "This model sometimes struggles with maintaining true MECE principles and may need explicit reminders to check for category overlaps or gaps"
       }
@@ -116,8 +116,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

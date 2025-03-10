@@ -88,7 +88,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Provide information with {level} precision. Use exact numbers, specific terminology, and avoid vague language. {units} {definitions} For every claim, aim for the highest possible accuracy and specificity. If you're uncertain about a precise value, acknowledge the uncertainty rather than giving approximate information.",
         "notes": "This model may need explicit reminders to maintain precision throughout, especially for longer responses or complex topics"
       }
@@ -112,8 +112,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

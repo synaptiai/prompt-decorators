@@ -8,7 +8,7 @@ The Prompt Decorators framework is designed to work with any LLM provider, as it
 
 ### OpenAI
 
-OpenAI models (GPT-3.5, GPT-4, etc.) work well with Prompt Decorators.
+OpenAI models work well with Prompt Decorators.
 
 ```python
 import openai
@@ -24,7 +24,7 @@ transformed_prompt = apply_dynamic_decorators(prompt)
 
 # Send to OpenAI
 response = openai.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": transformed_prompt}
@@ -33,7 +33,7 @@ response = openai.chat.completions.create(
 ```
 
 #### Considerations
-- GPT-4 and newer models have the best understanding of complex instructions
+- gpt-4o and newer models have the best understanding of complex instructions
 - Token limits may restrict the use of many decorators simultaneously
 - Add an explicit `system` message to set baseline behavior
 
@@ -58,7 +58,7 @@ transformed_prompt = apply_dynamic_decorators(prompt)
 
 # Send to Anthropic Claude
 message = client.messages.create(
-    model="claude-3-opus-20240229",
+    model="claude-3-7-sonnet-latest",
     max_tokens=1000,
     messages=[
         {"role": "user", "content": transformed_prompt}
@@ -221,7 +221,7 @@ from prompt_decorators import DecoratorDefinition, register_decorator
 # Define model-specific versions of decorators
 gpt4_reasoning_decorator = DecoratorDefinition(
     name="GPT4_Reasoning",
-    description="Reasoning decorator optimized for GPT-4",
+    description="Reasoning decorator optimized for gpt-4o",
     category="ModelSpecific",
     parameters=[
         {
@@ -252,8 +252,8 @@ register_decorator(gpt4_reasoning_decorator)
 
 # Use based on the target model
 def optimize_for_model(prompt, model_name):
-    if model_name.startswith("gpt-4"):
-        # Use GPT-4 optimized decorators
+    if model_name.startswith("gpt-4o"):
+        # Use gpt-4o optimized decorators
         reasoning = create_decorator_instance("GPT4_Reasoning", depth="comprehensive")
         return reasoning(prompt)
     elif model_name.startswith("claude"):

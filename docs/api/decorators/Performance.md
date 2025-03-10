@@ -67,7 +67,7 @@ Specific algorithm optimization recommendations that can be implemented quickly 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Analyze and improve system performance by identifying and resolving bottlenecks.
 
@@ -127,7 +127,7 @@ Optimize the performance of our product search functionality which is currently 
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

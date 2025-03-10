@@ -41,7 +41,7 @@ Presents 5 specific observations about screen time and child development, infers
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Use inductive reasoning to address this question. Start with {examples} specific real-world examples. Analyze these examples to identify patterns. Then use {structure} reasoning to derive general principles or conclusions. {confidence} Make each step in your reasoning explicit and clearly show how you move from specific cases to general insights.
 
@@ -105,7 +105,7 @@ How does screen time affect child development?
 
 - **Requires**: None
 - **Conflicts**: Deductive
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

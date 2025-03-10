@@ -162,7 +162,7 @@ import openai
 openai.api_key = "your-api-key-here"
 
 response = openai.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "system", "content": "You are an expert code reviewer with years of experience."},
         {"role": "user", "content": transformed_prompt}
@@ -297,7 +297,7 @@ transformed_prompt = apply_dynamic_decorators(inline_prompt)
 openai.api_key = "your-api-key-here"
 
 response = openai.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "system", "content": "You are an expert code reviewer with years of experience."},
         {"role": "user", "content": transformed_prompt}

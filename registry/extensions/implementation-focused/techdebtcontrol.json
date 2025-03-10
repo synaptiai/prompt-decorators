@@ -103,9 +103,9 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "For this implementation, follow these technical debt guidelines: {accept} {document} {tradeoff}",
-        "notes": "Simplified format works better with GPT-3.5's context handling."
+        "notes": "Simplified format works better with gpt-4's context handling."
       }
     }
   },
@@ -129,10 +129,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

@@ -34,7 +34,7 @@ Uses the Debate decorator structure for discussing gene editing ethics, but modi
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Apply the {decorator} decorator with these custom settings: {parameters}. {behavior} Follow the standard behavior of the decorator in all other aspects not explicitly modified.
 
@@ -94,7 +94,7 @@ Discuss the ethics of gene editing.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4
+- **Compatible Models**: gpt-4o
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

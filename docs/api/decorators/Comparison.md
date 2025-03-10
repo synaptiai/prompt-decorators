@@ -40,7 +40,7 @@ Delivers a flowing prose comparison between democracy and authoritarianism, cove
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a direct comparison between the items/concepts mentioned in the question. Use {format} format and compare them along {aspects} dimensions. {highlight}
 
@@ -103,7 +103,7 @@ Compare democracy and authoritarianism as political systems.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

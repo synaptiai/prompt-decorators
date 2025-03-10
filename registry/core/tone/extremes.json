@@ -85,7 +85,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Present {versions} versions of this topic along the spectrum of {dimension}. If showing a minimal version, focus on what's practical, immediately achievable, and conservative. If showing a radical version, explore ambitious, transformative possibilities that push boundaries. {compare} Make the contrast between approaches very clear, and ensure each version is fully developed.",
         "notes": "This model sometimes needs reminders to ensure the radical version is truly ambitious and not just a moderate enhancement of conventional approaches"
       }
@@ -109,8 +109,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

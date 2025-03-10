@@ -65,13 +65,13 @@ A database service that uses exceptions for error handling and implements a circ
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Implement error handling using the following approach:
 
 **Notes:** May need more explicit guidance on specific error handling patterns.
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Implement error handling with the following strategy:
 
@@ -151,7 +151,7 @@ Create a data fetching component.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

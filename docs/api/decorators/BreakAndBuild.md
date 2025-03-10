@@ -47,7 +47,7 @@ Delivers an intense critique focused specifically on the assumptions underlying 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Analyze this idea in two clear sections:
 1. BREAK: {intensity} critique focusing on {breakdown}. Be specific about what doesn't work and why.
@@ -116,7 +116,7 @@ Analyze this public policy proposal for reducing urban congestion.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

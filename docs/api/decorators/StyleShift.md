@@ -42,7 +42,7 @@ Delivers a description of product launch preparation steps with heightened sense
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Adjust the {aspect} of your response to level {level}/5 (where 1 is minimal and 5 is maximal). {maintain} Pay special attention to word choice, sentence structure, and tone that reflects this specific style adjustment. Keep all other aspects of your communication style consistent.
 
@@ -106,7 +106,7 @@ Describe the steps needed to prepare for the upcoming product launch.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

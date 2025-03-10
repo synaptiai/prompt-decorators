@@ -99,7 +99,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "You are a debugging expert. Analyze this error or issue carefully and provide a diagnosis. Look for the root cause and suggest fixes.",
         "notes": "Less capable models may need more explicit instructions to perform thorough debugging analysis."
       }
@@ -125,10 +125,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

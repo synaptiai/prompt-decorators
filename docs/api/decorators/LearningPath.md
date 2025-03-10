@@ -48,7 +48,7 @@ A comprehensive year-long advanced learning path for machine learning that cover
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a detailed, step-by-step learning path for {for}. The path should be for {experience} level learners and designed to be completed in a {timeframe}. Include specific resources, practice projects, and clear milestones.
 
@@ -111,7 +111,7 @@ Create a learning roadmap for a junior developer to become proficient in React a
 
 - **Requires**: None
 - **Conflicts**: Curriculum
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

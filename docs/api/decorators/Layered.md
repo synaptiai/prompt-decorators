@@ -46,7 +46,7 @@ Delivers a nested explanation of quantum computing with four progressive layers 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Provide {count} different levels of explanation about this topic. Use the {levels} approach, with each layer getting progressively more detailed. Structure these {progression}. Make sure to clearly label each layer so readers can choose their preferred depth.
 
@@ -110,7 +110,7 @@ Describe the principles of quantum computing.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

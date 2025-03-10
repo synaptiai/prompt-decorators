@@ -34,13 +34,13 @@ Starts with five different approaches to climate change, explores each in depth,
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Consider {branches} distinct approaches to this problem. For each approach, think step-by-step to a depth of {depth} levels. Label each branch clearly (e.g., 'Approach 1', 'Approach 2') and use subheadings to indicate depth levels. {pruning}
 
 **Notes:** This model handles complex branching reasoning well, but benefits from clear formatting instructions
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Explore {branches} different ways to approach this problem. Be very explicit about which approach you're discussing, and break down each approach into {depth} levels of detailed analysis. Start each approach with a clear label and keep them separated.
 
@@ -101,7 +101,7 @@ How might we solve the climate change crisis?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

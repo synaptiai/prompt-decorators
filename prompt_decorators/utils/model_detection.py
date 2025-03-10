@@ -201,32 +201,32 @@ class ModelDetector:
         """
         # OpenAI models
         openai_models = {
-            "gpt-3.5-turbo": {
+            "gpt-4-turbo": {
                 "max_tokens": 4096,
                 "supports_functions": True,
                 "supports_vision": False,
             },
-            "gpt-3.5-turbo-16k": {
+            "gpt-4-turbo-16k": {
                 "max_tokens": 16384,
                 "supports_functions": True,
                 "supports_vision": False,
             },
-            "gpt-4": {
+            "gpt-4o": {
                 "max_tokens": 8192,
                 "supports_functions": True,
                 "supports_vision": False,
             },
-            "gpt-4-32k": {
+            "gpt-4o-mini": {
                 "max_tokens": 32768,
                 "supports_functions": True,
                 "supports_vision": False,
             },
-            "gpt-4-vision-preview": {
+            "gpt-4o-vision-preview": {
                 "max_tokens": 8192,
                 "supports_functions": True,
                 "supports_vision": True,
             },
-            "gpt-4-turbo-preview": {
+            "gpt-4o-vision": {
                 "max_tokens": 128000,
                 "supports_functions": True,
                 "supports_vision": True,
@@ -254,12 +254,12 @@ class ModelDetector:
                 "supports_functions": False,
                 "supports_vision": False,
             },
-            "claude-2": {
+            "claude-3-5-sonnet-latest": {
                 "max_tokens": 100000,
                 "supports_functions": False,
                 "supports_vision": False,
             },
-            "claude-2.1": {
+            "claude-3-7-sonnet-latest": {
                 "max_tokens": 200000,
                 "supports_functions": False,
                 "supports_vision": True,

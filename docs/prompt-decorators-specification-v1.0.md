@@ -553,14 +553,14 @@ Before applying decorators, applications should detect model capabilities:
 def detect_model_capabilities(model_id):
     # Model capability database (would be more extensive in practice)
     model_capabilities = {
-        "gpt-4": {
+        "gpt-4o": {
             "reasoning": True,
             "step_by_step": True,
             "fact_check": True,
             "debate": True,
             "output_formats": ["json", "markdown", "yaml", "xml"]
         },
-        "gpt-3.5-turbo": {
+        "gpt-4-turbo": {
             "reasoning": True,
             "step_by_step": True,
             "fact_check": False,
@@ -627,7 +627,7 @@ For API-centric applications or when working with structured data, implementatio
     }
   ],
   "metadata": {
-    "model": "gpt-4",
+    "model": "gpt-4o",
     "version": "1.0.0",
     "temperature": 0.7
   }
@@ -668,7 +668,7 @@ decorators:
     parameters:
       numbered: true
 metadata:
-  model: gpt-4
+  model: gpt-4o
   version: 1.0.0
   temperature: 0.7
 ```
@@ -977,8 +977,8 @@ A central registry for standard and community decorators facilitates discovery a
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

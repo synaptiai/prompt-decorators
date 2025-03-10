@@ -40,7 +40,7 @@ Presents five highly diverse approaches to reducing urban carbon emissions, foll
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Generate {count} significantly different approaches to address this question. Each approach should be distinct and labeled clearly. Make sure these alternatives are {diversity} in terms of their fundamental strategy. {comparison}
 
@@ -103,7 +103,7 @@ What are some ways to reduce carbon emissions in urban areas?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

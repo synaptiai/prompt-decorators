@@ -115,11 +115,11 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Write code for an algorithm with these specifications:",
         "notes": "This model may need more explicit instructions about algorithm implementation details."
       },
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "Implement an algorithm with the following characteristics:",
         "notes": "This model can handle more abstract algorithm descriptions and infer appropriate implementations."
       }
@@ -143,10 +143,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

@@ -53,7 +53,7 @@ Begins with a thorough discussion of the limitations in our understanding of con
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Your response must include a clear section on the limitations of the information you're providing. Be honest about what isn't fully understood, potential issues with methodologies, and other important caveats. {position} Make the limitations {detail} and focus on {focus}.
 
@@ -120,7 +120,7 @@ Describe the current understanding of consciousness.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -101,7 +101,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Create clear, step-by-step instructions to reproduce the reported issue. Be specific about environment setup, actions to take, and expected results.",
         "notes": "Simpler instruction for models with less context capacity."
       }
@@ -128,10 +128,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

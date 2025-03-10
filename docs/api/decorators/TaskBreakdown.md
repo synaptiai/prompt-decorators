@@ -54,7 +54,7 @@ The model will provide a high-level kanban board of tasks organized by dependenc
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Please break down this problem into specific tasks that need to be completed. For each task, include details based on the specified level and prioritize according to the given approach.
 
@@ -110,7 +110,7 @@ Fix the data synchronization issues in our application.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.0.0
 
 ## Related Decorators

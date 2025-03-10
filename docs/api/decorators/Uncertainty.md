@@ -46,7 +46,7 @@ Provides information about fusion energy's environmental impacts followed by a d
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Be explicit about what is uncertain in your response. Use {format} to mark uncertainty. Apply a {threshold} threshold for identifying uncertain information. {reason} Make sure to differentiate between established facts and more speculative claims.
 
@@ -111,7 +111,7 @@ What are the environmental impacts of fusion energy?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

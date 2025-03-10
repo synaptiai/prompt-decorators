@@ -74,7 +74,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Respond as a {role} with these characteristics: {traits}. Your main priorities are: {goals}. Think about how someone in this position with these traits and goals would naturally approach this topic. Use appropriate vocabulary, concerns, and priorities for this persona.",
         "notes": "This model sometimes needs reminders to maintain consistent persona characteristics throughout longer responses"
       }
@@ -98,8 +98,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

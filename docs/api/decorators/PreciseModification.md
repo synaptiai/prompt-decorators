@@ -55,7 +55,7 @@ The model will provide a solution that makes minimal changes to the utility func
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Be extremely careful when modifying this code. Make precise, targeted changes based on the sensitivity level, scope requirements, and validation needs specified below:
 
@@ -110,7 +110,7 @@ When modifying code, ensure changes are carefully targeted and appropriate for t
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

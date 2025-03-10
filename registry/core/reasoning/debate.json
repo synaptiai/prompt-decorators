@@ -74,7 +74,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Present {perspectives} different viewpoints on this topic in a debate format. Structure the debate with clear labels for each perspective. Make sure each perspective presents strong arguments, and {balanced}. Ensure that no single perspective dominates the response.",
         "notes": "This model sometimes needs explicit reminders to maintain quality arguments for perspectives it might not favor"
       }
@@ -98,8 +98,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
+      "gpt-4o",
+      "gpt-4-turbo",
       "claude-3"
     ]
   }

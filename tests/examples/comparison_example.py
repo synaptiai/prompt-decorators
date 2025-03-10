@@ -61,7 +61,7 @@ def format_decorator(params=None):
     return f"+++{COMPARISON['decoratorName']}{params_str}"
 
 
-def generate_response(prompt, model="gpt-3.5-turbo", params=None):
+def generate_response(prompt, model="gpt-4-turbo", params=None):
     """Generate a response using the Comparison decorator."""
     # Format the decorator
     decorator = format_decorator(params)
@@ -98,9 +98,9 @@ def run_tests():
         print("Error: OPENAI_API_KEY environment variable not set")
         return
 
-    models = ["gpt-3.5-turbo"]
+    models = ["gpt-4-turbo"]
     if os.environ.get("USE_GPT4") == "true":
-        models.append("gpt-4")
+        models.append("gpt-4o")
 
     test_configurations = [
         {

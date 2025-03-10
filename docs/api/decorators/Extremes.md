@@ -40,7 +40,7 @@ Provides only a technologically radical vision of transportation's future, focus
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Present {versions} versions of this topic along the spectrum of {dimension}. If showing a minimal version, focus on what's practical, immediately achievable, and conservative. If showing a radical version, explore ambitious, transformative possibilities that push boundaries. {compare} Make the contrast between approaches very clear, and ensure each version is fully developed.
 
@@ -103,7 +103,7 @@ Outline the future of transportation.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -64,17 +64,17 @@ The model will apply company-specific formatting standards to the Python code wi
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability. Be specific about which standards you're applying and why.
 
-**Notes:** GPT-4 can handle more detailed explanations of standards application.
+**Notes:** gpt-4o can handle more detailed explanations of standards application.
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability.
 
-**Notes:** Keep instructions more concise for GPT-3.5.
+**Notes:** Keep instructions more concise for gpt-4.
 
 
 ## Implementation Guidance
@@ -127,7 +127,7 @@ Refactor this React component to be more efficient.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

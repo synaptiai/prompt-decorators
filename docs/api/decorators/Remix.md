@@ -41,7 +41,7 @@ Transforms the technical software architecture description into a board-appropri
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Reimagine this content specifically for {target}. Think about: 1) What this audience already knows, 2) What they care about most, 3) What vocabulary and examples will resonate with them, and 4) How to structure the information for maximum impact. Make sure to {preserve} above all else. {contrast} Use terminology, examples, and a communication style that would feel natural and engaging to this specific audience.
 
@@ -105,7 +105,7 @@ Describe the technical details of our new software architecture.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

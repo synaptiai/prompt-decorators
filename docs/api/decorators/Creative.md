@@ -40,7 +40,7 @@ Delivers an unconventional explanation of quantum computing through an engaging 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Be creative, original and imaginative in your response. Use {level} levels of creativity and incorporate {elements} in your writing. Work within these constraints: {constraints}. Focus on making the response engaging, unexpected, and thought-provoking while still addressing the core question.
 
@@ -102,7 +102,7 @@ Describe the principles of quantum computing.
 
 - **Requires**: None
 - **Conflicts**: Academic, Professional
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

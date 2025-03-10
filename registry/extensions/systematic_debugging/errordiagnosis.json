@@ -101,7 +101,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Analyze and diagnose the described error or bug. Identify likely causes and recommend solutions based on the error characteristics.",
         "notes": "Simplified instruction for models with less diagnostic capability."
       }
@@ -133,10 +133,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

@@ -85,7 +85,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Create an explanation that uses only {source}-based analogies. Identify {mappings} key concepts from the topic and map each one to something from {source}. For each mapping, explain: 1) The original concept, 2) The {source} analogy, and 3) How they are similar and different. Be {comprehensiveness} in your mapping depth. Stick to this domain exclusively - don't use analogies from any other fields.",
         "notes": "This model may need explicit reminders to stay within the specified source domain and to clearly label which concept maps to which analogy"
       }
@@ -109,8 +109,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

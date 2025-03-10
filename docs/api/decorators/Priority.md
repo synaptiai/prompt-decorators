@@ -40,11 +40,11 @@ Implements a cascading priority where Academic style dominates, with Creative el
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Follow a strict priority order when applying these decorators: {decorators}. When conflicts occur between decorators, resolve them using '{mode}' approach. Focus on implementing each decorator's functionality according to this priority hierarchy.
 
-**Notes:** Even GPT-4 sometimes needs explicit reminders about priority order when multiple decorators have complex interactions
+**Notes:** Even gpt-4o sometimes needs explicit reminders about priority order when multiple decorators have complex interactions
 
 
 ## Implementation Guidance
@@ -103,7 +103,7 @@ Explain the water cycle.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4
+- **Compatible Models**: gpt-4o
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

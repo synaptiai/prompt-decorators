@@ -88,11 +88,11 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "Create a visual representation of the relationships between concepts using ASCII or Unicode characters. Structure the diagram to clearly show connections and hierarchies between ideas.",
-        "notes": "GPT-4 can create effective ASCII/Unicode diagrams for concept visualization."
+        "notes": "gpt-4o can create effective ASCII/Unicode diagrams for concept visualization."
       },
-      "claude-2": {
+      "claude-3-7-sonnet-latest": {
         "instruction": "Create a visual representation of the relationships between concepts using ASCII art or structured text. Organize the information to clearly show connections and hierarchies between ideas.",
         "notes": "Claude models can create effective text-based visualizations."
       }
@@ -118,10 +118,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

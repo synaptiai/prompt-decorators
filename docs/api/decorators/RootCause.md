@@ -48,7 +48,7 @@ Uses Pareto principle to identify the vital few causes responsible for most manu
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Perform a systematic root cause analysis using the {method} approach. Don't stop at surface-level causes - keep investigating until you find the fundamental underlying factors. Be methodical and thorough in your analysis.
 
@@ -107,7 +107,7 @@ Why do our application servers crash under moderate load?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

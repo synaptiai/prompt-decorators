@@ -66,17 +66,17 @@ The model will generate code using Observable patterns (like RxJS) with error st
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Generate code that handles asynchronous operations using the specified pattern. For approach={approach}, use error handling with {error-handling} and implement {cancellation} cancellation support.
 
 **Notes:** This model may need more explicit instructions about the specific patterns to use.
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. Use {approach} as the primary asynchronous pattern. Implement {error-handling} for error handling. Support {cancellation} cancellation for asynchronous operations.
 
-**Notes:** GPT-4 has better understanding of advanced asynchronous patterns and can implement them more reliably.
+**Notes:** gpt-4o has better understanding of advanced asynchronous patterns and can implement them more reliably.
 
 
 ## Implementation Guidance
@@ -150,7 +150,7 @@ Create a function that fetches user data from multiple APIs in parallel and comb
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, claude-instant
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, claude-instant
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

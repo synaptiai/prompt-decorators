@@ -91,7 +91,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Provide {count} different levels of explanation about this topic. Use the {levels} approach, with each layer getting progressively more detailed. Structure these {progression}. Make sure to clearly label each layer so readers can choose their preferred depth.",
         "notes": "This model sometimes needs explicit reminders to create sufficiently distinct layers with meaningful differences in detail"
       }
@@ -115,8 +115,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

@@ -99,7 +99,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Implement this with the following complexity constraints: {code_complexity}, {concept_complexity}, {dependency_usage}.",
         "notes": "More explicit phrasing works better with this model."
       }
@@ -123,10 +123,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

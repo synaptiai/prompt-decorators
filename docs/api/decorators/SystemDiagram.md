@@ -65,11 +65,11 @@ Creates an informal context diagram showing the e-commerce platform and its conn
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Create a system diagram that visually represents the architecture or design described. Use clear notation and appropriate level of detail. The diagram should be described in text format that can be easily converted to a visual representation using tools like PlantUML, Mermaid, or similar diagramming tools.
 
-**Notes:** GPT-4 has enhanced capabilities for structured outputs that can be converted to diagrams.
+**Notes:** gpt-4o has enhanced capabilities for structured outputs that can be converted to diagrams.
 
 
 ## Implementation Guidance
@@ -123,7 +123,7 @@ Create a system diagram showing how a user authentication service interacts with
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, gemini-pro
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, gemini-pro
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

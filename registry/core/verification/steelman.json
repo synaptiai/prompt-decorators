@@ -87,7 +87,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Present the most compelling and charitable version of {sides} positions on this topic. For each position, include the strongest evidence, most persuasive reasoning, and most thoughtful responses to potential objections. Make each position as convincing as possible, even those you might disagree with. {critique} {separation} Avoid straw-manning any position.",
         "notes": "This model sometimes needs explicit reminders to avoid unconsciously weakening positions it might not favor"
       }
@@ -111,8 +111,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

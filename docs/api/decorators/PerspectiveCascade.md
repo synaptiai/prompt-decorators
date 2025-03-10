@@ -111,7 +111,7 @@ Help me develop a sustainability policy for my manufacturing company.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: claude-3-opus-20240229, claude-3-sonnet-20240229, gpt-4, gpt-4-turbo
+- **Compatible Models**: claude-3-opus-20240229, claude-3-sonnet-20240229, gpt-4o, gpt-4o-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -46,7 +46,7 @@ Presents a concise case study narrative about social media's impact on mental he
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Present this information as a {length} {structure} story. {characters} Use narrative elements like setting, plot development, and thematic threads to explain the concepts. Make the information engaging while ensuring accuracy.
 
@@ -111,7 +111,7 @@ Describe the impact of social media on mental health.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -114,13 +114,13 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Generate code that handles asynchronous operations using the specified pattern. For approach={approach}, use error handling with {error-handling} and implement {cancellation} cancellation support.",
         "notes": "This model may need more explicit instructions about the specific patterns to use."
       },
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. Use {approach} as the primary asynchronous pattern. Implement {error-handling} for error handling. Support {cancellation} cancellation for asynchronous operations.",
-        "notes": "GPT-4 has better understanding of advanced asynchronous patterns and can implement them more reliably."
+        "notes": "gpt-4o has better understanding of advanced asynchronous patterns and can implement them more reliably."
       }
     }
   },
@@ -147,9 +147,9 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
       "claude-instant"
     ]
   }

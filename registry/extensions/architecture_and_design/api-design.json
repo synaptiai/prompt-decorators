@@ -113,7 +113,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Design an API following these specific requirements: {style} architecture, focusing on {focus}, with {documentation} documentation approach. Consider endpoints, data formats, error handling, and authentication.",
         "notes": "Simplified instruction for models with more limited context windows."
       }
@@ -142,9 +142,9 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
       "claude-instant"
     ]
   }

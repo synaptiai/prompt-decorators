@@ -99,9 +99,9 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Explain this code in detail. Make sure to cover how it works, focusing on {focus}. Provide a {detail} explanation suitable for a {audience} developer.",
-        "notes": "Simplified instruction format works better with GPT-3.5-turbo."
+        "notes": "Simplified instruction format works better with gpt-4-turbo."
       }
     }
   },
@@ -128,10 +128,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "1.5.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

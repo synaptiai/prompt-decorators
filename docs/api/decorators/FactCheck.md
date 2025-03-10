@@ -46,7 +46,7 @@ Presents only well-established scientific facts about dark matter, excluding spe
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Carefully distinguish between facts with strong evidence, facts with moderate evidence, and speculative information. Label your confidence level for each claim (Established fact, Likely, Uncertain). Be precise about what is and isn't well-supported by evidence.
 
@@ -111,7 +111,7 @@ Describe what we know about dark matter.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

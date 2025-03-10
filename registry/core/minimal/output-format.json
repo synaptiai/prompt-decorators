@@ -59,7 +59,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Your response must be formatted exactly as specified. For JSON, ensure valid JSON syntax. For Markdown, use proper Markdown syntax with headings, lists, and code blocks.",
         "notes": "This model may need more explicit formatting instructions to produce properly formatted output"
       }
@@ -83,8 +83,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

@@ -40,7 +40,7 @@ Analyzes social media's impact on politics using dual contrasting perspectives f
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Follow these custom instructions for your response: {rules}. {name} Apply these custom rules with {priority} priority relative to other formatting guidance.
 
@@ -102,7 +102,7 @@ Analyze the impact of social media on politics.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4
+- **Compatible Models**: gpt-4o
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

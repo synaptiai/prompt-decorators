@@ -56,11 +56,11 @@ A social media platform architecture that focuses on user scalability, designed 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Design a scalable system architecture with the following characteristics: {dimension} scaling to {target} levels using {approach} scaling approaches.
 
-**Notes:** Simplified instruction format works better with GPT-3.5 Turbo's context handling.
+**Notes:** Simplified instruction format works better with gpt-4 Turbo's context handling.
 
 
 ## Implementation Guidance
@@ -114,7 +114,7 @@ Design a payment processing system that can handle Black Friday-level traffic sp
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

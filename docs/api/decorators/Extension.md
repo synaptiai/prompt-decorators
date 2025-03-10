@@ -36,7 +36,7 @@ Loads only the ClinicalCase and EvidenceBased decorators from version 2.1.0 of t
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** This request will load specialized decorators from {source}. If any decorators in the following prompt come from this extension, apply them according to their definitions in the extension package.
 
@@ -102,7 +102,7 @@ Describe the treatment approach for Type 2 diabetes.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4
+- **Compatible Models**: gpt-4o
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

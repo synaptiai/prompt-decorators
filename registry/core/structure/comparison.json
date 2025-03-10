@@ -79,7 +79,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Create a direct comparison between the items/concepts mentioned in the question. Use {format} format and compare them along {aspects} dimensions. {highlight}",
         "notes": "This model sometimes needs more explicit structure for complex multi-dimensional comparisons"
       }
@@ -103,8 +103,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

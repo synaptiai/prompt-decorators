@@ -34,7 +34,7 @@ Provides a detailed analysis of the monolith-to-microservices transition from th
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Respond as a {role} with these characteristics: {traits}. Your main priorities are: {goals}. Think about how someone in this position with these traits and goals would naturally approach this topic. Use appropriate vocabulary, concerns, and priorities for this persona.
 
@@ -94,7 +94,7 @@ Evaluate the proposal to switch from monolith to microservices.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -47,13 +47,13 @@ A simple mind map with programming paradigms as the central node, branching out 
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Create a visual representation of the relationships between concepts using ASCII or Unicode characters. Structure the diagram to clearly show connections and hierarchies between ideas.
 
-**Notes:** GPT-4 can create effective ASCII/Unicode diagrams for concept visualization.
+**Notes:** gpt-4o can create effective ASCII/Unicode diagrams for concept visualization.
 
-### claude-2
+### claude-3-7-sonnet-latest
 
 **Instruction:** Create a visual representation of the relationships between concepts using ASCII art or structured text. Organize the information to clearly show connections and hierarchies between ideas.
 
@@ -106,7 +106,7 @@ Explain the relationships between key React concepts including components, hooks
 
 - **Requires**: None
 - **Conflicts**: OutputFormat
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

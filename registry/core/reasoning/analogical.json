@@ -86,7 +86,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Explain this concept through {count} analogy(ies) that compare it to something from {domain}. For each analogy, establish clear mappings between elements of the original concept and the analogy. Make the analogy {depth} in detail to help readers understand the concept through familiar comparisons.",
         "notes": "This model sometimes generates analogies that are too superficial and may need explicit guidance to develop deeper mappings"
       }
@@ -110,8 +110,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

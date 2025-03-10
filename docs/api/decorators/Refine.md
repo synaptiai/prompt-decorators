@@ -34,7 +34,7 @@ Shows three visible iterations of analyzing AI economic impacts, with each step 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** For this response, you will create multiple drafts, with each draft improving on the previous one. Think carefully about how to enhance each version.
 
@@ -95,7 +95,7 @@ Analyze the economic impacts of artificial intelligence.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

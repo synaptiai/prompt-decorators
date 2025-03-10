@@ -111,7 +111,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Create a detailed deployment plan for the application with the following specifications:\n- Platform: {platform}\n- Deployment strategy: {strategy}\n- Target environment: {environment}\n\nInclude configuration details, step-by-step implementation instructions, and best practices.",
         "notes": "Simplified instruction with more explicit structure for models with less context understanding."
       }
@@ -135,10 +135,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

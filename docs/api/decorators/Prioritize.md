@@ -34,7 +34,7 @@ Provides 7 marketing strategies ranked by return on investment, with explanation
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a prioritized list of the {count} most important items related to this topic, ranked by {criteria}. Number them from 1 to {count}, with 1 being the highest priority. {showRationale} Make sure each item is distinct and clearly relevant to the question.
 
@@ -95,7 +95,7 @@ What marketing strategies should our startup focus on?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

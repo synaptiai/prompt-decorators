@@ -60,7 +60,7 @@ A comprehensive recommendation of enterprise-proven mobile technologies with str
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Recommend a technology stack for the following requirements. List specific technologies, frameworks, libraries, and tools that work well together. For each component, briefly explain why it's appropriate for the requirements.
 
@@ -122,7 +122,7 @@ Recommend a technology stack for a B2B SaaS application with emphasis on rapid d
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

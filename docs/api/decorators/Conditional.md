@@ -34,7 +34,7 @@ Determines that gene editing ethics is controversial, so it applies the Debate d
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** This response requires conditional formatting. First, analyze the topic to determine if it qualifies as '{if_param}'. Based on your determination, format your response using either the '{then}' approach (if true) or the '{else_param}' approach (if false).
 
@@ -94,7 +94,7 @@ Discuss the ethical implications of gene editing in humans.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4
+- **Compatible Models**: gpt-4o
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -105,7 +105,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Analyze this code carefully before suggesting any changes. Look for issues related to {focus} within the {scope} and provide a {output} report.",
         "notes": "Simplified instruction for models with more limited context windows."
       }
@@ -131,10 +131,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

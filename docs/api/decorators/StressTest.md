@@ -40,7 +40,7 @@ Delivers an assessment of the authentication protocol followed by five extreme s
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** First, provide a standard analysis of this topic. Then, apply {scenarios} different stress test scenarios at a {severity} level of intensity to find weaknesses and vulnerabilities. {domain} Each stress test should focus on a different aspect and clearly explain the scenario, the likely outcome, and what this reveals about potential weaknesses.
 
@@ -102,7 +102,7 @@ Assess our new authentication protocol design.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

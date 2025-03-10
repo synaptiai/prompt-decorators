@@ -39,7 +39,7 @@ Produces an executive-level analysis of telehealth impacts using healthcare indu
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Use formal business language appropriate for a professional {industry} context. Maintain {formality} level of formality. Ensure proper structure, avoid colloquialisms, and use industry-appropriate terminology where relevant.
 
@@ -98,7 +98,7 @@ Summarize the impact of telehealth adoption on patient outcomes.
 
 - **Requires**: None
 - **Conflicts**: ELI5, Creative
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

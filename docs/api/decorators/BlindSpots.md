@@ -46,7 +46,7 @@ Delivers an evaluation of social media's societal impact with comprehensive blin
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** When analyzing this topic, be vigilant about identifying {depth} blind spots such as {categories}. Consider what assumptions you're making, what perspectives might be missing, and what biases could be influencing your thinking. {position} Challenge your own conclusions and consider alternative viewpoints that might contradict your initial analysis.
 
@@ -110,7 +110,7 @@ Evaluate the impact of social media on society.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

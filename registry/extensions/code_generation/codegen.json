@@ -118,9 +118,9 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Write code to solve this problem. Use {language} and follow {style} programming style with {comments} comments and {error_handling} error handling.",
-        "notes": "Simplified instruction format works better with GPT-3.5 Turbo's context window limitations."
+        "notes": "Simplified instruction format works better with gpt-4 Turbo's context window limitations."
       }
     }
   },
@@ -147,10 +147,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "1.5.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

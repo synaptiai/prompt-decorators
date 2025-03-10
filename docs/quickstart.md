@@ -156,7 +156,7 @@ transformed_prompt = apply_dynamic_decorators(prompt)
 
 # Send to OpenAI
 response = openai.chat.completions.create(
-    model="gpt-4",
+    model="gpt-4o",
     messages=[
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": transformed_prompt}

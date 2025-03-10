@@ -47,13 +47,13 @@ Refines specifically the risk analysis section from the previous content with mo
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Continue from {reference} response, building on what was already said. {approach} the existing content while {preserveStructure}. Make sure your response feels like a natural continuation rather than starting over.
 
 **Notes:** This model sometimes needs explicit reminders to fully incorporate previous context
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Treating the {reference} as your foundation, please {approach} that content. {preserveStructure} Ensure your response maintains continuity with what came before.
 
@@ -119,7 +119,7 @@ Improve the section on risk analysis with more quantitative measures.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -33,7 +33,7 @@ Presents three balanced perspectives on UBI in a debate format, ensuring equal r
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Present {perspectives} different viewpoints on this topic in a debate format. Structure the debate with clear labels for each perspective. Make sure each perspective presents strong arguments, and {balanced}. Ensure that no single perspective dominates the response.
 
@@ -91,7 +91,7 @@ Should universal basic income be implemented nationally?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-3
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -94,7 +94,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Create a decision matrix comparing {options} against {criteria}. Rate each option-criterion pair using a {scale} scale. {weighted} Include a brief explanation for each rating, and conclude with a recommendation based on the matrix results.",
         "notes": "This model sometimes needs more explicit instructions about formatting the matrix clearly and providing final scores"
       }
@@ -118,8 +118,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

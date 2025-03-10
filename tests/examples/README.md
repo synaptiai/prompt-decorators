@@ -7,13 +7,13 @@ This directory contains example scripts that demonstrate how to use various prom
 Most examples require an API key for the AI model service being used. Set the appropriate environment variables before running the examples:
 
 ```bash
-# For OpenAI models (GPT-3.5, GPT-4)
+# For OpenAI models (gpt-4, gpt-4o)
 export OPENAI_API_KEY="your-api-key-here"
 
 # For Anthropic models (Claude)
 export ANTHROPIC_API_KEY="your-api-key-here"
 
-# To enable tests with GPT-4 (optional)
+# To enable tests with gpt-4o (optional)
 export USE_GPT4="true"
 ```
 

@@ -101,7 +101,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Use Site Reliability Engineering (SRE) principles in your response. Consider system reliability, monitoring, automation, and incident management.",
         "notes": "Simplified instruction for models with less context capacity."
       }
@@ -125,9 +125,9 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
       "claude-instant"
     ]
   }

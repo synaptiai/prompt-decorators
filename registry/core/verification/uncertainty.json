@@ -90,7 +90,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Be explicit about what is uncertain in your response. Use {format} to mark uncertainty. Apply a {threshold} threshold for identifying uncertain information. {reason} Make sure to differentiate between established facts and more speculative claims.",
         "notes": "This model sometimes needs stronger prompting to acknowledge uncertainty in topics where it has high confidence"
       }
@@ -114,8 +114,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

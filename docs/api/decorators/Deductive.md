@@ -34,7 +34,7 @@ Presents formal logical syllogisms about consciousness and intelligence, proceed
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Use deductive reasoning to answer this question. Start with {premises} general principles or premises. Follow a logical process through {steps} clear steps from these premises to a conclusion. {formal} Make each step in your reasoning explicit and label it clearly.
 
@@ -95,7 +95,7 @@ Is artificial intelligence conscious?
 
 - **Requires**: None
 - **Conflicts**: Inductive
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

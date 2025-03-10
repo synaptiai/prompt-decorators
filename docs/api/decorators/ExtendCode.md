@@ -65,11 +65,11 @@ Enhances the error handling with minimal changes while ensuring performance is n
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Add new functionality to the existing code without rewriting it. Follow the existing code style and patterns. For approach={approach}, impact={impact}, maintain={maintain}.
 
-**Notes:** Simpler instruction format works better with GPT-3.5 Turbo's context window limitations.
+**Notes:** Simpler instruction format works better with gpt-4 Turbo's context window limitations.
 
 
 ## Implementation Guidance
@@ -123,7 +123,7 @@ Add a method to this user service class that allows retrieving users by email do
 
 - **Requires**: None
 - **Conflicts**: Refactor, RewriteCode
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, claude-instant
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, claude-instant
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

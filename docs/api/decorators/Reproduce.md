@@ -55,7 +55,7 @@ A concise list of essential steps needed to observe the dropdown menu bug in a l
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create clear, step-by-step instructions to reproduce the reported issue. Be specific about environment setup, actions to take, and expected results.
 
@@ -112,7 +112,7 @@ Create reproduction steps for a race condition we're seeing in our payment proce
 
 - **Requires**: None
 - **Conflicts**: Summarize, Condense
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

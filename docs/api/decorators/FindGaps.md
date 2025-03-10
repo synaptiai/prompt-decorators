@@ -49,7 +49,7 @@ Provides an exhaustive analysis of overlooked or inadequately considered stakeho
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** First analyze this content carefully. Then identify missing or overlooked {aspects} using a {depth} approach. For each gap found, clearly explain why it matters and how it could impact outcomes. {solutions} Be specific and constructive in your gap analysis.
 
@@ -117,7 +117,7 @@ Here's our urban redevelopment proposal...
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

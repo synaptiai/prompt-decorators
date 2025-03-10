@@ -32,7 +32,7 @@ Provides an extended series of 5 question-answer cycles to explore epistemology
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Format your response as a series of thought-provoking questions. For each question, provide a thoughtful answer that leads to the next question. This creates a step-by-step exploration of the topic.
 
@@ -86,7 +86,7 @@ How do we know what we know?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

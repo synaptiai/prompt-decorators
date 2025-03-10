@@ -62,13 +62,13 @@ The model will implement a merge sort algorithm, which is stable and has O(n log
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Write code for an algorithm with these specifications:
 
 **Notes:** This model may need more explicit instructions about algorithm implementation details.
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Implement an algorithm with the following characteristics:
 
@@ -135,7 +135,7 @@ Implement an algorithm to find the shortest path between two nodes in an unweigh
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

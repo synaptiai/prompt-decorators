@@ -46,11 +46,11 @@ The model will provide a step-by-step implementation with minimal comments, focu
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Break down the implementation into clearly labeled steps. For each step, {output_style}. Provide {detail_level} explanations.
 
-**Notes:** For GPT-3.5 Turbo, more explicit instructions about the step structure may be needed.
+**Notes:** For gpt-4 Turbo, more explicit instructions about the step structure may be needed.
 
 
 ## Implementation Guidance
@@ -98,7 +98,7 @@ Implement a JWT authentication middleware for Express.js that verifies tokens an
 
 - **Requires**: None
 - **Conflicts**: Concise, OneShot
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

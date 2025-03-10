@@ -34,7 +34,7 @@ Develops four hypotheses explaining the Fermi Paradox, evaluates each against th
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Develop {hypotheses} possible explanations for this phenomenon. For each explanation: 1) Describe the hypothesis, 2) Connect it to the observed evidence, 3) Evaluate it against {criteria}, 4) Discuss its strengths and limitations. {rank} Present your reasoning clearly, acknowledging that we're working with incomplete information.
 
@@ -95,7 +95,7 @@ What might explain the Fermi Paradox?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

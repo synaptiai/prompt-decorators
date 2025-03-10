@@ -57,7 +57,7 @@ The model will examine the authentication component with a focus on security vul
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Analyze this code carefully before suggesting any changes. Look for issues related to {focus} within the {scope} and provide a {output} report.
 
@@ -116,7 +116,7 @@ Refactor this payment processing code to improve performance.
 
 - **Requires**: None
 - **Conflicts**: QuickFix
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

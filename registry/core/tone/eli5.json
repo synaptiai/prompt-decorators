@@ -65,7 +65,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Explain this in the simplest possible terms, as if talking to a young child. Use words a 5-year-old would know. Compare complex ideas to everyday things like toys, food, or familiar activities. {strictness}",
         "notes": "This model sometimes needs reminders to maintain the simplified level throughout longer responses"
       }
@@ -89,8 +89,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

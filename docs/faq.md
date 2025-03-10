@@ -25,7 +25,7 @@ Prompt Decorators addresses several challenges:
 
 The framework is designed to work with any LLM provider, including:
 
-- OpenAI (GPT-3.5, GPT-4, etc.)
+- OpenAI (gpt-4, gpt-4o, etc.)
 - Anthropic Claude
 - Google Gemini
 - Mistral AI

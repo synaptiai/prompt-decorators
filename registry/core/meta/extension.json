@@ -74,7 +74,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "This request will load specialized decorators from {source}. If any decorators in the following prompt come from this extension, apply them according to their definitions in the extension package.",
         "notes": "This model handles extension loading well but requires clear indications of which decorators come from the extension"
       }
@@ -98,7 +98,7 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4"
+      "gpt-4o"
     ]
   }
 }

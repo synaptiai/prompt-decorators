@@ -32,7 +32,7 @@ Provides an extremely simplified explanation of the internet using only basic vo
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Explain this in the simplest possible terms, as if talking to a young child. Use words a 5-year-old would know. Compare complex ideas to everyday things like toys, food, or familiar activities. {strictness}
 
@@ -87,7 +87,7 @@ How does the internet work?
 
 - **Requires**: None
 - **Conflicts**: Academic, Professional, AsExpert, Precision, Tone
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

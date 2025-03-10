@@ -136,7 +136,7 @@ python -m prompt_decorators.demo.compare \
   --prompt "Explain how nuclear fusion works" \
   --decorator "StepByStep(numbered=true)" \
   --decorator "Audience(level=beginner)" \
-  --model "gpt-4"
+  --model "gpt-4o"
 ```
 
 This will:
@@ -247,7 +247,7 @@ Or create a `.env` file in the demo directory.
 If you see:
 
 ```
-Error: The model 'gpt-4' does not exist or you do not have access to it.
+Error: The model 'gpt-4o' does not exist or you do not have access to it.
 ```
 
 Try using a different model:
@@ -255,7 +255,7 @@ Try using a different model:
 ```bash
 python -m prompt_decorators.demo.dynamic_openai_demo run-custom-prompt \
   --prompt "Hello world" \
-  --model "gpt-3.5-turbo"
+  --model "gpt-4-turbo"
 ```
 
 ### Other Issues

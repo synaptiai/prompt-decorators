@@ -41,7 +41,7 @@ Delivers the policy proposal, followed by qualitative assessments (poor/fair/goo
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** After providing your main response on this topic, evaluate the quality of your own response. Rate it on these metrics: {metrics} using a {scale} scale. {explanation} Present this evaluation in a clear 'Quality Assessment' section at the end of your response. Be honest and critical in your self-assessment.
 
@@ -105,7 +105,7 @@ Here's my policy proposal for urban housing...
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

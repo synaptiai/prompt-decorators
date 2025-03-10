@@ -1,9 +1,9 @@
 {
   "models": [
     {
-      "model_id": "gpt-4",
+      "model_id": "gpt-4o",
       "model_family": "gpt",
-      "version": "4.0",
+      "version": "4o",
       "capabilities": {
         "reasoning": true,
         "step_by_step": true,
@@ -33,9 +33,9 @@
       }
     },
     {
-      "model_id": "gpt-3.5-turbo",
+      "model_id": "gpt-4-turbo",
       "model_family": "gpt",
-      "version": "3.5",
+      "version": "4",
       "capabilities": {
         "reasoning": true,
         "step_by_step": true,
@@ -58,9 +58,9 @@
       }
     },
     {
-      "model_id": "claude-2",
+      "model_id": "claude-3-7-sonnet-latest",
       "model_family": "claude",
-      "version": "2.0",
+      "version": "3.7",
       "capabilities": {
         "reasoning": true,
         "step_by_step": true,
@@ -87,9 +87,9 @@
       }
     },
     {
-      "model_id": "llama-2-70b-chat",
+      "model_id": "llama-3.2-70b-chat",
       "model_family": "llama",
-      "version": "2.0",
+      "version": "3.2",
       "capabilities": {
         "reasoning": true,
         "step_by_step": true,

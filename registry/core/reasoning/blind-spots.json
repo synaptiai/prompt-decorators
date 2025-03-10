@@ -86,7 +86,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "When analyzing this topic, be vigilant about identifying {depth} blind spots such as {categories}. Consider what assumptions you're making, what perspectives might be missing, and what biases could be influencing your thinking. {position} Challenge your own conclusions and consider alternative viewpoints that might contradict your initial analysis.",
         "notes": "This model sometimes needs explicit prompting to avoid defaulting to surface-level blind spot analysis that merely acknowledges limitations without substantive exploration"
       }
@@ -110,8 +110,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

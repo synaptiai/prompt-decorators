@@ -60,11 +60,11 @@ The AI will focus on creating comprehensive documentation for the user managemen
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** You are working on a {scope} in the {stage} phase (iteration #{iteration}). Focus specifically on this phase and don't try to implement features beyond this scope.
 
-**Notes:** More explicit instructions help GPT-3.5 maintain focus on the specific implementation phase.
+**Notes:** More explicit instructions help gpt-4 maintain focus on the specific implementation phase.
 
 
 ## Implementation Guidance
@@ -121,7 +121,7 @@ Create a user authentication component with login/register forms.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

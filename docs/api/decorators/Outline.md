@@ -42,7 +42,7 @@ Creates a 5-level deep outline using mixed notation (numbers, letters, roman num
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Format your response as an outline with clear hierarchical structure. Use headings and subheadings with consistent formatting for each level.
 
@@ -107,7 +107,7 @@ Provide a comprehensive overview of machine learning techniques.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

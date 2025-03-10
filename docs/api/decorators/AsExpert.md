@@ -41,7 +41,7 @@ Delivers a technically sophisticated assessment of quantum computing's encryptio
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Adopt the perspective of a {experience} expert in {domain}. Use your specialized knowledge to provide an authoritative response that demonstrates deep expertise. {technical} Make sure to incorporate relevant frameworks, methodologies, and current understandings from the field.
 
@@ -105,7 +105,7 @@ Assess the security implications of quantum computing for current encryption sta
 
 - **Requires**: None
 - **Conflicts**: ELI5
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

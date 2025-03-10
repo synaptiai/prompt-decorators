@@ -101,7 +101,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Be extremely careful when modifying this code. Make precise, targeted changes based on the sensitivity level, scope requirements, and validation needs specified below:",
         "notes": "More explicit instruction for models with less context understanding."
       }
@@ -125,10 +125,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

@@ -88,7 +88,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Your response must include a clear section on the limitations of the information you're providing. Be honest about what isn't fully understood, potential issues with methodologies, and other important caveats. {position} Make the limitations {detail} and focus on {focus}.",
         "notes": "This model sometimes needs explicit prompting to acknowledge limitations, especially in domains where it has high confidence"
       }
@@ -112,8 +112,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

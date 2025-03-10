@@ -40,7 +40,7 @@ Delivers a relaxed, conversational explanation of atmospheric optics
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Please write your response in the following tone and style:
 
@@ -98,7 +98,7 @@ Why do leaves change color in autumn?
 
 - **Requires**: None
 - **Conflicts**: ELI5
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

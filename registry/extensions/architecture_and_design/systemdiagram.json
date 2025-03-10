@@ -103,9 +103,9 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "Create a system diagram that visually represents the architecture or design described. Use clear notation and appropriate level of detail. The diagram should be described in text format that can be easily converted to a visual representation using tools like PlantUML, Mermaid, or similar diagramming tools.",
-        "notes": "GPT-4 has enhanced capabilities for structured outputs that can be converted to diagrams."
+        "notes": "gpt-4o has enhanced capabilities for structured outputs that can be converted to diagrams."
       }
     }
   },
@@ -132,9 +132,9 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
       "gemini-pro"
     ]
   }

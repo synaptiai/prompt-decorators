@@ -46,7 +46,7 @@ Starts with a 100-word summary of climate change causes and effects, followed by
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a brief summary that captures the key points of your response. Focus on the most important information.
 
@@ -110,7 +110,7 @@ Describe the causes and effects of climate change.
 
 - **Requires**: None
 - **Conflicts**: Detailed
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

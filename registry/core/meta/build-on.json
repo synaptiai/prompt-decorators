@@ -86,11 +86,11 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Continue from {reference} response, building on what was already said. {approach} the existing content while {preserveStructure}. Make sure your response feels like a natural continuation rather than starting over.",
         "notes": "This model sometimes needs explicit reminders to fully incorporate previous context"
       },
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "Treating the {reference} as your foundation, please {approach} that content. {preserveStructure} Ensure your response maintains continuity with what came before.",
         "notes": "This model handles contextual building well but benefits from clear instructions about which aspects to preserve"
       }
@@ -114,8 +114,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

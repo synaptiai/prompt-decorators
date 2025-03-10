@@ -54,7 +54,7 @@ The model will identify common input validation edge cases for a user registrati
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Identify edge cases, corner cases, and boundary conditions for the following scenario. Consider what could go wrong, unexpected inputs, and system limitations.
 
@@ -110,7 +110,7 @@ Identify edge cases for a multi-user document editing feature.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

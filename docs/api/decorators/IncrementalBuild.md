@@ -56,7 +56,7 @@ The model will implement a robust user authentication system, including all nece
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Build this code step by step. First focus on {focus} with {completion} level of completeness. For dependencies, use the {dependencies} approach.
 
@@ -114,7 +114,7 @@ Implement a user profile card component that displays basic user information and
 
 - **Requires**: None
 - **Conflicts**: CompleteSystem, MonolithicImplementation
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

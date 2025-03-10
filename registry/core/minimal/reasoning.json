@@ -57,7 +57,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Explain your reasoning step by step before giving your final answer. Show your thought process clearly.",
         "notes": "This model may require more explicit instructions to produce detailed reasoning"
       }
@@ -81,8 +81,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

@@ -93,7 +93,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "You must follow these exact constraints: {wordCount} {timeframe} {vocabulary} {custom}. These are hard requirements - your response will only be valuable if it strictly adheres to these constraints.",
         "notes": "This model sometimes needs stronger emphasis on constraints to ensure they are followed precisely"
       }
@@ -117,8 +117,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

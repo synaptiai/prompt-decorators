@@ -89,7 +89,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Generate {count} significantly different approaches to address this question. Each approach should be distinct and labeled clearly. Make sure these alternatives are {diversity} in terms of their fundamental strategy. {comparison}",
         "notes": "This model sometimes needs more explicit instructions about maintaining meaningful differences between alternatives"
       }
@@ -113,8 +113,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

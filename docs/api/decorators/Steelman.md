@@ -34,7 +34,7 @@ Provides the most compelling possible argument for cryptocurrency as the future 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Present the most compelling and charitable version of {sides} positions on this topic. For each position, include the strongest evidence, most persuasive reasoning, and most thoughtful responses to potential objections. Make each position as convincing as possible, even those you might disagree with. {critique} {separation} Avoid straw-manning any position.
 
@@ -96,7 +96,7 @@ What is the strongest case for cryptocurrency as the future of finance?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

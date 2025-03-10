@@ -79,9 +79,9 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "Follow a strict priority order when applying these decorators: {decorators}. When conflicts occur between decorators, resolve them using '{mode}' approach. Focus on implementing each decorator's functionality according to this priority hierarchy.",
-        "notes": "Even GPT-4 sometimes needs explicit reminders about priority order when multiple decorators have complex interactions"
+        "notes": "Even gpt-4o sometimes needs explicit reminders about priority order when multiple decorators have complex interactions"
       }
     }
   },
@@ -103,7 +103,7 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4"
+      "gpt-4o"
     ]
   }
 }

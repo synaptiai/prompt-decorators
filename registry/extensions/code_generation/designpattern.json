@@ -100,11 +100,11 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Use the {pattern} design pattern in {language} for this code. Implement the {variation} version of the pattern.",
         "notes": "Simpler instruction format works better with this model."
       },
-      "claude-2": {
+      "claude-3-7-sonnet-latest": {
         "instruction": "Please implement the {pattern} design pattern in {language}, following the {variation} implementation approach. Ensure the code follows best practices for this architectural pattern.",
         "notes": "More detailed instructions work better with Claude models."
       }
@@ -133,10 +133,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2-70b"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2-70b"
     ]
   }
 }

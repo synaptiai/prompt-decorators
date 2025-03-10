@@ -92,7 +92,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Use {intensity} motivational language throughout your response. Focus on {focus} as your primary theme. {actionable} Incorporate powerful words, positive framing, and confidence-building phrases. Address challenges honestly but frame them as opportunities for growth. Use second-person perspective (\"you can\", \"your journey\") to make it personal and direct.",
         "notes": "This model sometimes needs explicit reminders to maintain consistent motivational tone throughout longer responses rather than only at the beginning and end"
       }
@@ -116,8 +116,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

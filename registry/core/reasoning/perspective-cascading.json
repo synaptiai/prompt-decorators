@@ -108,8 +108,8 @@
       "models": [
         "claude-3-opus-20240229",
         "claude-3-sonnet-20240229",
-        "gpt-4",
-        "gpt-4-turbo"
+        "gpt-4o",
+        "gpt-4o-turbo"
       ]
     },
     "implementationGuidance": {

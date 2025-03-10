@@ -54,7 +54,7 @@ Generates concise, business-focused release notes in a narrative style, emphasiz
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Generate structured release notes for this product update. Organize information clearly for the specified audience.
 
@@ -110,7 +110,7 @@ Create release notes for version 2.3.0 which includes new payment methods, perfo
 
 - **Requires**: None
 - **Conflicts**: Summarize
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -66,13 +66,13 @@ Generates TypeScript interfaces and classes for a task management system with st
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a well-structured interface definition following these specifications:
 
-**Notes:** For GPT-3.5, more explicit instructions about structure may be needed.
+**Notes:** For gpt-4, more explicit instructions about structure may be needed.
 
-### claude-2
+### claude-3-7-sonnet-latest
 
 **Instruction:** Design a clear and comprehensive interface with these parameters:
 
@@ -156,7 +156,7 @@ Design a data structure for managing a shopping cart.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

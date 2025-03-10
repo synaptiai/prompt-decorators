@@ -40,7 +40,7 @@ Provides three different brief analogies for blockchain from different domains (
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Explain this concept through {count} analogy(ies) that compare it to something from {domain}. For each analogy, establish clear mappings between elements of the original concept and the analogy. Make the analogy {depth} in detail to help readers understand the concept through familiar comparisons.
 
@@ -102,7 +102,7 @@ Describe how blockchain technology functions.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

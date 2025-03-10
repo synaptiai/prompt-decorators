@@ -64,13 +64,13 @@ A detailed review covering all aspects (security, performance, best practices, m
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** You are a code reviewer. Analyze the following code and provide feedback according to these guidelines:
 
 **Notes:** For smaller models, more explicit instructions about the review process may be needed.
 
-### claude-2
+### claude-3-7-sonnet-latest
 
 **Instruction:** Perform a thorough code review on the provided code. Identify issues and suggest improvements based on the following criteria:
 
@@ -141,7 +141,7 @@ function login(username, password) {
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2, palm-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2, palm-2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

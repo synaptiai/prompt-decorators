@@ -64,7 +64,7 @@ A comprehensive analysis of the progressive memory leak, including root causes, 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Analyze and diagnose the described error or bug. Identify likely causes and recommend solutions based on the error characteristics.
 
@@ -121,7 +121,7 @@ The payment processing occasionally fails during high traffic periods. Diagnose 
 
 - **Requires**: None
 - **Conflicts**: Simplify, CreativeWriting
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

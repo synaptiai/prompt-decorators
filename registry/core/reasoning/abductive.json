@@ -83,7 +83,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Develop {hypotheses} possible explanations for this phenomenon. For each explanation: 1) Describe the hypothesis, 2) Connect it to the observed evidence, 3) Evaluate it against {criteria}, 4) Discuss its strengths and limitations. {rank} Present your reasoning clearly, acknowledging that we're working with incomplete information.",
         "notes": "This model may sometimes need reminders to avoid conflating abductive reasoning with deductive or inductive approaches"
       }
@@ -107,8 +107,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

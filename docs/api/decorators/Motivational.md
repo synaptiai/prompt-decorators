@@ -48,7 +48,7 @@ Delivers highly energetic and inspiring advice for professional resilience, emph
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Use {intensity} motivational language throughout your response. Focus on {focus} as your primary theme. {actionable} Incorporate powerful words, positive framing, and confidence-building phrases. Address challenges honestly but frame them as opportunities for growth. Use second-person perspective ("you can", "your journey") to make it personal and direct.
 
@@ -115,7 +115,7 @@ How can I overcome setbacks in my professional life?
 
 - **Requires**: None
 - **Conflicts**: Academic
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

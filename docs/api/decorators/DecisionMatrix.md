@@ -42,7 +42,7 @@ Generates a weighted decision matrix comparing the specified programming languag
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a decision matrix comparing {options} against {criteria}. Rate each option-criterion pair using a {scale} scale. {weighted} Include a brief explanation for each rating, and conclude with a recommendation based on the matrix results.
 
@@ -109,7 +109,7 @@ Which programming language should I learn next?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

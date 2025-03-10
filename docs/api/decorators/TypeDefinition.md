@@ -56,11 +56,11 @@ The model will generate Python code with appropriate type annotations from the t
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Generate comprehensive type definitions for the code according to the specified parameters. Focus on creating clear, well-structured types that enhance code safety and documentation. Consider edge cases and ensure type definitions are complete and accurate.
 
-**Notes:** GPT-4 has stronger capabilities for understanding complex type systems and can handle more nuanced type definitions.
+**Notes:** gpt-4o has stronger capabilities for understanding complex type systems and can handle more nuanced type definitions.
 
 
 ## Implementation Guidance
@@ -114,7 +114,7 @@ Define types for an e-commerce application's product catalog and shopping cart.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, gemini-pro
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, gemini-pro
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

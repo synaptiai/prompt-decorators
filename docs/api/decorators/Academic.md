@@ -47,7 +47,7 @@ Provides a literary analysis of Hamlet using humanities-appropriate terminology 
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Write this response as a scholarly {style} academic paper with formal language, precise terminology, and proper structure (introduction, literature review, analysis/discussion, conclusion). Use {format} citations for all factual claims. Include appropriate academic vocabulary, transitional phrases, and maintain an objective, analytical stance.
 
@@ -110,7 +110,7 @@ Analyze the themes in Shakespeare's Hamlet.
 
 - **Requires**: None
 - **Conflicts**: ELI5, Creative, Motivational
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

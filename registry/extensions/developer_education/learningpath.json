@@ -92,7 +92,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Create a detailed, step-by-step learning path for {for}. The path should be for {experience} level learners and designed to be completed in a {timeframe}. Include specific resources, practice projects, and clear milestones.",
         "notes": "Simplified instruction with more direct language for models with smaller context windows."
       }
@@ -118,10 +118,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "1.5.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

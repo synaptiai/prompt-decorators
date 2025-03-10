@@ -32,7 +32,7 @@ Provides an extensive breakdown of machine learning starting from mathematical f
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Start by identifying the most basic, fundamental truths about this topic - the axioms that cannot be broken down further. Then build your explanation step by step from these foundations, showing how complex aspects emerge from these simple principles.
 
@@ -90,7 +90,7 @@ What makes machine learning effective?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

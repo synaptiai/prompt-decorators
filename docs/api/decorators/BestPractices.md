@@ -48,7 +48,7 @@ The response will provide a numbered list of key best practices for AWS cloud se
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Summarize industry best practices for {for} in a {format} format, optimized for {context} environments.
 
@@ -102,7 +102,7 @@ How should I structure my Node.js project?
 
 - **Requires**: None
 - **Conflicts**: ELI5
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

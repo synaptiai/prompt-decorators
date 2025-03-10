@@ -54,7 +54,7 @@ The model will provide a quick assessment focusing on the most likely causes for
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** You are a debugging expert. Analyze this error or issue carefully and provide a diagnosis. Look for the root cause and suggest fixes.
 
@@ -110,7 +110,7 @@ I'm getting this error in production - "TypeError: Cannot read property 'setting
 
 - **Requires**: None
 - **Conflicts**: Simplify
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

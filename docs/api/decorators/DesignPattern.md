@@ -63,13 +63,13 @@ C# implementation of a thread-safe Singleton pattern for a logging service using
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Use the {pattern} design pattern in {language} for this code. Implement the {variation} version of the pattern.
 
 **Notes:** Simpler instruction format works better with this model.
 
-### claude-2
+### claude-3-7-sonnet-latest
 
 **Instruction:** Please implement the {pattern} design pattern in {language}, following the {variation} implementation approach. Ensure the code follows best practices for this architectural pattern.
 
@@ -143,7 +143,7 @@ Create a database connection manager for a web application.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2-70b
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2-70b
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

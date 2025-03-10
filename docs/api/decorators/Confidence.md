@@ -41,7 +41,7 @@ Discusses only high-confidence (80%+) depression treatments with percentage indi
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** For each claim or statement in your response, indicate how confident you are using {scale} measures. Only include information where your confidence is at least {threshold}%. {detailed}
 
@@ -105,7 +105,7 @@ What are the most effective treatments for depression?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

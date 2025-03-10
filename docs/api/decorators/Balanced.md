@@ -40,7 +40,7 @@ Provides a balanced side-by-side comparison of four different perspectives on AI
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Present multiple perspectives on this topic, giving equal attention to each viewpoint. Avoid showing bias toward any particular position. Make sure to address the strongest arguments from each perspective.
 
@@ -103,7 +103,7 @@ What are the different views on artificial intelligence regulation?
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -40,7 +40,7 @@ Returns a nicely formatted markdown document with headings, code blocks, and lis
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Your response must be formatted exactly as specified. For JSON, ensure valid JSON syntax. For Markdown, use proper Markdown syntax with headings, lists, and code blocks.
 
@@ -98,7 +98,7 @@ Write a tutorial on setting up a React project.
 
 - **Requires**: None
 - **Conflicts**: Schema, TableFormat, Bullet
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

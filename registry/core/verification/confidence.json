@@ -85,7 +85,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "For each claim or statement in your response, indicate how confident you are using {scale} measures. Only include information where your confidence is at least {threshold}%. {detailed}",
         "notes": "This model sometimes needs more explicit reminders to maintain consistent confidence indicators throughout a long response"
       }
@@ -109,8 +109,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

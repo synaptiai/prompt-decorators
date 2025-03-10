@@ -88,11 +88,11 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Interpret this request within the context of the {domain} field. Use knowledge, terminology, and standards specific to this domain at a {level} level. Focus particularly on domain-appropriate {scope}.",
         "notes": "This model sometimes needs more explicit reminders to maintain consistent domain-specific focus throughout longer responses"
       },
-      "gpt-4": {
+      "gpt-4o": {
         "instruction": "Frame your response specifically for the {domain} domain. Adjust your {scope} to match domain conventions and target a {level} expertise level.",
         "notes": "This model handles domain adaptation well but benefits from clear guidance about which aspects to contextualize"
       }
@@ -116,8 +116,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

@@ -54,7 +54,7 @@ Delivers an analysis of the Stanford prison experiment methodology with a parall
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** First, generate your response to the query. Then, adopt the role of an academic peer reviewer to evaluate that content. In your review, focus on {criteria} with a {style} approach. Format your response with the review {position} the main content. Clearly label the peer review section.
 
@@ -122,7 +122,7 @@ Analyze the methodology used in Stanford's prison experiment.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

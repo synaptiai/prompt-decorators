@@ -52,13 +52,13 @@ Uses the Reasoning and ELI5 decorators with programming-appropriate examples spe
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Interpret this request within the context of the {domain} field. Use knowledge, terminology, and standards specific to this domain at a {level} level. Focus particularly on domain-appropriate {scope}.
 
 **Notes:** This model sometimes needs more explicit reminders to maintain consistent domain-specific focus throughout longer responses
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Frame your response specifically for the {domain} domain. Adjust your {scope} to match domain conventions and target a {level} expertise level.
 
@@ -132,7 +132,7 @@ Explain how databases work.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

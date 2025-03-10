@@ -85,7 +85,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Be creative, original and imaginative in your response. Use {level} levels of creativity and incorporate {elements} in your writing. Work within these constraints: {constraints}. Focus on making the response engaging, unexpected, and thought-provoking while still addressing the core question.",
         "notes": "This model sometimes needs explicit encouragement to break from conventional patterns in its responses"
       }
@@ -109,8 +109,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

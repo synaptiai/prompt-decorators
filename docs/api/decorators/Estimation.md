@@ -65,7 +65,7 @@ Provides an hourly worst-case estimate focusing specifically on the technical co
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Analyze this development task and provide a detailed effort estimation. Break down the components and explain your reasoning for each estimate.
 
@@ -123,7 +123,7 @@ Estimate the effort required to implement a new authentication system with socia
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Compatible Models**: gpt-4-turbo, gpt-4o, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

@@ -88,7 +88,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Use deductive reasoning to answer this question. Start with {premises} general principles or premises. Follow a logical process through {steps} clear steps from these premises to a conclusion. {formal} Make each step in your reasoning explicit and label it clearly.",
         "notes": "This model sometimes needs more explicit structure to maintain rigorous deductive reasoning throughout a response"
       }
@@ -112,8 +112,8 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "2.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo"
+      "gpt-4o",
+      "gpt-4-turbo"
     ]
   }
 }

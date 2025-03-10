@@ -42,7 +42,7 @@ Provides a 4-dimension MECE analysis of a four-day work week using a stakeholder
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a MECE (Mutually Exclusive, Collectively Exhaustive) analysis with {dimensions} main categories that don't overlap and together cover everything about this topic. Use the {framework} approach. For each main category, break it down into {depth} levels of sub-categories. Make sure there are no gaps in your analysis and no overlaps between categories.
 
@@ -106,7 +106,7 @@ Analyze the implications of implementing a four-day work week.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

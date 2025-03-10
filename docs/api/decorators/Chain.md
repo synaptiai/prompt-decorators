@@ -34,13 +34,13 @@ Shows the progression of applying Socratic questioning, then academic tone, then
 
 ## Model-Specific Implementations
 
-### gpt-4
+### gpt-4o
 
 **Instruction:** Apply these decorators in sequence: {decorators}. Each decorator processes the output of the previous one. {showSteps} {stopOnFailure}
 
 **Notes:** This model handles decorator chains well, but benefits from clear instructions about showing steps or handling failures
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Process this request through a series of steps. For each step, apply one of these decorators in this exact order: {decorators}. Make sure to follow the exact order and treat each output as input to the next decorator. {showSteps} {stopOnFailure}
 
@@ -102,7 +102,7 @@ Discuss the ethics of autonomous weapons.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

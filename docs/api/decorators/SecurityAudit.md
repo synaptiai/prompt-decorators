@@ -57,7 +57,7 @@ Conducts a thorough security assessment against HIPAA standards across all secur
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Analyze the following for security vulnerabilities according to industry standards. Identify risks and suggest fixes.
 
@@ -132,7 +132,7 @@ function login(username, password) {
 
 - **Requires**: None
 - **Conflicts**: Simplify, CreativeWriting
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

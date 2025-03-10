@@ -99,7 +99,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Please explain the following concept or code with clarity and detail.",
         "notes": "Slightly simplified instruction for models with less context capacity."
       }
@@ -125,10 +125,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "1.5.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

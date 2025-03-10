@@ -99,9 +99,9 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Refactor this code to improve its {goal} while making {level} changes and preserving {preserve}. Don't rewrite it completely - focus on structural improvements.",
-        "notes": "More explicit instructions help GPT-3.5 maintain the refactoring constraints."
+        "notes": "More explicit instructions help gpt-4 maintain the refactoring constraints."
       }
     }
   },
@@ -130,10 +130,10 @@
     ],
     "minStandardVersion": "1.0.0",
     "models": [
-      "gpt-3.5-turbo",
-      "gpt-4",
-      "claude-2",
-      "llama-2"
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

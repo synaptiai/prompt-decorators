@@ -65,13 +65,13 @@ The model will suggest algorithm improvements to reduce memory usage, allowing f
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** I need you to help optimize an application with these specific requirements:
 
 **Notes:** More direct instruction works better with this model.
 
-### claude-2
+### claude-3-7-sonnet-latest
 
 **Instruction:** Please analyze the following for optimization opportunities, focusing on the specified target and constraints:
 
@@ -145,7 +145,7 @@ Review this code for my Android app and suggest improvements.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo, claude-2, llama-2
+- **Compatible Models**: gpt-4o, gpt-4-turbo, claude-3-7-sonnet-latest, llama-3.2
 - **Standard Version**: 1.0.0 - 1.5.0
 
 ## Related Decorators

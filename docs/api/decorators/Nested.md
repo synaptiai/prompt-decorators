@@ -40,7 +40,7 @@ Creates a 5-level deep bullet-point hierarchy of programming paradigms, designed
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Create a {depth}-level deep hierarchical structure for this topic. Use {style} formatting for the levels. Each level should contain more specific details than its parent level. Make sure the categories are logical and properly nested. {collapsible}
 
@@ -103,7 +103,7 @@ Provide a comprehensive overview of programming paradigms.
 
 - **Requires**: None
 - **Conflicts**: None
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators

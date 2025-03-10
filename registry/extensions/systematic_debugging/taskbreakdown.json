@@ -99,7 +99,7 @@
       }
     ],
     "modelSpecificImplementations": {
-      "gpt-3.5-turbo": {
+      "gpt-4-turbo": {
         "instruction": "Please break down this problem into specific tasks that need to be completed. For each task, include details based on the specified level and prioritize according to the given approach.",
         "notes": "For models with more limited context windows, the instruction is simplified while maintaining the core functionality."
       }
@@ -123,10 +123,10 @@
     "minStandardVersion": "1.0.0",
     "maxStandardVersion": "1.0.0",
     "models": [
-      "gpt-4",
-      "gpt-3.5-turbo",
-      "claude-2",
-      "llama-2"
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
     ]
   }
 }

@@ -40,7 +40,7 @@ Delivers an extremely detailed analysis of renewable energy transition, exhausti
 
 ## Model-Specific Implementations
 
-### gpt-3.5-turbo
+### gpt-4-turbo
 
 **Instruction:** Provide an extremely thorough and comprehensive response that covers all aspects of this topic in detail. Don't simplify or abbreviate. Include explanations of core concepts, nuances, relationships between ideas, and practical implications.
 
@@ -103,7 +103,7 @@ Analyze the implications of transitioning to renewable energy.
 
 - **Requires**: None
 - **Conflicts**: Concise, Summary
-- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Compatible Models**: gpt-4o, gpt-4-turbo
 - **Standard Version**: 1.0.0 - 2.0.0
 
 ## Related Decorators
