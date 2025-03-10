@@ -34,6 +34,78 @@ DECORATOR_PATTERN = (
 logger = logging.getLogger(__name__)
 
 
+def create_transform_function_from_template(template: Dict[str, Any]) -> str:
+    """Convert a transformation template to an executable transform function.
+
+    Args:
+        template: The transformation template definition
+
+    Returns:
+        A string containing executable Python code for the transform function
+    """
+    instruction = template.get("instruction", "")
+    parameter_mapping = template.get("parameterMapping", {})
+    placement = template.get("placement", "prepend")
+
+    # Create a Python function string from the template
+    function_str = """
+def transform(text, **kwargs):
+    result = '''{}'''
+    """.format(
+        instruction
+    )
+
+    # Add parameter mapping logic
+    for param_name, mapping in parameter_mapping.items():
+        function_str += """
+    if "{param}" in kwargs:
+        param_value = kwargs["{param}"]
+        """.format(
+            param=param_name
+        )
+
+        # Handle value maps
+        if "valueMap" in mapping:
+            function_str += """
+        param_value_str = str(param_value)
+        value_map = {}
+        if param_value_str in value_map:
+            result += " " + value_map[param_value_str]
+            """.format(
+                repr(mapping["valueMap"])
+            )
+
+        # Handle format strings
+        elif "format" in mapping:
+            format_str = mapping["format"]
+            function_str += """
+        format_str = '''{}'''
+        result += " " + format_str.format(value=param_value)
+            """.format(
+                format_str
+            )
+
+    # Add placement logic
+    if placement == "prepend":
+        function_str += """
+    return result + "\\n\\n" + text
+    """
+    elif placement == "append":
+        function_str += """
+    return text + "\\n\\n" + result
+    """
+    elif placement == "replace":
+        function_str += """
+    return result
+    """
+    else:  # Default to append
+        function_str += """
+    return text + "\\n\\n" + result
+    """
+
+    return function_str
+
+
 class DecoratorParameter:
     """Class representing a validated decorator parameter."""
 
@@ -354,39 +426,49 @@ class DynamicDecorator:
         # Get the transform function from the definition
         transform_function = self.definition.get("transform_function", "")
         if not transform_function:
-            return text
+            # If no transform function but we have a transformationTemplate, create one on the fly
+            if "transformationTemplate" in self.definition:
+                try:
+                    transform_function = create_transform_function_from_template(
+                        self.definition["transformationTemplate"]
+                    )
+                    logger.debug(
+                        f"Created transform function from template for {self.name} on-demand"
+                    )
+                except Exception as e:
+                    logger.error(
+                        f"Error creating transform function from template for {self.name}: {e}"
+                    )
+                    return text
+            else:
+                return text
 
-        # Create a JavaScript-like environment for the transform function
-        # This is a simplified approach and may not handle all JS features
-        js_env = {
-            "text": text,
-            "console": {"log": print},
-            "return": None,
-        }
-
-        # Add parameters to the environment
-        for name, param in self.parameters.items():
-            js_env[name] = param.value
+        # Add parameters to dictionary for function call
+        param_dict = {k: v.value for k, v in self.parameters.items()}
 
         # Execute the transform function
         try:
-            # Add a return statement if not present
-            if "return" not in transform_function:
-                transform_function = f"return {transform_function}"
+            # Check if transform_function already looks like a complete Python function
+            if transform_function.strip().startswith("def transform("):
+                # If it's from our template generator, it's already a complete function
+                transform_code = transform_function
+            else:
+                # For backward compatibility with inline code snippets
+                # Add a return statement if not present
+                if "return" not in transform_function:
+                    transform_function = f"return {transform_function}"
 
-            # Create a Python function from the JavaScript-like code
-            transform_code = f"def transform(text, **kwargs):\n"
-            for line in transform_function.split("\n"):
-                transform_code += f"    {line}\n"
+                # Create a Python function from the code
+                transform_code = f"def transform(text, **kwargs):\n"
+                for line in transform_function.split("\n"):
+                    transform_code += f"    {line}\n"
 
             # Compile and execute the function
             namespace: Dict[str, Any] = {}
             exec(transform_code, namespace)
-            # Use a more generic type annotation that allows for kwargs
             transform = namespace["transform"]  # type: ignore
 
             # Call the function with the text and parameters as kwargs
-            param_dict = {k: v.value for k, v in self.parameters.items()}
             result = transform(text, **param_dict)
 
             # Ensure the result is a string
@@ -463,13 +545,36 @@ class DynamicDecorator:
                     # Check if this is a decorator definition
                     if "decoratorName" in data:
                         name = data["decoratorName"]
+
+                        # Get transform_function or create one from transformation template
+                        transform_function = data.get("transform_function") or data.get(
+                            "transformFunction", ""
+                        )
+
+                        # If no transform_function but there is a transformationTemplate, create one
+                        if not transform_function and "transformationTemplate" in data:
+                            try:
+                                transform_function = (
+                                    create_transform_function_from_template(
+                                        data["transformationTemplate"]
+                                    )
+                                )
+                                logger.debug(
+                                    f"Created transform function from template for {name}"
+                                )
+                            except Exception as e:
+                                logger.error(
+                                    f"Error creating transform function from template for {name}: {e}"
+                                )
+
                         cls._registry[name] = {
                             "name": name,
                             "description": data.get("description", ""),
                             "category": data.get("category", "General"),
                             "parameters": data.get("parameters", []),
-                            "transform_function": data.get(
-                                "transform_function", data.get("transformFunction", "")
+                            "transform_function": transform_function,
+                            "transformationTemplate": data.get(
+                                "transformationTemplate", {}
                             ),
                             "version": data.get("version", "1.0.0"),
                         }
@@ -533,14 +638,30 @@ class DynamicDecorator:
         if not name:
             raise ValueError("Decorator definition must include 'decoratorName'")
 
+        # Get transform_function or create one from transformation template
+        transform_function = decorator_def.get(
+            "transform_function"
+        ) or decorator_def.get("transformFunction", "")
+
+        # If no transform_function but there is a transformationTemplate, create one
+        if not transform_function and "transformationTemplate" in decorator_def:
+            try:
+                transform_function = create_transform_function_from_template(
+                    decorator_def["transformationTemplate"]
+                )
+                logger.debug(f"Created transform function from template for {name}")
+            except Exception as e:
+                logger.error(
+                    f"Error creating transform function from template for {name}: {e}"
+                )
+
         cls._registry[name] = {
             "name": name,
             "description": decorator_def.get("description", ""),
             "category": decorator_def.get("category", "General"),
             "parameters": decorator_def.get("parameters", []),
-            "transform_function": decorator_def.get(
-                "transform_function", decorator_def.get("transformFunction", "")
-            ),
+            "transform_function": transform_function,
+            "transformationTemplate": decorator_def.get("transformationTemplate", {}),
             "version": decorator_def.get("version", "1.0.0"),
         }
         logger.debug(f"Registered decorator: {name}")

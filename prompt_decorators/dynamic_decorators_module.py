@@ -47,6 +47,9 @@ __all__ = [
     "register_decorator",
     "extract_decorator_name",
     "parse_decorator_text",
+    "create_decorator",
+    "list_available_decorators",
+    "transform_prompt",
 ]
 
 
@@ -217,3 +220,62 @@ def parse_decorator_text(decorator_text: str) -> tuple:
         Tuple of (name, parameters)
     """
     return parse_decorator(decorator_text)
+
+
+# Functions added for backward compatibility with the demo
+
+
+def create_decorator(name: str, **kwargs: Any) -> DynamicDecorator:
+    """Create a decorator instance by name (alias for create_decorator_instance).
+
+    This function is maintained for backward compatibility with demo code.
+
+    Args:
+        name: Name of the decorator
+        **kwargs: Parameters for the decorator
+
+    Returns:
+        A decorator instance
+
+    Raises:
+        ValueError: If the decorator is not found
+    """
+    return create_decorator_instance(name, **kwargs)
+
+
+def list_available_decorators() -> List[str]:
+    """List all available decorator names.
+
+    This function is maintained for backward compatibility with demo code.
+
+    Returns:
+        A list of decorator names
+    """
+    # Make sure decorators are loaded
+    load_decorator_definitions()
+
+    # Get all available decorators
+    decorators = get_available_decorators()
+
+    # Return just the names
+    return [decorator.name for decorator in decorators]
+
+
+def transform_prompt(prompt: str, decorators: List[str]) -> str:
+    """Transform a prompt using a list of decorator strings.
+
+    This function is a wrapper around the core transform_prompt function
+    to ensure backward compatibility with the demo.
+
+    Args:
+        prompt: The prompt to transform
+        decorators: List of decorator strings
+
+    Returns:
+        The transformed prompt
+    """
+    from prompt_decorators.core.dynamic_decorator import (
+        transform_prompt as core_transform_prompt,
+    )
+
+    return core_transform_prompt(prompt, decorators)
