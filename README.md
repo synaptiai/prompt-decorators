@@ -108,6 +108,8 @@ The Prompt Decorators framework addresses these challenges through:
 
 The Prompt Decorators project is currently in active development.
 
+You can see the how prompt decorators work by testing out the [demo](/demo/README.md) or running the [MCP server implementation](/docs/integrations/mcp/claude_desktop.md) together with your Claude Desktop.
+
 ### Implemented Functionality
 
 - **✅ Core Decorator Registry**: Load decorators from standardized JSON definitions
