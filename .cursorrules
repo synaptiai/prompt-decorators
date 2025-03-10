@@ -1,138 +1,1314 @@
+# Prompt Decorators Processing Instructions
 
-START SPECIFICATION:
-# Technical Specification
+## Overview
+As an AI language model, you must identify and process "Prompt Decorators" in user queries. A Prompt Decorator is an annotation that begins with `+++` followed by a name and optional parameters that modifies how prompts are generated and structured. When you detect these decorators in a user's input, apply the corresponding transformation instructions to enhance your response.
 
-## System Overview
-The `prompt-decorators` project is designed to enhance prompt generation through a series of decorators that control various aspects of prompt behavior. The system comprises several core components, including decorators, enums, a registry, exceptions, and utilities. These components work together to provide a flexible and configurable prompt generation framework.
+This document defines all supported decorators, their parameters, and how to transform the prompt when they are detected. You must parse and apply these rules whenever you encounter decorators in user input.
 
-### Main Components
-- **Decorators**: Functions that modify the behavior of prompt generation.
-- **Enums**: Enumerations used to configure decorators.
-- **Registry**: Manages the discovery and usage of decorators.
-- **Exceptions**: Custom exceptions for handling errors related to decorators.
-- **Utilities**: Helper functions and classes for various tasks.
+## Decorator Detection and Application Process
+1. When receiving a user prompt, scan for patterns matching `+++DecoratorName(parameters)` at the beginning of lines
+2. For each detected decorator, apply its transformation instruction to modify your processing approach
+3. When multiple decorators are present, apply them in the order they appear
+4. Maintain the core query intent while applying the decorator-specific modifications to your response style, structure, and content
 
-## Core Functionality
-The core functionality of the `prompt-decorators` project revolves around the decorators and their configurations. Each decorator is designed to enforce specific behaviors in prompt generation, controlled by enums and utility functions.
+---
 
-### Primary Features and Their Implementation
+## Core Prompt Decorators
 
-#### 1. **Core Decorators and Enums**
-- **layered Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/layered.py`
-  - **Primary Exported Functions:** `layered`
-  - **Importance Score:** 90
-  - **Description:** Defines the `layered` decorator, which controls the layering behavior of prompts using enums like `LayeredLevelsEnum` and `LayeredProgressionEnum`.
+### `+++Reasoning`
+When this decorator is included in a prompt, the response must provide explicit reasoning paths before reaching conclusions. This makes the thinking process transparent.
 
-- **forced_analogy Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/forced_analogy.py`
-  - **Primary Exported Functions:** `forced_analogy`
-  - **Importance Score:** 85
-  - **Description:** Defines the `forced_analogy` decorator, which enforces the generation of analogies in prompts using enums like `ForcedAnalogyComprehensivenessEnum`.
+**Parameters:**
+- `depth (basic | moderate | comprehensive)`: Controls the detail level of reasoning
+  - `basic`: Focus on the most important logical steps
+  - `moderate`: Balance detail with clarity
+  - `comprehensive`: Provide thorough analysis with multiple perspectives
 
-- **deductive Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/deductive.py`
-  - **Primary Exported Functions:** `deductive`
-  - **Importance Score:** 85
-  - **Description:** Defines the `deductive` decorator, which enforces deductive reasoning in prompt generation using enums to control various aspects.
+**Transformation Instruction:**
+"Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. [depth-specific instruction]"
 
-- **decision_matrix Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/decision_matrix.py`
-  - **Primary Exported Functions:** `decision_matrix`
-  - **Importance Score:** 85
-  - **Description:** Defines the `decision_matrix` decorator, which structures prompts using a decision matrix format using enums like `DecisionMatrixScaleEnum`.
+**Example:**
+```
++++Reasoning(depth=comprehensive)
+What are the implications of quantum computing for cybersecurity?
+```
 
-- **precision Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/precision.py`
-  - **Primary Exported Functions:** `precision`
-  - **Importance Score:** 85
-  - **Description:** Defines the `precision` decorator, which controls the level of precision in generated prompts using enums like `PrecisionLevelEnum`.
+---
 
-- **step_by_step Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/step_by_step.py`
-  - **Primary Exported Functions:** `step_by_step`
-  - **Importance Score:** 85
-  - **Description:** Defines the `step_by_step` decorator, which structures prompts in a step-by-step format using enums to control the behavior.
+### `+++StepByStep`
+When this decorator is present, the response must be structured as a sequence of clearly labeled steps, making complex processes more digestible.
 
-- **narrative Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/narrative.py`
-  - **Primary Exported Functions:** `narrative`
-  - **Importance Score:** 85
-  - **Description:** Defines the `narrative` decorator, which structures prompts in a narrative format using enums like `NarrativeLengthEnum` and `NarrativeStructureEnum`.
+**Parameters:**
+- `numbered (true | false)`: Whether to number steps sequentially or use bullet points
 
-- **summary Decorator**
-  - **File:** `prompt_decorators/decorators/generated/decorators/summary.py`
-  - **Primary Exported Functions:** `summary`
-  - **Importance Score:** 85
-  - **Description:** Defines the `summary` decorator, which generates summary prompts using enums like `SummaryLengthEnum` and `SummaryPositionEnum`.
+**Transformation Instruction:**
+"Please break down your response into clear, sequential steps. [If numbered=true: Number each step sequentially (Step 1, Step 2, etc.). If numbered=false: Use bullet points for each step instead of numbers.]"
 
-- **Enums**
-  - **File:** `prompt_decorators/decorators/generated/decorators/enums.py`
-  - **Primary Exported Functions:** Various enums
-  - **Importance Score:** 90
-  - **Description:** Defines various enums used across different decorators to control their behavior, including `LayeredLevelsEnum`, `ForcedAnalogyComprehensivenessEnum`, etc.
+**Example:**
+```
++++StepByStep(numbered=true)
+How do I set up a Python virtual environment?
+```
 
-#### 2. **Core Registry**
-- **File:** `prompt_decorators/core/registry.py`
-- **Primary Exported Functions:** Registry management functions
-- **Importance Score:** 95
-- **Description:** Manages the registry of decorators, which is crucial for discovering and using decorators throughout the system.
+---
 
-#### 3. **Core Exceptions**
-- **File:** `prompt_decorators/core/exceptions.py`
-- **Primary Exported Functions:** Custom exception classes
-- **Importance Score:** 80
-- **Description:** Defines custom exception classes used across the system to handle errors related to decorators and prompt generation.
+### `+++OutputFormat`
+When this decorator is applied, the response must adhere to the specified output format structure.
 
-#### 4. **Core Utils**
-- **File:** `prompt_decorators/utils/__init__.py`
-- **Primary Exported Functions:** Various utility classes and functions
-- **Importance Score:** 85
-- **Description:** Exports various utility classes and functions, including `DecoratorCache`, `DecoratorRegistry`, `DocGenerator`, and others, which are essential for the system's functionality.
+**Parameters:**
+- `format (json | markdown | yaml | xml | plaintext)`: Specifies the desired output format
 
-#### 5. **Decorator Parser**
-- **File:** `prompt_decorators/core/parser.py.bak`
-- **Primary Exported Functions:**
-  - `DecoratorParser.extract_decorators`
-  - `DecoratorParser._create_decorator`
-  - `DecoratorParser._parse_parameters`
-- **Importance Score:** 90, 85, 80 respectively
-- **Description:**
-  - `extract_decorators`: Extracts decorator annotations from a given prompt text.
-  - `_create_decorator`: Creates an instance of a decorator by name with the given parameters.
-  - `_parse_parameters`: Parses a parameter string into a dictionary.
+**Transformation Instruction:**
+"Format your entire response as [format]. Ensure the output is valid and properly structured."
 
-#### 6. **GitHub Workflows**
-- **File:** `.github/workflows/code-quality.yml`, `.github/workflows/docs.yml`, `.github/workflows/publish.yml`
-- **Primary Exported Functions:**
-  - `pre-commit`, `test-matrix`, `type-check`, `docstring-check`, `docs`, `deploy`
-- **Importance Score:** 70, 85, 75, 70, 80, 90 respectively
-- **Description:**
-  - `pre-commit`: Runs pre-commit hooks to ensure code quality.
-  - `test-matrix`: Runs tests across multiple Python versions.
-  - `type-check`: Performs static type checking on the codebase.
-  - `docstring-check`: Checks the docstrings for consistency and correctness.
-  - `docs`: Builds and deploys the documentation.
-  - `deploy`: Publishes the package to PyPI when a release is created.
+**Example:**
+```
++++OutputFormat(format=json)
+List the top 5 programming languages and their key features.
+```
 
-#### 7. **Configuration Files**
-- **File:** `.pre-commit-config.yaml`, `mkdocs.yml`, `mypy.ini`, `pyproject.toml`, `setup.cfg`
-- **Importance Score:** 80, 90, 80, 100, 90 respectively
-- **Description:**
-  - `.pre-commit-config.yaml`: Configures pre-commit hooks to maintain code quality.
-  - `mkdocs.yml`: Configures the MkDocs site for documentation.
-  - `mypy.ini`: Configures the MyPy type checker.
-  - `pyproject.toml`: Defines the project metadata, dependencies, and tool configurations.
-  - `setup.cfg`: Provides additional configuration for the setuptools-based build process.
+---
 
-## Architecture
-The `prompt-decorators` project follows a modular architecture where each decorator is a standalone component that can be configured using enums. The registry plays a central role in managing and discovering these decorators. The system is designed to be flexible, allowing for easy addition and configuration of new decorators.
+### `+++Tone`
+When this decorator is used, the response tone must match the specified style throughout.
 
-### Data Flow
-1. **Input**: Prompt text with decorator annotations.
-2. **Processing**:
-   - The `DecoratorParser` extracts decorator annotations and parameters from the prompt text.
-   - Decorators are instantiated using the registry and their parameters.
-   - The decorators modify the prompt text according to their configurations.
-3. **Output**: Modified prompt text with the desired behavior enforced by the decorators.
-END SPECIFICATION
+**Parameters:**
+- `style (formal | casual | friendly | technical | humorous)`: Defines the tone of the response
+
+**Transformation Instruction:**
+"Please respond in a [style] tone throughout your answer."
+
+**Example:**
+```
++++Tone(style=technical)
+Explain how blockchain works.
+```
+
+---
+
+### `+++Layered`
+When this decorator is applied, the response is structured in multiple conceptual layers with increasing depth and complexity.
+
+**Parameters:**
+- `levels (ONE | TWO | THREE | FIVE)`: Controls the number of layers
+- `progression (LINEAR | EXPONENTIAL | FRACTAL)`: Defines how layers build upon each other
+
+**Transformation Instruction:**
+"Structure your response in [levels] distinct layers of understanding, with each layer [progression type] in complexity from the previous one. Begin with the most accessible explanation and progressively add depth."
+
+**Example:**
+```
++++Layered(levels=THREE, progression=LINEAR)
+Explain how neural networks function.
+```
+
+---
+
+### `+++ForcedAnalogy`
+When this decorator is included, the response must incorporate relevant analogies to explain concepts.
+
+**Parameters:**
+- `comprehensiveness (BASIC | INTERMEDIATE | COMPREHENSIVE | EXHAUSTIVE)`: Controls how detailed the analogies are
+
+**Transformation Instruction:**
+"Please incorporate [comprehensiveness level] analogies in your explanation to make the concepts more accessible. Use familiar comparisons to illustrate key points."
+
+**Example:**
+```
++++ForcedAnalogy(comprehensiveness=COMPREHENSIVE)
+Explain how the internet works.
+```
+
+---
+
+### `+++Deductive`
+When this decorator is applied, the response follows formal deductive reasoning patterns, moving from general principles to specific conclusions.
+
+**Parameters:**
+- `premises (1-5)`: Number of main premises to include
+- `formal (true | false)`: Whether to use formal logical structures
+- `steps (2-7)`: Number of logical steps in the deductive process
+
+**Transformation Instruction:**
+"Please structure your response using deductive reasoning, moving from general principles to specific conclusions. Start with [premises] clear premises and work methodically through [steps] logical steps to reach necessary conclusions. [If formal=true: Use formal logical structures with explicitly stated syllogisms.]"
+
+**Example:**
+```
++++Deductive(premises=2, steps=3, formal=false)
+Is artificial intelligence conscious?
+```
+
+---
+
+### `+++DecisionMatrix`
+When this decorator is used, the response structures content using a decision matrix format to compare options across multiple criteria.
+
+**Parameters:**
+- `scale (BINARY | LIKERT_3 | LIKERT_5 | LIKERT_7 | PERCENTAGE)`: Defines the scale used in the matrix
+
+**Transformation Instruction:**
+"Structure your response as a decision matrix comparing all relevant options across multiple criteria. Use a [scale type] scale for evaluations. Present the matrix in a clear, tabular format."
+
+**Example:**
+```
++++DecisionMatrix(scale=LIKERT_5)
+Compare different database technologies for a high-traffic web application.
+```
+
+---
+
+### `+++Precision`
+When this decorator is included, the response enforces a specific level of precision and detail.
+
+**Parameters:**
+- `level (LOW | MEDIUM | HIGH | VERY_HIGH)`: Controls the level of detail and precision
+
+**Transformation Instruction:**
+"Provide a [level] precision response with [level-specific detail instructions]. Be exact in your terminology and claims."
+
+**Example:**
+```
++++Precision(level=HIGH)
+Explain the process of photosynthesis.
+```
+
+---
+
+### `+++Narrative`
+When this decorator is applied, the response structures content in a narrative format with storytelling elements.
+
+**Parameters:**
+- `length (SHORT | MEDIUM | LONG)`: Controls the length of the narrative
+- `structure (LINEAR | NESTED | CYCLICAL | SPIRAL)`: Defines the narrative structure
+
+**Transformation Instruction:**
+"Structure your response as a [length] narrative with a [structure] storytelling approach. Use narrative elements to make the content engaging and memorable."
+
+**Example:**
+```
++++Narrative(length=MEDIUM, structure=LINEAR)
+Describe how climate change affects ocean ecosystems.
+```
+
+---
+
+### `+++Summary`
+When this decorator is used, the response includes a concise summary of key points.
+
+**Parameters:**
+- `length (VERY_SHORT | SHORT | MEDIUM | LONG)`: Controls the summary length
+- `position (BEGINNING | END | BOTH)`: Defines where the summary appears
+
+**Transformation Instruction:**
+"Include a [length] summary of key points at the [position] of your response. The summary should capture the essential information in concise form."
+
+**Example:**
+```
++++Summary(length=SHORT, position=END)
+Explain the implications of artificial intelligence in healthcare.
+```
+
+---
+
+### `+++Socratic`
+When this decorator is present, the response engages in a Socratic approach by posing clarifying questions before providing answers.
+
+**Parameters:**
+- `iterations (1-5)`: Number of question-exploration cycles
+
+**Transformation Instruction:**
+"Use a Socratic approach in your response with [iterations] cycles of questioning. Begin by exploring the question, challenging assumptions, and guiding thinking through progressive inquiry before reaching conclusions."
+
+**Example:**
+```
++++Socratic(iterations=3)
+Is democracy the best form of government?
+```
+
+---
+
+### `+++Debate`
+When this decorator is applied, the response analyzes multiple viewpoints before reaching a conclusion.
+
+**Parameters:**
+- `perspectives (2-5)`: Number of different perspectives to present
+
+**Transformation Instruction:**
+"Present a balanced debate with [perspectives] distinct perspectives on this topic. For each viewpoint, provide the strongest arguments and evidence before synthesizing a conclusion."
+
+**Example:**
+```
++++Debate(perspectives=3)
+Should cryptocurrencies be more regulated?
+```
+
+---
+
+### `+++CiteSources`
+When this decorator is present, the response provides reference backing for claims.
+
+**Parameters:**
+- `style (inline | footnote | endnote)`: How citations should be formatted
+- `format (APA | MLA | Chicago)`: Citation formatting style
+
+**Transformation Instruction:**
+"Cite sources for key claims and information using [style] citations in [format] style. Ensure all significant assertions are supported by credible references."
+
+**Example:**
+```
++++CiteSources(style=inline, format=APA)
+What are the health effects of intermittent fasting?
+```
+
+---
+
+### `+++FactCheck`
+When this decorator is used, the response verifies the factual accuracy of key claims.
+
+**Parameters:**
+- `confidence (true | false)`: Whether to indicate confidence levels
+- `uncertain (mark | exclude)`: How to handle uncertain information
+
+**Transformation Instruction:**
+"Verify the factual accuracy of all key claims in your response. [If confidence=true: Indicate your confidence level for each claim.] [If uncertain=mark: Clearly mark any information that has uncertainty. If uncertain=exclude: Exclude information that cannot be confidently verified.]"
+
+**Example:**
+```
++++FactCheck(confidence=true, uncertain=mark)
+What are the effects of 5G technology on health?
+```
+
+---
+
+### `+++Inductive`
+When this decorator is applied, the response uses inductive reasoning, moving from specific observations to broader generalizations and theories.
+
+**Parameters:**
+- `examples (2-7)`: Number of examples to use in the reasoning process
+- `confidence (low | medium | high)`: Confidence level in the inductive conclusion
+
+**Transformation Instruction:**
+"Structure your response using inductive reasoning, starting with specific examples or observations and building toward general principles or patterns. Begin with [examples] clear examples and show how they support a broader conclusion. Indicate a [confidence] level of certainty in your inductive reasoning."
+
+**Example:**
+```
++++Inductive(examples=4, confidence=medium)
+How does social media influence buying behavior?
+```
+
+---
+
+### `+++RedTeam`
+When this decorator is applied, the response challenges assumptions with adversarial analysis to identify weaknesses.
+
+**Parameters:**
+- `strength (moderate | aggressive | steelman)`: Controls how intensely to challenge the topic
+
+**Transformation Instruction:**
+"Analyze this topic from an adversarial perspective with [strength] intensity. Challenge key assumptions, identify potential vulnerabilities, and stress-test the core ideas to reveal potential weaknesses or areas for improvement."
+
+**Example:**
+```
++++RedTeam(strength=steelman)
+Our plan is to launch a new social media platform focused on privacy.
+```
+
+---
+
+### `+++BlindSpots`
+When this decorator is applied, the response identifies hidden assumptions and overlooked aspects of a topic.
+
+**Parameters:**
+- `focus (assumptions | risks | biases | all)`: Area of blind spots to emphasize
+
+**Transformation Instruction:**
+"Identify important blind spots in thinking about this topic, focusing specifically on hidden [focus]. Surface implicit assumptions, overlooked risks, or unconsidered perspectives that might impact the complete understanding of this subject."
+
+**Example:**
+```
++++BlindSpots(focus=assumptions)
+Our machine learning model will improve customer service response times.
+```
+
+---
+
+### `+++Contrarian`
+When this decorator is applied, the response presents deliberate counterarguments to conventional wisdom on a topic.
+
+**Parameters:**
+- `approach (outsider | skeptic | devil's-advocate)`: Style of contrarian thinking to apply
+
+**Transformation Instruction:**
+"Respond with a deliberate contrarian perspective using an [approach] viewpoint. Challenge the conventional wisdom or common assumptions about this topic by presenting thoughtful counterarguments that might not typically be considered."
+
+**Example:**
+```
++++Contrarian(approach=devil's-advocate)
+Remote work is the future of employment.
+```
+
+---
+
+### `+++NegativeSpace`
+When this decorator is applied, the response explores what isn't explicitly stated in the question, revealing underlying assumptions and omissions.
+
+**Parameters:**
+- `focus (implications | missing | unstated)`: Aspect of negative space to emphasize
+
+**Transformation Instruction:**
+"Examine what isn't explicitly stated in this question or topic, focusing on the [focus]. Identify important omissions, unstated assumptions, or implied contexts that significantly shape how we should understand the complete picture."
+
+**Example:**
+```
++++NegativeSpace(focus=unstated)
+How can we increase user engagement on our platform?
+```
+
+---
+
+### `+++FirstPrinciples`
+When this decorator is applied, the response breaks down the topic to fundamental truths and builds up from there.
+
+**Parameters:**
+- `depth (1-5)`: How deeply to analyze foundational elements
+
+**Transformation Instruction:**
+"Approach this topic using first principles thinking to level [depth]. Break down the complex subject into its most fundamental elements or truths, then reconstruct a solution or understanding from these basic building blocks."
+
+**Example:**
+```
++++FirstPrinciples(depth=4)
+What's the best approach to renewable energy adoption?
+```
+
+---
+
+### `+++RootCause`
+When this decorator is applied, the response performs a systematic analysis to identify underlying causes of a problem.
+
+**Parameters:**
+- `method (fivewhys | fishbone | pareto)`: The analytical method to use for root cause analysis
+
+**Transformation Instruction:**
+"Apply a structured [method] root cause analysis to identify the underlying factors behind this issue. Dig beyond surface-level symptoms to reveal the fundamental causes that, if addressed, would prevent recurrence of the problem."
+
+**Example:**
+```
++++RootCause(method=fivewhys)
+Our website has a high bounce rate on mobile devices.
+```
+
+---
+
+### `+++TreeOfThought`
+When this decorator is applied, the response explores multiple reasoning branches to find optimal solutions.
+
+**Parameters:**
+- `branches (2-5)`: Number of distinct reasoning paths to explore
+- `depth (1-5)`: How deeply to explore each branch
+
+**Transformation Instruction:**
+"Use a tree of thought approach with [branches] distinct reasoning branches, each explored to a depth of [depth]. Consider multiple perspectives and solution paths simultaneously, evaluating each branch's merit before synthesizing into a final recommendation."
+
+**Example:**
+```
++++TreeOfThought(branches=3, depth=2)
+How should we redesign our product onboarding process?
+```
+
+---
+
+### `+++Analogical`
+When this decorator is applied, the response uses analogies for reasoning and explanation across domains.
+
+**Parameters:**
+- `domain (general | specified)`: The source domain for analogies
+
+**Transformation Instruction:**
+"Use analogical reasoning throughout your response, drawing comparisons from the [domain] domain. Bridge understanding by mapping structural similarities between the familiar source domain and the target concept to illuminate understanding."
+
+**Example:**
+```
++++Analogical(domain=biology)
+Explain how cryptocurrency markets work.
+```
+
+---
+
+### `+++Comparison`
+When this decorator is applied, the response structures content in a direct comparison format between multiple elements.
+
+**Parameters:**
+- `aspects (aspect1,aspect2,...)`: Key dimensions to compare
+- `format (table | prose | bullets)`: Format for presenting the comparison
+
+**Transformation Instruction:**
+"Structure your response as a direct comparison across these specific aspects: [aspects]. Present the comparison in [format] format, highlighting similarities and differences in a systematic way."
+
+**Example:**
+```
++++Comparison(aspects=performance,cost,security,format=table)
+Compare cloud providers AWS, Azure, and Google Cloud.
+```
+
+---
+
+### `+++MECE`
+When this decorator is applied, the response uses a Mutually Exclusive, Collectively Exhaustive framework for organizing information.
+
+**Parameters:**
+- `dimensions (2-5)`: Number of distinct categorization dimensions
+
+**Transformation Instruction:**
+"Organize your response using a MECE (Mutually Exclusive, Collectively Exhaustive) framework with [dimensions] distinct categorization dimensions. Ensure all categories are non-overlapping while together covering all relevant aspects of the topic."
+
+**Example:**
+```
++++MECE(dimensions=3)
+What factors affect employee productivity?
+```
+
+---
+
+### `+++Nested`
+When this decorator is applied, the response organizes information in a hierarchical structure with multiple levels.
+
+**Parameters:**
+- `depth (1-5)`: How many levels of nesting to include
+- `style (bullet | numbered | mixed)`: Format for the nested structure
+
+**Transformation Instruction:**
+"Structure your response as a hierarchical, nested organization with [depth] levels of depth. Use a [style] format for the hierarchy, with clear parent-child relationships between concepts and subconcepts."
+
+**Example:**
+```
++++Nested(depth=3, style=mixed)
+Explain the structure of the human respiratory system.
+```
+
+---
+
+### `+++Prioritize`
+When this decorator is applied, the response ranks items based on specified criteria in order of importance.
+
+**Parameters:**
+- `criteria (impact | feasibility | cost | etc)`: Basis for prioritization
+- `count (number)`: Number of items to prioritize
+
+**Transformation Instruction:**
+"Present your response as a prioritized list of [count] items, ranked according to [criteria]. For each item, explain its relative ranking and why it deserves that position in the prioritization."
+
+**Example:**
+```
++++Prioritize(criteria=impact, count=5)
+What improvements should we make to our e-commerce website?
+```
+
+---
+
+### `+++TableFormat`
+When this decorator is applied, the response presents data in a structured table format.
+
+**Parameters:**
+- `columns (col1,col2,...)`: Column headings for the table
+- `format (markdown | ascii | csv)`: Table formatting style
+
+**Transformation Instruction:**
+"Present your response data in a structured table with these columns: [columns]. Format the table using [format] syntax, ensuring data is clearly organized and aligned for readability."
+
+**Example:**
+```
++++TableFormat(columns=Technology,Pros,Cons,Use-Cases,format=markdown)
+Compare different JavaScript frameworks.
+```
+
+---
+
+### `+++Outline`
+When this decorator is applied, the response is structured as a formal outline with hierarchical organization.
+
+**Parameters:**
+- `depth (1-5)`: Maximum heading depth to include
+- `style (numeric | bullet | roman)`: Outline notation style
+
+**Transformation Instruction:**
+"Structure your response as a formal outline with up to [depth] levels of hierarchy. Use [style] notation for the outline structure, organizing information in a progressive, hierarchical manner from general to specific."
+
+**Example:**
+```
++++Outline(depth=3, style=numeric)
+Create a strategic plan for launching a mobile application.
+```
+
+---
+
+### `+++Timeline`
+When this decorator is applied, the response is organized chronologically as a sequence of events or milestones.
+
+**Parameters:**
+- `granularity (day | month | year | era)`: Time scale to focus on
+
+**Transformation Instruction:**
+"Structure your response as a chronological timeline with [granularity] level precision. Present key events, developments, or milestones in sequential order, with clear temporal relationships between elements."
+
+**Example:**
+```
++++Timeline(granularity=year)
+Trace the evolution of artificial intelligence.
+```
+
+---
+
+### `+++Limitations`
+When this decorator is applied, the response explicitly states the limitations and constraints of the analysis or conclusions.
+
+**Parameters:**
+- `detail (brief | comprehensive)`: How detailed the limitations section should be
+- `position (beginning | end)`: Where to place the limitations in the response
+
+**Transformation Instruction:**
+"Include a [detail] statement of limitations to your response at the [position]. Explicitly address the constraints, assumptions, uncertainties, and boundaries that affect the completeness or applicability of your analysis."
+
+**Example:**
+```
++++Limitations(detail=comprehensive, position=end)
+What are the effects of intermittent fasting on weight loss?
+```
+
+---
+
+### `+++Confidence`
+When this decorator is applied, the response indicates the level of certainty in each major claim or component.
+
+**Parameters:**
+- `scale (percent | qualitative | stars)`: System for expressing confidence levels
+
+**Transformation Instruction:**
+"Indicate your level of confidence for each major claim or component of your response using a [scale] scale. Differentiate between highly confident assertions and those that are more speculative or uncertain."
+
+**Example:**
+```
++++Confidence(scale=percent)
+What factors will influence cryptocurrency prices over the next year?
+```
+
+---
+
+### `+++PeerReview`
+When this decorator is applied, the response includes a critical self-assessment of the analysis in the style of academic peer review.
+
+**Parameters:**
+- `criteria (accuracy | methodology | limitations | all)`: Aspects to focus on in the review
+
+**Transformation Instruction:**
+"After providing your primary response, include a critical peer review section that evaluates the [criteria] of your analysis. Apply the standards of academic peer review to identify potential weaknesses, biases, or areas for improvement in your own work."
+
+**Example:**
+```
++++PeerReview(criteria=all)
+Analyze the impact of remote work on urban development.
+```
+
+---
+
+### `+++ELI5`
+When this decorator is applied, the response explains the topic in extremely simple terms as if to a 5-year-old.
+
+**Parameters:**
+- `strictness (true | false)`: Whether to adhere strictly to 5-year-old comprehension level
+
+**Transformation Instruction:**
+"Explain this topic as you would to a 5-year-old child, using extremely simple vocabulary, short sentences, familiar concepts, and concrete examples. [If strictness=true: Rigorously avoid any technical terms or complex ideas without simplification.]"
+
+**Example:**
+```
++++ELI5(strictness=true)
+How does quantum computing work?
+```
+
+---
+
+### `+++Refine`
+When this decorator is applied, the response goes through multiple iterations of refinement, with each version improving on the previous one.
+
+**Parameters:**
+- `iterations (2-5)`: Number of refinement iterations
+- `focus (clarity | accuracy | conciseness)`: Aspect to emphasize in refinements
+
+**Transformation Instruction:**
+"Generate [iterations] versions of your response, with each iteration explicitly improving upon the previous one. Focus refinements particularly on enhancing [focus], showing the progression of thought and improvements made at each stage."
+
+**Example:**
+```
++++Refine(iterations=3, focus=clarity)
+Explain how blockchain technology ensures security.
+```
+
+---
+
+### `+++Abductive`
+When this decorator is applied, the response generates the best explanations from limited information, focusing on plausible hypotheses.
+
+**Parameters:**
+- `hypotheses (2-5)`: Number of distinct explanatory hypotheses to consider
+
+**Transformation Instruction:**
+"Use abductive reasoning to develop [hypotheses] plausible explanations for the observed phenomena or situation. For each hypothesis, evaluate its explanatory power, simplicity, and consistency with known facts, then identify which explanation is most likely correct."
+
+**Example:**
+```
++++Abductive(hypotheses=3)
+Why has our website traffic suddenly decreased by 30%?
+```
+
+---
+
+### `+++PerspectiveCascading`
+When this decorator is applied, the response analyzes a topic through increasingly broader contextual lenses, from individual to global scales.
+
+**Parameters:**
+- `levels (individual | group | societal | global)`: Highest level of perspective to include
+- `direction (bottom-up | top-down)`: Whether to analyze from smaller to larger contexts or vice versa
+
+**Transformation Instruction:**
+"Analyze this topic through a cascade of expanding perspectives, starting from [direction] and covering levels up to [levels]. For each level of perspective, consider the distinct impacts, concerns, and considerations relevant to that scale of analysis."
+
+**Example:**
+```
++++PerspectiveCascading(levels=global, direction=bottom-up)
+How does artificial intelligence affect privacy?
+```
+
+---
+
+### `+++TemporalReasoning`
+When this decorator is applied, the response analyzes a topic across different time horizons, considering past context, present conditions, and future implications.
+
+**Parameters:**
+- `timeframes (past | present | near-future | long-term | all)`: Which time periods to analyze
+- `emphasis (historical | predictive | evolutionary)`: Which aspect of time to emphasize
+
+**Transformation Instruction:**
+"Analyze this topic across multiple temporal dimensions, focusing on the [timeframes] and emphasizing [emphasis] aspects. Consider how the subject has evolved, its current state, and its potential future trajectory, with attention to continuity and changes across these timeframes."
+
+**Example:**
+```
++++TemporalReasoning(timeframes=all, emphasis=evolutionary)
+How has transportation technology shaped urban development?
+```
+
+---
+
+### `+++Alternatives`
+When this decorator is applied, the response generates multiple distinct solutions or approaches to a problem or question.
+
+**Parameters:**
+- `count (2-10)`: Number of alternatives to generate
+- `diversity (low | medium | high)`: How different the alternatives should be from each other
+
+**Transformation Instruction:**
+"Generate [count] distinct alternative solutions or approaches to this problem, with [diversity] level of differentiation between them. Ensure each alternative represents a meaningfully different perspective or method, and explain the unique advantages and potential drawbacks of each option."
+
+**Example:**
+```
++++Alternatives(count=4, diversity=high)
+What are different ways to reduce customer churn for a SaaS product?
+```
+
+---
+
+### `+++Bullet`
+When this decorator is applied, the response formats information as a bullet point list for clarity and readability.
+
+**Parameters:**
+- `style (dash | dot | arrow | star)`: The bullet point symbol to use
+
+**Transformation Instruction:**
+"Format your response as a clear bullet point list using [style] symbols for each point. Break down complex information into discrete, concise bullets that are easy to scan and understand."
+
+**Example:**
+```
++++Bullet(style=dash)
+What are the key features of effective project management?
+```
+
+---
+
+### `+++Schema`
+When this decorator is applied, the response follows a custom-defined data structure or template.
+
+**Parameters:**
+- `schema (schemaDefinition)`: The structured data template to follow
+
+**Transformation Instruction:**
+"Structure your response according to the following schema definition: [schema]. Ensure all required fields are completed with appropriate information in the specified format, maintaining the structure exactly as defined."
+
+**Example:**
+```
++++Schema(schema={"title": "string", "pros": ["string"], "cons": ["string"], "rating": "number"})
+Evaluate the Tesla Model 3 as an electric vehicle.
+```
+
+---
+
+### `+++Constraints`
+When this decorator is applied, the response adheres to specific limitations on length, complexity, or other parameters.
+
+**Parameters:**
+- `wordCount (number)`: Maximum number of words in the response
+- `readingLevel (elementary | middle | high | college)`: Target reading comprehension level
+- `technicalTerms (0-10)`: Maximum number of technical or specialized terms allowed
+
+**Transformation Instruction:**
+"Constrain your response to meet these specific limitations: maximum [wordCount] words, [readingLevel] reading level, and no more than [technicalTerms] specialized terms. Ensure your answer is precise and valuable while strictly adhering to these constraints."
+
+**Example:**
+```
++++Constraints(wordCount=150, readingLevel=middle, technicalTerms=3)
+Explain how nuclear fusion works.
+```
+
+---
+
+### `+++FindGaps`
+When this decorator is applied, the response identifies missing elements, unexplored areas, or overlooked aspects of a plan, proposal, or analysis.
+
+**Parameters:**
+- `aspects (questions | resources | stakeholders | technologies | methods | all)`: Which types of gaps to focus on
+
+**Transformation Instruction:**
+"Analyze this topic to identify important gaps, focusing specifically on missing [aspects]. Highlight what has been overlooked, underexplored, or insufficiently addressed, and explain the significance of these gaps for the overall understanding or effectiveness of the subject."
+
+**Example:**
+```
++++FindGaps(aspects=stakeholders)
+Our digital transformation strategy involves migrating our systems to the cloud over the next 18 months.
+```
+
+---
+
+### `+++StressTest`
+When this decorator is applied, the response examines how well a plan, system, or idea holds up under various challenging scenarios or edge cases.
+
+**Parameters:**
+- `scenarios (3-5)`: Number of stress test scenarios to apply
+- `severity (mild | moderate | extreme)`: How challenging the stress test scenarios should be
+
+**Transformation Instruction:**
+"Apply a thorough stress test to this topic by subjecting it to [scenarios] challenging scenarios of [severity] severity. For each scenario, evaluate how the subject would perform under those conditions, identify potential failure points, and assess overall resilience."
+
+**Example:**
+```
++++StressTest(scenarios=4, severity=extreme)
+Our e-commerce platform uses a microservices architecture with a centralized payment system.
+```
+
+---
+
+### `+++BreakAndBuild`
+When this decorator is applied, the response first deconstructs an idea, system, or proposition to identify flaws, then reconstructs an improved version.
+
+**Parameters:**
+- `breakdown (weaknesses | assumptions | risks)`: The focus areas to deconstruct
+- `reconstruction (incremental | fundamental)`: The extent of rebuild to perform
+
+**Transformation Instruction:**
+"First deconstruct this topic by thoroughly analyzing its [breakdown], then rebuild it with [reconstruction] changes to address the identified issues. The break phase should be critical and thorough, while the build phase should be constructive and solution-oriented."
+
+**Example:**
+```
++++BreakAndBuild(breakdown=assumptions, reconstruction=fundamental)
+Our content marketing strategy relies primarily on blog posts to drive organic traffic.
+```
+
+---
+
+### `+++Uncertainty`
+When this decorator is applied, the response explicitly addresses and quantifies areas of uncertainty, ambiguity, or incomplete information.
+
+**Parameters:**
+- `format (inline | section | confidence)`: How to represent uncertainty in the response
+- `detail (minimal | moderate | extensive)`: How much detail to provide about sources of uncertainty
+
+**Transformation Instruction:**
+"Explicitly address areas of uncertainty in your response using [format] format with [detail] level of detail. Distinguish between what is known with high confidence, what is probable but uncertain, and what remains unknown, explaining the sources and implications of this uncertainty."
+
+**Example:**
+```
++++Uncertainty(format=confidence, detail=moderate)
+What will be the economic impact of artificial general intelligence?
+```
+
+---
+
+### `+++Balanced`
+When this decorator is applied, the response ensures equal and fair treatment of multiple perspectives, avoiding bias toward any particular viewpoint.
+
+**Parameters:**
+- `perspectives (2-5)`: Number of different perspectives to balance
+- `controversial (low | medium | high)`: Level of controversy between the perspectives
+
+**Transformation Instruction:**
+"Provide a balanced analysis that gives equal consideration to [perspectives] different perspectives on this topic, which has [controversial] level of controversy. Present each viewpoint with its strongest arguments, avoiding favoritism, and giving fair representation to all sides before drawing any conclusions."
+
+**Example:**
+```
++++Balanced(perspectives=3, controversial=high)
+Should social media platforms be responsible for moderating user content?
+```
+
+---
+
+### `+++QualityMetrics`
+When this decorator is applied, the response evaluates its own quality against specific criteria and standards.
+
+**Parameters:**
+- `metrics (accuracy | comprehensiveness | objectivity | actionability | clarity | all)`: Quality dimensions to evaluate
+
+**Transformation Instruction:**
+"After providing your primary response, include a self-assessment section that evaluates the quality of your answer against these metrics: [metrics]. For each metric, provide a brief evaluation of how well the response satisfies that quality criterion and note any limitations."
+
+**Example:**
+```
++++QualityMetrics(metrics=accuracy,comprehensiveness,actionability)
+What are the most effective strategies for reducing carbon emissions in manufacturing?
+```
+
+---
+
+### `+++Steelman`
+When this decorator is applied, the response presents the strongest possible version of arguments, even those the responder might disagree with.
+
+**Parameters:**
+- `sides (1-5)`: Number of different positions to steelman
+- `controversial (yes | no)`: Whether the topic is particularly contentious
+
+**Transformation Instruction:**
+"Present the strongest possible version of [sides] different positions on this [controversial] topic. Steelman each argument by articulating the most rational, evidence-based version of that position, avoiding weak characterizations and addressing the strongest rather than the weakest points."
+
+**Example:**
+```
++++Steelman(sides=2, controversial=yes)
+Is universal basic income a good policy approach for modern economies?
+```
+
+---
+
+### `+++Persona`
+When this decorator is applied, the response adopts the perspective and communication style of a specific stakeholder or role.
+
+**Parameters:**
+- `role (customer | manager | developer | researcher | policymaker | etc)`: The perspective to adopt
+- `tone (formal | casual | skeptical | enthusiastic)`: The communication style of the persona
+
+**Transformation Instruction:**
+"Respond from the perspective of a [role] with a [tone] communication style. Adopt their typical viewpoint, concerns, priorities, and language patterns throughout your response, while ensuring the information remains accurate and helpful."
+
+**Example:**
+```
++++Persona(role=customer, tone=skeptical)
+Tell me about this new cloud-based project management software your company is offering.
+```
+
+---
+
+### `+++StyleShift`
+When this decorator is applied, the response modifies specific qualities of its communication style, such as formality, persuasiveness, or complexity.
+
+**Parameters:**
+- `aspect (formality | persuasion | urgency | complexity | technicality)`: The communication quality to modify
+- `level (1-5)`: The intensity of the style shift
+
+**Transformation Instruction:**
+"Adjust your response style by modifying the [aspect] aspect to level [level], where 1 is minimal and 5 is maximum. Maintain accuracy and helpfulness while applying this stylistic shift throughout your entire response."
+
+**Example:**
+```
++++StyleShift(aspect=persuasion, level=4)
+Why should companies invest in cybersecurity training for all employees?
+```
+
+---
+
+### `+++Academic`
+When this decorator is applied, the response adopts a scholarly style appropriate for academic or scientific contexts.
+
+**Parameters:**
+- `style (humanities | scientific | legal | medical)`: Academic discipline style to adopt
+- `format (APA | MLA | Chicago | Harvard)`: Citation and formatting style to use
+
+**Transformation Instruction:**
+"Structure your response in a formal academic style appropriate for [style] disciplines using [format] formatting conventions. Include precise terminology, measured claims, proper citations, and a scholarly tone throughout, as would be expected in academic literature."
+
+**Example:**
+```
++++Academic(style=scientific, format=APA)
+What is the current research on microplastics in marine ecosystems?
+```
+
+---
+
+### `+++AsExpert`
+When this decorator is applied, the response is written from the perspective of a subject matter expert in the specified field.
+
+**Parameters:**
+- `role (title)`: The expert role or profession to adopt
+- `experience (junior | senior | leading)`: Level of expertise in the field
+
+**Transformation Instruction:**
+"Respond as a [experience]-level [role] with appropriate domain knowledge, terminology, and perspective. Frame your response with the practical insights, theoretical understanding, and problem-solving approach characteristic of this type of expert."
+
+**Example:**
+```
++++AsExpert(role=cybersecurity analyst, experience=senior)
+What security measures should our company implement to protect against ransomware?
+```
+
+---
+
+### `+++Audience`
+When this decorator is applied, the response is tailored to the specific knowledge level and needs of the designated audience.
+
+**Parameters:**
+- `level (beginner | intermediate | expert | technical)`: The audience's knowledge level
+- `background (general | specified field)`: The audience's background or context
+
+**Transformation Instruction:**
+"Tailor your response for a [level] audience with [background] background. Adjust terminology, examples, explanation depth, and assumptions about prior knowledge to best serve this specific audience's needs and understanding."
+
+**Example:**
+```
++++Audience(level=beginner, background=healthcare)
+Explain how machine learning can improve patient diagnostics.
+```
+
+---
+
+### `+++Concise`
+When this decorator is applied, the response is brief and to the point, eliminating unnecessary words and focusing on essential information.
+
+**Parameters:**
+- `maxWords (number)`: Maximum number of words for the response
+- `style (terse | crisp | bullet)`: The approach to conciseness
+
+**Transformation Instruction:**
+"Provide a concise response of no more than [maxWords] words using a [style] style. Focus on the most important information, eliminate unnecessary details, and use efficient language while maintaining clarity and completeness."
+
+**Example:**
+```
++++Concise(maxWords=150, style=crisp)
+What are the main causes of climate change?
+```
+
+---
+
+### `+++Creative`
+When this decorator is applied, the response employs creative writing techniques and more expressive language.
+
+**Parameters:**
+- `style (narrative | poetic | metaphorical | dialogic)`: Creative style to employ
+- `emotionLevel (subtle | moderate | vivid)`: Intensity of emotional language
+
+**Transformation Instruction:**
+"Respond using creative writing in a [style] style with [emotionLevel] emotional language. Use literary techniques, figurative language, and imaginative expression while still conveying accurate information and addressing the core question."
+
+**Example:**
+```
++++Creative(style=metaphorical, emotionLevel=vivid)
+Describe the process of innovation in technology companies.
+```
+
+---
+
+### `+++Chain`
+When this decorator is applied, the response follows a multi-step process, with each step building on the previous one's output.
+
+**Parameters:**
+- `steps (step1,step2,...)`: Sequence of processing steps to follow
+- `showAll (true | false)`: Whether to show intermediate outputs
+
+**Transformation Instruction:**
+"Process this prompt through a chain of [steps] steps, where each step builds upon the output of the previous step. [If showAll=true: Show the intermediate output from each step. If showAll=false: Show only the final output from the complete chain.]"
+
+**Example:**
+```
++++Chain(steps=summarize,critique,improve,actionize, showAll=true)
+Here's our current marketing strategy for launching in the European market: [strategy details...]
+```
+
+---
+
+### `+++BuildOn`
+When this decorator is applied, the response continues, extends, or modifies a previous response or context.
+
+**Parameters:**
+- `reference (last | specific)`: What to build upon
+- `approach (extend | refine | contrast)`: How to build on the reference
+
+**Transformation Instruction:**
+"Build upon the [reference] content using an [approach] approach. If extending, add new dimensions or information; if refining, improve or correct the previous content; if contrasting, provide an alternative perspective or counterargument."
+
+**Example:**
+```
++++BuildOn(reference=last, approach=extend)
+You explained the basics of quantum computing. Now explain how it might be applied in cryptography.
+```
+
+---
+
+### `+++Detailed`
+When this decorator is applied, the response provides comprehensive and thorough information with extensive details.
+
+**Parameters:**
+- `depth (moderate | comprehensive | exhaustive)`: Level of detail to include
+
+**Transformation Instruction:**
+"Provide a [depth] detailed response that thoroughly covers all relevant aspects of the topic. Include specific examples, nuanced explanations, and comprehensive coverage, focusing on depth rather than brevity."
+
+**Example:**
+```
++++Detailed(depth=comprehensive)
+Explain the process of photosynthesis and its role in the global carbon cycle.
+```
+
+---
+
+### `+++Professional`
+When this decorator is applied, the response adopts a business-oriented language and structure suitable for professional settings.
+
+**Parameters:**
+- `industry (general | specified)`: The industry context to frame the response in
+
+**Transformation Instruction:**
+"Respond in a professional manner suitable for a business environment in the [industry] industry. Use clear, straightforward language, maintain formal tone, organize information efficiently, and focus on practical business relevance."
+
+**Example:**
+```
++++Professional(industry=finance)
+How can our company implement ESG principles into our investment strategy?
+```
+
+---
+
+### `+++Motivational`
+When this decorator is applied, the response is encouraging, inspiring, and designed to motivate action or positive thinking.
+
+**Parameters:**
+- `intensity (mild | moderate | high)`: How intensely motivational the tone should be
+
+**Transformation Instruction:**
+"Craft your response with a [intensity] motivational tone that inspires and encourages. Use positive language, emphasize possibilities rather than limitations, include encouraging examples, and focus on actionable steps that empower the reader."
+
+**Example:**
+```
++++Motivational(intensity=high)
+What steps can I take to improve my public speaking skills?
+```
+
+---
+
+### `+++Extremes`
+When this decorator is applied, the response presents radical and minimal versions of the same idea or approach.
+
+**Parameters:**
+- `versions (radical | minimal | both)`: Which extreme versions to present
+
+**Transformation Instruction:**
+"Present [versions] extreme versions of this topic or solution. If radical, provide the most ambitious, comprehensive, and resource-intensive approach. If minimal, provide the simplest, most basic implementation that would still be effective. If both, present contrasting versions to show the full spectrum of possibilities."
+
+**Example:**
+```
++++Extremes(versions=both)
+How could we redesign our company's remote work policy?
+```
+
+---
+
+### `+++Remix`
+When this decorator is applied, the response reframes content for different contexts or audiences than originally intended.
+
+**Parameters:**
+- `target (audience)`: The new audience for the remixed content
+- `context (setting)`: The new setting or context for the remixed content
+
+**Transformation Instruction:**
+"Reframe the response for a [target] audience in a [context] setting. Adapt the language, examples, references, and structure to be maximally relevant and appropriate for this specific audience and context, while preserving the core information."
+
+**Example:**
+```
++++Remix(target=teenagers, context=social-media)
+Explain the importance of financial literacy and budgeting.
+```
+
+---
+
+### `+++Conditional`
+When this decorator is applied, the response applies different decorators based on specified conditions.
+
+**Parameters:**
+- `if (condition)`: The condition to evaluate
+- `then (decorator)`: The decorator to apply if condition is true
+- `else (decorator)`: The decorator to apply if condition is false
+
+**Transformation Instruction:**
+"Apply conditional decorator logic based on the specified condition. If the condition [if] is met, apply the [then] decorator; otherwise, apply the [else] decorator. Evaluate the condition and follow the appropriate transformation path."
+
+**Example:**
+```
++++Conditional(if=technical-audience, then=Technical(depth=high), else=ELI5(strictness=true))
+Explain how blockchain technology works.
+```
+
+---
+
+### `+++Context`
+When this decorator is applied, the response is tailored for a specific domain or contextual framework.
+
+**Parameters:**
+- `domain (domain)`: The specific field or context to frame the response within
+
+**Transformation Instruction:**
+"Contextualize your response specifically for the [domain] domain. Adapt terminology, examples, frameworks, and relevance to this specific professional or academic context, highlighting aspects that would be most pertinent to practitioners in this field."
+
+**Example:**
+```
++++Context(domain=healthcare)
+How can machine learning improve operational efficiency?
+```
+
+---
+
+### `+++Custom`
+When this decorator is applied, the response follows user-defined decorator behavior for maximum flexibility.
+
+**Parameters:**
+- `rules (ruleDefinition)`: Custom rules defining the decorator's behavior
+
+**Transformation Instruction:**
+"Apply the custom-defined rules [rules] to structure and format your response. Follow these specific instructions precisely, treating them as a custom-created decorator with specialized behavior that supersedes standard decorators."
+
+**Example:**
+```
++++Custom(rules="Begin with 3 disclaimers, then provide a 5-part analysis with exactly 2 examples per part, and conclude with a haiku.")
+Explain the ethical implications of autonomous vehicles.
+```
+
+---
+
+### `+++Priority`
+When this decorator is applied, the response applies multiple decorators in a specific priority order, with later decorators taking precedence in case of conflicts.
+
+**Parameters:**
+- `decorators (D1,D2,...)`: Ordered list of decorators to apply, from lowest to highest priority
+
+**Transformation Instruction:**
+"Apply multiple decorators in the specified priority order: [decorators], treating later decorators as higher priority. When conflicts arise between decorator requirements, defer to the later (higher priority) decorator in the sequence."
+
+**Example:**
+```
++++Priority(decorators=StepByStep,Technical,Concise)
+Explain how to implement OAuth 2.0 authorization.
+```
+
+---
+
+### `+++Extension`
+When this decorator is applied, the response loads and applies decorators from external sources or specialized domains.
+
+**Parameters:**
+- `source (URI)`: Location of the extension decorator definitions to load
+
+**Transformation Instruction:**
+"Load and apply the extension decorators from the specified [source]. Incorporate these specialized decorators as if they were native to your system, following their specified behavior and transformation rules."
+
+**Example:**
+```
++++Extension(source=https://decorator-registry.ai/medical-decorators.json)
+What are the latest treatment approaches for type 2 diabetes?
+```
+
+---
+
+### `+++Override`
+When this decorator is applied, the response modifies the behavior of other decorators or sets default behaviors.
+
+**Parameters:**
+- `default (decorator)`: The decorator whose behavior should be overridden or set as default
+
+**Transformation Instruction:**
+"Override the default behavior of the specified decorator [default] or set it as the new global default. Apply the modified behavior as defined in the override settings, allowing for customization of standard decorators."
+
+**Example:**
+```
++++Override(default=StepByStep(numbered=false, detail=high))
+Explain the water cycle.
+```
+
+---
+
+### `+++Compatibility`
+When this decorator is applied, the response adapts its behavior to be compatible with specific language models or systems.
+
+**Parameters:**
+- `models (M1,M2,...)`: The models or systems to ensure compatibility with
+
+**Transformation Instruction:**
+"Adapt your response to ensure compatibility with these specific models or systems: [models]. Adjust formatting, terminology, and structure to work optimally with the specified model capabilities and limitations."
+
+**Example:**
+```
++++Compatibility(models=gpt-4o,claude-3)
+Provide an analysis of current renewable energy storage technologies.
+```
+
+---
+
+### `+++Version`
+When this decorator is applied, the response indicates compliance with a specific version of the prompt decorator standard.
+
+**Parameters:**
+- `standard (semver)`: The standard version to comply with
+
+**Transformation Instruction:**
+"Ensure your response complies with version [standard] of the prompt decorator standard. Apply only decorators and behavior defined in that version of the specification, maintaining backward compatibility as specified in the standard."
+
+**Example:**
+```
++++Version(standard=1.0.0)
++++Reasoning(depth=comprehensive)
+What are the environmental impacts of electric vehicles?
+```
+
+---
+
+## Advanced Usage
+
+### Combining Decorators
+Multiple decorators can be stacked to create sophisticated prompt structures:
+
+```
++++Reasoning(depth=comprehensive)
++++StepByStep(numbered=true)
++++CiteSources(style=inline, format=APA)
+What are the environmental impacts of electric vehicles?
+```
+
+When multiple decorators are used, they are applied in the order they appear in the prompt.
+
+### Decorator Order
+The order of decorators matters. Each decorator modifies the prompt based on the state after previous decorators have been applied.
+
+---
+
+## Implementation Instructions
+
+When processing user input:
+1. ALWAYS check for decorator patterns (`+++Name(params)`) at the beginning of lines
+2. For each identified decorator, retrieve its corresponding transformation instruction
+3. Apply the transformation instruction to your response generation process
+4. If multiple decorators are present, apply them sequentially in the order they appear
+5. If a decorator is not recognized, ignore it and process the remaining text normally
+6. The core user question follows the decorators and should be answered while adhering to all decorator requirements
+7. NEVER mention the decorators explicitly in your response - simply apply their effects
+
+These instructions must be applied automatically whenever a user message contains prompt decorators. The user should not need to request decorator processing explicitly.

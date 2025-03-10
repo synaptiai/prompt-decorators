@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="docs/assets/logo.png" alt="Prompt Decorators Logo" width="400"/>
+<img src="https://synaptiai.github.io/prompt-decorators/assets/logo.png" alt="Prompt Decorators Logo" width="400"/>
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python Versions](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/)
@@ -110,6 +110,8 @@ The Prompt Decorators project is currently in active development.
 
 You can see the how prompt decorators work by testing out the [demo](/demo/README.md) or running the [MCP server implementation](/docs/integrations/mcp/claude_desktop.md) together with your Claude Desktop.
 
+Or you can use the [.cursorrules](.cursorrules) in this repository as system instructions in Cursor (or chatGPT/Claude) to instruct it. Try it out and share your experiences!
+
 ### Implemented Functionality
 
 - **✅ Core Decorator Registry**: Load decorators from standardized JSON definitions
@@ -131,7 +133,7 @@ The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.
 
 ### Installation
 
-You can install the package from PyPI:
+You can install the package from PyPI [https://pypi.org/project/prompt-decorators/](https://pypi.org/project/prompt-decorators/):
 
 ```bash
 pip install prompt-decorators
