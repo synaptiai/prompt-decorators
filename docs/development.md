@@ -140,6 +140,10 @@ mypy prompt_decorators
 ### Building Documentation
 
 ```bash
+# Generate API and decorator documentation
+cd docs
+python generate_docs.py
+
 # Build documentation
 cd docs
 mkdocs build
@@ -149,6 +153,8 @@ mkdocs serve
 ```
 
 Then visit http://localhost:8000 to view the documentation.
+
+> **Note:** Always use `generate_docs.py` to regenerate documentation when making changes to decorators or code. This is the sole official documentation generator for the project.
 
 ## Working with Decorators
 

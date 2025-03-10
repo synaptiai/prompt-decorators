@@ -1,5 +1,4 @@
-"""
-Parser module for extracting decorators from prompts.
+"""Parser module for extracting decorators from prompts.
 
 This module provides functionality to parse and extract decorator annotations
 from prompt text using the +++ syntax.
@@ -13,8 +12,7 @@ from prompt_decorators.core.registry import DecoratorRegistry
 
 
 class DecoratorParser:
-    """
-    Parser for extracting decorator annotations from prompts.
+    """Parser for extracting decorator annotations from prompts.
 
     This class handles the parsing of decorator annotations in the format:
     +++DecoratorName(param1=value1, param2=value2)

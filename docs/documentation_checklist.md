@@ -1,5 +1,7 @@
 # Documentation Verification Checklist
 
+> **Important Note:** Always use `docs/generate_docs.py` to generate documentation for the prompt-decorators project. Any other documentation generators found in the codebase are deprecated and will be removed in future releases.
+
 This checklist helps ensure that the documentation for the prompt-decorators project is complete, accurate, and helpful for users. Use this checklist when reviewing documentation changes or conducting regular documentation audits.
 
 ## Navigation Structure

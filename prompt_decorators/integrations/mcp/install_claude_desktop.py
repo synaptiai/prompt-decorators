@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-Installation helper for Claude Desktop integration.
+"""Installation helper for Claude Desktop integration.
 
 This script generates a configuration file for Claude Desktop that sets up
 the Prompt Decorators MCP integration.

@@ -128,8 +128,7 @@ class Parameter(BaseModel):
 
 
 class DecoratorParameter:
-    """
-    Represents a parameter for a decorator.
+    """Represents a parameter for a decorator.
 
     This class is used by dynamic decorators to define parameters and validate values.
     """
@@ -148,8 +147,7 @@ class DecoratorParameter:
         max_length: Optional[int] = None,
         pattern: Optional[str] = None,
     ):
-        """
-        Initialize a decorator parameter.
+        """Initialize a decorator parameter.
 
         Args:
             name: The name of the parameter
@@ -177,8 +175,7 @@ class DecoratorParameter:
         self.pattern = pattern
 
     def validate(self, value: Any) -> Any:
-        """
-        Validate a parameter value against constraints.
+        """Validate a parameter value against constraints.
 
         Args:
             value: The value to validate

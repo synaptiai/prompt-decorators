@@ -13,22 +13,6 @@ Features:
 - Parameter validation against schema
 - Support for decorator composition
 
-Example usage:
-    >>> from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators, create_decorator_instance
-    >>> # Using apply_dynamic_decorators for string-based decorators
-    >>> transformed = apply_dynamic_decorators(
-    ...     "+++StepByStep(numbered=true)
-+++Tone(style=technical)
-What is quantum computing?"
-    ... )
-    >>>
-    >>> # Using decorator objects
-    >>> step_by_step = create_decorator_instance("StepByStep", numbered=True)
-    >>> technical_tone = create_decorator_instance("Tone", style="technical")
-    >>> prompt = "What is quantum computing?"
-    >>> prompt = step_by_step(prompt)
-    >>> prompt = technical_tone(prompt)
-
 ## Classes
 
 ### DecoratorDefinition

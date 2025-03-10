@@ -1,5 +1,4 @@
-"""
-MCP Server for Prompt Decorators.
+"""MCP Server for Prompt Decorators.
 
 This module provides integration between Prompt Decorators and the Model Context Protocol (MCP),
 exposing prompt decorators as MCP tools that can be used by any MCP client.
@@ -51,8 +50,7 @@ except ImportError:
         """Dummy FastMCP class for when MCP is not installed."""
 
         def __init__(self, name: str) -> None:
-            """
-            Initialize the dummy FastMCP class.
+            """Initialize the dummy FastMCP class.
 
             Args:
                 name: The name of the MCP server.
@@ -63,8 +61,7 @@ except ImportError:
             self.name = name
 
         def tool(self, *args: Any, **kwargs: Any) -> Callable[[F], F]:
-            """
-            Dummy tool decorator for registering functions as MCP tools.
+            """Dummy tool decorator for registering functions as MCP tools.
 
             Args:
                 *args: Positional arguments (ignored).
@@ -75,8 +72,7 @@ except ImportError:
             """
 
             def decorator(func: F) -> F:
-                """
-                Inner decorator function that returns the input function unchanged.
+                """Inner decorator function that returns the input function unchanged.
 
                 Args:
                     func: The function to decorate.
@@ -89,8 +85,7 @@ except ImportError:
             return decorator
 
         def run(self, **kwargs: Any) -> None:
-            """
-            Dummy run method that raises an ImportError.
+            """Dummy run method that raises an ImportError.
 
             Args:
                 **kwargs: Keyword arguments (ignored).
@@ -126,8 +121,7 @@ if MCP_AVAILABLE:
 
     @mcp.tool()
     def list_decorators() -> Dict[str, Any]:
-        """
-        Lists all available prompt decorators.
+        """Lists all available prompt decorators.
 
         Returns:
             A dictionary containing information about all available decorators.
@@ -276,8 +270,7 @@ if MCP_AVAILABLE:
 
     @mcp.tool()
     def get_decorator_details(name: str) -> Dict[str, Any]:
-        """
-        Get detailed information about a specific decorator.
+        """Get detailed information about a specific decorator.
 
         Args:
             name: The name of the decorator to get details for.
@@ -488,8 +481,7 @@ if MCP_AVAILABLE:
     def apply_decorators(
         prompt: str, decorators: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """
-        Apply decorators to a prompt using the +++ syntax.
+        """Apply decorators to a prompt using the +++ syntax.
 
         Args:
             prompt: The prompt text to decorate.
@@ -570,8 +562,7 @@ if MCP_AVAILABLE:
     def create_decorated_prompt(
         template_name: str, content: str, parameters: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        """
-        Create a decorated prompt using a predefined template.
+        """Create a decorated prompt using a predefined template.
 
         Args:
             template_name: The name of the template to use.
@@ -711,8 +702,7 @@ if MCP_AVAILABLE:
 
     @mcp.tool()
     def transform_prompt(prompt: str, decorator_strings: List[str]) -> Dict[str, Any]:
-        """
-        Transform a prompt using a list of decorator strings.
+        """Transform a prompt using a list of decorator strings.
 
         This tool directly transforms a prompt using the raw decorator syntax strings
         (e.g., "+++StepByStep(numbered=true)"), which can be useful for clients
@@ -788,8 +778,7 @@ if MCP_AVAILABLE:
             }
 
     def run_server(host: str = "0.0.0.0", port: int = 5000) -> None:
-        """
-        Run the MCP server.
+        """Run the MCP server.
 
         Args:
             host: The host to listen on.
@@ -816,8 +805,7 @@ if MCP_AVAILABLE:
 else:
     # Stub implementations for when MCP is not available
     def list_decorators() -> Dict[str, Any]:
-        """
-        Stub implementation for when MCP is not available.
+        """Stub implementation for when MCP is not available.
 
         Returns:
             A dictionary with an error message.
@@ -826,8 +814,7 @@ else:
         return {"error": "MCP is not available"}
 
     def get_decorator_details(name: str) -> Dict[str, Any]:
-        """
-        Stub implementation for when MCP is not available.
+        """Stub implementation for when MCP is not available.
 
         Args:
             name: The name of the decorator to get details for (ignored).
@@ -841,8 +828,7 @@ else:
     def apply_decorators(
         prompt: str, decorators: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
-        """
-        Stub implementation for when MCP is not available.
+        """Stub implementation for when MCP is not available.
 
         Args:
             prompt: The prompt text to decorate (ignored).
@@ -855,8 +841,7 @@ else:
         return {"error": "MCP is not available"}
 
     def transform_prompt(prompt: str, decorator_strings: List[str]) -> Dict[str, Any]:
-        """
-        Stub implementation for when MCP is not available.
+        """Stub implementation for when MCP is not available.
 
         Args:
             prompt: The prompt text to transform (ignored).
@@ -871,8 +856,7 @@ else:
     def create_decorated_prompt(
         template_name: str, content: str, parameters: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
-        """
-        Stub implementation for when MCP is not available.
+        """Stub implementation for when MCP is not available.
 
         Args:
             template_name: The name of the template to use (ignored).
@@ -886,8 +870,7 @@ else:
         return {"error": "MCP is not available"}
 
     def run_server(host: str = "0.0.0.0", port: int = 5000) -> None:
-        """
-        Stub implementation for when MCP is not available.
+        """Stub implementation for when MCP is not available.
 
         Args:
             host: The host to listen on (ignored).

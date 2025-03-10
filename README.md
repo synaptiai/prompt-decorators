@@ -119,16 +119,19 @@ The framework is organized into several key components:
    - `discovery.py`: Runtime decorator discovery and registration
    - `compatibility.py`: Checks compatibility between decorators
    - `cache.py`: Caching utilities for decorator responses
-   - `doc_gen.py`: Documentation generation utilities
    - `string_utils.py`: String manipulation utilities
    - `json_loader.py`: Loads decorator definitions from JSON files
 
-4. **Integrations** (`prompt_decorators/integrations/`):
+4. **Documentation** (`docs/`):
+   - `generate_docs.py`: Official documentation generator for decorators and API reference
+   - Documentation standards, workflows, and guidelines
+
+5. **Integrations** (`prompt_decorators/integrations/`):
    - `mcp/`: Integration with the Model Context Protocol
    - `mcp/server.py`: MCP server implementation
    - `mcp/claude_desktop.py`: Integration with Claude Desktop
 
-5. **Scripts** (`scripts/`):
+6. **Scripts** (`scripts/`):
    - Documentation scripts for generating, verifying, and enhancing documentation
    - Validation scripts for checking docstrings and code quality
    - Development tools for common tasks

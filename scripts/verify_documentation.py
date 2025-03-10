@@ -132,9 +132,7 @@ def run_doc_generator() -> bool:
     logger.info("Running documentation generator...")
 
     # Run the documentation generator
-    returncode, stdout, stderr = run_command(
-        ["python", "docs/generate_docs.py", "--format", "markdown"]
-    )
+    returncode, stdout, stderr = run_command(["python", "docs/generate_docs.py"])
 
     logger.info(stdout)
     if returncode != 0:

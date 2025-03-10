@@ -1,5 +1,4 @@
-"""
-Model Context Protocol (MCP) integration for Prompt Decorators.
+"""Model Context Protocol (MCP) integration for Prompt Decorators.
 
 This module provides integration between Prompt Decorators and the Model Context Protocol (MCP),
 allowing users to apply decorators through MCP tools.

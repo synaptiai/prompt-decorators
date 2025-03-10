@@ -6,7 +6,7 @@ This document explains the workflow for generating and maintaining documentation
 
 The documentation for Prompt Decorators consists of:
 
-1. **API Reference**: Automatically generated from docstrings and type annotations in the code
+1. **API Reference**: Automatically generated from docstrings, type annotations, and registry data
 2. **User Guides**: Manually written Markdown files
 3. **Examples**: Code examples with explanations
 4. **Tutorials**: Step-by-step guides for common tasks
@@ -17,29 +17,30 @@ We use [MkDocs](https://www.mkdocs.org/) with the [Material theme](https://squid
 
 The documentation generation process involves two main steps:
 
-1. **Generate API Reference**: Extract docstrings and type annotations from the code to create Markdown files
+1. **Generate API Reference**: Extract information from code and registry to create Markdown files
 2. **Build Documentation Website**: Use MkDocs to build a static website from all Markdown files
 
 ### Step 1: Generate API Reference
 
-To generate the API reference documentation, use the `generate_docs.py` script:
+To generate the API reference documentation, use the `generate_docs.py` script in the `docs` directory:
 
 ```bash
-# Generate Markdown documentation
-python docs/generate_docs.py --format markdown
+# Generate documentation
+cd docs
+python generate_docs.py
 
-# Clean the output directory before generating documentation
-python docs/generate_docs.py --format markdown --clean
-
-# Generate both Markdown and HTML documentation
-python docs/generate_docs.py --format both
+# Enable debug mode for verbose output
+python generate_docs.py --debug
 ```
 
 This script:
 - Extracts docstrings and type annotations from the code
 - Loads decorator definitions from the registry
-- Merges code and registry documentation
-- Generates Markdown files in the `docs/api` directory
+- Generates comprehensive documentation for all modules and decorators
+- Creates well-organized Markdown files in the `docs/api` directory
+- Automatically categorizes decorators by their functional domain
+
+> **Important:** `docs/generate_docs.py` is the sole official documentation generator for the Prompt Decorators project. Any other documentation generators found in the codebase (such as `doc_gen.py`, `generate_api_docs.py`, or scripts in the `scripts/` directory that generate documentation) are deprecated and should not be used. These deprecated files will be removed in future releases.
 
 ### Step 2: Build Documentation Website
 
@@ -62,6 +63,8 @@ The documentation is organized as follows:
 
 - `docs/`: Root directory for documentation
   - `api/`: API reference documentation (auto-generated)
+    - `modules/`: Module documentation
+    - `decorators/`: Decorator documentation
   - `examples/`: Code examples with explanations
   - `guide/`: User guides
   - `tutorials/`: Step-by-step tutorials
@@ -75,9 +78,18 @@ The documentation is organized as follows:
 When you make changes to the code:
 
 1. Update docstrings and type annotations in the code
-2. Run `python docs/generate_docs.py --format markdown --clean` to regenerate the API reference
+2. Run `python docs/generate_docs.py` to regenerate the API reference
 3. Run `mkdocs serve` to preview the changes
 4. Commit the changes to the repository
+
+### Adding New Decorators
+
+When adding new decorators to the registry:
+
+1. Create the JSON definition file in the appropriate registry directory
+2. Run `python docs/generate_docs.py` to generate documentation for the new decorator
+3. The documentation will automatically include the decorator in the appropriate category
+4. Verify the generated documentation with `mkdocs serve`
 
 ### Adding New Documentation
 

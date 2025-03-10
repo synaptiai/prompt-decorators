@@ -1,5 +1,4 @@
-"""
-String utilities for working with prompt decorators.
+"""String utilities for working with prompt decorators.
 
 This module provides utility functions for extracting and replacing decorators in text.
 """
@@ -9,8 +8,7 @@ from typing import Any, Dict, List, Tuple
 
 
 def extract_decorators_from_text(text: str) -> Tuple[List[Dict[str, Any]], str]:
-    """
-    Extract decorator annotations from text.
+    """Extract decorator annotations from text.
 
     Args:
         text: Text containing decorator annotations
@@ -82,8 +80,7 @@ def extract_decorators_from_text(text: str) -> Tuple[List[Dict[str, Any]], str]:
 
 
 def replace_decorators_in_text(text: str, decorators: List[Dict[str, Any]]) -> str:
-    """
-    Replace decorator annotations in text.
+    """Replace decorator annotations in text.
 
     Args:
         text: Text to modify

@@ -1,5 +1,4 @@
-"""
-Prompt Decorators - A framework for dynamic prompt modification.
+"""Prompt Decorators - A framework for dynamic prompt modification.
 
 This module provides decorators that can be applied to prompts
 to enhance, modify, or transform them before they are sent to LLMs.

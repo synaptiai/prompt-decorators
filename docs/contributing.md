@@ -148,10 +148,17 @@ To add a new decorator to the registry:
 We use MkDocs with the Material theme for documentation. To build the documentation locally:
 
 ```bash
+# Generate API and decorator documentation
+cd docs
+python generate_docs.py
+
+# Serve documentation locally
 poetry run mkdocs serve
 ```
 
 This will start a local server at http://localhost:8000 where you can preview the documentation.
+
+> **Important:** Always use `docs/generate_docs.py` to regenerate the API reference and decorator documentation before building or serving with MkDocs. Any other documentation generators found in the codebase are deprecated.
 
 ## License
 

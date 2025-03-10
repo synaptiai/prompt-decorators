@@ -135,7 +135,6 @@ nav:
       - prompt_decorators.utils.cache: api/modules/prompt_decorators.utils.cache.md
       - prompt_decorators.utils.compatibility: api/modules/prompt_decorators.utils.compatibility.md
       - prompt_decorators.utils.discovery: api/modules/prompt_decorators.utils.discovery.md
-      - prompt_decorators.utils.doc_gen: api/modules/prompt_decorators.utils.doc_gen.md
       - prompt_decorators.utils.factory: api/modules/prompt_decorators.utils.factory.md
       - prompt_decorators.utils.json_loader: api/modules/prompt_decorators.utils.json_loader.md
       - prompt_decorators.utils.model_detection: api/modules/prompt_decorators.utils.model_detection.md

@@ -1,5 +1,4 @@
-"""
-Schema definitions for prompt decorators.
+"""Schema definitions for prompt decorators.
 
 This module defines the schema classes used for validating decorator definitions
 and parameters.

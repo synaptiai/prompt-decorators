@@ -1,5 +1,4 @@
-"""
-Utility functions for prompt decorators.
+"""Utility functions for prompt decorators.
 
 This package provides utility functions for working with prompt decorators.
 """

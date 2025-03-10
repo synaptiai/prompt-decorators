@@ -1,5 +1,4 @@
-"""
-Schema definitions for prompt decorators.
+"""Schema definitions for prompt decorators.
 
 This package contains schema definitions for validating decorator definitions
 and parameters.
