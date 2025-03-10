@@ -161,5 +161,37 @@ def strategic_planning() -> None:
     # Response is already logged by query_with_decorators
 
 
+@app.command()
+def perspective_cascade() -> None:
+    """
+    Demonstrate analyzing a complex topic through multiple interconnected perspectives.
+    """
+    log_info("Running Perspective Cascade example")
+    prompt = "Analyze the future of remote work and its implications for society."
+    decorators = [
+        "PerspectiveCascade(domain='business', perspectives=4, integrationLevel='comprehensive')",
+        "OutputFormat(format='markdown')",
+    ]
+    result = query_with_decorators(prompt, decorators)
+    # Response is already logged by query_with_decorators
+
+
+@app.command()
+def temporal_resonance() -> None:
+    """
+    Demonstrate analyzing patterns across different time horizons.
+    """
+    log_info("Running Temporal Resonance example")
+    prompt = (
+        "Analyze the evolution of transportation technology and its future trajectory."
+    )
+    decorators = [
+        "TemporalResonance(horizons=3, resonancePoints=3, domain='technology', depth='deep')",
+        "OutputFormat(format='markdown')",
+    ]
+    result = query_with_decorators(prompt, decorators)
+    # Response is already logged by query_with_decorators
+
+
 if __name__ == "__main__":
     app()
