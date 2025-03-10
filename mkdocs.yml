@@ -57,6 +57,8 @@ plugins:
       enable_creation_date: true
       fallback_to_build_date: true
       strict: false
+  - autorefs:
+      link_titles: auto
   - mkdocstrings:
       default_handler: python
       handlers:
@@ -67,8 +69,6 @@ plugins:
             show_source: true
             show_category_heading: true
             show_if_no_docstring: false
-  - mermaid2:
-      version: 10.0.2
 
 # Add strict: false at the root level
 strict: false
