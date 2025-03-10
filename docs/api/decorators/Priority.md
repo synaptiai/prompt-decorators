@@ -1,5 +1,60 @@
 # Priority Decorator
 
-Documentation for the Priority decorator.
+A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior.
 
-This documentation is a placeholder and will be updated in the future.
+**Category**: Meta
+
+## Parameters
+
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|--------|
+| `decorators` | array | Ordered list of decorators by priority (highest priority first) | Required |
+| `explicit` | boolean | Whether to explicitly mention overridden behaviors in the response | False |
+| `mode` | enum | How to handle conflicts between decorators | override |
+
+## Mode Options
+
+- `override`: When decorators conflict, completely override lower-priority decorator instructions with those from higher-priority decorators.
+- `merge`: When decorators conflict, attempt to merge their instructions by integrating compatible aspects of each.
+- `cascade`: When decorators conflict, apply higher-priority decorator instructions first, then apply lower-priority instructions where they don't directly conflict.
+
+## Examples
+
+### Basic priority ordering between potentially conflicting decorators
+
+```
++++Priority(decorators=[Concise,Detailed])
+Explain quantum computing.
+```
+
+Applies both decorators, but when conflicts arise, Concise takes precedence over Detailed, resulting in a more concise explanation of quantum computing
+
+### Complex priority with explicit conflict resolution
+
+```
++++Priority(decorators=[Academic,Creative,StepByStep], explicit=true, mode=cascade)
+Explain the water cycle.
+```
+
+Implements a cascading priority where Academic style dominates, with Creative elements where they don't conflict with Academic style, and StepByStep structure throughout, explicitly noting where decorator behaviors were modified due to conflicts
+
+## Model-Specific Implementations
+
+### gpt-4
+
+**Instruction:** Follow a strict priority order when applying these decorators: {decorators}. When conflicts occur between decorators, resolve them using '{mode}' approach. Focus on implementing each decorator's functionality according to this priority hierarchy.
+
+**Notes:** Even GPT-4 sometimes needs explicit reminders about priority order when multiple decorators have complex interactions
+
+
+## Compatibility
+
+- **Requires**: None
+- **Conflicts**: None
+- **Compatible Models**: gpt-4
+- **Standard Version**: 1.0.0 - 2.0.0
+
+## Related Decorators
+
+- **Conditional**: Enhances Priority Priority complements Conditional by determining which decorators take precedence when conditions are met
+- **Override**: Conflicts with Priority Priority and Override both attempt to control decorator behavior conflicts in different ways

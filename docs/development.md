@@ -216,6 +216,26 @@ Use the validator to check your decorator:
 python -m prompt_decorators.tools.validator validate path/to/my_decorator.json
 ```
 
+### Using the Unified Validator Script
+
+The project includes a unified validator script (`prompt_validator.py`) that provides more comprehensive validation capabilities:
+
+```bash
+# Validate decorator syntax in a prompt
+python scripts/prompt_validator.py syntax -t "+++Reasoning(depth=comprehensive)\nExplain quantum computing."
+
+# Validate a decorator schema file
+python scripts/prompt_validator.py schema -f registry/core/reasoning/deductive.json
+
+# Validate all files in a directory
+python scripts/prompt_validator.py directory -d registry/core -s registry
+
+# Get help on all available commands
+python scripts/prompt_validator.py --help
+```
+
+This script is especially useful for development as it combines multiple validation functions in a single tool.
+
 ## Code Style Guidelines
 
 ### Python Code

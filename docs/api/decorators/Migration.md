@@ -1,5 +1,61 @@
 # Migration Decorator
 
-Documentation for the Migration decorator.
+Plans migration approaches between system states.
 
-This documentation is a placeholder and will be updated in the future.
+**Category**: Architecture And Design
+
+## Parameters
+
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|--------|
+| `from` | string | Current state | context-dependent |
+| `to` | string | Target state | context-dependent |
+| `approach` | enum | Migration strategy | incremental |
+
+## Approach Options
+
+- `big-bang`: Use a big-bang migration approach, where the entire system is replaced at once.
+- `incremental`: Use an incremental migration approach, where components are migrated one by one over time.
+- `strangler-fig`: Use a strangler-fig migration approach, where the new system gradually replaces the old one.
+- `parallel-run`: Use a parallel-run migration approach, where both systems operate simultaneously until the migration is complete.
+
+## Examples
+
+### Migration plan for transitioning from monolith to microservices
+
+```
++++Migration(from=monolith, to=microservices, approach=strangler-fig)
+Create a migration plan for transitioning our monolithic e-commerce application to microservices.
+```
+
+A detailed migration plan using the strangler-fig pattern to gradually transition from a monolithic architecture to microservices.
+
+### Database migration planning
+
+```
++++Migration(from=SQL, to=NoSQL, approach=parallel-run)
+How should we migrate our customer data?
+```
+
+A migration plan for transitioning from SQL to NoSQL databases using a parallel-run approach, with specific focus on customer data.
+
+## Model-Specific Implementations
+
+### gpt-3.5-turbo
+
+**Instruction:** Create a step-by-step migration plan to move from {from} to {to} using the {approach} approach. Include timeline, risks, and resource needs.
+
+**Notes:** Simplified instruction for models with more limited context windows.
+
+
+## Compatibility
+
+- **Requires**: None
+- **Conflicts**: None
+- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Standard Version**: 1.0.0 - 2.0.0
+
+## Related Decorators
+
+- **SystemDesign**: Enhances Migration Migration works well with SystemDesign as it provides context for the migration planning.
+- **RiskAnalysis**: Enhances Migration RiskAnalysis can be used to further elaborate on the risks associated with the migration.

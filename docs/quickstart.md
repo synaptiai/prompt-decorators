@@ -103,6 +103,38 @@ if reasoning_decorator:
             print(f"    Default: {param.default}")
 ```
 
+### Validating Decorator Syntax
+
+You can validate decorator syntax using the validation tools:
+
+```bash
+# Validate decorator syntax in a prompt
+python scripts/prompt_validator.py syntax -t "+++Reasoning(depth=comprehensive)\nExplain quantum computing."
+
+# Validate a decorator schema file
+python scripts/prompt_validator.py schema -f registry/core/reasoning/deductive.json
+
+# Validate all files in a directory
+python scripts/prompt_validator.py directory -d registry/core -s registry
+```
+
+You can also validate syntax programmatically:
+
+```python
+from prompt_decorators.core.dynamic_decorator import extract_decorators
+
+# Extract and validate decorators from a prompt
+prompt = """
++++Reasoning(depth=comprehensive)
++++StepByStep(numbered=true)
+Explain quantum computing.
+"""
+
+decorators, cleaned_text = extract_decorators(prompt)
+for decorator in decorators:
+    print(f"Found decorator: {decorator.name} with parameters: {decorator.parameters}")
+```
+
 ## Integration with LLM Providers
 
 ### Using with OpenAI

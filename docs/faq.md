@@ -218,6 +218,16 @@ Use the validator tool to check your decorators:
 python -m prompt_decorators.tools.validator validate my_decorator.json
 ```
 
+You can also use the more comprehensive unified validator script:
+
+```bash
+# Validate decorator syntax in a prompt
+python scripts/prompt_validator.py syntax -t "+++Reasoning(depth=comprehensive)\nExplain quantum computing."
+
+# Validate a decorator schema file
+python scripts/prompt_validator.py schema -f registry/core/reasoning/deductive.json
+```
+
 ## Integrations
 
 ### How do I use Prompt Decorators with Claude Desktop?

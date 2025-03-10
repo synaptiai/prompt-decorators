@@ -1,5 +1,61 @@
 # RedTeam Decorator
 
-Documentation for the RedTeam decorator.
+Applies adversarial analysis to test assumptions, identify vulnerabilities, and strengthen proposals by actively looking for flaws. This decorator simulates how an opponent or critic would evaluate and attack ideas, plans, or arguments.
 
-This documentation is a placeholder and will be updated in the future.
+**Category**: Reasoning
+
+## Parameters
+
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|--------|
+| `strength` | enum | How aggressive or challenging the red team analysis should be | moderate |
+| `focus` | array | Specific aspects to focus the red team analysis on |  |
+| `constructive` | boolean | Whether to include constructive suggestions for improvement after critiques | True |
+
+## Strength Options
+
+- `moderate`: Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective.
+- `aggressive`: Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches.
+- `steelman`: Apply the most sophisticated possible critique by first strengthening the argument to its best form, then finding its most substantive vulnerabilities.
+
+## Examples
+
+### Basic red team analysis of a business proposal
+
+```
++++RedTeam
+Here's our plan to launch a new subscription service...
+```
+
+Analyzes the subscription service plan from an adversarial perspective, identifying potential weaknesses, oversights, and challenges
+
+### Aggressive red team analysis with specific focus areas
+
+```
++++RedTeam(strength=aggressive, focus=[security,scalability,market-fit], constructive=true)
+Review our new authentication system design.
+```
+
+Aggressively challenges the authentication system design, specifically targeting security, scalability, and market-fit concerns, followed by constructive improvement suggestions
+
+## Model-Specific Implementations
+
+### gpt-3.5-turbo
+
+**Instruction:** Act as a {strength} critic examining this content. Look for all possible problems, weaknesses, and vulnerabilities. {focus} Challenge underlying assumptions. Think about what could go wrong, what's missing, and why this might fail. {constructive} Be thorough and consider multiple angles of attack.
+
+**Notes:** This model may need more explicit direction to maintain a consistently critical stance throughout the analysis
+
+
+## Compatibility
+
+- **Requires**: None
+- **Conflicts**: None
+- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Standard Version**: 1.0.0 - 2.0.0
+
+## Related Decorators
+
+- **Limitations**: Enhances RedTeam RedTeam and Limitations work together to identify both external challenges and inherent constraints
+- **Steelman**: Enhances RedTeam When RedTeam is set to 'steelman' strength, it works particularly well with the Steelman decorator
+- **FindGaps**: Enhances RedTeam FindGaps complements RedTeam by identifying missing elements while RedTeam challenges existing elements

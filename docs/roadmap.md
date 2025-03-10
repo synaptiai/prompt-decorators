@@ -2,6 +2,31 @@
 
 This page outlines the future development plans for the Prompt Decorators framework.
 
+## Implementation Phases
+
+The implementation is organized into four main phases:
+
+- **Phase 1 (Core Support)**: ✅ Complete
+  - Core decorators and transformation functionality
+  - Parameter validation and basic error handling
+
+- **Phase 2 (Extended Support)**: 🔄 In Progress
+  - Most decorator categories are implemented
+  - Validation tools are functional but being improved
+  - Documentation is being aligned with implementation
+
+- **Phase 3 (Full Support)**: 🕒 Planned
+  - Complete implementation of all standard decorators
+  - Comprehensive error handling
+  - Enhanced composition strategies
+
+- **Phase 4 (Extensions)**: 🕒 Planned
+  - Extension loading mechanism
+  - Domain-specific extensions
+  - Extension discovery service
+
+For a detailed breakdown of implementation status, see our [Implementation Status](implementation-status.md) document.
+
 ## Core Framework Enhancements
 
 - **Performance Optimization**: Improve the efficiency of decorator application for large prompts

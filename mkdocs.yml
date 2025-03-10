@@ -79,6 +79,7 @@ nav:
     - Quick Start: quickstart.md
     - Core Concepts: concepts.md
     - Creating Decorators: creating_decorators.md
+    - Extensions: extensions.md
     - Compatibility: compatibility.md
   - Tutorials:
     - Creating Custom Decorators: tutorials/creating_custom_decorator.md
@@ -100,6 +101,7 @@ nav:
     - Roadmap: roadmap.md
     - Architecture: architecture.md
     - Specification: prompt-decorators-specification-v1.0.md
+    - Implementation Status: implementation-status.md
     - Code Quality Integration: code_quality_integration.md
     - FAQ: faq.md
     - Glossary: glossary.md
@@ -242,6 +244,7 @@ nav:
       - PeerReview: api/decorators/PeerReview.md
       - Performance: api/decorators/Performance.md
       - Persona: api/decorators/Persona.md
+      - PerspectiveCascade: api/decorators/PerspectiveCascade.md
       - PostMortem: api/decorators/PostMortem.md
       - PreciseModification: api/decorators/PreciseModification.md
       - Precision: api/decorators/Precision.md
@@ -278,6 +281,7 @@ nav:
       - TechDebt: api/decorators/TechDebt.md
       - TechDebtControl: api/decorators/TechDebtControl.md
       - TechStack: api/decorators/TechStack.md
+      - TemporalResonance: api/decorators/TemporalResonance.md
       - TestCases: api/decorators/TestCases.md
       - TestStrategy: api/decorators/TestStrategy.md
       - Timeline: api/decorators/Timeline.md

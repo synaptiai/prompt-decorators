@@ -1,5 +1,75 @@
 # MemoryConstraint Decorator
 
-Documentation for the MemoryConstraint decorator.
+Helps manage implementation within AI context window limitations by focusing on specific code portions.
 
-This documentation is a placeholder and will be updated in the future.
+**Category**: Implementation-Focused
+
+## Parameters
+
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|--------|
+| `focus` | enum | Part of the code to focus on | component |
+| `implementation` | enum | Implementation completeness | core-logic |
+| `context` | enum | How to handle surrounding code | summarize |
+
+## Focus Options
+
+- `single-function`: Focus only on implementing a single function or method.
+- `component`: Implement a complete component with its related functions.
+- `interface`: Focus on defining the interface or API surface.
+- `specific-feature`: Implement a specific feature across relevant functions/components.
+
+## Implementation Options
+
+- `skeleton`: Provide only the structure/skeleton of the implementation with minimal logic.
+- `core-logic`: Implement the core logic while omitting edge cases and optimizations.
+- `full-implementation`: Provide a complete implementation with error handling and edge cases.
+- `with-tests`: Include both implementation and unit tests for the code.
+
+## Context Options
+
+- `ignore`: Ignore any surrounding code context in your implementation.
+- `summarize`: Briefly summarize how this implementation fits into the broader codebase.
+- `interface-only`: Only reference interfaces or signatures of surrounding code.
+- `stub`: Include stub implementations for surrounding code dependencies.
+
+## Examples
+
+### Implementing a single authentication function with full implementation
+
+```
++++MemoryConstraint(focus=single-function, implementation=full-implementation, context=interface-only)
+Implement the user authentication function that verifies credentials against our database.
+```
+
+A complete implementation of just the authentication function with error handling and edge cases, referencing only the interfaces of surrounding code.
+
+### Creating a component skeleton with stubbed dependencies
+
+```
++++MemoryConstraint(focus=component, implementation=skeleton, context=stub)
+Implement a shopping cart component for our e-commerce application.
+```
+
+A structural skeleton of the shopping cart component with stubbed implementations of dependencies.
+
+## Model-Specific Implementations
+
+### gpt-3.5-turbo
+
+**Instruction:** Due to context window limitations, focus specifically on: {focus} with {implementation} level of detail. For surrounding code, {context}.
+
+**Notes:** More explicit instructions needed for models with smaller context windows.
+
+
+## Compatibility
+
+- **Requires**: None
+- **Conflicts**: FullSystemDesign, ComprehensiveImplementation
+- **Compatible Models**: gpt-3.5-turbo, gpt-4, claude-2, llama-2
+- **Standard Version**: 1.0.0 - 2.0.0
+
+## Related Decorators
+
+- **CodeStyle**: Enhances MemoryConstraint Can be combined with CodeStyle to specify both memory constraints and coding style preferences.
+- **FullSystemDesign**: Conflicts with MemoryConstraint Conflicts with decorators that request comprehensive system designs as MemoryConstraint deliberately limits scope.

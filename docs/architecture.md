@@ -48,6 +48,33 @@ step_by_step = create_decorator_instance("StepByStep", numbered=True)
 transformed_prompt = persona(step_by_step(original_prompt))
 ```
 
+### Validation Tools
+
+The framework includes several validation tools to ensure decorator definition quality and proper usage:
+
+- **Parameter Validators**: Type-specific validators in `validation.py` that enforce parameter constraints
+- **Schema Validation**: JSON schema validation for decorator definitions
+- **Syntax Validation**: Parser that validates decorator syntax in prompts
+- **Command-line Validators**:
+  - `validate_decorators.py`: For schema validation of JSON files
+  - `prompt_validator.py`: Unified CLI for validating syntax, schema, and directories
+
+The validation system is designed to catch issues early:
+
+```mermaid
+graph TD
+    A[Decorator Definition] --> B[Schema Validator]
+    B -- Valid Schema --> C[Parameter Validator]
+    C -- Valid Parameters --> D[Transform Function Validator]
+    D -- Valid Function --> E[Registry]
+
+    F[Prompt with Decorators] --> G[Syntax Validator]
+    G -- Valid Syntax --> H[Decorator Extractor]
+    H --> I[Decorator Instances]
+```
+
+These validation tools can be used both programmatically and from the command line, providing flexibility for different workflows.
+
 ### Dynamic Transformation System
 
 The transformation system executes JavaScript transform functions:

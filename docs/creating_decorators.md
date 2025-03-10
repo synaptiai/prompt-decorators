@@ -419,3 +419,55 @@ business_analysis_def = DecoratorDefinition(
 - Explore the [Tutorial: Creating a Custom Decorator](tutorials/creating_custom_decorator.md) for step-by-step examples
 - Learn about [Tutorial: Combining Decorators](tutorials/combining_decorators.md) for advanced use cases
 - See the [specification](prompt-decorators-specification-v1.0.md) for technical details of the decorator system
+
+## Validating Custom Decorators
+
+After creating a custom decorator, it's important to validate it to ensure it works correctly and follows the framework's standards.
+
+### Using Validator Tools
+
+You can validate your custom decorator using the validation tools:
+
+```bash
+# For JSON-based decorators, validate the schema
+python scripts/prompt_validator.py schema -f path/to/your/custom_decorator.json
+
+# To validate a decorator's syntax in a prompt
+python scripts/prompt_validator.py syntax -t "+++CustomPrefix(prefix='CUSTOM: ')\nThis is a test prompt."
+```
+
+### Validating Programmatically
+
+You can also validate decorators programmatically:
+
+```python
+from prompt_decorators.core.validation import TypeValidator, RangeValidator
+
+# Validate a parameter value
+string_validator = TypeValidator("string")
+is_valid = string_validator.validate("This is a string")  # Returns the string if valid
+
+# Validate a numeric range
+range_validator = RangeValidator(min_value=1, max_value=10)
+valid_number = range_validator.validate(5)  # Returns 5 if valid
+# Will raise ValidationError for values outside the range
+
+# Validate a decorator's parameters using extract_decorators
+from prompt_decorators.core.dynamic_decorator import extract_decorators
+
+prompt = "+++CustomPrefix(prefix='TEST: ')\nMy prompt text."
+try:
+    decorators, text = extract_decorators(prompt)
+    print(f"Valid decorators found: {[d.name for d in decorators]}")
+except Exception as e:
+    print(f"Validation error: {e}")
+```
+
+### Common Validation Issues
+
+Watch out for these common issues when creating custom decorators:
+
+1. **Parameter Type Mismatches**: Ensure parameter values match their declared types
+2. **Missing Required Parameters**: All required parameters must be provided
+3. **Invalid Transform Functions**: Syntax errors in transform functions
+4. **Naming Conflicts**: Decorator names must be unique in the registry

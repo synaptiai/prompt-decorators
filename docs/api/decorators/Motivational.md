@@ -1,5 +1,69 @@
 # Motivational Decorator
 
-Documentation for the Motivational decorator.
+Enhances responses with encouraging, inspiring, and empowering language. This decorator is designed to motivate action, build confidence, and create a positive emotional impact while still delivering substantive content.
 
-This documentation is a placeholder and will be updated in the future.
+**Category**: Tone
+
+## Parameters
+
+| Parameter | Type | Description | Default |
+|-----------|------|-------------|--------|
+| `intensity` | enum | The level of motivational energy and enthusiasm | moderate |
+| `focus` | enum | The primary motivational approach to emphasize | balanced |
+| `actionable` | boolean | Whether to include specific actionable steps or only inspirational content | True |
+
+## Intensity Options
+
+- `mild`: Use a mildly motivational tone with gentle encouragement and moderate positivity, maintaining a balanced and realistic perspective.
+- `moderate`: Use a moderately motivational tone with clear encouragement, positive framing, and confidence-building language throughout the response.
+- `high`: Use a highly motivational tone with energetic, enthusiastic, and empowering language throughout, creating strong emotional impact and inspiration.
+
+## Focus Options
+
+- `achievement`: Focus your motivational approach on accomplishment, success, and reaching goals, emphasizing concrete results and outcomes.
+- `growth`: Focus your motivational approach on learning, development, and continuous improvement, emphasizing progress over perfection.
+- `resilience`: Focus your motivational approach on overcoming obstacles, perseverance, and bouncing back from setbacks, emphasizing inner strength.
+- `purpose`: Focus your motivational approach on meaning, values, and impact, emphasizing the deeper significance of actions and choices.
+- `balanced`: Take a balanced motivational approach that incorporates elements of achievement, growth, resilience, and purpose in appropriate proportions.
+
+## Examples
+
+### Basic moderately motivational response
+
+```
++++Motivational
+What are some strategies for building healthy habits?
+```
+
+Provides strategies for building healthy habits with moderate motivational language, encouraging tone, and confidence-building framing
+
+### High-intensity resilience-focused motivational content
+
+```
++++Motivational(intensity=high, focus=resilience, actionable=true)
+How can I overcome setbacks in my professional life?
+```
+
+Delivers highly energetic and inspiring advice for professional resilience, emphasizing overcoming adversity with specific actionable steps, using powerful language and empowering framing
+
+## Model-Specific Implementations
+
+### gpt-3.5-turbo
+
+**Instruction:** Use {intensity} motivational language throughout your response. Focus on {focus} as your primary theme. {actionable} Incorporate powerful words, positive framing, and confidence-building phrases. Address challenges honestly but frame them as opportunities for growth. Use second-person perspective ("you can", "your journey") to make it personal and direct.
+
+**Notes:** This model sometimes needs explicit reminders to maintain consistent motivational tone throughout longer responses rather than only at the beginning and end
+
+
+## Compatibility
+
+- **Requires**: None
+- **Conflicts**: Academic
+- **Compatible Models**: gpt-4, gpt-3.5-turbo
+- **Standard Version**: 1.0.0 - 2.0.0
+
+## Related Decorators
+
+- **Academic**: Conflicts with Motivational Academic's formal, objective tone conflicts with Motivational's encouraging, emotionally resonant approach
+- **Professional**: Enhances Motivational Professional can be enhanced with mild motivational elements while maintaining appropriate business context
+- **StepByStep**: Enhances Motivational StepByStep works well with Motivational's actionable parameter to create encouraging yet structured guidance

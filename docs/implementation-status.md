@@ -51,6 +51,30 @@ The specification outlines a phased implementation approach. Current progress:
 | Security Considerations | 🔄 Partial | Basic input validation is implemented |
 | Testing and Validation | 🔄 Partial | Unit tests exist but comprehensive test suite is in development |
 
+## Decorator Implementation Status
+
+| Decorator | Status | Notes |
+|-----------|--------|-------|
+| Reasoning | ✅ Complete | Core decorator for reasoning processes |
+| StepByStep | ✅ Complete | Core decorator for step-by-step instructions |
+| Socratic | ✅ Complete | Question-based exploration |
+| Debate | ✅ Complete | Multiple viewpoint analysis |
+| FirstPrinciples | ✅ Complete | Breaking down to fundamental truths |
+| RootCause | ✅ Complete | Systematic analysis to identify underlying causes |
+| TreeOfThought | ✅ Complete | Explore multiple reasoning branches |
+| Analogical | ✅ Complete | Use analogies for reasoning and explanation |
+| ForcedAnalogy | ✅ Complete | Compare concepts through specific analogical domains |
+| Inductive | ✅ Complete | Pattern-based reasoning from specific to general |
+| Deductive | ✅ Complete | Logical reasoning from general to specific |
+| Abductive | ✅ Complete | Generate best explanations from limited information |
+| RedTeam | ✅ Complete | Challenge assumptions with adversarial analysis |
+| BlindSpots | ✅ Complete | Identify hidden assumptions and risks |
+| Contrarian | ✅ Complete | Generate counterarguments to test perspectives |
+| NegativeSpace | ✅ Complete | Uncover what isn't explicitly stated |
+| DeepDive | ✅ Complete | Multi-layered, progressively deeper analysis |
+| PerspectiveCascade | ✅ Complete | Systematically explores a topic through a sequence of diverse, interconnected viewpoints |
+| TemporalResonance | ✅ Complete | Analyzes topics across multiple time horizons to identify patterns and principles |
+
 ## Validation Tools
 
 The specification mentions several validation tools. Their implementation status:
@@ -76,9 +100,9 @@ The specification references a dedicated test suite repository. Current status:
 ## Next Steps
 
 1. Complete remaining Phase 2 components
-2. Implement a unified validation CLI tool
+2. ✅ Implement a unified validation CLI tool (completed in `scripts/prompt_validator.py`)
 3. Expand test coverage
-4. Document extension capabilities clearly
+4. ✅ Document extension capabilities clearly (completed in `docs/extensions.md`)
 5. Begin work on Extension Mechanism for Phase 4
 
 ## Compatibility Notes

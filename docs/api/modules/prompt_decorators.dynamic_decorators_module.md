@@ -87,6 +87,27 @@ Apply decorators to a prompt using the +++ syntax.
 
 - `prompt`: str
 
+### create_decorator
+
+Create a decorator instance by name (alias for create_decorator_instance).
+
+    This function is maintained for backward compatibility with demo code.
+
+    Args:
+        name: Name of the decorator
+        **kwargs: Parameters for the decorator
+
+    Returns:
+        A decorator instance
+
+    Raises:
+        ValueError: If the decorator is not found
+
+#### Parameters
+
+- `name`: str
+- `kwargs`: Any
+
 ### create_decorator_class
 
 Create a decorator class from a definition.
@@ -141,6 +162,15 @@ Get a list of all available decorators.
     Returns:
         List of decorator definitions
 
+### list_available_decorators
+
+List all available decorator names.
+
+    This function is maintained for backward compatibility with demo code.
+
+    Returns:
+        A list of decorator names
+
 ### load_decorator_definitions
 
 Load decorator definitions from the registry.
@@ -172,3 +202,22 @@ Register a decorator definition.
 #### Parameters
 
 - `definition`: DecoratorDefinition
+
+### transform_prompt
+
+Transform a prompt using a list of decorator strings.
+
+    This function is a wrapper around the core transform_prompt function
+    to ensure backward compatibility with the demo.
+
+    Args:
+        prompt: The prompt to transform
+        decorators: List of decorator strings
+
+    Returns:
+        The transformed prompt
+
+#### Parameters
+
+- `prompt`: str
+- `decorators`: List

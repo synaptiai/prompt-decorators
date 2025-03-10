@@ -36,8 +36,31 @@ prompt-decorators validate my_decorator.json
 
 # Validate all decorators in a directory
 prompt-decorators validate --directory path/to/decorators
+```
 
-# Validate a decorator defined in Python code
+### Using the prompt_validator.py Script
+
+For direct validation without installing the CLI, you can use the `prompt_validator.py` script:
+
+```bash
+# Validate decorator syntax in a prompt
+python scripts/prompt_validator.py syntax -t "+++Reasoning(depth=comprehensive)\nExplain quantum computing."
+
+# Validate a decorator schema file
+python scripts/prompt_validator.py schema -f registry/core/reasoning/deductive.json
+
+# Validate all files in a directory against registry schema
+python scripts/prompt_validator.py directory -d registry/core -s registry
+```
+
+This script provides a unified interface for validating different aspects of prompt decorators, including syntax validation, schema validation, and directory validation.
+
+```bash
+# Get help on available commands
+python scripts/prompt_validator.py --help
+```
+
+### Validate a decorator defined in Python code
 prompt-decorators validate --module my_package.decorators
 
 # Generate a report
