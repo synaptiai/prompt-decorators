@@ -13,10 +13,43 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+      - name: Verify version consistency
+        run: |
+          # Install Poetry to read version from pyproject.toml
+          pip install poetry
+
+          # Extract version from pyproject.toml
+          VERSION=$(poetry version -s)
+
+          # Extract the GitHub tag (strip leading 'v' if present)
+          GITHUB_TAG=${GITHUB_REF#refs/tags/}
+          GITHUB_TAG=${GITHUB_TAG#v}
+
+          echo "Package version from pyproject.toml: $VERSION"
+          echo "GitHub release tag: $GITHUB_TAG"
+
+          # Verify they match
+          if [ "$VERSION" != "$GITHUB_TAG" ]; then
+            echo "Error: Version mismatch between pyproject.toml ($VERSION) and GitHub tag ($GITHUB_TAG)"
+            echo "Please run scripts/bump_version.py to update the version properly."
+            exit 1
+          fi
+
+          # Verify version doesn't already exist on PyPI
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://pypi.org/pypi/prompt-decorators/$VERSION/json)
+          if [ "$HTTP_STATUS" -eq "200" ]; then
+            echo "Error: Version $VERSION already exists on PyPI."
+            echo "Please bump version using scripts/bump_version.py before releasing."
+            exit 1
+          fi
+
+          echo "✅ Version verification successful. Proceeding with release..."
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install poetry
+          # Configure Poetry to handle hash verification issues
+          poetry config installer.no-binary :none:
           poetry install
       - name: Build and publish
         env:

@@ -12,8 +12,9 @@ Thank you for your interest in contributing to the Prompt Decorators project! Th
 6. [Testing](#testing)
 7. [Documentation](#documentation)
 8. [Pull Request Process](#pull-request-process)
-9. [Registry Contributions](#registry-contributions)
-10. [Community](#community)
+9. [Release Process](#release-process)
+10. [Registry Contributions](#registry-contributions)
+11. [Community](#community)
 
 ## Code of Conduct
 
@@ -235,6 +236,98 @@ mkdocs serve
 - **Documentation**: Include documentation updates if applicable.
 - **Single Purpose**: PR should address a single concern.
 - **Reviews**: PR requires at least one maintainer review.
+
+## Release Process
+
+The Prompt Decorators project follows [Semantic Versioning](https://semver.org/) for releases. We have an automated release process that ensures version consistency and smooth publishing to PyPI.
+
+### Version Management
+
+Versions are managed in the `pyproject.toml` file and should never be manually edited. Instead, use our version bumping script to ensure proper versioning:
+
+```bash
+# Activate your virtual environment first
+poetry shell
+
+# For a patch bump (e.g., 1.2.3 -> 1.2.4)
+python scripts/bump_version.py patch
+
+# For a minor bump (e.g., 1.2.3 -> 1.3.0)
+python scripts/bump_version.py minor
+
+# For a major bump (e.g., 1.2.3 -> 2.0.0)
+python scripts/bump_version.py major
+
+# Add --push flag to automatically push changes to GitHub
+python scripts/bump_version.py patch --push
+```
+
+The script performs the following steps:
+1. Verifies there are no uncommitted changes
+2. Updates the version in `pyproject.toml`
+3. Creates a git commit with the version change
+4. Creates a git tag with the version (prefixed with 'v')
+5. Optionally pushes changes and tags to GitHub
+
+### Complete Release Process
+
+To release a new version of Prompt Decorators, follow these steps:
+
+1. **Ensure all changes for the release are merged to main**
+   ```bash
+   git checkout main
+   git pull origin main
+   ```
+
+2. **Run tests to confirm everything works**
+   ```bash
+   pytest
+   ```
+
+3. **Bump the version according to semantic versioning**
+   ```bash
+   python scripts/bump_version.py [patch|minor|major]
+   ```
+
+4. **Push changes and tag to GitHub** (if not done with `--push` flag)
+   ```bash
+   git push origin main
+   git push origin v[version]
+   ```
+
+5. **Create a GitHub Release**
+   - Go to the [Releases page](https://github.com/synaptiai/prompt-decorators/releases)
+   - Click "Create a new release"
+   - Select the tag you just pushed
+   - Add a title (e.g., "v1.2.3 - Short description")
+   - Write release notes, highlighting:
+     - New features
+     - Bug fixes
+     - Breaking changes
+     - Deprecations
+   - Click "Publish release"
+
+6. **Monitor the GitHub Actions workflow**
+   - The release will trigger the GitHub Actions workflow
+   - The workflow performs several checks:
+     - Verifies version consistency between tag and `pyproject.toml`
+     - Checks the version doesn't already exist on PyPI
+     - Builds and publishes the package to PyPI
+   - If any issues occur, fix them and release again with a new version
+
+7. **Verify the release on PyPI**
+   - Check [PyPI](https://pypi.org/project/prompt-decorators/) to confirm the new version is published
+   - Verify the package can be installed with `pip install prompt-decorators==[version]`
+
+### Troubleshooting Release Issues
+
+If you encounter issues during the release process:
+
+1. **Version already exists on PyPI**: Use the version bumping script to increment to a higher version.
+
+2. **Hash verification errors**: The workflow includes configuration to handle hash verification issues, but if they persist, you may need to regenerate your Poetry lock file with `poetry lock --no-update`.
+
+3. **GitHub Actions workflow failures**: Check the workflow logs for specific errors and fix the underlying issues before trying again with a new version.
 
 ## Registry Contributions
 
