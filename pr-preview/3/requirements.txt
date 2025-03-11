@@ -1,0 +1,14 @@
+mkdocs>=1.5.0
+mkdocs-material>=9.0.0
+mkdocs-awesome-pages-plugin==2.10.1
+mkdocs-autolinks-plugin>=0.7.0
+mkdocs-git-revision-date-localized-plugin>=1.2.0
+mkdocs-minify-plugin>=0.7.0
+mkdocstrings>=0.24.0
+mkdocstrings-python>=1.7.0
+pydantic>=2.0.0
+jsonschema>=4.0.0
+importlib-metadata>=6.0.0
+markdown>=3.7
+interrogate>=1.5.0
+pydocstyle>=6.3.0
