@@ -5,6 +5,10 @@ on:
   push:
     branches: [main, master]
 
+# Set minimum required permissions
+permissions:
+  contents: read  # Only needs read access to repository content
+
 jobs:
   pre-commit:
     runs-on: ubuntu-latest

@@ -4,6 +4,10 @@ on:
   release:
     types: [created]
 
+# Set minimum required permissions
+permissions:
+  contents: read  # Only needs read access to repository content
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
