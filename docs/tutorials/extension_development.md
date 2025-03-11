@@ -98,647 +98,528 @@ setup(
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.11",
+        "License :: OSI Approved :: MIT License",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    keywords="prompt engineering, llm, ai, decorators, data science",
     python_requires=">=3.11",
 )
 ```
 
-### Step 3: Implementing Decorators
+Create a basic README.md:
 
-Create a module for each decorator or group of related decorators. Let's implement the `DataAnalysis` decorator first.
+```markdown
+    # Prompt Decorators: Data Science Extension
 
-Create a file `prompt_decorators_datascience/decorators/analysis.py`:
+    This package extends the [Prompt Decorators](https://github.com/synaptiai/prompt-decorators) framework with decorators specifically designed for data science workflows.
+
+    ## Installation
+
+    ```bash
+    pip install prompt-decorators-datascience
+    ```
+
+    ## Features
+
+    - Data analysis decorators
+    - Visualization specification decorators
+    - Model evaluation decorators
+    - Statistical summary decorators
+    - Data cleaning decorators
+
+    ## Usage
+
+    ```python
+    from prompt_decorators import apply_dynamic_decorators
+    from prompt_decorators_datascience import register_datascience_decorators
+
+    # Register the data science decorators
+    register_datascience_decorators()
+
+    # Use the decorators in your prompts
+    prompt = """
+    +++DataAnalysis(depth="exploratory", focus="correlations")
+    Please analyze this dataset:
+
+    [dataset content...]
+    """
+
+    transformed_prompt = apply_dynamic_decorators(prompt)
+    ```
+
+    ## Documentation
+
+    For full documentation, visit [documentation link].
+```
+
+### Step 3: Implementing Your Decorators
+
+Now, let's implement the decorators for our extension. We'll start with the `DataAnalysis` decorator:
 
 ```python
-from prompt_decorators import DecoratorDefinition
+# prompt_decorators_datascience/decorators/data_analysis.py
 
+from prompt_decorators import DecoratorDefinition, register_decorator
+
+def data_analysis_transform(text, focus="general", visualize=True, statistical=True):
+    """
+    Transform function for the DataAnalysis decorator.
+
+    Args:
+        text (str): The original prompt text
+        focus (str): The focus area of the analysis
+        visualize (bool): Whether to include visualization suggestions
+        statistical (bool): Whether to include statistical analysis
+
+    Returns:
+        str: The transformed prompt text
+    """
+    instruction = "Perform exploratory data analysis on the following data. "
+
+    # Add focus-specific instructions
+    if focus == "outliers":
+        instruction += "Focus on identifying and analyzing outliers in the data. "
+    elif focus == "patterns":
+        instruction += "Focus on identifying patterns, trends, and relationships in the data. "
+    elif focus == "distributions":
+        instruction += "Focus on analyzing the distributions of variables in the data. "
+    else:
+        instruction += "Provide a general exploratory analysis of the data. "
+
+    # Add visualization instructions
+    if visualize:
+        instruction += "Include suggestions for appropriate visualizations to illustrate key findings. "
+
+    # Add statistical instructions
+    if statistical:
+        instruction += "Include relevant statistical measures and tests to support your analysis. "
+
+    # Add structure instructions
+    instruction += "Structure your analysis as follows:\n" \
+                 "1. Data overview\n" \
+                 "2. Key variables and their characteristics\n" \
+                 "3. Relationships between variables\n" \
+                 "4. Notable patterns or anomalies\n" \
+                 "5. Recommendations for further analysis\n\n"
+
+    # Return the transformed text
+    return instruction + text
+
+# Create the decorator definition
 data_analysis_decorator = DecoratorDefinition(
     name="DataAnalysis",
-    description="Directs LLM to perform exploratory data analysis on provided data",
+    description="Transforms a prompt into instructions for exploratory data analysis",
     category="DataScience",
+    parameters=[
+        {
+            "name": "focus",
+            "type": "enum",
+            "description": "The focus area of the analysis",
+            "enum_values": ["general", "outliers", "patterns", "distributions"],
+            "default": "general"
+        },
+        {
+            "name": "visualize",
+            "type": "boolean",
+            "description": "Whether to include visualization suggestions",
+            "default": True
+        },
+        {
+            "name": "statistical",
+            "type": "boolean",
+            "description": "Whether to include statistical analysis",
+            "default": True
+        }
+    ],
+    transform_function=data_analysis_transform
+)
+
+# Export the decorator
+def register_decorators():
+    """Register all decorators in this module."""
+    register_decorator(data_analysis_decorator)
+```
+
+### Step 4: Implementing Individual Decorators
+
+Let's implement one of the decorators as an example:
+
+```python
+# prompt_decorators_datascience/decorators/data_analysis.py
+"""Data analysis decorator implementation."""
+
+from prompt_decorators import DecoratorDefinition
+
+def data_analysis_transform(text, depth="exploratory", focus="all", visualize=True, summary=True):
+    """
+    Transform function for the DataAnalysis decorator.
+
+    Args:
+        text (str): The input text containing the data to analyze
+        depth (str): How deep the analysis should be
+        focus (str): What aspects of the data to focus on
+        visualize (bool): Whether to suggest visualizations
+        summary (bool): Whether to include a summary
+
+    Returns:
+        str: The transformed prompt with data analysis instructions
+    """
+    instruction = "Please perform a data analysis on the provided dataset. "
+
+    # Add depth-specific instructions
+    if depth == "exploratory":
+        instruction += "Conduct an exploratory data analysis to understand the basic properties of the data. "
+    elif depth == "descriptive":
+        instruction += "Provide a descriptive analysis with summary statistics and distributions. "
+    elif depth == "inferential":
+        instruction += "Perform an inferential analysis to test hypotheses and make predictions. "
+    elif depth == "comprehensive":
+        instruction += "Conduct a comprehensive analysis covering exploratory, descriptive, and inferential statistics. "
+
+    # Add focus-specific instructions
+    if focus == "correlations":
+        instruction += "Focus on identifying correlations between variables. "
+    elif focus == "outliers":
+        instruction += "Pay special attention to outliers and anomalies in the data. "
+    elif focus == "trends":
+        instruction += "Emphasize temporal trends and patterns in the data. "
+    elif focus != "all":
+        instruction += f"Focus particularly on {focus} in your analysis. "
+
+    # Add visualization instructions
+    if visualize:
+        instruction += ("Include recommendations for appropriate data visualizations "
+                        "that would help understand the data better. ")
+
+    # Add summary instructions
+    if summary:
+        instruction += ("Provide a clear summary of your findings at the beginning "
+                        "of your response. ")
+
+    # Structure the response
+    instruction += """
+Structure your analysis as follows:
+1. Summary of Findings
+2. Data Overview (dimensions, types, missing values)
+3. Descriptive Statistics
+4. Key Insights
+5. Recommendations for Further Analysis
+"""
+
+    # Combine with the original prompt
+    return instruction + "\n\n" + text
+
+# Create the decorator definition
+data_analysis_decorator = DecoratorDefinition(
+    name="DataAnalysis",
+    description="Transforms a prompt into instructions for analyzing data",
+    category="Data Science",
     parameters=[
         {
             "name": "depth",
             "type": "enum",
-            "description": "Depth of analysis",
-            "enum": ["basic", "moderate", "comprehensive"],
-            "default": "moderate"
+            "description": "How deep the analysis should be",
+            "enum": ["exploratory", "descriptive", "inferential", "comprehensive"],
+            "default": "exploratory"
         },
         {
             "name": "focus",
-            "type": "enum",
-            "description": "Primary focus of the analysis",
-            "enum": ["patterns", "outliers", "correlations", "distributions", "all"],
-            "default": "all"
-        },
-        {
-            "name": "include_visualizations",
-            "type": "boolean",
-            "description": "Whether to include visualization recommendations",
-            "default": True
-        }
-    ],
-    transform_function="""
-    let instruction = "Please perform exploratory data analysis on the following data. ";
-
-    // Add depth-specific instructions
-    if (depth === "basic") {
-        instruction += "Focus on the most important high-level insights and summary statistics. ";
-    } else if (depth === "moderate") {
-        instruction += "Provide a balanced analysis with key statistics, trends, and notable patterns. ";
-    } else if (depth === "comprehensive") {
-        instruction += "Conduct a thorough analysis exploring all aspects of the data including distributions, " +
-            "relationships, patterns, outliers, and potential issues. ";
-    }
-
-    // Add focus-specific instructions
-    if (focus === "patterns") {
-        instruction += "Focus primarily on identifying patterns and trends in the data. ";
-    } else if (focus === "outliers") {
-        instruction += "Pay special attention to outliers and anomalies in the data. ";
-    } else if (focus === "correlations") {
-        instruction += "Emphasize relationships and correlations between variables. ";
-    } else if (focus === "distributions") {
-        instruction += "Focus on the distributions of variables and their statistical properties. ";
-    } else {
-        instruction += "Cover all aspects including patterns, outliers, correlations, and distributions. ";
-    }
-
-    // Add visualization instructions
-    if (include_visualizations) {
-        instruction += "For each insight, recommend appropriate visualizations (with code examples if applicable). ";
-    }
-
-    // Add structure instructions
-    instruction += "Structure your analysis as follows:\\n" +
-        "1. Data Overview: Summarize the dataset structure\\n" +
-        "2. Summary Statistics: Provide key statistical measures\\n" +
-        "3. Key Insights: Highlight the most important findings";
-
-    if (focus !== "all") {
-        instruction += "\\n4. Detailed Analysis: " + focus.charAt(0).toUpperCase() + focus.slice(1);
-    } else {
-        instruction += "\\n4. Detailed Analysis: Patterns, outliers, correlations, and distributions";
-    }
-
-    if (include_visualizations) {
-        instruction += "\\n5. Visualization Recommendations: Suggest appropriate charts with explanations";
-    }
-
-    instruction += "\\n6. Next Steps: Suggest further analyses or actions based on the findings";
-
-    instruction += "\\n\\nHere's the data to analyze:\\n\\n";
-
-    return instruction + text;
-    """
-)
-```
-
-Now create the `DataVisualization` decorator in `prompt_decorators_datascience/decorators/visualization.py`:
-
-```python
-from prompt_decorators import DecoratorDefinition
-
-data_visualization_decorator = DecoratorDefinition(
-    name="DataVisualization",
-    description="Directs LLM to provide visualization recommendations and code for data",
-    category="DataScience",
-    parameters=[
-        {
-            "name": "library",
-            "type": "enum",
-            "description": "Visualization library to use",
-            "enum": ["matplotlib", "seaborn", "plotly", "altair", "any"],
-            "default": "any"
-        },
-        {
-            "name": "chart_types",
             "type": "string",
-            "description": "Comma-separated list of chart types to include",
+            "description": "What aspects of the data to focus on",
             "default": "all"
         },
         {
-            "name": "include_code",
+            "name": "visualize",
             "type": "boolean",
-            "description": "Whether to include code examples",
+            "description": "Whether to suggest visualizations",
+            "default": True
+        },
+        {
+            "name": "summary",
+            "type": "boolean",
+            "description": "Whether to include a summary",
             "default": True
         }
     ],
-    transform_function="""
-    let instruction = "Please recommend visualizations for the following data. ";
-
-    // Add library-specific instructions
-    if (library !== "any") {
-        instruction += `Use the ${library} library for all visualizations. `;
-    } else {
-        instruction += "Use the most appropriate visualization library for each chart type. ";
-    }
-
-    // Add chart type instructions
-    if (chart_types !== "all") {
-        const chartList = chart_types.split(",").map(t => t.trim());
-        instruction += `Focus on the following chart types: ${chartList.join(", ")}. `;
-    } else {
-        instruction += "Recommend a diverse set of chart types appropriate for the data. ";
-    }
-
-    // Add code instructions
-    if (include_code) {
-        instruction += "For each visualization, provide Python code that would create the chart. Ensure the code is correct, complete, and ready to run. ";
-    } else {
-        instruction += "Describe each visualization clearly but do not include code examples. ";
-    }
-
-    // Add structure instructions
-    instruction += "Structure your response as follows:\\n" +
-        "1. Data Overview: Brief summary of the data\\n" +
-        "2. Visualization Recommendations: For each visualization include:\\n" +
-        "   a. Purpose: What insight this visualization will provide\\n" +
-        "   b. Chart Type: The specific type of chart recommended\\n" +
-        "   c. Variables: Which data variables should be included";
-
-    if (include_code) {
-        instruction += "\\n   d. Code: Python code to generate this visualization";
-    }
-
-    instruction += "\\n3. Dashboard Suggestion: How these visualizations could be combined into a dashboard\\n";
-
-    instruction += "\\nHere's the data to visualize:\\n\\n";
-
-    return instruction + text;
-    """
+    transform_function=data_analysis_transform
 )
 ```
 
-Repeat this process for the other decorators in your extension.
+Similarly, implement the other decorators in their respective files.
 
-### Step 4: Registering Decorators
+### Step 5: Creating Tests
 
-In your package's `__init__.py`, import and register all your decorators:
+Create a tests directory and add tests for your decorators:
 
 ```python
+# tests/test_data_analysis.py
+import unittest
+from prompt_decorators import apply_dynamic_decorators, register_decorator
+from prompt_decorators_datascience.decorators.data_analysis import data_analysis_decorator
+
+class TestDataAnalysisDecorator(unittest.TestCase):
+
+    def setUp(self):
+        # Register the decorator for testing
+        register_decorator(data_analysis_decorator)
+
+    def test_basic_transformation(self):
+        prompt = """
++++DataAnalysis(depth="exploratory", focus="correlations")
+Analyze this dataset:
+ID, Age, Income, Education
+1, 25, 50000, Bachelor's
+2, 40, 75000, Master's
+3, 30, 60000, Bachelor's
 """
-Prompt Decorators - Data Science Extension
+        transformed = apply_dynamic_decorators(prompt)
 
-A collection of prompt decorators for data science workflows.
+        # Check that the transformation includes expected elements
+        self.assertIn("exploratory data analysis", transformed)
+        self.assertIn("identifying correlations", transformed)
+        self.assertIn("Structure your analysis", transformed)
+        self.assertIn("Analyze this dataset:", transformed)
+
+    def test_different_parameters(self):
+        prompt = """
++++DataAnalysis(depth="comprehensive", focus="outliers", visualize=false)
+Analyze this dataset:
+[data here]
 """
+        transformed = apply_dynamic_decorators(prompt)
 
-from prompt_decorators import register_decorator
-
-# Import decorators
-from .decorators.analysis import data_analysis_decorator
-from .decorators.visualization import data_visualization_decorator
-# Import other decorators...
-
-# Register all decorators
-def register_all_decorators():
-    """Register all decorators from this extension."""
-    register_decorator(data_analysis_decorator)
-    register_decorator(data_visualization_decorator)
-    # Register other decorators...
-
-# Auto-register when the package is imported
-register_all_decorators()
-
-# Export public API
-__all__ = [
-    "data_analysis_decorator",
-    "data_visualization_decorator",
-    # Add other decorators...
-]
-```
-
-In your decorators' `__init__.py`, export the decorators:
-
-```python
-"""Data science decorators."""
-
-from .analysis import data_analysis_decorator
-from .visualization import data_visualization_decorator
-# Import other decorators...
-
-__all__ = [
-    "data_analysis_decorator",
-    "data_visualization_decorator",
-    # Add other decorators...
-]
-```
-
-### Step 5: Creating Composite Decorators
-
-You can also create composite decorators that combine multiple data science decorators for common workflows:
-
-```python
-from prompt_decorators import DecoratorDefinition
-
-data_science_workflow_decorator = DecoratorDefinition(
-    name="DataScienceWorkflow",
-    description="Comprehensive data science workflow combining analysis, visualization, and insights",
-    category="DataScience",
-    parameters=[
-        {
-            "name": "workflow_stage",
-            "type": "enum",
-            "description": "Stage of the data science workflow",
-            "enum": ["exploration", "preprocessing", "modeling", "evaluation", "full"],
-            "default": "full"
-        },
-        {
-            "name": "detail_level",
-            "type": "enum",
-            "description": "Level of detail in the response",
-            "enum": ["brief", "standard", "detailed"],
-            "default": "standard"
-        }
-    ],
-    transform_function="""
-    // Import our component decorators from this extension
-    const dataAnalysis = createDecoratorInstance('DataAnalysis', {
-        depth: detail_level === "brief" ? "basic" : detail_level === "detailed" ? "comprehensive" : "moderate",
-        include_visualizations: true
-    });
-
-    const dataViz = createDecoratorInstance('DataVisualization', {
-        include_code: true
-    });
-
-    // Add standard decorators
-    const outputFormat = createDecoratorInstance('OutputFormat', { format: 'markdown' });
-    const reasoning = createDecoratorInstance('Reasoning', {
-        depth: detail_level === "brief" ? "basic" : detail_level === "detailed" ? "comprehensive" : "moderate"
-    });
-
-    let result = text;
-
-    // Apply different decorators based on workflow stage
-    if (workflow_stage === "exploration" || workflow_stage === "full") {
-        result = dataAnalysis(result);
-    }
-
-    if (workflow_stage === "preprocessing") {
-        // Use a hypothetical DataCleaning decorator
-        const dataCleaning = createDecoratorInstance('DataCleaning');
-        result = dataCleaning(result);
-    }
-
-    if ((workflow_stage === "exploration" || workflow_stage === "full") && detail_level !== "brief") {
-        result = dataViz(result);
-    }
-
-    if (workflow_stage === "modeling" || workflow_stage === "full") {
-        // Use a hypothetical ModelSelection decorator
-        const modelSelection = createDecoratorInstance('ModelSelection');
-        result = modelSelection(result);
-    }
-
-    if (workflow_stage === "evaluation" || workflow_stage === "full") {
-        // Use a hypothetical ModelEvaluation decorator
-        const modelEvaluation = createDecoratorInstance('ModelEvaluation');
-        result = modelEvaluation(result);
-    }
-
-    // Always apply these decorators
-    result = reasoning(result);
-    result = outputFormat(result);
-
-    return result;
-    """
-)
-```
-
-Add this to your extension and register it along with the other decorators.
-
-### Step 6: Testing Your Extension
-
-Create a test script to ensure your decorators work as expected:
-
-```python
-# test_extension.py
-import openai
-from prompt_decorators import apply_dynamic_decorators, create_decorator_instance
-# Import your extension
-import prompt_decorators_datascience
-
-# Sample data
-sample_data = """
-Age,Income,Education,Job_Experience,Credit_Score
-32,65000,Bachelors,8,720
-45,85000,Masters,15,780
-23,35000,High School,2,650
-37,72000,Bachelors,12,710
-51,95000,PhD,20,800
-29,48000,Associates,5,680
-"""
-
-# Test DataAnalysis decorator
-def test_data_analysis():
-    # Using inline syntax
-    prompt = f"""
-    +++DataAnalysis(depth=comprehensive, focus=correlations)
-    {sample_data}
-    """
-
-    transformed_prompt = apply_dynamic_decorators(prompt)
-    print("Data Analysis Transformed Prompt:")
-    print("-" * 80)
-    print(transformed_prompt)
-    print("-" * 80)
-
-    # Using programmatic approach
-    data_analysis = create_decorator_instance("DataAnalysis", depth="comprehensive", focus="correlations")
-    transformed_prompt_2 = data_analysis(sample_data)
-
-    # They should be identical
-    assert transformed_prompt == transformed_prompt_2
-
-# Test DataVisualization decorator
-def test_data_visualization():
-    # Using inline syntax
-    prompt = f"""
-    +++DataVisualization(library=seaborn, include_code=true)
-    {sample_data}
-    """
-
-    transformed_prompt = apply_dynamic_decorators(prompt)
-    print("Data Visualization Transformed Prompt:")
-    print("-" * 80)
-    print(transformed_prompt)
-    print("-" * 80)
-
-# Test with an LLM
-def test_with_llm():
-    # Using DataAnalysis decorator
-    prompt = f"""
-    +++DataAnalysis(depth=moderate, focus=all)
-    {sample_data}
-    """
-
-    transformed_prompt = apply_dynamic_decorators(prompt)
-
-    # Replace with your API key
-    openai.api_key = "your-api-key-here"
-
-    response = openai.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": transformed_prompt}],
-        temperature=0.7
-    )
-
-    print("LLM Response:")
-    print("-" * 80)
-    print(response.choices[0].message.content)
+        # Check parameter-specific instructions
+        self.assertIn("comprehensive analysis", transformed)
+        self.assertIn("outliers and anomalies", transformed)
+        self.assertNotIn("recommendations for appropriate data visualizations", transformed)
 
 if __name__ == "__main__":
-    test_data_analysis()
-    test_data_visualization()
-    # Uncomment to test with an actual LLM
-    # test_with_llm()
+    unittest.main()
 ```
 
-### Step 7: Documenting Your Extension
+### Step 6: Documentation
 
-Create thorough documentation for your extension. At minimum, include:
-
-1. **README.md**: Overview, installation, and basic usage
-2. **API Documentation**: Details of each decorator
-3. **Examples**: Practical examples of using each decorator
-4. **Integration Guide**: How to integrate with existing workflows
-
-Here's a sample README.md:
+Create detailed documentation for your extension. For example, create a `docs` directory with specific documentation for each decorator:
 
 ```markdown
-# Prompt Decorators - Data Science Extension
+    # DataAnalysis Decorator
 
-A collection of specialized prompt decorators for data science workflows. This extension for the [Prompt Decorators](https://github.com/synaptiai/prompt-decorators) framework provides decorators for data analysis, visualization, model evaluation, and more.
+    The `DataAnalysis` decorator transforms a prompt into instructions for analyzing data. It guides the LLM to perform various types of data analysis depending on the parameters.
 
-## Installation
+    ## Parameters
+
+    - **depth** (enum): How deep the analysis should be
+    - `exploratory`: Basic exploration of the data properties
+    - `descriptive`: Summary statistics and distributions
+    - `inferential`: Hypothesis testing and predictions
+    - `comprehensive`: Complete analysis covering all aspects
+    - Default: `exploratory`
+
+    - **focus** (string): What aspects of the data to focus on
+    - Examples: `correlations`, `outliers`, `trends`, `distributions`, or any custom focus
+    - Default: `all`
+
+    - **visualize** (boolean): Whether to suggest visualizations
+    - Default: `true`
+
+    - **summary** (boolean): Whether to include a summary
+    - Default: `true`
+
+    ## Examples
+
+    ### Basic Usage
+
+    ```python
+    from prompt_decorators import apply_dynamic_decorators
+    from prompt_decorators_datascience import register_datascience_decorators
+
+    # Register the decorators
+    register_datascience_decorators()
+
+    prompt = """
+    +++DataAnalysis(depth="exploratory", focus="correlations")
+    Analyze this dataset:
+
+    User ID, Age, Purchase Amount, Frequency
+    1, 25, 120.50, 3
+    2, 34, 75.20, 5
+    3, 19, 30.00, 1
+    4, 45, 200.75, 8
+    """
+
+    transformed_prompt = apply_dynamic_decorators(prompt)
+    ```
+
+    ### Comprehensive Analysis
+
+    ```python
+    prompt = """
+    +++DataAnalysis(depth="comprehensive", focus="customer segments", visualize=true)
+    Please analyze this customer data and identify key patterns:
+
+    [dataset content...]
+    """
+    ```
+```
+
+### Step 7: Publishing Your Extension
+
+Once you've implemented and tested your extension, you can publish it to PyPI:
 
 ```bash
-pip install prompt-decorators-datascience
-```
+# Install build tools
+pip install build twine
 
-## Usage
-
-```python
-from prompt_decorators import apply_dynamic_decorators
-import prompt_decorators_datascience  # This registers all the decorators
-
-# Using inline syntax
-prompt = """
-+++DataAnalysis(depth=comprehensive, focus=correlations)
-Here's my dataset:
-Age,Income,Education,Job_Experience,Credit_Score
-32,65000,Bachelors,8,720
-45,85000,Masters,15,780
-23,35000,High School,2,650
-...
-"""
-
-transformed_prompt = apply_dynamic_decorators(prompt)
-# Now send transformed_prompt to your LLM
-```
-
-## Available Decorators
-
-### DataAnalysis
-
-Directs LLM to perform exploratory data analysis on provided data.
-
-**Parameters:**
-- `depth` (enum): Depth of analysis (basic, moderate, comprehensive)
-- `focus` (enum): Primary focus (patterns, outliers, correlations, distributions, all)
-- `include_visualizations` (boolean): Whether to include visualization recommendations
-
-### DataVisualization
-
-Directs LLM to provide visualization recommendations and code for data.
-
-**Parameters:**
-- `library` (enum): Visualization library to use (matplotlib, seaborn, plotly, altair, any)
-- `chart_types` (string): Comma-separated list of chart types to include
-- `include_code` (boolean): Whether to include code examples
-
-### DataScienceWorkflow
-
-Comprehensive data science workflow combining analysis, visualization, and insights.
-
-**Parameters:**
-- `workflow_stage` (enum): Stage of the data science workflow (exploration, preprocessing, modeling, evaluation, full)
-- `detail_level` (enum): Level of detail in the response (brief, standard, detailed)
-
-## License
-
-MIT
-```
-
-### Step 8: Packaging and Distribution
-
-Once your extension is ready for distribution, create a package:
-
-```bash
-# Create a source distribution
-python setup.py sdist
-
-# Create a wheel package
-python setup.py bdist_wheel
-```
-
-If you want to publish to PyPI:
-
-```bash
-# Install twine
-pip install twine
+# Build the distribution
+python -m build
 
 # Upload to PyPI
 twine upload dist/*
 ```
 
-Alternatively, you can publish your package to GitHub and install directly from there:
+## Alternative: Class-Based Implementation
 
-```bash
-pip install git+https://github.com/yourusername/prompt-decorators-datascience.git
-```
-
-## Advanced Extension Development
-
-### Configuration Management
-
-For more complex extensions, you might want to add configuration management:
+If you prefer a class-based approach for more complex decorators, you can use the `DecoratorBase` class:
 
 ```python
-# prompt_decorators_datascience/config.py
+# prompt_decorators_datascience/decorators/model_evaluation.py
 
-class DataScienceExtensionConfig:
-    """Configuration for the data science extension."""
+from prompt_decorators import DecoratorBase, register_decorator
 
-    def __init__(self):
-        self.default_visualization_library = "matplotlib"
-        self.include_code_by_default = True
-        self.default_analysis_depth = "moderate"
+class ModelEvaluationDecorator(DecoratorBase):
+    """Class-based decorator for ML model evaluation."""
 
-    def update_from_dict(self, config_dict):
-        """Update configuration from a dictionary."""
-        for key, value in config_dict.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
+    def __init__(self, model_type="classifier", metrics=None, error_analysis=True):
+        """
+        Initialize the ModelEvaluation decorator.
 
-    def __str__(self):
-        """String representation of the configuration."""
-        return str(vars(self))
+        Args:
+            model_type (str): Type of model to evaluate
+            metrics (list): List of metrics to include
+            error_analysis (bool): Whether to include error analysis
+        """
+        super().__init__()  # Initialize the base class
+        self.model_type = model_type
+        self.metrics = metrics or self._default_metrics()
+        self.error_analysis = error_analysis
 
-# Default configuration
-config = DataScienceExtensionConfig()
+    def _default_metrics(self):
+        """Get default metrics based on model type."""
+        if self.model_type == "classifier":
+            return ["accuracy", "precision", "recall", "f1"]
+        elif self.model_type == "regressor":
+            return ["rmse", "mae", "r2"]
+        elif self.model_type == "cluster":
+            return ["silhouette", "inertia", "davies_bouldin"]
+        else:
+            return ["custom"]
 
-def configure(config_dict):
-    """Configure the extension with custom settings."""
-    config.update_from_dict(config_dict)
+    def transform(self, text):
+        """Transform the input text to focus on model evaluation."""
+        instruction = f"Evaluate the {self.model_type} model based on the following data. "
+
+        # Add metrics instructions
+        instruction += f"Include the following evaluation metrics: {', '.join(self.metrics)}. "
+
+        # Add error analysis instructions
+        if self.error_analysis:
+            instruction += "Perform error analysis to identify patterns in misclassifications or prediction errors. "
+
+        # Add structure instructions
+        instruction += "Structure your evaluation as follows:\n" \
+                    "1. Model performance summary\n" \
+                    "2. Detailed metrics analysis\n" \
+                    "3. Strengths and weaknesses\n" \
+                    "4. Recommendations for improvement\n\n"
+
+        return instruction + text
+
+# Register the class-based decorator
+def register_class_decorators():
+    """Register all class-based decorators."""
+    register_decorator(ModelEvaluationDecorator,
+                      name="ModelEvaluation",
+                      description="Decorator for ML model evaluation",
+                      category="DataScience")
 ```
 
-Then use this configuration in your decorators:
+## Creating a Decorator Registry
+
+For more advanced extensions, you might want to create a registry file that defines all your decorators in a structured format using the defined [registry decorator schema](/schemas/registry-entry.schema.json):
 
 ```python
-from .config import config
+# prompt_decorators_datascience/registry.py
+"""Registry of all data science decorators."""
 
-# In your transform_function:
-"""
-// Use configuration
-const default_library = "${config.default_visualization_library}";
-// ...
-"""
+DATASCIENCE_DECORATORS = [
+    {
+        "name": "DataAnalysis",
+        "description": "Transforms a prompt into instructions for analyzing data",
+        "category": "Data Science",
+        "parameters": [
+            {
+                "name": "depth",
+                "type": "enum",
+                "description": "How deep the analysis should be",
+                "enum": ["exploratory", "descriptive", "inferential", "comprehensive"],
+                "default": "exploratory"
+            },
+            # Other parameters...
+        ],
+        "transform_module": "prompt_decorators_datascience.decorators.data_analysis",
+        "transform_function": "data_analysis_transform"
+    },
+    # Other decorator definitions...
+]
+
+def load_from_registry():
+    """
+    Load all decorators from the registry and return decorator definitions.
+
+    This allows for more dynamic loading of decorators.
+    """
+    from prompt_decorators import DecoratorDefinition
+    import importlib
+
+    decorator_definitions = []
+
+    for decorator_info in DATASCIENCE_DECORATORS:
+        # Dynamically import the transform function
+        module = importlib.import_module(decorator_info["transform_module"])
+        transform_function = getattr(module, decorator_info["transform_function"])
+
+        # Create the decorator definition
+        decorator_def = DecoratorDefinition(
+            name=decorator_info["name"],
+            description=decorator_info["description"],
+            category=decorator_info["category"],
+            parameters=decorator_info["parameters"],
+            transform_function=transform_function
+        )
+
+        decorator_definitions.append(decorator_def)
+
+    return decorator_definitions
 ```
 
-### Versioning Strategy
+## Conclusion
 
-Implement proper versioning:
+In this tutorial, you've learned how to:
 
-```python
-# prompt_decorators_datascience/__init__.py
+1. Plan and design a decorator extension
+2. Set up a Python package for your extension
+3. Implement decorator functionality
+4. Create tests for your decorators
+5. Document your extension
+6. Prepare for publishing to PyPI
 
-__version__ = "0.1.0"
-```
-
-Follow semantic versioning:
-- Increment MAJOR version for incompatible API changes
-- Increment MINOR version for backwards-compatible new features
-- Increment PATCH version for backwards-compatible bug fixes
-
-### Testing Framework
-
-For comprehensive testing, use pytest:
-
-```python
-# tests/test_decorators.py
-import pytest
-from prompt_decorators import apply_dynamic_decorators, create_decorator_instance
-import prompt_decorators_datascience
-
-def test_data_analysis_decorator():
-    # Create a test prompt
-    test_data = "Age,Income\n30,50000\n40,70000"
-    decorator = create_decorator_instance("DataAnalysis", depth="basic")
-
-    # Apply the decorator
-    result = decorator(test_data)
-
-    # Assertions
-    assert "Please perform exploratory data analysis" in result
-    assert "Focus on the most important high-level insights" in result
-    assert test_data in result
-
-# Add more tests for other decorators...
-```
-
-Create a tox.ini file for multi-environment testing:
-
-```ini
-[tox]
-envlist = py38, py39, py310
-
-[testenv]
-deps =
-    pytest
-    prompt-decorators
-commands =
-    pytest
-```
-
-## Best Practices for Extension Development
-
-1. **Focus on a Domain**: Keep your extension focused on a specific domain or use case
-2. **Maintain Compatibility**: Ensure your decorators work well with core decorators
-3. **Provide Sensible Defaults**: Make your decorators usable without extensive configuration
-4. **Version Dependencies**: Specify compatible versions of prompt-decorators
-5. **Document Extensively**: Create thorough documentation with examples
-6. **Test Thoroughly**: Test with different LLMs to ensure compatibility
-7. **Manage Conflicts**: Document any conflicts with core decorators
-8. **Provide Examples**: Include real-world examples of using your decorators
-
-## Extension Ideas
-
-Here are some ideas for decorator extensions:
-
-1. **Legal Decorators**: For legal document analysis, contract generation, and case research
-2. **Medical Decorators**: For clinical notes, medical literature, and diagnosis assistance
-3. **Creative Writing**: For storytelling, character development, and narrative structure
-4. **Academic Writing**: For research papers, literature reviews, and academic formatting
-5. **Software Development**: For code generation, documentation, and technical specifications
-6. **Marketing**: For content creation, ad copy, and marketing analysis
-7. **Financial Analysis**: For investment analysis, financial reporting, and risk assessment
+By following these steps, you can create specialized decorator extensions that enhance the Prompt Decorators framework for specific domains or use cases. This allows you to build reusable libraries of prompt engineering patterns that can be shared with others in your field.
 
 ## Next Steps
 
-After creating your extension:
-
-1. Share it with the community
-2. Gather feedback and iterate on your design
-3. Add more specialized decorators
-4. Create tutorials and examples
-5. Integrate with other tools and frameworks
-
-By developing extensions, you contribute to the Prompt Decorators ecosystem and help establish best practices for prompt engineering in your domain.
+- Implement a full set of decorators for your domain
+- Create examples demonstrating your decorators in real-world scenarios
+- Explore integrations with domain-specific libraries and frameworks
+- Contribute your extension to the community
+- Consider creating a web interface for your decorators

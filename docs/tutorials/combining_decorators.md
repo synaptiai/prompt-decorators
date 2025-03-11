@@ -8,7 +8,7 @@ Before starting this tutorial, ensure you have:
 
 1. Installed the Prompt Decorators package (`pip install prompt-decorators`)
 2. Completed the [Creating Custom Decorators](creating_custom_decorator.md) tutorial
-3. Familiarity with the [core concepts](../concepts.md) of the framework
+3. Familiarity with the core concepts of the framework
 
 ## Why Combine Decorators?
 
@@ -177,12 +177,40 @@ expert_content = generate_educational_content(
 
 ## 3. Composite Decorators
 
-For reusable combinations of decorators, you can create composite decorators that encapsulate multiple transformations:
+For reusable combinations of decorators, you can create composite decorators that encapsulate multiple transformations. Here's how to implement one in Python:
 
 ```python
-from prompt_decorators import DecoratorDefinition, register_decorator
+from prompt_decorators import DecoratorDefinition, register_decorator, create_decorator_instance
 
-# Define a composite decorator
+def technical_tutorial_transform(text, format="markdown", examples=True):
+    """
+    Transform function for the TechnicalTutorial decorator.
+
+    Args:
+        text (str): The original prompt text
+        format (str): Output format
+        examples (bool): Whether to include examples
+
+    Returns:
+        str: The transformed prompt text
+    """
+    # Create instances of the component decorators
+    persona = create_decorator_instance('Persona', role='senior developer')
+    steps = create_decorator_instance('StepByStep', numbered=True)
+    audience = create_decorator_instance('Audience', level='technical')
+    output_format = create_decorator_instance('OutputFormat', format=format)
+
+    # Apply decorators in sequence
+    result = persona(steps(audience(text)))
+    result = output_format(result)
+
+    # Add examples instruction if needed
+    if examples:
+        result = "Please include practical code examples for each step.\n\n" + result
+
+    return result
+
+# Define the composite decorator
 technical_tutorial = DecoratorDefinition(
     name="TechnicalTutorial",
     description="Creates a technical tutorial with steps, reasoning, and technical details",
@@ -202,32 +230,13 @@ technical_tutorial = DecoratorDefinition(
             "default": True
         }
     ],
-    transform_function="""
-    // Create instances of the component decorators
-    const persona = createDecoratorInstance('Persona', { role: 'senior developer' });
-    const steps = createDecoratorInstance('StepByStep', { numbered: true });
-    const audience = createDecoratorInstance('Audience', { level: 'technical' });
-    const outputFormat = createDecoratorInstance('OutputFormat', { format: format });
-
-    // Apply conditional decorators
-    let result = persona(steps(audience(text)));
-    result = outputFormat(result);
-
-    // Add examples instruction if needed
-    if (examples) {
-        result = "Please include practical code examples for each step.\\n\\n" + result;
-    }
-
-    return result;
-    """
+    transform_function=technical_tutorial_transform
 )
 
 # Register the composite decorator
 register_decorator(technical_tutorial)
 
 # Use the composite decorator
-from prompt_decorators import create_decorator_instance
-
 tutorial = create_decorator_instance("TechnicalTutorial", format="markdown", examples=True)
 transformed = tutorial("Explain how to implement a binary search algorithm.")
 ```
@@ -237,311 +246,64 @@ When creating composite decorators:
 - You ensure consistent application of multiple decorators
 - You can provide parameters that control the internal decorators
 
-### Example: Educational Content Generator
+## 4. Decorator Composition with Classes
 
-Here's a more advanced composite decorator for educational content:
-
-```python
-from prompt_decorators import DecoratorDefinition, register_decorator, create_decorator_instance
-
-educational_content = DecoratorDefinition(
-    name="EducationalContent",
-    description="Creates educational content with appropriate structure and style",
-    category="Education",
-    parameters=[
-        {
-            "name": "level",
-            "type": "enum",
-            "description": "Target audience level",
-            "enum": ["elementary", "middle_school", "high_school", "undergraduate", "graduate"],
-            "default": "high_school"
-        },
-        {
-            "name": "structure",
-            "type": "enum",
-            "description": "Content structure",
-            "enum": ["steps", "outline", "narrative", "q_and_a"],
-            "default": "steps"
-        },
-        {
-            "name": "visuals",
-            "type": "boolean",
-            "description": "Include descriptions of visual aids",
-            "default": True
-        },
-        {
-            "name": "assessment",
-            "type": "boolean",
-            "description": "Include assessment questions",
-            "default": False
-        }
-    ],
-    transform_function="""
-    // Map education level to audience level
-    let audienceLevel = "intermediate";
-    if (level === "elementary" || level === "middle_school") {
-        audienceLevel = "beginner";
-    } else if (level === "graduate") {
-        audienceLevel = "expert";
-    }
-
-    // Map structure to appropriate decorator
-    let structureDecorator;
-    if (structure === "steps") {
-        structureDecorator = createDecoratorInstance('StepByStep', { numbered: true });
-    } else if (structure === "outline") {
-        structureDecorator = createDecoratorInstance('Outline', { depth: 3 });
-    } else if (structure === "narrative") {
-        structureDecorator = createDecoratorInstance('Narrative', { structure: 'classic' });
-    } else if (structure === "q_and_a") {
-        structureDecorator = createDecoratorInstance('QAndA');
-    }
-
-    // Create audience and persona decorators
-    const audience = createDecoratorInstance('Audience', { level: audienceLevel });
-
-    // Create appropriate persona based on level
-    let personaRole = "teacher";
-    if (level === "undergraduate" || level === "graduate") {
-        personaRole = "professor";
-    } else if (level === "elementary") {
-        personaRole = "elementary teacher";
-    }
-    const persona = createDecoratorInstance('Persona', { role: personaRole });
-
-    // Apply the basic transformations
-    let result = persona(structureDecorator(audience(text)));
-
-    // Add instructions for visuals if requested
-    if (visuals) {
-        result = "Please include descriptions of appropriate visual aids or diagrams that would help explain the concepts.\\n\\n" + result;
-    }
-
-    // Add assessment questions if requested
-    if (assessment) {
-        const assessmentDecorator = createDecoratorInstance('Assessment', { questionCount: 5, includeAnswers: true });
-        result = assessmentDecorator(result);
-    }
-
-    return result;
-    """
-)
-
-# Register the composite decorator
-register_decorator(educational_content)
-
-# Example usage
-educational = create_decorator_instance(
-    "EducationalContent",
-    level="high_school",
-    structure="steps",
-    visuals=True,
-    assessment=True
-)
-
-lesson = educational("Explain the process of cell division (mitosis).")
-```
-
-## Advanced Topics: Handling Decorator Conflicts
-
-When combining decorators, you may encounter conflicts. The framework handles conflicts by giving precedence to later decorators, but you can also explicitly manage them:
-
-### Incompatible Decorators
-
-Some decorators are inherently incompatible:
+If you prefer a more object-oriented approach, you can create a class-based composite decorator:
 
 ```python
-# These decorators have conflicting behaviors
-prompt = """
-+++Concise(level="high")
-+++Detailed(depth="comprehensive")
-Explain quantum computing.
-"""
+from prompt_decorators import DecoratorBase, register_decorator
+
+class CompositeTutorialDecorator(DecoratorBase):
+    """A class-based composite decorator for generating tutorials."""
+
+    def __init__(self, format="markdown", examples=True, audience="technical"):
+        """Initialize the composite decorator."""
+        super().__init__()
+        self.format = format
+        self.examples = examples
+        self.audience = audience
+
+    def transform(self, text):
+        """Apply multiple transformations in sequence."""
+        from prompt_decorators import create_decorator_instance
+
+        # Create instances of component decorators
+        persona = create_decorator_instance('Persona', role='senior developer')
+        steps = create_decorator_instance('StepByStep', numbered=True)
+        audience = create_decorator_instance('Audience', level=self.audience)
+        output_format = create_decorator_instance('OutputFormat', format=self.format)
+
+        # Apply the transformations in sequence
+        result = persona(steps(audience(text)))
+        result = output_format(result)
+
+        # Add examples instruction if needed
+        if self.examples:
+            result = "Please include practical code examples for each step.\n\n" + result
+
+        return result
+
+# Register the composite class decorator
+register_decorator(CompositeTutorialDecorator,
+                  name="ClassTutorial",
+                  description="Class-based tutorial decorator",
+                  category="Composite")
 ```
 
-In this case, `Detailed` will win because it appears later. To manage this:
+## Conclusion
 
-1. Be aware of potential conflicts (see [Compatibility](../compatibility.md))
-2. Order your decorators carefully, with higher priority decorators later in the sequence
-3. Consider using composite decorators that are designed to work together
+In this tutorial, you've learned how to:
 
-### Parameter Conflicts
+1. Combine decorators using inline stacking in the prompt
+2. Chain decorators programmatically in your code
+3. Create composite decorators that encapsulate multiple transformations
+4. Implement class-based composite decorators
 
-Parameter conflicts can occur when decorators modify the same aspect:
-
-```python
-# Parameter conflict example
-prompt = """
-+++OutputFormat(format="json")
-+++OutputFormat(format="markdown")
-Provide a list of popular programming languages.
-"""
-```
-
-Again, the later parameter (`format="markdown"`) will override the earlier one.
-
-## Real-World Example: Research Paper Generator
-
-Let's build a comprehensive example that combines multiple decorators to generate research paper outlines:
-
-```python
-from prompt_decorators import (
-    DecoratorDefinition,
-    register_decorator,
-    create_decorator_instance,
-    apply_dynamic_decorators
-)
-import openai
-
-# Define a composite decorator for research papers
-research_paper = DecoratorDefinition(
-    name="ResearchPaper",
-    description="Generates research paper content with appropriate academic structure and style",
-    category="Academic",
-    parameters=[
-        {
-            "name": "field",
-            "type": "enum",
-            "description": "Academic field",
-            "enum": ["computer_science", "biology", "psychology", "physics", "economics"],
-            "default": "computer_science"
-        },
-        {
-            "name": "paper_section",
-            "type": "enum",
-            "description": "Which section of the paper to generate",
-            "enum": ["abstract", "introduction", "methodology", "results", "discussion", "conclusion", "outline"],
-            "default": "outline"
-        },
-        {
-            "name": "citation_style",
-            "type": "enum",
-            "description": "Citation style",
-            "enum": ["APA", "MLA", "Chicago", "IEEE", "Harvard"],
-            "default": "APA"
-        },
-        {
-            "name": "include_citations",
-            "type": "boolean",
-            "description": "Whether to include citations",
-            "default": True
-        }
-    ],
-    transform_function="""
-    // Map field to persona role
-    const fieldMap = {
-        computer_science: "computer scientist",
-        biology: "biologist",
-        psychology: "psychologist",
-        physics: "physicist",
-        economics: "economist"
-    };
-    const role = fieldMap[field] || "researcher";
-
-    // Basic decorators
-    const persona = createDecoratorInstance('Persona', { role: role });
-    const academic = createDecoratorInstance('Academic', { style: 'scientific' });
-    const outputFormat = createDecoratorInstance('OutputFormat', { format: 'markdown' });
-
-    // Section-specific decorators
-    let sectionDecorator;
-    let instruction = "";
-
-    if (paper_section === "abstract") {
-        sectionDecorator = createDecoratorInstance('Concise', { level: 'high' });
-        instruction = "Please write an abstract for a research paper on the following topic. " +
-            "Keep it between 150-250 words and focus on the research question, methodology, " +
-            "key findings, and implications.\\n\\n";
-    } else if (paper_section === "introduction") {
-        sectionDecorator = createDecoratorInstance('FirstPrinciples', { depth: 3 });
-        instruction = "Please write an introduction section for a research paper on the following topic. " +
-            "Include background information, the research gap being addressed, the research question, " +
-            "and the significance of the study.\\n\\n";
-    } else if (paper_section === "methodology") {
-        sectionDecorator = createDecoratorInstance('StepByStep', { numbered: true });
-        instruction = "Please write a methodology section for a research paper on the following topic. " +
-            "Detail the research design, participants/data sources, procedures, measures, and analysis methods.\\n\\n";
-    } else if (paper_section === "results") {
-        sectionDecorator = createDecoratorInstance('Detailed', { depth: 'comprehensive' });
-        instruction = "Please write a results section for a research paper on the following topic. " +
-            "Present the findings without interpretation, using appropriate organizational structure.\\n\\n";
-    } else if (paper_section === "discussion") {
-        sectionDecorator = createDecoratorInstance('Reasoning', { depth: 'comprehensive' });
-        instruction = "Please write a discussion section for a research paper on the following topic. " +
-            "Interpret the results, relate them to prior work, address limitations, and suggest future directions.\\n\\n";
-    } else if (paper_section === "conclusion") {
-        sectionDecorator = createDecoratorInstance('Concise', { level: 'moderate' });
-        instruction = "Please write a conclusion section for a research paper on the following topic. " +
-            "Summarize the main findings and their implications without introducing new information.\\n\\n";
-    } else {
-        // Default: outline
-        sectionDecorator = createDecoratorInstance('Outline', { depth: 3 });
-        instruction = "Please create a detailed outline for a research paper on the following topic. " +
-            "Include all major sections and subsections with brief descriptions of their content.\\n\\n";
-    }
-
-    // Citation decorator if requested
-    let citationDecorator = null;
-    if (include_citations) {
-        citationDecorator = createDecoratorInstance('CiteSources', { style: citation_style });
-    }
-
-    // Apply transformations in sequence
-    let result = instruction + text;
-    result = academic(result);
-    result = sectionDecorator(result);
-    if (citationDecorator) {
-        result = citationDecorator(result);
-    }
-    result = persona(result);
-    result = outputFormat(result);
-
-    return result;
-    """
-)
-
-# Register the decorator
-register_decorator(research_paper)
-
-# Create a research paper outline
-research = create_decorator_instance(
-    "ResearchPaper",
-    field="computer_science",
-    paper_section="outline",
-    citation_style="IEEE",
-    include_citations=True
-)
-
-topic = "The impact of transformer architectures on natural language processing tasks"
-paper_outline = research(topic)
-
-# Send to an LLM
-openai.api_key = "your-api-key-here"
-response = openai.chat.completions.create(
-    model="gpt-4o",
-    messages=[{"role": "user", "content": paper_outline}],
-    temperature=0.7
-)
-
-print(response.choices[0].message.content)
-```
-
-## Best Practices for Combining Decorators
-
-When combining decorators, follow these best practices:
-
-1. **Consider Order Carefully**: The sequence of decorators affects the final result
-2. **Minimize Conflicts**: Avoid combining inherently contradictory decorators
-3. **Create Composites for Common Patterns**: If you frequently use a specific combination, create a composite decorator
-4. **Test Thoroughly**: Different LLMs may handle combinations differently
-5. **Watch Token Limits**: Multiple decorators increase instruction length, which counts against token limits
-6. **Document Combinations**: Keep track of effective decorator combinations for different tasks
+By combining decorators, you can create powerful, flexible prompt transformations that would be difficult to achieve with a single decorator. This modular approach allows you to build complex behaviors from simple, reusable components.
 
 ## Next Steps
 
-Now that you've learned how to combine decorators, you can:
-
-1. Explore [extension development](extension_development.md) to create decorator packages
-2. Dive into advanced techniques like conditional decorator application
-3. Create domain-specific composite decorators for your use case
-4. Experiment with the [MCP integration](../integrations/mcp.md) to use decorator combinations with Claude Desktop
+- Experiment with different combinations of decorators
+- Create domain-specific composite decorators for your use cases
+- Develop an extension with multiple related decorators (see the [Extension Development](extension_development.md) tutorial)
+- Contribute your most useful decorator combinations to the community
