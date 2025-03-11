@@ -31,7 +31,7 @@ markdown = "^3.7"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
-black = "^23.0.0"
+black = ">=23,<25"
 isort = "^5.0.0"
 mypy = "^1.0.0"
 pytest-cov = "^4.0.0"
