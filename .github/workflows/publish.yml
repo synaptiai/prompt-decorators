@@ -4,13 +4,15 @@ on:
   release:
     types: [created]
 
-# Set minimum required permissions
+# Set permissions for trusted publishing
 permissions:
   contents: read  # Only needs read access to repository content
+  id-token: write  # IMPORTANT: mandatory for trusted publishing
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -55,10 +57,56 @@ jobs:
           # Configure Poetry to handle hash verification issues
           poetry config installer.no-binary :none:
           poetry install
-      - name: Build and publish
+
+      # Build the package using Poetry
+      - name: Build package
+        run: poetry build
+
+      # Store the distribution packages for other jobs to use
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      # Publish to PyPI using trusted publishing
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+          verbose: true
+
+  # Add a new job for signing packages with Sigstore
+  sign-and-publish:
+    name: Sign packages with Sigstore and publish to GitHub Release
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Required for creating GitHub Releases
+      id-token: write  # Required for Sigstore signing
+
+    steps:
+      # Download the built packages from the previous job
+      - name: Download distribution packages
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
+      # Sign the packages with Sigstore
+      - name: Sign the distribution packages with Sigstore
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        with:
+          inputs: >-
+            ./dist/*.tar.gz
+            ./dist/*.whl
+
+      # Upload the signed packages to the GitHub Release
+      - name: Upload artifacts to GitHub Release
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          poetry config pypi-token.pypi $POETRY_PYPI_TOKEN_PYPI
-          poetry build
-          poetry publish
+          # The release should already exist as this workflow is triggered by release creation
+          # Upload all files in dist/ including the signatures
+          gh release upload "${GITHUB_REF_NAME}" dist/* --repo "${GITHUB_REPOSITORY}"
