@@ -440,15 +440,16 @@ When this decorator is applied, the response structures content in a direct comp
 
 **Parameters:**
 - `aspects (aspect1,aspect2,...)`: Key dimensions to compare
-- `format (table | prose | bullets)`: Format for presenting the comparison
+- `format (table | pros-cons | narrative | scorecard)`: Format for presenting the comparison
+- `recommendation (none | light | definitive)`: Conclusion strength
 
 **Transformation Instruction:**
-"Structure your response as a direct comparison across these specific aspects: [aspects]. Present the comparison in [format] format, highlighting similarities and differences in a systematic way."
+"Compare the alternatives with a systematic approach highlighting key differences. [If criteria is specified: Compare based on [criteria] factors.] [If format is specified: Present the comparison in [format] format.] [If recommendation is specified: Provide a [recommendation] level recommendation based on the comparison.]"
 
 **Example:**
 ```
-+++Comparison(aspects=performance,cost,security,format=table)
-Compare cloud providers AWS, Azure, and Google Cloud.
++++Comparison(criteria=all, format=table, recommendation=definitive)
+Compare React, Vue, and Angular for building a complex enterprise web application.
 ```
 
 ---
@@ -695,6 +696,27 @@ When this decorator is applied, the response analyzes a topic across different t
 ```
 +++TemporalReasoning(timeframes=all, emphasis=evolutionary)
 How has transportation technology shaped urban development?
+```
+
+---
+
+### `+++TemporalResonance`
+When this decorator is applied, the response analyzes topics across multiple time horizons to identify patterns, principles, and possibilities that transcend present-focused thinking.
+
+**Parameters:**
+- `horizons (2-5)`: Number of distinct time horizons to explore
+- `resonancePoints (1-4)`: Number of resonance points to identify across time horizons
+- `futureScenarios (1-4)`: Number of potential future scenarios to consider
+- `domain (business | technology | society | personal | science | general)`: Specific domain context for the temporal analysis
+- `depth (shallow | moderate | deep)`: Depth of historical analysis and future projection
+
+**Transformation Instruction:**
+"Analyze the topic using the Temporal Resonance approach, which examines patterns across different time horizons (past, present, and future) to generate insights that transcend present limitations. Identify recurring patterns, underlying principles, and resonance points where insights from different time periods amplify each other. [If horizons is specified: Explore [horizons] distinct time horizons.] [If resonancePoints is specified: Identify [resonancePoints] significant resonance points that reveal patterns transcending specific time periods.] [If futureScenarios is specified: Develop [futureScenarios] distinct future scenarios representing different potential trajectories.] [If domain is specified: Focus on [domain]-specific patterns and dynamics across time periods.] [If depth is specified: Perform a [depth] temporal analysis with appropriate level of historical detail and future projection.]"
+
+**Example:**
+```
++++TemporalResonance(domain=business, resonancePoints=3, depth=moderate)
+How might our industry evolve over the next decade based on historical patterns?
 ```
 
 ---
@@ -1280,6 +1302,1280 @@ What are the environmental impacts of electric vehicles?
 ```
 
 ---
+
+## Software Development Prompt Decorators
+
+### `+++Algorithm`
+When this decorator is applied, the response implements specific algorithms with the desired complexity characteristics.
+
+**Parameters:**
+- `type (sorting | search | graph | string | numeric | ml | crypto)`: Algorithm category
+- `complexity (constant | logarithmic | linear | linearithmic | quadratic | polynomial | exponential)`: Desired time complexity
+- `approach (recursive | iterative | divide-conquer | dynamic | greedy)`: Algorithm design approach
+
+**Transformation Instruction:**
+"Implement an algorithm with the following characteristics: [If type is specified: Use a [type] algorithm such as [examples of algorithms in that category].] [If complexity is specified: The algorithm should have [complexity] time complexity.] [If approach is specified: Implement the algorithm using a [approach] approach.]"
+
+**Example:**
+```
++++Algorithm(type=graph, complexity=linear, approach=iterative)
+Implement an algorithm to find the shortest path between two nodes in an unweighted graph.
+```
+
+---
+
+### `+++APIDesign`
+When this decorator is applied, the response designs API interfaces focusing on specific qualities.
+
+**Parameters:**
+- `style (rest | graphql | grpc | soap | websocket | webhook)`: API architectural style
+- `focus (consistency | performance | developer-experience | backward-compatibility)`: Design priority
+- `documentation (openapi | graphql-schema | protobuf | custom | style-appropriate)`: Documentation approach
+
+**Transformation Instruction:**
+"Design an API that follows best practices and industry standards. Consider the interface design, endpoint structure, data formats, error handling, and authentication mechanisms. [If style is specified: Design a [style] API with appropriate specifications.] [If focus is specified: Prioritize [focus] in the API design.] [If documentation is specified: Document the API using [documentation] specifications.]"
+
+**Example:**
+```
++++APIDesign(style=graphql, focus=developer-experience, documentation=graphql-schema)
+Design a GraphQL API for a content management system that prioritizes a great developer experience.
+```
+
+---
+
+### `+++BugDiagnosis`
+When this decorator is applied, the response systematically diagnoses software bugs using specified approaches.
+
+**Parameters:**
+- `method (bisection | logging | tracing | debugging | testing)`: Primary diagnostic method
+- `level (symptoms | immediate-cause | root-cause)`: Depth of diagnosis
+- `scope (code | configuration | environment | integration)`: Area to focus investigation
+
+**Transformation Instruction:**
+"Diagnose the bug systematically using a structured approach. [If method is specified: Apply [method] techniques to identify the issue.] [If level is specified: Focus on identifying the [level] of the problem.] [If scope is specified: Concentrate your diagnostic efforts on the [scope] aspects of the system.]"
+
+**Example:**
+```
++++BugDiagnosis(method=bisection, level=root-cause, scope=integration)
+Our login system intermittently fails when users attempt to authenticate with third-party providers.
+```
+
+---
+
+### `+++CodeWalkthrough`
+When this decorator is applied, the response provides a detailed explanation of code, following a specified pedagogical approach.
+
+**Parameters:**
+- `style (line-by-line | functional | conceptual | architectural)`: Explanation approach
+- `audience (beginner | intermediate | advanced)`: Target knowledge level
+- `highlight (patterns | gotchas | optimizations | all)`: Aspects to emphasize
+
+**Transformation Instruction:**
+"Provide a code walkthrough that explains how this code works. [If style is specified: Use a [style] approach to explain the code.] [If audience is specified: Target an explanation appropriate for [audience] level programmers.] [If highlight is specified: Highlight [highlight] aspects of the code that are particularly noteworthy.]"
+
+**Example:**
+```
++++CodeWalkthrough(style=functional, audience=intermediate, highlight=patterns)
+Explain how this React component manages state and renders the UI.
+```
+
+---
+
+### `+++DesignPattern`
+When this decorator is applied, the response implements or explains software design patterns with appropriate applications.
+
+**Parameters:**
+- `pattern (singleton | factory | adapter | observer | strategy | command | facade)`: The design pattern to implement
+- `language (python | javascript | typescript | java | csharp | go | rust)`: Programming language to use
+- `variation (string)`: Specific variation of the pattern
+
+**Transformation Instruction:**
+"Apply the [pattern] design pattern in [language] to the following code generation task. Use the [variation] variation of this pattern where appropriate."
+
+**Example:**
+```
++++DesignPattern(pattern=observer, language=javascript)
+Create a notification system for an e-commerce application that alerts different parts of the UI when the cart changes.
+```
+
+---
+
+### `+++TestCases`
+When this decorator is applied, the response generates software test cases with specific coverage and methodologies.
+
+**Parameters:**
+- `type (unit | integration | functional | performance | security)`: Test category
+- `coverage (happy-path | edge-cases | error-handling | all)`: Test coverage focus
+- `framework (jest | pytest | junit | mocha | other)`: Testing framework to use
+
+**Transformation Instruction:**
+"Generate comprehensive test cases for this code or functionality. [If type is specified: Create [type] tests targeting the appropriate scope.] [If coverage is specified: Ensure tests cover [coverage] scenarios.] [If framework is specified: Write tests using the [framework] testing framework and its conventions.]"
+
+**Example:**
+```
++++TestCases(type=unit, coverage=all, framework=pytest)
+Write tests for this user authentication function.
+```
+
+---
+
+### `+++SystemDiagram`
+When this decorator is applied, the response creates a visual representation of system architecture or flow.
+
+**Parameters:**
+- `type (component | sequence | class | deployment | other)`: Diagram type
+- `notation (uml | c4 | informal | boxes-arrows)`: Diagramming notation
+- `detail (high-level | detailed)`: Level of detail to include
+
+**Transformation Instruction:**
+"Create a system diagram that visually represents the architecture or process. [If type is specified: Draw a [type] diagram showing the relevant elements and their relationships.] [If notation is specified: Use [notation] notation for the diagram.] [If detail is specified: Include a [detail] level of detail in the diagram.]"
+
+**Example:**
+```
++++SystemDiagram(type=sequence, notation=uml, detail=detailed)
+Create a diagram showing the authentication flow in our web application.
+```
+
+---
+
+### `+++TechDebt`
+When this decorator is applied, the response identifies and analyzes technical debt in code or architecture.
+
+**Parameters:**
+- `focus (code-quality | architecture | testing | documentation | other)`: Area of technical debt
+- `severity (low | medium | high)`: How critical the tech debt is
+- `remediation (quick-fixes | refactoring | redesign)`: Approach to addressing issues
+
+**Transformation Instruction:**
+"Analyze the technical debt in this code or system. [If focus is specified: Concentrate on [focus] aspects.] [If severity is specified: Identify [severity] severity issues.] [If remediation is specified: Suggest [remediation] approaches to address the technical debt.]"
+
+**Example:**
+```
++++TechDebt(focus=architecture, severity=high, remediation=refactoring)
+Review our backend service that has evolved organically over three years with multiple contributors.
+```
+
+---
+
+### `+++CICD`
+When this decorator is applied, the response creates or explains continuous integration and deployment pipelines.
+
+**Parameters:**
+- `platform (github-actions | jenkins | gitlab-ci | circleci | azure-devops)`: CI/CD platform
+- `stages (build | test | static-analysis | security | deploy | all)`: Pipeline stages to include
+- `approach (basic | comprehensive)`: Level of sophistication
+
+**Transformation Instruction:**
+"Design a continuous integration and deployment pipeline. [If platform is specified: Create a pipeline for [platform].] [If stages is specified: Include [stages] stages in the pipeline.] [If approach is specified: Make the pipeline [approach] in its implementation.]"
+
+**Example:**
+```
++++CICD(platform=github-actions, stages=all, approach=comprehensive)
+Create a CI/CD pipeline for our Node.js backend application.
+```
+
+---
+
+### `+++RootCauseAnalysis`
+When this decorator is applied, the response performs a systematic analysis to identify underlying causes of a problem.
+
+**Parameters:**
+- `method (fivewhys | fishbone | pareto | fault-tree)`: The analytical method to use
+- `depth (shallow | moderate | deep)`: How deeply to analyze the causes
+- `focus (technical | process | organizational | all)`: Area to emphasize in analysis
+
+**Transformation Instruction:**
+"Apply a structured [method] root cause analysis to identify the underlying factors behind this issue. Dig beyond surface-level symptoms to reveal the fundamental causes that, if addressed, would prevent recurrence of the problem. [If depth is specified: Perform a [depth] analysis.] [If focus is specified: Focus particularly on [focus] factors that may be contributing to the problem.]"
+
+**Example:**
+```
++++RootCauseAnalysis(method=fivewhys, depth=deep, focus=technical)
+Our application experiences intermittent performance degradation during peak usage hours.
+```
+
+---
+
+### `+++OptimizationFocus`
+When this decorator is applied, the response optimizes code or systems with emphasis on specific aspects.
+
+**Parameters:**
+- `goal (speed | memory | readability | scalability | security)`: Primary optimization target
+- `constraints (time | resources | backward-compatibility | none)`: Limiting factors to consider
+- `level (micro | architectural)`: Scope of optimization
+
+**Transformation Instruction:**
+"Optimize this code or system with a specific focus on [goal]. [If constraints is specified: Work within the [constraints] constraints.] [If level is specified: Focus on [level] level optimizations.]"
+
+**Example:**
+```
++++OptimizationFocus(goal=speed, constraints=backward-compatibility, level=micro)
+Improve the performance of this database query function that's causing a bottleneck.
+```
+
+---
+
+### `+++ErrorStrategy`
+When this decorator is applied, the response implements or suggests error handling approaches appropriate for the situation.
+
+**Parameters:**
+- `approach (defensive | exceptions | result-types | logging | recovery)`: Error handling paradigm
+- `verbosity (minimal | informative | debug)`: Level of error information
+- `user-facing (true | false)`: Whether errors should be user-presentable
+
+**Transformation Instruction:**
+"Implement error handling using a [approach] approach. [If verbosity is specified: Include [verbosity] level of error details.] [If user-facing is true: Ensure errors are properly formatted for end user presentation. If user-facing is false: Focus on technical error details for debugging.]"
+
+**Example:**
+```
++++ErrorStrategy(approach=result-types, verbosity=informative, user-facing=true)
+Implement error handling for this API endpoint that processes user uploads.
+```
+
+---
+
+### `+++Architecture`
+When this decorator is applied, the response designs or analyzes software architecture with specific patterns and qualities.
+
+**Parameters:**
+- `style (microservices | monolith | serverless | event-driven | layered)`: Architecture pattern
+- `focus (scalability | maintainability | performance | security | flexibility)`: Design priorities
+- `constraints (budget | legacy | time | team-size | regulatory)`: Limiting factors
+
+**Transformation Instruction:**
+"Design or analyze a software architecture that meets the requirements and constraints. [If style is specified: Use a [style] architectural pattern as the primary approach.] [If focus is specified: Prioritize [focus] qualities in the architecture.] [If constraints is specified: Work within the [constraints] constraints that affect the solution.]"
+
+**Example:**
+```
++++Architecture(style=microservices, focus=scalability, constraints=team-size)
+Design a backend architecture for our e-commerce platform that needs to handle seasonal traffic spikes.
+```
+
+---
+
+### `+++Documentation`
+When this decorator is applied, the response creates software documentation following specified standards and formats.
+
+**Parameters:**
+- `type (api | code | user | architecture)`: Documentation category
+- `format (markdown | javadoc | openapi | sphinx | other)`: Format standard
+- `audience (developers | end-users | operations | managers)`: Target readers
+
+**Transformation Instruction:**
+"Create comprehensive documentation that follows best practices. [If type is specified: Generate [type] documentation with appropriate content.] [If format is specified: Follow [format] formatting conventions and structure.] [If audience is specified: Tailor the documentation for [audience].]"
+
+**Example:**
+```
++++Documentation(type=api, format=openapi, audience=developers)
+Document our user authentication REST API.
+```
+
+---
+
+### `+++BestPractices`
+When this decorator is applied, the response explains or applies domain-specific best practices and standards.
+
+**Parameters:**
+- `domain (security | performance | maintainability | ux | accessibility)`: Practice area
+- `context (web | mobile | enterprise | embedded | ml)`: Application context
+- `level (basic | intermediate | advanced)`: Sophistication level
+
+**Transformation Instruction:**
+"Apply industry best practices and established standards to this problem. [If domain is specified: Focus on [domain] best practices.] [If context is specified: Apply practices appropriate for [context] applications.] [If level is specified: Include [level] practices that match this sophistication level.]"
+
+**Example:**
+```
++++BestPractices(domain=security, context=web, level=advanced)
+Review our user authentication and authorization implementation.
+```
+
+---
+
+### `+++ImplementationStrategy`
+When this decorator is applied, the response proposes systematic approaches to implementing a feature or system.
+
+**Parameters:**
+- `approach (incremental | mvp | prototype | vertical-slice | tdd)`: Implementation methodology
+- `timeframe (immediate | short-term | long-term)`: Timing for completion
+- `team (solo | small-team | large-team)`: Team resource context
+
+**Transformation Instruction:**
+"Develop a strategy for implementing this feature or system effectively. [If approach is specified: Use a [approach] methodology to guide implementation.] [If timeframe is specified: Plan for a [timeframe] delivery timeline.] [If team is specified: Design the implementation approach for a [team] resource context.]"
+
+**Example:**
+```
++++ImplementationStrategy(approach=incremental, timeframe=short-term, team=small-team)
+Plan the implementation of a new payment processing system for our e-commerce application.
+```
+
+---
+
+### `+++DataModel`
+When this decorator is applied, the response designs data models with appropriate structures and relationships.
+
+**Parameters:**
+- `type (relational | document | graph | time-series | key-value)`: Database paradigm
+- `focus (normalization | performance | flexibility | integrity)`: Design priority
+- `detail (conceptual | logical | physical)`: Level of modeling detail
+
+**Transformation Instruction:**
+"Design a data model that appropriately represents the domain entities and their relationships. [If type is specified: Create a [type] data model with storage-appropriate structures.] [If focus is specified: Prioritize [focus] in the design.] [If detail is specified: Develop a [detail] level data model.]"
+
+**Example:**
+```
++++DataModel(type=relational, focus=normalization, detail=logical)
+Create a data model for an employee management system that tracks departments, positions, and reporting relationships.
+```
+
+---
+
+### `+++SecurityAudit`
+When this decorator is applied, the response analyzes code or architecture for security vulnerabilities.
+
+**Parameters:**
+- `focus (authentication | authorization | data-protection | input-validation | dependency)`: Security concern area
+- `standard (owasp-top-10 | nist | cis | hipaa | pci-dss)`: Security standard reference
+- `severity (low | medium | high | critical)`: Vulnerability level to identify
+
+**Transformation Instruction:**
+"Perform a security audit to identify vulnerabilities and recommend improvements. [If focus is specified: Concentrate on [focus] security concerns.] [If standard is specified: Evaluate against [standard] security standards.] [If severity is specified: Highlight [severity] and higher severity issues.]"
+
+**Example:**
+```
++++SecurityAudit(focus=input-validation, standard=owasp-top-10, severity=high)
+Review our web form handling code for security vulnerabilities.
+```
+
+---
+
+### `+++Refactor`
+When this decorator is applied, the response improves existing code structure without changing its behavior.
+
+**Parameters:**
+- `goal (performance | readability | maintainability | security | testability)`: Primary objective of the refactoring
+- `level (minor | moderate | major)`: Extent of changes to make
+- `preserve (api | behavior | both)`: Aspects that must be preserved
+
+**Transformation Instruction:**
+"Refactor the provided code to improve its structure while preserving its functionality. Focus on making the code more [goal]. [If level is specified: Perform a [level] refactoring that addresses key issues without completely rewriting the code.] [If preserve is specified: Preserve [preserve] during refactoring.]"
+
+**Example:**
+```
++++Refactor(goal=performance, level=moderate, preserve=both)
+Refactor this database query function that's causing performance issues.
+```
+
+---
+
+### `+++CodeReview`
+When this decorator is applied, the response provides feedback on code quality, following defined standards.
+
+**Parameters:**
+- `depth (quick | standard | thorough)`: Review comprehensiveness
+- `focus (correctness | style | security | performance | all)`: Review emphasis
+- `tone (strict | balanced | constructive)`: Feedback approach
+
+**Transformation Instruction:**
+"Review the provided code and offer feedback to improve it. [If depth is specified: Perform a [depth] review with appropriate detail.] [If focus is specified: Emphasize [focus] aspects in your review.] [If tone is specified: Provide feedback in a [tone] manner.]"
+
+**Example:**
+```
++++CodeReview(depth=thorough, focus=security, tone=constructive)
+Review this authentication middleware implementation for a Node.js application.
+```
+
+---
+
+### `+++Monitoring`
+When this decorator is applied, the response designs monitoring solutions for systems and applications.
+
+**Parameters:**
+- `metrics (performance | errors | usage | business | all)`: What to monitor
+- `implementation (prometheus | cloudwatch | datadog | custom | other)`: Monitoring tools
+- `alerts (none | minimal | comprehensive)`: Alert configuration level
+
+**Transformation Instruction:**
+"Design a monitoring solution that provides visibility into system health and performance. [If metrics is specified: Focus on tracking [metrics] metrics.] [If implementation is specified: Use [implementation] for the monitoring implementation.] [If alerts is specified: Include [alerts] alerting configuration.]"
+
+**Example:**
+```
++++Monitoring(metrics=all, implementation=prometheus, alerts=comprehensive)
+Create a monitoring setup for our microservices architecture running on Kubernetes.
+```
+
+---
+
+### `+++DebugStrategy`
+When this decorator is applied, the response outlines a systematic approach to debugging and resolving issues.
+
+**Parameters:**
+- `approach (step-by-step | scientific | bisection | logging | profiling)`: Debugging methodology
+- `tools (debugger | logs | metrics | traces | all)`: Debugging instruments
+- `environment (development | staging | production)`: Context for debugging
+
+**Transformation Instruction:**
+"Develop a strategy to debug and resolve this issue systematically. [If approach is specified: Use a [approach] approach to isolate the problem.] [If tools is specified: Leverage [tools] to gather diagnostic information.] [If environment is specified: Adapt the debugging approach for a [environment] environment.]"
+
+**Example:**
+```
++++DebugStrategy(approach=scientific, tools=all, environment=production)
+Our payment processing service is intermittently failing during high traffic periods with no clear error pattern.
+```
+
+---
+
+### `+++PullRequest`
+When this decorator is applied, the response creates or reviews pull request documentation with appropriate detail.
+
+**Parameters:**
+- `type (creation | review | feedback)`: PR interaction type
+- `scope (feature | bugfix | refactor | documentation)`: Change type
+- `detail (minimal | standard | comprehensive)`: Information level
+
+**Transformation Instruction:**
+"[If type=creation: Create a pull request description that effectively communicates these changes.] [If type=review: Review this pull request with appropriate attention to detail.] [If type=feedback: Provide feedback on this pull request.] [If scope is specified: Focus on aspects relevant to a [scope] change.] [If detail is specified: Include [detail] level of information.]"
+
+**Example:**
+```
++++PullRequest(type=creation, scope=feature, detail=comprehensive)
+Create a pull request description for my implementation of the new user profile management feature.
+```
+
+---
+
+### `+++TypeDefinition`
+When this decorator is applied, the response creates or explains type definitions with appropriate structures.
+
+**Parameters:**
+- `system (typescript | flow | jsdoc | python-typing | java-generics)`: Type system or annotation format
+- `strictness (loose | moderate | strict)`: Level of type enforcement
+- `style (inline | declaration-file | interface-based | type-alias | generics)`: Type definition pattern
+
+**Transformation Instruction:**
+"Generate type definitions for the code according to the specified parameters. Focus on creating clear, well-structured types that enhance code safety and documentation."
+
+**Example:**
+```
++++TypeDefinition(system=typescript, strictness=strict, style=interface-based)
+Define types for an e-commerce application's product catalog and shopping cart.
+```
+
+---
+
+### `+++TaskBreakdown`
+When this decorator is applied, the response decomposes complex tasks into manageable subtasks with clear organization.
+
+**Parameters:**
+- `structure (sequential | parallel | hierarchical)`: Task organization approach
+- `granularity (coarse | medium | fine)`: Level of task decomposition
+- `prioritization (must-have | nice-to-have | both)`: Task importance labeling
+
+**Transformation Instruction:**
+"Break down this complex task into smaller, more manageable subtasks. [If structure is specified: Organize the tasks in a [structure] structure.] [If granularity is specified: Use [granularity] grained task decomposition.] [If prioritization is specified: Label tasks with [prioritization] priority levels.]"
+
+**Example:**
+```
++++TaskBreakdown(structure=hierarchical, granularity=medium, prioritization=both)
+Implement a new user authentication system with OAuth, multi-factor authentication, and password recovery.
+```
+
+---
+
+### `+++PreciseModification`
+When this decorator is applied, the response specifies code changes with exact locations and modifications.
+
+**Parameters:**
+- `scope (line | method | class | file)`: Modification granularity
+- `approach (replace | insert | delete | modify)`: Change type
+- `safety (minimal | defensive | comprehensive)`: Error prevention strategy
+
+**Transformation Instruction:**
+"Specify precise code modifications with exact locations and changes. [If scope is specified: Make changes at the [scope] level.] [If approach is specified: Use [approach] operations for the modifications.] [If safety is specified: Implement [safety] safety measures to prevent introducing bugs.]"
+
+**Example:**
+```
++++PreciseModification(scope=method, approach=modify, safety=comprehensive)
+Fix the bug in our user registration method that allows duplicate email addresses.
+```
+
+---
+
+### `+++DependencyAnalysis`
+When this decorator is applied, the response analyzes software dependencies and their implications.
+
+**Parameters:**
+- `level (direct | transitive | all)`: Dependency depth to analyze
+- `focus (security | compatibility | size | licensing)`: Analysis emphasis
+- `action (report | upgrade | replace | optimize)`: Recommended next steps
+
+**Transformation Instruction:**
+"Analyze the dependencies in this codebase or project. [If level is specified: Examine [level] dependencies.] [If focus is specified: Concentrate on [focus] aspects of the dependencies.] [If action is specified: Recommend [action] actions based on the analysis.]"
+
+**Example:**
+```
++++DependencyAnalysis(level=all, focus=security, action=upgrade)
+Analyze the npm dependencies in our Node.js application for security vulnerabilities.
+```
+
+---
+
+### `+++EdgeCases`
+When this decorator is applied, the response identifies and handles boundary conditions and unusual scenarios.
+
+**Parameters:**
+- `coverage (input | state | environment | all)`: Edge case categories
+- `handling (validation | fallback | graceful-failure | prevention)`: Solution approach
+- `documentation (none | code-comments | tests | comprehensive)`: How to document cases
+
+**Transformation Instruction:**
+"Identify and handle edge cases and unusual scenarios that could affect this code or system. [If coverage is specified: Focus on [coverage] edge cases.] [If handling is specified: Use [handling] approaches to handle the edge cases.] [If documentation is specified: Document the edge cases with [documentation] methods.]"
+
+**Example:**
+```
++++EdgeCases(coverage=all, handling=validation, documentation=comprehensive)
+Ensure this payment processing function handles all possible error conditions and edge cases.
+```
+
+---
+
+### `+++AntiPatterns`
+When this decorator is applied, the response identifies and remedies problematic coding or design patterns.
+
+**Parameters:**
+- `domain (architecture | code | database | concurrency | security)`: Problem area
+- `severity (informational | concerning | critical)`: Issue importance
+- `remediation (identify | explain | fix)`: Response approach
+
+**Transformation Instruction:**
+"Identify anti-patterns and problematic practices in this code or design. [If domain is specified: Focus on [domain] anti-patterns.] [If severity is specified: Highlight [severity] level issues.] [If remediation is specified: Provide [remediation] level response to each identified anti-pattern.]"
+
+**Example:**
+```
++++AntiPatterns(domain=code, severity=critical, remediation=fix)
+Review this JavaScript code that manages asynchronous operations and user authentication.
+```
+
+---
+
+### `+++ConceptModel`
+When this decorator is applied, the response creates a conceptual model to explain complex technical topics.
+
+**Parameters:**
+- `abstraction (high | medium | detailed)`: Conceptual simplification level
+- `format (analogy | diagram | narrative | comparison)`: Explanation approach
+- `target (beginner | intermediate | expert)`: Audience knowledge level
+
+**Transformation Instruction:**
+"Create a conceptual model that makes this technical topic more understandable. [If abstraction is specified: Use [abstraction] level of abstraction.] [If format is specified: Present the model using a [format] approach.] [If target is specified: Design the model for [target] level understanding.]"
+
+**Example:**
+```
++++ConceptModel(abstraction=medium, format=analogy, target=beginner)
+Explain how containerization works and why it's useful for application deployment.
+```
+
+---
+
+### `+++Compare`
+When this decorator is applied, the response provides a systematic comparison between technical alternatives.
+
+**Parameters:**
+- `criteria (performance | cost | complexity | maturity | all)`: Comparison dimensions
+- `format (table | pros-cons | narrative | scorecard)`: Presentation method
+- `recommendation (none | light | definitive)`: Conclusion strength
+
+**Transformation Instruction:**
+"Compare the alternatives with a systematic approach highlighting key differences. [If criteria is specified: Compare based on [criteria] factors.] [If format is specified: Present the comparison in [format] format.] [If recommendation is specified: Provide a [recommendation] level recommendation based on the comparison.]"
+
+**Example:**
+```
++++Compare(criteria=all, format=table, recommendation=definitive)
+Compare React, Vue, and Angular for building a complex enterprise web application.
+```
+
+---
+
+### `+++Explain`
+When this decorator is applied, the response provides a clear explanation of code or concepts with appropriate detail.
+
+**Parameters:**
+- `depth (high-level | detailed | comprehensive)`: Explanation thoroughness
+- `focus (how | why | both)`: Explanation emphasis
+- `examples (none | few | many)`: Illustrative examples amount
+
+**Transformation Instruction:**
+"Explain this code or concept clearly and effectively. [If depth is specified: Provide a [depth] explanation.] [If focus is specified: Emphasize [focus] the code works or why it was designed this way.] [If examples is specified: Include [examples] illustrative examples.]"
+
+**Example:**
+```
++++Explain(depth=comprehensive, focus=both, examples=many)
+Explain React's useEffect hook and its common use cases.
+```
+
+---
+
+### `+++LearningPath`
+When this decorator is applied, the response creates structured learning progression for technical topics.
+
+**Parameters:**
+- `duration (short | medium | long)`: Learning timeline
+- `depth (foundational | practical | comprehensive)`: Knowledge level goal
+- `style (hands-on | academic | mixed)`: Learning approach
+
+**Transformation Instruction:**
+"Create a structured learning path that guides someone through this topic effectively. [If duration is specified: Design a [duration] term learning journey.] [If depth is specified: Target [depth] knowledge acquisition.] [If style is specified: Use a [style] learning approach.]"
+
+**Example:**
+```
++++LearningPath(duration=medium, depth=practical, style=hands-on)
+Create a learning plan for a backend developer who wants to learn Kubernetes.
+```
+
+---
+
+### `+++ErrorDiagnosis`
+When this decorator is applied, the response analyzes error patterns and provides systematic troubleshooting.
+
+**Parameters:**
+- `language (javascript | python | java | go | other)`: Programming language context
+- `depth (symptom | cause | solution)`: Diagnostic thoroughness
+- `format (checklist | decision-tree | step-by-step | narrative)`: Diagnostic structure
+
+**Transformation Instruction:**
+"Diagnose the error with a systematic approach to identify and resolve the issue. [If language is specified: Apply [language] specific knowledge to the diagnosis.] [If depth is specified: Provide [depth] level analysis.] [If format is specified: Structure the diagnosis as a [format].]"
+
+**Example:**
+```
++++ErrorDiagnosis(language=python, depth=cause, format=decision-tree)
+Debug this error: "TypeError: cannot use a string pattern on a bytes-like object" in our file processing code.
+```
+
+---
+
+### `+++CodeContext`
+When this decorator is applied, the response provides relevant contextual information for code understanding.
+
+**Parameters:**
+- `levels (implementation | function | module | system | business)`: Contextual scope
+- `focus (dependencies | flow | purpose | evolution | all)`: Context emphasis
+- `presentation (brief | standard | comprehensive)`: Detail level
+
+**Transformation Instruction:**
+"Provide important contextual information to better understand this code. [If levels is specified: Include [levels] level context.] [If focus is specified: Emphasize the [focus] aspects of the context.] [If presentation is specified: Present the context at a [presentation] level of detail.]"
+
+**Example:**
+```
++++CodeContext(levels=all, focus=flow, presentation=comprehensive)
+Explain how this authentication middleware fits into our Express.js application architecture.
+```
+
+---
+
+### `+++TechDebtControl`
+When this decorator is applied, the response guides how technical debt should be handled during implementation.
+
+**Parameters:**
+- `accept (none | minimal | moderate | pragmatic)`: Level of acceptable technical debt
+- `document (none | comments | todos | issues | comprehensive)`: How tech debt should be documented
+- `tradeoff (nothing | completeness | performance | elegance)`: What can be traded for quality
+
+**Transformation Instruction:**
+"When implementing this solution, consider the following technical debt guidelines: [If accept is specified: [accept].] [If document is specified: [document].] [If tradeoff is specified: [tradeoff].]"
+
+**Example:**
+```
++++TechDebtControl(accept=pragmatic, document=todos, tradeoff=elegance)
+Implement a quick solution for the file upload feature we need for the demo next week.
+```
+
+---
+
+### `+++ComplexityLevel`
+When this decorator is applied, the response specifies the permitted complexity level for the implementation.
+
+**Parameters:**
+- `code (simple | moderate | complex | necessary-only)`: Code complexity limit
+- `concepts (beginner-friendly | intermediate | advanced)`: Conceptual complexity limit
+- `dependencies (none | minimal | standard | whatever-needed)`: External dependency usage
+
+**Transformation Instruction:**
+"Please implement this with appropriate complexity constraints. [If code is specified: [code].] [If concepts is specified: [concepts].] [If dependencies is specified: [dependencies].]"
+
+**Example:**
+```
++++ComplexityLevel(code=simple, concepts=beginner-friendly, dependencies=minimal)
+Implement a simple date formatter utility that converts between different date formats without external libraries.
+```
+
+---
+
+### `+++AsyncPattern`
+When this decorator is applied, the response handles asynchronous operations with appropriate patterns for the language and environment.
+
+**Parameters:**
+- `approach (promises | async-await | observables | callbacks | streams | events)`: Asynchronous programming model to use
+- `error-handling (try-catch | error-first-callbacks | promise-rejection | error-streams)`: Error handling strategy
+- `cancellation (none | manual | timeout | signal)`: Support for operation cancellation
+
+**Transformation Instruction:**
+"When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. [If approach is specified: Use [approach] as the primary asynchronous pattern.] [If error-handling is specified: Implement [error-handling] for error handling.] [If cancellation is specified: Support [cancellation] cancellation for asynchronous operations.]"
+
+**Example:**
+```
++++AsyncPattern(approach=async-await, error-handling=try-catch, cancellation=signal)
+Create a function that fetches user data from multiple APIs in parallel and combines the results.
+```
+
+---
+
+### `+++CodeGen`
+When this decorator is applied, the response generates code snippets or complete solutions with configurable style and documentation level.
+
+**Parameters:**
+- `language (python | javascript | typescript | java | csharp | go | rust)`: Programming language to generate code in
+- `style (functional | oop | procedural | reactive | declarative)`: Programming paradigm or coding style to use
+- `comments (minimal | moderate | extensive)`: Level of code documentation to include
+- `error_handling (none | basic | comprehensive)`: Level of error handling to include
+
+**Transformation Instruction:**
+"Generate code that solves the following problem. Make sure the solution is correct, efficient, and follows best practices. [If language is specified: Use [language] as the programming language.] [If style is specified: Write the code using [style] programming principles.] [If comments is specified: Include [comments] level of comments and documentation.] [If error_handling is specified: Implement [error_handling] error handling.]"
+
+**Example:**
+```
++++CodeGen(language=typescript, style=functional, comments=moderate, error_handling=basic)
+Create a utility function that calculates the total price of items in a shopping cart with discounts applied.
+```
+
+---
+
+### `+++Interface`
+When this decorator is applied, the response generates interface definitions for APIs, libraries, or components.
+
+**Parameters:**
+- `style (rest | graphql | rpc | soap | class | function | event-driven)`: Interface paradigm or API style
+- `verbosity (minimal | documented | extensive)`: Level of documentation detail
+- `format (code | openapi | schema | typescript)`: Output format of the interface
+
+**Transformation Instruction:**
+"Generate an interface definition with the following characteristics: [If style is specified: Interface style: [style].] [If verbosity is specified: Documentation level: [verbosity].] [If format is specified: Output format: [format].]"
+
+**Example:**
+```
++++Interface(style=rest, verbosity=extensive, format=openapi)
+Create an API interface for a user management service with authentication, user profiles, and role management.
+```
+
+---
+
+### `+++CodeStandards`
+When this decorator is applied, the response applies coding standards and best practices.
+
+**Parameters:**
+- `standard (company | language-specific | custom | industry)`: Code standard type
+- `strictness (recommended | required | strict)`: Enforcement level
+- `focus (formatting | naming | patterns | security | all)`: Areas of emphasis
+
+**Transformation Instruction:**
+"Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability. [If standard is specified: [standard].] [If strictness is specified: [strictness].] [If focus is specified: [focus].]"
+
+**Example:**
+```
++++CodeStandards(standard=language-specific, strictness=required, focus=all)
+Apply JavaScript best practices to this React component following Airbnb style guide.
+```
+
+---
+
+### `+++CommitMessage`
+When this decorator is applied, the response generates structured, informative commit messages.
+
+**Parameters:**
+- `style (conventional | detailed | minimal | semantic | custom)`: Commit message format
+- `scope (include | exclude)`: Change scope information
+- `issue (none | reference | close)`: Include issue references
+
+**Transformation Instruction:**
+"Generate a commit message that is clear, concise, and follows best practices for version control. The message should effectively communicate the changes made in the commit. [If style is specified: [style].] [If scope is specified: [scope].] [If issue is specified: [issue].]"
+
+**Example:**
+```
++++CommitMessage(style=conventional, scope=include, issue=reference)
+Generate a commit message for changes that improve error handling in the authentication module, related to issue #143.
+```
+
+---
+
+### `+++MockData`
+When this decorator is applied, the response generates test fixtures and mock data for testing.
+
+**Parameters:**
+- `complexity (simple | moderate | complex)`: Sophistication of generated data
+- `format (json | csv | sql | code | graphql)`: Output format of the mock data
+- `size (small | medium | large)`: Amount of mock data to generate
+
+**Transformation Instruction:**
+"Generate mock data according to the specified parameters. The data should be realistic but not real. [If complexity is specified: [complexity].] [If format is specified: [format].] [If size is specified: [size].]"
+
+**Example:**
+```
++++MockData(complexity=complex, format=json, size=medium)
+Generate mock data for an e-commerce system with users, products, orders, and reviews.
+```
+
+---
+
+### `+++Backup`
+When this decorator is applied, the response designs backup and recovery strategies.
+
+**Parameters:**
+- `criticality (low | medium | high | mission-critical)`: Data importance level
+- `rpo (minutes | hours | days | custom)`: Recovery Point Objective
+- `rto (minutes | hours | days | custom)`: Recovery Time Objective
+
+**Transformation Instruction:**
+"Design a backup and recovery strategy with the following requirements: [If criticality is specified: [criticality].] [If rpo is specified: [rpo].] [If rto is specified: [rto].]"
+
+**Example:**
+```
++++Backup(criticality=mission-critical, rpo=minutes, rto=minutes)
+Design a backup and disaster recovery strategy for our financial transaction database.
+```
+
+---
+
+### `+++Scalability`
+When this decorator is applied, the response designs system architecture with focus on specific scaling dimensions.
+
+**Parameters:**
+- `dimension (users | data | transactions | geographic | complexity)`: Scaling aspect to focus on
+- `target (10x | 100x | 1000x | all)`: Scale magnitude to design for
+- `approach (horizontal | vertical | hybrid | cloud-native)`: Scaling strategy to implement
+
+**Transformation Instruction:**
+"Design a system architecture that addresses scalability concerns. Consider appropriate scaling strategies and techniques. [If dimension is specified: Focus on scaling [dimension] with considerations specific to that domain.] [If target is specified: Design for [target] scale growth.] [If approach is specified: Utilize [approach] scaling approaches in the architecture.]"
+
+**Example:**
+```
++++Scalability(dimension=transactions, target=1000x, approach=horizontal)
+Design a payment processing system that can handle Black Friday-level traffic spikes.
+```
+
+---
+
+### `+++Optimize`
+When this decorator is applied, the response optimizes code for specific metrics while respecting constraints.
+
+**Parameters:**
+- `for (speed | memory | readability | size | network)`: The primary optimization target
+- `constraints (backwards-compatible | minimal-changes | no-external-dependencies | same-api | none)`: Limitations that must be respected
+- `priority (max-gains | min-risk | balanced)`: Trade-off preference when optimizations conflict
+
+**Transformation Instruction:**
+"Optimize the code for [for] while respecting the following constraints: [constraints]. When optimizations conflict, prioritize [priority]."
+
+**Example:**
+```
++++Optimize(for=memory, constraints=backwards-compatible, priority=min-risk)
+Optimize this image processing function that's consuming too much memory.
+```
+
+---
+
+### `+++ChangeVerification`
+When this decorator is applied, the response focuses on verifying that changes have the intended effect and don't introduce regressions.
+
+**Parameters:**
+- `type (functionality | visual | performance | security)`: Verification type
+- `method (manual-testing | automated-tests | dom-inspection | logging)`: Verification method
+- `coverage (changed-only | dependent-areas | comprehensive)`: Verification coverage
+
+**Transformation Instruction:**
+"Verify the changes to ensure they have the intended effect and don't introduce regressions. [If type is specified: Focus on verifying the [type] aspects of the changes.] [If method is specified: Use [method] to verify the changes.] [If coverage is specified: Verify [coverage] areas that might be affected.]"
+
+**Example:**
+```
++++ChangeVerification(type=functionality, method=dom-inspection, coverage=dependent-areas)
+Verify that the UI updates properly after implementing the sorting functionality. Check all elements that should respond to the sort action.
+```
+
+---
+
+### `+++CodeAudit`
+When this decorator is applied, the response requests an audit of existing code to identify issues before making changes.
+
+**Parameters:**
+- `scope (function | component | module | system | specific-issue)`: Audit scope
+- `focus (bugs | performance | security | maintainability | all)`: Audit focus areas
+- `output (summary | detailed | categorized | prioritized)`: Audit output format
+
+**Transformation Instruction:**
+"Before making any changes, please perform a code audit to identify potential issues. [If scope is specified: [scope].] [If focus is specified: [focus].] [If output is specified: [output].]"
+
+**Example:**
+```
++++CodeAudit(scope=module, focus=performance, output=detailed)
+Refactor this payment processing code to improve performance.
+```
+
+---
+
+### `+++Deployment`
+When this decorator is applied, the response generates deployment approaches for applications and services.
+
+**Parameters:**
+- `platform (aws | azure | gcp | kubernetes | heroku | netlify | vercel | on-prem)`: Deployment target
+- `strategy (blue-green | canary | rolling | recreate | custom)`: Deployment methodology
+- `environment (dev | staging | production | multi-region)`: Target environment
+
+**Transformation Instruction:**
+"Generate a deployment plan for the specified platform, using the appropriate deployment strategy and targeting the specified environment. Include necessary configuration, infrastructure requirements, and implementation steps. [If platform is specified: [platform].] [If strategy is specified: [strategy].] [If environment is specified: [environment].]"
+
+**Example:**
+```
++++Deployment(platform=kubernetes, strategy=blue-green, environment=production)
+Create a deployment plan for our microservices architecture ensuring zero downtime.
+```
+
+---
+
+### `+++Estimation`
+When this decorator is applied, the response helps with effort estimation for development tasks.
+
+**Parameters:**
+- `method (t-shirt | fibonacci | hours | days)`: Estimation approach
+- `confidence (best-case | worst-case | expected | range)`: Estimate type
+- `factors (complexity | risk | unknowns | dependencies | all)`: Considerations to include
+
+**Transformation Instruction:**
+"Provide an effort estimation for the development task described. Break down the task into components and explain your reasoning. [If method is specified: [method].] [If confidence is specified: [confidence].] [If factors is specified: [factors].]"
+
+**Example:**
+```
++++Estimation(method=fibonacci, confidence=range, factors=all)
+Estimate the effort required to implement a new authentication system with social login and MFA support.
+```
+
+---
+
+### `+++ExtendCode`
+When this decorator is applied, the response requests extending or enhancing existing code with new functionality without complete rewrites.
+
+**Parameters:**
+- `approach (add-function | add-method | add-feature | enhance-existing)`: How to extend the code
+- `impact (none | minimal | moderate | significant)`: Level of changes to existing code
+- `maintain (api | architecture | naming | performance | all)`: Aspects to maintain
+
+**Transformation Instruction:**
+"Extend the existing code with new functionality. Focus on adding to the codebase rather than rewriting it. [If approach is specified: Apply the [approach] approach to implementing the functionality.] [If impact is specified: Make [impact] changes to existing code.] [If maintain is specified: Maintain [maintain] aspects of the existing code.]"
+
+**Example:**
+```
++++ExtendCode(approach=add-method, impact=minimal, maintain=all)
+Add a method to this user service class that allows retrieving users by email domain.
+```
+
+---
+
+### `+++IncrementalBuild`
+When this decorator is applied, the response indicates that the code should be built incrementally, with focus on one feature/component at a time.
+
+**Parameters:**
+- `focus (feature | component | function | integration | refactoring)`: Current implementation focus
+- `dependencies (mock | stub | implement | import-existing)`: How to handle dependencies
+- `completion (minimal-viable | functional | robust | production-ready)`: Expected completion of this increment
+
+**Transformation Instruction:**
+"Implement code incrementally, focusing on one part at a time. Build the solution step by step, ensuring each increment is testable before moving to the next. [If focus is specified: [focus] with the appropriate level of implementation.] [If dependencies is specified: Handle dependencies with the [dependencies] approach.] [If completion is specified: Aim for a [completion] level of completion in this increment.]"
+
+**Example:**
+```
++++IncrementalBuild(focus=component, dependencies=mock, completion=minimal-viable)
+Implement the user profile card component that displays basic user information and an avatar.
+```
+
+---
+
+### `+++ImplPhase`
+When this decorator is applied, the response indicates which phase of implementation the AI should focus on, controlling scope and detail level.
+
+**Parameters:**
+- `stage (design | scaffold | core | refinement | optimization | documentation)`: Current implementation phase
+- `scope (function | component | module | service | system)`: Implementation scope boundary
+- `iteration (number)`: Implementation iteration number
+
+**Transformation Instruction:**
+"Focus on the [stage] phase of implementation for this [scope], iteration #[iteration]. [If stage is specified: Apply the appropriate development approach for this phase.] [If scope is specified: Maintain proper boundaries for the [scope].] [If iteration is specified: Consider this as iteration #[iteration] of the implementation process.]"
+
+**Example:**
+```
++++ImplPhase(stage=scaffold, scope=component, iteration=1)
+Create the initial structure for a user authentication component with login/register forms.
+```
+
+---
+
+### `+++Iterate`
+When this decorator is applied, the response indicates this is an iteration on previously generated code, with specific improvements needed.
+
+**Parameters:**
+- `version (number)`: Iteration number
+- `feedback (review-comments | bug-fixes | performance-issues | feature-requests)`: Type of feedback addressed
+- `priority (correctness | completeness | performance | readability)`: Implementation priority
+
+**Transformation Instruction:**
+"This is iteration [version] of the code implementation. Please focus on addressing the following feedback: [feedback], with priority on [priority]. Maintain continuity with the previously generated code while making targeted improvements based on the feedback provided."
+
+**Example:**
+```
++++Iterate(version=2, feedback=review-comments, priority=correctness)
+Update the authentication middleware based on these code review comments: 1) Token expiration is not properly checked, 2) Error messages are not consistent.
+```
+
+---
+
+### `+++MemoryConstraint`
+When this decorator is applied, the response helps manage implementation within AI context window limitations by focusing on specific code portions.
+
+**Parameters:**
+- `focus (single-function | component | interface | specific-feature)`: Part of the code to focus on
+- `implementation (skeleton | core-logic | full-implementation | with-tests)`: Implementation completeness
+- `context (ignore | summarize | interface-only | stub)`: How to handle surrounding code
+
+**Transformation Instruction:**
+"Focus on implementing the specified code portion while managing memory constraints. Prioritize clarity and correctness within the scope. [If focus is specified: [focus].] [If implementation is specified: [implementation].] [If context is specified: [context].]"
+
+**Example:**
+```
++++MemoryConstraint(focus=single-function, implementation=full-implementation, context=interface-only)
+Implement the user authentication function that verifies credentials against our database.
+```
+
+---
+
+### `+++PreciseModification`
+When this decorator is applied, the response guides careful, targeted modifications to sensitive parts of the codebase.
+
+**Parameters:**
+- `sensitivity (normal | sensitive | critical | fragile)`: Code sensitivity level
+- `scope (isolated | contained | minimal | precise)`: Modification scope
+- `validation (review | tests | both | comprehensive)`: Required validation approach
+
+**Transformation Instruction:**
+"When modifying code, ensure changes are carefully targeted and appropriate for the sensitivity level of the codebase. Consider the scope of changes and implement proper validation procedures. [If sensitivity is specified: [sensitivity].] [If scope is specified: [scope].] [If validation is specified: [validation].]"
+
+**Example:**
+```
++++PreciseModification(sensitivity=fragile, scope=precise, validation=comprehensive)
+Update the payment processing calculation without affecting any other components.
+```
+
+---
+
+### `+++SystemIntegration`
+When this decorator is applied, the response provides guidance for integrating with existing systems and services.
+
+**Parameters:**
+- `systems (string)`: External systems to integrate with
+- `approach (adapter | direct | facade | proxy | bridge)`: Integration approach
+- `coupling (loose | moderate | tight)`: Desired coupling level
+
+**Transformation Instruction:**
+"Consider the following system integration requirements when developing your solution: [If systems is specified: Integrate with the following systems: [systems].] [If approach is specified: [approach].] [If coupling is specified: [coupling].]"
+
+**Example:**
+```
++++SystemIntegration(systems=payment-gateway,inventory-service, approach=facade, coupling=loose)
+Implement an order processing service that integrates with our payment gateway and inventory system.
+```
+
+---
+
+### `+++Infrastructure`
+When this decorator is applied, the response generates infrastructure as code templates for environment provisioning.
+
+**Parameters:**
+- `tool (terraform | cloudformation | arm | pulumi | cdk | ansible)`: Infrastructure as code tool
+- `environment (dev | staging | prod | multi-environment)`: Target environment
+- `approach (immutable | mutable | hybrid)`: Infrastructure philosophy
+
+**Transformation Instruction:**
+"Generate infrastructure as code using best practices for the specified tool, environment, and approach. [If tool is specified: [tool].] [If environment is specified: [environment].] [If approach is specified: [approach].]"
+
+**Example:**
+```
++++Infrastructure(tool=terraform, environment=multi-environment, approach=immutable)
+Create infrastructure as code for a web application with frontend, API, and database tiers.
+```
+
+---
+
+### `+++LoggingStrategy`
+When this decorator is applied, the response defines a strategy for implementing logging to aid debugging and monitoring.
+
+**Parameters:**
+- `level (minimal | standard | verbose | diagnostic)`: Logging detail level
+- `targets (console | file | service | all)`: Logging targets
+- `lifecycle (temporary | permanent | conditional | togglable)`: Log lifecycle management
+
+**Transformation Instruction:**
+"Implement a logging strategy for the code or system being discussed. [If level is specified: [level].] [If targets is specified: [targets].] [If lifecycle is specified: [lifecycle].]"
+
+**Example:**
+```
++++LoggingStrategy(level=diagnostic, targets=console, lifecycle=togglable)
+Implement comprehensive logging for the authentication flow that can be enabled/disabled with a debug flag.
+```
+
+---
+
+### `+++Migration`
+When this decorator is applied, the response plans migration approaches between system states.
+
+**Parameters:**
+- `from (string)`: Current state
+- `to (string)`: Target state
+- `approach (big-bang | incremental | strangler-fig | parallel-run)`: Migration strategy
+
+**Transformation Instruction:**
+"Create a detailed migration plan that addresses the transition from the current state to the target state. Include key considerations, risks, timeline estimates, and resource requirements. [If from is specified: The current state is: [from].] [If to is specified: The target state is: [to].] [If approach is specified: [approach].]"
+
+**Example:**
+```
++++Migration(from=monolith, to=microservices, approach=strangler-fig)
+Create a migration plan for transitioning our monolithic e-commerce application to microservices.
+```
+
+---
+
+### `+++PostMortem`
+When this decorator is applied, the response creates incident reviews and postmortem documents.
+
+**Parameters:**
+- `format (timeline | 5-whys | fishbone | comprehensive)`: Document structure
+- `focus (what-happened | why | prevention | balanced)`: Analysis emphasis
+- `audience (team | leadership | stakeholders | public)`: Target readers
+
+**Transformation Instruction:**
+"Create a detailed postmortem document that analyzes the incident, identifies root causes, and proposes preventive measures. [If format is specified: [format].] [If focus is specified: [focus].] [If audience is specified: [audience].]"
+
+**Example:**
+```
++++PostMortem(format=comprehensive, focus=balanced, audience=team)
+Create a postmortem for the database outage we experienced yesterday that caused 45 minutes of downtime.
+```
+
+---
+
+### `+++ReleaseNotes`
+When this decorator is applied, the response creates structured release notes for product updates.
+
+**Parameters:**
+- `audience (users | developers | stakeholders | public)`: Target reader
+- `detail (high-level | detailed)`: Information depth
+- `format (changelog | narrative | categorized | markdown | html)`: Release note structure
+
+**Transformation Instruction:**
+"Create structured release notes for the product update. Focus on clarity and organization. [If audience is specified: [audience].] [If detail is specified: [detail].] [If format is specified: [format].]"
+
+**Example:**
+```
++++ReleaseNotes(audience=users, detail=detailed, format=markdown)
+Create release notes for version 2.3.0 which includes new payment methods, performance improvements, and bug fixes.
+```
+
+---
+
+### `+++Reproduce`
+When this decorator is applied, the response creates detailed steps to reproduce a reported issue.
+
+**Parameters:**
+- `environment (local | staging | prod | docker | specific-version)`: Target environment for reproduction
+- `detail (minimal | comprehensive | debug-oriented)`: Level of detail in steps
+- `format (steps | script | docker-compose | video-script)`: Output format
+
+**Transformation Instruction:**
+"Create detailed steps to reproduce the reported issue. Focus on clarity and completeness so that someone else can follow these steps to observe the same behavior. [If environment is specified: [environment].] [If detail is specified: [detail].] [If format is specified: [format].]"
+
+**Example:**
+```
++++Reproduce(environment=docker, detail=comprehensive, format=script)
+Create reproduction steps for a race condition we're seeing in our payment processing service.
+```
+
+---
+
+### `+++Roadmap`
+When this decorator is applied, the response plans development timelines and feature sequencing.
+
+**Parameters:**
+- `timeframe (sprint | quarter | halfyear | year)`: Planning horizon
+- `focus (features | technical-debt | security | performance | balanced)`: Roadmap emphasis
+- `detail (high-level | milestones | detailed)`: Depth of planning
+
+**Transformation Instruction:**
+"Create a development roadmap with the following specifications: [If timeframe is specified: [timeframe].] [If focus is specified: [focus].] [If detail is specified: [detail].]"
+
+**Example:**
+```
++++Roadmap(timeframe=quarter, focus=features, detail=milestones)
+Create a product roadmap for our e-commerce platform focusing on enhancing the checkout experience.
+```
+
+---
+
+### `+++SRE`
+When this decorator is applied, the response applies Site Reliability Engineering practices.
+
+**Parameters:**
+- `focus (slos | error-budgets | runbooks | postmortems | chaos-eng | automation)`: SRE practice area
+- `maturity (beginner | intermediate | advanced)`: Organization SRE maturity
+- `output (implementation | roadmap | assessment)`: Deliverable type
+
+**Transformation Instruction:**
+"Apply Site Reliability Engineering practices to this task. Consider reliability, scalability, and operational excellence in your response. [If focus is specified: [focus].] [If maturity is specified: [maturity].] [If output is specified: [output].]"
+
+**Example:**
+```
++++SRE(focus=slos, maturity=intermediate, output=implementation)
+Develop SLOs and error budgets for our e-commerce platform focusing on checkout and payment processing.
+```
+
+---
+
+### `+++StepByStepImpl`
+When this decorator is applied, the response requests a step-by-step implementation approach, with explicitly labeled stages.
+
+**Parameters:**
+- `detail (minimal | moderate | comprehensive)`: Level of explanation and comments
+- `steps (string)`: Number of implementation steps
+- `output (code-only | code-with-explanation | explanation-then-code)`: What to include in each step
+
+**Transformation Instruction:**
+"Please provide a step-by-step implementation approach with explicitly labeled stages. [If detail is specified: [detail].] [If steps is specified: Organize the implementation into [steps] distinct steps.] [If output is specified: [output].]"
+
+**Example:**
+```
++++StepByStepImpl(detail=comprehensive, steps=5, output=explanation-then-code)
+Implement a JWT authentication middleware for Express.js that verifies tokens and extracts user roles.
+```
+
+---
+
+### `+++TechStack`
+When this decorator is applied, the response recommends technology combinations based on requirements.
+
+**Parameters:**
+- `for (web | mobile | desktop | iot | data | ai | enterprise)`: Target application type
+- `constraints (budget | scale | team-size | performance | security | timeline)`: Project limitations
+- `maturity (bleeding-edge | modern-stable | established | enterprise-proven)`: Technology maturity preference
+
+**Transformation Instruction:**
+"Recommend a technology stack that is appropriate for the specified requirements. Include specific technologies, frameworks, and tools that work well together. Explain why each component is suitable for the requirements. [If for is specified: [for].] [If constraints is specified: [constraints].] [If maturity is specified: [maturity].]"
+
+**Example:**
+```
++++TechStack(for=web, constraints=budget, maturity=modern-stable)
+Recommend a technology stack for a B2B SaaS application with emphasis on rapid development and scalability.
+```
 
 ## Advanced Usage
 
