@@ -39,7 +39,7 @@ from prompt_decorators.utils.string_utils import (
 )
 
 # Version information
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 # Public API
 __all__ = [

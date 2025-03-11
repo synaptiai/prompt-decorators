@@ -14,7 +14,7 @@ with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as f:
 # Define package metadata
 setup(
     name="prompt-decorators",
-    version="0.3.0",
+    version="0.3.1",
     description="A framework for defining, managing, and applying prompt decorators to enhance interactions with LLMs",
     long_description=long_description,
     long_description_content_type="text/markdown",
