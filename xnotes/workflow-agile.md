@@ -1,25 +1,26 @@
-# Agile Workflow to be followed
+# Agile Workflow and core memory proceedure RULES that MUST be followed EXACTLY!
 
-**Critical Rule**: First Ensure a .ai/prd.md file exists, if not, work with the user to create one to you know what the project is about.
-**Critical Rule**: this workflow is critical to your memory systems, all retention of what is planned or what has been completed or changed will be recorded in the .ai folder. it is critical that this information be retained in top quality and kept up to date. When you are unsure, reference the PRD, ARCH, current and previous stories as needed to guide you. If still unsure, dont ever guess - ask the user for help.
+Follow this core operating instruction set to work in the proper sequence outlined below - ALWAYS ensure you do not deviate from these instructions as we work together.
+
+**Critical Rule**: First Ensure a .ai/prd.md file exists, if not, work with the user to create one so you know in full detail what the project is about.
+**Critical Rule**: This workflow rule is critical to your memory systems, all retention of what is planned or what has been completed or changed will be recorded in the .ai folder. it is critical that this information be retained in top quality and kept up to date. When you are unsure, reference the PRD, ARCH, current and previous stories as needed to guide you. If still unsure, dont ever guess - ask the user for help.
 
 1. When coming online, you will first check if a .ai/prd.md file exists, if not, work with the user to create one to you know what the project is about.
-2. Help Improve the .ai/prd.md file as needed if not marked approved to ensure it is the best possible document include the following:
+2. If the PRD is not status: approved, you will ONLY have the goal of helping Improve the .ai/prd.md file as needed and getting it approved by the userto ensure it is the best possible document include the following:
    - Very Detailed Purpose, problems solved, and task sequence.
    - Very Detailed Architecture patterns and key technical decisions, mermaid diagrams to help visualize the architecture.
    - Very Detailed Technologies, setup, and constraints.
    - Unknowns, assumptions, and risks.
+   - It must be formatted and include at least everything outlined in the .cursor/templates/template-prd.md
 3. Once the .ai/prd.md file is created and the status is approved, Generate the architecture document .ai/arch.md draft - which also needs to be approved.
+   - The template for this must be used and include all sections from the template at a minimum: .cursor/templates/template-arch.md
 4. Once the .ai/arch.md is approved, create the draft of the first story in the .ai folder.
-5. Always use the @903-story.mdc.mdc file as a template for the story. The story will be named <story-or-task-><N>.story.md added to the .ai folder
+5. Always use the .cursor/templates/template-story.md file as a template for the story. The story will be named <story-or-task-><N>.story.md added to the .ai folder
    - Example: .ai/story-1.story.md or .ai/task-1.story.md
-
-- Since we follow TDD, each subtask on a story will include unit tests with at least 80% quality coverage.
-
-5. You will wait for approval of the story before proceeding to do any work on the story.
-6. You are a TDD Master, so you will run tests and ensure tests pass before going to the next subtask or story.
-7. You will update the story file as subtasks are completed.
-8. Once a Story is complete, you will generate a draft of the next story and wait on approval before proceeding.
+6. You will wait for approval of the story before proceeding to do any work on the story.
+7. You are a TDD Master, so you will run tests and ensure tests pass before going to the next subtask or story.
+8. You will update the story file as subtasks are completed.
+9. Once a Story is complete, you will generate a draft of the next story and wait on approval before proceeding.
 
 ### During Development
 
@@ -28,7 +29,9 @@
 - When prompted by the user with 'update story', update the current story to:
   - Reflect the current state.
   - Clarify next steps.
+  - Ensure the chat log in the story is up to date with any chat thread interactions
 - Continue to verify the story is correct and the next steps are clear.
+- Remember that a story is not complete if you have not also ran ALL stories and verified all stories pass. Do not tell the user the story is complete, or mark the story as complete unless you have run ALL the tests.
 
 ## YOU DO NOT NEED TO ASK to:
 
