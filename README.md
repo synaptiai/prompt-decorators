@@ -16,7 +16,7 @@
 **Prompt Decorators is a comprehensive framework that standardizes how prompts for Large Language Models (LLMs) are enhanced, structured, and transformed. This repository contains both the official Prompt Decorators Specification and its complete Python reference implementation.**
 
 [Documentation](https://synaptiai.github.io/prompt-decorators/) •
-[Prompt Decorators Specification](/docs/prompt-decorators-specification-v1.0.md)
+[Prompt Decorators Specification](https://synaptiai.github.io/prompt-decorators/prompt-decorators-specification-v1.0/)
 
 </div>
 
@@ -51,7 +51,7 @@ This project addresses the growing complexity of AI interactions by providing:
 
 ### Key Components
 
-- **📝 Specification**: The formal [Prompt Decorators Specification (v1.0)](/docs/prompt-decorators-specification-v1.0.md) defining the standard
+- **📝 Specification**: The formal [Prompt Decorators Specification (v1.0)](https://synaptiai.github.io/prompt-decorators/prompt-decorators-specification-v1.0/) defining the standard
 - **🛠️ Core Framework**: A Python implementation with registry-based decorator management
 - **🧩 140+ Decorators**: A comprehensive library of pre-built decorators covering reasoning, formatting, and more
 - **🔌 MCP Server**: Integration with the Model Context Protocol for use with desktop AI applications
@@ -108,7 +108,7 @@ The Prompt Decorators framework addresses these challenges through:
 
 The Prompt Decorators project is currently in active development.
 
-You can see the how prompt decorators work by testing out the [demo](/demo/README.md) or running the [MCP server implementation](/docs/integrations/mcp/claude_desktop.md) together with your Claude Desktop.
+You can see the how prompt decorators work by testing out the [demo](/demo/README.md) or running the [MCP server implementation](https://synaptiai.github.io/prompt-decorators/integrations/mcp/) together with your Claude Desktop.
 
 Or you can use the [.cursorrules](.cursorrules) in this repository as system instructions in Cursor (or chatGPT/Claude) to instruct it. Try it out and share your experiences!
 
@@ -123,11 +123,11 @@ Or you can use the [.cursorrules](.cursorrules) in this repository as system ins
 - **✅ Extension Framework**: Support for domain-specific decorator extensions
 - **✅ Documentation Generation**: Automated documentation generation from decorator definitions
 
-For a detailed breakdown of implementation status, see our [Implementation Status](docs/implementation-status.md) document.
+For a detailed breakdown of implementation status, see our [Implementation Status](https://synaptiai.github.io/prompt-decorators/implementation-status/) document.
 
 ### Roadmap
 
-The roadmap for this project is outlined in the [ROADMAP](ROADMAP.md) file.
+The roadmap for this project is outlined in the [ROADMAP](https://synaptiai.github.io/prompt-decorators/roadmap/) file.
 
 ## 🚀 Getting Started
 
