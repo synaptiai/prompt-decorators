@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "prompt-decorators"
-version = "0.6.0"
+version = "0.7.0"
 description = "A framework for defining, managing, and applying prompt decorators to enhance interactions with LLMs"
 authors = ["Daniel Bentes <promptdecorators@synapti.ai>"]
 readme = "README.md"
