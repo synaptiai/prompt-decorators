@@ -26,34 +26,20 @@ class PreBuildCommand(build_py):
         self.execute_copy_registry()
         build_py.run(self)
 
-    def execute_copy_registry(self) -> None:
-        """Execute the copy registry script.
-
-        Returns:
-            None
-        """
-        try:
-            copy_script = Path(__file__).parent / "scripts" / "copy_registry.py"
-            if copy_script.exists():
-                print("Running copy registry script...")
-                subprocess.check_call([sys.executable, str(copy_script)])
-            else:
-                print(f"Copy registry script not found: {copy_script}")
-        except Exception as e:
-            print(f"Error running copy registry script: {e}")
-
-
-class PostDevelopCommand(develop):
-    """Post-installation for development mode."""
-
-    def run(self) -> None:
-        """Run the post-develop command.
-
-        Returns:
-            None
-        """
-        self.execute_copy_registry()
-        develop.run(self)
+def execute_copy_registry() -> None:
+    """Execute the copy registry script.
+    Returns:
+        None
+    """
+    try:
+        copy_script = Path(__file__).parent / "scripts" / "copy_registry.py"
+        if copy_script.exists():
+            print("Running copy registry script...")
+            subprocess.check_call([sys.executable, str(copy_script)])
+        else:
+            print(f"Copy registry script not found: {copy_script}")
+    except Exception as e:
+        print(f"Error running copy registry script: {e}")
         self.execute_registry_setup()
 
     def execute_copy_registry(self) -> None:
