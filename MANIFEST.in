@@ -9,12 +9,20 @@ include setup.cfg
 
 recursive-include prompt_decorators *.py
 recursive-include prompt_decorators *.json
-recursive-include prompt_decorators/registry *.json
 recursive-include prompt_decorators/templates *.j2
 recursive-include prompt_decorators/schemas *.json
-recursive-include registry *.json
+
+# Include registry files both in the package and in the source directory
+recursive-include prompt_decorators/registry *.json *.yml
+recursive-include prompt_decorators/registry/core *.json
+recursive-include prompt_decorators/registry/extensions *.json
+recursive-include prompt_decorators/registry/simplified_decorators *.json *.yml
+
+# Include registry files from the source directory for backward compatibility
+recursive-include registry *.json *.yml
 recursive-include registry/core *.json
 recursive-include registry/extensions *.json
+recursive-include registry/simplified_decorators *.json *.yml
 
 recursive-include tests *.py
 recursive-include examples *.py
