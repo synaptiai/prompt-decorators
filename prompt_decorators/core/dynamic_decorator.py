@@ -16,8 +16,74 @@ import json
 import logging
 import os
 import re
+from importlib import resources
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    Union,
+    cast,
+)
+
+if TYPE_CHECKING:
+    from typing import Iterator, Protocol
+
+    class HasGlob(Protocol):
+        """Protocol for objects that support the glob method."""
+
+        def glob(self, pattern: str) -> Iterator[Any]:
+            """Find paths matching a pattern.
+
+            Args:
+                pattern: The pattern to match
+
+            Returns:
+                Iterator of matching paths
+            """
+            ...
+
+    class HasSuffix(Protocol):
+        """Protocol for objects that have a suffix property and file-like methods."""
+
+        @property
+        def suffix(self) -> str:
+            """Get the file extension.
+
+            Args:
+                self: The object instance
+
+            Returns:
+                The file extension including the leading dot
+            """
+            ...
+
+        def is_file(self) -> bool:
+            """Check if the path is a file.
+
+            Args:
+                self: The object instance
+
+            Returns:
+                True if the path is a file, False otherwise
+            """
+            ...
+
+        def open(self, mode: str) -> Any:
+            """Open the file.
+
+            Args:
+                mode: The mode to open the file in
+
+            Returns:
+                A file-like object
+            """
+            ...
+
 
 from prompt_decorators.schemas.decorator_schema import DecoratorSchema, ParameterSchema
 
@@ -375,7 +441,8 @@ class DynamicDecorator:
         """
         # If text_or_func is a function, return a wrapper function
         if callable(text_or_func):
-            # Define a wrapper function that applies the decorator to the result of the original function
+            # Define a wrapper function that applies the decorator to the result of
+            # the original function
             def wrapper(*args: Any, **kwargs: Any) -> str:
                 """Apply the decorator to the result of the decorated function.
 
@@ -443,7 +510,7 @@ class DynamicDecorator:
                     transform_function = f"return {transform_function}"
 
                 # Create a Python function from the code
-                transform_code = f"def transform(text, **kwargs):\n"
+                transform_code = "def transform(text, **kwargs):\n"
                 for line in transform_function.split("\n"):
                     transform_code += f"    {line}\n"
 
@@ -473,8 +540,8 @@ class DynamicDecorator:
     def load_registry(cls) -> None:
         """Load decorator definitions from the registry directory.
 
-        This method scans the registry directory for JSON files containing
-        decorator definitions and loads them into the class-level registry.
+        This method first attempts to load decorators from the package resources,
+        then falls back to scanning the filesystem for backward compatibility.
 
         Args:
             cls: The class object
@@ -482,6 +549,187 @@ class DynamicDecorator:
         Returns:
             None
         """
+        # Clear the registry
+        cls._registry.clear()
+
+        # First try to load from package resources
+        loaded_from_package = cls._load_from_package_resources()
+
+        # If nothing was loaded from package resources, fall back to filesystem
+        if not loaded_from_package:
+            cls._load_from_filesystem()
+
+        cls._loaded = True
+        logger.info(f"Loaded {len(cls._registry)} decorators from registry")
+
+    @classmethod
+    def _load_from_package_resources(cls) -> bool:
+        """Load decorator definitions from package resources.
+
+        Args:
+            cls: The class object
+
+        Returns:
+            bool: True if any decorators were loaded, False otherwise
+        """
+        try:
+            # Try to import the registry package
+            try:
+                # For Python 3.9+
+                from importlib.resources import files
+
+                registry_exists = (
+                    files("prompt_decorators").joinpath("registry").is_dir()
+                )
+            except (ImportError, AttributeError):
+                # Fallback for Python 3.7-3.8
+                registry_exists = resources.is_resource("prompt_decorators", "registry")
+
+            if not registry_exists:
+                logger.debug("Registry not found in package resources")
+                return False
+
+            # Process registry subdirectories
+            subdirs = ["core", "extensions", "simplified_decorators"]
+            decorators_loaded = 0
+
+            for subdir in subdirs:
+                try:
+                    # Try to access the subdirectory
+                    try:
+                        # For Python 3.9+
+                        subdir_path = files("prompt_decorators").joinpath(
+                            f"registry/{subdir}"
+                        )
+                        if not subdir_path.is_dir():
+                            continue
+
+                        # Walk through the directory structure
+                        # Use Path.glob for Python 3.9+ and manual iteration for older versions
+                        try:
+                            # Type ignore for mypy since it doesn't know the exact type
+                            for json_file in subdir_path.glob("**/*.json"):  # type: ignore
+                                with json_file.open("r") as f:  # type: ignore
+                                    data = json.load(f)
+                                    if cls._process_decorator_data(data):
+                                        decorators_loaded += 1
+                        except AttributeError:
+                            # Fallback for older Python versions or different Path implementations
+                            logger.debug(
+                                "Using fallback method for traversing directory structure"
+                            )
+                            # This is a simplified approach that won't handle nested directories
+                            # Type ignore for mypy since it doesn't know the exact type
+                            json_files = [
+                                p
+                                for p in subdir_path.iterdir()  # type: ignore
+                                if p.is_file()
+                                and hasattr(p, "suffix")  # type: ignore
+                                and getattr(  # Check if p has suffix attribute
+                                    p, "suffix"
+                                )
+                                == ".json"  # Get suffix safely
+                            ]
+                            for json_file in json_files:
+                                with json_file.open("r") as f:
+                                    data = json.load(f)
+                                    if cls._process_decorator_data(data):
+                                        decorators_loaded += 1
+                    except (ImportError, AttributeError):
+                        # Fallback for Python 3.7-3.8
+                        if not resources.is_resource(
+                            "prompt_decorators.registry", subdir
+                        ):
+                            continue
+
+                        # This is a simplified approach for older Python versions
+                        # It won't handle nested directories well, but it's a fallback
+                        for resource in resources.contents(
+                            f"prompt_decorators.registry.{subdir}"
+                        ):
+                            if resource.endswith(".json"):
+                                json_data = resources.read_text(
+                                    f"prompt_decorators.registry.{subdir}", resource
+                                )
+                                data = json.loads(json_data)
+                                if cls._process_decorator_data(data):
+                                    decorators_loaded += 1
+                except Exception as e:
+                    logger.error(
+                        f"Error loading decorators from package resources/{subdir}: {e}"
+                    )
+
+            return decorators_loaded > 0
+        except Exception as e:
+            logger.error(f"Error loading decorators from package resources: {e}")
+            return False
+
+    @classmethod
+    def _process_decorator_data(cls, data: Dict[str, Any]) -> bool:
+        """Process decorator data from JSON.
+
+        Args:
+            data: The decorator data loaded from JSON
+
+        Returns:
+            bool: True if the decorator was processed successfully, False otherwise
+        """
+        try:
+            # Check if this is a decorator definition
+            if "decoratorName" not in data:
+                return False
+
+            name = data["decoratorName"]
+
+            # Get transform_function or create one from transformation template
+            transform_function = data.get("transform_function") or data.get(
+                "transformFunction", ""
+            )
+
+            # If no transform_function but there is a transformationTemplate, create one
+            if not transform_function and "transformationTemplate" in data:
+                try:
+                    transform_function = create_transform_function_from_template(
+                        data["transformationTemplate"]
+                    )
+                    logger.debug(f"Created transform function from template for {name}")
+                except Exception as e:
+                    logger.error(
+                        f"Error creating transform function from template for {name}: {e}"
+                    )
+
+            # Process parameters - ensure enum values are properly set
+            parameters = data.get("parameters", [])
+            for param in parameters:
+                # If param has 'enum' but not 'enum_values', copy enum to enum_values
+                if (
+                    param.get("type") == "enum"
+                    and "enum" in param
+                    and "enum_values" not in param
+                ):
+                    param["enum_values"] = param["enum"]
+                    logger.debug(
+                        f"Copied enum values to enum_values for {name}.{param.get('name')}"
+                    )
+
+            cls._registry[name] = {
+                "name": name,
+                "description": data.get("description", ""),
+                "category": data.get("category", "General"),
+                "parameters": parameters,
+                "transform_function": transform_function,
+                "transformationTemplate": data.get("transformationTemplate", {}),
+                "version": data.get("version", "1.0.0"),
+            }
+            logger.debug(f"Loaded decorator: {name}")
+            return True
+        except Exception as e:
+            logger.error(f"Error processing decorator data: {e}")
+            return False
+
+    @classmethod
+    def _load_from_filesystem(cls) -> None:
+        """Load decorator definitions from the filesystem for backward compatibility."""
         # Get the registry directory from environment variable or use default
         registry_dir_str = os.environ.get(REGISTRY_ENV_VAR, DEFAULT_REGISTRY_DIR)
 
@@ -503,15 +751,11 @@ class DynamicDecorator:
                     if os.path.exists(registry_path_str):
                         registry_dir_str = registry_path_str
 
-        logger.debug(f"Loading registry from {registry_dir_str}")
-
-        # Clear the registry
-        cls._registry.clear()
+        logger.debug(f"Loading registry from filesystem: {registry_dir_str}")
 
         # Check if the registry directory exists
         if not os.path.exists(registry_dir_str):
             logger.warning(f"Registry directory not found: {registry_dir_str}")
-            cls._loaded = True
             return
 
         # Scan the registry directory for JSON files
@@ -525,63 +769,9 @@ class DynamicDecorator:
                 try:
                     with open(json_file, "r") as f:
                         data = json.load(f)
-
-                    # Check if this is a decorator definition
-                    if "decoratorName" in data:
-                        name = data["decoratorName"]
-
-                        # Get transform_function or create one from transformation template
-                        transform_function = data.get("transform_function") or data.get(
-                            "transformFunction", ""
-                        )
-
-                        # If no transform_function but there is a transformationTemplate, create one
-                        if not transform_function and "transformationTemplate" in data:
-                            try:
-                                transform_function = (
-                                    create_transform_function_from_template(
-                                        data["transformationTemplate"]
-                                    )
-                                )
-                                logger.debug(
-                                    f"Created transform function from template for {name}"
-                                )
-                            except Exception as e:
-                                logger.error(
-                                    f"Error creating transform function from template for {name}: {e}"
-                                )
-
-                        # Process parameters - ensure enum values are properly set
-                        parameters = data.get("parameters", [])
-                        for param in parameters:
-                            # If param has 'enum' but not 'enum_values', copy enum to enum_values
-                            if (
-                                param.get("type") == "enum"
-                                and "enum" in param
-                                and "enum_values" not in param
-                            ):
-                                param["enum_values"] = param["enum"]
-                                logger.debug(
-                                    f"Copied enum values to enum_values for {name}.{param.get('name')}"
-                                )
-
-                        cls._registry[name] = {
-                            "name": name,
-                            "description": data.get("description", ""),
-                            "category": data.get("category", "General"),
-                            "parameters": parameters,
-                            "transform_function": transform_function,
-                            "transformationTemplate": data.get(
-                                "transformationTemplate", {}
-                            ),
-                            "version": data.get("version", "1.0.0"),
-                        }
-                        logger.debug(f"Loaded decorator: {name}")
+                    cls._process_decorator_data(data)
                 except Exception as e:
                     logger.error(f"Error loading decorator from {json_file}: {e}")
-
-        cls._loaded = True
-        logger.info(f"Loaded {len(cls._registry)} decorators from registry")
 
     @classmethod
     def from_definition(cls, definition: Any) -> type:

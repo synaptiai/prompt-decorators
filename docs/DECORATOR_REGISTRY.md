@@ -14,163 +14,186 @@ The Decorator Registry is a central component of the Prompt Decorators package t
 
 ## Implementation
 
-The Decorator Registry is implemented in the `prompt_decorators.utils.discovery` module. The main class is `DecoratorRegistry`, which provides methods for registering and discovering decorators.
+The Decorator Registry is implemented in two main modules:
+
+1. **Dynamic Registry**: The primary implementation in `prompt_decorators.core.dynamic_decorator`, which loads decorator definitions from JSON files at runtime
+2. **Class Registry**: A secondary implementation in `prompt_decorators.utils.discovery` for backward compatibility
+
+### Registry Structure
+
+The registry is organized as a directory structure:
+
+```
+prompt_decorators/registry/
+├── core/                 # Core decorators from the specification
+├── extensions/           # Community extensions and domain-specific decorators
+└── simplified_decorators/ # Simplified versions for specific use cases
+```
+
+Each decorator is defined in a JSON file following the registry-entry.schema.json format.
 
 ### Key Components
 
-1. **DecoratorRegistry**: The main class that manages the registry of decorators
-2. **register_decorator**: Method to register a decorator class or instance
-3. **get_decorator**: Method to retrieve a decorator by name
-4. **get_all_decorators**: Method to retrieve all registered decorators
-5. **find_decorators_by_category**: Method to find decorators by category
+1. **DynamicDecorator**: The main class that loads and applies decorators from the registry
+2. **load_registry**: Method to load decorator definitions from the registry directory
+3. **register_decorator**: Method to register a decorator definition
+4. **get_available_decorators**: Method to get all available decorators
+5. **create_decorator_instance**: Method to create a decorator instance by name
 
 ## Usage
 
-### Registering Decorators
+### Using Dynamic Decorators
 
-Decorators can be registered in several ways:
-
-1. **Registering a Decorator Class**:
+The recommended way to use decorators is through the dynamic decorator system:
 
 ```python
-from prompt_decorators.utils.discovery import DecoratorRegistry
-from prompt_decorators.decorators.generated.decorators.concise import Concise
+from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+from prompt_decorators.dynamic_decorators_module import load_decorator_definitions
 
-# Get the registry instance
-registry = DecoratorRegistry()
+# Load the registry (this is done automatically when creating a decorator)
+load_decorator_definitions()
 
-# Register a decorator class
-registry.register_decorator(Concise)
+# Create a decorator instance by name
+concise = DynamicDecorator("Concise", maxWords=100, bulletPoints=True)
+
+# Apply the decorator to a prompt
+original_prompt = "Explain the concept of quantum computing in detail."
+decorated_prompt = concise(original_prompt)
 ```
 
-2. **Registering a Decorator Instance**:
+### Adding Custom Decorators
 
-```python
-from prompt_decorators.utils.discovery import DecoratorRegistry
-from prompt_decorators.decorators.generated.decorators.concise import Concise
+You can add custom decorators to the registry in several ways:
 
-# Get the registry instance
-registry = DecoratorRegistry()
+1. **Adding a JSON File to the Registry Directory**:
 
-# Create a decorator instance
-concise = Concise(maxWords=100, bulletPoints=True, level=2)
+Create a JSON file in the appropriate registry directory (e.g., `prompt_decorators/registry/extensions/`) with the following structure:
 
-# Register the decorator instance
-registry.register_decorator(concise)
+```json
+{
+  "decoratorName": "MyCustomDecorator",
+  "description": "A custom decorator that does something useful",
+  "category": "custom",
+  "parameters": [
+    {
+      "name": "param1",
+      "description": "First parameter",
+      "type": "string",
+      "required": false,
+      "default": "default value"
+    }
+  ],
+  "transform_function": "return text + '\\n\\nThis was processed by MyCustomDecorator with param1=' + kwargs.get('param1', 'default value')"
+}
 ```
 
-3. **Registering All Decorators from a Directory**:
+2. **Registering a Decorator Programmatically**:
 
 ```python
-import os
-import importlib
-import inspect
-from pathlib import Path
-from prompt_decorators.utils.discovery import DecoratorRegistry
-from prompt_decorators.core.base import BaseDecorator
+from prompt_decorators.dynamic_decorators_module import DecoratorDefinition, register_decorator
 
-def register_decorators():
-    registry = DecoratorRegistry()
-    registry.clear()
+# Create a decorator definition
+my_decorator = DecoratorDefinition(
+    name="MyCustomDecorator",
+    description="A custom decorator that does something useful",
+    category="custom",
+    parameters=[
+        {
+            "name": "param1",
+            "description": "First parameter",
+            "type": "string",
+            "required": False,
+            "default": "default value"
+        }
+    ],
+    transform_function="return text + '\\n\\nThis was processed by MyCustomDecorator with param1=' + kwargs.get('param1', 'default value')"
+)
 
-    # Path to the generated decorators directory
-    decorators_dir = Path("prompt_decorators/decorators/generated/decorators")
-
-    # Iterate through all Python files in the directory
-    for file_path in decorators_dir.glob("*.py"):
-        if file_path.name == "__init__.py":
-            continue
-
-        # Import the module
-        module_name = f"prompt_decorators.decorators.generated.decorators.{file_path.stem}"
-        try:
-            module = importlib.import_module(module_name)
-
-            # Find all classes in the module that are subclasses of BaseDecorator
-            for name, obj in inspect.getmembers(module):
-                if inspect.isclass(obj) and issubclass(obj, BaseDecorator) and obj != BaseDecorator:
-                    # Register the decorator
-                    decorator_name = getattr(obj, "name", name)
-                    registry.register_decorator(obj)
-                    print(f"  - Registered: {decorator_name}")
-        except Exception as e:
-            print(f"Error registering decorators from {module_name}: {e}")
-
-    # Print summary
-    decorators = registry.get_all_decorators()
-    print(f"\nRegistered {len(decorators)} decorators:")
-
-    # Print categories
-    categories = set(decorator.category for decorator in decorators)
-    print(f"\nDecorator categories ({len(categories)}):")
-    for category in categories:
-        category_decorators = registry.find_decorators_by_category(category)
-        print(f"  - {category}: {len(category_decorators)} decorators")
+# Register the decorator
+register_decorator(my_decorator)
 ```
 
 ### Finding Decorators
 
-Once decorators are registered, they can be discovered in several ways:
+You can discover available decorators in several ways:
 
-1. **Getting a Decorator by Name**:
-
-```python
-from prompt_decorators.utils.discovery import DecoratorRegistry
-
-registry = DecoratorRegistry()
-concise = registry.get_decorator("Concise")
-```
-
-2. **Getting All Decorators**:
+1. **Getting All Available Decorators**:
 
 ```python
-from prompt_decorators.utils.discovery import DecoratorRegistry
+from prompt_decorators.dynamic_decorators_module import get_available_decorators
 
-registry = DecoratorRegistry()
-all_decorators = registry.get_all_decorators()
+# Get all available decorators
+decorators = get_available_decorators()
+
+# Print decorator names
+for decorator in decorators:
+    print(f"{decorator.name}: {decorator.description}")
 ```
 
-3. **Finding Decorators by Category**:
+2. **Listing Available Decorator Names**:
 
 ```python
-from prompt_decorators.utils.discovery import DecoratorRegistry
+from prompt_decorators.dynamic_decorators_module import list_available_decorators
 
-registry = DecoratorRegistry()
-tone_decorators = registry.find_decorators_by_category("tone")
+# Get all available decorator names
+decorator_names = list_available_decorators()
+print(decorator_names)
 ```
 
-### Using Registered Decorators
-
-Once a decorator is retrieved from the registry, it can be used like any other decorator:
+3. **Checking if a Decorator Exists**:
 
 ```python
-from prompt_decorators.utils.discovery import DecoratorRegistry
+from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+from prompt_decorators.dynamic_decorators_module import load_decorator_definitions
 
-registry = DecoratorRegistry()
-concise = registry.get_decorator("Concise")
+# Load the registry
+load_decorator_definitions()
 
-# Create an instance of the decorator
-concise_instance = concise(maxWords=100, bulletPoints=True, level=2)
-
-# Apply the decorator to a prompt
-original_prompt = "Explain the concept of quantum computing in detail."
-decorated_prompt = concise_instance.apply(original_prompt)
+# Try to create a decorator instance
+try:
+    decorator = DynamicDecorator("Concise")
+    print(f"Decorator 'Concise' exists")
+except ValueError:
+    print(f"Decorator 'Concise' does not exist")
 ```
+
+### Using Decorators in Text
+
+You can also use decorators directly in text using the +++ syntax:
+
+```python
+from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators
+
+# Text with decorator syntax
+text = """+++Concise(maxWords=100, bulletPoints=true)
+Explain the concept of quantum computing in detail.
+"""
+
+# Apply decorators to the text
+result = apply_dynamic_decorators(text)
+```
+
+## Registry Location
+
+The registry is located in the `prompt_decorators/registry` directory within the package. When the package is installed, this directory is included in the package distribution.
+
+For backward compatibility, a symlink is created from the source registry directory to the package registry directory during installation. This allows code that expects the registry in the source location to continue working.
 
 ## Examples
 
 For complete examples of how to use the Decorator Registry, see the following example scripts:
 
-- `examples/register_all_decorators.py`: Demonstrates how to register all decorators from the generated directory
-- `examples/use_registered_decorators.py`: Shows how to use registered decorators to modify prompts
+- `examples/use_dynamic_decorators.py`: Shows how to use dynamic decorators to modify prompts
+- `examples/create_custom_decorator.py`: Demonstrates how to create and register a custom decorator
 
 ## Best Practices
 
-1. **Clear the Registry Before Bulk Registration**: If you're registering multiple decorators at once, it's a good practice to clear the registry first to avoid duplicates.
-2. **Handle Exceptions During Registration**: When registering decorators from external sources, make sure to handle exceptions properly to avoid breaking your application.
+1. **Use Dynamic Decorators**: The dynamic decorator system is the recommended way to use decorators.
+2. **Handle Exceptions When Creating Decorators**: When creating decorators by name, handle exceptions properly to avoid breaking your application.
 3. **Check Decorator Existence Before Use**: Always check if a decorator exists in the registry before trying to use it.
 4. **Use Categories for Organization**: Organize decorators by category to make them easier to discover and use.
 5. **Consider Version Compatibility**: When using multiple decorators together, consider their version compatibility to avoid unexpected behavior.
+6. **Add Custom Decorators to the Extensions Directory**: When adding custom decorators, place them in the `extensions` directory to avoid conflicts with core decorators.
 
 ## Future Enhancements
 
@@ -181,3 +204,4 @@ The Decorator Registry is designed to be extensible and can be enhanced in sever
 3. **Caching**: Implement caching for better performance
 4. **Analytics**: Add analytics to track decorator usage
 5. **UI Integration**: Create a user interface for browsing and selecting decorators
+6. **Package Distribution**: Improve the packaging and distribution of decorators
