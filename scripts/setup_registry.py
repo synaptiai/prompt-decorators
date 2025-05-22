@@ -28,8 +28,8 @@ def setup_registry() -> bool:
     Returns:
         bool: True if setup was successful, False otherwise
     """
-    # Get the current directory
-    current_dir = Path.cwd()
+    # Get the script's directory
+    current_dir = Path(__file__).resolve().parent
 
     # Define the paths
     package_registry = current_dir / "prompt_decorators" / "registry"
