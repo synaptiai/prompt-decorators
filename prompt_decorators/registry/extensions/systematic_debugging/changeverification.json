@@ -1,0 +1,132 @@
+{
+  "decoratorName": "ChangeVerification",
+  "version": "1.0.0",
+  "description": "Focuses on verifying that changes have the intended effect and don't introduce regressions.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "type",
+      "type": "enum",
+      "description": "Verification type",
+      "enum": [
+        "functionality",
+        "visual",
+        "performance",
+        "security"
+      ],
+      "default": "functionality",
+      "required": false
+    },
+    {
+      "name": "method",
+      "type": "enum",
+      "description": "Verification method",
+      "enum": [
+        "manual-testing",
+        "automated-tests",
+        "dom-inspection",
+        "logging"
+      ],
+      "default": "manual-testing",
+      "required": false
+    },
+    {
+      "name": "coverage",
+      "type": "enum",
+      "description": "Verification coverage",
+      "enum": [
+        "changed-only",
+        "dependent-areas",
+        "comprehensive"
+      ],
+      "default": "dependent-areas",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Verify the changes to ensure they have the intended effect and don't introduce regressions.",
+    "parameterMapping": {
+      "type": {
+        "valueMap": {
+          "functionality": "Focus on verifying the functional behavior of the changes.",
+          "visual": "Focus on verifying the visual appearance and UI elements affected by the changes.",
+          "performance": "Focus on verifying the performance impact of the changes.",
+          "security": "Focus on verifying the security implications of the changes."
+        }
+      },
+      "method": {
+        "valueMap": {
+          "manual-testing": "Use manual testing procedures to verify the changes.",
+          "automated-tests": "Use automated tests to verify the changes.",
+          "dom-inspection": "Inspect the DOM structure to verify the changes.",
+          "logging": "Use logging and debug output to verify the changes."
+        }
+      },
+      "coverage": {
+        "valueMap": {
+          "changed-only": "Verify only the specific components that were changed.",
+          "dependent-areas": "Verify the changed components and any dependent areas that might be affected.",
+          "comprehensive": "Perform a comprehensive verification across the entire system."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web development",
+        "originalPrompt": "How should I test the new sorting feature?",
+        "transformedPrompt": "Verify the changes to ensure they have the intended effect and don't introduce regressions. Focus on verifying the functional behavior of the changes. Use manual testing procedures to verify the changes. Verify the changed components and any dependent areas that might be affected.\n\nHow should I test the new sorting feature?",
+        "notes": "The decorator adds specific verification instructions based on the parameters."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "TestingStrategy",
+        "relationship": "enhances",
+        "notes": "ChangeVerification works well with TestingStrategy by focusing on verification aspects while TestingStrategy provides the overall testing approach."
+      },
+      {
+        "decorator": "BugReport",
+        "relationship": "enhances",
+        "notes": "ChangeVerification can help identify issues that might need to be reported using BugReport."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Please verify that the changes work as expected and don't cause any problems. Check for {type} issues using {method} and focus on {coverage} areas.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Verifying UI updates after implementing sorting functionality",
+      "usage": "+++ChangeVerification(type=functionality, method=dom-inspection, coverage=dependent-areas)\nVerify that the UI updates properly after implementing the sorting functionality. Check all elements that should respond to the sort action.",
+      "result": "The model will provide guidance on how to verify the UI updates after implementing sorting functionality, focusing on functional aspects using DOM inspection and checking both the changed components and dependent areas."
+    },
+    {
+      "description": "Verifying performance impact of database query optimization",
+      "usage": "+++ChangeVerification(type=performance, method=automated-tests, coverage=comprehensive)\nVerify the performance impact of the new database query optimization.",
+      "result": "The model will provide guidance on how to verify the performance impact of database query optimization using automated tests across the entire system."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

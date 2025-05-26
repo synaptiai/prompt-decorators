@@ -1,0 +1,87 @@
+{
+  "decoratorName": "Socratic",
+  "version": "1.0.0",
+  "description": "Structures the response as a series of questions that guide the user through a problem or topic. This decorator encourages critical thinking through question-based exploration, helping to uncover assumptions and lead to deeper understanding.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "iterations",
+      "type": "number",
+      "description": "Number of question-answer cycles to include",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a Socratic dialogue that guides through the topic using thought-provoking questions followed by answers.",
+    "parameterMapping": {
+      "iterations": {
+        "format": "Include approximately {value} question-answer cycles in your exploration."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation with 3 iterations",
+        "originalPrompt": "What is justice?",
+        "transformedPrompt": "Please structure your response as a Socratic dialogue that guides through the topic using thought-provoking questions followed by answers. Include approximately 3 question-answer cycles in your exploration.\n\nWhat is justice?"
+      },
+      {
+        "context": "Extended exploration with 5 iterations",
+        "originalPrompt": "How do we know what we know?",
+        "transformedPrompt": "Please structure your response as a Socratic dialogue that guides through the topic using thought-provoking questions followed by answers. Include approximately 5 question-answer cycles in your exploration.\n\nHow do we know what we know?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "Can be combined with StepByStep to create a structured Socratic analysis"
+      },
+      {
+        "decorator": "OutputFormat",
+        "relationship": "enhances",
+        "notes": "Can be combined with OutputFormat for consistent presentation"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Format your response as a series of thought-provoking questions. For each question, provide a thoughtful answer that leads to the next question. This creates a step-by-step exploration of the topic.",
+        "notes": "This model benefits from more explicit instructions on the question-answer structure"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic socratic exploration of a philosophical concept",
+      "usage": "+++Socratic\nWhat is justice?",
+      "result": "Explores the concept of justice through a series of guiding questions"
+    },
+    {
+      "description": "Deep socratic analysis with 5 iterations",
+      "usage": "+++Socratic(iterations=5)\nHow do we know what we know?",
+      "result": "Provides an extended series of 5 question-answer cycles to explore epistemology"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

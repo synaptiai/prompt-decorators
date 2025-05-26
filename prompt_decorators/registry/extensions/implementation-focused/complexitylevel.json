@@ -1,0 +1,132 @@
+{
+  "decoratorName": "ComplexityLevel",
+  "version": "1.0.0",
+  "description": "Specifies the permitted complexity level for the implementation.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "code",
+      "type": "enum",
+      "description": "Code complexity limit",
+      "enum": [
+        "simple",
+        "moderate",
+        "complex",
+        "necessary-only"
+      ],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "concepts",
+      "type": "enum",
+      "description": "Conceptual complexity limit",
+      "enum": [
+        "beginner-friendly",
+        "intermediate",
+        "advanced"
+      ],
+      "default": "intermediate",
+      "required": false
+    },
+    {
+      "name": "dependencies",
+      "type": "enum",
+      "description": "External dependency usage",
+      "enum": [
+        "none",
+        "minimal",
+        "standard",
+        "whatever-needed"
+      ],
+      "default": "standard",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please implement this with appropriate complexity constraints.",
+    "parameterMapping": {
+      "code": {
+        "valueMap": {
+          "simple": "Use simple, straightforward code structures. Avoid complex algorithms or patterns.",
+          "moderate": "Balance simplicity with efficiency. Use standard patterns where appropriate.",
+          "complex": "Optimize for performance and scalability. Use advanced patterns when beneficial.",
+          "necessary-only": "Use only the complexity that is absolutely necessary for the task."
+        }
+      },
+      "concepts": {
+        "valueMap": {
+          "beginner-friendly": "Use only basic concepts that beginners would understand. Explain any non-trivial concepts.",
+          "intermediate": "You can use intermediate-level concepts that most practitioners would be familiar with.",
+          "advanced": "You can use advanced concepts and techniques appropriate for experienced developers."
+        }
+      },
+      "dependencies": {
+        "valueMap": {
+          "none": "Do not use any external dependencies or libraries.",
+          "minimal": "Use only essential dependencies. Prefer standard libraries when possible.",
+          "standard": "Use common, well-established dependencies as needed.",
+          "whatever-needed": "Use any dependencies that would make the implementation better, regardless of number."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web development task",
+        "originalPrompt": "Create a function to validate email addresses.",
+        "transformedPrompt": "Please implement this with appropriate complexity constraints. Use simple, straightforward code structures. Avoid complex algorithms or patterns. Use only basic concepts that beginners would understand. Explain any non-trivial concepts. Use only essential dependencies. Prefer standard libraries when possible.\n\nCreate a function to validate email addresses.",
+        "notes": "The transformed prompt guides the model to create a simple implementation with minimal dependencies that would be understandable to beginners."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "LanguagePreference",
+        "relationship": "enhances",
+        "notes": "ComplexityLevel works well with LanguagePreference to specify both the programming language and its complexity level."
+      },
+      {
+        "decorator": "OptimizationFocus",
+        "relationship": "conflicts",
+        "notes": "May conflict with OptimizationFocus if that decorator requests optimizations that would increase complexity beyond the specified level."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Implement this with the following complexity constraints: {code_complexity}, {concept_complexity}, {dependency_usage}.",
+        "notes": "More explicit phrasing works better with this model."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Simple date formatter with beginner-friendly concepts",
+      "usage": "+++ComplexityLevel(code=simple, concepts=beginner-friendly, dependencies=minimal)\nImplement a simple date formatter utility that converts between different date formats without external libraries.",
+      "result": "The model will provide a simple date formatter implementation using only basic programming concepts and minimal dependencies, suitable for beginners."
+    },
+    {
+      "description": "Complex algorithm with standard dependencies",
+      "usage": "+++ComplexityLevel(code=complex, concepts=advanced, dependencies=standard)\nImplement a machine learning algorithm for sentiment analysis.",
+      "result": "The model will provide an optimized, advanced implementation using standard libraries and frameworks appropriate for experienced developers."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

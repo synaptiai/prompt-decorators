@@ -1,0 +1,110 @@
+{
+  "decoratorName": "Comparison",
+  "version": "1.0.0",
+  "description": "Structures the response as a direct comparison between multiple items, concepts, or approaches. This decorator is ideal for highlighting similarities and differences across specific dimensions or criteria.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "aspects",
+      "type": "array",
+      "description": "Specific aspects or dimensions to compare",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The presentation format for the comparison",
+      "enum": ["table", "prose", "bullets"],
+      "default": "table",
+      "required": false
+    },
+    {
+      "name": "highlight",
+      "type": "boolean",
+      "description": "Whether to explicitly emphasize key differences",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences.",
+    "parameterMapping": {
+      "aspects": {
+        "format": "Compare the items specifically across these aspects or dimensions: {value}."
+      },
+      "format": {
+        "valueMap": {
+          "table": "Present the comparison in a tabular format with items as columns (or rows) and comparison aspects as rows (or columns).",
+          "prose": "Present the comparison as flowing paragraphs that discuss each aspect across all items in a narrative style.",
+          "bullets": "Present the comparison as bulleted lists grouped by aspect or by item."
+        }
+      },
+      "highlight": {
+        "valueMap": {
+          "true": "Explicitly emphasize or call attention to key differences between the items being compared.",
+          "false": "Present differences and similarities without special emphasis on either."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Comparing programming frameworks with specific aspects",
+        "originalPrompt": "Compare React, Angular, and Vue for front-end development.",
+        "transformedPrompt": "Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences. Compare the items specifically across these aspects or dimensions: performance, cost, ease of use, ecosystem. Present the comparison in a tabular format with items as columns (or rows) and comparison aspects as rows (or columns). Explicitly emphasize or call attention to key differences between the items being compared.\n\nCompare React, Angular, and Vue for front-end development."
+      },
+      {
+        "context": "Prose comparison of political systems",
+        "originalPrompt": "Compare democracy and authoritarianism as political systems.",
+        "transformedPrompt": "Please structure your response as a direct comparison between multiple items, concepts, or approaches, highlighting their similarities and differences. Present the comparison as flowing paragraphs that discuss each aspect across all items in a narrative style. Present differences and similarities without special emphasis on either.\n\nCompare democracy and authoritarianism as political systems."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "TableFormat",
+        "relationship": "enhances",
+        "notes": "When using table format, TableFormat can provide additional formatting options for the comparison table"
+      },
+      {
+        "decorator": "Balanced",
+        "relationship": "enhances",
+        "notes": "Balanced works well with Comparison to ensure fair treatment of each item being compared"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a direct comparison between the items/concepts mentioned in the question. Use {format} format and compare them along {aspects} dimensions. {highlight}",
+        "notes": "This model sometimes needs more explicit structure for complex multi-dimensional comparisons"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic tabular comparison of specific aspects",
+      "usage": "+++Comparison(aspects=[performance,cost,ease of use,ecosystem])\nCompare React, Angular, and Vue for front-end development.",
+      "result": "Creates a table comparing React, Angular, and Vue across the specified aspects, with key differences highlighted"
+    },
+    {
+      "description": "Prose-based comparison without specific aspects",
+      "usage": "+++Comparison(format=prose, highlight=false)\nCompare democracy and authoritarianism as political systems.",
+      "result": "Delivers a flowing prose comparison between democracy and authoritarianism, covering key differences and similarities in paragraph form"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

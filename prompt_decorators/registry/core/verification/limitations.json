@@ -1,0 +1,119 @@
+{
+  "decoratorName": "Limitations",
+  "version": "1.0.0",
+  "description": "Adds an explicit statement of limitations, caveats, or uncertainties related to the provided information. This decorator promotes intellectual honesty by acknowledging the boundaries of current knowledge, potential biases, or contextual constraints.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "The level of detail in the limitations statement",
+      "enum": ["brief", "moderate", "comprehensive"],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "position",
+      "type": "enum",
+      "description": "Where to place the limitations statement in the response",
+      "enum": ["beginning", "end"],
+      "default": "end",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "The primary aspect to focus on in the limitations",
+      "enum": ["knowledge", "methodology", "context", "biases", "all"],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response.",
+    "parameterMapping": {
+      "detail": {
+        "valueMap": {
+          "brief": "Add a concise, focused statement highlighting only the most critical limitations.",
+          "moderate": "Provide a balanced discussion of several important limitations with some supporting context.",
+          "comprehensive": "Include a thorough examination of all significant limitations with detailed explanations and implications."
+        }
+      },
+      "position": {
+        "valueMap": {
+          "beginning": "Place the limitations statement at the beginning of your response, before presenting the main information.",
+          "end": "Place the limitations statement at the end of your response, after presenting the main information."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "knowledge": "Focus primarily on limitations related to the current state of knowledge or understanding in this field.",
+          "methodology": "Focus primarily on limitations in the methodology, research approaches, or analytical techniques used in this area.",
+          "context": "Focus primarily on contextual limitations such as time period, geographical scope, or situational constraints.",
+          "biases": "Focus primarily on potential biases, including research biases, sampling biases, or perspective biases.",
+          "all": "Address a balanced mix of limitations across knowledge gaps, methodological issues, contextual constraints, and potential biases."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Brief methodological limitations at the end",
+        "originalPrompt": "Explain how personality tests predict career success.",
+        "transformedPrompt": "Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response. Add a concise, focused statement highlighting only the most critical limitations. Place the limitations statement at the end of your response, after presenting the main information. Focus primarily on limitations in the methodology, research approaches, or analytical techniques used in this area.\n\nExplain how personality tests predict career success."
+      },
+      {
+        "context": "Comprehensive limitations at the beginning covering all aspects",
+        "originalPrompt": "Describe the current understanding of consciousness.",
+        "transformedPrompt": "Please include an explicit statement of limitations, caveats, or uncertainties related to the information in your response. Include a thorough examination of all significant limitations with detailed explanations and implications. Place the limitations statement at the beginning of your response, before presenting the main information. Address a balanced mix of limitations across knowledge gaps, methodological issues, contextual constraints, and potential biases.\n\nDescribe the current understanding of consciousness."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "FactCheck",
+        "relationship": "enhances",
+        "notes": "FactCheck and Limitations work well together to provide both factual accuracy and transparent acknowledgment of knowledge boundaries"
+      },
+      {
+        "decorator": "Confidence",
+        "relationship": "enhances",
+        "notes": "Confidence ratings complement Limitations by quantifying uncertainty where Limitations describes it qualitatively"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Your response must include a clear section on the limitations of the information you're providing. Be honest about what isn't fully understood, potential issues with methodologies, and other important caveats. {position} Make the limitations {detail} and focus on {focus}.",
+        "notes": "This model sometimes needs explicit prompting to acknowledge limitations, especially in domains where it has high confidence"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Brief limitations statement at the end focused on methodology",
+      "usage": "+++Limitations(detail=brief, focus=methodology)\nExplain how personality tests predict career success.",
+      "result": "Explains personality tests and career success, concluding with a brief statement of methodological limitations"
+    },
+    {
+      "description": "Comprehensive limitations at the beginning covering all aspects",
+      "usage": "+++Limitations(detail=comprehensive, position=beginning, focus=all)\nDescribe the current understanding of consciousness.",
+      "result": "Begins with a thorough discussion of the limitations in our understanding of consciousness before presenting the current state of knowledge"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "decoratorName": "OptimizationFocus",
+  "version": "1.0.0",
+  "description": "Guides targeted optimization efforts with specific constraints and goals.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "target",
+      "type": "enum",
+      "description": "Optimization target",
+      "enum": [
+        "performance",
+        "memory",
+        "network",
+        "size",
+        "mobile"
+      ],
+      "default": "performance",
+      "required": false
+    },
+    {
+      "name": "constraints",
+      "type": "enum",
+      "description": "Optimization constraints",
+      "enum": [
+        "no-visual-changes",
+        "no-functional-changes",
+        "both",
+        "minimal-changes"
+      ],
+      "default": "no-functional-changes",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Optimization approach",
+      "enum": [
+        "profiling",
+        "code-review",
+        "algorithm-improvements",
+        "resource-management"
+      ],
+      "default": "profiling",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Optimize the application with a focus on improving its efficiency and performance.",
+    "parameterMapping": {
+      "target": {
+        "valueMap": {
+          "performance": "Focus on optimizing overall execution speed and responsiveness.",
+          "memory": "Focus on reducing memory usage and improving memory management.",
+          "network": "Focus on optimizing network requests, reducing payload sizes, and improving caching strategies.",
+          "size": "Focus on reducing the overall size of the application or its assets.",
+          "mobile": "Focus on optimizing specifically for mobile device constraints and capabilities."
+        }
+      },
+      "constraints": {
+        "valueMap": {
+          "no-visual-changes": "Ensure that no visual changes occur as a result of the optimization.",
+          "no-functional-changes": "Ensure that the functionality remains identical after optimization.",
+          "both": "Ensure that neither visual appearance nor functionality changes during optimization.",
+          "minimal-changes": "Allow minimal changes to appearance or functionality if they significantly improve optimization outcomes."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "profiling": "Use profiling tools to identify bottlenecks and optimization opportunities.",
+          "code-review": "Perform a systematic code review to identify inefficiencies and improvement opportunities.",
+          "algorithm-improvements": "Focus on improving the underlying algorithms and data structures.",
+          "resource-management": "Focus on better management of system resources like memory, disk, and network."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application optimization",
+        "originalPrompt": "How can I make my React application faster?",
+        "transformedPrompt": "Focus on optimizing overall execution speed and responsiveness. Ensure that the functionality remains identical after optimization. Use profiling tools to identify bottlenecks and optimization opportunities.\n\nHow can I make my React application faster?",
+        "notes": "The decorator adds specific optimization guidance before the original question."
+      },
+      {
+        "context": "Mobile app optimization",
+        "originalPrompt": "Review this code for my Android app and suggest improvements.",
+        "transformedPrompt": "Focus on optimizing specifically for mobile device constraints and capabilities. Ensure that no visual changes occur as a result of the optimization. Perform a systematic code review to identify inefficiencies and improvement opportunities.\n\nReview this code for my Android app and suggest improvements.",
+        "notes": "Parameters target=mobile, constraints=no-visual-changes, and approach=code-review are applied."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "OptimizationFocus can enhance CodeReview by adding specific optimization targets and constraints."
+      },
+      {
+        "decorator": "PerformanceAnalysis",
+        "relationship": "enhances",
+        "notes": "Combines well with PerformanceAnalysis for more comprehensive optimization guidance."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "I need you to help optimize an application with these specific requirements:",
+        "notes": "More direct instruction works better with this model."
+      },
+      "claude-3-7-sonnet-latest": {
+        "instruction": "Please analyze the following for optimization opportunities, focusing on the specified target and constraints:",
+        "notes": "Claude benefits from a more analytical framing."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Optimizing a web application for performance",
+      "usage": "+++OptimizationFocus(target=performance, constraints=no-functional-changes, approach=profiling)\nHow can I improve the loading time of my e-commerce website?",
+      "result": "The model will provide optimization suggestions focused on performance, ensuring functionality doesn't change, using profiling-based approaches."
+    },
+    {
+      "description": "Mobile optimization with code review",
+      "usage": "+++OptimizationFocus(target=mobile, constraints=no-visual-changes, approach=code-review)\nReview this React Native code for my mobile app.",
+      "result": "The model will review the code specifically looking for mobile optimization opportunities while preserving the visual design."
+    },
+    {
+      "description": "Memory optimization with algorithm improvements",
+      "usage": "+++OptimizationFocus(target=memory, constraints=minimal-changes, approach=algorithm-improvements)\nHow can I reduce the memory usage of this data processing function?",
+      "result": "The model will suggest algorithm improvements to reduce memory usage, allowing for minimal changes to functionality if necessary."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

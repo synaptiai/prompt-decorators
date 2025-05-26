@@ -1,0 +1,127 @@
+{
+  "decoratorName": "ConceptModel",
+  "version": "1.0.0",
+  "description": "Visualizes relationships between technical concepts.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "notation",
+      "type": "enum",
+      "description": "Diagram type",
+      "enum": [
+        "mind-map",
+        "concept-map",
+        "knowledge-graph",
+        "informal"
+      ],
+      "default": "concept-map",
+      "required": false
+    },
+    {
+      "name": "complexity",
+      "type": "enum",
+      "description": "Diagram sophistication",
+      "enum": [
+        "basic",
+        "intermediate",
+        "comprehensive"
+      ],
+      "default": "intermediate",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "string",
+      "description": "Central concept",
+      "default": "main-topic",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create a visual representation of the relationships between concepts. Use a structured approach to show connections and hierarchies between ideas.",
+    "parameterMapping": {
+      "notation": {
+        "valueMap": {
+          "mind-map": "Organize the information as a mind map with a central concept and branching ideas.",
+          "concept-map": "Create a concept map with labeled relationships between concepts.",
+          "knowledge-graph": "Develop a knowledge graph with nodes representing concepts and edges showing relationships.",
+          "informal": "Use an informal diagram style that best represents the relationships between concepts."
+        }
+      },
+      "complexity": {
+        "valueMap": {
+          "basic": "Keep the diagram simple with only key concepts and primary relationships.",
+          "intermediate": "Include important secondary concepts and relationships in addition to primary ones.",
+          "comprehensive": "Create a detailed diagram capturing all relevant concepts, sub-concepts, and their interconnections."
+        }
+      },
+      "focus": {
+        "format": "Center the diagram around the concept of {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Technical education",
+        "originalPrompt": "Explain the relationships between key React concepts including components, hooks, state, and context.",
+        "transformedPrompt": "Create a concept map with labeled relationships between concepts. Include important secondary concepts and relationships in addition to primary ones. Center the diagram around the concept of main-topic.\n\nExplain the relationships between key React concepts including components, hooks, state, and context.",
+        "notes": "The decorator transforms a simple explanation request into a request for a visual concept map."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "DetailLevel",
+        "relationship": "enhances",
+        "notes": "DetailLevel can be used to further refine the depth of information in the concept model."
+      },
+      {
+        "decorator": "OutputFormat",
+        "relationship": "conflicts",
+        "notes": "This decorator already specifies an output format, so it may conflict with other format specifications."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "Create a visual representation of the relationships between concepts using ASCII or Unicode characters. Structure the diagram to clearly show connections and hierarchies between ideas.",
+        "notes": "gpt-4o can create effective ASCII/Unicode diagrams for concept visualization."
+      },
+      "claude-3-7-sonnet-latest": {
+        "instruction": "Create a visual representation of the relationships between concepts using ASCII art or structured text. Organize the information to clearly show connections and hierarchies between ideas.",
+        "notes": "Claude models can create effective text-based visualizations."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Creating a concept map for React concepts",
+      "usage": "+++ConceptModel(notation=concept-map, complexity=intermediate)\nCreate a concept map showing the relationships between key React concepts including components, hooks, state, and context.",
+      "result": "A concept map showing React concepts with components, hooks, state, and context as main nodes, with labeled relationships between them and relevant secondary concepts."
+    },
+    {
+      "description": "Basic mind map for programming paradigms",
+      "usage": "+++ConceptModel(notation=mind-map, complexity=basic, focus=programming-paradigms)\nShow the main programming paradigms and their key characteristics.",
+      "result": "A simple mind map with programming paradigms as the central node, branching out to imperative, declarative, object-oriented, functional, and other paradigms."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "OutputFormat"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

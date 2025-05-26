@@ -1,0 +1,118 @@
+{
+  "decoratorName": "CiteSources",
+  "version": "1.0.0",
+  "description": "Structures the response to include citations for claims and information. This decorator enhances credibility by providing references to source material, enabling fact verification and further exploration of topics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The placement and format of citations within the response",
+      "enum": ["inline", "footnote", "endnote"],
+      "default": "inline",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The citation format to use",
+      "enum": ["APA", "MLA", "Chicago", "Harvard", "IEEE"],
+      "default": "APA",
+      "required": false
+    },
+    {
+      "name": "comprehensive",
+      "type": "boolean",
+      "description": "Whether to cite every claim (true) or only major claims (false)",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please include citations for factual claims in your response to enhance credibility and enable verification.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "inline": "Add citations directly in the text using parenthetical references.",
+          "footnote": "Use numbered footnotes for citations, with footnotes appearing at the bottom of relevant sections.",
+          "endnote": "Use numbered endnotes for citations, with all notes appearing in a References section at the end."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "APA": "Format citations according to APA style guidelines.",
+          "MLA": "Format citations according to MLA style guidelines.",
+          "Chicago": "Format citations according to Chicago Manual of Style guidelines.",
+          "Harvard": "Format citations according to Harvard referencing style guidelines.",
+          "IEEE": "Format citations according to IEEE citation style guidelines."
+        }
+      },
+      "comprehensive": {
+        "valueMap": {
+          "true": "Cite every factual claim, including commonly known facts.",
+          "false": "Only cite major claims, specialized knowledge, statistics, and direct quotes."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation with APA inline citations",
+        "originalPrompt": "Explain the evidence for climate change.",
+        "transformedPrompt": "Please include citations for factual claims in your response to enhance credibility and enable verification. Add citations directly in the text using parenthetical references. Format citations according to APA style guidelines. Only cite major claims, specialized knowledge, statistics, and direct quotes.\n\nExplain the evidence for climate change."
+      },
+      {
+        "context": "Comprehensive Chicago footnotes",
+        "originalPrompt": "Describe the major events of World War II.",
+        "transformedPrompt": "Please include citations for factual claims in your response to enhance credibility and enable verification. Use numbered footnotes for citations, with footnotes appearing at the bottom of relevant sections. Format citations according to Chicago Manual of Style guidelines. Cite every factual claim, including commonly known facts.\n\nDescribe the major events of World War II."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "FactCheck",
+        "relationship": "enhances",
+        "notes": "CiteSources pairs well with FactCheck for highly reliable information"
+      },
+      {
+        "decorator": "Concise",
+        "relationship": "conflicts",
+        "notes": "Comprehensive citations may conflict with concise output requirements"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Your response should include citations for the claims you make. For each significant fact or statistic, provide a citation to a credible source.",
+        "notes": "This model may need more explicit instructions about proper citation formatting"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic inline citations for a scientific topic",
+      "usage": "+++CiteSources\nExplain the evidence for climate change.",
+      "result": "Explains climate change with inline citations to scientific sources in APA format"
+    },
+    {
+      "description": "Comprehensive footnote citations in Chicago style",
+      "usage": "+++CiteSources(style=footnote, format=Chicago, comprehensive=true)\nDescribe the major events of World War II.",
+      "result": "Delivers a detailed account of WWII with comprehensive footnote citations in Chicago style for all factual claims"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

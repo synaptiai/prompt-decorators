@@ -1,0 +1,120 @@
+{
+  "decoratorName": "Nested",
+  "version": "1.0.0",
+  "description": "Organizes information in a deeply hierarchical structure with multiple levels of nesting. This decorator is ideal for complex topics with many subcategories, helping to maintain clarity through consistent organization patterns.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Maximum nesting level of the hierarchy",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Visual style for hierarchical levels",
+      "enum": ["bullet", "numbered", "mixed"],
+      "default": "mixed",
+      "required": false
+    },
+    {
+      "name": "collapsible",
+      "type": "boolean",
+      "description": "Whether to suggest the hierarchy could be rendered as collapsible sections (for UI implementations)",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please organize your response in a deeply hierarchical structure with clearly defined levels of nesting. Create a logical progression from major categories down to granular subcategories, maintaining consistent organization patterns throughout.",
+    "parameterMapping": {
+      "depth": {
+        "format": "Structure your response with {value} levels of nesting, where the information hierarchy reveals increasingly specific details at each level."
+      },
+      "style": {
+        "valueMap": {
+          "bullet": "Use bullet points (•, ○, ■, □, etc.) consistently throughout all hierarchical levels.",
+          "numbered": "Use numbered lists (1., 1.1., 1.1.1., etc.) consistently throughout all hierarchical levels.",
+          "mixed": "Use a mix of formatting styles: numbers for top level (1., 2., etc.), letters for second level (a., b., etc.), and bullets for deeper levels."
+        }
+      },
+      "collapsible": {
+        "valueMap": {
+          "true": "Design the hierarchy to work as collapsible sections, where each parent category could expand to show child categories.",
+          "false": "Present the full hierarchy with all levels visible simultaneously."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Nested taxonomy explanation",
+        "originalPrompt": "Explain the classification of living organisms.",
+        "transformedPrompt": "Please organize your response in a deeply hierarchical structure with clearly defined levels of nesting. Create a logical progression from major categories down to granular subcategories, maintaining consistent organization patterns throughout. Structure your response with 3 levels of nesting, where the information hierarchy reveals increasingly specific details at each level. Use a mix of formatting styles: numbers for top level (1., 2., etc.), letters for second level (a., b., etc.), and bullets for deeper levels. Present the full hierarchy with all levels visible simultaneously.\n\nExplain the classification of living organisms."
+      },
+      {
+        "context": "Collapsible programming paradigms overview",
+        "originalPrompt": "Provide a comprehensive overview of programming paradigms.",
+        "transformedPrompt": "Please organize your response in a deeply hierarchical structure with clearly defined levels of nesting. Create a logical progression from major categories down to granular subcategories, maintaining consistent organization patterns throughout. Structure your response with 5 levels of nesting, where the information hierarchy reveals increasingly specific details at each level. Use bullet points (•, ○, ■, □, etc.) consistently throughout all hierarchical levels. Design the hierarchy to work as collapsible sections, where each parent category could expand to show child categories.\n\nProvide a comprehensive overview of programming paradigms."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Outline",
+        "relationship": "enhances",
+        "notes": "Nested provides deeper hierarchical structure to Outline's organizational framework"
+      },
+      {
+        "decorator": "MECE",
+        "relationship": "enhances",
+        "notes": "MECE ensures categories in the Nested hierarchy are mutually exclusive and collectively exhaustive"
+      },
+      {
+        "decorator": "Schema",
+        "relationship": "enhances",
+        "notes": "Schema can provide a consistent data structure for each level of the Nested hierarchy"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a {depth}-level deep hierarchical structure for this topic. Use {style} formatting for the levels. Each level should contain more specific details than its parent level. Make sure the categories are logical and properly nested. {collapsible}",
+        "notes": "This model may need additional guidance to maintain consistent depth across all branches of the hierarchy"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Deep hierarchical organization of a complex domain",
+      "usage": "+++Nested\nExplain the classification of living organisms.",
+      "result": "Presents taxonomy in a nested hierarchy with domains, kingdoms, phyla, etc., using mixed notation styles for different levels"
+    },
+    {
+      "description": "Maximum depth collapsible structure for reference material",
+      "usage": "+++Nested(depth=5, style=bullet, collapsible=true)\nProvide a comprehensive overview of programming paradigms.",
+      "result": "Creates a 5-level deep bullet-point hierarchy of programming paradigms, designed to be rendered as collapsible sections"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

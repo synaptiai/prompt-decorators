@@ -33,14 +33,14 @@ class PreBuildCommand(build_py):
             None
         """
         try:
-            copy_script = Path(__file__).parent / "scripts" / "copy_registry.py"
+            copy_script = Path(__file__).parent / "scripts" / "prepare_build.py"
             if copy_script.exists():
-                print("Running copy registry script...")
+                print("Running prepare build script...")
                 subprocess.check_call([sys.executable, str(copy_script)])
             else:
-                print(f"Copy registry script not found: {copy_script}")
+                print(f"Prepare build script not found: {copy_script}")
         except Exception as e:
-            print(f"Error running copy registry script: {e}")
+            print(f"Error running prepare build script: {e}")
 
 
 class PostDevelopCommand(develop):
@@ -63,14 +63,14 @@ class PostDevelopCommand(develop):
             None
         """
         try:
-            copy_script = Path(__file__).parent / "scripts" / "copy_registry.py"
+            copy_script = Path(__file__).parent / "scripts" / "prepare_build.py"
             if copy_script.exists():
-                print("Running copy registry script...")
+                print("Running prepare build script...")
                 subprocess.check_call([sys.executable, str(copy_script)])
             else:
-                print(f"Copy registry script not found: {copy_script}")
+                print(f"Prepare build script not found: {copy_script}")
         except Exception as e:
-            print(f"Error running copy registry script: {e}")
+            print(f"Error running prepare build script: {e}")
 
     def execute_registry_setup(self) -> None:
         """Execute the registry setup script.
@@ -126,7 +126,7 @@ with open(os.path.join(this_directory, "README.md"), encoding="utf-8") as f:
 # Define package metadata
 setup(
     name="prompt-decorators",
-    version="0.3.1",
+    version="0.8.0",
     description="A framework for defining, managing, and applying prompt decorators to enhance interactions with LLMs",
     long_description=long_description,
     long_description_content_type="text/markdown",

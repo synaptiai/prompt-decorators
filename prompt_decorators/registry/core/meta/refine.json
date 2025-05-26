@@ -1,0 +1,109 @@
+{
+  "decoratorName": "Refine",
+  "version": "1.0.0",
+  "description": "A meta-decorator that iteratively improves the output based on specified criteria or dimensions. This decorator simulates multiple drafts or revisions of content, with each iteration focusing on enhancing particular aspects of the response.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "iterations",
+      "type": "number",
+      "description": "Number of refinement cycles to perform",
+      "default": 2,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 3
+      }
+    },
+    {
+      "name": "focus",
+      "type": "array",
+      "description": "Specific aspects to focus on during refinement (e.g., clarity, conciseness, evidence)",
+      "required": false
+    },
+    {
+      "name": "showProcess",
+      "type": "boolean",
+      "description": "Whether to show the intermediate steps in the refinement process",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please apply an iterative refinement process to your response, with each iteration improving upon the previous version.",
+    "parameterMapping": {
+      "iterations": {
+        "format": "Perform {value} refinement iterations to improve your response."
+      },
+      "focus": {
+        "format": "Focus your refinements on improving these specific aspects: {value}."
+      },
+      "showProcess": {
+        "valueMap": {
+          "true": "Show each iteration separately in your response, labeling them as 'Draft 1', 'Draft 2', etc., to demonstrate the refinement process.",
+          "false": "Only provide the final refined response without showing the intermediate steps."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation with two iterations",
+        "originalPrompt": "Explain the implications of quantum computing for cybersecurity.",
+        "transformedPrompt": "Please apply an iterative refinement process to your response, with each iteration improving upon the previous version. Perform 2 refinement iterations to improve your response. Only provide the final refined response without showing the intermediate steps.\n\nExplain the implications of quantum computing for cybersecurity."
+      },
+      {
+        "context": "Comprehensive refinement with visible process",
+        "originalPrompt": "Analyze the economic impacts of artificial intelligence.",
+        "transformedPrompt": "Please apply an iterative refinement process to your response, with each iteration improving upon the previous version. Perform 3 refinement iterations to improve your response. Focus your refinements on improving these specific aspects: clarity,evidence,conciseness. Show each iteration separately in your response, labeling them as 'Draft 1', 'Draft 2', etc., to demonstrate the refinement process.\n\nAnalyze the economic impacts of artificial intelligence."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "Refine can improve a StepByStep response by making each step clearer and more precise"
+      },
+      {
+        "decorator": "Chain",
+        "relationship": "conflicts",
+        "notes": "Chain and Refine both control multi-step processing and may conflict"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "For this response, you will create multiple drafts, with each draft improving on the previous one. Think carefully about how to enhance each version.",
+        "notes": "This model may require more explicit instructions about the refinement process"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic refinement of a complex explanation",
+      "usage": "+++Refine\nExplain the implications of quantum computing for cybersecurity.",
+      "result": "Provides a refined explanation of quantum computing implications for cybersecurity, with two hidden iterations improving clarity and accuracy"
+    },
+    {
+      "description": "Detailed refinement with visible iterations",
+      "usage": "+++Refine(iterations=3, focus=[clarity,evidence,conciseness], showProcess=true)\nAnalyze the economic impacts of artificial intelligence.",
+      "result": "Shows three visible iterations of analyzing AI economic impacts, with each step focusing on improving clarity, strengthening evidence, and enhancing conciseness"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

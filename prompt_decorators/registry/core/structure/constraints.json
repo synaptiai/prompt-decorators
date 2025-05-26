@@ -1,0 +1,124 @@
+{
+  "decoratorName": "Constraints",
+  "version": "1.0.0",
+  "description": "Applies specific limitations to the output format, length, or content. This decorator enforces creative constraints that can enhance focus, brevity, or precision by requiring the response to work within defined boundaries.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "wordCount",
+      "type": "number",
+      "description": "Maximum number of words allowed in the response",
+      "required": false,
+      "validation": {
+        "minimum": 10,
+        "maximum": 1000
+      }
+    },
+    {
+      "name": "timeframe",
+      "type": "string",
+      "description": "Maximum time required to implement or consume the response (e.g., '5min', '1hr', '1week')",
+      "required": false
+    },
+    {
+      "name": "vocabulary",
+      "type": "enum",
+      "description": "Constraints on vocabulary usage",
+      "enum": ["simple", "technical", "domain-specific", "creative"],
+      "required": false
+    },
+    {
+      "name": "custom",
+      "type": "string",
+      "description": "Custom constraint to apply (e.g., 'no negatives', 'use only questions', 'each sentence starts with consecutive letters of the alphabet')",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please craft your response within specific constraints that limit aspects of the output format, length, or content.",
+    "parameterMapping": {
+      "wordCount": {
+        "format": "Limit your response to exactly {value} words. Count carefully to ensure you meet this constraint precisely."
+      },
+      "timeframe": {
+        "format": "Ensure your response describes solutions or content that could be implemented or consumed within a {value} timeframe."
+      },
+      "vocabulary": {
+        "valueMap": {
+          "simple": "Use only simple, everyday vocabulary that would be understood by elementary school students. Avoid jargon, technical terms, and complex words.",
+          "technical": "Use precise technical vocabulary appropriate to the subject matter, including field-specific terminology and concepts.",
+          "domain-specific": "Employ specialized vocabulary from the relevant domain or field, using terms of art and professional language.",
+          "creative": "Use varied, vivid, and evocative vocabulary that enhances engagement, including metaphors, sensory language, and uncommon word choices."
+        }
+      },
+      "custom": {
+        "format": "Apply this additional custom constraint: {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Word count constraint for quantum computing explanation",
+        "originalPrompt": "Explain quantum computing principles.",
+        "transformedPrompt": "Please craft your response within specific constraints that limit aspects of the output format, length, or content. Limit your response to exactly 100 words. Count carefully to ensure you meet this constraint precisely.\n\nExplain quantum computing principles."
+      },
+      {
+        "context": "Multiple constraints for futuristic city description",
+        "originalPrompt": "Describe a futuristic city.",
+        "transformedPrompt": "Please craft your response within specific constraints that limit aspects of the output format, length, or content. Limit your response to exactly 200 words. Count carefully to ensure you meet this constraint precisely. Use varied, vivid, and evocative vocabulary that enhances engagement, including metaphors, sensory language, and uncommon word choices. Apply this additional custom constraint: each paragraph must contain exactly three sentences.\n\nDescribe a futuristic city."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Concise",
+        "relationship": "enhances",
+        "notes": "Constraints with wordCount and Concise work well together to enforce brevity in different ways"
+      },
+      {
+        "decorator": "Detailed",
+        "relationship": "conflicts",
+        "notes": "Constraints with low wordCount may conflict with Detailed's aim for comprehensiveness"
+      },
+      {
+        "decorator": "Creative",
+        "relationship": "enhances",
+        "notes": "Constraints often enhance creativity by forcing innovative solutions within limitations"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "You must follow these exact constraints: {wordCount} {timeframe} {vocabulary} {custom}. These are hard requirements - your response will only be valuable if it strictly adheres to these constraints.",
+        "notes": "This model sometimes needs stronger emphasis on constraints to ensure they are followed precisely"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Word count constraint for a complex topic",
+      "usage": "+++Constraints(wordCount=100)\nExplain quantum computing principles.",
+      "result": "Provides a concise explanation of quantum computing, carefully limiting the response to exactly 100 words"
+    },
+    {
+      "description": "Multiple constraints for a creative response",
+      "usage": "+++Constraints(wordCount=200, vocabulary=creative, custom=each paragraph must contain exactly three sentences)\nDescribe a futuristic city.",
+      "result": "Delivers a 200-word description of a futuristic city using creative vocabulary, with each paragraph containing exactly three sentences"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}
