@@ -1,0 +1,116 @@
+{
+  "decoratorName": "Remix",
+  "version": "1.0.0",
+  "description": "Reframes or adapts content for a different context, purpose, or audience than originally intended. This decorator transforms the presentation style while preserving core information, making it accessible and relevant to specific scenarios or demographics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "target",
+      "type": "string",
+      "description": "The specific audience or context to adapt the content for (e.g., 'executives', 'teenagers', 'technical team', 'sales pitch')",
+      "required": true
+    },
+    {
+      "name": "preserve",
+      "type": "enum",
+      "description": "What aspects of the original content to prioritize preserving",
+      "enum": ["facts", "structure", "tone", "comprehensiveness"],
+      "default": "facts",
+      "required": false
+    },
+    {
+      "name": "contrast",
+      "type": "boolean",
+      "description": "Whether to highlight differences between the original framing and the remixed version",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please reframe or adapt this content for a different audience or context than might normally be expected. Transform the presentation style while preserving core information to make it relevant to the specified target audience.",
+    "parameterMapping": {
+      "target": {
+        "format": "Adapt this content specifically for {value}. Consider the background, needs, interests, and communication preferences of this audience when reframing the material."
+      },
+      "preserve": {
+        "valueMap": {
+          "facts": "Prioritize preserving the accurate factual content while allowing flexibility in presentation style, structure, and level of detail.",
+          "structure": "Maintain the original organizational structure and flow of ideas while adapting language, examples, and level of detail.",
+          "tone": "Keep the original tone and voice consistent while adapting other elements like vocabulary, examples, and level of detail.",
+          "comprehensiveness": "Ensure all key points and details from the original content are included, even while completely adapting the presentation style."
+        }
+      },
+      "contrast": {
+        "valueMap": {
+          "true": "Include an explicit comparison highlighting key differences between how this content would typically be presented versus how it's being adapted for the target audience.",
+          "false": "Focus solely on the adapted version without explicitly comparing it to how the content might be presented in other contexts."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Neural networks explanation for high school students",
+        "originalPrompt": "Explain how neural networks function in artificial intelligence.",
+        "transformedPrompt": "Please reframe or adapt this content for a different audience or context than might normally be expected. Transform the presentation style while preserving core information to make it relevant to the specified target audience. Adapt this content specifically for high school students. Consider the background, needs, interests, and communication preferences of this audience when reframing the material. Prioritize preserving the accurate factual content while allowing flexibility in presentation style, structure, and level of detail. Focus solely on the adapted version without explicitly comparing it to how the content might be presented in other contexts.\n\nExplain how neural networks function in artificial intelligence."
+      },
+      {
+        "context": "Technical software architecture for board presentation",
+        "originalPrompt": "Describe the technical details of our new software architecture.",
+        "transformedPrompt": "Please reframe or adapt this content for a different audience or context than might normally be expected. Transform the presentation style while preserving core information to make it relevant to the specified target audience. Adapt this content specifically for board presentation. Consider the background, needs, interests, and communication preferences of this audience when reframing the material. Ensure all key points and details from the original content are included, even while completely adapting the presentation style. Include an explicit comparison highlighting key differences between how this content would typically be presented versus how it's being adapted for the target audience.\n\nDescribe the technical details of our new software architecture."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Audience",
+        "relationship": "enhances",
+        "notes": "Remix provides more transformative adaptation than Audience alone, reframing content rather than just adjusting to audience expertise level"
+      },
+      {
+        "decorator": "ELI5",
+        "relationship": "enhances",
+        "notes": "Remix can target specific audiences beyond simplification, while ELI5 focuses exclusively on making content extremely simple"
+      },
+      {
+        "decorator": "StyleShift",
+        "relationship": "enhances",
+        "notes": "StyleShift modifies specific style aspects, while Remix performs comprehensive reframing for different contexts"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Reimagine this content specifically for {target}. Think about: 1) What this audience already knows, 2) What they care about most, 3) What vocabulary and examples will resonate with them, and 4) How to structure the information for maximum impact. Make sure to {preserve} above all else. {contrast} Use terminology, examples, and a communication style that would feel natural and engaging to this specific audience.",
+        "notes": "This model may need explicit reminders to maintain the core information while significantly transforming the presentation style"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic remix for a different audience",
+      "usage": "+++Remix(target=high school students)\nExplain how neural networks function in artificial intelligence.",
+      "result": "Reframes the technical explanation of neural networks to be accessible and engaging for high school students while preserving the core facts"
+    },
+    {
+      "description": "Business remix with contrasting approach",
+      "usage": "+++Remix(target=board presentation, preserve=comprehensiveness, contrast=true)\nDescribe the technical details of our new software architecture.",
+      "result": "Transforms the technical software architecture description into a board-appropriate presentation format, maintaining comprehensive coverage while highlighting how this differs from a technical explanation"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

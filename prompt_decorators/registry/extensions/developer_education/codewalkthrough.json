@@ -1,0 +1,137 @@
+{
+  "decoratorName": "CodeWalkthrough",
+  "version": "1.0.0",
+  "description": "Provides detailed explanations of code functionality.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Walkthrough emphasis",
+      "enum": [
+        "how",
+        "why",
+        "optimization",
+        "security"
+      ],
+      "default": "how",
+      "required": false
+    },
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Explanation granularity",
+      "enum": [
+        "overview",
+        "key-parts",
+        "line-by-line"
+      ],
+      "default": "key-parts",
+      "required": false
+    },
+    {
+      "name": "audience",
+      "type": "enum",
+      "description": "Target reader",
+      "enum": [
+        "junior",
+        "peer",
+        "senior",
+        "non-technical"
+      ],
+      "default": "peer",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Provide a walkthrough explanation of the code. Focus on making the explanation clear and educational.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "how": "Explain how the code works, focusing on its mechanics and implementation details.",
+          "why": "Explain why the code is designed this way, focusing on design decisions and rationale.",
+          "optimization": "Explain how the code is optimized, focusing on performance considerations and efficiency.",
+          "security": "Explain the security aspects of the code, focusing on potential vulnerabilities and safeguards."
+        }
+      },
+      "detail": {
+        "valueMap": {
+          "overview": "Provide a high-level overview of the code structure and functionality.",
+          "key-parts": "Focus on explaining the key components and important sections of the code.",
+          "line-by-line": "Provide a detailed line-by-line explanation of how the code works."
+        }
+      },
+      "audience": {
+        "valueMap": {
+          "junior": "Explain the code for a junior developer with basic programming knowledge.",
+          "peer": "Explain the code as you would to a peer developer with similar experience.",
+          "senior": "Explain the code with advanced concepts and patterns for a senior developer.",
+          "non-technical": "Explain the code in simple terms for someone without technical background."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "JavaScript authentication middleware",
+        "originalPrompt": "Walk through this authentication middleware explaining how it works.",
+        "transformedPrompt": "Provide a walkthrough explanation of the code. Focus on making the explanation clear and educational. Explain how the code works, focusing on its mechanics and implementation details. Focus on explaining the key components and important sections of the code. Explain the code as you would to a peer developer with similar experience.\n\nWalk through this authentication middleware explaining how it works.",
+        "notes": "The decorator adds specific instructions for explaining code functionality with appropriate focus, detail level, and audience adaptation."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CodeWalkthrough can enhance CodeReview by providing educational context to review comments."
+      },
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "When audience is set to anything other than 'non-technical', this may conflict with ELI5's simplification approach."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Explain this code in detail. Make sure to cover how it works, focusing on {focus}. Provide a {detail} explanation suitable for a {audience} developer.",
+        "notes": "Simplified instruction format works better with gpt-4-turbo."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic code walkthrough for junior developers",
+      "usage": "+++CodeWalkthrough(focus=how, detail=key-parts, audience=junior)\nWalk through this authentication middleware explaining how it works.",
+      "result": "A detailed explanation of how the authentication middleware works, focusing on key components and written for junior developers to understand."
+    },
+    {
+      "description": "Security-focused code review for senior developers",
+      "usage": "+++CodeWalkthrough(focus=security, detail=line-by-line, audience=senior)\nExplain this encryption implementation.",
+      "result": "A comprehensive line-by-line security analysis of the encryption implementation, using advanced terminology appropriate for senior developers."
+    },
+    {
+      "description": "High-level explanation for non-technical stakeholders",
+      "usage": "+++CodeWalkthrough(focus=why, detail=overview, audience=non-technical)\nExplain what this payment processing code does.",
+      "result": "A non-technical overview explaining why the payment processing code is designed the way it is, avoiding jargon and technical details."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

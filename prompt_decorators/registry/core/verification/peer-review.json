@@ -1,0 +1,125 @@
+{
+  "decoratorName": "PeerReview",
+  "version": "1.0.0",
+  "description": "Augments the response with a simulated peer review of the content. This decorator enhances critical thinking by evaluating the response's strengths, weaknesses, methodological soundness, and potential improvements as an academic reviewer would.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "criteria",
+      "type": "enum",
+      "description": "Primary criteria to focus on in the review",
+      "enum": ["accuracy", "methodology", "limitations", "completeness", "all"],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The tone and approach of the peer review",
+      "enum": ["constructive", "critical", "balanced"],
+      "default": "balanced",
+      "required": false
+    },
+    {
+      "name": "position",
+      "type": "enum",
+      "description": "Where to place the peer review relative to the main content",
+      "enum": ["after", "before", "alongside"],
+      "default": "after",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please include a simulated peer review of your response, evaluating the content as an academic reviewer would.",
+    "parameterMapping": {
+      "criteria": {
+        "valueMap": {
+          "accuracy": "Focus the peer review primarily on the factual accuracy and precision of the information presented.",
+          "methodology": "Focus the peer review primarily on the methodological approach, analytical framework, or reasoning process used.",
+          "limitations": "Focus the peer review primarily on identifying limitations, gaps, or unaddressed aspects in the analysis.",
+          "completeness": "Focus the peer review primarily on how thoroughly the topic is covered and whether key elements are missing.",
+          "all": "Include a comprehensive peer review addressing accuracy, methodology, limitations, and completeness of the content."
+        }
+      },
+      "style": {
+        "valueMap": {
+          "constructive": "Maintain a supportive tone in the peer review, emphasizing positive aspects while gently suggesting improvements.",
+          "critical": "Adopt a rigorously critical stance in the peer review, thoroughly identifying weaknesses and challenging assumptions.",
+          "balanced": "Provide a balanced peer review that equally addresses strengths and weaknesses with a neutral academic tone."
+        }
+      },
+      "position": {
+        "valueMap": {
+          "after": "Present the main content first, followed by the peer review section.",
+          "before": "Begin with the peer review section, then present the main content.",
+          "alongside": "Integrate the peer review comments throughout the content, marking them clearly as reviewer notes."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic peer review of dark matter content",
+        "originalPrompt": "Explain the current understanding of dark matter in astrophysics.",
+        "transformedPrompt": "Please include a simulated peer review of your response, evaluating the content as an academic reviewer would. Focus the peer review primarily on the factual accuracy and precision of the information presented. Provide a balanced peer review that equally addresses strengths and weaknesses with a neutral academic tone. Present the main content first, followed by the peer review section.\n\nExplain the current understanding of dark matter in astrophysics."
+      },
+      {
+        "context": "Critical comprehensive review alongside content",
+        "originalPrompt": "Analyze the methodology used in Stanford's prison experiment.",
+        "transformedPrompt": "Please include a simulated peer review of your response, evaluating the content as an academic reviewer would. Include a comprehensive peer review addressing accuracy, methodology, limitations, and completeness of the content. Adopt a rigorously critical stance in the peer review, thoroughly identifying weaknesses and challenging assumptions. Integrate the peer review comments throughout the content, marking them clearly as reviewer notes.\n\nAnalyze the methodology used in Stanford's prison experiment."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Academic",
+        "relationship": "enhances",
+        "notes": "Academic style complements PeerReview by maintaining scholarly language throughout both content and review"
+      },
+      {
+        "decorator": "CiteSources",
+        "relationship": "enhances",
+        "notes": "CiteSources works well with PeerReview to provide academic references that the peer review can evaluate"
+      },
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "Limitations pairs well with PeerReview when focusing on limitation criteria, offering complementary perspectives"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "First, generate your response to the query. Then, adopt the role of an academic peer reviewer to evaluate that content. In your review, focus on {criteria} with a {style} approach. Format your response with the review {position} the main content. Clearly label the peer review section.",
+        "notes": "This model sometimes needs explicit prompting to maintain appropriate critical distance between the content creation and review aspects"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic peer review of content accuracy",
+      "usage": "+++PeerReview(criteria=accuracy)\nExplain the current understanding of dark matter in astrophysics.",
+      "result": "Provides an explanation of dark matter, followed by a balanced peer review focusing on the accuracy of the information presented"
+    },
+    {
+      "description": "Critical peer review of multiple aspects, shown alongside content",
+      "usage": "+++PeerReview(criteria=all, style=critical, position=alongside)\nAnalyze the methodology used in Stanford's prison experiment.",
+      "result": "Delivers an analysis of the Stanford prison experiment methodology with a parallel critical peer review addressing accuracy, methodology, limitations, and completeness"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

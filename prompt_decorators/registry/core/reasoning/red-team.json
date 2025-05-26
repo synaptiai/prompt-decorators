@@ -1,0 +1,115 @@
+{
+  "decoratorName": "RedTeam",
+  "version": "1.0.0",
+  "description": "Applies adversarial analysis to test assumptions, identify vulnerabilities, and strengthen proposals by actively looking for flaws. This decorator simulates how an opponent or critic would evaluate and attack ideas, plans, or arguments.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "strength",
+      "type": "enum",
+      "description": "How aggressive or challenging the red team analysis should be",
+      "enum": ["moderate", "aggressive", "steelman"],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "array",
+      "description": "Specific aspects to focus the red team analysis on",
+      "required": false
+    },
+    {
+      "name": "constructive",
+      "type": "boolean",
+      "description": "Whether to include constructive suggestions for improvement after critiques",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented.",
+    "parameterMapping": {
+      "strength": {
+        "valueMap": {
+          "moderate": "Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective.",
+          "aggressive": "Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches.",
+          "steelman": "Apply the most sophisticated possible critique by first strengthening the argument to its best form, then finding its most substantive vulnerabilities."
+        }
+      },
+      "focus": {
+        "format": "Focus your adversarial analysis specifically on these aspects: {value}."
+      },
+      "constructive": {
+        "valueMap": {
+          "true": "After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.",
+          "false": "Focus solely on identifying weaknesses and vulnerabilities without providing suggestions for improvement."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Moderate red team analysis of a subscription service plan",
+        "originalPrompt": "Here's our plan to launch a new subscription service...",
+        "transformedPrompt": "Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented. Apply a balanced adversarial analysis that identifies significant issues while maintaining a fair and reasonable perspective. After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.\n\nHere's our plan to launch a new subscription service..."
+      },
+      {
+        "context": "Aggressive focused red team analysis of an authentication system",
+        "originalPrompt": "Review our new authentication system design.",
+        "transformedPrompt": "Please analyze the content from an adversarial perspective, actively looking for flaws, vulnerabilities, and weak points. Simulate how a critic or opponent would evaluate and challenge the ideas, plans, or arguments presented. Apply an intensely critical adversarial analysis that aggressively challenges all aspects of the content, including fundamental assumptions and approaches. Focus your adversarial analysis specifically on these aspects: [security,scalability,market-fit]. After identifying vulnerabilities and weaknesses, provide constructive suggestions for addressing each issue and strengthening the overall approach.\n\nReview our new authentication system design."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "RedTeam and Limitations work together to identify both external challenges and inherent constraints"
+      },
+      {
+        "decorator": "Steelman",
+        "relationship": "enhances",
+        "notes": "When RedTeam is set to 'steelman' strength, it works particularly well with the Steelman decorator"
+      },
+      {
+        "decorator": "FindGaps",
+        "relationship": "enhances",
+        "notes": "FindGaps complements RedTeam by identifying missing elements while RedTeam challenges existing elements"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Act as a {strength} critic examining this content. Look for all possible problems, weaknesses, and vulnerabilities. {focus} Challenge underlying assumptions. Think about what could go wrong, what's missing, and why this might fail. {constructive} Be thorough and consider multiple angles of attack.",
+        "notes": "This model may need more explicit direction to maintain a consistently critical stance throughout the analysis"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic red team analysis of a business proposal",
+      "usage": "+++RedTeam\nHere's our plan to launch a new subscription service...",
+      "result": "Analyzes the subscription service plan from an adversarial perspective, identifying potential weaknesses, oversights, and challenges"
+    },
+    {
+      "description": "Aggressive red team analysis with specific focus areas",
+      "usage": "+++RedTeam(strength=aggressive, focus=[security,scalability,market-fit], constructive=true)\nReview our new authentication system design.",
+      "result": "Aggressively challenges the authentication system design, specifically targeting security, scalability, and market-fit concerns, followed by constructive improvement suggestions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

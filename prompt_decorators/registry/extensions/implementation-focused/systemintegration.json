@@ -1,0 +1,123 @@
+{
+  "decoratorName": "SystemIntegration",
+  "version": "1.0.0",
+  "description": "Provides guidance for integrating with existing systems and services.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "systems",
+      "type": "string",
+      "description": "External systems to integrate with",
+      "default": "none",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Integration approach",
+      "enum": [
+        "adapter",
+        "direct",
+        "facade",
+        "proxy",
+        "bridge"
+      ],
+      "default": "adapter",
+      "required": false
+    },
+    {
+      "name": "coupling",
+      "type": "enum",
+      "description": "Desired coupling level",
+      "enum": [
+        "loose",
+        "moderate",
+        "tight"
+      ],
+      "default": "loose",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Consider the following system integration requirements when developing your solution:",
+    "parameterMapping": {
+      "systems": {
+        "format": "Integrate with the following systems: {value}."
+      },
+      "approach": {
+        "valueMap": {
+          "adapter": "Use an adapter pattern to create a compatible interface between systems.",
+          "direct": "Implement direct integration with minimal abstraction layers.",
+          "facade": "Create a facade to provide a simplified interface to the complex subsystems.",
+          "proxy": "Implement a proxy pattern to control access to the external systems.",
+          "bridge": "Use a bridge pattern to decouple abstraction from implementation."
+        }
+      },
+      "coupling": {
+        "valueMap": {
+          "loose": "Maintain loose coupling to minimize dependencies between systems.",
+          "moderate": "Balance coupling with performance considerations.",
+          "tight": "Implement tight coupling where performance is critical."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "E-commerce application",
+        "originalPrompt": "Implement an order processing service that integrates with our payment gateway and inventory system.",
+        "transformedPrompt": "Consider the following system integration requirements when developing your solution:\nIntegrate with the following systems: payment-gateway,inventory-service.\nCreate a facade to provide a simplified interface to the complex subsystems.\nMaintain loose coupling to minimize dependencies between systems.\n\nImplement an order processing service that integrates with our payment gateway and inventory system.",
+        "notes": "The decorator adds specific integration guidance while preserving the original implementation request."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "DesignPatterns",
+        "relationship": "enhances",
+        "notes": "SystemIntegration works well with DesignPatterns to provide comprehensive architectural guidance."
+      },
+      {
+        "decorator": "CodeQuality",
+        "relationship": "enhances",
+        "notes": "Can be combined with CodeQuality to ensure integration code meets quality standards."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "When implementing the solution, consider these system integration guidelines:",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic integration with payment gateway using facade pattern",
+      "usage": "+++SystemIntegration(systems=payment-gateway,inventory-service, approach=facade, coupling=loose)",
+      "result": "Provides guidance for implementing a facade-based integration with payment gateway and inventory services while maintaining loose coupling."
+    },
+    {
+      "description": "Direct integration with tight coupling for performance",
+      "usage": "+++SystemIntegration(systems=database, approach=direct, coupling=tight)",
+      "result": "Guides implementation of direct database integration with tight coupling for performance-critical operations."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

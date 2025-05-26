@@ -1,0 +1,109 @@
+{
+  "decoratorName": "Priority",
+  "version": "1.0.0",
+  "description": "A meta-decorator that establishes a precedence hierarchy among multiple decorators. This allows explicit control over which decorator's parameters or behaviors take precedence when conflicts arise, overriding the default last-decorator-wins behavior.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "decorators",
+      "type": "array",
+      "description": "Ordered list of decorators by priority (highest priority first)",
+      "required": true
+    },
+    {
+      "name": "explicit",
+      "type": "boolean",
+      "description": "Whether to explicitly mention overridden behaviors in the response",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "mode",
+      "type": "enum",
+      "description": "How to handle conflicts between decorators",
+      "enum": ["override", "merge", "cascade"],
+      "default": "override",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please apply the following decorators with a specific priority hierarchy to resolve any conflicts between them.",
+    "parameterMapping": {
+      "decorators": {
+        "format": "Apply these decorators in priority order (highest priority first): {value}."
+      },
+      "explicit": {
+        "valueMap": {
+          "true": "When a conflict between decorators occurs, explicitly note in your response which decorator's behavior took precedence.",
+          "false": "Handle conflicts between decorators without explicitly mentioning the resolution in your response."
+        }
+      },
+      "mode": {
+        "valueMap": {
+          "override": "When decorators conflict, completely override lower-priority decorator instructions with those from higher-priority decorators.",
+          "merge": "When decorators conflict, attempt to merge their instructions by integrating compatible aspects of each.",
+          "cascade": "When decorators conflict, apply higher-priority decorator instructions first, then apply lower-priority instructions where they don't directly conflict."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Simple priority between conflicting decorators",
+        "originalPrompt": "Explain quantum computing.",
+        "transformedPrompt": "Please apply the following decorators with a specific priority hierarchy to resolve any conflicts between them. Apply these decorators in priority order (highest priority first): Concise, Detailed. When decorators conflict, completely override lower-priority decorator instructions with those from higher-priority decorators. Handle conflicts between decorators without explicitly mentioning the resolution in your response.\n\nExplain quantum computing."
+      },
+      {
+        "context": "Complex cascading priority with explicit notes",
+        "originalPrompt": "Explain the water cycle.",
+        "transformedPrompt": "Please apply the following decorators with a specific priority hierarchy to resolve any conflicts between them. Apply these decorators in priority order (highest priority first): Academic, Creative, StepByStep. When decorators conflict, apply higher-priority decorator instructions first, then apply lower-priority instructions where they don't directly conflict. When a conflict between decorators occurs, explicitly note in your response which decorator's behavior took precedence.\n\nExplain the water cycle."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Conditional",
+        "relationship": "enhances",
+        "notes": "Priority complements Conditional by determining which decorators take precedence when conditions are met"
+      },
+      {
+        "decorator": "Override",
+        "relationship": "conflicts",
+        "notes": "Priority and Override both attempt to control decorator behavior conflicts in different ways"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "Follow a strict priority order when applying these decorators: {decorators}. When conflicts occur between decorators, resolve them using '{mode}' approach. Focus on implementing each decorator's functionality according to this priority hierarchy.",
+        "notes": "Even gpt-4o sometimes needs explicit reminders about priority order when multiple decorators have complex interactions"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic priority ordering between potentially conflicting decorators",
+      "usage": "+++Priority(decorators=[Concise,Detailed])\nExplain quantum computing.",
+      "result": "Applies both decorators, but when conflicts arise, Concise takes precedence over Detailed, resulting in a more concise explanation of quantum computing"
+    },
+    {
+      "description": "Complex priority with explicit conflict resolution",
+      "usage": "+++Priority(decorators=[Academic,Creative,StepByStep], explicit=true, mode=cascade)\nExplain the water cycle.",
+      "result": "Implements a cascading priority where Academic style dominates, with Creative elements where they don't conflict with Academic style, and StepByStep structure throughout, explicitly noting where decorator behaviors were modified due to conflicts"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o"
+    ]
+  }
+}

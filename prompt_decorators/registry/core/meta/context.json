@@ -1,0 +1,123 @@
+{
+  "decoratorName": "Context",
+  "version": "1.0.0",
+  "description": "A meta-decorator that adapts standard decorators for domain-specific contexts. This provides specialized interpretations of decorators based on particular fields, industries, or subject matter to ensure appropriate adaptation to contextual requirements.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "The specific domain, field, or industry to contextualize decorators for (e.g., 'medicine', 'legal', 'engineering', 'education')",
+      "required": true
+    },
+    {
+      "name": "scope",
+      "type": "enum",
+      "description": "Which aspects of decorators to contextualize",
+      "enum": ["terminology", "examples", "structure", "all"],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The expertise level to target within the domain",
+      "enum": ["beginner", "intermediate", "expert", "mixed"],
+      "default": "mixed",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please adapt your response and the behavior of any other decorators to the specific domain context provided.",
+    "parameterMapping": {
+      "domain": {
+        "format": "Apply specialized knowledge, terminology, and conventions appropriate for the {value} domain."
+      },
+      "scope": {
+        "valueMap": {
+          "terminology": "Use domain-specific terminology and vocabulary from this field, but keep other aspects generalized.",
+          "examples": "Use domain-specific examples and cases to illustrate concepts, but keep terminology and structure generalized.",
+          "structure": "Organize the information according to standard frameworks and structures used in this domain, but keep terminology and examples generalized.",
+          "all": "Apply domain-specific terminology, examples, and structural organization throughout the entire response."
+        }
+      },
+      "level": {
+        "valueMap": {
+          "beginner": "Target the response for newcomers to the field with limited domain knowledge or expertise.",
+          "intermediate": "Target the response for individuals with moderate familiarity and experience in the domain.",
+          "expert": "Target the response for specialists and experts with advanced knowledge in the domain.",
+          "mixed": "Structure the response to be accessible to beginners while also including deeper insights for experts."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Medical domain contextualization for step-by-step explanation",
+        "originalPrompt": "+++StepByStep\n+++Detailed\nExplain how vaccines are developed.",
+        "transformedPrompt": "Please adapt your response and the behavior of any other decorators to the specific domain context provided. Apply specialized knowledge, terminology, and conventions appropriate for the medicine domain. Apply domain-specific terminology, examples, and structural organization throughout the entire response. Structure the response to be accessible to beginners while also including deeper insights for experts.\n\n+++StepByStep\n+++Detailed\nExplain how vaccines are developed."
+      },
+      {
+        "context": "Programming domain with beginner-focused examples",
+        "originalPrompt": "+++Reasoning\n+++ELI5\nExplain how databases work.",
+        "transformedPrompt": "Please adapt your response and the behavior of any other decorators to the specific domain context provided. Apply specialized knowledge, terminology, and conventions appropriate for the programming domain. Use domain-specific examples and cases to illustrate concepts, but keep terminology and structure generalized. Target the response for newcomers to the field with limited domain knowledge or expertise.\n\n+++Reasoning\n+++ELI5\nExplain how databases work."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Audience",
+        "relationship": "enhances",
+        "notes": "Audience complements Context by further refining the target expertise level within the domain context"
+      },
+      {
+        "decorator": "Professional",
+        "relationship": "enhances",
+        "notes": "Professional works well with Context to ensure appropriate formal language for the specific domain context"
+      },
+      {
+        "decorator": "Custom",
+        "relationship": "enhances",
+        "notes": "Custom can provide additional specialized behaviors for particular domain contexts beyond standard adaptations"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Interpret this request within the context of the {domain} field. Use knowledge, terminology, and standards specific to this domain at a {level} level. Focus particularly on domain-appropriate {scope}.",
+        "notes": "This model sometimes needs more explicit reminders to maintain consistent domain-specific focus throughout longer responses"
+      },
+      "gpt-4o": {
+        "instruction": "Frame your response specifically for the {domain} domain. Adjust your {scope} to match domain conventions and target a {level} expertise level.",
+        "notes": "This model handles domain adaptation well but benefits from clear guidance about which aspects to contextualize"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic domain-specific adaptation of decorators",
+      "usage": "+++Context(domain=medicine)\n+++StepByStep\n+++Detailed\nExplain how vaccines are developed.",
+      "result": "Applies the StepByStep and Detailed decorators with medical context-awareness, using appropriate medical terminology, examples, and structures for explaining vaccine development"
+    },
+    {
+      "description": "Targeted contextualization for specific expertise level",
+      "usage": "+++Context(domain=programming, scope=examples, level=beginner)\n+++Reasoning\n+++ELI5\nExplain how databases work.",
+      "result": "Uses the Reasoning and ELI5 decorators with programming-appropriate examples specifically tailored for beginners, while keeping general terminology and structure accessible"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

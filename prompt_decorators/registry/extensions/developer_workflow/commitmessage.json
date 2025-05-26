@@ -1,0 +1,135 @@
+{
+  "decoratorName": "CommitMessage",
+  "version": "1.0.0",
+  "description": "Generates structured, informative commit messages.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Commit message format",
+      "enum": [
+        "conventional",
+        "detailed",
+        "minimal",
+        "semantic",
+        "custom"
+      ],
+      "default": "conventional",
+      "required": false
+    },
+    {
+      "name": "scope",
+      "type": "enum",
+      "description": "Change scope information",
+      "enum": [
+        "include",
+        "exclude"
+      ],
+      "default": "include",
+      "required": false
+    },
+    {
+      "name": "issue",
+      "type": "enum",
+      "description": "Include issue references",
+      "enum": [
+        "none",
+        "reference",
+        "close"
+      ],
+      "default": "reference",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate a commit message that is clear, concise, and follows best practices for version control. The message should effectively communicate the changes made in the commit.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "conventional": "Follow the Conventional Commits format (type(scope): description) with types like feat, fix, docs, style, refactor, test, chore.",
+          "detailed": "Create a detailed commit message with a summary line followed by a blank line and a more detailed explanatory text.",
+          "minimal": "Create a brief, to-the-point commit message focusing only on the essential change.",
+          "semantic": "Use semantic versioning principles to indicate the nature and impact of changes.",
+          "custom": "Format the commit message according to the specific requirements provided in the prompt."
+        }
+      },
+      "scope": {
+        "valueMap": {
+          "include": "Include the scope of the change in parentheses after the type (e.g., feat(auth): add login functionality).",
+          "exclude": "Omit the scope information from the commit message."
+        }
+      },
+      "issue": {
+        "valueMap": {
+          "none": "Do not include any issue references in the commit message.",
+          "reference": "Reference related issues at the end of the commit message (e.g., 'Related to #123').",
+          "close": "Include closing keywords for issues (e.g., 'Closes #123', 'Fixes #123')."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Git commit for a bug fix",
+        "originalPrompt": "Generate a commit message for changes that fix a login error in the authentication module.",
+        "transformedPrompt": "Generate a commit message that is clear, concise, and follows best practices for version control. The message should effectively communicate the changes made in the commit. Follow the Conventional Commits format (type(scope): description) with types like feat, fix, docs, style, refactor, test, chore. Include the scope of the change in parentheses after the type (e.g., feat(auth): add login functionality). Reference related issues at the end of the commit message (e.g., 'Related to #123'). Generate a commit message for changes that fix a login error in the authentication module.",
+        "notes": "The decorator adds specific instructions for formatting the commit message according to conventional commits style."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CommitMessage works well after CodeReview to generate appropriate commit messages based on code changes identified in the review."
+      },
+      {
+        "decorator": "PullRequest",
+        "relationship": "enhances",
+        "notes": "CommitMessage can be used to generate commit messages that will be included in a pull request description."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Write a clear git commit message for the following changes. The message should follow standard commit message conventions and clearly explain what was changed and why.",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Conventional commit message for a bug fix",
+      "usage": "+++CommitMessage(style=conventional, scope=include, issue=reference)\nGenerate a commit message for changes that improve error handling in the authentication module, related to issue #143.",
+      "result": "fix(auth): improve error handling in authentication module\n\nEnhance error handling for failed login attempts with better user feedback and logging. Related to #143"
+    },
+    {
+      "description": "Detailed commit message without scope",
+      "usage": "+++CommitMessage(style=detailed, scope=exclude, issue=close)\nGenerate a commit message for adding a new feature that allows users to reset their password.",
+      "result": "Add password reset functionality\n\nImplements a secure password reset flow with email verification and temporary token generation. Users can now request password resets via the login page and receive email instructions.\n\nCloses #156"
+    },
+    {
+      "description": "Minimal commit message",
+      "usage": "+++CommitMessage(style=minimal, issue=none)\nGenerate a commit message for updating the README with installation instructions.",
+      "result": "Update README with installation instructions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

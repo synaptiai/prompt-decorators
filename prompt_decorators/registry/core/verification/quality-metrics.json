@@ -1,0 +1,116 @@
+{
+  "decoratorName": "QualityMetrics",
+  "version": "1.0.0",
+  "description": "Applies specific quality measurements to evaluate content against defined criteria. This decorator enhances verification by providing quantifiable assessments of aspects like accuracy, completeness, clarity, or other custom metrics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "metrics",
+      "type": "array",
+      "description": "Specific quality metrics to measure (e.g., accuracy, completeness, clarity, usefulness)",
+      "required": false
+    },
+    {
+      "name": "scale",
+      "type": "enum",
+      "description": "Rating scale to use for evaluations",
+      "enum": ["1-5", "1-10", "percentage", "qualitative"],
+      "default": "1-5",
+      "required": false
+    },
+    {
+      "name": "explanation",
+      "type": "boolean",
+      "description": "Whether to provide detailed explanations for each metric score",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please include a quality assessment of your response using specific metrics. After presenting your main content, evaluate it against defined quality criteria with appropriate ratings and explanations where needed.",
+    "parameterMapping": {
+      "metrics": {
+        "format": "Evaluate your response against these specific quality metrics: {value}. For each metric, provide a rating and assess how well the content meets that particular quality standard."
+      },
+      "scale": {
+        "valueMap": {
+          "1-5": "Use a 1-5 scale for your ratings, where 1 represents the lowest quality and 5 represents the highest quality.",
+          "1-10": "Use a 1-10 scale for your ratings, where 1 represents the lowest quality and 10 represents the highest quality.",
+          "percentage": "Express your ratings as percentages, ranging from 0% (lowest quality) to 100% (highest quality).",
+          "qualitative": "Use qualitative ratings (poor, fair, good, excellent) rather than numerical scores."
+        }
+      },
+      "explanation": {
+        "valueMap": {
+          "true": "For each metric, provide a detailed explanation that justifies the rating, citing specific aspects of the content.",
+          "false": "Provide ratings for each metric without detailed explanations."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Financial market trend analysis with standard metrics",
+        "originalPrompt": "My analysis of the financial market trends is as follows...",
+        "transformedPrompt": "Please include a quality assessment of your response using specific metrics. After presenting your main content, evaluate it against defined quality criteria with appropriate ratings and explanations where needed. Use a 1-5 scale for your ratings, where 1 represents the lowest quality and 5 represents the highest quality. For each metric, provide a detailed explanation that justifies the rating, citing specific aspects of the content.\n\nMy analysis of the financial market trends is as follows..."
+      },
+      {
+        "context": "Urban housing policy proposal with custom qualitative metrics",
+        "originalPrompt": "Here's my policy proposal for urban housing...",
+        "transformedPrompt": "Please include a quality assessment of your response using specific metrics. After presenting your main content, evaluate it against defined quality criteria with appropriate ratings and explanations where needed. Evaluate your response against these specific quality metrics: [factual accuracy,predictive value,consideration of alternatives,logical flow]. For each metric, provide a rating and assess how well the content meets that particular quality standard. Use qualitative ratings (poor, fair, good, excellent) rather than numerical scores. For each metric, provide a detailed explanation that justifies the rating, citing specific aspects of the content.\n\nHere's my policy proposal for urban housing..."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "PeerReview",
+        "relationship": "enhances",
+        "notes": "QualityMetrics provides structured quantitative assessment while PeerReview offers broader critique and improvement suggestions"
+      },
+      {
+        "decorator": "FactCheck",
+        "relationship": "enhances",
+        "notes": "FactCheck verifies specific claims while QualityMetrics assesses broader aspects including but not limited to factual accuracy"
+      },
+      {
+        "decorator": "Confidence",
+        "relationship": "enhances",
+        "notes": "Confidence indicates certainty in content while QualityMetrics evaluates multiple dimensions of quality"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "After providing your main response on this topic, evaluate the quality of your own response. Rate it on these metrics: {metrics} using a {scale} scale. {explanation} Present this evaluation in a clear 'Quality Assessment' section at the end of your response. Be honest and critical in your self-assessment.",
+        "notes": "This model may need explicit instructions to be sufficiently critical in its self-assessment rather than defaulting to consistently high ratings"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic quality assessment of an analysis",
+      "usage": "+++QualityMetrics\nMy analysis of the financial market trends is as follows...",
+      "result": "Provides the analysis of financial market trends, followed by 1-5 ratings across standard quality metrics with explanations for each score"
+    },
+    {
+      "description": "Specific custom metrics with detailed qualitative assessment",
+      "usage": "+++QualityMetrics(metrics=[factual accuracy,predictive value,consideration of alternatives,logical flow], scale=qualitative, explanation=true)\nHere's my policy proposal for urban housing...",
+      "result": "Delivers the policy proposal, followed by qualitative assessments (poor/fair/good/excellent) of the four specified metrics, with detailed explanations for each evaluation"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

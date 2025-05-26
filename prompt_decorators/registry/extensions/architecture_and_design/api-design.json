@@ -1,0 +1,151 @@
+{
+  "decoratorName": "APIDesign",
+  "version": "1.0.0",
+  "description": "Designs API interfaces focusing on specific qualities.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "API architectural style",
+      "enum": [
+        "rest",
+        "graphql",
+        "grpc",
+        "soap",
+        "websocket",
+        "webhook"
+      ],
+      "default": "rest",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Design priority",
+      "enum": [
+        "consistency",
+        "performance",
+        "developer-experience",
+        "backward-compatibility"
+      ],
+      "default": "developer-experience",
+      "required": false
+    },
+    {
+      "name": "documentation",
+      "type": "enum",
+      "description": "Documentation approach",
+      "enum": [
+        "openapi",
+        "graphql-schema",
+        "protobuf",
+        "custom",
+        "style-appropriate"
+      ],
+      "default": "style-appropriate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Design an API that follows best practices and industry standards. Consider the interface design, endpoint structure, data formats, error handling, and authentication mechanisms.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "rest": "Design a RESTful API with appropriate resource-oriented endpoints, HTTP methods, and status codes.",
+          "graphql": "Design a GraphQL API with a well-structured schema, queries, mutations, and resolvers.",
+          "grpc": "Design a gRPC API with efficient protocol buffers and service definitions.",
+          "soap": "Design a SOAP API with appropriate XML schemas and WSDL definitions.",
+          "websocket": "Design a WebSocket API for real-time bidirectional communication.",
+          "webhook": "Design a webhook-based API for event-driven architectures."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "consistency": "Prioritize consistency in naming conventions, response formats, and error handling across all endpoints.",
+          "performance": "Optimize for performance with efficient data transfer, pagination, and caching strategies.",
+          "developer-experience": "Prioritize developer experience with intuitive endpoints, comprehensive documentation, and helpful error messages.",
+          "backward-compatibility": "Ensure backward compatibility through careful versioning and deprecation strategies."
+        }
+      },
+      "documentation": {
+        "valueMap": {
+          "openapi": "Document the API using OpenAPI/Swagger specifications.",
+          "graphql-schema": "Document the API using GraphQL schema language and introspection.",
+          "protobuf": "Document the API using Protocol Buffer definitions.",
+          "custom": "Create custom documentation that clearly explains all endpoints, parameters, and responses.",
+          "style-appropriate": "Use the documentation format most appropriate for the chosen API style."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Designing a REST API for a content management system",
+        "originalPrompt": "Design an API for a content management system.",
+        "transformedPrompt": "Design an API that follows best practices and industry standards. Consider the interface design, endpoint structure, data formats, error handling, and authentication mechanisms. Design a RESTful API with appropriate resource-oriented endpoints, HTTP methods, and status codes. Prioritize developer experience with intuitive endpoints, comprehensive documentation, and helpful error messages. Use the documentation format most appropriate for the chosen API style.\n\nDesign an API for a content management system.",
+        "notes": "The decorator adds specific guidance for REST API design with a focus on developer experience."
+      },
+      {
+        "context": "Designing a GraphQL API with performance focus",
+        "originalPrompt": "Create an API for an e-commerce platform.",
+        "transformedPrompt": "Design an API that follows best practices and industry standards. Consider the interface design, endpoint structure, data formats, error handling, and authentication mechanisms. Design a GraphQL API with a well-structured schema, queries, mutations, and resolvers. Optimize for performance with efficient data transfer, pagination, and caching strategies. Document the API using GraphQL schema language and introspection.\n\nCreate an API for an e-commerce platform.",
+        "notes": "The decorator adds specific guidance for GraphQL API design with a focus on performance and appropriate documentation."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SystemDesign",
+        "relationship": "enhances",
+        "notes": "APIDesign works well with SystemDesign by focusing on the API layer of a larger system architecture."
+      },
+      {
+        "decorator": "DatabaseDesign",
+        "relationship": "enhances",
+        "notes": "APIDesign can be combined with DatabaseDesign to create a complete data access solution."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Design an API following these specific requirements: {style} architecture, focusing on {focus}, with {documentation} documentation approach. Consider endpoints, data formats, error handling, and authentication.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Designing a GraphQL API for a content management system",
+      "usage": "+++APIDesign(style=graphql, focus=developer-experience, documentation=graphql-schema)\nDesign a GraphQL API for a content management system that prioritizes a great developer experience.",
+      "result": "A comprehensive GraphQL API design for a CMS with a focus on developer experience, including schema definitions, query/mutation examples, and GraphQL-specific documentation."
+    },
+    {
+      "description": "Designing a REST API focused on performance",
+      "usage": "+++APIDesign(style=rest, focus=performance)\nDesign an API for a high-traffic e-commerce platform.",
+      "result": "A RESTful API design optimized for performance, with caching strategies, pagination, and efficient data transfer patterns."
+    },
+    {
+      "description": "Designing a gRPC API with backward compatibility",
+      "usage": "+++APIDesign(style=grpc, focus=backward-compatibility, documentation=protobuf)\nDesign an API for a microservice architecture that needs to maintain compatibility with existing clients.",
+      "result": "A gRPC API design with Protocol Buffer definitions that emphasizes versioning strategies and backward compatibility approaches."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "claude-instant"
+    ]
+  }
+}
