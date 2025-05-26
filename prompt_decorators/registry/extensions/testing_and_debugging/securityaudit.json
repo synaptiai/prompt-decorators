@@ -1,0 +1,141 @@
+{
+  "decoratorName": "SecurityAudit",
+  "version": "1.0.0",
+  "description": "Performs security-focused analysis following industry standards.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "standard",
+      "type": "enum",
+      "description": "Security standard to follow",
+      "enum": [
+        "owasp-top10",
+        "sans-top25",
+        "cwe",
+        "nist",
+        "gdpr",
+        "hipaa"
+      ],
+      "default": "owasp-top10",
+      "required": false
+    },
+    {
+      "name": "risk-level",
+      "type": "enum",
+      "description": "Sensitivity for flagging issues",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "required": false
+    },
+    {
+      "name": "scope",
+      "type": "enum",
+      "description": "Areas to evaluate",
+      "enum": [
+        "input-validation",
+        "authentication",
+        "authorization",
+        "data-protection",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Perform a security audit on the following content. Identify potential security vulnerabilities and provide recommendations for remediation.",
+    "parameterMapping": {
+      "standard": {
+        "valueMap": {
+          "owasp-top10": "Follow OWASP Top 10 guidelines to identify common web application security risks.",
+          "sans-top25": "Use SANS Top 25 Most Dangerous Software Errors as a reference framework.",
+          "cwe": "Reference the Common Weakness Enumeration (CWE) database for vulnerability identification.",
+          "nist": "Apply NIST Cybersecurity Framework standards for the security assessment.",
+          "gdpr": "Evaluate compliance with GDPR data protection and privacy requirements.",
+          "hipaa": "Assess against HIPAA security and privacy standards for healthcare information."
+        }
+      },
+      "risk-level": {
+        "valueMap": {
+          "low": "Flag only critical and high-severity security issues.",
+          "medium": "Identify critical, high, and medium-severity security concerns.",
+          "high": "Report all security issues including low-severity and potential future concerns."
+        }
+      },
+      "scope": {
+        "valueMap": {
+          "input-validation": "Focus on input validation vulnerabilities such as injection attacks, XSS, and input sanitization.",
+          "authentication": "Concentrate on authentication mechanisms, credential management, and session handling.",
+          "authorization": "Examine authorization controls, access rights, and privilege escalation risks.",
+          "data-protection": "Analyze data encryption, storage practices, and sensitive information handling.",
+          "all": "Conduct a comprehensive security review across all potential vulnerability categories."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Code review for a web application",
+        "originalPrompt": "Review this login function for issues:\n\nfunction login(username, password) {\n  const user = db.findUser(username);\n  if (user && user.password === password) {\n    return generateToken(user);\n  }\n  return null;\n}",
+        "transformedPrompt": "Perform a security audit on the following content. Identify potential security vulnerabilities and provide recommendations for remediation. Follow OWASP Top 10 guidelines to identify common web application security risks. Identify critical, high, and medium-severity security concerns. Conduct a comprehensive security review across all potential vulnerability categories.\n\nReview this login function for issues:\n\nfunction login(username, password) {\n  const user = db.findUser(username);\n  if (user && user.password === password) {\n    return generateToken(user);\n  }\n  return null;\n}",
+        "notes": "The security audit decorator adds specific instructions to evaluate the code against security standards with appropriate risk sensitivity."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "SecurityAudit adds security-specific analysis to general code reviews."
+      },
+      {
+        "decorator": "Simplify",
+        "relationship": "conflicts",
+        "notes": "Security audits require detailed analysis which conflicts with simplification."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze the following for security vulnerabilities according to industry standards. Identify risks and suggest fixes.",
+        "notes": "Simplified instruction for models with less security expertise."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic security audit of a web API endpoint",
+      "usage": "+++SecurityAudit(standard=owasp-top10, risk-level=medium, scope=input-validation)\nAudit this express.js API endpoint for security vulnerabilities.",
+      "result": "Performs a security audit focused on input validation vulnerabilities according to OWASP Top 10, with medium risk sensitivity."
+    },
+    {
+      "description": "Comprehensive HIPAA compliance check",
+      "usage": "+++SecurityAudit(standard=hipaa, risk-level=high, scope=all)\nReview this patient data handling code for security issues.",
+      "result": "Conducts a thorough security assessment against HIPAA standards across all security domains with high sensitivity to potential issues."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Simplify",
+      "CreativeWriting"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

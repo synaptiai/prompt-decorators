@@ -1,0 +1,116 @@
+{
+  "decoratorName": "Summary",
+  "version": "1.0.0",
+  "description": "Provides a condensed summary of information that would otherwise be presented in a more detailed format. This decorator is useful for generating executive summaries, article summaries, or concise overviews of complex topics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "length",
+      "type": "enum",
+      "description": "Relative length of the summary",
+      "enum": ["short", "medium", "long"],
+      "default": "medium",
+      "required": false
+    },
+    {
+      "name": "wordCount",
+      "type": "number",
+      "description": "Approximate target word count for the summary",
+      "required": false,
+      "validation": {
+        "minimum": 10,
+        "maximum": 500
+      }
+    },
+    {
+      "name": "position",
+      "type": "enum",
+      "description": "Where to position the summary in relation to any full content",
+      "enum": ["beginning", "end", "standalone"],
+      "default": "standalone",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide a condensed summary of the information in your response.",
+    "parameterMapping": {
+      "length": {
+        "valueMap": {
+          "short": "Make the summary very concise (approximately 2-3 sentences) capturing only the most essential points.",
+          "medium": "Create a moderate-length summary that includes main ideas and key supporting details (approximately 1 paragraph).",
+          "long": "Provide a comprehensive summary that covers all significant points while still being more condensed than a full explanation (approximately 2-3 paragraphs)."
+        }
+      },
+      "wordCount": {
+        "format": "The summary should be approximately {value} words in length."
+      },
+      "position": {
+        "valueMap": {
+          "beginning": "Place the summary at the beginning of your response, before any detailed content.",
+          "end": "Place the summary at the end of your response, after providing the detailed content.",
+          "standalone": "Provide only the summary without additional detailed content."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Short standalone summary",
+        "originalPrompt": "Explain quantum computing and its potential applications.",
+        "transformedPrompt": "Please provide a condensed summary of the information in your response. Make the summary very concise (approximately 2-3 sentences) capturing only the most essential points. Provide only the summary without additional detailed content.\n\nExplain quantum computing and its potential applications."
+      },
+      {
+        "context": "Word-count limited summary at beginning",
+        "originalPrompt": "Describe the causes and effects of climate change.",
+        "transformedPrompt": "Please provide a condensed summary of the information in your response. The summary should be approximately 100 words in length. Place the summary at the beginning of your response, before any detailed content.\n\nDescribe the causes and effects of climate change."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Detailed",
+        "relationship": "conflicts",
+        "notes": "Summary aims for concise information, which directly conflicts with Detailed's expansive approach"
+      },
+      {
+        "decorator": "Concise",
+        "relationship": "enhances",
+        "notes": "Summary and Concise work well together for extremely brief outputs"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a brief summary that captures the key points of your response. Focus on the most important information.",
+        "notes": "This model sometimes requires more explicit instructions about brevity"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Short standalone summary of a complex topic",
+      "usage": "+++Summary(length=short)\nExplain quantum computing and its potential applications.",
+      "result": "Delivers a concise overview of quantum computing and its applications in approximately 2-3 sentences"
+    },
+    {
+      "description": "Specific word count summary at the beginning of a response",
+      "usage": "+++Summary(wordCount=100, position=beginning)\nDescribe the causes and effects of climate change.",
+      "result": "Starts with a 100-word summary of climate change causes and effects, followed by more detailed information"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Detailed"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "decoratorName": "DebugStrategy",
+  "version": "1.0.0",
+  "description": "Specifies the overall approach to debugging and problem analysis.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Debugging methodology",
+      "enum": [
+        "systematic",
+        "incremental",
+        "root-cause",
+        "isolation",
+        "comparison"
+      ],
+      "default": "systematic",
+      "required": false
+    },
+    {
+      "name": "verbosity",
+      "type": "enum",
+      "description": "Debug output verbosity",
+      "enum": [
+        "minimal",
+        "standard",
+        "verbose",
+        "comprehensive"
+      ],
+      "default": "standard",
+      "required": false
+    },
+    {
+      "name": "priority",
+      "type": "enum",
+      "description": "Issue resolution priority",
+      "enum": [
+        "functionality",
+        "performance",
+        "ux",
+        "security"
+      ],
+      "default": "functionality",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Apply a structured debugging approach to analyze and solve the problem.",
+    "parameterMapping": {
+      "approach": {
+        "valueMap": {
+          "systematic": "Use a systematic step-by-step debugging approach to identify and resolve issues.",
+          "incremental": "Debug incrementally by making small changes and testing after each modification.",
+          "root-cause": "Focus on identifying the underlying root cause rather than addressing symptoms.",
+          "isolation": "Isolate components to determine which specific part is causing the issue.",
+          "comparison": "Compare working and non-working states to identify differences causing the problem."
+        }
+      },
+      "verbosity": {
+        "valueMap": {
+          "minimal": "Provide only essential information about the debugging process and findings.",
+          "standard": "Include a balanced amount of detail about the debugging process and findings.",
+          "verbose": "Provide detailed explanations of each debugging step and observation.",
+          "comprehensive": "Document exhaustively all aspects of the debugging process, including all tests performed and results observed."
+        }
+      },
+      "priority": {
+        "valueMap": {
+          "functionality": "Prioritize restoring basic functionality over other concerns.",
+          "performance": "Focus on optimizing performance aspects of the solution.",
+          "ux": "Emphasize user experience considerations in the debugging process.",
+          "security": "Prioritize security implications and vulnerabilities in the debugging process."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software development debugging",
+        "originalPrompt": "Debug the authentication failure that occurs when users attempt to log in with social credentials. Identify the exact point of failure.",
+        "transformedPrompt": "Apply a structured debugging approach to analyze and solve the problem. Focus on identifying the underlying root cause rather than addressing symptoms. Provide detailed explanations of each debugging step and observation. Prioritize restoring basic functionality over other concerns.\n\nDebug the authentication failure that occurs when users attempt to log in with social credentials. Identify the exact point of failure.",
+        "notes": "The decorator adds specific debugging instructions based on the selected approach, verbosity, and priority parameters."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeAnalysis",
+        "relationship": "enhances",
+        "notes": "DebugStrategy works well with CodeAnalysis to provide a comprehensive debugging framework."
+      },
+      {
+        "decorator": "QuickFix",
+        "relationship": "conflicts",
+        "notes": "DebugStrategy focuses on thorough analysis which may conflict with QuickFix's emphasis on rapid solutions."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Use a structured debugging approach to solve this problem. {approach_instruction} {verbosity_instruction} {priority_instruction}",
+        "notes": "Simplified instruction format for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Root cause analysis of an authentication issue",
+      "usage": "+++DebugStrategy(approach=root-cause, verbosity=verbose, priority=functionality)\nDebug the authentication failure that occurs when users attempt to log in with social credentials. Identify the exact point of failure.",
+      "result": "A detailed analysis focusing on finding the root cause of the authentication failure, with verbose explanations of each debugging step, prioritizing the restoration of functionality."
+    },
+    {
+      "description": "Minimal debugging of a performance issue",
+      "usage": "+++DebugStrategy(approach=isolation, verbosity=minimal, priority=performance)\nThe application becomes slow after processing large datasets. Debug the performance bottleneck.",
+      "result": "A concise analysis that isolates components to identify performance bottlenecks, with minimal explanatory text, focusing on performance optimization."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "QuickFix"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

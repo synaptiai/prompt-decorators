@@ -1,0 +1,125 @@
+{
+  "decoratorName": "Iterate",
+  "version": "1.0.0",
+  "description": "Indicates this is an iteration on previously generated code, with specific improvements needed.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "version",
+      "type": "number",
+      "description": "Iteration number",
+      "default": 2,
+      "required": false
+    },
+    {
+      "name": "feedback",
+      "type": "enum",
+      "description": "Type of feedback addressed",
+      "enum": [
+        "review-comments",
+        "bug-fixes",
+        "performance-issues",
+        "feature-requests"
+      ],
+      "default": "review-comments",
+      "required": false
+    },
+    {
+      "name": "priority",
+      "type": "enum",
+      "description": "Implementation priority",
+      "enum": [
+        "correctness",
+        "completeness",
+        "performance",
+        "readability"
+      ],
+      "default": "correctness",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "This is iteration {version} of the code implementation. Please focus on addressing the following feedback: {feedback}, with priority on {priority}.",
+    "parameterMapping": {
+      "version": {
+        "format": "{value}"
+      },
+      "feedback": {
+        "valueMap": {
+          "review-comments": "code review comments",
+          "bug-fixes": "bug fixes",
+          "performance-issues": "performance issues",
+          "feature-requests": "feature requests"
+        }
+      },
+      "priority": {
+        "valueMap": {
+          "correctness": "ensuring code correctness",
+          "completeness": "ensuring feature completeness",
+          "performance": "optimizing performance",
+          "readability": "improving code readability"
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web development",
+        "originalPrompt": "Create an authentication middleware for Express.js",
+        "transformedPrompt": "This is iteration 2 of the code implementation. Please focus on addressing the following feedback: code review comments, with priority on ensuring code correctness.\n\nCreate an authentication middleware for Express.js",
+        "notes": "The decorator indicates this is a follow-up request to improve previously generated code."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "Iterate works well after CodeReview to implement suggested changes."
+      },
+      {
+        "decorator": "FromScratch",
+        "relationship": "conflicts",
+        "notes": "Iterate assumes existing code to improve upon, which conflicts with FromScratch's purpose."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "This is iteration {version}. I need you to improve the previously generated code based on {feedback} feedback. Focus primarily on {priority}.",
+        "notes": "Simpler phrasing works better with this model."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic iteration on authentication middleware",
+      "usage": "+++Iterate(version=2, feedback=review-comments, priority=correctness)\nUpdate the authentication middleware based on these code review comments: 1) Token expiration is not properly checked, 2) Error messages are not consistent.",
+      "result": "The model will understand this is the second iteration of code, focusing on fixing specific review comments with correctness as the priority."
+    },
+    {
+      "description": "Performance improvement iteration",
+      "usage": "+++Iterate(feedback=performance-issues, priority=performance)\nThe database query in the user service is taking too long. Please optimize it.",
+      "result": "The model will understand this is an iteration focused on performance issues, with performance optimization as the priority."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "FromScratch"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

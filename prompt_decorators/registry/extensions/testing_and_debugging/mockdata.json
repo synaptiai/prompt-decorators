@@ -1,0 +1,132 @@
+{
+  "decoratorName": "MockData",
+  "version": "1.0.0",
+  "description": "Generates test fixtures and mock data for testing.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "complexity",
+      "type": "enum",
+      "description": "Sophistication of generated data",
+      "enum": [
+        "simple",
+        "moderate",
+        "complex"
+      ],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Output format of the mock data",
+      "enum": [
+        "json",
+        "csv",
+        "sql",
+        "code",
+        "graphql"
+      ],
+      "default": "json",
+      "required": false
+    },
+    {
+      "name": "size",
+      "type": "enum",
+      "description": "Amount of mock data to generate",
+      "enum": [
+        "small",
+        "medium",
+        "large"
+      ],
+      "default": "medium",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate mock data according to the specified parameters. The data should be realistic but not real.",
+    "parameterMapping": {
+      "complexity": {
+        "valueMap": {
+          "simple": "Create basic mock data with minimal fields and simple relationships.",
+          "moderate": "Generate mock data with reasonable complexity including relationships and varied field values.",
+          "complex": "Produce sophisticated mock data with complex relationships, edge cases, and realistic variations."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "json": "Output the mock data in JSON format.",
+          "csv": "Output the mock data in CSV format.",
+          "sql": "Output the mock data as SQL insert statements.",
+          "code": "Output the mock data as code objects in a programming language appropriate to the context.",
+          "graphql": "Output the mock data in GraphQL format."
+        }
+      },
+      "size": {
+        "valueMap": {
+          "small": "Generate a small sample of 3-5 records per entity.",
+          "medium": "Generate a medium-sized dataset of 10-20 records per entity.",
+          "large": "Generate a large dataset of 50-100 records per entity."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "E-commerce application testing",
+        "originalPrompt": "Generate mock data for an e-commerce system with users, products, orders, and reviews.",
+        "transformedPrompt": "Generate mock data according to the specified parameters. The data should be realistic but not real. Generate mock data with reasonable complexity including relationships and varied field values. Output the mock data in JSON format. Generate a medium-sized dataset of 10-20 records per entity.\n\nGenerate mock data for an e-commerce system with users, products, orders, and reviews.",
+        "notes": "The decorator adds specific instructions about the complexity, format, and size of the mock data to generate."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeGeneration",
+        "relationship": "enhances",
+        "notes": "MockData works well with CodeGeneration to create test fixtures within generated code."
+      },
+      {
+        "decorator": "DataAnalysis",
+        "relationship": "enhances",
+        "notes": "MockData can provide test data for DataAnalysis examples."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create realistic mock data for testing purposes. The data should be fictional but plausible.",
+        "notes": "Simpler instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Generating complex JSON mock data for an e-commerce system",
+      "usage": "+++MockData(complexity=complex, format=json, size=medium)\nGenerate mock data for an e-commerce system with users, products, orders, and reviews.",
+      "result": "Returns a medium-sized set of complex, interconnected mock data in JSON format for an e-commerce system, including users, products, orders, and reviews with realistic relationships."
+    },
+    {
+      "description": "Creating simple SQL test data",
+      "usage": "+++MockData(complexity=simple, format=sql, size=small)\nGenerate test data for a blog database with authors, posts, and comments.",
+      "result": "Returns SQL insert statements for a small set of simple blog data including authors, posts, and comments tables."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

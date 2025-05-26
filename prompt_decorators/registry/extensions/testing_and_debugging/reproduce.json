@@ -1,0 +1,137 @@
+{
+  "decoratorName": "Reproduce",
+  "version": "1.0.0",
+  "description": "Creates detailed steps to reproduce a reported issue.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "environment",
+      "type": "enum",
+      "description": "Target environment for reproduction",
+      "enum": [
+        "local",
+        "staging",
+        "prod",
+        "docker",
+        "specific-version"
+      ],
+      "default": "local",
+      "required": false
+    },
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Level of detail in steps",
+      "enum": [
+        "minimal",
+        "comprehensive",
+        "debug-oriented"
+      ],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Output format",
+      "enum": [
+        "steps",
+        "script",
+        "docker-compose",
+        "video-script"
+      ],
+      "default": "steps",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create detailed steps to reproduce the reported issue. Focus on clarity and completeness so that someone else can follow these steps to observe the same behavior.",
+    "parameterMapping": {
+      "environment": {
+        "valueMap": {
+          "local": "Provide reproduction steps for a local development environment.",
+          "staging": "Provide reproduction steps specifically for a staging environment.",
+          "prod": "Provide reproduction steps that can be safely executed in a production environment.",
+          "docker": "Provide reproduction steps using Docker containers.",
+          "specific-version": "Provide reproduction steps for a specific software version, noting version dependencies."
+        }
+      },
+      "detail": {
+        "valueMap": {
+          "minimal": "Provide only the essential steps needed to reproduce the issue.",
+          "comprehensive": "Provide detailed steps including setup, execution, and verification of the issue.",
+          "debug-oriented": "Provide extremely detailed steps with debugging information, logging points, and state verification throughout the process."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "steps": "Format the reproduction as numbered steps with clear instructions.",
+          "script": "Format the reproduction as a script that can be executed to reproduce the issue.",
+          "docker-compose": "Format the reproduction as a docker-compose configuration and associated commands.",
+          "video-script": "Format the reproduction as a script for creating a demonstration video, including visual cues and narration points."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Bug reproduction for web application",
+        "originalPrompt": "Create reproduction steps for a race condition we're seeing in our payment processing service.",
+        "transformedPrompt": "Create detailed steps to reproduce the reported issue. Focus on clarity and completeness so that someone else can follow these steps to observe the same behavior. Provide reproduction steps using Docker containers. Provide detailed steps including setup, execution, and verification of the issue. Format the reproduction as a script that can be executed to reproduce the issue.\n\nCreate reproduction steps for a race condition we're seeing in our payment processing service.",
+        "notes": "The decorator adds specific instructions about environment (Docker), detail level (comprehensive), and format (script) to guide the reproduction creation."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Debug",
+        "relationship": "enhances",
+        "notes": "The Debug decorator can enhance Reproduce by adding specific debugging techniques to the reproduction steps."
+      },
+      {
+        "decorator": "Summarize",
+        "relationship": "conflicts",
+        "notes": "The Summarize decorator conflicts with Reproduce as it would condense the detailed steps needed for proper reproduction."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create clear, step-by-step instructions to reproduce the reported issue. Be specific about environment setup, actions to take, and expected results.",
+        "notes": "Simpler instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Creating Docker-based reproduction steps for a race condition",
+      "usage": "+++Reproduce(environment=docker, detail=comprehensive, format=script)\nCreate reproduction steps for a race condition we're seeing in our payment processing service.",
+      "result": "A comprehensive script that can be executed to reproduce the race condition in a Docker environment, including setup, execution steps, and verification points."
+    },
+    {
+      "description": "Minimal reproduction steps for a UI bug",
+      "usage": "+++Reproduce(detail=minimal)\nCreate steps to reproduce the dropdown menu disappearing in our admin panel.",
+      "result": "A concise list of essential steps needed to observe the dropdown menu bug in a local environment."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Summarize",
+      "Condense"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}
