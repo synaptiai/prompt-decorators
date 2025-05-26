@@ -32,7 +32,7 @@ class VersionPart(enum.Enum):
 class ReleaseManager:
     """Manages the release process for the Prompt Decorators library."""
 
-    def __init__(self, dry_run=False, confirm=True):
+    def __init__(self, dry_run: bool = False, confirm: bool = True) -> None:
         """
         Initialize the release manager.
 
@@ -265,8 +265,35 @@ class ReleaseManager:
 
     def _build_and_publish(self) -> None:
         """Build and publish the package to PyPI."""
-        # Implementation of _build_and_publish method
-        pass
+        print("Building and publishing package...")
+
+        # Clean previous builds
+        self._run_command(["rm", "-rf", "dist/", "build/"])
+
+        # Build the package using Poetry
+        self._run_command(["poetry", "build"])
+
+        # Verify build contents
+        print("Verifying build contents...")
+        try:
+            verify_script = Path(__file__).parent / "verify_build.py"
+            if verify_script.exists():
+                self._run_command([sys.executable, str(verify_script)])
+            else:
+                print("Warning: Build verification script not found")
+        except Exception as e:
+            print(f"Warning: Build verification failed: {e}")
+
+        # Publish to PyPI (if not dry run and user confirms)
+        if self.confirm:
+            response = input("Publish to PyPI? (y/N): ")
+            if response.lower() != "y":
+                print("Publishing cancelled by user")
+                return
+
+        print("Publishing to PyPI...")
+        self._run_command(["poetry", "publish"])
+        print("Package published successfully!")
 
     def _run_command(self, command: List[str]) -> str:
         """Run a shell command and return its output."""
@@ -277,7 +304,7 @@ class ReleaseManager:
         return result.stdout.strip()
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Prompt Decorators release script")
     parser.add_argument(
