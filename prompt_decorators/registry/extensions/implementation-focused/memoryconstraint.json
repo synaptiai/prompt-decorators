@@ -1,0 +1,137 @@
+{
+  "decoratorName": "MemoryConstraint",
+  "version": "1.0.0",
+  "description": "Helps manage implementation within AI context window limitations by focusing on specific code portions.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Part of the code to focus on",
+      "enum": [
+        "single-function",
+        "component",
+        "interface",
+        "specific-feature"
+      ],
+      "default": "component",
+      "required": false
+    },
+    {
+      "name": "implementation",
+      "type": "enum",
+      "description": "Implementation completeness",
+      "enum": [
+        "skeleton",
+        "core-logic",
+        "full-implementation",
+        "with-tests"
+      ],
+      "default": "core-logic",
+      "required": false
+    },
+    {
+      "name": "context",
+      "type": "enum",
+      "description": "How to handle surrounding code",
+      "enum": [
+        "ignore",
+        "summarize",
+        "interface-only",
+        "stub"
+      ],
+      "default": "summarize",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Focus on implementing the specified code portion while managing memory constraints. Prioritize clarity and correctness within the scope.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "single-function": "Focus only on implementing a single function or method.",
+          "component": "Implement a complete component with its related functions.",
+          "interface": "Focus on defining the interface or API surface.",
+          "specific-feature": "Implement a specific feature across relevant functions/components."
+        }
+      },
+      "implementation": {
+        "valueMap": {
+          "skeleton": "Provide only the structure/skeleton of the implementation with minimal logic.",
+          "core-logic": "Implement the core logic while omitting edge cases and optimizations.",
+          "full-implementation": "Provide a complete implementation with error handling and edge cases.",
+          "with-tests": "Include both implementation and unit tests for the code."
+        }
+      },
+      "context": {
+        "valueMap": {
+          "ignore": "Ignore any surrounding code context in your implementation.",
+          "summarize": "Briefly summarize how this implementation fits into the broader codebase.",
+          "interface-only": "Only reference interfaces or signatures of surrounding code.",
+          "stub": "Include stub implementations for surrounding code dependencies."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application development",
+        "originalPrompt": "Implement the user authentication function that verifies credentials against our database.",
+        "transformedPrompt": "Focus only on implementing a single function or method. Provide a complete implementation with error handling and edge cases. Only reference interfaces or signatures of surrounding code.\n\nImplement the user authentication function that verifies credentials against our database.",
+        "notes": "The decorator helps focus the implementation on just the authentication function with complete implementation while only referencing interfaces of surrounding code."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeStyle",
+        "relationship": "enhances",
+        "notes": "Can be combined with CodeStyle to specify both memory constraints and coding style preferences."
+      },
+      {
+        "decorator": "FullSystemDesign",
+        "relationship": "conflicts",
+        "notes": "Conflicts with decorators that request comprehensive system designs as MemoryConstraint deliberately limits scope."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Due to context window limitations, focus specifically on: {focus} with {implementation} level of detail. For surrounding code, {context}.",
+        "notes": "More explicit instructions needed for models with smaller context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Implementing a single authentication function with full implementation",
+      "usage": "+++MemoryConstraint(focus=single-function, implementation=full-implementation, context=interface-only)\nImplement the user authentication function that verifies credentials against our database.",
+      "result": "A complete implementation of just the authentication function with error handling and edge cases, referencing only the interfaces of surrounding code."
+    },
+    {
+      "description": "Creating a component skeleton with stubbed dependencies",
+      "usage": "+++MemoryConstraint(focus=component, implementation=skeleton, context=stub)\nImplement a shopping cart component for our e-commerce application.",
+      "result": "A structural skeleton of the shopping cart component with stubbed implementations of dependencies."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "FullSystemDesign",
+      "ComprehensiveImplementation"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

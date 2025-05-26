@@ -1,0 +1,159 @@
+{
+  "decoratorName": "Documentation",
+  "version": "1.0.0",
+  "description": "Creates comprehensive documentation for various audiences.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "for",
+      "type": "enum",
+      "description": "Documentation target",
+      "enum": [
+        "code",
+        "api",
+        "user",
+        "admin",
+        "architecture"
+      ],
+      "default": "code",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Documentation format",
+      "enum": [
+        "markdown",
+        "javadoc",
+        "jsdoc",
+        "openapi",
+        "restructuredtext",
+        "html",
+        "jupyter"
+      ],
+      "default": "markdown",
+      "required": false
+    },
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Documentation comprehensiveness",
+      "enum": [
+        "minimal",
+        "standard",
+        "comprehensive"
+      ],
+      "default": "standard",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create comprehensive documentation based on the provided content.",
+    "parameterMapping": {
+      "for": {
+        "valueMap": {
+          "code": "Create code documentation that explains the implementation details, functions, classes, and methods.",
+          "api": "Create API documentation that includes endpoints, request/response formats, authentication, and error handling.",
+          "user": "Create user documentation that explains how to use the product or service from an end-user perspective.",
+          "admin": "Create administrator documentation that explains how to configure, manage, and troubleshoot the system.",
+          "architecture": "Create architecture documentation that explains the system design, components, and their interactions."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "markdown": "Format the documentation in Markdown syntax.",
+          "javadoc": "Format the documentation in Javadoc syntax.",
+          "jsdoc": "Format the documentation in JSDoc syntax.",
+          "openapi": "Format the documentation following OpenAPI specification.",
+          "restructuredtext": "Format the documentation in reStructuredText syntax.",
+          "html": "Format the documentation in HTML.",
+          "jupyter": "Format the documentation as a Jupyter notebook with explanatory cells."
+        }
+      },
+      "detail": {
+        "valueMap": {
+          "minimal": "Include only essential information with brief descriptions.",
+          "standard": "Include standard level of detail with examples and explanations.",
+          "comprehensive": "Include exhaustive details, examples, edge cases, and cross-references."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "API Documentation",
+        "originalPrompt": "Create documentation for our payment processing API.",
+        "transformedPrompt": "Create API documentation that includes endpoints, request/response formats, authentication, and error handling. Format the documentation in Markdown syntax. Include standard level of detail with examples and explanations.\n\nCreate documentation for our payment processing API.",
+        "notes": "The decorator adds specific guidance on what elements to include in API documentation."
+      },
+      {
+        "context": "Code Documentation",
+        "originalPrompt": "Document this Python class for calculating mortgage payments.",
+        "transformedPrompt": "Create code documentation that explains the implementation details, functions, classes, and methods. Format the documentation in reStructuredText syntax. Include exhaustive details, examples, edge cases, and cross-references.\n\nDocument this Python class for calculating mortgage payments.",
+        "notes": "The decorator specifies the format and level of detail for code documentation."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeAnalysis",
+        "relationship": "enhances",
+        "notes": "Documentation works well after CodeAnalysis to document the analyzed code."
+      },
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "ELI5 simplifies content while Documentation formalizes it, creating potential conflicts in tone and detail level."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Generate detailed documentation following these specifications:",
+        "notes": "For smaller models, be more explicit about documentation structure requirements."
+      },
+      "claude-3-7-sonnet-latest": {
+        "instruction": "Please create well-structured documentation with the following characteristics:",
+        "notes": "Claude models respond well to clear structure guidance in documentation tasks."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Creating comprehensive API documentation in Markdown",
+      "usage": "+++Documentation(for=api, format=markdown, detail=comprehensive)\nCreate documentation for our payment processing API including authentication, endpoints, request/response formats, and error handling.",
+      "result": "The model will generate comprehensive API documentation in Markdown format, covering all aspects of the payment processing API with detailed examples, error scenarios, and cross-references."
+    },
+    {
+      "description": "Creating minimal user documentation",
+      "usage": "+++Documentation(for=user, format=html, detail=minimal)\nDocument how to use our photo editing application.",
+      "result": "The model will generate concise user documentation in HTML format, covering only the essential features and workflows of the photo editing application."
+    },
+    {
+      "description": "Creating standard code documentation",
+      "usage": "+++Documentation(for=code, format=jsdoc, detail=standard)\nDocument this JavaScript utility function library.",
+      "result": "The model will generate standard JSDoc documentation for the JavaScript utility functions, including function signatures, parameters, return values, and basic usage examples."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "ELI5",
+      "Simplify"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2",
+      "palm-2"
+    ]
+  }
+}

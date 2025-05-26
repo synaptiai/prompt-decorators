@@ -1,0 +1,116 @@
+{
+  "decoratorName": "ForcedAnalogy",
+  "version": "1.0.0",
+  "description": "Explains concepts by specifically comparing them to a particular domain or field. This decorator forces analogies from a specified source domain to make complex or unfamiliar topics more relatable and understandable.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "source",
+      "type": "string",
+      "description": "The specific domain, field, or context to draw analogies from",
+      "required": true
+    },
+    {
+      "name": "comprehensiveness",
+      "type": "enum",
+      "description": "How comprehensively to map concepts between domains",
+      "enum": ["basic", "comprehensive", "detailed"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "mappings",
+      "type": "number",
+      "description": "Number of distinct concept mappings to create between domains",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 7
+      }
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please explain this topic using analogies drawn specifically from a particular domain. Create explicit comparisons that map concepts from the topic to elements, processes, or ideas from the specified source domain.",
+    "parameterMapping": {
+      "source": {
+        "format": "Use analogies specifically from the domain of {value}. Draw all your comparisons and metaphors from this domain to explain the target concepts."
+      },
+      "comprehensiveness": {
+        "valueMap": {
+          "basic": "Create simple, straightforward analogies with clear one-to-one mappings between the most fundamental concepts.",
+          "comprehensive": "Develop well-rounded analogies that cover the major components and processes, with moderately detailed mappings between domains.",
+          "detailed": "Construct elaborate, nuanced analogies with detailed mappings that capture subtle aspects, edge cases, and complexities of the topic."
+        }
+      },
+      "mappings": {
+        "format": "Create exactly {value} distinct concept mappings between the target domain and the source domain. Each mapping should connect a specific element from the topic to a corresponding element in the {source} domain."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Using sports analogies to explain blockchain",
+        "originalPrompt": "Explain how blockchain technology works.",
+        "transformedPrompt": "Please explain this topic using analogies drawn specifically from a particular domain. Create explicit comparisons that map concepts from the topic to elements, processes, or ideas from the specified source domain. Use analogies specifically from the domain of sports. Draw all your comparisons and metaphors from this domain to explain the target concepts. Develop well-rounded analogies that cover the major components and processes, with moderately detailed mappings between domains. Create exactly 3 distinct concept mappings between the target domain and the source domain. Each mapping should connect a specific element from the topic to a corresponding element in the sports domain.\n\nExplain how blockchain technology works."
+      },
+      {
+        "context": "Detailed cooking analogies for CRISPR gene editing",
+        "originalPrompt": "Describe how CRISPR gene editing works.",
+        "transformedPrompt": "Please explain this topic using analogies drawn specifically from a particular domain. Create explicit comparisons that map concepts from the topic to elements, processes, or ideas from the specified source domain. Use analogies specifically from the domain of cooking. Draw all your comparisons and metaphors from this domain to explain the target concepts. Construct elaborate, nuanced analogies with detailed mappings that capture subtle aspects, edge cases, and complexities of the topic. Create exactly 5 distinct concept mappings between the target domain and the source domain. Each mapping should connect a specific element from the topic to a corresponding element in the cooking domain.\n\nDescribe how CRISPR gene editing works."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Analogical",
+        "relationship": "enhances",
+        "notes": "ForcedAnalogy constrains the source domain for analogies, while Analogical provides more general analogy-based reasoning"
+      },
+      {
+        "decorator": "ELI5",
+        "relationship": "enhances",
+        "notes": "ForcedAnalogy can be combined with ELI5 to create simple, accessible analogies from a specific domain"
+      },
+      {
+        "decorator": "Technical",
+        "relationship": "enhances",
+        "notes": "ForcedAnalogy helps make technical topics more accessible by mapping them to familiar domains"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create an explanation that uses only {source}-based analogies. Identify {mappings} key concepts from the topic and map each one to something from {source}. For each mapping, explain: 1) The original concept, 2) The {source} analogy, and 3) How they are similar and different. Be {comprehensiveness} in your mapping depth. Stick to this domain exclusively - don't use analogies from any other fields.",
+        "notes": "This model may need explicit reminders to stay within the specified source domain and to clearly label which concept maps to which analogy"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Explaining a technical concept using sports analogies",
+      "usage": "+++ForcedAnalogy(source=sports)\nExplain how blockchain technology works.",
+      "result": "Explains blockchain technology by mapping concepts to sports analogies (e.g., ledger as scoreboard, miners as referees, consensus as rulebook)"
+    },
+    {
+      "description": "Detailed cooking analogy for complex scientific process",
+      "usage": "+++ForcedAnalogy(source=cooking, comprehensiveness=detailed, mappings=5)\nDescribe how CRISPR gene editing works.",
+      "result": "Provides a detailed explanation of CRISPR through cooking analogies, with 5 distinct concept mappings (e.g., DNA as recipe, Cas9 as kitchen knife, guide RNA as cooking instructions)"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

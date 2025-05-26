@@ -1,0 +1,112 @@
+{
+  "decoratorName": "Audience",
+  "version": "1.0.0",
+  "description": "Adapts the response for a specific audience expertise level. This decorator ensures content is appropriately tailored to the knowledge, vocabulary, and needs of different audience types, from beginners to technical experts.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The expertise level of the target audience",
+      "enum": ["beginner", "intermediate", "expert", "technical"],
+      "default": "intermediate",
+      "required": false
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "Specific knowledge domain or field for domain-specific terminology adaptation",
+      "default": "general",
+      "required": false
+    },
+    {
+      "name": "examples",
+      "type": "boolean",
+      "description": "Whether to include additional examples for clarity",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please tailor your response for a specific audience expertise level.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "beginner": "Write for beginners with no prior knowledge of the subject. Use simple language, avoid jargon, and explain all technical terms. Start with fundamental concepts.",
+          "intermediate": "Write for an audience with basic familiarity of the subject. You can use some field-specific terms, but explain more advanced concepts.",
+          "expert": "Write for a knowledgeable audience with extensive experience in the field. You can use specialized terminology and discuss advanced concepts directly.",
+          "technical": "Write for technical professionals who need precise, detailed information. Use proper technical terminology, reference standards, and provide implementation details where relevant."
+        }
+      },
+      "domain": {
+        "format": "The audience has specific interest in the {value} field, so use appropriate concepts and examples from this domain."
+      },
+      "examples": {
+        "valueMap": {
+          "true": "Include multiple concrete examples to illustrate key points and enhance understanding.",
+          "false": "Focus on clear explanations without requiring numerous examples."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Technical audience in cybersecurity",
+        "originalPrompt": "Explain zero-knowledge proofs.",
+        "transformedPrompt": "Please tailor your response for a specific audience expertise level. Write for technical professionals who need precise, detailed information. Use proper technical terminology, reference standards, and provide implementation details where relevant. The audience has specific interest in the cybersecurity field, so use appropriate concepts and examples from this domain. Include multiple concrete examples to illustrate key points and enhance understanding.\n\nExplain zero-knowledge proofs."
+      },
+      {
+        "context": "Beginner audience with examples",
+        "originalPrompt": "How does machine learning work?",
+        "transformedPrompt": "Please tailor your response for a specific audience expertise level. Write for beginners with no prior knowledge of the subject. Use simple language, avoid jargon, and explain all technical terms. Start with fundamental concepts. The audience has specific interest in the general field, so use appropriate concepts and examples from this domain. Include multiple concrete examples to illustrate key points and enhance understanding.\n\nHow does machine learning work?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "ELI5 targets a specific audience level that may contradict the level specified in Audience"
+      },
+      {
+        "decorator": "Technical",
+        "relationship": "enhances",
+        "notes": "Technical can be combined with Audience when level=technical for enhanced technical details"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Adapt your language, terminology, and examples for a specific audience:",
+        "notes": "This model benefits from more direct instructions about audience adaptation"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Technical explanation for experts in a specific field",
+      "usage": "+++Audience(level=technical, domain=cybersecurity)\nExplain zero-knowledge proofs.",
+      "result": "Provides an in-depth technical explanation of zero-knowledge proofs using cybersecurity-specific terminology and concepts"
+    },
+    {
+      "description": "Beginner-friendly explanation with examples",
+      "usage": "+++Audience(level=beginner, examples=true)\nHow does machine learning work?",
+      "result": "Explains machine learning concepts in simple terms with multiple illustrative examples suitable for complete beginners"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

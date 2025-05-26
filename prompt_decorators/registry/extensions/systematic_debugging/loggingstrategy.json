@@ -1,0 +1,145 @@
+{
+  "decoratorName": "LoggingStrategy",
+  "version": "1.0.0",
+  "description": "Defines a strategy for implementing logging to aid debugging and monitoring.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "Logging detail level",
+      "enum": [
+        "minimal",
+        "standard",
+        "verbose",
+        "diagnostic"
+      ],
+      "default": "standard",
+      "required": false
+    },
+    {
+      "name": "targets",
+      "type": "enum",
+      "description": "Logging targets",
+      "enum": [
+        "console",
+        "file",
+        "service",
+        "all"
+      ],
+      "default": "console",
+      "required": false
+    },
+    {
+      "name": "lifecycle",
+      "type": "enum",
+      "description": "Log lifecycle management",
+      "enum": [
+        "temporary",
+        "permanent",
+        "conditional",
+        "togglable"
+      ],
+      "default": "temporary",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Implement a logging strategy for the code or system being discussed.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "minimal": "Implement minimal logging that captures only critical events and errors.",
+          "standard": "Implement standard logging that captures important application events, errors, and basic flow information.",
+          "verbose": "Implement verbose logging that captures detailed information about application flow, state changes, and all significant events.",
+          "diagnostic": "Implement diagnostic logging that captures comprehensive details about internal operations, variable states, and system interactions for troubleshooting purposes."
+        }
+      },
+      "targets": {
+        "valueMap": {
+          "console": "Direct logs to the console or standard output.",
+          "file": "Write logs to persistent files with appropriate rotation and management.",
+          "service": "Send logs to a dedicated logging service or aggregator.",
+          "all": "Implement multiple logging targets including console, file, and service integration."
+        }
+      },
+      "lifecycle": {
+        "valueMap": {
+          "temporary": "Implement logging as a temporary measure that can be easily removed when no longer needed.",
+          "permanent": "Implement logging as a permanent part of the system architecture.",
+          "conditional": "Implement conditional logging that activates based on environment variables or configuration.",
+          "togglable": "Implement logging that can be dynamically enabled or disabled at runtime."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Node.js application",
+        "originalPrompt": "Write a user authentication function for my Express app.",
+        "transformedPrompt": "Implement a logging strategy for the code or system being discussed. Implement diagnostic logging that captures comprehensive details about internal operations, variable states, and system interactions for troubleshooting purposes. Direct logs to the console or standard output. Implement logging that can be dynamically enabled or disabled at runtime.\n\nWrite a user authentication function for my Express app.",
+        "notes": "The transformed prompt instructs the model to include diagnostic-level logging in the authentication function with console output that can be toggled on/off."
+      },
+      {
+        "context": "Python backend service",
+        "originalPrompt": "Create a data processing pipeline that handles CSV imports.",
+        "transformedPrompt": "Implement a logging strategy for the code or system being discussed. Implement verbose logging that captures detailed information about application flow, state changes, and all significant events. Write logs to persistent files with appropriate rotation and management. Implement conditional logging that activates based on environment variables or configuration.\n\nCreate a data processing pipeline that handles CSV imports.",
+        "notes": "The transformed prompt adds instructions for verbose file-based logging with conditional activation based on environment settings."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ErrorHandling",
+        "relationship": "enhances",
+        "notes": "LoggingStrategy works well with ErrorHandling to create robust error tracking and debugging capabilities."
+      },
+      {
+        "decorator": "PerformanceOptimization",
+        "relationship": "conflicts",
+        "notes": "Verbose or diagnostic logging may impact performance, so be cautious when combining with PerformanceOptimization."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Add logging to the code with the following characteristics: {level} detail level, output to {targets}, and {lifecycle} persistence.",
+        "notes": "Simplified instruction format works better with gpt-4 Turbo."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Implementing diagnostic logging for authentication flow",
+      "usage": "+++LoggingStrategy(level=diagnostic, targets=console, lifecycle=togglable)\nImplement comprehensive logging for the authentication flow that can be enabled/disabled with a debug flag.",
+      "result": "The model will generate code for an authentication flow with detailed diagnostic logging that outputs to the console and can be toggled on/off via a debug flag."
+    },
+    {
+      "description": "Standard file logging for production environment",
+      "usage": "+++LoggingStrategy(level=standard, targets=file, lifecycle=permanent)\nCreate a user registration system with appropriate logging.",
+      "result": "The model will implement a user registration system with standard-level logging written to files as a permanent part of the system."
+    },
+    {
+      "description": "Minimal conditional logging for performance-sensitive operations",
+      "usage": "+++LoggingStrategy(level=minimal, targets=service, lifecycle=conditional)\nWrite a high-performance data processing function.",
+      "result": "The model will create a high-performance function with minimal logging sent to a service, activated only under specific conditions to minimize performance impact."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

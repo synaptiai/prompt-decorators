@@ -1,0 +1,138 @@
+{
+  "decoratorName": "CICD",
+  "version": "1.0.0",
+  "description": "Designs continuous integration and delivery pipelines.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "tool",
+      "type": "enum",
+      "description": "CI/CD platform or tool",
+      "enum": [
+        "github-actions",
+        "jenkins",
+        "gitlab-ci",
+        "azure-devops",
+        "circle-ci",
+        "argocd"
+      ],
+      "default": "github-actions",
+      "required": false
+    },
+    {
+      "name": "complexity",
+      "type": "enum",
+      "description": "Pipeline sophistication",
+      "enum": [
+        "basic",
+        "standard",
+        "comprehensive",
+        "enterprise"
+      ],
+      "default": "standard",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Pipeline emphasis",
+      "enum": [
+        "speed",
+        "reliability",
+        "security",
+        "compliance",
+        "balanced"
+      ],
+      "default": "balanced",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Design a CI/CD pipeline with the following specifications:",
+    "parameterMapping": {
+      "tool": {
+        "format": "Using {value} as the CI/CD platform"
+      },
+      "complexity": {
+        "valueMap": {
+          "basic": "Create a simple pipeline with essential build and deploy steps.",
+          "standard": "Implement a standard pipeline with testing, building, and deployment stages.",
+          "comprehensive": "Design a comprehensive pipeline with extensive testing, security scanning, and multi-environment deployments.",
+          "enterprise": "Architect an enterprise-grade pipeline with advanced features including canary deployments, automated rollbacks, and detailed compliance reporting."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "speed": "Optimize the pipeline for fast feedback and rapid deployments.",
+          "reliability": "Prioritize reliability with robust testing and validation steps.",
+          "security": "Emphasize security with thorough scanning, vulnerability checks, and secure deployment practices.",
+          "compliance": "Ensure compliance with industry standards and regulations through appropriate checks and documentation.",
+          "balanced": "Balance speed, reliability, security, and compliance considerations."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application development",
+        "originalPrompt": "Design a CI/CD pipeline for a financial services application with security scanning and compliance checks.",
+        "transformedPrompt": "Design a CI/CD pipeline with the following specifications:\nUsing github-actions as the CI/CD platform\nDesign a comprehensive pipeline with extensive testing, security scanning, and multi-environment deployments.\nEmphasize security with thorough scanning, vulnerability checks, and secure deployment practices.\n\nDesign a CI/CD pipeline for a financial services application with security scanning and compliance checks.",
+        "notes": "The decorator adds specific CI/CD tool information and emphasizes security aspects for financial applications."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SecurityRequirements",
+        "relationship": "enhances",
+        "notes": "SecurityRequirements can provide detailed security specifications that complement the CICD decorator's security focus."
+      },
+      {
+        "decorator": "ComplianceFramework",
+        "relationship": "enhances",
+        "notes": "ComplianceFramework can specify regulatory requirements that the CI/CD pipeline should address."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a CI/CD pipeline with these requirements:",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic GitHub Actions pipeline for a web application",
+      "usage": "+++CICD(tool=github-actions, complexity=basic, focus=speed)",
+      "result": "Generates a simple GitHub Actions workflow optimized for quick feedback and deployment."
+    },
+    {
+      "description": "Comprehensive security-focused Jenkins pipeline",
+      "usage": "+++CICD(tool=jenkins, complexity=comprehensive, focus=security)",
+      "result": "Creates a detailed Jenkins pipeline configuration with extensive security scanning and testing."
+    },
+    {
+      "description": "Enterprise-grade GitLab CI pipeline with compliance focus",
+      "usage": "+++CICD(tool=gitlab-ci, complexity=enterprise, focus=compliance)",
+      "result": "Designs an advanced GitLab CI/CD configuration with detailed compliance reporting and validation."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

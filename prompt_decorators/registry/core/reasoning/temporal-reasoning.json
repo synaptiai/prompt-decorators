@@ -1,0 +1,142 @@
+{
+    "decoratorName": "TemporalResonance",
+    "version": "1.0.0",
+    "description": "Analyzes topics across multiple time horizons to identify patterns, principles, and possibilities that transcend present-focused thinking",
+    "author": {
+        "name": "Prompt Decorators Working Group",
+        "email": "promptdecoratorspec@synapti.ai",
+        "url": "https://synapti.ai"
+    },
+    "parameters": [
+      {
+        "name": "horizons",
+        "type": "number",
+        "description": "Number of distinct time horizons to explore",
+        "default": 3,
+        "required": false
+      },
+      {
+        "name": "resonancePoints",
+        "type": "number",
+        "description": "Number of resonance points to identify across time horizons",
+        "default": 3,
+        "required": false
+      },
+      {
+        "name": "futureScenarios",
+        "type": "number",
+        "description": "Number of potential future scenarios to consider",
+        "default": 3,
+        "required": false
+      },
+      {
+        "name": "domain",
+        "type": "enum",
+        "description": "Specific domain context for the temporal analysis",
+        "enum": ["business", "technology", "society", "personal", "science", "general"],
+        "default": "general",
+        "required": false
+      },
+      {
+        "name": "depth",
+        "type": "enum",
+        "description": "Depth of historical analysis and future projection",
+        "enum": ["shallow", "moderate", "deep"],
+        "default": "moderate",
+        "required": false
+      }
+    ],
+    "transformationTemplate": {
+      "instruction": "Analyze the topic using the Temporal Resonance approach, which examines patterns across different time horizons (past, present, and future) to generate insights that transcend present limitations. Identify recurring patterns, underlying principles, and resonance points where insights from different time periods amplify each other.",
+      "parameterMapping": {
+        "horizons": {
+          "valueMap": {
+            "2": "Explore two primary time horizons.",
+            "3": "Explore three distinct time horizons: historical patterns, current dynamics, and emergent possibilities.",
+            "4": "Explore four time horizons, including distant past, recent past, present, and future possibilities.",
+            "5": "Conduct a comprehensive exploration across five time horizons, ranging from distant historical patterns to long-term future possibilities."
+          }
+        },
+        "resonancePoints": {
+          "valueMap": {
+            "1": "Identify one key resonance point where patterns across time horizons converge.",
+            "2": "Identify two significant resonance points that reveal patterns transcending specific time periods.",
+            "3": "Identify three powerful resonance points that demonstrate persistent patterns across different time contexts.",
+            "4": "Conduct an extensive analysis to identify four or more resonance points that reveal deep underlying principles."
+          }
+        },
+        "futureScenarios": {
+          "valueMap": {
+            "1": "Consider one primary future trajectory.",
+            "2": "Explore two contrasting future scenarios.",
+            "3": "Develop three distinct future scenarios representing different potential trajectories.",
+            "4": "Create a comprehensive set of four or more future scenarios to capture a wide range of possibilities."
+          }
+        },
+        "domain": {
+          "valueMap": {
+            "business": "Focus on organizational patterns, market cycles, and business model evolution across time periods.",
+            "technology": "Examine technological adoption cycles, innovation patterns, and digital transformation dynamics across different eras.",
+            "society": "Analyze social movements, cultural shifts, and institutional changes across historical periods.",
+            "personal": "Focus on individual development patterns, career trajectories, and personal growth cycles.",
+            "science": "Examine scientific paradigm shifts, research methodologies, and knowledge development across different periods.",
+            "general": "Apply a general temporal analysis approach appropriate to the topic."
+          }
+        },
+        "depth": {
+          "valueMap": {
+            "shallow": "Conduct a brief analysis of obvious patterns across time horizons.",
+            "moderate": "Perform a balanced temporal analysis that identifies substantive patterns without excessive historical detail.",
+            "deep": "Conduct a comprehensive temporal analysis with detailed historical context, nuanced present assessment, and well-developed future projections."
+          }
+        }
+      },
+      "placement": "prepend",
+      "compositionBehavior": "accumulate"
+    },
+    "examples": [
+      {
+        "description": "Business transformation analysis",
+        "usage": "+++TemporalResonance(domain=business, resonancePoints=3, depth=moderate)",
+        "result": "Analyzes business transformation through three time horizons, identifying three key resonance points with moderate historical depth"
+      },
+      {
+        "description": "Personal career planning",
+        "usage": "+++TemporalResonance(domain=personal, futureScenarios=4, depth=deep)",
+        "result": "Provides deep analysis of personal career development across time horizons with four detailed future scenarios"
+      }
+    ],
+    "compatibility": {
+      "requires": [],
+      "conflicts": [],
+      "minStandardVersion": "1.0.0",
+      "maxStandardVersion": "2.0.0",
+      "models": [
+        "claude-3-opus-20240229",
+        "claude-3-sonnet-20240229",
+        "gpt-4o",
+        "gpt-4o-turbo"
+      ]
+    },
+    "implementationGuidance": {
+      "examples": [
+        {
+          "context": "Organizational change management",
+          "originalPrompt": "How can I approach implementing a new CRM system effectively?",
+          "transformedPrompt": "Analyze the topic using the Temporal Resonance approach, which examines patterns across different time horizons (past, present, and future) to generate insights that transcend present limitations. Identify recurring patterns, underlying principles, and resonance points where insights from different time periods amplify each other. Explore three distinct time horizons: historical patterns, current dynamics, and emergent possibilities. Identify three powerful resonance points that demonstrate persistent patterns across different time contexts. Develop three distinct future scenarios representing different potential trajectories. Focus on organizational patterns, market cycles, and business model evolution across time periods. Perform a balanced temporal analysis that identifies substantive patterns without excessive historical detail.\n\nHow can I approach implementing a new CRM system effectively?"
+        }
+      ],
+      "compatibilityNotes": [
+        {
+          "decorator": "StepByStep",
+          "relationship": "enhances",
+          "notes": "StepByStep can be used to structure the temporal analysis process"
+        },
+        {
+          "decorator": "Debate",
+          "relationship": "enhances",
+          "notes": "Debate can be used to explore contrasting views across different time horizons"
+        }
+      ]
+    }
+  }

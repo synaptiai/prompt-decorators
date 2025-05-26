@@ -1,0 +1,142 @@
+{
+  "decoratorName": "DesignPattern",
+  "version": "1.0.0",
+  "description": "Applies a specific design pattern to generated code, ensuring architectural best practices.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "pattern",
+      "type": "enum",
+      "description": "The design pattern to implement",
+      "enum": [
+        "singleton",
+        "factory",
+        "adapter",
+        "observer",
+        "strategy",
+        "command",
+        "facade"
+      ],
+      "default": "inferred",
+      "required": false
+    },
+    {
+      "name": "language",
+      "type": "enum",
+      "description": "Programming language to use",
+      "enum": [
+        "python",
+        "javascript",
+        "typescript",
+        "java",
+        "csharp",
+        "go",
+        "rust"
+      ],
+      "default": "inferred",
+      "required": false
+    },
+    {
+      "name": "variation",
+      "type": "string",
+      "description": "Specific variation of the pattern",
+      "default": "standard",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Apply the {pattern} design pattern in {language} to the following code generation task. Use the {variation} variation of this pattern where appropriate.",
+    "parameterMapping": {
+      "pattern": {
+        "valueMap": {
+          "singleton": "Implement a Singleton pattern to ensure only one instance of the class exists throughout the application.",
+          "factory": "Use a Factory pattern to create objects without specifying the exact class of object that will be created.",
+          "adapter": "Implement an Adapter pattern to allow incompatible interfaces to work together.",
+          "observer": "Use the Observer pattern to define a one-to-many dependency between objects.",
+          "strategy": "Implement the Strategy pattern to define a family of algorithms and make them interchangeable.",
+          "command": "Use the Command pattern to encapsulate a request as an object.",
+          "facade": "Implement a Facade pattern to provide a simplified interface to a complex subsystem."
+        }
+      },
+      "language": {
+        "format": "using {value} syntax and conventions"
+      },
+      "variation": {
+        "format": "Consider implementing the {value} variation of this pattern if appropriate for the use case."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Observer pattern in JavaScript",
+        "originalPrompt": "Create a notification system for an e-commerce application that alerts different parts of the UI when the cart changes.",
+        "transformedPrompt": "Apply the observer design pattern in javascript to the following code generation task. Use the standard variation of this pattern where appropriate.\n\nImplement the Observer pattern to define a one-to-many dependency between objects using javascript syntax and conventions. Consider implementing the standard variation of this pattern if appropriate for the use case.\n\nCreate a notification system for an e-commerce application that alerts different parts of the UI when the cart changes.",
+        "notes": "The Observer pattern is ideal for this scenario as it allows multiple UI components to subscribe to cart change events."
+      },
+      {
+        "context": "Singleton pattern in Python",
+        "originalPrompt": "Create a database connection manager for a web application.",
+        "transformedPrompt": "Apply the singleton design pattern in python to the following code generation task. Use the standard variation of this pattern where appropriate.\n\nImplement a Singleton pattern to ensure only one instance of the class exists throughout the application using python syntax and conventions. Consider implementing the standard variation of this pattern if appropriate for the use case.\n\nCreate a database connection manager for a web application.",
+        "notes": "The Singleton pattern ensures only one database connection pool is created, preventing resource exhaustion."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CodeReview can be used after DesignPattern to evaluate the implementation quality."
+      },
+      {
+        "decorator": "CodeOptimization",
+        "relationship": "enhances",
+        "notes": "CodeOptimization can be applied after DesignPattern to improve performance while maintaining the pattern structure."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Use the {pattern} design pattern in {language} for this code. Implement the {variation} version of the pattern.",
+        "notes": "Simpler instruction format works better with this model."
+      },
+      "claude-3-7-sonnet-latest": {
+        "instruction": "Please implement the {pattern} design pattern in {language}, following the {variation} implementation approach. Ensure the code follows best practices for this architectural pattern.",
+        "notes": "More detailed instructions work better with Claude models."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Observer pattern in JavaScript",
+      "usage": "+++DesignPattern(pattern=observer, language=javascript)\nCreate a notification system for an e-commerce application that alerts different parts of the UI when the cart changes.",
+      "result": "JavaScript implementation of the Observer pattern for a notification system, with Subject (Cart) and multiple Observer (UI components) classes."
+    },
+    {
+      "description": "Factory pattern in Java",
+      "usage": "+++DesignPattern(pattern=factory, language=java)\nCreate a payment processing system that can handle different payment methods.",
+      "result": "Java implementation of a Factory pattern that creates different payment processor objects based on the payment method requested."
+    },
+    {
+      "description": "Singleton pattern with thread safety in C#",
+      "usage": "+++DesignPattern(pattern=singleton, language=csharp, variation=thread-safe)\nImplement a logging service for a multi-threaded application.",
+      "result": "C# implementation of a thread-safe Singleton pattern for a logging service using double-check locking."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2-70b"
+    ]
+  }
+}

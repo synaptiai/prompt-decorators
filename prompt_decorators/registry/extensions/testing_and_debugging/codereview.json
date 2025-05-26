@@ -1,0 +1,144 @@
+{
+  "decoratorName": "CodeReview",
+  "version": "1.0.0",
+  "description": "Performs a review of code quality, identifying issues and suggesting improvements.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Aspects to focus on during review",
+      "enum": [
+        "security",
+        "performance",
+        "best-practices",
+        "maintainability",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "strictness",
+      "type": "enum",
+      "description": "Level of scrutiny",
+      "enum": [
+        "relaxed",
+        "standard",
+        "strict"
+      ],
+      "default": "standard",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Review output format",
+      "enum": [
+        "comment-style",
+        "summary",
+        "detailed",
+        "inline"
+      ],
+      "default": "detailed",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Perform a code review on the provided code. Identify issues and suggest improvements.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "security": "Focus specifically on security vulnerabilities, input validation, authentication issues, and potential exploits.",
+          "performance": "Focus specifically on performance bottlenecks, inefficient algorithms, and optimization opportunities.",
+          "best-practices": "Focus specifically on adherence to coding standards, design patterns, and industry best practices.",
+          "maintainability": "Focus specifically on code readability, documentation, modularity, and long-term maintenance concerns.",
+          "all": "Review all aspects including security, performance, best practices, and maintainability."
+        }
+      },
+      "strictness": {
+        "valueMap": {
+          "relaxed": "Apply a relaxed level of scrutiny, focusing only on major issues.",
+          "standard": "Apply a standard level of scrutiny, balancing thoroughness with pragmatism.",
+          "strict": "Apply a strict level of scrutiny, identifying all potential issues regardless of severity."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "comment-style": "Present the review as code comments that could be directly added to the source.",
+          "summary": "Present a concise summary of findings with key points only.",
+          "detailed": "Present a comprehensive review with sections for different types of issues and detailed explanations.",
+          "inline": "Present the review as inline comments within the code itself."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Security review of authentication code",
+        "originalPrompt": "Review this authentication controller code:\n\nfunction login(username, password) {\n  if(username === 'admin' && password === 'password123') {\n    return generateToken(username);\n  }\n  return null;\n}",
+        "transformedPrompt": "Perform a code review on the provided code. Identify issues and suggest improvements. Focus specifically on security vulnerabilities, input validation, authentication issues, and potential exploits. Apply a strict level of scrutiny, identifying all potential issues regardless of severity. Present a comprehensive review with sections for different types of issues and detailed explanations.\n\nReview this authentication controller code:\n\nfunction login(username, password) {\n  if(username === 'admin' && password === 'password123') {\n    return generateToken(username);\n  }\n  return null;\n}",
+        "notes": "The decorator adds specific instructions for a security-focused code review with strict scrutiny and detailed output format."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ExplainCode",
+        "relationship": "enhances",
+        "notes": "CodeReview can be used after ExplainCode to first understand the code and then review it."
+      },
+      {
+        "decorator": "FixCode",
+        "relationship": "enhances",
+        "notes": "CodeReview can be used before FixCode to identify issues that need fixing."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "You are a code reviewer. Analyze the following code and provide feedback according to these guidelines:",
+        "notes": "For smaller models, more explicit instructions about the review process may be needed."
+      },
+      "claude-3-7-sonnet-latest": {
+        "instruction": "Perform a thorough code review on the provided code. Identify issues and suggest improvements based on the following criteria:",
+        "notes": "Claude models may benefit from more structured review instructions."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Security-focused code review with strict scrutiny",
+      "usage": "+++CodeReview(focus=security, strictness=strict, format=detailed)\nReview this authentication controller for security issues.",
+      "result": "A detailed security-focused code review that identifies potential vulnerabilities, authentication issues, and security best practices violations with a high level of scrutiny."
+    },
+    {
+      "description": "Performance review with standard scrutiny and summary format",
+      "usage": "+++CodeReview(focus=performance, strictness=standard, format=summary)\nReview this data processing function for performance issues.",
+      "result": "A summary of performance-related issues in the code, including potential bottlenecks and optimization opportunities with a balanced level of scrutiny."
+    },
+    {
+      "description": "Comprehensive code review with default parameters",
+      "usage": "+++CodeReview\nReview this utility class implementation.",
+      "result": "A detailed review covering all aspects (security, performance, best practices, maintainability) with standard scrutiny level."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2",
+      "palm-2"
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "decoratorName": "PreciseModification",
+  "version": "1.0.0",
+  "description": "Guides careful, targeted modifications to sensitive parts of the codebase.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "sensitivity",
+      "type": "enum",
+      "description": "Code sensitivity level",
+      "enum": [
+        "normal",
+        "sensitive",
+        "critical",
+        "fragile"
+      ],
+      "default": "sensitive",
+      "required": false
+    },
+    {
+      "name": "scope",
+      "type": "enum",
+      "description": "Modification scope",
+      "enum": [
+        "isolated",
+        "contained",
+        "minimal",
+        "precise"
+      ],
+      "default": "minimal",
+      "required": false
+    },
+    {
+      "name": "validation",
+      "type": "enum",
+      "description": "Required validation approach",
+      "enum": [
+        "review",
+        "tests",
+        "both",
+        "comprehensive"
+      ],
+      "default": "both",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "When modifying code, ensure changes are carefully targeted and appropriate for the sensitivity level of the codebase. Consider the scope of changes and implement proper validation procedures.",
+    "parameterMapping": {
+      "sensitivity": {
+        "valueMap": {
+          "normal": "This code has standard sensitivity. Apply normal caution when modifying.",
+          "sensitive": "This code has elevated sensitivity. Be careful with modifications and consider potential side effects.",
+          "critical": "This code is critical to system operation. Exercise extreme caution with any modifications.",
+          "fragile": "This code is fragile and prone to breaking. Make minimal, precise changes with thorough testing."
+        }
+      },
+      "scope": {
+        "valueMap": {
+          "isolated": "Make changes that are completely isolated from other components.",
+          "contained": "Ensure changes are contained to a specific module or subsystem.",
+          "minimal": "Make the smallest possible changes to achieve the objective.",
+          "precise": "Make surgical, precise modifications targeting only the specific issue."
+        }
+      },
+      "validation": {
+        "valueMap": {
+          "review": "All changes must be carefully reviewed before implementation.",
+          "tests": "All changes must be validated with appropriate test coverage.",
+          "both": "All changes require both code review and test validation.",
+          "comprehensive": "All changes require comprehensive validation including code review, testing, and integration verification."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Payment processing system modification",
+        "originalPrompt": "Update the payment processing calculation without affecting any other components.",
+        "transformedPrompt": "When modifying code, ensure changes are carefully targeted and appropriate for the sensitivity level of the codebase. Consider the scope of changes and implement proper validation procedures. This code is fragile and prone to breaking. Make minimal, precise changes with thorough testing. Make surgical, precise modifications targeting only the specific issue. All changes require comprehensive validation including code review, testing, and integration verification. Update the payment processing calculation without affecting any other components.",
+        "notes": "The decorator adds specific guidance on how to approach modifying fragile payment processing code with precise scope and comprehensive validation."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "PreciseModification works well with CodeReview to ensure changes are properly scrutinized."
+      },
+      {
+        "decorator": "TestDrivenDevelopment",
+        "relationship": "enhances",
+        "notes": "Combining with TestDrivenDevelopment ensures proper test coverage for sensitive modifications."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Be extremely careful when modifying this code. Make precise, targeted changes based on the sensitivity level, scope requirements, and validation needs specified below:",
+        "notes": "More explicit instruction for models with less context understanding."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Modifying fragile payment processing code",
+      "usage": "+++PreciseModification(sensitivity=fragile, scope=precise, validation=comprehensive)\nUpdate the payment processing calculation without affecting any other components. This is a critical system that requires extensive validation.",
+      "result": "The model will provide a solution that makes extremely careful, surgical changes to the payment processing calculation, with comprehensive validation steps and awareness of the code's fragility."
+    },
+    {
+      "description": "Normal sensitivity code modification with minimal scope",
+      "usage": "+++PreciseModification(sensitivity=normal, scope=minimal)\nRefactor this utility function to improve performance.",
+      "result": "The model will provide a solution that makes minimal changes to the utility function while maintaining normal caution appropriate for non-critical code."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}
