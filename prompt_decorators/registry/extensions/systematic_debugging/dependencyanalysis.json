@@ -1,0 +1,132 @@
+{
+  "decoratorName": "DependencyAnalysis",
+  "version": "1.0.0",
+  "description": "Focuses on analyzing dependencies and their impacts on a system or component.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "type",
+      "type": "enum",
+      "description": "Dependency type",
+      "enum": [
+        "code",
+        "data",
+        "service",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "direction",
+      "type": "enum",
+      "description": "Dependency direction",
+      "enum": [
+        "inbound",
+        "outbound",
+        "both"
+      ],
+      "default": "both",
+      "required": false
+    },
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Analysis detail",
+      "enum": [
+        "summary",
+        "detailed",
+        "comprehensive",
+        "impact-focused"
+      ],
+      "default": "detailed",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Analyze the dependencies in the system or component described. Identify relationships and potential impacts of changes.",
+    "parameterMapping": {
+      "type": {
+        "valueMap": {
+          "code": "Focus on code-level dependencies such as imports, libraries, and modules.",
+          "data": "Focus on data dependencies such as database relationships, data flows, and storage requirements.",
+          "service": "Focus on service dependencies such as API calls, microservices, and external integrations.",
+          "all": "Analyze all types of dependencies including code, data, and service relationships."
+        }
+      },
+      "direction": {
+        "valueMap": {
+          "inbound": "Examine what depends on this component (inbound dependencies).",
+          "outbound": "Examine what this component depends on (outbound dependencies).",
+          "both": "Examine both inbound and outbound dependencies for a complete picture."
+        }
+      },
+      "detail": {
+        "valueMap": {
+          "summary": "Provide a high-level summary of key dependencies.",
+          "detailed": "Provide a detailed analysis of dependencies with specific examples.",
+          "comprehensive": "Provide an exhaustive analysis of all dependencies with technical details.",
+          "impact-focused": "Focus on how dependencies affect system stability, performance, and change management."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software architecture analysis",
+        "originalPrompt": "Analyze the user profile component in our application.",
+        "transformedPrompt": "Analyze the dependencies in the system or component described. Identify relationships and potential impacts of changes. Analyze all types of dependencies including code, data, and service relationships. Examine both inbound and outbound dependencies for a complete picture. Provide a detailed analysis of dependencies with specific examples.\n\nAnalyze the user profile component in our application.",
+        "notes": "The decorator adds specific instructions for dependency analysis before the original prompt."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SystematicDebugging",
+        "relationship": "enhances",
+        "notes": "DependencyAnalysis works well with SystematicDebugging by providing deeper insights into component relationships."
+      },
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "Can be combined with CodeReview to focus on dependency-related issues in code."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze dependencies between components. Identify what depends on what and how changes might affect the system.",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Analyzing code dependencies of a component",
+      "usage": "+++DependencyAnalysis(type=code, direction=outbound, detail=detailed)\nAnalyze the authentication module to understand what libraries and frameworks it depends on.",
+      "result": "Provides a detailed analysis of external libraries, frameworks, and other code components that the authentication module depends on."
+    },
+    {
+      "description": "Impact-focused analysis of all dependencies",
+      "usage": "+++DependencyAnalysis(type=all, direction=both, detail=impact-focused)\nAnalyze all dependencies of the user profile component to understand what might be affected by our planned changes.",
+      "result": "Delivers an analysis focused on how changes to the user profile component might impact other systems and how changes in dependent systems might affect it."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

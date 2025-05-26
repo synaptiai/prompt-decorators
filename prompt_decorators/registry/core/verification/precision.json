@@ -1,0 +1,119 @@
+{
+  "decoratorName": "Precision",
+  "version": "1.0.0",
+  "description": "Enhances responses with exact, specific, and precisely defined information. This decorator prioritizes accuracy in measurements, terms, definitions, and claims, avoiding vague language in favor of concrete specificity.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The degree of precision to apply",
+      "enum": ["moderate", "high", "scientific"],
+      "default": "high",
+      "required": false
+    },
+    {
+      "name": "units",
+      "type": "boolean",
+      "description": "Whether to consistently provide units for all measurements",
+      "default": true,
+      "required": false
+    },
+    {
+      "name": "definitions",
+      "type": "boolean",
+      "description": "Whether to include precise definitions for key terms",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide information with a high degree of precision and specificity. Use exact measurements, specific terminology, and concrete details rather than vague or general statements. Prioritize accuracy in all claims and descriptions.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "moderate": "Use moderately precise language with specific details where important, while maintaining accessibility and clarity for a general audience.",
+          "high": "Use highly precise language throughout the response, with exact figures, specific terminology, and detailed descriptions that leave minimal room for ambiguity.",
+          "scientific": "Use scientific-grade precision with rigorous accuracy, including error margins where appropriate, precise technical terminology, and specific quantitative measurements."
+        }
+      },
+      "units": {
+        "valueMap": {
+          "true": "Always include appropriate units for all measurements and quantities, using standard notation (SI units preferred where applicable).",
+          "false": "Include units where necessary for clarity, but prioritize readability over comprehensive unit notation."
+        }
+      },
+      "definitions": {
+        "valueMap": {
+          "true": "Include precise definitions for key terms and concepts when first introduced, ensuring clarity and exact understanding of specialized vocabulary.",
+          "false": "Use precise terminology without interrupting the flow with explicit definitions unless absolutely necessary for understanding."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Precise explanation of vaccine function",
+        "originalPrompt": "Explain how vaccines work.",
+        "transformedPrompt": "Please provide information with a high degree of precision and specificity. Use exact measurements, specific terminology, and concrete details rather than vague or general statements. Prioritize accuracy in all claims and descriptions. Use highly precise language throughout the response, with exact figures, specific terminology, and detailed descriptions that leave minimal room for ambiguity. Always include appropriate units for all measurements and quantities, using standard notation (SI units preferred where applicable). Use precise terminology without interrupting the flow with explicit definitions unless absolutely necessary for understanding.\n\nExplain how vaccines work."
+      },
+      {
+        "context": "Scientific precision for photosynthesis explanation",
+        "originalPrompt": "Describe the process of photosynthesis.",
+        "transformedPrompt": "Please provide information with a high degree of precision and specificity. Use exact measurements, specific terminology, and concrete details rather than vague or general statements. Prioritize accuracy in all claims and descriptions. Use scientific-grade precision with rigorous accuracy, including error margins where appropriate, precise technical terminology, and specific quantitative measurements. Always include appropriate units for all measurements and quantities, using standard notation (SI units preferred where applicable). Include precise definitions for key terms and concepts when first introduced, ensuring clarity and exact understanding of specialized vocabulary.\n\nDescribe the process of photosynthesis."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Fact-Check",
+        "relationship": "enhances",
+        "notes": "Precision complements Fact-Check by ensuring the verified information is presented with appropriate specificity"
+      },
+      {
+        "decorator": "Academic",
+        "relationship": "enhances",
+        "notes": "Precision enhances Academic by adding scientific rigor and exactitude to scholarly content"
+      },
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "The high precision and technical specificity conflicts with ELI5's goal of simplified, accessible explanations"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Provide information with {level} precision. Use exact numbers, specific terminology, and avoid vague language. {units} {definitions} For every claim, aim for the highest possible accuracy and specificity. If you're uncertain about a precise value, acknowledge the uncertainty rather than giving approximate information.",
+        "notes": "This model may need explicit reminders to maintain precision throughout, especially for longer responses or complex topics"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic precise explanation of a scientific concept",
+      "usage": "+++Precision\nExplain how vaccines work.",
+      "result": "Provides an explanation of vaccine mechanisms using precise terminology, specific examples, and accurate measurements where relevant"
+    },
+    {
+      "description": "Highly precise response with scientific rigor",
+      "usage": "+++Precision(level=scientific, units=true, definitions=true)\nDescribe the process of photosynthesis.",
+      "result": "Delivers a scientifically precise explanation of photosynthesis with exact units for all measurements, precise definitions for key terms, and specific chemical reactions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

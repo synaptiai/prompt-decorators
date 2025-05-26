@@ -1,0 +1,114 @@
+{
+  "decoratorName": "Concise",
+  "version": "1.0.0",
+  "description": "Optimizes the response for brevity and directness, eliminating unnecessary details and verbose language. This decorator is ideal for obtaining quick answers, executive summaries, or essential information when time or space is limited.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "maxWords",
+      "type": "number",
+      "description": "Maximum word count for the entire response",
+      "required": false,
+      "validation": {
+        "minimum": 10,
+        "maximum": 500
+      }
+    },
+    {
+      "name": "bulletPoints",
+      "type": "boolean",
+      "description": "Whether to use bullet points for maximum brevity",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The degree of conciseness to apply",
+      "enum": ["moderate", "high", "extreme"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide a concise, to-the-point response without unnecessary details or verbose language.",
+    "parameterMapping": {
+      "maxWords": {
+        "format": "Limit your entire response to no more than {value} words."
+      },
+      "bulletPoints": {
+        "valueMap": {
+          "true": "Use bullet points to present information in the most concise format possible.",
+          "false": "Use concise paragraphs rather than bullet points."
+        }
+      },
+      "level": {
+        "valueMap": {
+          "moderate": "Focus on the most important information while maintaining readability and essential context.",
+          "high": "Include only key points and critical information, eliminating all non-essential details.",
+          "extreme": "Provide only the absolute minimum information required to answer the question - be as brief as possible."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic concise explanation",
+        "originalPrompt": "Explain how blockchain technology works.",
+        "transformedPrompt": "Please provide a concise, to-the-point response without unnecessary details or verbose language. Focus on the most important information while maintaining readability and essential context. Use concise paragraphs rather than bullet points.\n\nExplain how blockchain technology works."
+      },
+      {
+        "context": "Extremely concise bullet points with word limit",
+        "originalPrompt": "What are the key factors in successful project management?",
+        "transformedPrompt": "Please provide a concise, to-the-point response without unnecessary details or verbose language. Limit your entire response to no more than 50 words. Use bullet points to present information in the most concise format possible. Provide only the absolute minimum information required to answer the question - be as brief as possible.\n\nWhat are the key factors in successful project management?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Detailed",
+        "relationship": "conflicts",
+        "notes": "Concise aims for brevity while Detailed aims for comprehensive coverage, creating a direct conflict"
+      },
+      {
+        "decorator": "Summary",
+        "relationship": "enhances",
+        "notes": "Summary and Concise can work together to create extremely condensed outputs"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Be extremely brief and direct. Focus only on essential information and eliminate all unnecessary words. Get straight to the point.",
+        "notes": "This model may need more explicit instructions about brevity requirements"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic concise explanation of a complex topic",
+      "usage": "+++Concise\nExplain how blockchain technology works.",
+      "result": "Provides a brief, to-the-point explanation of blockchain technology focusing only on essential concepts"
+    },
+    {
+      "description": "Extremely concise bulleted answer with word limit",
+      "usage": "+++Concise(maxWords=50, bulletPoints=true, level=extreme)\nWhat are the key factors in successful project management?",
+      "result": "Delivers a set of extremely concise bullet points covering only the most critical project management factors, totaling under 50 words"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Detailed"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

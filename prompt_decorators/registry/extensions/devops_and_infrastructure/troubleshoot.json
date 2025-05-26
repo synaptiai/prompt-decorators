@@ -1,0 +1,138 @@
+{
+  "decoratorName": "Troubleshoot",
+  "version": "1.0.0",
+  "description": "Creates troubleshooting guides for resolving system issues.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "component",
+      "type": "enum",
+      "description": "System area",
+      "enum": [
+        "network",
+        "database",
+        "application",
+        "infrastructure",
+        "security"
+      ],
+      "default": "application",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Guide structure",
+      "enum": [
+        "decision-tree",
+        "step-by-step",
+        "flowchart",
+        "runbook"
+      ],
+      "default": "step-by-step",
+      "required": false
+    },
+    {
+      "name": "audience",
+      "type": "enum",
+      "description": "Target user",
+      "enum": [
+        "developer",
+        "sre",
+        "support",
+        "end-user"
+      ],
+      "default": "sre",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create a comprehensive troubleshooting guide that helps identify and resolve issues. The guide should be clear, methodical, and focused on practical solutions.",
+    "parameterMapping": {
+      "component": {
+        "valueMap": {
+          "network": "Focus on network-related issues such as connectivity, latency, DNS problems, and routing.",
+          "database": "Address database issues including performance problems, query optimization, data integrity, and availability.",
+          "application": "Cover application-level problems including bugs, performance bottlenecks, error handling, and service integration.",
+          "infrastructure": "Examine infrastructure concerns like server health, resource utilization, scaling issues, and deployment problems.",
+          "security": "Focus on security vulnerabilities, access control issues, authentication problems, and potential breaches."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "decision-tree": "Structure the guide as a decision tree with clear branching paths based on symptoms and diagnostic results.",
+          "step-by-step": "Present a sequential, ordered list of troubleshooting steps with clear instructions at each stage.",
+          "flowchart": "Organize the troubleshooting process as a visual flowchart with decision points and action steps.",
+          "runbook": "Create a detailed operational runbook with procedures, commands, and expected outputs for each scenario."
+        }
+      },
+      "audience": {
+        "valueMap": {
+          "developer": "Target the guide for software developers with appropriate technical depth and code-level details.",
+          "sre": "Design for Site Reliability Engineers with focus on system-level diagnostics and operational concerns.",
+          "support": "Create for support personnel with clear escalation paths and customer-facing considerations.",
+          "end-user": "Simplify for end-users with minimal technical jargon and focus on user interface interactions."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Database troubleshooting for SREs",
+        "originalPrompt": "Create a troubleshooting guide for PostgreSQL performance issues in production.",
+        "transformedPrompt": "Create a comprehensive troubleshooting guide that helps identify and resolve issues. The guide should be clear, methodical, and focused on practical solutions. Address database issues including performance problems, query optimization, data integrity, and availability. Present a sequential, ordered list of troubleshooting steps with clear instructions at each stage. Design for Site Reliability Engineers with focus on system-level diagnostics and operational concerns.\n\nCreate a troubleshooting guide for PostgreSQL performance issues in production.",
+        "notes": "The decorator adds specific guidance on the type of troubleshooting content to create, tailored to the specified component, format, and audience."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Explain",
+        "relationship": "enhances",
+        "notes": "Can be combined with Explain to create more detailed explanations within the troubleshooting steps."
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "conflicts",
+        "notes": "The format parameter with 'step-by-step' value overlaps with StepByStep decorator functionality."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a troubleshooting guide for {component} issues. Use a {format} format designed for {audience} users. Include clear steps, diagnostic procedures, and solutions.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Database troubleshooting guide in decision tree format for SREs",
+      "usage": "+++Troubleshoot(component=database, format=decision-tree, audience=sre)\nCreate a troubleshooting guide for PostgreSQL performance issues in production.",
+      "result": "A decision tree-structured troubleshooting guide for PostgreSQL performance issues, targeted at Site Reliability Engineers with appropriate technical depth."
+    },
+    {
+      "description": "Network troubleshooting guide for support staff",
+      "usage": "+++Troubleshoot(component=network, format=step-by-step, audience=support)\nCreate a guide for diagnosing and resolving VPN connection failures.",
+      "result": "A step-by-step troubleshooting guide for VPN connection issues, designed for support personnel with appropriate escalation paths."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "StepByStep"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

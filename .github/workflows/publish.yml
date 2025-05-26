@@ -58,6 +58,10 @@ jobs:
           poetry config installer.no-binary :none:
           poetry install
 
+      # Prepare build (copy registry files)
+      - name: Prepare build
+        run: python scripts/prepare_build.py
+
       # Build the package using Poetry
       - name: Build package
         run: poetry build

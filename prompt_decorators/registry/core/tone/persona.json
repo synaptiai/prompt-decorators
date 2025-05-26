@@ -1,0 +1,105 @@
+{
+  "decoratorName": "Persona",
+  "version": "1.0.0",
+  "description": "Adapts the response to reflect the perspective and concerns of a specific persona. This decorator helps explore how different stakeholders or personality types would view a situation or topic.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "role",
+      "type": "string",
+      "description": "The specific persona or stakeholder role to adopt",
+      "required": true
+    },
+    {
+      "name": "traits",
+      "type": "array",
+      "description": "Key personality traits or characteristics of the persona",
+      "required": false
+    },
+    {
+      "name": "goals",
+      "type": "array",
+      "description": "Primary goals or concerns of the persona",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please respond from the perspective of the specified persona, adapting your analysis and viewpoint to reflect how this persona would naturally view and respond to the situation or topic.",
+    "parameterMapping": {
+      "role": {
+        "format": "Adopt the perspective and viewpoint of a {value}, considering how someone in this role would approach the topic."
+      },
+      "traits": {
+        "format": "Incorporate these key personality traits into the persona: {value}. Let these characteristics influence how the persona perceives and reacts to the topic."
+      },
+      "goals": {
+        "format": "Prioritize these primary goals and concerns that drive the persona's thinking: {value}. Ensure these priorities shape the perspective and recommendations offered."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Customer perspective on subscription model",
+        "originalPrompt": "What are the implications of implementing a new subscription model?",
+        "transformedPrompt": "Please respond from the perspective of the specified persona, adapting your analysis and viewpoint to reflect how this persona would naturally view and respond to the situation or topic. Adopt the perspective and viewpoint of a customer, considering how someone in this role would approach the topic.\n\nWhat are the implications of implementing a new subscription model?"
+      },
+      {
+        "context": "Detailed senior engineer persona evaluating architecture change",
+        "originalPrompt": "Evaluate the proposal to switch from monolith to microservices.",
+        "transformedPrompt": "Please respond from the perspective of the specified persona, adapting your analysis and viewpoint to reflect how this persona would naturally view and respond to the situation or topic. Adopt the perspective and viewpoint of a senior software engineer, considering how someone in this role would approach the topic. Incorporate these key personality traits into the persona: [pragmatic,detail-oriented,experienced]. Let these characteristics influence how the persona perceives and reacts to the topic. Prioritize these primary goals and concerns that drive the persona's thinking: [code quality,maintainability,efficiency]. Ensure these priorities shape the perspective and recommendations offered.\n\nEvaluate the proposal to switch from monolith to microservices."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "AsExpert",
+        "relationship": "enhances",
+        "notes": "Persona can be combined with AsExpert to create a character who is both in a specific role and has domain expertise"
+      },
+      {
+        "decorator": "Audience",
+        "relationship": "enhances",
+        "notes": "Persona (for the speaker) works well with Audience (for the listener) to create targeted communication"
+      },
+      {
+        "decorator": "Balanced",
+        "relationship": "conflicts",
+        "notes": "Persona intentionally presents a single perspective, which may conflict with Balanced's goal of presenting multiple viewpoints"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Respond as a {role} with these characteristics: {traits}. Your main priorities are: {goals}. Think about how someone in this position with these traits and goals would naturally approach this topic. Use appropriate vocabulary, concerns, and priorities for this persona.",
+        "notes": "This model sometimes needs reminders to maintain consistent persona characteristics throughout longer responses"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Response from the perspective of a specific stakeholder",
+      "usage": "+++Persona(role=customer)\nWhat are the implications of implementing a new subscription model?",
+      "result": "Analyzes the subscription model from a customer's perspective, focusing on value, convenience, and potential concerns"
+    },
+    {
+      "description": "Detailed persona with specific traits and goals",
+      "usage": "+++Persona(role=senior software engineer, traits=[pragmatic,detail-oriented,experienced], goals=[code quality,maintainability,efficiency])\nEvaluate the proposal to switch from monolith to microservices.",
+      "result": "Provides a detailed analysis of the monolith-to-microservices transition from the perspective of a pragmatic, detail-oriented senior engineer who prioritizes code quality and maintainability"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

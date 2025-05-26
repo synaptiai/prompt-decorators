@@ -1,0 +1,117 @@
+{
+  "decoratorName": "BlindSpots",
+  "version": "1.0.0",
+  "description": "Identifies potential cognitive blind spots, unstated assumptions, and overlooked perspectives in the response. This decorator helps mitigate bias by explicitly acknowledging the limitations of one's thinking and analysis.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "categories",
+      "type": "array",
+      "description": "Specific categories of blind spots to check for (e.g., cultural, temporal, confirmation bias)",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "How thoroughly to analyze for blind spots",
+      "enum": ["basic", "thorough", "comprehensive"],
+      "default": "thorough",
+      "required": false
+    },
+    {
+      "name": "position",
+      "type": "enum",
+      "description": "Where to place the blind spots analysis",
+      "enum": ["after", "before", "integrated"],
+      "default": "after",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please identify potential cognitive blind spots, unstated assumptions, and overlooked perspectives in your response. Explicitly acknowledge the limitations and biases that might affect your analysis of the topic.",
+    "parameterMapping": {
+      "categories": {
+        "format": "Focus specifically on identifying these categories of blind spots: {value}. For each category, explain how it might influence the analysis."
+      },
+      "depth": {
+        "valueMap": {
+          "basic": "Provide a basic assessment of key blind spots, focusing on the most significant limitations without extensive elaboration.",
+          "thorough": "Conduct a thorough analysis of blind spots, with substantial attention to underlying assumptions and alternative perspectives.",
+          "comprehensive": "Perform a comprehensive examination of blind spots, including detailed exploration of subtle biases, edge cases, and interconnected limitations."
+        }
+      },
+      "position": {
+        "valueMap": {
+          "after": "Present your main analysis first, then follow it with a separate section that identifies blind spots and limitations in your reasoning.",
+          "before": "Begin with an acknowledgment of potential blind spots and limitations that might affect your analysis, then proceed with your main response.",
+          "integrated": "Integrate the identification of blind spots throughout your analysis, pointing out limitations and alternative perspectives as they become relevant to each aspect of the topic."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic blind spots analysis after economic growth factors",
+        "originalPrompt": "What factors drive economic growth?",
+        "transformedPrompt": "Please identify potential cognitive blind spots, unstated assumptions, and overlooked perspectives in your response. Explicitly acknowledge the limitations and biases that might affect your analysis of the topic. Conduct a thorough analysis of blind spots, with substantial attention to underlying assumptions and alternative perspectives. Present your main analysis first, then follow it with a separate section that identifies blind spots and limitations in your reasoning.\n\nWhat factors drive economic growth?"
+      },
+      {
+        "context": "Comprehensive integrated blind spots analysis of social media impact",
+        "originalPrompt": "Evaluate the impact of social media on society.",
+        "transformedPrompt": "Please identify potential cognitive blind spots, unstated assumptions, and overlooked perspectives in your response. Explicitly acknowledge the limitations and biases that might affect your analysis of the topic. Focus specifically on identifying these categories of blind spots: [cultural,historical,methodological]. For each category, explain how it might influence the analysis. Perform a comprehensive examination of blind spots, including detailed exploration of subtle biases, edge cases, and interconnected limitations. Integrate the identification of blind spots throughout your analysis, pointing out limitations and alternative perspectives as they become relevant to each aspect of the topic.\n\nEvaluate the impact of social media on society."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "BlindSpots focuses on cognitive biases and unstated assumptions while Limitations addresses known constraints of the analysis"
+      },
+      {
+        "decorator": "RedTeam",
+        "relationship": "enhances",
+        "notes": "RedTeam challenges the content through adversarial analysis while BlindSpots identifies underlying cognitive biases"
+      },
+      {
+        "decorator": "Balanced",
+        "relationship": "enhances",
+        "notes": "Balanced ensures equal coverage of viewpoints while BlindSpots helps identify perspectives that might be overlooked entirely"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "When analyzing this topic, be vigilant about identifying {depth} blind spots such as {categories}. Consider what assumptions you're making, what perspectives might be missing, and what biases could be influencing your thinking. {position} Challenge your own conclusions and consider alternative viewpoints that might contradict your initial analysis.",
+        "notes": "This model sometimes needs explicit prompting to avoid defaulting to surface-level blind spot analysis that merely acknowledges limitations without substantive exploration"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic blind spots analysis after a response",
+      "usage": "+++BlindSpots\nWhat factors drive economic growth?",
+      "result": "Provides an analysis of economic growth factors, followed by identification of unstated assumptions and potential blind spots in the analysis"
+    },
+    {
+      "description": "Comprehensive blind spots analysis integrated throughout",
+      "usage": "+++BlindSpots(categories=[cultural,historical,methodological], depth=comprehensive, position=integrated)\nEvaluate the impact of social media on society.",
+      "result": "Delivers an evaluation of social media's societal impact with comprehensive blind spot analysis woven throughout, specifically addressing cultural, historical, and methodological blind spots"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

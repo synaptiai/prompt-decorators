@@ -1,0 +1,123 @@
+{
+  "decoratorName": "BreakAndBuild",
+  "version": "1.0.0",
+  "description": "Structures responses in two distinct phases: first critically analyzing and 'breaking down' an idea by identifying flaws, assumptions, and weaknesses, then 'building it back up' with improvements, refinements, and solutions. This decorator enhances critical thinking while maintaining constructive output.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "breakdown",
+      "type": "enum",
+      "description": "Primary approach for the critical breakdown phase",
+      "enum": ["weaknesses", "assumptions", "risks", "comprehensive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "intensity",
+      "type": "enum",
+      "description": "How thorough and challenging the breakdown phase should be",
+      "enum": ["mild", "thorough", "intense"],
+      "default": "thorough",
+      "required": false
+    },
+    {
+      "name": "buildRatio",
+      "type": "number",
+      "description": "Approximate ratio of build-up content to breakdown content (e.g., 2 means twice as much reconstruction as critique)",
+      "default": 1,
+      "required": false,
+      "validation": {
+        "minimum": 0.5,
+        "maximum": 3
+      }
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues.",
+    "parameterMapping": {
+      "breakdown": {
+        "valueMap": {
+          "weaknesses": "In the breakdown phase, focus primarily on identifying functional weaknesses, operational gaps, and practical limitations.",
+          "assumptions": "In the breakdown phase, focus primarily on identifying and questioning underlying assumptions, unstated premises, and taken-for-granted elements.",
+          "risks": "In the breakdown phase, focus primarily on identifying potential risks, failure modes, and negative scenarios.",
+          "comprehensive": "In the breakdown phase, conduct a comprehensive critique that addresses weaknesses, assumptions, risks, and any other relevant vulnerabilities."
+        }
+      },
+      "intensity": {
+        "valueMap": {
+          "mild": "Keep the breakdown phase constructive and moderate in tone, highlighting issues without overly aggressive critique.",
+          "thorough": "Make the breakdown phase thorough and substantial, with detailed examination of significant issues.",
+          "intense": "Make the breakdown phase rigorous and challenging, with incisive critique that explores fundamental flaws and serious concerns."
+        }
+      },
+      "buildRatio": {
+        "format": "Allocate approximately {value} times as much content to the constructive building phase as to the critical breakdown phase."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic break and build for plant care subscription",
+        "originalPrompt": "Evaluate this startup idea: a subscription service for plant care.",
+        "transformedPrompt": "Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues. In the breakdown phase, conduct a comprehensive critique that addresses weaknesses, assumptions, risks, and any other relevant vulnerabilities. Make the breakdown phase thorough and substantial, with detailed examination of significant issues. Allocate approximately 1 times as much content to the constructive building phase as to the critical breakdown phase.\n\nEvaluate this startup idea: a subscription service for plant care."
+      },
+      {
+        "context": "Intense assumption-focused analysis of urban congestion policy",
+        "originalPrompt": "Analyze this public policy proposal for reducing urban congestion.",
+        "transformedPrompt": "Please structure your response in two distinct phases: first, critically analyze and break down the idea by identifying flaws, assumptions, and weaknesses; then, build it back up with improvements, refinements, and solutions that address the identified issues. In the breakdown phase, focus primarily on identifying and questioning underlying assumptions, unstated premises, and taken-for-granted elements. Make the breakdown phase rigorous and challenging, with incisive critique that explores fundamental flaws and serious concerns. Allocate approximately 2 times as much content to the constructive building phase as to the critical breakdown phase.\n\nAnalyze this public policy proposal for reducing urban congestion."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "RedTeam",
+        "relationship": "enhances",
+        "notes": "RedTeam can strengthen the breakdown phase while BreakAndBuild ensures a constructive rebuilding follows the critique"
+      },
+      {
+        "decorator": "Steelman",
+        "relationship": "enhances",
+        "notes": "Steelman can be applied to the build phase to create the strongest possible version after breaking down the original"
+      },
+      {
+        "decorator": "Prioritize",
+        "relationship": "enhances",
+        "notes": "Prioritize can help focus both the breakdown and build phases on the most important aspects of the topic"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze this idea in two clear sections: \n1. BREAK: {intensity} critique focusing on {breakdown}. Be specific about what doesn't work and why.\n2. BUILD: Create an improved version that addresses all the problems you identified. Make this section approximately {buildRatio}x longer than the BREAK section.\n\nClearly separate these sections with headings.",
+        "notes": "This model may need explicit reminders to ensure that the build phase directly addresses the specific issues identified in the breakdown phase"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic break and build analysis of a business concept",
+      "usage": "+++BreakAndBuild\nEvaluate this startup idea: a subscription service for plant care.",
+      "result": "First thoroughly critiques the plant care subscription concept by identifying weaknesses and risks, then reconstructs it with improvements and solutions of equal depth"
+    },
+    {
+      "description": "Intense breakdown of assumptions with substantial rebuilding",
+      "usage": "+++BreakAndBuild(breakdown=assumptions, intensity=intense, buildRatio=2)\nAnalyze this public policy proposal for reducing urban congestion.",
+      "result": "Delivers an intense critique focused specifically on the assumptions underlying the urban congestion proposal, followed by twice as much content reconstructing it with stronger foundations and improvements"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

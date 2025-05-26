@@ -1,0 +1,116 @@
+{
+  "decoratorName": "StressTest",
+  "version": "1.0.0",
+  "description": "Tests the robustness of ideas, theories, plans, or systems by applying extreme conditions, edge cases, and unlikely scenarios. This decorator helps identify vulnerabilities, limitations, and breaking points that might not be apparent under normal circumstances.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "scenarios",
+      "type": "number",
+      "description": "Number of stress test scenarios to apply",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "severity",
+      "type": "enum",
+      "description": "The intensity level of the stress conditions",
+      "enum": ["moderate", "severe", "extreme"],
+      "default": "severe",
+      "required": false
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "Optional specific domain or dimension to stress test (e.g., financial, ethical, scalability)",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please first provide a standard analysis or assessment of the topic, then test its robustness by applying challenging conditions, edge cases, and unlikely scenarios to identify potential vulnerabilities and limitations.",
+    "parameterMapping": {
+      "scenarios": {
+        "format": "Apply {value} distinct stress test scenarios that challenge different aspects of the idea, plan, or system."
+      },
+      "severity": {
+        "valueMap": {
+          "moderate": "Apply realistic but challenging conditions that test important aspects without going to extremes.",
+          "severe": "Apply highly challenging conditions that push the subject to its likely breaking points and reveal significant vulnerabilities.",
+          "extreme": "Apply worst-case scenarios and highly improbable but catastrophic conditions to find absolute breaking points and critical vulnerabilities."
+        }
+      },
+      "domain": {
+        "format": "Focus your stress testing specifically on the {value} aspects or dimensions of the subject."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic stress test of a business model",
+        "originalPrompt": "Evaluate this subscription-based SaaS business model.",
+        "transformedPrompt": "Please first provide a standard analysis or assessment of the topic, then test its robustness by applying challenging conditions, edge cases, and unlikely scenarios to identify potential vulnerabilities and limitations. Apply 3 distinct stress test scenarios that challenge different aspects of the idea, plan, or system. Apply highly challenging conditions that push the subject to its likely breaking points and reveal significant vulnerabilities.\n\nEvaluate this subscription-based SaaS business model."
+      },
+      {
+        "context": "Extreme security stress test",
+        "originalPrompt": "Assess our new authentication protocol design.",
+        "transformedPrompt": "Please first provide a standard analysis or assessment of the topic, then test its robustness by applying challenging conditions, edge cases, and unlikely scenarios to identify potential vulnerabilities and limitations. Apply 5 distinct stress test scenarios that challenge different aspects of the idea, plan, or system. Apply worst-case scenarios and highly improbable but catastrophic conditions to find absolute breaking points and critical vulnerabilities. Focus your stress testing specifically on the security aspects or dimensions of the subject.\n\nAssess our new authentication protocol design."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "RedTeam",
+        "relationship": "enhances",
+        "notes": "RedTeam and StressTest complement each other well, with RedTeam providing adversarial thinking and StressTest providing scenario-based challenges"
+      },
+      {
+        "decorator": "BreakAndBuild",
+        "relationship": "enhances",
+        "notes": "StressTest can identify weaknesses that BreakAndBuild can then reconstruct solutions for"
+      },
+      {
+        "decorator": "FindGaps",
+        "relationship": "enhances",
+        "notes": "FindGaps works well with StressTest to identify both what's missing and what might break"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "First, provide a standard analysis of this topic. Then, apply {scenarios} different stress test scenarios at a {severity} level of intensity to find weaknesses and vulnerabilities. {domain} Each stress test should focus on a different aspect and clearly explain the scenario, the likely outcome, and what this reveals about potential weaknesses.",
+        "notes": "This model sometimes needs guidance to develop truly challenging scenarios rather than obvious or simplistic tests"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic stress test of a business model",
+      "usage": "+++StressTest\nEvaluate this subscription-based SaaS business model.",
+      "result": "Provides an analysis of the business model followed by three severe stress test scenarios that challenge its core assumptions and viability"
+    },
+    {
+      "description": "Extreme stress test focused on a specific domain",
+      "usage": "+++StressTest(scenarios=5, severity=extreme, domain=security)\nAssess our new authentication protocol design.",
+      "result": "Delivers an assessment of the authentication protocol followed by five extreme security-focused stress test scenarios that identify potential vulnerabilities and breaking points"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

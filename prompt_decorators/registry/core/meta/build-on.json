@@ -1,0 +1,121 @@
+{
+  "decoratorName": "BuildOn",
+  "version": "1.0.0",
+  "description": "A meta-decorator that builds upon previous context or responses rather than starting from scratch. This enables continuity across interactions, allowing refinement, extension, or alteration of previous outputs in a coherent manner.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "reference",
+      "type": "enum",
+      "description": "What to build upon from the previous context",
+      "enum": ["last", "specific", "all"],
+      "default": "last",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "How to build upon the referenced content",
+      "enum": ["extend", "refine", "contrast", "synthesize"],
+      "default": "extend",
+      "required": false
+    },
+    {
+      "name": "preserveStructure",
+      "type": "boolean",
+      "description": "Whether to maintain the structure of the referenced content",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please build upon the previous context or response rather than starting from scratch, maintaining continuity across the interaction.",
+    "parameterMapping": {
+      "reference": {
+        "valueMap": {
+          "last": "Build specifically upon the most recent response or context provided.",
+          "specific": "Build upon the specific part of the previous context mentioned in the current prompt.",
+          "all": "Consider all previous exchanges in the conversation when building your response."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "extend": "Add new information, examples, or dimensions that extend and complement the existing content.",
+          "refine": "Improve, correct, or enhance the existing content while preserving its core message.",
+          "contrast": "Provide alternative perspectives or approaches that contrast with those in the existing content.",
+          "synthesize": "Combine and integrate ideas from the existing content into a new cohesive whole."
+        }
+      },
+      "preserveStructure": {
+        "valueMap": {
+          "true": "Maintain the same organizational structure, format, and overall framework as the referenced content.",
+          "false": "Feel free to reorganize or restructure the content in a new way that better serves the current purpose."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic extension of previous response",
+        "originalPrompt": "Add more detail about implementation challenges.",
+        "transformedPrompt": "Please build upon the previous context or response rather than starting from scratch, maintaining continuity across the interaction. Build specifically upon the most recent response or context provided. Add new information, examples, or dimensions that extend and complement the existing content. Maintain the same organizational structure, format, and overall framework as the referenced content.\n\nAdd more detail about implementation challenges."
+      },
+      {
+        "context": "Specific refinement with structural changes",
+        "originalPrompt": "Improve the section on risk analysis with more quantitative measures.",
+        "transformedPrompt": "Please build upon the previous context or response rather than starting from scratch, maintaining continuity across the interaction. Build upon the specific part of the previous context mentioned in the current prompt. Improve, correct, or enhance the existing content while preserving its core message. Feel free to reorganize or restructure the content in a new way that better serves the current purpose.\n\nImprove the section on risk analysis with more quantitative measures."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Refine",
+        "relationship": "enhances",
+        "notes": "BuildOn and Refine can work together to iteratively improve content over multiple interactions"
+      },
+      {
+        "decorator": "Contrast",
+        "relationship": "enhances",
+        "notes": "When using the contrast approach, BuildOn works well with decorators that provide multiple perspectives"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Continue from {reference} response, building on what was already said. {approach} the existing content while {preserveStructure}. Make sure your response feels like a natural continuation rather than starting over.",
+        "notes": "This model sometimes needs explicit reminders to fully incorporate previous context"
+      },
+      "gpt-4o": {
+        "instruction": "Treating the {reference} as your foundation, please {approach} that content. {preserveStructure} Ensure your response maintains continuity with what came before.",
+        "notes": "This model handles contextual building well but benefits from clear instructions about which aspects to preserve"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic extension of the previous response",
+      "usage": "+++BuildOn\nAdd more detail about implementation challenges.",
+      "result": "Extends the previous response by adding more detailed information about implementation challenges while maintaining continuity"
+    },
+    {
+      "description": "Specific refinement with structural changes",
+      "usage": "+++BuildOn(reference=specific, approach=refine, preserveStructure=false)\nImprove the section on risk analysis with more quantitative measures.",
+      "result": "Refines specifically the risk analysis section from the previous content with more quantitative measures, potentially restructuring it"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "decoratorName": "Performance",
+  "version": "1.0.0",
+  "description": "Optimizes system performance focusing on specific bottlenecks.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "bottleneck",
+      "type": "enum",
+      "description": "Performance limitation area",
+      "enum": [
+        "cpu",
+        "memory",
+        "io",
+        "network",
+        "database",
+        "algorithm"
+      ],
+      "default": "context-dependent",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Performance analysis methodology",
+      "enum": [
+        "identify",
+        "measure",
+        "optimize",
+        "comprehensive"
+      ],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "constraints",
+      "type": "enum",
+      "description": "Optimization constraints",
+      "enum": [
+        "cost",
+        "time",
+        "complexity",
+        "compatibility",
+        "none"
+      ],
+      "default": "none",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Analyze and optimize system performance with a focus on efficiency and scalability.",
+    "parameterMapping": {
+      "bottleneck": {
+        "valueMap": {
+          "cpu": "Focus on CPU optimization strategies including algorithm efficiency, parallel processing, and computational load balancing.",
+          "memory": "Focus on memory usage optimization including allocation patterns, garbage collection, caching strategies, and memory leaks.",
+          "io": "Focus on I/O performance including disk access patterns, buffering strategies, and asynchronous operations.",
+          "network": "Focus on network performance including latency reduction, bandwidth optimization, and connection management.",
+          "database": "Focus on database performance including query optimization, indexing strategies, connection pooling, and data access patterns.",
+          "algorithm": "Focus on algorithmic efficiency including time complexity, space complexity, and algorithm selection."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "identify": "Identify the specific performance bottlenecks through profiling and analysis without implementing solutions.",
+          "measure": "Measure and quantify performance metrics to establish baselines and identify improvement opportunities.",
+          "optimize": "Implement specific optimization techniques to address known performance issues.",
+          "comprehensive": "Perform a comprehensive performance analysis including identification, measurement, and optimization recommendations."
+        }
+      },
+      "constraints": {
+        "valueMap": {
+          "cost": "Optimize within cost constraints, prioritizing solutions with minimal additional resource requirements.",
+          "time": "Optimize with time constraints in mind, focusing on solutions that can be implemented quickly.",
+          "complexity": "Optimize while maintaining code simplicity and maintainability.",
+          "compatibility": "Optimize while ensuring compatibility with existing systems and interfaces.",
+          "none": "Optimize for maximum performance without specific constraints."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Database query optimization",
+        "originalPrompt": "Optimize the performance of our product search functionality which is currently taking 5+ seconds to return results.",
+        "transformedPrompt": "Analyze and optimize system performance with a focus on efficiency and scalability. Focus on database performance including query optimization, indexing strategies, connection pooling, and data access patterns. Perform a comprehensive performance analysis including identification, measurement, and optimization recommendations. Optimize while ensuring compatibility with existing systems and interfaces.\n\nOptimize the performance of our product search functionality which is currently taking 5+ seconds to return results.",
+        "notes": "This example focuses on database optimization with a comprehensive approach while maintaining compatibility with existing systems."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "Performance decorator can enhance code review by focusing specifically on performance aspects of the code."
+      },
+      {
+        "decorator": "Simplify",
+        "relationship": "conflicts",
+        "notes": "Performance optimizations sometimes increase code complexity, which may conflict with simplification goals."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze and improve system performance by identifying and resolving bottlenecks.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Database performance optimization with compatibility constraints",
+      "usage": "+++Performance(bottleneck=database, approach=comprehensive, constraints=compatibility)\nOptimize the performance of our product search functionality which is currently taking 5+ seconds to return results.",
+      "result": "A comprehensive analysis of database performance issues affecting the product search functionality, with optimization recommendations that maintain compatibility with existing systems."
+    },
+    {
+      "description": "CPU performance identification",
+      "usage": "+++Performance(bottleneck=cpu, approach=identify)\nOur image processing service is using 100% CPU during peak loads.",
+      "result": "An analysis identifying specific CPU bottlenecks in the image processing service without implementation details."
+    },
+    {
+      "description": "Algorithm optimization with time constraints",
+      "usage": "+++Performance(bottleneck=algorithm, approach=optimize, constraints=time)\nOur sorting algorithm needs to be faster for the upcoming release.",
+      "result": "Specific algorithm optimization recommendations that can be implemented quickly before the upcoming release."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

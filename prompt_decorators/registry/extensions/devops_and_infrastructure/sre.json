@@ -1,0 +1,134 @@
+{
+  "decoratorName": "SRE",
+  "version": "1.0.0",
+  "description": "Applies Site Reliability Engineering practices.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "SRE practice area",
+      "enum": [
+        "slos",
+        "error-budgets",
+        "runbooks",
+        "postmortems",
+        "chaos-eng",
+        "automation"
+      ],
+      "default": "context-dependent",
+      "required": false
+    },
+    {
+      "name": "maturity",
+      "type": "enum",
+      "description": "Organization SRE maturity",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "default": "intermediate",
+      "required": false
+    },
+    {
+      "name": "output",
+      "type": "enum",
+      "description": "Deliverable type",
+      "enum": [
+        "implementation",
+        "roadmap",
+        "assessment"
+      ],
+      "default": "implementation",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Apply Site Reliability Engineering practices to this task. Consider reliability, scalability, and operational excellence in your response.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "slos": "Focus on defining appropriate Service Level Objectives (SLOs) that balance reliability with innovation velocity.",
+          "error-budgets": "Implement error budgets to quantify acceptable service disruption and guide development priorities.",
+          "runbooks": "Develop clear, actionable runbooks for operational procedures and incident response.",
+          "postmortems": "Create blameless postmortem processes to learn from incidents and prevent recurrence.",
+          "chaos-eng": "Apply chaos engineering principles to proactively identify system weaknesses.",
+          "automation": "Prioritize automation to reduce toil and increase operational efficiency."
+        }
+      },
+      "maturity": {
+        "valueMap": {
+          "beginner": "Provide foundational SRE concepts and implementation steps suitable for organizations new to SRE practices.",
+          "intermediate": "Offer more sophisticated SRE strategies for organizations with established but evolving SRE practices.",
+          "advanced": "Present cutting-edge SRE approaches for organizations with mature SRE functions seeking optimization."
+        }
+      },
+      "output": {
+        "valueMap": {
+          "implementation": "Provide specific, actionable implementation guidance with concrete examples and code where appropriate.",
+          "roadmap": "Develop a phased approach to implementing or improving the specified SRE practices over time.",
+          "assessment": "Evaluate current practices against SRE best practices and identify gaps and improvement opportunities."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Cloud infrastructure reliability",
+        "originalPrompt": "How can we improve our AWS infrastructure reliability?",
+        "transformedPrompt": "Apply Site Reliability Engineering practices to this task. Consider reliability, scalability, and operational excellence in your response. Focus on defining appropriate Service Level Objectives (SLOs) that balance reliability with innovation velocity. Offer more sophisticated SRE strategies for organizations with established but evolving SRE practices. Provide specific, actionable implementation guidance with concrete examples and code where appropriate.\n\nHow can we improve our AWS infrastructure reliability?",
+        "notes": "This example shows how the decorator adds SRE context with a focus on SLOs for an intermediate organization seeking implementation guidance."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "DevOps",
+        "relationship": "enhances",
+        "notes": "SRE complements DevOps practices by adding reliability engineering focus."
+      },
+      {
+        "decorator": "CloudArchitecture",
+        "relationship": "enhances",
+        "notes": "SRE provides reliability considerations for cloud architecture designs."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Use Site Reliability Engineering (SRE) principles in your response. Consider system reliability, monitoring, automation, and incident management.",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Creating SLOs for an e-commerce platform",
+      "usage": "+++SRE(focus=slos, maturity=intermediate, output=implementation)\nDevelop SLOs and error budgets for our e-commerce platform focusing on checkout and payment processing.",
+      "result": "Provides specific implementation guidance for creating appropriate SLOs and error budgets for checkout and payment processing systems, tailored to an organization with intermediate SRE maturity."
+    },
+    {
+      "description": "Developing a chaos engineering roadmap",
+      "usage": "+++SRE(focus=chaos-eng, maturity=beginner, output=roadmap)\nHow should we introduce chaos engineering to our organization?",
+      "result": "Delivers a phased roadmap for introducing chaos engineering practices to an organization new to SRE, starting with basic principles and progressing to more advanced techniques."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "claude-instant"
+    ]
+  }
+}

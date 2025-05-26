@@ -1,0 +1,117 @@
+{
+  "decoratorName": "StyleShift",
+  "version": "1.0.0",
+  "description": "Modifies specific style characteristics of responses such as formality, persuasiveness, or urgency. This decorator enables fine-tuned control over particular aspects of communication style without changing the overall tone.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "aspect",
+      "type": "enum",
+      "description": "The specific style aspect to modify",
+      "enum": ["formality", "persuasion", "urgency", "confidence", "complexity"],
+      "required": true
+    },
+    {
+      "name": "level",
+      "type": "number",
+      "description": "The intensity level of the style aspect (1-5, where 1 is minimal and 5 is maximal)",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "maintain",
+      "type": "array",
+      "description": "Style aspects to explicitly maintain while modifying the target aspect",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please modify a specific aspect of your communication style while keeping the content and overall tone consistent.",
+    "parameterMapping": {
+      "aspect": {
+        "valueMap": {
+          "formality": "Adjust the formality level of your response, paying attention to word choice, sentence structure, and adherence to communication conventions.",
+          "persuasion": "Adjust the persuasiveness of your response, focusing on rhetorical techniques, compelling arguments, and call-to-action elements.",
+          "urgency": "Adjust the sense of urgency in your response, emphasizing time sensitivity, immediate relevance, and priority framing.",
+          "confidence": "Adjust the level of confidence expressed in your response, through certainty markers, hedging language, and the strength of assertions.",
+          "complexity": "Adjust the complexity of your response, considering vocabulary, sentence structure, conceptual depth, and assumed background knowledge."
+        }
+      },
+      "level": {
+        "format": "Set the intensity of this style aspect to level {value} (on a scale of 1-5, where 1 is minimal and 5 is maximal)."
+      },
+      "maintain": {
+        "format": "While adjusting the target style aspect, make sure to maintain your current level of these aspects: {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Highly formal explanation maintaining normal complexity",
+        "originalPrompt": "Explain the process of photosynthesis.",
+        "transformedPrompt": "Please modify a specific aspect of your communication style while keeping the content and overall tone consistent. Adjust the formality level of your response, paying attention to word choice, sentence structure, and adherence to communication conventions. Set the intensity of this style aspect to level 5 (on a scale of 1-5, where 1 is minimal and 5 is maximal). While adjusting the target style aspect, make sure to maintain your current level of these aspects: [complexity].\n\nExplain the process of photosynthesis."
+      },
+      {
+        "context": "Increased urgency for product launch preparation",
+        "originalPrompt": "Describe the steps needed to prepare for the upcoming product launch.",
+        "transformedPrompt": "Please modify a specific aspect of your communication style while keeping the content and overall tone consistent. Adjust the sense of urgency in your response, emphasizing time sensitivity, immediate relevance, and priority framing. Set the intensity of this style aspect to level 4 (on a scale of 1-5, where 1 is minimal and 5 is maximal).\n\nDescribe the steps needed to prepare for the upcoming product launch."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Audience",
+        "relationship": "enhances",
+        "notes": "StyleShift works well with Audience to fine-tune specific style aspects for particular target groups"
+      },
+      {
+        "decorator": "Professional",
+        "relationship": "enhances",
+        "notes": "StyleShift can enhance Professional by adjusting specific aspects like formality or confidence while maintaining professionalism"
+      },
+      {
+        "decorator": "Persona",
+        "relationship": "enhances",
+        "notes": "StyleShift allows for subtle style adjustments within the broader context of a Persona's voice"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Adjust the {aspect} of your response to level {level}/5 (where 1 is minimal and 5 is maximal). {maintain} Pay special attention to word choice, sentence structure, and tone that reflects this specific style adjustment. Keep all other aspects of your communication style consistent.",
+        "notes": "This model may need more explicit examples of the target style aspect at the specified level to maintain consistency throughout the response"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Highly formal style while maintaining normal complexity",
+      "usage": "+++StyleShift(aspect=formality, level=5, maintain=[complexity])\nExplain the process of photosynthesis.",
+      "result": "Provides a highly formal explanation of photosynthesis with elevated language and structure, while keeping the complexity at a moderate level"
+    },
+    {
+      "description": "Increased urgency for a business communication",
+      "usage": "+++StyleShift(aspect=urgency, level=4)\nDescribe the steps needed to prepare for the upcoming product launch.",
+      "result": "Delivers a description of product launch preparation steps with heightened sense of urgency and time-sensitivity in the language and framing"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "decoratorName": "CodeGen",
+  "version": "1.0.0",
+  "description": "Generates code snippets or complete solutions with configurable style and documentation level.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "language",
+      "type": "enum",
+      "description": "Programming language to generate code in",
+      "enum": [
+        "python",
+        "javascript",
+        "typescript",
+        "java",
+        "csharp",
+        "go",
+        "rust"
+      ],
+      "default": "inferred",
+      "required": false
+    },
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Programming paradigm or coding style to use",
+      "enum": [
+        "functional",
+        "oop",
+        "procedural",
+        "reactive",
+        "declarative"
+      ],
+      "default": "oop",
+      "required": false
+    },
+    {
+      "name": "comments",
+      "type": "enum",
+      "description": "Level of code documentation to include",
+      "enum": [
+        "minimal",
+        "moderate",
+        "extensive"
+      ],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "error_handling",
+      "type": "enum",
+      "description": "Level of error handling to include",
+      "enum": [
+        "none",
+        "basic",
+        "comprehensive"
+      ],
+      "default": "basic",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate code that solves the following problem. Make sure the solution is correct, efficient, and follows best practices.",
+    "parameterMapping": {
+      "language": {
+        "format": "Use {value} as the programming language."
+      },
+      "style": {
+        "valueMap": {
+          "functional": "Write the code using functional programming principles, emphasizing immutability and pure functions.",
+          "oop": "Structure the code using object-oriented programming principles with appropriate classes and inheritance.",
+          "procedural": "Write procedural code with a focus on sequential operations and procedures.",
+          "reactive": "Implement using reactive programming patterns with event streams and observers.",
+          "declarative": "Use a declarative approach focusing on what the program should accomplish rather than how."
+        }
+      },
+      "comments": {
+        "valueMap": {
+          "minimal": "Include only essential comments for complex logic.",
+          "moderate": "Add comments for functions, classes, and non-obvious logic.",
+          "extensive": "Provide comprehensive documentation including function descriptions, parameter explanations, and implementation details."
+        }
+      },
+      "error_handling": {
+        "valueMap": {
+          "none": "Focus on the happy path without explicit error handling.",
+          "basic": "Include basic error handling for common edge cases.",
+          "comprehensive": "Implement thorough error handling, input validation, and appropriate error messages."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "TypeScript function implementation",
+        "originalPrompt": "Create a utility function that calculates the total price of items in a shopping cart with discounts applied.",
+        "transformedPrompt": "Generate code that solves the following problem. Make sure the solution is correct, efficient, and follows best practices. Use typescript as the programming language. Write the code using functional programming principles, emphasizing immutability and pure functions. Add comments for functions, classes, and non-obvious logic. Include basic error handling for common edge cases.\n\nCreate a utility function that calculates the total price of items in a shopping cart with discounts applied.",
+        "notes": "The decorator adds specific instructions about language, style, comments, and error handling before the original prompt."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Reasoning",
+        "relationship": "enhances",
+        "notes": "Using Reasoning before CodeGen can help break down complex problems before code implementation."
+      },
+      {
+        "decorator": "Concise",
+        "relationship": "conflicts",
+        "notes": "Concise may reduce the level of comments and documentation that CodeGen is instructed to produce."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Write code to solve this problem. Use {language} and follow {style} programming style with {comments} comments and {error_handling} error handling.",
+        "notes": "Simplified instruction format works better with gpt-4 Turbo's context window limitations."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Generate TypeScript code with functional programming style",
+      "usage": "+++CodeGen(language=typescript, style=functional, comments=moderate)",
+      "result": "Produces TypeScript code using functional programming paradigms with moderate documentation."
+    },
+    {
+      "description": "Generate Python code with comprehensive error handling",
+      "usage": "+++CodeGen(language=python, error_handling=comprehensive)",
+      "result": "Produces Python code with thorough error handling, input validation, and appropriate error messages."
+    },
+    {
+      "description": "Generate Java code with minimal comments",
+      "usage": "+++CodeGen(language=java, comments=minimal)",
+      "result": "Produces Java code with only essential comments for complex logic."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

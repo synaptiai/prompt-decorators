@@ -55,6 +55,42 @@ print(prompt_decorators.__version__)
 
 You should see the version number printed to the console.
 
+### Verifying Registry Loading
+
+To ensure that decorators are properly loaded, you can use the built-in verification tool:
+
+```bash
+python -m prompt_decorators verify
+```
+
+This command will:
+- Check if the registry directories exist
+- Verify that decorator files are present
+- Test loading of core decorators
+- Report any issues found
+
+If you see "Registry verification successful" with a count of loaded decorators, your installation is working correctly.
+
+### Auto-Repair System
+
+If the verification tool detects missing registry files, it will automatically attempt to repair the installation by copying decorator definitions from the source registry. This can happen if:
+
+- The package was installed without registry files
+- Registry files were accidentally deleted
+- There was an issue during package installation
+
+The auto-repair system will:
+1. Detect missing or empty registry directories
+2. Copy decorator definitions from the source registry
+3. Verify the repair was successful
+4. Report the number of decorators restored
+
+You can also manually trigger the repair process:
+
+```bash
+python -m prompt_decorators repair
+```
+
 ## Environment Setup
 
 ### Configuration
@@ -144,6 +180,44 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install prompt-decorators
 ```
+
+#### Registry Loading Issues
+
+If you encounter "No decorators loaded" or "Registry is empty" errors:
+
+1. **Verify Installation**:
+   ```bash
+   python -m prompt_decorators verify
+   ```
+
+2. **Check Registry Directories**:
+   ```python
+   import prompt_decorators
+   from pathlib import Path
+
+   # Check if registry directories exist
+   registry_path = Path(prompt_decorators.__file__).parent / "registry"
+   print(f"Registry path: {registry_path}")
+   print(f"Registry exists: {registry_path.exists()}")
+
+   # List registry contents
+   if registry_path.exists():
+       for item in registry_path.rglob("*.json"):
+           print(f"Found: {item}")
+   ```
+
+3. **Auto-Repair**:
+   ```bash
+   python -m prompt_decorators repair
+   ```
+
+4. **Manual Reinstallation**:
+   ```bash
+   pip uninstall prompt-decorators
+   pip install --no-cache-dir prompt-decorators
+   ```
+
+If issues persist, please [open an issue](https://github.com/synaptiai/prompt-decorators/issues) with the output of the verification command.
 
 ## Next Steps
 
