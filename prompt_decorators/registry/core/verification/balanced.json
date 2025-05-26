@@ -1,0 +1,115 @@
+{
+  "decoratorName": "Balanced",
+  "version": "1.0.0",
+  "description": "Ensures equal representation of different perspectives or viewpoints on a topic. This decorator promotes fairness and comprehensiveness by giving proportional attention to multiple sides of an issue, avoiding bias toward any particular position.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "perspectives",
+      "type": "number",
+      "description": "Number of different perspectives to include",
+      "default": 2,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "structure",
+      "type": "enum",
+      "description": "How to structure the different perspectives",
+      "enum": ["alternating", "sequential", "comparative"],
+      "default": "sequential",
+      "required": false
+    },
+    {
+      "name": "equal",
+      "type": "boolean",
+      "description": "Whether to strictly enforce equal word count for each perspective",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please ensure your response presents a balanced view with equal representation of different perspectives on the topic.",
+    "parameterMapping": {
+      "perspectives": {
+        "format": "Include {value} different perspectives or viewpoints on this topic."
+      },
+      "structure": {
+        "valueMap": {
+          "alternating": "Present the different perspectives in an alternating point-by-point format, addressing the same aspects from each viewpoint before moving to the next aspect.",
+          "sequential": "Present each perspective fully and separately in sequence, with clear sections for each viewpoint.",
+          "comparative": "Present the perspectives in a side-by-side comparative analysis, highlighting agreements and differences across specific dimensions."
+        }
+      },
+      "equal": {
+        "valueMap": {
+          "true": "Ensure that each perspective receives equal attention, detail, and word count in your response.",
+          "false": "Each perspective should be adequately represented, but strict equality in length is not required."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic balanced view with two perspectives",
+        "originalPrompt": "Discuss the pros and cons of nuclear energy.",
+        "transformedPrompt": "Please ensure your response presents a balanced view with equal representation of different perspectives on the topic. Include 2 different perspectives or viewpoints on this topic. Present each perspective fully and separately in sequence, with clear sections for each viewpoint. Ensure that each perspective receives equal attention, detail, and word count in your response.\n\nDiscuss the pros and cons of nuclear energy."
+      },
+      {
+        "context": "Comparative analysis of multiple perspectives",
+        "originalPrompt": "What are the different views on artificial intelligence regulation?",
+        "transformedPrompt": "Please ensure your response presents a balanced view with equal representation of different perspectives on the topic. Include 4 different perspectives or viewpoints on this topic. Present the perspectives in a side-by-side comparative analysis, highlighting agreements and differences across specific dimensions. Ensure that each perspective receives equal attention, detail, and word count in your response.\n\nWhat are the different views on artificial intelligence regulation?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Debate",
+        "relationship": "enhances",
+        "notes": "Balanced pairs well with Debate to ensure fair representation in dialectical formats"
+      },
+      {
+        "decorator": "Steelman",
+        "relationship": "enhances",
+        "notes": "Balanced ensures equal representation while Steelman strengthens the quality of each perspective"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Present multiple perspectives on this topic, giving equal attention to each viewpoint. Avoid showing bias toward any particular position. Make sure to address the strongest arguments from each perspective.",
+        "notes": "This model may need more explicit reminders about maintaining balance throughout the response"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic balanced view of a controversial topic",
+      "usage": "+++Balanced\nDiscuss the pros and cons of nuclear energy.",
+      "result": "Presents the benefits and drawbacks of nuclear energy with equal attention and detail given to both perspectives"
+    },
+    {
+      "description": "Balanced presentation of multiple perspectives in comparative structure",
+      "usage": "+++Balanced(perspectives=4, structure=comparative, equal=true)\nWhat are the different views on artificial intelligence regulation?",
+      "result": "Provides a balanced side-by-side comparison of four different perspectives on AI regulation, with equal word count allocated to each viewpoint"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

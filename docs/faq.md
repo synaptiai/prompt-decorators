@@ -309,6 +309,41 @@ Common issues include:
 3. **Name Typos**: Verify the decorator name is spelled correctly (case-sensitive)
 4. **Parameter Errors**: Check that parameter names and values are correct
 
+### Why am I getting "No decorators loaded" or "Registry is empty" errors?
+
+This is a common issue that can occur when the package is installed without its built-in decorator definitions. Here's how to diagnose and fix it:
+
+1. **Quick Verification**:
+   ```bash
+   python -m prompt_decorators verify
+   ```
+
+2. **Check Registry Status**:
+   ```python
+   from prompt_decorators import get_available_decorators
+   decorators = get_available_decorators()
+   print(f"Loaded decorators: {len(decorators)}")
+   ```
+
+3. **Auto-Repair**:
+   ```bash
+   python -m prompt_decorators repair
+   ```
+
+4. **Manual Fix**:
+   ```bash
+   pip uninstall prompt-decorators
+   pip install --no-cache-dir prompt-decorators
+   python -m prompt_decorators verify
+   ```
+
+This issue typically occurs when:
+- The package was built without registry files
+- Installation was incomplete
+- Registry files were accidentally deleted
+
+The auto-repair system will automatically detect and fix most registry issues.
+
 ### How do I debug decorator transformations?
 
 Print the transformed prompt to see what's happening:

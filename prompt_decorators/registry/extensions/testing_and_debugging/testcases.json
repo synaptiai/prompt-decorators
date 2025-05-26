@@ -1,0 +1,132 @@
+{
+  "decoratorName": "TestCases",
+  "version": "1.0.0",
+  "description": "Generates specific test cases for functionality, edge cases, or regressions.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "coverage",
+      "type": "enum",
+      "description": "Types of test cases to generate",
+      "enum": [
+        "happy-path",
+        "edge-cases",
+        "error-conditions",
+        "boundary",
+        "all"
+      ],
+      "default": "happy-path",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Output format of the test cases",
+      "enum": [
+        "table",
+        "code",
+        "gherkin"
+      ],
+      "default": "code",
+      "required": false
+    },
+    {
+      "name": "assertions",
+      "type": "enum",
+      "description": "Level of assertion detail",
+      "enum": [
+        "basic",
+        "comprehensive",
+        "advanced"
+      ],
+      "default": "comprehensive",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate test cases for the following functionality. Focus on providing thorough test coverage.",
+    "parameterMapping": {
+      "coverage": {
+        "valueMap": {
+          "happy-path": "Focus on testing the main functionality with valid inputs and expected behavior.",
+          "edge-cases": "Focus on testing edge cases and unusual inputs that might cause unexpected behavior.",
+          "error-conditions": "Focus on testing error conditions and how the system handles invalid inputs.",
+          "boundary": "Focus on testing boundary conditions and limits of the functionality.",
+          "all": "Provide comprehensive test coverage including happy paths, edge cases, error conditions, and boundary tests."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "table": "Present the test cases in a tabular format with inputs, expected outputs, and test descriptions.",
+          "code": "Present the test cases as executable code with proper test functions and assertions.",
+          "gherkin": "Present the test cases in Gherkin format (Given-When-Then) suitable for behavior-driven development."
+        }
+      },
+      "assertions": {
+        "valueMap": {
+          "basic": "Include basic assertions that verify the core functionality.",
+          "comprehensive": "Include comprehensive assertions that verify both the core functionality and important side effects.",
+          "advanced": "Include advanced assertions that verify all aspects of the functionality, including edge cases and performance considerations."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Unit testing a date range function",
+        "originalPrompt": "Generate test cases for a function that processes date ranges.",
+        "transformedPrompt": "Generate test cases for the following functionality. Focus on providing thorough test coverage. Focus on testing edge cases and unusual inputs that might cause unexpected behavior. Present the test cases as executable code with proper test functions and assertions. Include comprehensive assertions that verify both the core functionality and important side effects.\n\nGenerate test cases for a function that processes date ranges.",
+        "notes": "The decorator adds specific guidance on test coverage, format, and assertion level."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "TestCases works well with CodeReview as it can generate tests that verify issues identified in code reviews."
+      },
+      {
+        "decorator": "Debugging",
+        "relationship": "enhances",
+        "notes": "TestCases can be used to create regression tests for bugs identified during debugging."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create test cases for the following functionality. Be thorough and consider different scenarios.",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Generating edge case tests for a date processing function",
+      "usage": "+++TestCases(coverage=edge-cases, format=code, assertions=comprehensive)\nGenerate test cases for a function that processes date ranges, including edge cases like leap years and timezone transitions.",
+      "result": "The model will generate code-based test cases focusing on edge cases for date processing, with comprehensive assertions."
+    },
+    {
+      "description": "Creating tabular test cases for error conditions",
+      "usage": "+++TestCases(coverage=error-conditions, format=table)\nGenerate test cases for a user registration form validation.",
+      "result": "The model will generate a table of test cases focusing on error conditions in form validation, with comprehensive assertions (the default)."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

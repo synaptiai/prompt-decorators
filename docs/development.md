@@ -73,6 +73,23 @@ pytest
 
 If all tests pass, your environment is set up correctly!
 
+### 5. Verify Registry Loading
+
+After setting up your development environment, verify that the registry system is working:
+
+```bash
+# Verify registry loading
+python -m prompt_decorators verify
+
+# If needed, prepare the build (copy registry files)
+python scripts/prepare_build.py
+
+# Verify again
+python -m prompt_decorators verify
+```
+
+You should see a message indicating that decorators were loaded successfully.
+
 ## Project Structure
 
 The project follows this structure:
@@ -366,14 +383,20 @@ def test_decorator_functionality():
 1. Update version in `pyproject.toml`
 2. Update CHANGELOG.md
 3. Ensure all tests pass
-4. Build the distribution:
+4. Prepare and build the distribution:
 
 ```bash
-# Using Poetry
+# Prepare build (copy registry files)
+python scripts/prepare_build.py
+
+# Verify build contents
+python scripts/verify_build.py
+
+# Build using Poetry
 poetry build
 
-# Using setuptools
-python -m build
+# Or use the automated release script
+python scripts/release.py patch  # or minor/major
 ```
 
 ### Publishing a Release

@@ -1,0 +1,105 @@
+{
+  "decoratorName": "Compatibility",
+  "version": "1.0.0",
+  "description": "A meta-decorator that specifies model-specific adaptations or fall-back behaviors. This enables graceful degradation of decorator functionalities across different LLM capabilities and ensures optimal performance across model variants.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "models",
+      "type": "array",
+      "description": "List of specific models to adapt for (e.g., gpt-4-turbo, gpt-4o, etc.)",
+      "required": true
+    },
+    {
+      "name": "fallback",
+      "type": "string",
+      "description": "Decorator to apply if the current model doesn't match any in the models list",
+      "required": false
+    },
+    {
+      "name": "behaviors",
+      "type": "string",
+      "description": "JSON string mapping model names to specific adaptations (e.g., '{\"gpt-4-turbo\": \"simplify complex reasoning\", \"gpt-4o\": \"maximize detailed analysis\"}')",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please apply model-specific adaptations to ensure optimal performance on the current language model.",
+    "parameterMapping": {
+      "models": {
+        "format": "Apply the specialized behavior for these specific models: {value}. If the current model is not in this list, use the default or fallback behavior."
+      },
+      "fallback": {
+        "format": "If the current model is not one of the specified models, fall back to using the {value} decorator instead."
+      },
+      "behaviors": {
+        "format": "Apply these model-specific behavior adaptations: {value}. Each adaptation should be used only when running on the corresponding model."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "gpt-4o specific complex reasoning with StepByStep fallback",
+        "originalPrompt": "+++Compatibility(models=[gpt-4o], fallback=StepByStep)\n+++TreeOfThought(branches=3, depth=3)\nSolve this complex optimization problem.",
+        "transformedPrompt": "Please apply model-specific adaptations to ensure optimal performance on the current language model. Apply the specialized behavior for these specific models: [gpt-4o]. If the current model is not in this list, use the default or fallback behavior. If the current model is not one of the specified models, fall back to using the StepByStep decorator instead.\n\n+++TreeOfThought(branches=3, depth=3)\nSolve this complex optimization problem."
+      },
+      {
+        "context": "Model-specific explanations for quantum field theory",
+        "originalPrompt": "+++Compatibility(models=[gpt-4o,gpt-4-turbo], behaviors={\"gpt-4o\":\"use full mathematical notation and derivations\", \"gpt-4-turbo\":\"use simplified equations and more intuitive explanations\"})\n+++Academic(style=scientific)\nExplain quantum field theory.",
+        "transformedPrompt": "Please apply model-specific adaptations to ensure optimal performance on the current language model. Apply the specialized behavior for these specific models: [gpt-4o,gpt-4-turbo]. If the current model is not in this list, use the default or fallback behavior. Apply these model-specific behavior adaptations: {\"gpt-4o\":\"use full mathematical notation and derivations\", \"gpt-4-turbo\":\"use simplified equations and more intuitive explanations\"}. Each adaptation should be used only when running on the corresponding model.\n\n+++Academic(style=scientific)\nExplain quantum field theory."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "All",
+        "relationship": "enhances",
+        "notes": "Compatibility is designed to work with all other decorators to optimize their performance across different models"
+      },
+      {
+        "decorator": "Priority",
+        "relationship": "enhances",
+        "notes": "Priority can be used to control the sequence when both Compatibility and other meta-decorators are applied"
+      },
+      {
+        "decorator": "Override",
+        "relationship": "enhances",
+        "notes": "Compatibility and Override can work together to provide both model-specific adaptations and parameter customizations"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "Apply special handling for different model capabilities. If using {models}, implement the full decorator capabilities. If not using one of these models, {fallback}. For model-specific behavior adjustments: {behaviors}. Adapt your response based on the capabilities of the model you're currently running on.",
+        "notes": "This model can effectively implement complex model-specific adaptation logic across different decorator combinations"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic model-specific adaptation",
+      "usage": "+++Compatibility(models=[gpt-4o], fallback=StepByStep)\n+++TreeOfThought(branches=3, depth=3)\nSolve this complex optimization problem.",
+      "result": "If using gpt-4o, applies the TreeOfThought decorator with full functionality; if using any other model, falls back to the simpler StepByStep decorator"
+    },
+    {
+      "description": "Detailed model-specific behavior adaptations",
+      "usage": "+++Compatibility(models=[gpt-4o,gpt-4-turbo], behaviors={\"gpt-4o\":\"use full mathematical notation and derivations\", \"gpt-4-turbo\":\"use simplified equations and more intuitive explanations\"})\n+++Academic(style=scientific)\nExplain quantum field theory.",
+      "result": "Applies the Academic decorator but adapts how quantum field theory is explained based on the specific model capabilities, with full mathematical rigor for gpt-4o or simplified explanations for gpt-4-turbo"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

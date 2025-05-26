@@ -1,0 +1,116 @@
+{
+  "decoratorName": "Creative",
+  "version": "1.0.0",
+  "description": "Enhances responses with imaginative, novel, and original content. This decorator encourages divergent thinking, metaphorical language, and unusual connections to generate engaging and non-obvious outputs.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "The degree of creative thinking to apply",
+      "enum": ["moderate", "high", "unconventional"],
+      "default": "high",
+      "required": false
+    },
+    {
+      "name": "elements",
+      "type": "array",
+      "description": "Specific creative elements to incorporate (e.g., metaphor, wordplay, narrative)",
+      "required": false
+    },
+    {
+      "name": "constraints",
+      "type": "array",
+      "description": "Optional creative constraints to work within",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide an imaginative, novel, and original response that uses creative language and unexpected connections to engage the reader.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "moderate": "Use creativity to make the content engaging while ensuring it remains accessible and practical. Incorporate creative elements that enhance understanding without overshadowing the substance.",
+          "high": "Apply significant creative thinking to present the information in fresh, surprising ways. Use vivid language, unexpected angles, and novel framing to create an engaging and memorable response.",
+          "unconventional": "Push far beyond conventional thinking to create a truly original response. Break traditional patterns, challenge assumptions, and explore highly unusual perspectives or approaches."
+        }
+      },
+      "elements": {
+        "format": "Specifically incorporate these creative elements in your response: {value}."
+      },
+      "constraints": {
+        "format": "While being creative, work within these constraints: {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Creative explanation of the internet",
+        "originalPrompt": "Explain how the internet works.",
+        "transformedPrompt": "Please provide an imaginative, novel, and original response that uses creative language and unexpected connections to engage the reader. Apply significant creative thinking to present the information in fresh, surprising ways. Use vivid language, unexpected angles, and novel framing to create an engaging and memorable response.\n\nExplain how the internet works."
+      },
+      {
+        "context": "Highly unconventional quantum computing explanation with specific elements and constraints",
+        "originalPrompt": "Describe the principles of quantum computing.",
+        "transformedPrompt": "Please provide an imaginative, novel, and original response that uses creative language and unexpected connections to engage the reader. Push far beyond conventional thinking to create a truly original response. Break traditional patterns, challenge assumptions, and explore highly unusual perspectives or approaches. Specifically incorporate these creative elements in your response: metaphor, narrative, wordplay. While being creative, work within these constraints: must reference nature.\n\nDescribe the principles of quantum computing."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Academic",
+        "relationship": "conflicts",
+        "notes": "Creative's imaginative expression conflicts with Academic's formal scholarly conventions"
+      },
+      {
+        "decorator": "Professional",
+        "relationship": "conflicts",
+        "notes": "Creative's playful approach conflicts with Professional's business-oriented formality"
+      },
+      {
+        "decorator": "Analogical",
+        "relationship": "enhances",
+        "notes": "Analogical reasoning works well with Creative to develop rich, imaginative comparisons"
+      },
+      {
+        "decorator": "Narrative",
+        "relationship": "enhances",
+        "notes": "Narrative structure pairs excellently with Creative to build engaging storylines"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Be creative, original and imaginative in your response. Use {level} levels of creativity and incorporate {elements} in your writing. Work within these constraints: {constraints}. Focus on making the response engaging, unexpected, and thought-provoking while still addressing the core question.",
+        "notes": "This model sometimes needs explicit encouragement to break from conventional patterns in its responses"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic creative response to a standard question",
+      "usage": "+++Creative\nExplain how the internet works.",
+      "result": "Provides an imaginative explanation of the internet using unexpected metaphors and creative language while maintaining accuracy"
+    },
+    {
+      "description": "Highly creative response with specific elements",
+      "usage": "+++Creative(level=unconventional, elements=[metaphor,narrative,wordplay], constraints=[must reference nature])\nDescribe the principles of quantum computing.",
+      "result": "Delivers an unconventional explanation of quantum computing through an engaging narrative filled with nature metaphors and clever wordplay"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Academic", "Professional"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

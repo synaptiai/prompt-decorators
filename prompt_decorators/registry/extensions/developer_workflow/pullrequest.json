@@ -1,0 +1,134 @@
+{
+  "decoratorName": "PullRequest",
+  "version": "1.0.0",
+  "description": "Generates descriptive pull request templates and descriptions.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Description depth",
+      "enum": [
+        "minimal",
+        "standard",
+        "comprehensive"
+      ],
+      "default": "standard",
+      "required": false
+    },
+    {
+      "name": "sections",
+      "type": "enum",
+      "description": "PR sections to include",
+      "enum": [
+        "summary",
+        "changes",
+        "testing",
+        "screenshots",
+        "dependencies",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "reviewers",
+      "type": "enum",
+      "description": "Guidance for reviewers",
+      "enum": [
+        "none",
+        "focused",
+        "detailed"
+      ],
+      "default": "focused",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate a pull request description with the following structure and content:",
+    "parameterMapping": {
+      "detail": {
+        "valueMap": {
+          "minimal": "Keep the description concise and focus only on essential information.",
+          "standard": "Provide a balanced level of detail that covers the main aspects of the changes.",
+          "comprehensive": "Create a detailed description that thoroughly explains all aspects of the changes."
+        }
+      },
+      "sections": {
+        "valueMap": {
+          "summary": "Include only a summary section that briefly describes the changes.",
+          "changes": "Include sections for summary and detailed changes made.",
+          "testing": "Include sections for summary, changes, and testing information.",
+          "screenshots": "Include sections for summary, changes, testing, and visual references/screenshots.",
+          "dependencies": "Include sections for summary, changes, testing, and dependency information.",
+          "all": "Include all standard PR sections: summary, changes made, testing information, visual references/screenshots if applicable, and dependency changes."
+        }
+      },
+      "reviewers": {
+        "valueMap": {
+          "none": "Do not include specific guidance for reviewers.",
+          "focused": "Include targeted guidance for reviewers, highlighting specific areas that need attention.",
+          "detailed": "Include comprehensive guidance for reviewers with specific questions and areas to focus on."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web development project",
+        "originalPrompt": "Create a pull request description for a feature that adds social login options to our authentication system.",
+        "transformedPrompt": "Generate a pull request description with the following structure and content: Provide a balanced level of detail that covers the main aspects of the changes. Include all standard PR sections: summary, changes made, testing information, visual references/screenshots if applicable, and dependency changes. Include targeted guidance for reviewers, highlighting specific areas that need attention.\n\nCreate a pull request description for a feature that adds social login options to our authentication system.",
+        "notes": "The decorator prepends instructions for generating a structured PR description with standard detail, all sections, and focused reviewer guidance."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "PullRequest works well with CodeReview, as they address different aspects of the development workflow."
+      },
+      {
+        "decorator": "TechnicalDocumentation",
+        "relationship": "enhances",
+        "notes": "Can be combined to generate both PR descriptions and related documentation."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a pull request description with the following sections and level of detail:",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Comprehensive PR description for a new feature",
+      "usage": "+++PullRequest(detail=comprehensive, sections=all, reviewers=detailed)\nCreate a pull request description for a feature that adds social login options to our authentication system.",
+      "result": "Generates a detailed PR description with all sections and comprehensive reviewer guidance for a social login feature."
+    },
+    {
+      "description": "Minimal PR description focusing on changes only",
+      "usage": "+++PullRequest(detail=minimal, sections=changes, reviewers=none)\nCreate a pull request description for a bug fix in the payment processing system.",
+      "result": "Generates a concise PR description focusing only on the changes made to fix the payment processing bug."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

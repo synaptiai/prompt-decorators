@@ -1,0 +1,116 @@
+{
+  "decoratorName": "FactCheck",
+  "version": "1.0.0",
+  "description": "Enhances the response with verification of factual claims and explicit indication of confidence levels. This decorator promotes accuracy by distinguishing between well-established facts, likely facts, and uncertain or speculative information.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "confidence",
+      "type": "boolean",
+      "description": "Whether to include explicit confidence levels for claims",
+      "default": true,
+      "required": false
+    },
+    {
+      "name": "uncertain",
+      "type": "enum",
+      "description": "How to handle uncertain information",
+      "enum": ["mark", "exclude", "qualify"],
+      "default": "mark",
+      "required": false
+    },
+    {
+      "name": "strictness",
+      "type": "enum",
+      "description": "The threshold for considering information verified",
+      "enum": ["low", "moderate", "high"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information.",
+    "parameterMapping": {
+      "confidence": {
+        "valueMap": {
+          "true": "For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:').",
+          "false": "Maintain factual accuracy but do not explicitly label confidence levels for individual claims."
+        }
+      },
+      "uncertain": {
+        "valueMap": {
+          "mark": "Clearly mark any uncertain or speculative information with appropriate qualifiers (e.g., 'may be', 'some evidence suggests', 'it is theorized').",
+          "exclude": "Only include well-established or highly likely information, omitting speculative or highly uncertain claims entirely.",
+          "qualify": "Include uncertain information but qualify it extensively with context about the limitations of current knowledge."
+        }
+      },
+      "strictness": {
+        "valueMap": {
+          "low": "Apply a lenient standard for verification, allowing inclusion of generally accepted information even without definitive proof.",
+          "moderate": "Apply a balanced verification standard, requiring reliable sources for claims but accepting well-supported consensus views.",
+          "high": "Apply a stringent verification standard, requiring strong evidence and multiple reliable sources for all claims."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic fact checking with confidence indicators",
+        "originalPrompt": "Explain the history and effectiveness of vaccines.",
+        "transformedPrompt": "Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information. For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:'). Clearly mark any uncertain or speculative information with appropriate qualifiers (e.g., 'may be', 'some evidence suggests', 'it is theorized'). Apply a balanced verification standard, requiring reliable sources for claims but accepting well-supported consensus views.\n\nExplain the history and effectiveness of vaccines."
+      },
+      {
+        "context": "High-strictness fact checking excluding uncertain information",
+        "originalPrompt": "Describe what we know about dark matter.",
+        "transformedPrompt": "Please verify the factual claims in your response and clearly distinguish between well-established facts, likely facts, and uncertain or speculative information. For each factual claim, include an explicit indication of your confidence level (e.g., 'Established fact:', 'Likely:', 'Uncertain:'). Only include well-established or highly likely information, omitting speculative or highly uncertain claims entirely. Apply a stringent verification standard, requiring strong evidence and multiple reliable sources for all claims.\n\nDescribe what we know about dark matter."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CiteSource",
+        "relationship": "enhances",
+        "notes": "CiteSource pairs well with FactCheck by providing references for verified claims"
+      },
+      {
+        "decorator": "Uncertainty",
+        "relationship": "enhances",
+        "notes": "Uncertainty complements FactCheck by providing detailed probabilistic assessment of uncertain claims"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Carefully distinguish between facts with strong evidence, facts with moderate evidence, and speculative information. Label your confidence level for each claim (Established fact, Likely, Uncertain). Be precise about what is and isn't well-supported by evidence.",
+        "notes": "This model benefits from more explicit instructions about the need to clearly signal confidence levels"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic fact checking with confidence indicators",
+      "usage": "+++FactCheck\nExplain the history and effectiveness of vaccines.",
+      "result": "Provides information about vaccines with clear indications of confidence levels for different claims"
+    },
+    {
+      "description": "High-strictness fact checking that excludes uncertain information",
+      "usage": "+++FactCheck(strictness=high, uncertain=exclude)\nDescribe what we know about dark matter.",
+      "result": "Presents only well-established scientific facts about dark matter, excluding speculative or uncertain information"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

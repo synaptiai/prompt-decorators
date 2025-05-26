@@ -1,0 +1,124 @@
+{
+  "decoratorName": "FindGaps",
+  "version": "1.0.0",
+  "description": "Identifies missing elements, unanswered questions, or overlooked considerations in an idea, plan, or argument. This decorator helps improve completeness by systematically discovering and highlighting gaps that need addressing.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "aspects",
+      "type": "enum",
+      "description": "The specific types of gaps to focus on finding",
+      "enum": ["questions", "resources", "stakeholders", "risks", "dependencies", "comprehensive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "How thoroughly to analyze for gaps",
+      "enum": ["basic", "thorough", "exhaustive"],
+      "default": "thorough",
+      "required": false
+    },
+    {
+      "name": "solutions",
+      "type": "boolean",
+      "description": "Whether to suggest solutions or approaches for addressing the identified gaps",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please first analyze the main content, then methodically identify missing elements, unanswered questions, or overlooked considerations that need addressing.",
+    "parameterMapping": {
+      "aspects": {
+        "valueMap": {
+          "questions": "Focus specifically on identifying unanswered questions and unresolved issues that need clarification.",
+          "resources": "Focus specifically on identifying missing resources, tools, skills, or capabilities needed for implementation or success.",
+          "stakeholders": "Focus specifically on identifying overlooked stakeholders, individuals, or groups whose perspectives or needs are not adequately addressed.",
+          "risks": "Focus specifically on identifying potential risks, threats, and vulnerabilities that have not been adequately considered.",
+          "dependencies": "Focus specifically on identifying overlooked dependencies, prerequisites, or contingencies that could affect implementation or outcomes.",
+          "comprehensive": "Comprehensively identify gaps across multiple dimensions, including questions, resources, stakeholders, risks, and dependencies."
+        }
+      },
+      "depth": {
+        "valueMap": {
+          "basic": "Conduct a focused analysis to identify the most obvious and critical gaps.",
+          "thorough": "Conduct a detailed analysis to identify both obvious and subtle gaps that might significantly impact outcomes.",
+          "exhaustive": "Conduct an extremely comprehensive analysis to identify all possible gaps, including edge cases and minor considerations."
+        }
+      },
+      "solutions": {
+        "valueMap": {
+          "true": "For each identified gap, suggest potential solutions, approaches, or strategies to address it.",
+          "false": "Focus solely on identifying gaps without suggesting solutions or remedies."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic comprehensive gap analysis of a business plan",
+        "originalPrompt": "We plan to launch our SaaS product with these features and marketing channels...",
+        "transformedPrompt": "Please first analyze the main content, then methodically identify missing elements, unanswered questions, or overlooked considerations that need addressing. Comprehensively identify gaps across multiple dimensions, including questions, resources, stakeholders, risks, and dependencies. Conduct a detailed analysis to identify both obvious and subtle gaps that might significantly impact outcomes. For each identified gap, suggest potential solutions, approaches, or strategies to address it.\n\nWe plan to launch our SaaS product with these features and marketing channels..."
+      },
+      {
+        "context": "Exhaustive stakeholder-focused gap analysis without solutions",
+        "originalPrompt": "Here's our urban redevelopment proposal...",
+        "transformedPrompt": "Please first analyze the main content, then methodically identify missing elements, unanswered questions, or overlooked considerations that need addressing. Focus specifically on identifying overlooked stakeholders, individuals, or groups whose perspectives or needs are not adequately addressed. Conduct an extremely comprehensive analysis to identify all possible gaps, including edge cases and minor considerations. Focus solely on identifying gaps without suggesting solutions or remedies.\n\nHere's our urban redevelopment proposal..."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "Limitations and FindGaps complement each other by identifying both inherent constraints and missing elements"
+      },
+      {
+        "decorator": "BreakAndBuild",
+        "relationship": "enhances",
+        "notes": "FindGaps can help identify issues that BreakAndBuild can then address in its reconstruction phase"
+      },
+      {
+        "decorator": "StressTest",
+        "relationship": "enhances",
+        "notes": "FindGaps plus StressTest provides a comprehensive approach to identifying both missing elements and potential breaking points"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "First analyze this content carefully. Then identify missing or overlooked {aspects} using a {depth} approach. For each gap found, clearly explain why it matters and how it could impact outcomes. {solutions} Be specific and constructive in your gap analysis.",
+        "notes": "This model sometimes needs more explicit instruction to go beyond surface-level analysis and identify non-obvious gaps"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic comprehensive gap analysis of a business plan",
+      "usage": "+++FindGaps\nWe plan to launch our SaaS product with these features and marketing channels...",
+      "result": "First identifies gaps across various aspects of the SaaS product launch plan, then suggests solutions for addressing each gap"
+    },
+    {
+      "description": "Exhaustive stakeholder-focused gap analysis without solutions",
+      "usage": "+++FindGaps(aspects=stakeholders, depth=exhaustive, solutions=false)\nHere's our urban redevelopment proposal...",
+      "result": "Provides an exhaustive analysis of overlooked or inadequately considered stakeholders in the urban redevelopment proposal, without suggesting solutions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

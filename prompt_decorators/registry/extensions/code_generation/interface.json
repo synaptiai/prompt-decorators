@@ -1,0 +1,156 @@
+{
+  "decoratorName": "Interface",
+  "version": "1.0.0",
+  "description": "Generates interface definitions for APIs, libraries, or components.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Interface paradigm or API style",
+      "enum": [
+        "rest",
+        "graphql",
+        "rpc",
+        "soap",
+        "class",
+        "function",
+        "event-driven"
+      ],
+      "default": "context-dependent",
+      "required": false
+    },
+    {
+      "name": "verbosity",
+      "type": "enum",
+      "description": "Level of documentation detail",
+      "enum": [
+        "minimal",
+        "documented",
+        "extensive"
+      ],
+      "default": "documented",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Output format of the interface",
+      "enum": [
+        "code",
+        "openapi",
+        "schema",
+        "typescript"
+      ],
+      "default": "context-dependent",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate an interface definition with the following characteristics:",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "rest": "Use REST API design principles with appropriate HTTP methods and resource-based URLs.",
+          "graphql": "Design a GraphQL schema with types, queries, and mutations.",
+          "rpc": "Create an RPC-style interface with clearly defined methods and parameters.",
+          "soap": "Define a SOAP web service interface with XML schema definitions.",
+          "class": "Design an object-oriented class interface with methods and properties.",
+          "function": "Create a functional programming interface with pure functions.",
+          "event-driven": "Design an event-driven interface with events, subscribers, and handlers."
+        },
+        "format": "Interface style: {value}"
+      },
+      "verbosity": {
+        "valueMap": {
+          "minimal": "Include only essential documentation with brief descriptions.",
+          "documented": "Provide standard documentation with descriptions for all elements and parameters.",
+          "extensive": "Include comprehensive documentation with examples, edge cases, and implementation notes."
+        },
+        "format": "Documentation level: {value}"
+      },
+      "format": {
+        "valueMap": {
+          "code": "Output as implementation code in the most appropriate language.",
+          "openapi": "Output as an OpenAPI/Swagger specification.",
+          "schema": "Output as a schema definition (JSON Schema, XML Schema, etc.).",
+          "typescript": "Output as TypeScript interface definitions."
+        },
+        "format": "Output format: {value}"
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "REST API design",
+        "originalPrompt": "Create an API interface for a user management service with authentication, user profiles, and role management.",
+        "transformedPrompt": "Generate an interface definition with the following characteristics:\nInterface style: rest\nDocumentation level: extensive\nOutput format: openapi\n\nCreate an API interface for a user management service with authentication, user profiles, and role management.",
+        "notes": "The decorator transforms the prompt to specify REST API design with extensive documentation in OpenAPI format."
+      },
+      {
+        "context": "Class interface design",
+        "originalPrompt": "Design a data structure for managing a shopping cart.",
+        "transformedPrompt": "Generate an interface definition with the following characteristics:\nInterface style: class\nDocumentation level: documented\nOutput format: typescript\n\nDesign a data structure for managing a shopping cart.",
+        "notes": "The decorator transforms the prompt to specify a class-based interface with standard documentation in TypeScript."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CodeReview can be applied after Interface to evaluate the generated interface design."
+      },
+      {
+        "decorator": "LanguageSpecific",
+        "relationship": "enhances",
+        "notes": "LanguageSpecific can refine the output to target a specific programming language."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a well-structured interface definition following these specifications:",
+        "notes": "For gpt-4, more explicit instructions about structure may be needed."
+      },
+      "claude-3-7-sonnet-latest": {
+        "instruction": "Design a clear and comprehensive interface with these parameters:",
+        "notes": "Claude models may benefit from more emphasis on comprehensive documentation."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "REST API for user management",
+      "usage": "+++Interface(style=rest, verbosity=extensive, format=openapi)\nCreate an API interface for a user management service with authentication, user profiles, and role management.",
+      "result": "Generates a comprehensive OpenAPI specification for a RESTful user management API with detailed documentation."
+    },
+    {
+      "description": "GraphQL API with minimal documentation",
+      "usage": "+++Interface(style=graphql, verbosity=minimal)\nDesign an e-commerce product catalog API.",
+      "result": "Produces a GraphQL schema for an e-commerce product catalog with essential documentation."
+    },
+    {
+      "description": "TypeScript class interface",
+      "usage": "+++Interface(style=class, format=typescript)\nCreate a data structure for a task management system.",
+      "result": "Generates TypeScript interfaces and classes for a task management system with standard documentation."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

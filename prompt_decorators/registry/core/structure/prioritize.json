@@ -1,0 +1,115 @@
+{
+  "decoratorName": "Prioritize",
+  "version": "1.0.0",
+  "description": "Structures the response by ranking information according to importance, urgency, or impact. This decorator helps identify the most critical aspects of a topic and presents information in a hierarchical manner from most to least important.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "criteria",
+      "type": "string",
+      "description": "The specific criterion to use for prioritization (e.g., importance, urgency, ROI)",
+      "default": "importance",
+      "required": false
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "description": "Number of prioritized items to include",
+      "default": 5,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 10
+      }
+    },
+    {
+      "name": "showRationale",
+      "type": "boolean",
+      "description": "Whether to explain the reasoning behind each priority ranking",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please prioritize the information in your response by ranking it according to specific criteria. Organize the content hierarchically from most to least critical, clearly distinguishing different levels of priority.",
+    "parameterMapping": {
+      "criteria": {
+        "format": "Rank the information based specifically on {value}, with the highest {value} items appearing first and lowest appearing last."
+      },
+      "count": {
+        "format": "Include exactly {value} prioritized items in your response, focusing on those with the highest priority according to the specified criteria."
+      },
+      "showRationale": {
+        "valueMap": {
+          "true": "For each prioritized item, provide a clear explanation of the reasoning behind its ranking position.",
+          "false": "Focus on presenting the prioritized items in order without explaining the rationale for each ranking position."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Prioritizing mobile app design factors",
+        "originalPrompt": "What factors should be considered when designing a mobile app?",
+        "transformedPrompt": "Please prioritize the information in your response by ranking it according to specific criteria. Organize the content hierarchically from most to least critical, clearly distinguishing different levels of priority. Rank the information based specifically on importance, with the highest importance items appearing first and lowest appearing last. Include exactly 5 prioritized items in your response, focusing on those with the highest priority according to the specified criteria. Focus on presenting the prioritized items in order without explaining the rationale for each ranking position.\n\nWhat factors should be considered when designing a mobile app?"
+      },
+      {
+        "context": "Prioritizing marketing strategies by ROI with rationale",
+        "originalPrompt": "What marketing strategies should our startup focus on?",
+        "transformedPrompt": "Please prioritize the information in your response by ranking it according to specific criteria. Organize the content hierarchically from most to least critical, clearly distinguishing different levels of priority. Rank the information based specifically on ROI, with the highest ROI items appearing first and lowest appearing last. Include exactly 7 prioritized items in your response, focusing on those with the highest priority according to the specified criteria. For each prioritized item, provide a clear explanation of the reasoning behind its ranking position.\n\nWhat marketing strategies should our startup focus on?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "MECE",
+        "relationship": "enhances",
+        "notes": "MECE ensures comprehensive coverage of categories while Prioritize ranks them by importance"
+      },
+      {
+        "decorator": "Alternatives",
+        "relationship": "enhances",
+        "notes": "Alternatives generates multiple options that Prioritize can then rank according to the specified criteria"
+      },
+      {
+        "decorator": "DecisionMatrix",
+        "relationship": "enhances",
+        "notes": "DecisionMatrix provides multi-criteria evaluation that can inform and complement the single-criterion ranking of Prioritize"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a prioritized list of the {count} most important items related to this topic, ranked by {criteria}. Number them from 1 to {count}, with 1 being the highest priority. {showRationale} Make sure each item is distinct and clearly relevant to the question.",
+        "notes": "This model may need explicit reminders to maintain strict ordering throughout the response and to avoid adding unprioritized items after the ranked list"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic prioritization of key factors",
+      "usage": "+++Prioritize\nWhat factors should be considered when designing a mobile app?",
+      "result": "Presents the top 5 factors for mobile app design, ranked by importance from most to least critical"
+    },
+    {
+      "description": "Detailed prioritization with custom criteria and rationale",
+      "usage": "+++Prioritize(criteria=ROI, count=7, showRationale=true)\nWhat marketing strategies should our startup focus on?",
+      "result": "Provides 7 marketing strategies ranked by return on investment, with explanations for each ranking position"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

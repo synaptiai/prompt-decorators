@@ -540,8 +540,10 @@ class DynamicDecorator:
     def load_registry(cls) -> None:
         """Load decorator definitions from the registry directory.
 
-        This method first attempts to load decorators from the package resources,
-        then falls back to scanning the filesystem for backward compatibility.
+        This method implements a comprehensive three-tier loading strategy:
+        1. Package resources loading (preferred)
+        2. Auto-repair if package registry is empty
+        3. Enhanced filesystem fallback
 
         Args:
             cls: The class object
@@ -555,12 +557,43 @@ class DynamicDecorator:
         # First try to load from package resources
         loaded_from_package = cls._load_from_package_resources()
 
-        # If nothing was loaded from package resources, fall back to filesystem
+        # If nothing was loaded from package resources, try auto-repair
         if not loaded_from_package:
+            logger.debug("Package registry empty, attempting auto-repair...")
+            try:
+                # Import registry validator for auto-repair
+                from prompt_decorators.utils.registry_validator import RegistryValidator
+
+                # Attempt auto-repair
+                success, message = RegistryValidator.auto_repair_registry()
+                if success:
+                    logger.info(f"Registry auto-repair successful: {message}")
+                    # Retry loading from package resources after repair
+                    loaded_from_package = cls._load_from_package_resources()
+                else:
+                    logger.warning(f"Registry auto-repair failed: {message}")
+            except ImportError:
+                logger.debug("Registry validator not available for auto-repair")
+            except Exception as e:
+                logger.warning(f"Auto-repair attempt failed: {e}")
+
+        # If still nothing loaded, fall back to filesystem
+        if not loaded_from_package:
+            logger.debug("Falling back to filesystem loading...")
             cls._load_from_filesystem()
 
         cls._loaded = True
-        logger.info(f"Loaded {len(cls._registry)} decorators from registry")
+        decorator_count = len(cls._registry)
+        logger.info(f"Loaded {decorator_count} decorators from registry")
+
+        # Log loading strategy used for debugging
+        if decorator_count > 0:
+            if loaded_from_package:
+                logger.debug("Successfully loaded decorators from package resources")
+            else:
+                logger.debug("Successfully loaded decorators from filesystem fallback")
+        else:
+            logger.warning("No decorators loaded - registry may be missing or empty")
 
     @classmethod
     def _load_from_package_resources(cls) -> bool:
@@ -866,6 +899,7 @@ class DynamicDecorator:
             "version": decorator_def.get("version", "1.0.0"),
         }
         logger.debug(f"Registered decorator: {name}")
+        cls._loaded = True  # Mark registry as loaded after successful registration
 
     @classmethod
     def get_available_decorators(cls) -> List[Any]:
