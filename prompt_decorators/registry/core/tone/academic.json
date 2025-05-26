@@ -1,0 +1,115 @@
+{
+  "decoratorName": "Academic",
+  "version": "1.0.0",
+  "description": "Adapts the response to follow scholarly writing conventions appropriate for academic publications. This decorator generates responses with formal language, structured argumentation, and proper citations following established academic citation styles.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The academic discipline style to follow",
+      "enum": ["humanities", "scientific", "legal"],
+      "default": "scientific",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The citation format to use for references",
+      "enum": ["APA", "MLA", "Chicago", "Harvard", "IEEE"],
+      "default": "APA",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response following scholarly writing conventions appropriate for academic publications, using formal language, structured argumentation, and proper citations.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "humanities": "Use conventions typical of humanities scholarship, including interpretive analysis, theoretical frameworks, and engagement with cultural, historical, or philosophical contexts.",
+          "scientific": "Follow scientific writing conventions, including clear methodology descriptions, evidence-based claims, objective tone, and precise technical terminology.",
+          "legal": "Adopt legal academic writing style, including careful statutory interpretation, case analysis, precedent citation, and attention to doctrinal frameworks."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "APA": "Format all citations and references according to APA (American Psychological Association) style, 7th edition.",
+          "MLA": "Format all citations and references according to MLA (Modern Language Association) style, 9th edition.",
+          "Chicago": "Format all citations and references according to Chicago style (Chicago Manual of Style), 17th edition.",
+          "Harvard": "Format all citations and references according to Harvard referencing style.",
+          "IEEE": "Format all citations and references according to IEEE citation style used in engineering and computer science."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Scientific academic response with APA citations",
+        "originalPrompt": "Discuss the evidence for climate change.",
+        "transformedPrompt": "Please structure your response following scholarly writing conventions appropriate for academic publications, using formal language, structured argumentation, and proper citations. Follow scientific writing conventions, including clear methodology descriptions, evidence-based claims, objective tone, and precise technical terminology. Format all citations and references according to APA (American Psychological Association) style, 7th edition.\n\nDiscuss the evidence for climate change."
+      },
+      {
+        "context": "Humanities academic response with MLA citations",
+        "originalPrompt": "Analyze the themes in Shakespeare's Hamlet.",
+        "transformedPrompt": "Please structure your response following scholarly writing conventions appropriate for academic publications, using formal language, structured argumentation, and proper citations. Use conventions typical of humanities scholarship, including interpretive analysis, theoretical frameworks, and engagement with cultural, historical, or philosophical contexts. Format all citations and references according to MLA (Modern Language Association) style, 9th edition.\n\nAnalyze the themes in Shakespeare's Hamlet."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CiteSources",
+        "relationship": "enhances",
+        "notes": "CiteSources complements Academic by ensuring thorough citation practices consistent with academic standards"
+      },
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "ELI5's simplified language directly conflicts with Academic's scholarly language requirements"
+      },
+      {
+        "decorator": "Creative",
+        "relationship": "conflicts",
+        "notes": "Creative's artistic expression conflicts with Academic's formal scholarly conventions"
+      },
+      {
+        "decorator": "PeerReview",
+        "relationship": "enhances",
+        "notes": "PeerReview pairs well with Academic to simulate scholarly publication review processes"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Write this response as a scholarly {style} academic paper with formal language, precise terminology, and proper structure (introduction, literature review, analysis/discussion, conclusion). Use {format} citations for all factual claims. Include appropriate academic vocabulary, transitional phrases, and maintain an objective, analytical stance.",
+        "notes": "This model sometimes needs more explicit guidance to maintain consistent academic tone and proper citation formats throughout"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Scientific academic response with APA citations",
+      "usage": "+++Academic\nDiscuss the evidence for climate change.",
+      "result": "Produces a scholarly analysis of climate change evidence using formal scientific language and proper APA citations"
+    },
+    {
+      "description": "Humanities-focused academic response with MLA citations",
+      "usage": "+++Academic(style=humanities, format=MLA)\nAnalyze the themes in Shakespeare's Hamlet.",
+      "result": "Provides a literary analysis of Hamlet using humanities-appropriate terminology and MLA citation format"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5", "Creative", "Motivational"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

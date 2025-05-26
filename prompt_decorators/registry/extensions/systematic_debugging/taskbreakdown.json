@@ -1,0 +1,132 @@
+{
+  "decoratorName": "TaskBreakdown",
+  "version": "1.0.0",
+  "description": "Requests identification and prioritization of tasks needed to fix an issue or implement a change.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Task breakdown detail level",
+      "enum": [
+        "high-level",
+        "detailed",
+        "comprehensive"
+      ],
+      "default": "detailed",
+      "required": false
+    },
+    {
+      "name": "priority",
+      "type": "enum",
+      "description": "Task prioritization approach",
+      "enum": [
+        "dependency-order",
+        "impact",
+        "effort",
+        "risk"
+      ],
+      "default": "dependency-order",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Task output format",
+      "enum": [
+        "list",
+        "checklist",
+        "kanban",
+        "detailed"
+      ],
+      "default": "checklist",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Break down this task into discrete steps or components. Identify the key tasks needed to address this issue.",
+    "parameterMapping": {
+      "detail": {
+        "valueMap": {
+          "high-level": "Provide a high-level breakdown of the main tasks required.",
+          "detailed": "Provide a detailed breakdown of tasks with subtasks where appropriate.",
+          "comprehensive": "Provide a comprehensive breakdown with detailed subtasks, considerations, and potential challenges for each step."
+        }
+      },
+      "priority": {
+        "valueMap": {
+          "dependency-order": "Order tasks based on dependencies, with prerequisite tasks first.",
+          "impact": "Prioritize tasks based on their impact on resolving the overall issue.",
+          "effort": "Prioritize tasks based on effort required, starting with quick wins.",
+          "risk": "Prioritize tasks based on risk level, addressing high-risk items first."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "list": "Present the tasks as a numbered list.",
+          "checklist": "Present the tasks as a checklist with checkable items.",
+          "kanban": "Organize tasks into 'To Do', 'In Progress', and 'Done' categories.",
+          "detailed": "Present each task with a title, description, priority level, and estimated effort."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software debugging scenario",
+        "originalPrompt": "Fix the data synchronization issues in our application.",
+        "transformedPrompt": "Break down this task into discrete steps or components. Identify the key tasks needed to address this issue. Provide a comprehensive breakdown with detailed subtasks, considerations, and potential challenges for each step. Prioritize tasks based on risk level, addressing high-risk items first. Present the tasks as a checklist with checkable items.\n\nFix the data synchronization issues in our application.",
+        "notes": "The decorator adds structure to a vague request by asking for specific task breakdown with prioritization."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "TaskBreakdown works well with StepByStep, as it identifies the tasks that can then be executed in sequence."
+      },
+      {
+        "decorator": "PrioritizationFramework",
+        "relationship": "enhances",
+        "notes": "Can be combined with PrioritizationFramework for more sophisticated prioritization approaches."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Please break down this problem into specific tasks that need to be completed. For each task, include details based on the specified level and prioritize according to the given approach.",
+        "notes": "For models with more limited context windows, the instruction is simplified while maintaining the core functionality."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic task breakdown for debugging a software issue",
+      "usage": "+++TaskBreakdown(detail=comprehensive, priority=risk, format=checklist)\nBreak down the tasks needed to fix the data synchronization issues.",
+      "result": "The model will provide a comprehensive checklist of tasks needed to fix data synchronization issues, prioritized by risk level."
+    },
+    {
+      "description": "High-level project planning",
+      "usage": "+++TaskBreakdown(detail=high-level, priority=dependency-order, format=kanban)\nWhat steps should we take to implement the new user authentication system?",
+      "result": "The model will provide a high-level kanban board of tasks organized by dependencies for implementing a new authentication system."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

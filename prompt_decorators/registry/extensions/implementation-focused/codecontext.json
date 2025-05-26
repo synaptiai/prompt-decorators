@@ -1,0 +1,115 @@
+{
+  "decoratorName": "CodeContext",
+  "version": "1.0.0",
+  "description": "Provides information about the existing codebase context to ensure proper integration.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "project",
+      "type": "string",
+      "description": "Project type or framework",
+      "default": "inferred",
+      "required": false
+    },
+    {
+      "name": "patterns",
+      "type": "string",
+      "description": "Established code patterns to follow",
+      "default": "inferred",
+      "required": false
+    },
+    {
+      "name": "conventions",
+      "type": "enum",
+      "description": "Naming and style conventions",
+      "enum": [
+        "camelCase",
+        "snake_case",
+        "PascalCase",
+        "kebab-case",
+        "custom"
+      ],
+      "default": "language-standard",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Consider the following code context when implementing the solution:",
+    "parameterMapping": {
+      "project": {
+        "format": "Project/Framework: {value}"
+      },
+      "patterns": {
+        "format": "Design Patterns: {value}"
+      },
+      "conventions": {
+        "valueMap": {
+          "camelCase": "Use camelCase naming convention (e.g., myVariable, calculateTotal)",
+          "snake_case": "Use snake_case naming convention (e.g., my_variable, calculate_total)",
+          "PascalCase": "Use PascalCase naming convention (e.g., MyVariable, CalculateTotal)",
+          "kebab-case": "Use kebab-case naming convention (e.g., my-variable, calculate-total)",
+          "custom": "Follow the custom naming conventions established in the project"
+        },
+        "format": "Naming Convention: {value}"
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "React application",
+        "originalPrompt": "Implement a shopping cart hook that matches our existing custom hooks pattern.",
+        "transformedPrompt": "Consider the following code context when implementing the solution:\nProject/Framework: react\nDesign Patterns: hooks\nNaming Convention: Use camelCase naming convention (e.g., myVariable, calculateTotal)\n\nImplement a shopping cart hook that matches our existing custom hooks pattern.",
+        "notes": "The decorator adds context about the React framework, hooks pattern, and camelCase convention to guide the implementation."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CodeContext provides the baseline standards that CodeReview can check against."
+      },
+      {
+        "decorator": "LanguageSpecific",
+        "relationship": "enhances",
+        "notes": "CodeContext complements language-specific guidance by providing project-level conventions."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Please follow these code context guidelines for your implementation:",
+        "notes": "More explicit instruction for models with less context understanding."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "React hooks implementation with camelCase convention",
+      "usage": "+++CodeContext(project=react, patterns=hooks, conventions=camelCase)\nImplement a shopping cart hook that matches our existing custom hooks pattern.",
+      "result": "The model will implement a React hook using camelCase naming conventions and following standard React hooks patterns."
+    },
+    {
+      "description": "Python backend with snake_case convention",
+      "usage": "+++CodeContext(project=django, patterns=MVT, conventions=snake_case)\nCreate a view for user authentication.",
+      "result": "The model will implement a Django view following the Model-View-Template pattern with snake_case naming conventions."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

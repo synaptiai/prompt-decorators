@@ -1,0 +1,134 @@
+{
+  "decoratorName": "Explain",
+  "version": "1.0.0",
+  "description": "Explains code or technical concepts with appropriate depth.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "Expertise assumption",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "default": "intermediate",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Explanation style",
+      "enum": [
+        "analogy",
+        "examples",
+        "theory",
+        "step-by-step",
+        "visual"
+      ],
+      "default": "examples",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Explanation emphasis",
+      "enum": [
+        "how",
+        "why",
+        "both"
+      ],
+      "default": "both",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Explain the following concept or code clearly and thoroughly.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "beginner": "Explain this as if to someone new to the field, avoiding jargon and using simple concepts.",
+          "intermediate": "Explain this to someone with moderate familiarity with the subject area.",
+          "advanced": "Provide an in-depth technical explanation suitable for experts in the field."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "analogy": "Use relevant analogies to make the concept more relatable.",
+          "examples": "Include concrete examples to illustrate the concept.",
+          "theory": "Focus on the theoretical foundations and principles.",
+          "step-by-step": "Break down the explanation into clear sequential steps.",
+          "visual": "Describe visual representations or diagrams that would help understand the concept."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "how": "Focus on how it works and practical implementation details.",
+          "why": "Focus on why it exists and the underlying rationale.",
+          "both": "Cover both how it works and why it exists or is designed this way."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Explaining a programming concept",
+        "originalPrompt": "Explain React's useEffect hook and its dependency array.",
+        "transformedPrompt": "Explain the following concept or code clearly and thoroughly. Explain this to someone with moderate familiarity with the subject area. Include concrete examples to illustrate the concept. Cover both how it works and why it exists or is designed this way.\n\nExplain React's useEffect hook and its dependency array.",
+        "notes": "The transformation adds context about the target audience level, preferred explanation approach, and what aspects to focus on."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "ELI5 sets a specific explanation level that would override the level parameter in Explain."
+      },
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "Can be used together to explain code while reviewing it."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Please explain the following concept or code with clarity and detail.",
+        "notes": "Slightly simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Explaining a programming concept at intermediate level with examples",
+      "usage": "+++Explain(level=intermediate, approach=examples, focus=both)\nExplain React's useEffect hook and its dependency array.",
+      "result": "A comprehensive explanation of React's useEffect hook that assumes intermediate knowledge, uses concrete examples, and covers both how it works and why it's designed that way."
+    },
+    {
+      "description": "Explaining a complex concept to beginners using analogies",
+      "usage": "+++Explain(level=beginner, approach=analogy, focus=how)\nExplain how public key cryptography works.",
+      "result": "A beginner-friendly explanation of public key cryptography using analogies, focusing on how it works rather than theoretical underpinnings."
+    }
+  ],
+  "compatibility": {
+    "conflicts": [
+      "ELI5",
+      "TechnicalDetail"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "decoratorName": "Extension",
+  "version": "1.0.0",
+  "description": "A meta-decorator that enables loading of community-defined decorators from external sources. This facilitates the use of specialized decorator packages, domain-specific extensions, or custom decorator libraries maintained by communities or organizations.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "source",
+      "type": "string",
+      "description": "URI or identifier for the extension package (e.g., URL, namespace, or registry identifier)",
+      "required": true
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Specific version of the extension package to use",
+      "required": false
+    },
+    {
+      "name": "decorators",
+      "type": "array",
+      "description": "Specific decorators to load from the extension (if empty, loads all decorators from the package)",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please load and apply specialized decorators from an external source to enhance your response capabilities.",
+    "parameterMapping": {
+      "source": {
+        "format": "Load the extension package from this source: {value}."
+      },
+      "version": {
+        "format": "Use version {value} of the extension package."
+      },
+      "decorators": {
+        "format": "Load only these specific decorators from the package: {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Loading scientific package for dark matter explanation",
+        "originalPrompt": "+++Extension(source=https://decorator-registry.ai/scientific-pack.json)\n+++ScientificReasoning(discipline=physics)\nExplain dark matter.",
+        "transformedPrompt": "Please load and apply specialized decorators from an external source to enhance your response capabilities. Load the extension package from this source: https://decorator-registry.ai/scientific-pack.json.\n\n+++ScientificReasoning(discipline=physics)\nExplain dark matter."
+      },
+      {
+        "context": "Loading specific medical decorators for diabetes treatment",
+        "originalPrompt": "+++Extension(source=medical-decorators, version=2.1.0, decorators=[ClinicalCase,EvidenceBased])\n+++ClinicalCase(format=SOAP)\nDescribe the treatment approach for Type 2 diabetes.",
+        "transformedPrompt": "Please load and apply specialized decorators from an external source to enhance your response capabilities. Load the extension package from this source: medical-decorators. Use version 2.1.0 of the extension package. Load only these specific decorators from the package: ClinicalCase,EvidenceBased.\n\n+++ClinicalCase(format=SOAP)\nDescribe the treatment approach for Type 2 diabetes."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Context",
+        "relationship": "enhances",
+        "notes": "Context can help adapt the loaded extension decorators to domain-specific requirements"
+      },
+      {
+        "decorator": "Custom",
+        "relationship": "enhances",
+        "notes": "Custom provides flexibility for working with extension decorators that might require customization"
+      },
+      {
+        "decorator": "Version",
+        "relationship": "enhances",
+        "notes": "Version helps ensure compatibility between core decorators and loaded extensions"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "This request will load specialized decorators from {source}. If any decorators in the following prompt come from this extension, apply them according to their definitions in the extension package.",
+        "notes": "This model handles extension loading well but requires clear indications of which decorators come from the extension"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic loading of an extension package",
+      "usage": "+++Extension(source=https://decorator-registry.ai/scientific-pack.json)\n+++ScientificReasoning(discipline=physics)\nExplain dark matter.",
+      "result": "Loads decorators from the scientific-pack extension and then applies the ScientificReasoning decorator (defined in that pack) with physics discipline to explain dark matter"
+    },
+    {
+      "description": "Loading specific decorators from a versioned extension",
+      "usage": "+++Extension(source=medical-decorators, version=2.1.0, decorators=[ClinicalCase,EvidenceBased])\n+++ClinicalCase(format=SOAP)\nDescribe the treatment approach for Type 2 diabetes.",
+      "result": "Loads only the ClinicalCase and EvidenceBased decorators from version 2.1.0 of the medical-decorators package, then applies the ClinicalCase decorator with SOAP format to describe diabetes treatment"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o"
+    ]
+  }
+}

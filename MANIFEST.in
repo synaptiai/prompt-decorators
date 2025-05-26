@@ -1,47 +1,39 @@
-include LICENSE
+# Include registry files in the package distribution
+recursive-include prompt_decorators/registry *.json
+recursive-include prompt_decorators/registry *.yml
+recursive-include prompt_decorators/registry *.yaml
+
+# Include documentation files
 include README.md
-include CODE_OF_CONDUCT.md
-include CONTRIBUTING.md
+include LICENSE
 include CHANGELOG.md
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+
+# Include configuration files
 include pyproject.toml
-include setup.py
 include setup.cfg
+include .pre-commit-config.yaml
 
-recursive-include prompt_decorators *.py
-recursive-include prompt_decorators *.json
-recursive-include prompt_decorators/templates *.j2
-recursive-include prompt_decorators/schemas *.json
+# Include schema files
+recursive-include schemas *.json
+recursive-include schemas *.yaml
 
-# Include registry files both in the package and in the source directory
-recursive-include prompt_decorators/registry *.json *.yml
-recursive-include prompt_decorators/registry/core *.json
-recursive-include prompt_decorators/registry/extensions *.json
-recursive-include prompt_decorators/registry/simplified_decorators *.json *.yml
+# Include type information
+include prompt_decorators/py.typed
 
-# Include registry files from the source directory for backward compatibility
-recursive-include registry *.json *.yml
-recursive-include registry/core *.json
-recursive-include registry/extensions *.json
-recursive-include registry/simplified_decorators *.json *.yml
-
-recursive-include tests *.py
-recursive-include examples *.py
-recursive-include examples/interactive *.ipynb
-recursive-include examples/providers *.py
-recursive-include examples/data *.json
-
-recursive-include docs *.md
-recursive-include docs *.yml
-recursive-include docs *.yaml
-
-prune */__pycache__
-prune */*.pyc
-prune */*.pyo
-prune */*.pyd
-prune .git
-prune .github
-prune .vscode
-prune .idea
-prune dist
-prune build
-prune *.egg-info
+# Exclude development and build artifacts
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .DS_Store
+global-exclude *.so
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+global-exclude .coverage
+global-exclude htmlcov
+global-exclude dist
+global-exclude build
+global-exclude *.egg-info

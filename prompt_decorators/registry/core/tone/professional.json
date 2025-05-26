@@ -1,0 +1,103 @@
+{
+  "decoratorName": "Professional",
+  "version": "1.0.0",
+  "description": "Adapts the response to use business-oriented language appropriate for professional contexts. This decorator generates content using formal business terminology, clear and concise phrasing, and industry-appropriate jargon when relevant.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "industry",
+      "type": "string",
+      "description": "The specific industry context to adapt the language for",
+      "default": "general",
+      "required": false
+    },
+    {
+      "name": "formality",
+      "type": "enum",
+      "description": "The level of formality to maintain in the response",
+      "enum": ["standard", "high", "executive"],
+      "default": "standard",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please respond using professional, business-oriented language appropriate for formal workplace communication.",
+    "parameterMapping": {
+      "industry": {
+        "format": "Adapt the language and terminology to be appropriate for the {value} industry, using relevant terminology and frameworks where applicable."
+      },
+      "formality": {
+        "valueMap": {
+          "standard": "Use standard professional business language that is clear, concise, and respectful without being overly formal.",
+          "high": "Use a high level of formality with careful attention to precise language, proper business terminology, and structured communication.",
+          "executive": "Use executive-level communication style with strategic framing, high-level insights, and language appropriate for senior leadership or board presentations."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard professional response about business systems",
+        "originalPrompt": "Explain the benefits of implementing a CRM system.",
+        "transformedPrompt": "Please respond using professional, business-oriented language appropriate for formal workplace communication. Use standard professional business language that is clear, concise, and respectful without being overly formal. Adapt the language and terminology to be appropriate for the general industry, using relevant terminology and frameworks where applicable.\n\nExplain the benefits of implementing a CRM system."
+      },
+      {
+        "context": "Executive-level healthcare industry communication",
+        "originalPrompt": "Summarize the impact of telehealth adoption on patient outcomes.",
+        "transformedPrompt": "Please respond using professional, business-oriented language appropriate for formal workplace communication. Use executive-level communication style with strategic framing, high-level insights, and language appropriate for senior leadership or board presentations. Adapt the language and terminology to be appropriate for the healthcare industry, using relevant terminology and frameworks where applicable.\n\nSummarize the impact of telehealth adoption on patient outcomes."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "Professional's formal business language directly conflicts with ELI5's simplified explanations"
+      },
+      {
+        "decorator": "Creative",
+        "relationship": "conflicts",
+        "notes": "Professional's structured business approach conflicts with Creative's artistic expression"
+      },
+      {
+        "decorator": "Audience",
+        "relationship": "enhances",
+        "notes": "Professional works well with Audience to further refine the target business context"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Use formal business language appropriate for a professional {industry} context. Maintain {formality} level of formality. Ensure proper structure, avoid colloquialisms, and use industry-appropriate terminology where relevant.",
+        "notes": "This model sometimes needs explicit reminders to maintain consistent professional tone throughout longer responses"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Standard professional business communication",
+      "usage": "+++Professional\nExplain the benefits of implementing a CRM system.",
+      "result": "Delivers a clear, professional explanation of CRM benefits using business-appropriate language and structure"
+    },
+    {
+      "description": "Industry-specific executive-level communication",
+      "usage": "+++Professional(industry=healthcare, formality=executive)\nSummarize the impact of telehealth adoption on patient outcomes.",
+      "result": "Produces an executive-level analysis of telehealth impacts using healthcare industry terminology and highly formal business language"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5", "Creative"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

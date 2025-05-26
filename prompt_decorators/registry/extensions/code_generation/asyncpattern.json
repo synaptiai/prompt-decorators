@@ -1,0 +1,156 @@
+{
+  "decoratorName": "AsyncPattern",
+  "version": "1.0.0",
+  "description": "Handles asynchronous operations with appropriate patterns for the language and environment.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Asynchronous programming model to use",
+      "enum": [
+        "promises",
+        "async-await",
+        "observables",
+        "callbacks",
+        "streams",
+        "events"
+      ],
+      "default": "language-appropriate",
+      "required": false
+    },
+    {
+      "name": "error-handling",
+      "type": "enum",
+      "description": "Error handling strategy",
+      "enum": [
+        "try-catch",
+        "error-first-callbacks",
+        "promise-rejection",
+        "error-streams"
+      ],
+      "default": "approach-appropriate",
+      "required": false
+    },
+    {
+      "name": "cancellation",
+      "type": "enum",
+      "description": "Support for operation cancellation",
+      "enum": [
+        "none",
+        "manual",
+        "timeout",
+        "signal"
+      ],
+      "default": "none",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach.",
+    "parameterMapping": {
+      "approach": {
+        "valueMap": {
+          "promises": "Implement using Promise-based patterns for asynchronous operations.",
+          "async-await": "Use async/await syntax for cleaner asynchronous code.",
+          "observables": "Implement using Observable patterns for reactive asynchronous streams.",
+          "callbacks": "Use callback functions to handle asynchronous operations.",
+          "streams": "Implement using stream-based asynchronous processing.",
+          "events": "Use event-based asynchronous programming model."
+        },
+        "format": "Use {value} as the primary asynchronous pattern."
+      },
+      "error-handling": {
+        "valueMap": {
+          "try-catch": "Handle errors using try/catch blocks around asynchronous operations.",
+          "error-first-callbacks": "Follow the error-first callback pattern where the first parameter is an error object.",
+          "promise-rejection": "Use promise rejection handling with .catch() or try/catch with async/await.",
+          "error-streams": "Handle errors through dedicated error streams or channels."
+        },
+        "format": "Implement {value} for error handling."
+      },
+      "cancellation": {
+        "valueMap": {
+          "none": "No cancellation mechanism is required.",
+          "manual": "Implement manual cancellation through boolean flags or state tracking.",
+          "timeout": "Include timeout-based cancellation for asynchronous operations.",
+          "signal": "Use AbortController or similar signal-based cancellation mechanisms."
+        },
+        "format": "Support {value} cancellation for asynchronous operations."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "JavaScript/TypeScript",
+        "originalPrompt": "Create a function that fetches user data from multiple APIs in parallel and combines the results.",
+        "transformedPrompt": "When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. Use async/await as the primary asynchronous pattern. Implement try/catch for error handling. Support signal cancellation for asynchronous operations.\n\nCreate a function that fetches user data from multiple APIs in parallel and combines the results.",
+        "notes": "The implementation uses async/await with Promise.all for parallel fetching, try/catch blocks for error handling, and accepts an AbortSignal parameter for cancellation."
+      },
+      {
+        "context": "Python",
+        "originalPrompt": "Create a function that fetches user data from multiple APIs in parallel and combines the results.",
+        "transformedPrompt": "When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. Use async/await as the primary asynchronous pattern. Implement try/catch for error handling. Support signal cancellation for asynchronous operations.\n\nCreate a function that fetches user data from multiple APIs in parallel and combines the results.",
+        "notes": "The implementation uses Python's asyncio with async/await, try/except blocks, and cancellation tokens from asyncio."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "LanguageSpecific",
+        "relationship": "enhances",
+        "notes": "LanguageSpecific can provide context for language-appropriate async patterns."
+      },
+      {
+        "decorator": "ErrorHandling",
+        "relationship": "enhances",
+        "notes": "ErrorHandling can provide more detailed error handling strategies that complement the async error handling approach."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Generate code that handles asynchronous operations using the specified pattern. For approach={approach}, use error handling with {error-handling} and implement {cancellation} cancellation support.",
+        "notes": "This model may need more explicit instructions about the specific patterns to use."
+      },
+      "gpt-4o": {
+        "instruction": "When implementing asynchronous operations in the code, use the specified asynchronous pattern and error handling approach. Use {approach} as the primary asynchronous pattern. Implement {error-handling} for error handling. Support {cancellation} cancellation for asynchronous operations.",
+        "notes": "gpt-4o has better understanding of advanced asynchronous patterns and can implement them more reliably."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "JavaScript async/await with try/catch and AbortController",
+      "usage": "+++AsyncPattern(approach=async-await, error-handling=try-catch, cancellation=signal)\nCreate a function that fetches user data from multiple APIs in parallel and combines the results.",
+      "result": "The model will generate JavaScript code using async/await syntax, with try/catch blocks for error handling, and accepting an AbortSignal parameter to support cancellation."
+    },
+    {
+      "description": "Node.js callback-based approach",
+      "usage": "+++AsyncPattern(approach=callbacks, error-handling=error-first-callbacks)\nCreate a function that reads multiple files and processes their contents.",
+      "result": "The model will generate Node.js code using callback functions with the error-first pattern for handling asynchronous file operations."
+    },
+    {
+      "description": "Reactive programming with observables",
+      "usage": "+++AsyncPattern(approach=observables, error-handling=error-streams, cancellation=manual)\nCreate a service that monitors real-time data from multiple sources.",
+      "result": "The model will generate code using Observable patterns (like RxJS) with error streams for error handling and manual subscription management for cancellation."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "claude-instant"
+    ]
+  }
+}

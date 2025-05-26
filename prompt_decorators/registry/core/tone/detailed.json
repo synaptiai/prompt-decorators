@@ -1,0 +1,115 @@
+{
+  "decoratorName": "Detailed",
+  "version": "1.0.0",
+  "description": "Enhances the response with comprehensive information, thorough explanations, and rich context. This decorator is ideal for in-depth learning, complex topics requiring nuance, or when completeness is valued over brevity.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "The level of detail and comprehensiveness",
+      "enum": ["moderate", "comprehensive", "exhaustive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "aspects",
+      "type": "array",
+      "description": "Specific aspects or dimensions to explore in detail",
+      "required": false
+    },
+    {
+      "name": "examples",
+      "type": "boolean",
+      "description": "Whether to include detailed examples to illustrate points",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide a detailed response with comprehensive information, thorough explanations, and rich context.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "moderate": "Include a good level of detail that covers the main points thoroughly while avoiding excessive information.",
+          "comprehensive": "Provide extensive detail, covering both main concepts and secondary aspects with thorough explanation of each.",
+          "exhaustive": "Deliver an extremely detailed analysis that leaves no aspect unexplored, including nuances, edge cases, theoretical foundations, and practical applications."
+        }
+      },
+      "aspects": {
+        "format": "Pay particular attention to these specific aspects: {value}. Explore each of these dimensions thoroughly."
+      },
+      "examples": {
+        "valueMap": {
+          "true": "Include detailed examples, case studies, or illustrations to demonstrate key points and enhance understanding.",
+          "false": "Focus on explaining concepts without providing specific examples or case studies."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Comprehensive explanation of a complex system",
+        "originalPrompt": "Explain how the human immune system works.",
+        "transformedPrompt": "Please provide a detailed response with comprehensive information, thorough explanations, and rich context. Provide extensive detail, covering both main concepts and secondary aspects with thorough explanation of each. Include detailed examples, case studies, or illustrations to demonstrate key points and enhance understanding.\n\nExplain how the human immune system works."
+      },
+      {
+        "context": "Exhaustive analysis of specific aspects",
+        "originalPrompt": "Analyze the implications of transitioning to renewable energy.",
+        "transformedPrompt": "Please provide a detailed response with comprehensive information, thorough explanations, and rich context. Deliver an extremely detailed analysis that leaves no aspect unexplored, including nuances, edge cases, theoretical foundations, and practical applications. Pay particular attention to these specific aspects: economic, environmental, social, technological. Explore each of these dimensions thoroughly. Include detailed examples, case studies, or illustrations to demonstrate key points and enhance understanding.\n\nAnalyze the implications of transitioning to renewable energy."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Concise",
+        "relationship": "conflicts",
+        "notes": "Detailed's comprehensive approach directly conflicts with Concise's brevity focus"
+      },
+      {
+        "decorator": "Summary",
+        "relationship": "conflicts",
+        "notes": "Detailed aims for comprehensiveness while Summary aims for conciseness"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can organize detailed information into a more digestible format"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Provide an extremely thorough and comprehensive response that covers all aspects of this topic in detail. Don't simplify or abbreviate. Include explanations of core concepts, nuances, relationships between ideas, and practical implications.",
+        "notes": "This model sometimes needs more explicit instructions to maintain depth throughout a long response"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Comprehensive detailed explanation of a concept",
+      "usage": "+++Detailed\nExplain how the human immune system works.",
+      "result": "Provides a thorough, in-depth explanation of the immune system covering all major components, processes, and functions with illustrative examples"
+    },
+    {
+      "description": "Exhaustive detailed analysis of specific aspects",
+      "usage": "+++Detailed(depth=exhaustive, aspects=[economic,environmental,social,technological], examples=true)\nAnalyze the implications of transitioning to renewable energy.",
+      "result": "Delivers an extremely detailed analysis of renewable energy transition, exhaustively covering all four specified aspects with comprehensive examples"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Concise", "Summary"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

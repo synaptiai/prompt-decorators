@@ -173,6 +173,20 @@ decorated_prompt = reasoning.apply(prompt)
 print(decorated_prompt)
 ```
 
+### Verifying Installation
+
+After installation, verify that everything is working correctly:
+
+```bash
+# Verify the package is installed
+python -c "import prompt_decorators; print(prompt_decorators.__version__)"
+
+# Verify registry loading
+python -m prompt_decorators verify
+```
+
+If you see "Registry verification successful" with a count of loaded decorators, you're ready to go!
+
 For more detailed examples and usage instructions, please refer to the [official documentation](https://synaptiai.github.io/prompt-decorators/).
 
 ## 📝 License

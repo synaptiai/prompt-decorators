@@ -1,0 +1,152 @@
+{
+  "decoratorName": "Algorithm",
+  "version": "1.0.0",
+  "description": "Implements specific algorithms with the desired complexity characteristics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "type",
+      "type": "enum",
+      "description": "Algorithm category",
+      "enum": [
+        "sorting",
+        "search",
+        "graph",
+        "string",
+        "numeric",
+        "ml",
+        "crypto"
+      ],
+      "default": "context-dependent",
+      "required": false
+    },
+    {
+      "name": "complexity",
+      "type": "enum",
+      "description": "Desired time complexity",
+      "enum": [
+        "constant",
+        "logarithmic",
+        "linear",
+        "linearithmic",
+        "quadratic",
+        "polynomial",
+        "exponential"
+      ],
+      "default": "best-available",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Algorithm design approach",
+      "enum": [
+        "recursive",
+        "iterative",
+        "divide-conquer",
+        "dynamic",
+        "greedy"
+      ],
+      "default": "most-appropriate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Implement an algorithm with the following characteristics:",
+    "parameterMapping": {
+      "type": {
+        "valueMap": {
+          "sorting": "Use a sorting algorithm such as merge sort, quick sort, or bubble sort.",
+          "search": "Implement a search algorithm such as binary search, linear search, or depth-first search.",
+          "graph": "Use a graph algorithm such as Dijkstra's, BFS, DFS, or minimum spanning tree.",
+          "string": "Implement a string processing algorithm such as KMP, Rabin-Karp, or regex matching.",
+          "numeric": "Use a numeric algorithm such as GCD, prime factorization, or numerical integration.",
+          "ml": "Implement a machine learning algorithm such as linear regression, k-means, or neural networks.",
+          "crypto": "Use a cryptographic algorithm such as RSA, AES, or hashing functions."
+        }
+      },
+      "complexity": {
+        "valueMap": {
+          "constant": "The algorithm should have O(1) time complexity.",
+          "logarithmic": "The algorithm should have O(log n) time complexity.",
+          "linear": "The algorithm should have O(n) time complexity.",
+          "linearithmic": "The algorithm should have O(n log n) time complexity.",
+          "quadratic": "The algorithm should have O(n\u00b2) time complexity.",
+          "polynomial": "The algorithm should have polynomial time complexity.",
+          "exponential": "The algorithm may have exponential time complexity if necessary."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "recursive": "Implement the algorithm using a recursive approach.",
+          "iterative": "Implement the algorithm using an iterative approach.",
+          "divide-conquer": "Use a divide and conquer strategy for the implementation.",
+          "dynamic": "Implement the algorithm using dynamic programming techniques.",
+          "greedy": "Use a greedy algorithm approach for the implementation."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Graph algorithm implementation",
+        "originalPrompt": "Implement an algorithm to find the shortest path between two nodes in an unweighted graph.",
+        "transformedPrompt": "Implement an algorithm with the following characteristics:\nUse a graph algorithm such as Dijkstra's, BFS, DFS, or minimum spanning tree.\nThe algorithm should have O(n) time complexity.\nImplement the algorithm using an iterative approach.\n\nImplement an algorithm to find the shortest path between two nodes in an unweighted graph.",
+        "notes": "For unweighted graphs, BFS is typically the most appropriate algorithm with linear time complexity."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeStyle",
+        "relationship": "enhances",
+        "notes": "CodeStyle can be used to specify the coding style for the algorithm implementation."
+      },
+      {
+        "decorator": "Language",
+        "relationship": "enhances",
+        "notes": "Language can be used to specify the programming language for the algorithm implementation."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Write code for an algorithm with these specifications:",
+        "notes": "This model may need more explicit instructions about algorithm implementation details."
+      },
+      "gpt-4o": {
+        "instruction": "Implement an algorithm with the following characteristics:",
+        "notes": "This model can handle more abstract algorithm descriptions and infer appropriate implementations."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Implementing a graph algorithm with linear complexity using an iterative approach",
+      "usage": "+++Algorithm(type=graph, complexity=linear, approach=iterative)\nImplement an algorithm to find the shortest path between two nodes in an unweighted graph.",
+      "result": "The model will implement a breadth-first search algorithm for finding the shortest path in an unweighted graph, using an iterative approach with O(n) time complexity."
+    },
+    {
+      "description": "Implementing a sorting algorithm with optimal complexity",
+      "usage": "+++Algorithm(type=sorting, complexity=linearithmic)\nImplement a stable sorting algorithm for an array of integers.",
+      "result": "The model will implement a merge sort algorithm, which is stable and has O(n log n) time complexity."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}
