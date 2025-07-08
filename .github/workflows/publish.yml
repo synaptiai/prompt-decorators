@@ -100,7 +100,7 @@ jobs:
 
       # Sign the packages with Sigstore
       - name: Sign the distribution packages with Sigstore
-        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        uses: sigstore/gh-action-sigstore-python@v3.0.1
         with:
           inputs: >-
             ./dist/*.tar.gz
