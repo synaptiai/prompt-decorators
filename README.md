@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/synaptiai-prompt-decorators-badge.png)](https://mseep.ai/app/synaptiai-prompt-decorators)
+
 # Prompt Decorators
 
 <div align="center">
