@@ -68,7 +68,7 @@ jobs:
 
       # Store the distribution packages for other jobs to use
       - name: Store the distribution packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: python-package-distributions
           path: dist/
