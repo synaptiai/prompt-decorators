@@ -31,22 +31,18 @@ jobs:
           set +e
           pre-commit run --all-files --verbose --show-diff-on-failure 2>&1 | tee /tmp/precommit.log
           rc=${PIPESTATUS[0]}
+          echo ""
+          echo "===PRECOMMIT_EXIT_CODE=$rc==="
+          echo ""
+          echo "===PRECOMMIT_LOG_TAIL==="
+          tail -60 /tmp/precommit.log
+          echo "===END_LOG_TAIL==="
           if [ $rc -ne 0 ]; then
-            # Surface the log as a workflow annotation so it's visible even
-            # without artifact download rights.
-            echo "::group::pre-commit log"
-            cat /tmp/precommit.log
-            echo "::endgroup::"
-            echo "::error title=pre-commit failed::$(tail -5 /tmp/precommit.log | tr '\n' ' ')"
+            echo "::error title=pre-commit exit $rc::$(tail -3 /tmp/precommit.log | tr '\n' ' | ')"
+          else
+            echo "::notice title=pre-commit passed::all hooks green"
           fi
           exit $rc
-      - name: Upload pre-commit log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: precommit-output
-          path: /tmp/precommit.log
-          if-no-files-found: ignore
 
   test-matrix:
     needs: pre-commit
