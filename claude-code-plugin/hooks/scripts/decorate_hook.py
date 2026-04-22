@@ -40,10 +40,39 @@ from pd_common import (  # noqa: E402
     user_registry_dir,
 )
 
-# Sigil grammar: name, optional :vX[.Y[.Z]] version, optional (...) params.
-_SIGIL_BODY = (
-    r"[A-Za-z][A-Za-z0-9]*" r"(?::v[0-9]+(?:\.[0-9]+(?:\.[0-9]+)?)?)?" r"(?:\([^)]*\))?"
-)
+# Derive sigil regexes from the engine's canonical `DECORATOR_PATTERN` so the
+# plugin's `::` syntax and the library's `+++` syntax can never drift. The
+# engine owns the grammar of a decorator reference (name, optional version,
+# optional parenthesised params); this file only owns the alternative
+# start-of-line sigil prefix.
+ensure_engine_on_path()
+try:
+    from prompt_decorators.core.dynamic_decorator import (
+        DECORATOR_PATTERN as _ENGINE_DECORATOR_PATTERN,
+    )
+
+    # Engine pattern shape: r"\+\+\+(NAME_VERSION)(?:\((PARAMS)\))?"
+    # Drop the `\+\+\+` prefix and the two capture groups to get a
+    # non-capturing body we can embed under arbitrary prefixes.
+    _ENGINE_BODY = _ENGINE_DECORATOR_PATTERN.replace(r"\+\+\+", "", 1)
+    # Replace the engine's two capture groups with non-capturing groups so
+    # the plugin's single outer group always captures the whole decorator
+    # reference in .group(1).
+    _SIGIL_BODY = (
+        _ENGINE_BODY.replace(r"([A-Za-z]", r"(?:[A-Za-z]", 1)
+        .replace(r"(\(", r"(?:\(", 1)
+        .replace(r"\(([^)]*)\)", r"\([^)]*\)", 1)
+    )
+except Exception:  # noqa: BLE001
+    # Fallback if the engine's pattern constant ever moves or changes. Covers
+    # the same grammar - if this diverges from the engine, the test suite
+    # catches it via the end-to-end hook tests.
+    _SIGIL_BODY = (
+        r"[A-Za-z][A-Za-z0-9]*"
+        r"(?::v[0-9]+(?:\.[0-9]+(?:\.[0-9]+)?)?)?"
+        r"(?:\([^)]*\))?"
+    )
+
 SIGIL_COLON_RE = re.compile(rf"(?m)^::({_SIGIL_BODY})")
 SIGIL_PLUS_RE = re.compile(rf"(?m)^\+\+\+({_SIGIL_BODY})")
 STRIP_RE = re.compile(rf"(?m)^\+\+\+{_SIGIL_BODY}\s*\n?")

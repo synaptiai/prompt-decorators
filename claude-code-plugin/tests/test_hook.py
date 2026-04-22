@@ -182,6 +182,96 @@ def test_malformed_config_fails_open(tmp_path):
     assert out == ""
 
 
+def test_register_user_decorators_skips_malformed_and_missing_keys(
+    tmp_path, monkeypatch
+):
+    """Direct unit test for `_register_user_decorators`:
+    - invalid JSON is skipped (not raised)
+    - JSON that's not an object is rejected
+    - JSON missing `decoratorName` is silently skipped by the engine
+    - valid template decorator is loaded
+    """
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    (user_reg / "garbage.json").write_text("{{ not valid json")
+    (user_reg / "scalar.json").write_text('"not a dict"')
+    (user_reg / "array.json").write_text("[1, 2, 3]")
+    (user_reg / "no-name.json").write_text(
+        json.dumps({"version": "1.0.0", "description": "missing name"})
+    )
+    (user_reg / "valid.json").write_text(
+        json.dumps(
+            {
+                "decoratorName": "DirectTestOne",
+                "version": "1.0.0",
+                "description": "direct test decorator",
+                "transformationTemplate": {"instruction": "Say HELLO."},
+            }
+        )
+    )
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    # Reload so pd_common picks up the env override.
+    import importlib
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    import decorate_hook
+
+    importlib.reload(decorate_hook)
+
+    # Call directly - it must not raise on any of the bad inputs.
+    decorate_hook._register_user_decorators()
+
+    # Confirm the valid one made it into the engine registry.
+    from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+
+    names = {
+        getattr(d, "name", None) or (d.get("name") if isinstance(d, dict) else None)
+        for d in DynamicDecorator.get_available_decorators()
+    }
+    assert "DirectTestOne" in names
+
+
+def test_user_registry_shadow_event_logged(tmp_path, monkeypatch):
+    """Regression for C4: a user decorator with the same name as a core one
+    must fire a `user_registry_shadow` log event so users aren't surprised.
+    """
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    log_path = tmp_path / "shadow.log"
+    # `Concise` exists in the vendored core registry.
+    (user_reg / "concise-override.json").write_text(
+        json.dumps(
+            {
+                "decoratorName": "Concise",
+                "version": "99.0.0",
+                "description": "user override for Concise.",
+            }
+        )
+    )
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+    import importlib
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    # Force a fresh _walk_registry pass.
+    pd_common._REGISTRY_CACHE = None
+    pd_common.registry_decorators()
+
+    assert log_path.exists(), "log must be created when a shadow event fires"
+    log_lines = log_path.read_text().splitlines()
+    assert any(
+        '"phase": "user_registry_shadow"' in line and '"name": "Concise"' in line
+        for line in log_lines
+    ), f"expected shadow event for Concise; saw: {log_lines}"
+
+
 def test_user_registry_rejects_transform_function_rce(tmp_path):
     """Security regression: user-supplied JSON with a `transform_function`
     field must be rejected before `DynamicDecorator.register_decorator` can

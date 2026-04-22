@@ -190,40 +190,69 @@ def _walk_registry() -> list[dict[str, Any]]:
     `category` to "General" when the JSON doesn't declare one, so we
     derive it from the directory layout - the first path segment is the
     category bucket.
+
+    Shadowing: a user decorator with the same name as a vendored one wins
+    (user dir is iterated last). The shadow is intentional (per the
+    authoring skill) but surprising, so we log a `user_registry_shadow`
+    event for each name replaced. Inspect with
+    `PROMPT_DECORATORS_LOG_DEBUG=1`.
     """
     import json as _json
 
-    registry_roots: list[Path] = [
+    vendored_roots: list[Path] = [
         VENDOR_DIR / "prompt_decorators" / "registry" / "core",
         VENDOR_DIR / "prompt_decorators" / "registry" / "extensions",
     ]
     user_dir = user_registry_dir()
-    if user_dir is not None and user_dir.exists():
-        registry_roots.append(user_dir)
 
     seen: dict[str, dict[str, Any]] = {}
-    for root in registry_roots:
+    # Pass 1: vendored catalogue.
+    for root in vendored_roots:
         if not root.exists():
             continue
         for path in root.rglob("*.json"):
-            try:
-                data = _json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, _json.JSONDecodeError):
+            entry = _parse_registry_json(path, root)
+            if entry is not None:
+                seen[entry["name"]] = entry
+
+    # Pass 2: user extensions override by name. Log each shadow so users
+    # aren't surprised when their custom Concise overrides the core Concise.
+    if user_dir is not None and user_dir.exists():
+        for path in user_dir.rglob("*.json"):
+            entry = _parse_registry_json(path, user_dir)
+            if entry is None:
                 continue
-            name = data.get("decoratorName") or data.get("name")
-            if not name:
-                continue
-            rel_parts = path.relative_to(root).parts
-            category = rel_parts[0] if len(rel_parts) > 1 else "user"
-            desc = (data.get("description") or "").splitlines()
-            # Later roots override earlier ones: a user decorator with the
-            # same name as a vendored one wins.
-            seen[name] = {
-                "name": name,
-                "description": desc[0][:160] if desc else "",
-                "category": category,
-            }
+            name = entry["name"]
+            if name in seen:
+                log(
+                    {
+                        "phase": "user_registry_shadow",
+                        "name": name,
+                        "file": str(path),
+                    }
+                )
+            seen[name] = entry
     return sorted(seen.values(), key=lambda x: (x["category"], x["name"]))
+
+
+def _parse_registry_json(path: Path, root: Path) -> dict[str, Any] | None:
+    import json as _json
+
+    try:
+        data = _json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, _json.JSONDecodeError):
+        return None
+    name = data.get("decoratorName") or data.get("name")
+    if not name:
+        return None
+    rel_parts = path.relative_to(root).parts
+    category = rel_parts[0] if len(rel_parts) > 1 else "user"
+    desc = (data.get("description") or "").splitlines()
+    return {
+        "name": name,
+        "description": desc[0][:160] if desc else "",
+        "category": category,
+    }
 
 
 def registry_decorators() -> list[dict[str, Any]]:

@@ -56,6 +56,14 @@ next sync.
 
     /decorate search <your-candidate-name>
 
+**Shadowing (intentional but surprising):** a user decorator with the
+same name as a vendored core decorator *replaces* the core one. This is
+deliberate - it lets you override catalogue behaviour without forking
+the upstream repo - but it's a sharp edge. The hook logs a
+`user_registry_shadow` event when it happens (visible with
+`PROMPT_DECORATORS_LOG_DEBUG=1`). If you didn't mean to shadow a core
+name, rename your decorator.
+
 **Category choice**
 
 | Category | What belongs |
