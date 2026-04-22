@@ -1,0 +1,11 @@
+{
+  "name": "prompt-decorators",
+  "version": "0.1.0-spike",
+  "description": "Automatically enhance Claude Code prompts with composable prompt decorators",
+  "author": {
+    "name": "Synapti",
+    "url": "https://github.com/synaptiai/prompt-decorators"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["prompts", "decorators", "reasoning", "structure", "enhancement"]
+}
