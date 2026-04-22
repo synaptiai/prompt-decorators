@@ -173,11 +173,23 @@ def bare_name(sigil: str) -> str:
 
 
 # Credentials / tokens that sometimes leak into exception messages from
-# upstream libraries. Redact before logging `traceback.format_exc()`.
+# upstream libraries. Redact before logging tracebacks or `str(exception)`.
 _SECRET_PATTERNS = (
+    # Anthropic API keys (post-2023 `sk-ant-...` format).
     (re.compile(r"sk-ant-[A-Za-z0-9\-_]{10,}"), "sk-ant-<redacted>"),
+    # OpenAI API keys (`sk-...` without the `ant-` infix).
+    (re.compile(r"\bsk-[A-Za-z0-9]{20,}\b"), "sk-<redacted>"),
+    # Generic Authorization headers / Bearer tokens.
     (re.compile(r"(?i)bearer\s+[A-Za-z0-9\-._~+/=]{10,}"), "Bearer <redacted>"),
+    (
+        re.compile(r"(?i)authorization:\s*[A-Za-z]+\s+[A-Za-z0-9\-._~+/=]{10,}"),
+        "Authorization: <redacted>",
+    ),
+    # Env-style key embeds (anthropic/openai style).
     (re.compile(r"ANTHROPIC_API_KEY=[^\s'\"]+"), "ANTHROPIC_API_KEY=<redacted>"),
+    (re.compile(r"OPENAI_API_KEY=[^\s'\"]+"), "OPENAI_API_KEY=<redacted>"),
+    # X-Api-Key header pattern.
+    (re.compile(r"(?i)x-api-key:\s*[^\s'\",]+"), "x-api-key: <redacted>"),
 )
 
 
@@ -220,8 +232,6 @@ def _walk_registry() -> list[dict[str, Any]]:
     event for each name replaced. Inspect with
     `PROMPT_DECORATORS_LOG_DEBUG=1`.
     """
-    import json as _json
-
     vendored_roots: list[Path] = [
         VENDOR_DIR / "prompt_decorators" / "registry" / "core",
         VENDOR_DIR / "prompt_decorators" / "registry" / "extensions",
@@ -259,11 +269,15 @@ def _walk_registry() -> list[dict[str, Any]]:
 
 
 def _parse_registry_json(path: Path, root: Path) -> dict[str, Any] | None:
-    import json as _json
-
     try:
-        data = _json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, _json.JSONDecodeError):
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    # Defensive: a user could drop `[1, 2, 3]` or `"hi"` or `null` into the
+    # registry. Skip silently instead of raising AttributeError on
+    # `.get(...)` - that would propagate through `/decorate list` and
+    # crash the dispatcher.
+    if not isinstance(data, dict):
         return None
     name = data.get("decoratorName") or data.get("name")
     if not name:

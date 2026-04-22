@@ -69,7 +69,7 @@ name, rename your decorator.
 | Category | What belongs |
 |---|---|
 | `reasoning` | Changes HOW the model thinks (ToT, Socratic, FirstPrinciples) |
-| `structure` | Changes the shape of the OUTPUT (Outline, Table, Bullet) |
+| `structure` | Changes the shape of the OUTPUT (Outline, TableFormat, Bullet, Summary, Comparison) |
 | `tone` | Changes the VOICE of the response (Concise, Detailed, Academic, Professional, ELI5) |
 | `verification` | Adds CHECKS to the output (CiteSources, FactCheck, Confidence, Uncertainty) |
 | `minimal` | Foundational base-layer decorators — OutputFormat, Reasoning, StepByStep, Tone, Version. Do NOT use for brevity (that's Concise/ELI5 in `tone`). |

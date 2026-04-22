@@ -11,8 +11,11 @@ from pathlib import Path
 import pytest
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
+TESTS_DIR = Path(__file__).resolve().parent
 HOOK_SCRIPT = PLUGIN_ROOT / "hooks" / "scripts" / "decorate_hook.py"
 
+# Let test modules do `from conftest import ...` directly.
+sys.path.insert(0, str(TESTS_DIR))
 sys.path.insert(0, str(PLUGIN_ROOT / "scripts"))
 sys.path.insert(0, str(PLUGIN_ROOT / "hooks" / "scripts"))
 

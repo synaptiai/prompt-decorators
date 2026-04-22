@@ -18,6 +18,7 @@ import re
 import sys
 import traceback
 from pathlib import Path
+from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 PLUGIN_ROOT = SCRIPT_DIR.parent.parent
@@ -152,7 +153,7 @@ def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str], bool]:
         log(
             {
                 "phase": "auto_error",
-                "error": str(e)[:300],
+                "error": redact(str(e))[:300],
                 "tb": redact(traceback.format_exc())[:2000],
             }
         )
@@ -178,7 +179,7 @@ def _consume_once_armed(cfg: dict) -> None:
             {
                 "phase": "auto_once_save_error",
                 "error_type": type(e).__name__,
-                "error": str(e)[:200],
+                "error": redact(str(e))[:200],
             }
         )
 
@@ -192,6 +193,51 @@ def _consume_once_armed(cfg: dict) -> None:
 _UNSAFE_USER_FIELDS = ("transform_function", "transformFunction")
 
 
+def _is_safe_template_string(s: Any) -> bool:
+    # Reject strings that can escape the engine's triple-quoted Python
+    # string literals during template->exec rendering.
+    #
+    # The engine builds Python source like ``result = (triple-single-quote){
+    # instruction}(triple-single-quote)`` and then exec()s it. A user-supplied
+    # sequence of three single quotes inside the instruction closes the
+    # string literal and injects arbitrary code. A sequence of three double
+    # quotes does the same against any future variant that switches quote
+    # styles. A backslash can combine with quote characters to engineer
+    # equivalent breakouts via escape-sequence processing inside triple-
+    # quoted literals.
+    #
+    # Benign instructions do not need any of those characters; reject all
+    # three conservatively.
+    if not isinstance(s, str):
+        return False
+    if "'''" in s or '"""' in s:
+        return False
+    if "\\" in s:
+        return False
+    return True
+
+
+def _validate_user_template(data: dict) -> tuple[bool, str | None]:
+    """Validate every exec-reachable string inside a user decorator's
+    `transformationTemplate`. Returns `(safe, reason)`.
+    """
+    tpl = data.get("transformationTemplate")
+    if not isinstance(tpl, dict):
+        return True, None
+    instruction = tpl.get("instruction", "")
+    if instruction and not _is_safe_template_string(instruction):
+        return False, "unsafe_template_instruction"
+    mapping = tpl.get("parameterMapping")
+    if isinstance(mapping, dict):
+        for param_name, param_cfg in mapping.items():
+            if not isinstance(param_cfg, dict):
+                continue
+            fmt = param_cfg.get("format")
+            if fmt is not None and not _is_safe_template_string(fmt):
+                return False, f"unsafe_template_format:{param_name}"
+    return True, None
+
+
 def _register_user_decorators() -> None:
     """Inject user-local decorators into the engine's registry.
 
@@ -200,10 +246,13 @@ def _register_user_decorators() -> None:
     `vendor/` re-syncs. Without this step, user decorators would appear in
     `/decorate list` but the hook couldn't actually expand them.
 
-    Security: user JSON is NOT trusted. Files that declare
-    `transform_function` (the engine's exec-a-string-of-Python path) are
-    rejected outright - user decorators are restricted to the safe
-    `transformationTemplate` authoring path.
+    Security: user JSON is NOT trusted. Rejects outright:
+      - Files declaring `transform_function` / `transformFunction` - the
+        engine's raw exec-a-string-of-Python path.
+      - Files whose `transformationTemplate.instruction` or any
+        `parameterMapping[*].format` contains characters that can escape
+        the engine's triple-quoted string literal and smuggle code into
+        the `exec()` rendering.
     """
     user_dir = user_registry_dir()
     if user_dir is None or not user_dir.exists():
@@ -211,7 +260,7 @@ def _register_user_decorators() -> None:
     try:
         from prompt_decorators.core.dynamic_decorator import DynamicDecorator
     except Exception as e:  # noqa: BLE001
-        log({"phase": "user_registry_import_error", "error": str(e)})
+        log({"phase": "user_registry_import_error", "error": redact(str(e))})
         return
     DynamicDecorator.load_registry()
     loaded = 0
@@ -238,6 +287,17 @@ def _register_user_decorators() -> None:
                         "file": str(path),
                         "reason": "unsafe_field",
                         "fields": unsafe,
+                    }
+                )
+                continue
+            safe, reason = _validate_user_template(data)
+            if not safe:
+                rejected += 1
+                log(
+                    {
+                        "phase": "user_registry_rejected",
+                        "file": str(path),
+                        "reason": reason,
                     }
                 )
                 continue
@@ -279,7 +339,7 @@ def _main_impl() -> int:
     try:
         event = json.loads(raw) if raw.strip() else {}
     except json.JSONDecodeError as e:
-        log({"phase": "parse_error", "error": str(e)})
+        log({"phase": "parse_error", "error": redact(str(e))})
         return 0
 
     prompt: str = event.get("prompt", "")
@@ -322,7 +382,7 @@ def _main_impl() -> int:
         log(
             {
                 "phase": "import_error",
-                "error": str(e)[:300],
+                "error": redact(str(e))[:300],
                 "tb": redact(traceback.format_exc())[:2000],
             }
         )
@@ -338,7 +398,7 @@ def _main_impl() -> int:
         log(
             {
                 "phase": "apply_error",
-                "error": str(e)[:300],
+                "error": redact(str(e))[:300],
                 "tb": redact(traceback.format_exc())[:2000],
             }
         )
@@ -390,7 +450,7 @@ def main() -> int:
                 {
                     "phase": "unhandled_error",
                     "error_type": type(e).__name__,
-                    "error": str(e)[:500],
+                    "error": redact(str(e))[:500],
                     "tb": redact(traceback.format_exc())[:2000],
                 }
             )

@@ -1,43 +1,24 @@
-"""Tests for the UserPromptSubmit hook script."""
+"""Tests for the UserPromptSubmit hook script.
+
+Uses the shared `make_event` / `run_hook_subprocess` helpers from
+`conftest.py`. The thin `_run_hook` alias preserves the 2-tuple shape
+used across this file's existing assertions.
+"""
 
 from __future__ import annotations
 
 import json
 import subprocess
 import sys
-from pathlib import Path
 
-PLUGIN_ROOT = Path(__file__).resolve().parent.parent
-HOOK = PLUGIN_ROOT / "hooks" / "scripts" / "decorate_hook.py"
+from conftest import HOOK_SCRIPT as HOOK
+from conftest import make_event as _event
+from conftest import run_hook_subprocess
 
 
 def _run_hook(event: dict, env: dict | None = None) -> tuple[str, int]:
-    """Run the hook script as a subprocess with a given event on stdin."""
-    import os
-
-    merged_env = os.environ.copy()
-    if env:
-        merged_env.update(env)
-    proc = subprocess.run(
-        [sys.executable, str(HOOK)],
-        input=json.dumps(event),
-        capture_output=True,
-        text=True,
-        env=merged_env,
-        timeout=30,
-    )
-    return proc.stdout, proc.returncode
-
-
-def _event(prompt: str) -> dict:
-    return {
-        "session_id": "test",
-        "transcript_path": "/tmp/t",
-        "cwd": "/tmp",
-        "permission_mode": "default",
-        "hook_event_name": "UserPromptSubmit",
-        "prompt": prompt,
-    }
+    out, _stderr, rc = run_hook_subprocess(event, env=env)
+    return out, rc
 
 
 def test_passthrough_when_no_sigils(tmp_path):
@@ -270,6 +251,112 @@ def test_user_registry_shadow_event_logged(tmp_path, monkeypatch):
         '"phase": "user_registry_shadow"' in line and '"name": "Concise"' in line
         for line in log_lines
     ), f"expected shadow event for Concise; saw: {log_lines}"
+
+
+def test_user_registry_rejects_template_instruction_rce(tmp_path):
+    """Security regression (cycle 4): the engine builds
+    `result = '''{instruction}'''` and `exec()`s it. An instruction
+    containing `'''` breaks out of the string literal and smuggles
+    arbitrary Python. The allowlist must reject such payloads.
+    """
+    user_reg = tmp_path / "user-ext"
+    user_reg.mkdir()
+    sentinel = tmp_path / "pwned_instruction.txt"
+    evil = {
+        "decoratorName": "TmplEvilInstruction",
+        "version": "1.0.0",
+        "description": "Attempts RCE via instruction triple-quote breakout.",
+        "transformationTemplate": {
+            "instruction": (
+                "safe''' + __import__('pathlib').Path(r'"
+                + str(sentinel)
+                + "').write_text('PWNED-VIA-INSTRUCTION') + '''after"
+            ),
+            "placement": "prepend",
+        },
+    }
+    (user_reg / "evil-instruction.json").write_text(json.dumps(evil))
+
+    out, rc = _run_hook(
+        _event("::TmplEvilInstruction\nHello"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0
+    assert not sentinel.exists(), "RCE payload must not have executed"
+    # `::TmplEvilInstruction` won't resolve (rejected), so no emission.
+    assert out == ""
+
+
+def test_user_registry_rejects_template_format_rce(tmp_path):
+    """Second bypass variant: the engine also builds
+    `format_str = '''{format}'''` from `parameterMapping[*].format`.
+    Same triple-quote breakout applies. Allowlist must reject both.
+    """
+    user_reg = tmp_path / "user-ext"
+    user_reg.mkdir()
+    sentinel = tmp_path / "pwned_format.txt"
+    evil = {
+        "decoratorName": "TmplEvilFormat",
+        "version": "1.0.0",
+        "description": "RCE via parameterMapping.format triple-quote breakout.",
+        "parameters": [{"name": "mode", "type": "string", "required": False}],
+        "transformationTemplate": {
+            "instruction": "Apply the decorator.",
+            "parameterMapping": {
+                "mode": {
+                    "format": (
+                        "safe''' + __import__('pathlib').Path(r'"
+                        + str(sentinel)
+                        + "').write_text('PWNED-VIA-FORMAT') + '''after"
+                    ),
+                },
+            },
+            "placement": "prepend",
+        },
+    }
+    (user_reg / "evil-format.json").write_text(json.dumps(evil))
+
+    out, rc = _run_hook(
+        _event("::TmplEvilFormat(mode=test)\nHello"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0
+    assert not sentinel.exists(), "RCE payload must not have executed"
+    assert out == ""
+
+
+def test_user_registry_rejects_backslash_in_template(tmp_path):
+    """Backslashes can be used in escape-sequence attacks that survive
+    triple-quote processing inside Python source. Reject conservatively.
+    """
+    user_reg = tmp_path / "user-ext"
+    user_reg.mkdir()
+    evil = {
+        "decoratorName": "TmplBackslash",
+        "version": "1.0.0",
+        "description": "Backslash breakout attempt.",
+        "transformationTemplate": {
+            "instruction": "safe\\'''injected",
+            "placement": "prepend",
+        },
+    }
+    (user_reg / "evil-bs.json").write_text(json.dumps(evil))
+
+    out, rc = _run_hook(
+        _event("::TmplBackslash\nHi"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0
+    assert out == ""
 
 
 def test_user_registry_rejects_transform_function_rce(tmp_path):
