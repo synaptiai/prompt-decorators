@@ -37,6 +37,7 @@ from pd_common import (  # noqa: E402
     load_config,
     log,
     save_config,
+    user_registry_dir,
 )
 
 # Sigil grammar: name, optional :vX[.Y[.Z]] version, optional (...) params.
@@ -135,6 +136,41 @@ def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str]]:
     return f"{prefix}\n{prompt}", names
 
 
+def _register_user_decorators() -> None:
+    """Inject user-local decorators into the engine's registry.
+
+    User decorators live under `$PROMPT_DECORATORS_USER_REGISTRY` (or
+    `~/.config/prompt-decorators/extensions/` by default) and survive
+    `vendor/` re-syncs. Without this step, user decorators would appear in
+    `/decorate list` but the hook couldn't actually expand them.
+    """
+    user_dir = user_registry_dir()
+    if user_dir is None or not user_dir.exists():
+        return
+    try:
+        from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+    except Exception as e:  # noqa: BLE001
+        log({"phase": "user_registry_import_error", "error": str(e)})
+        return
+    DynamicDecorator.load_registry()
+    loaded = 0
+    for path in user_dir.rglob("*.json"):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            DynamicDecorator.register_decorator(data)
+            loaded += 1
+        except Exception as e:  # noqa: BLE001
+            log(
+                {
+                    "phase": "user_registry_load_error",
+                    "file": str(path),
+                    "error_type": type(e).__name__,
+                }
+            )
+    if loaded:
+        log({"phase": "user_registry_loaded", "count": loaded})
+
+
 def _emit_import_error_to_stderr(exc: Exception) -> None:
     """Engine import failures are a configuration bug worth surfacing loudly
     in addition to the log. Keep stdout clean (would corrupt hook protocol).
@@ -187,6 +223,8 @@ def _main_impl() -> int:
         log({"phase": "import_error", "error": str(e), "tb": traceback.format_exc()})
         _emit_import_error_to_stderr(e)
         return 0
+
+    _register_user_decorators()
 
     clean = strip_sigils(normalised)
     try:

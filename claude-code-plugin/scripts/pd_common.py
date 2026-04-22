@@ -168,20 +168,40 @@ def bare_name(sigil: str) -> str:
 _REGISTRY_CACHE: list[dict[str, Any]] | None = None
 
 
-def _walk_registry() -> list[dict[str, Any]]:
-    """Walk the vendored registry JSON files and infer category from path.
+def user_registry_dir() -> Path | None:
+    """User-local extension directory for personal decorators.
 
-    The engine defaults `category` to "General" when the JSON doesn't declare
-    one (and most don't), so we derive it from the directory layout where the
-    catalogue's taxonomy actually lives.
+    Survives `vendor/` re-syncs (which wipe the vendored copy). Enabled by
+    setting PROMPT_DECORATORS_USER_REGISTRY or by populating the default
+    path at `$HOME/.config/prompt-decorators/extensions/`.
+    """
+    override = os.environ.get("PROMPT_DECORATORS_USER_REGISTRY")
+    if override:
+        return Path(override)
+    default = Path.home() / ".config" / "prompt-decorators" / "extensions"
+    return default if default.exists() else None
+
+
+def _walk_registry() -> list[dict[str, Any]]:
+    """Walk registry JSON files and infer category from path.
+
+    Reads both the vendored catalogue (shipped with the plugin) and the
+    user's personal extension directory (if present). The engine defaults
+    `category` to "General" when the JSON doesn't declare one, so we
+    derive it from the directory layout - the first path segment is the
+    category bucket.
     """
     import json as _json
 
-    registry_roots = [
+    registry_roots: list[Path] = [
         VENDOR_DIR / "prompt_decorators" / "registry" / "core",
         VENDOR_DIR / "prompt_decorators" / "registry" / "extensions",
     ]
-    out: list[dict[str, Any]] = []
+    user_dir = user_registry_dir()
+    if user_dir is not None and user_dir.exists():
+        registry_roots.append(user_dir)
+
+    seen: dict[str, dict[str, Any]] = {}
     for root in registry_roots:
         if not root.exists():
             continue
@@ -194,16 +214,16 @@ def _walk_registry() -> list[dict[str, Any]]:
             if not name:
                 continue
             rel_parts = path.relative_to(root).parts
-            category = rel_parts[0] if len(rel_parts) > 1 else "other"
+            category = rel_parts[0] if len(rel_parts) > 1 else "user"
             desc = (data.get("description") or "").splitlines()
-            out.append(
-                {
-                    "name": name,
-                    "description": desc[0][:160] if desc else "",
-                    "category": category,
-                }
-            )
-    return sorted(out, key=lambda x: (x["category"], x["name"]))
+            # Later roots override earlier ones: a user decorator with the
+            # same name as a vendored one wins.
+            seen[name] = {
+                "name": name,
+                "description": desc[0][:160] if desc else "",
+                "category": category,
+            }
+    return sorted(seen.values(), key=lambda x: (x["category"], x["name"]))
 
 
 def registry_decorators() -> list[dict[str, Any]]:

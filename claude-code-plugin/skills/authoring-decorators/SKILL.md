@@ -16,30 +16,45 @@ what fields it needs, and how to verify it works end-to-end via the
 - The `prompt-decorators` plugin is installed.
 - The user has a concrete behaviour they want a decorator to codify (e.g.,
   "always format output as XML", "always include confidence intervals").
-- Write access to `claude-code-plugin/vendor/prompt_decorators/registry/extensions/`.
+- Write access to `$HOME/.config/prompt-decorators/extensions/` for personal decorators, OR write access to the upstream `synaptiai/prompt-decorators` repo for contributions back.
 
 ## Workflow
 
 Use TodoWrite to track these mandatory steps:
 
 <required>
-1. Pick a name and category for the new decorator
-2. Draft the decorator JSON using the schema template
-3. Place the file under the correct extensions subdirectory
-4. Add a unit test proving the hook expands it correctly
-5. Verify end-to-end via the /decorate CLI
+1. Decide whether the decorator is personal (stays local) or a contribution (goes upstream)
+2. Pick a name and category
+3. Draft the decorator JSON using the schema template
+4. Place the file in the correct directory (per step 1's decision)
+5. Add a unit test proving the hook expands it correctly
+6. Verify end-to-end via the /decorate CLI
 </required>
 
-### Step 1: Pick a name and category
+### Step 1: Decide destination
+
+Two legitimate destinations exist, and choosing wrong loses your work:
+
+| Use case | Destination | Survives vendor sync? |
+|---|---|---|
+| Personal decorator for your workflow | `$HOME/.config/prompt-decorators/extensions/<your-namespace>/<name>.json` (or set `PROMPT_DECORATORS_USER_REGISTRY` to a path of your choice) | Yes - independent of plugin |
+| Contribution back to the shared catalogue | Upstream repo `synaptiai/prompt-decorators/registry/extensions/<namespace>/<name>.json`, open a PR, then re-sync the vendor (see `claude-code-plugin/VENDORING.md`) | Yes - becomes part of upstream |
+
+**Do NOT place personal decorators under
+`claude-code-plugin/vendor/prompt_decorators/registry/`.** The vendored
+copy is periodically wiped and re-synced from upstream (see
+`claude-code-plugin/VENDORING.md`), so anything under `vendor/` that
+isn't in the source-of-truth upstream repo gets silently deleted on the
+next sync.
+
+### Step 2: Pick a name and category
 
 **Naming rules**
 - PascalCase (e.g., `ConfidenceIntervals`, not `confidence_intervals`).
 - Single-word preferred; multi-word only when unavoidable.
 - Must not collide with an existing decorator - check first:
 
-```bash
-/decorate search <your-candidate-name>
-```
+    /decorate search <your-candidate-name>
 
 **Category choice**
 
@@ -55,7 +70,7 @@ Use TodoWrite to track these mandatory steps:
 If none of those fit, use an extension category under
 `registry/extensions/<your-namespace>/`.
 
-### Step 2: Draft the decorator JSON
+### Step 3: Draft the decorator JSON
 
 Minimal schema:
 
@@ -106,25 +121,32 @@ Minimal schema:
   compact additions, not essays.
 </bad-example>
 
-### Step 3: Place the file
+### Step 4: Place the file
 
-For a personal/experimental decorator:
+For a **personal** decorator (matches step 1's first row):
 
 ```
-claude-code-plugin/vendor/prompt_decorators/registry/extensions/<your-namespace>/<decorator-name>.json
+$HOME/.config/prompt-decorators/extensions/<your-namespace>/<decorator-name>.json
 ```
+
+(override the base with `PROMPT_DECORATORS_USER_REGISTRY=/some/path`).
+
+The plugin's `UserPromptSubmit` hook injects every JSON file found under
+this directory into the engine at runtime via
+`DynamicDecorator.register_decorator`, so the decorator is immediately
+usable inline (`::YourName`) without any sync step.
+
+For a **contribution** back to the shared catalogue (matches step 1's
+second row), open a PR against `synaptiai/prompt-decorators` adding the
+file under the appropriate `registry/core/<category>/` directory, and
+then re-sync the vendor per `claude-code-plugin/VENDORING.md`.
 
 The `<decorator-name>` in the filename should be lowercase kebab-case
 (`confidence-intervals.json`) - the engine reads the `decoratorName` field
 from inside, not the filename, but kebab-case filenames match the rest of
 the registry.
 
-For a contribution back to the upstream catalogue, **do not edit
-`vendor/`** directly - open a PR against `synaptiai/prompt-decorators`
-adding the file to the appropriate `registry/core/<category>/` directory,
-then re-sync the vendor (see `claude-code-plugin/VENDORING.md`).
-
-### Step 4: Unit test
+### Step 5: Unit test
 
 Add a test under `claude-code-plugin/tests/test_hook.py` proving the hook
 expands your sigil:
@@ -148,7 +170,7 @@ Run the suite:
 cd claude-code-plugin && python3 -m pytest tests/ -q
 ```
 
-### Step 5: Verify end-to-end
+### Step 6: Verify end-to-end
 
 ```bash
 # Browse the catalogue to confirm registry pickup.
@@ -203,8 +225,10 @@ The decorator is not ready to ship if any of these hold:
   (signals the decorator is doing too many things at once - split it).
 - No unit test proves end-to-end expansion.
 - Parameter validation is absent for enum-style params.
-- The file is placed under `registry/core/<category>/` in the vendored
-  copy (edit `synaptiai/prompt-decorators` upstream and re-sync instead).
+- The file is placed under `claude-code-plugin/vendor/...` - the vendored
+  copy is wiped on every upstream sync. Put personal decorators in
+  `$HOME/.config/prompt-decorators/extensions/`, or open an upstream PR
+  against `synaptiai/prompt-decorators` for contributions.
 
 ## Output
 
@@ -213,7 +237,7 @@ After a successful authoring session, report:
 ```markdown
 ## Decorator Ready: <Name>
 
-**File:** `claude-code-plugin/vendor/prompt_decorators/registry/extensions/<ns>/<name>.json`
+**File:** `$HOME/.config/prompt-decorators/extensions/<ns>/<name>.json` (personal) OR `synaptiai/prompt-decorators/registry/extensions/<ns>/<name>.json` (contribution)
 **Category:** <category>
 **Test coverage:** `claude-code-plugin/tests/test_hook.py::test_my_new_decorator`
 
