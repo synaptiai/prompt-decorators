@@ -359,6 +359,77 @@ def test_user_registry_rejects_backslash_in_template(tmp_path):
     assert out == ""
 
 
+def test_user_registry_rejects_param_key_rce(tmp_path):
+    """Cycle-5 regression (P1): the engine does
+    `.format(param=param_name)` into `if "{param}" in kwargs:` without
+    escaping. A dict KEY like `foo" and __import__('os').system(...) or "`
+    breaks out of the `"{param}"` wrapper without using triple-quotes or
+    backslashes (so the cycle-4 filter didn't catch it). Generated source
+    parses as valid Python; `__import__` fires at transform() apply time.
+
+    The allowlist now requires keys to match `[A-Za-z][A-Za-z0-9_]*`.
+    """
+    user_reg = tmp_path / "user-ext"
+    user_reg.mkdir()
+    sentinel = tmp_path / "pwned_paramkey.txt"
+    evil_key = (
+        "foo\" and __import__('pathlib').Path(r\""
+        + str(sentinel)
+        + "\").write_text('PWNED-VIA-PARAMKEY') or \""
+    )
+    evil = {
+        "decoratorName": "TmplEvilParamKey",
+        "version": "1.0.0",
+        "description": "RCE via parameterMapping key breakout.",
+        "parameters": [{"name": "mode", "type": "string", "required": False}],
+        "transformationTemplate": {
+            "instruction": "Apply the decorator.",
+            "parameterMapping": {evil_key: {"format": "{value}"}},
+            "placement": "prepend",
+        },
+    }
+    (user_reg / "evil-paramkey.json").write_text(json.dumps(evil))
+
+    out, rc = _run_hook(
+        _event("::TmplEvilParamKey\nHello"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0
+    assert not sentinel.exists(), "RCE payload must not have executed"
+    assert out == ""
+
+
+def test_user_registry_rejects_non_dict_param_mapping(tmp_path):
+    """N2 regression: if `parameterMapping` is a list/scalar, reject
+    explicitly instead of silently accepting and letting the engine
+    crash on `.items()` at apply time."""
+    user_reg = tmp_path / "user-ext"
+    user_reg.mkdir()
+    bad = {
+        "decoratorName": "BadMapping",
+        "version": "1.0.0",
+        "description": "parameterMapping as a list.",
+        "transformationTemplate": {
+            "instruction": "hi",
+            "parameterMapping": ["not", "a", "dict"],
+        },
+    }
+    (user_reg / "bad-mapping.json").write_text(json.dumps(bad))
+
+    out, rc = _run_hook(
+        _event("::BadMapping\nHi"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0
+    assert out == ""
+
+
 def test_user_registry_rejects_transform_function_rce(tmp_path):
     """Security regression: user-supplied JSON with a `transform_function`
     field must be rejected before `DynamicDecorator.register_decorator` can

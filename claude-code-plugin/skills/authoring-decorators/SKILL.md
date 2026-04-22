@@ -68,7 +68,7 @@ name, rename your decorator.
 
 | Category | What belongs |
 |---|---|
-| `reasoning` | Changes HOW the model thinks (ToT, Socratic, FirstPrinciples) |
+| `reasoning` | Changes HOW the model thinks (TreeOfThought, Socratic, FirstPrinciples, RedTeam) |
 | `structure` | Changes the shape of the OUTPUT (Outline, TableFormat, Bullet, Summary, Comparison) |
 | `tone` | Changes the VOICE of the response (Concise, Detailed, Academic, Professional, ELI5) |
 | `verification` | Adds CHECKS to the output (CiteSources, FactCheck, Confidence, Uncertainty) |

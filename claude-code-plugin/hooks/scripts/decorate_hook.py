@@ -193,7 +193,7 @@ def _consume_once_armed(cfg: dict) -> None:
 _UNSAFE_USER_FIELDS = ("transform_function", "transformFunction")
 
 
-def _is_safe_template_string(s: Any) -> bool:
+def _is_safe_template_string(s: Any) -> tuple[bool, str | None]:
     # Reject strings that can escape the engine's triple-quoted Python
     # string literals during template->exec rendering.
     #
@@ -207,34 +207,56 @@ def _is_safe_template_string(s: Any) -> bool:
     # quoted literals.
     #
     # Benign instructions do not need any of those characters; reject all
-    # three conservatively.
+    # three conservatively. Return a reason tag so downstream can emit a
+    # specific `user_registry_rejected` event (helps users distinguish
+    # "used backslash legitimately" vs "attempted triple-quote breakout").
     if not isinstance(s, str):
-        return False
+        return False, "not_a_string"
     if "'''" in s or '"""' in s:
-        return False
+        return False, "triple_quote"
     if "\\" in s:
-        return False
-    return True
+        return False, "backslash"
+    return True, None
+
+
+# `parameterMapping` keys are interpolated unquoted into Python source via
+# `.format(param=param_name)` at engine `dynamic_decorator.py:125-131`. A key
+# like `foo" and __import__("os").system("id") or "` would break out of the
+# `"{param}"` wrapper without using triple-quote or backslash characters.
+# The engine's own parameter-name grammar accepts only identifier-like
+# strings; enforce that same grammar before registration.
+_SAFE_PARAM_KEY_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*$")
 
 
 def _validate_user_template(data: dict) -> tuple[bool, str | None]:
-    """Validate every exec-reachable string inside a user decorator's
+    """Validate every exec-reachable value inside a user decorator's
     `transformationTemplate`. Returns `(safe, reason)`.
     """
     tpl = data.get("transformationTemplate")
     if not isinstance(tpl, dict):
         return True, None
     instruction = tpl.get("instruction", "")
-    if instruction and not _is_safe_template_string(instruction):
-        return False, "unsafe_template_instruction"
+    if instruction:
+        safe, kind = _is_safe_template_string(instruction)
+        if not safe:
+            return False, f"unsafe_template_instruction_{kind}"
     mapping = tpl.get("parameterMapping")
-    if isinstance(mapping, dict):
-        for param_name, param_cfg in mapping.items():
-            if not isinstance(param_cfg, dict):
-                continue
-            fmt = param_cfg.get("format")
-            if fmt is not None and not _is_safe_template_string(fmt):
-                return False, f"unsafe_template_format:{param_name}"
+    if mapping is None:
+        return True, None
+    if not isinstance(mapping, dict):
+        # List / scalar `parameterMapping` values break the engine at apply
+        # time anyway. Reject explicitly so the user sees why.
+        return False, "unsafe_template_param_mapping_shape"
+    for param_name, param_cfg in mapping.items():
+        if not _SAFE_PARAM_KEY_RE.match(str(param_name)):
+            return False, "unsafe_template_param_key"
+        if not isinstance(param_cfg, dict):
+            continue
+        fmt = param_cfg.get("format")
+        if fmt is not None:
+            safe, kind = _is_safe_template_string(fmt)
+            if not safe:
+                return False, f"unsafe_template_format_{kind}:{param_name}"
     return True, None
 
 
@@ -260,7 +282,12 @@ def _register_user_decorators() -> None:
     try:
         from prompt_decorators.core.dynamic_decorator import DynamicDecorator
     except Exception as e:  # noqa: BLE001
-        log({"phase": "user_registry_import_error", "error": redact(str(e))})
+        log(
+            {
+                "phase": "user_registry_import_error",
+                "error": redact(str(e))[:300],
+            }
+        )
         return
     DynamicDecorator.load_registry()
     loaded = 0
@@ -339,7 +366,7 @@ def _main_impl() -> int:
     try:
         event = json.loads(raw) if raw.strip() else {}
     except json.JSONDecodeError as e:
-        log({"phase": "parse_error", "error": redact(str(e))})
+        log({"phase": "parse_error", "error": redact(str(e))[:300]})
         return 0
 
     prompt: str = event.get("prompt", "")
