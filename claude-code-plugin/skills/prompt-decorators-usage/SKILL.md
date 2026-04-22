@@ -42,16 +42,21 @@ suggesting.
 
 | Category | Trigger phrases in the prompt | Real decorators (verified) |
 |---|---|---|
-| **reasoning** | "why", "explain", "analyze", "compare", "pros/cons", "trade-offs" | `Reasoning`, `StepByStep`, `TreeOfThought`, `FirstPrinciples`, `RedTeam`, `Socratic`, `RootCause`, `Debate`, `Contrarian` |
+| **reasoning** | "why", "explain", "analyze", "compare", "pros/cons", "trade-offs" | `TreeOfThought`, `FirstPrinciples`, `RedTeam`, `Socratic`, `RootCause`, `Debate`, `Contrarian`, `Abductive`, `Deductive`, `Inductive`, `BlindSpots` |
 | **structure** | "list", "outline", "summarize", "table", "bullet", "organize" | `Outline`, `Summary`, `TableFormat`, `Comparison`, `Bullet`, `Layered`, `Nested`, `DecisionMatrix`, `Prioritize`, `Timeline` |
 | **tone** | "concise", "brief", "detailed", "academic", "formal", "simple" | `Concise`, `Detailed`, `Academic`, `ELI5`, `Professional`, `AsExpert`, `Audience`, `Persona`, `Creative`, `Narrative` |
 | **verification** | "verify", "fact-check", "cite", "sources", "evidence", "risks" | `CiteSources`, `FactCheck`, `Confidence`, `Uncertainty`, `Limitations`, `Balanced`, `Steelman`, `FindGaps`, `PeerReview` |
 | **minimal** (base layer) | "standard output format", "baseline reasoning shape" | `OutputFormat`, `Reasoning`, `StepByStep`, `Tone`, `Version` |
 | **meta** | composing decorators or controlling their interaction | `Override`, `Chain`, `Conditional`, `Refine`, `Priority`, `BuildOn`, `Extension` |
 
-Note: the `minimal` category is NOT a "brevity" bucket - it's the required
-base layer of foundational decorators. For terseness, use `Concise` or
-`ELI5` from `tone`.
+Note: the `minimal` category is NOT a "brevity" bucket - it's the
+required base layer of foundational decorators (`OutputFormat`,
+`Reasoning`, `StepByStep`, `Tone`, `Version`). Those names are
+reasoning-shaped but they live under `minimal/` in the registry because
+they're the base layer every other decorator composes with. For
+terseness, use `Concise` or `ELI5` from `tone`. For stepwise output,
+either `::StepByStep` (minimal base-layer) or a reasoning pattern like
+`::TreeOfThought` works.
 
 <good-example>
 **User prompt:** "Compare REST and GraphQL, including pros and cons in a table."

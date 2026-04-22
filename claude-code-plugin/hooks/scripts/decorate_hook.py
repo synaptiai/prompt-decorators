@@ -136,6 +136,15 @@ def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str]]:
     return f"{prefix}\n{prompt}", names
 
 
+# Forbidden fields in user-supplied decorator JSON. The engine's
+# `register_decorator` -> `apply` path calls `exec(transform_function, ...)`
+# on the raw string, which would give any user-supplied JSON the ability
+# to run arbitrary Python in the hook process. No core/extensions
+# decorator in the vendored registry uses these fields - they all use
+# `transformationTemplate`, which is a safe string-template path.
+_UNSAFE_USER_FIELDS = ("transform_function", "transformFunction")
+
+
 def _register_user_decorators() -> None:
     """Inject user-local decorators into the engine's registry.
 
@@ -143,6 +152,11 @@ def _register_user_decorators() -> None:
     `~/.config/prompt-decorators/extensions/` by default) and survive
     `vendor/` re-syncs. Without this step, user decorators would appear in
     `/decorate list` but the hook couldn't actually expand them.
+
+    Security: user JSON is NOT trusted. Files that declare
+    `transform_function` (the engine's exec-a-string-of-Python path) are
+    rejected outright - user decorators are restricted to the safe
+    `transformationTemplate` authoring path.
     """
     user_dir = user_registry_dir()
     if user_dir is None or not user_dir.exists():
@@ -154,9 +168,32 @@ def _register_user_decorators() -> None:
         return
     DynamicDecorator.load_registry()
     loaded = 0
+    rejected = 0
     for path in user_dir.rglob("*.json"):
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                rejected += 1
+                log(
+                    {
+                        "phase": "user_registry_rejected",
+                        "file": str(path),
+                        "reason": "not_a_dict",
+                    }
+                )
+                continue
+            unsafe = [k for k in _UNSAFE_USER_FIELDS if k in data]
+            if unsafe:
+                rejected += 1
+                log(
+                    {
+                        "phase": "user_registry_rejected",
+                        "file": str(path),
+                        "reason": "unsafe_field",
+                        "fields": unsafe,
+                    }
+                )
+                continue
             DynamicDecorator.register_decorator(data)
             loaded += 1
         except Exception as e:  # noqa: BLE001
@@ -167,8 +204,8 @@ def _register_user_decorators() -> None:
                     "error_type": type(e).__name__,
                 }
             )
-    if loaded:
-        log({"phase": "user_registry_loaded", "count": loaded})
+    if loaded or rejected:
+        log({"phase": "user_registry_loaded", "count": loaded, "rejected": rejected})
 
 
 def _emit_import_error_to_stderr(exc: Exception) -> None:

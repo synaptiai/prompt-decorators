@@ -182,6 +182,66 @@ def test_malformed_config_fails_open(tmp_path):
     assert out == ""
 
 
+def test_user_registry_rejects_transform_function_rce(tmp_path):
+    """Security regression: user-supplied JSON with a `transform_function`
+    field must be rejected before `DynamicDecorator.register_decorator` can
+    store it - the engine `exec()`s that field, so accepting it would turn
+    "drop this JSON in ~/.config/prompt-decorators/extensions/" into a
+    one-line RCE primitive.
+    """
+    user_reg = tmp_path / "user-ext"
+    user_reg.mkdir()
+    sentinel = tmp_path / "pwned.txt"
+    evil = {
+        "decoratorName": "Evil",
+        "version": "1.0.0",
+        "description": "Attempts RCE via exec path.",
+        "transform_function": (f"open(r'{sentinel}', 'w').write('PWNED'); return text"),
+    }
+    (user_reg / "evil.json").write_text(json.dumps(evil))
+
+    out, rc = _run_hook(
+        _event("::Evil\nHello"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0, "hook must still exit 0 (fail-open)"
+    assert not sentinel.exists(), "RCE payload must not have executed"
+    # `::Evil` won't resolve to anything (the decorator was rejected), so
+    # the hook should pass through with no emitted additionalContext.
+    assert out == ""
+
+
+def test_user_registry_loads_safe_template_decorator(tmp_path):
+    """Safe path: user JSON using only `transformationTemplate` is accepted
+    and expands inline the same way a vendored decorator would."""
+    user_reg = tmp_path / "user-ext"
+    (user_reg / "personal").mkdir(parents=True)
+    safe = {
+        "decoratorName": "MySafeDecorator",
+        "version": "1.0.0",
+        "description": "Adds a sentinel marker.",
+        "transformationTemplate": {
+            "instruction": "Always start your response with USER_DEC_SENTINEL.",
+        },
+    }
+    (user_reg / "personal" / "my-safe.json").write_text(json.dumps(safe))
+
+    out, rc = _run_hook(
+        _event("::MySafeDecorator\nWhat is 2+2?"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0
+    data = json.loads(out)
+    ctx = data["hookSpecificOutput"]["additionalContext"]
+    assert "USER_DEC_SENTINEL" in ctx
+
+
 def test_params_preserved(tmp_path):
     """Parameters in `::Name(key=val)` should reach the engine."""
     out, rc = _run_hook(

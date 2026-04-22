@@ -62,9 +62,9 @@ next sync.
 |---|---|
 | `reasoning` | Changes HOW the model thinks (ToT, Socratic, FirstPrinciples) |
 | `structure` | Changes the shape of the OUTPUT (Outline, Table, Bullet) |
-| `tone` | Changes the VOICE of the response (Concise, Detailed, Formal) |
-| `verification` | Adds CHECKS to the output (Cite, FactCheck, Confidence) |
-| `minimal` | Extreme brevity (Short, TLDR) |
+| `tone` | Changes the VOICE of the response (Concise, Detailed, Academic, Professional, ELI5) |
+| `verification` | Adds CHECKS to the output (CiteSources, FactCheck, Confidence, Uncertainty) |
+| `minimal` | Foundational base-layer decorators — OutputFormat, Reasoning, StepByStep, Tone, Version. Do NOT use for brevity (that's Concise/ELI5 in `tone`). |
 | `meta` | About decorators themselves (Override, Chain, Conditional) |
 
 If none of those fit, use an extension category under
