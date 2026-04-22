@@ -100,9 +100,7 @@ def test_recursion_guard_short_circuits_hook(tmp_path):
     against infinite recursion when the plugin is installed globally and
     auto_decorate shells out to `claude --print`.
     """
-    plugin_root = os.path.dirname(
-        os.path.dirname(os.path.abspath(__file__))
-    )
+    plugin_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     hook = os.path.join(plugin_root, "hooks", "scripts", "decorate_hook.py")
 
     event = (
