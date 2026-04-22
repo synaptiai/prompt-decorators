@@ -20,14 +20,16 @@ jobs:
           cache: 'pip'
       - name: Install dependencies
         run: |
+          set -x
           python -m pip install --upgrade pip
           pip install poetry
           poetry install --with mcp
           # Install required dependencies directly as well, so they're available to pre-commit hooks
           pip install pre-commit mypy pytest pydantic
           pip install -e .
+          pip list | head -40
       - name: Run pre-commit
-        run: pre-commit run --all-files
+        run: pre-commit run --all-files --verbose --show-diff-on-failure
 
   test-matrix:
     needs: pre-commit
