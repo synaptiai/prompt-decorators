@@ -1,0 +1,136 @@
+{
+  "decoratorName": "Infrastructure",
+  "version": "1.0.0",
+  "description": "Generates infrastructure as code templates for environment provisioning.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "tool",
+      "type": "enum",
+      "description": "Infrastructure as code tool",
+      "enum": [
+        "terraform",
+        "cloudformation",
+        "arm",
+        "pulumi",
+        "cdk",
+        "ansible"
+      ],
+      "default": "terraform",
+      "required": false
+    },
+    {
+      "name": "environment",
+      "type": "enum",
+      "description": "Target environment",
+      "enum": [
+        "dev",
+        "staging",
+        "prod",
+        "multi-environment"
+      ],
+      "default": "multi-environment",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Infrastructure philosophy",
+      "enum": [
+        "immutable",
+        "mutable",
+        "hybrid"
+      ],
+      "default": "immutable",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate infrastructure as code using best practices for the specified tool, environment, and approach.",
+    "parameterMapping": {
+      "tool": {
+        "valueMap": {
+          "terraform": "Use Terraform HCL syntax and modules to define the infrastructure.",
+          "cloudformation": "Use AWS CloudFormation YAML/JSON templates to define the infrastructure.",
+          "arm": "Use Azure Resource Manager templates to define the infrastructure.",
+          "pulumi": "Use Pulumi with appropriate programming language to define the infrastructure.",
+          "cdk": "Use Cloud Development Kit with appropriate programming language to define the infrastructure.",
+          "ansible": "Use Ansible playbooks and roles to define the infrastructure."
+        }
+      },
+      "environment": {
+        "valueMap": {
+          "dev": "Optimize for development speed and cost efficiency.",
+          "staging": "Create a production-like environment with reduced resources.",
+          "prod": "Optimize for reliability, security, and performance.",
+          "multi-environment": "Design with environment promotion in mind, using variables or parameters to differentiate environments."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "immutable": "Design infrastructure to be replaced rather than modified when changes are needed.",
+          "mutable": "Design infrastructure that can be updated in place.",
+          "hybrid": "Use a combination of immutable and mutable approaches as appropriate."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application infrastructure",
+        "originalPrompt": "Create infrastructure as code for a web application with frontend, API, and database tiers.",
+        "transformedPrompt": "Generate infrastructure as code using best practices for the specified tool, environment, and approach. Use Terraform HCL syntax and modules to define the infrastructure. Design with environment promotion in mind, using variables or parameters to differentiate environments. Design infrastructure to be replaced rather than modified when changes are needed.\n\nCreate infrastructure as code for a web application with frontend, API, and database tiers.",
+        "notes": "The decorator adds specific guidance based on the selected IaC tool, environment strategy, and infrastructure approach."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CloudProvider",
+        "relationship": "enhances",
+        "notes": "CloudProvider can specify the target cloud platform, which complements the Infrastructure decorator."
+      },
+      {
+        "decorator": "Security",
+        "relationship": "enhances",
+        "notes": "Security decorator can add security-specific requirements to the infrastructure code."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create infrastructure as code for the following requirements using {tool} for {environment} environments with an {approach} infrastructure approach:",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Terraform infrastructure for a multi-environment web application",
+      "usage": "+++Infrastructure(tool=terraform, environment=multi-environment, approach=immutable)\nCreate infrastructure as code for a web application with frontend, API, and database tiers.",
+      "result": "Generates Terraform code with modules for frontend (e.g., S3/CloudFront), API (e.g., ECS/Lambda), and database (e.g., RDS) with environment variables and immutable deployment strategy."
+    },
+    {
+      "description": "CloudFormation template for a development environment",
+      "usage": "+++Infrastructure(tool=cloudformation, environment=dev, approach=mutable)\nCreate infrastructure for a data processing pipeline.",
+      "result": "Generates AWS CloudFormation template optimized for development with cost-saving measures and the ability to update resources in place."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "claude-instant"
+    ]
+  }
+}

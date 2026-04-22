@@ -1,0 +1,107 @@
+{
+  "decoratorName": "RootCause",
+  "version": "1.0.0",
+  "description": "Structures the response to systematically analyze underlying causes of problems or situations. This decorator applies formal root cause analysis methodologies to identify fundamental factors rather than just symptoms or immediate causes.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "method",
+      "type": "enum",
+      "description": "The specific root cause analysis methodology to apply",
+      "enum": ["fivewhys", "fishbone", "pareto"],
+      "default": "fivewhys",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Level of detail in the analysis (for fivewhys, represents number of 'why' iterations)",
+      "default": 5,
+      "required": false,
+      "validation": {
+        "minimum": 3,
+        "maximum": 7
+      }
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please analyze the problem using formal root cause analysis to identify the underlying fundamental causes rather than just symptoms or immediate factors.",
+    "parameterMapping": {
+      "method": {
+        "valueMap": {
+          "fivewhys": "Use the '5 Whys' technique by repeatedly asking why to drill down to the root cause(s). For each identified factor, ask 'why' to go deeper until reaching fundamental causes.",
+          "fishbone": "Apply the Fishbone (Ishikawa) diagram approach by categorizing potential causes into major categories (e.g., People, Process, Equipment, Environment, Management, Materials) and analyzing each systematically.",
+          "pareto": "Use the Pareto principle (80/20 rule) to identify and focus on the vital few causes that likely contribute to most of the problem, prioritizing them by impact."
+        }
+      },
+      "depth": {
+        "format": "Conduct the analysis with {value} levels of depth, ensuring a thorough investigation of causal chains."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Five Whys analysis of a business problem",
+        "originalPrompt": "Why is our website's bounce rate increasing?",
+        "transformedPrompt": "Please analyze the problem using formal root cause analysis to identify the underlying fundamental causes rather than just symptoms or immediate factors. Use the '5 Whys' technique by repeatedly asking why to drill down to the root cause(s). For each identified factor, ask 'why' to go deeper until reaching fundamental causes. Conduct the analysis with 5 levels of depth, ensuring a thorough investigation of causal chains.\n\nWhy is our website's bounce rate increasing?"
+      },
+      {
+        "context": "Fishbone analysis of a technical issue",
+        "originalPrompt": "Why do our application servers crash under moderate load?",
+        "transformedPrompt": "Please analyze the problem using formal root cause analysis to identify the underlying fundamental causes rather than just symptoms or immediate factors. Apply the Fishbone (Ishikawa) diagram approach by categorizing potential causes into major categories (e.g., People, Process, Equipment, Environment, Management, Materials) and analyzing each systematically. Conduct the analysis with 5 levels of depth, ensuring a thorough investigation of causal chains.\n\nWhy do our application servers crash under moderate load?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "FirstPrinciples",
+        "relationship": "enhances",
+        "notes": "FirstPrinciples complements RootCause by providing a philosophical foundation for the causal analysis"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can help organize the progressive analysis of causes in a clear sequence"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Perform a systematic root cause analysis using the {method} approach. Don't stop at surface-level causes - keep investigating until you find the fundamental underlying factors. Be methodical and thorough in your analysis.",
+        "notes": "This model benefits from more explicit instruction about the need to go beyond superficial causes"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic 5 Whys analysis of a business problem",
+      "usage": "+++RootCause\nWhy is our website's bounce rate increasing?",
+      "result": "Performs a systematic 5 Whys analysis to trace the increasing bounce rate back to its fundamental causes"
+    },
+    {
+      "description": "Fishbone diagram approach to a technical issue",
+      "usage": "+++RootCause(method=fishbone)\nWhy do our application servers crash under moderate load?",
+      "result": "Analyzes the server crashes using the fishbone (Ishikawa) methodology, categorizing potential causes into major categories like People, Process, Equipment, etc."
+    },
+    {
+      "description": "Pareto analysis with deeper investigation",
+      "usage": "+++RootCause(method=pareto, depth=7)\nWhat factors are causing our manufacturing defects?",
+      "result": "Uses Pareto principle to identify the vital few causes responsible for most manufacturing defects, with an exceptionally thorough analysis"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

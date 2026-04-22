@@ -1,0 +1,104 @@
+{
+  "decoratorName": "Override",
+  "version": "1.0.0",
+  "description": "A meta-decorator that overrides the default parameters or behaviors of other decorators. This enables customization of standard decorators without modifying their definitions, allowing for reuse of established patterns with specific adjustments.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "decorator",
+      "type": "string",
+      "description": "The specific decorator whose behavior to override",
+      "required": true
+    },
+    {
+      "name": "parameters",
+      "type": "string",
+      "description": "JSON string specifying the parameters to override (e.g., '{\"depth\": \"comprehensive\", \"focus\": \"methodology\"}')",
+      "required": false
+    },
+    {
+      "name": "behavior",
+      "type": "string",
+      "description": "Optional custom behavior modification instructions that override the standard decorator interpretation",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please apply a customized version of a standard decorator with specific modifications to its default parameters or behavior.",
+    "parameterMapping": {
+      "decorator": {
+        "format": "Apply the {value} decorator, but with the following modifications to its standard implementation."
+      },
+      "parameters": {
+        "format": "Override the default parameters of the decorator with these specific values: {value}."
+      },
+      "behavior": {
+        "format": "Additionally, modify the standard behavior of the decorator as follows: {value}."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic parameter override for StepByStep",
+        "originalPrompt": "Explain how to bake bread.",
+        "transformedPrompt": "Please apply a customized version of a standard decorator with specific modifications to its default parameters or behavior. Apply the StepByStep decorator, but with the following modifications to its standard implementation. Override the default parameters of the decorator with these specific values: {\"numbered\": true, \"steps\": 7}.\n\nExplain how to bake bread."
+      },
+      {
+        "context": "Complex behavior override for Debate",
+        "originalPrompt": "Discuss the ethics of gene editing.",
+        "transformedPrompt": "Please apply a customized version of a standard decorator with specific modifications to its default parameters or behavior. Apply the Debate decorator, but with the following modifications to its standard implementation. Override the default parameters of the decorator with these specific values: {\"perspectives\": 2}. Additionally, modify the standard behavior of the decorator as follows: instead of presenting neutral perspectives, adopt strongly opposing viewpoints with clear advocacy for each position.\n\nDiscuss the ethics of gene editing."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "All",
+        "relationship": "enhances",
+        "notes": "Override can work with any decorator, as its purpose is to modify their behavior"
+      },
+      {
+        "decorator": "Priority",
+        "relationship": "enhances",
+        "notes": "Priority can help determine which Override takes precedence when multiple are applied"
+      },
+      {
+        "decorator": "Custom",
+        "relationship": "enhances",
+        "notes": "Override and Custom provide complementary approaches to customization - Override modifies existing decorators while Custom creates new behaviors"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "Apply the {decorator} decorator with these custom settings: {parameters}. {behavior} Follow the standard behavior of the decorator in all other aspects not explicitly modified.",
+        "notes": "This model handles behavior overrides well but benefits from explicit instructions about which aspects of behavior to preserve"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic parameter override for a standard decorator",
+      "usage": "+++Override(decorator=StepByStep, parameters={\"numbered\": true, \"steps\": 7})\nExplain how to bake bread.",
+      "result": "Applies the StepByStep decorator to explain bread baking, but overrides its default parameters to ensure exactly 7 numbered steps"
+    },
+    {
+      "description": "Complex behavior override with custom instructions",
+      "usage": "+++Override(decorator=Debate, parameters={\"perspectives\": 2}, behavior=instead of presenting neutral perspectives, adopt strongly opposing viewpoints with clear advocacy for each position)\nDiscuss the ethics of gene editing.",
+      "result": "Uses the Debate decorator structure for discussing gene editing ethics, but modifies its standard neutral approach to present strongly advocated opposing positions"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o"
+    ]
+  }
+}

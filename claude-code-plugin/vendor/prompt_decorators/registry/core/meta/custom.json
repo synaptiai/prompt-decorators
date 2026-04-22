@@ -1,0 +1,105 @@
+{
+  "decoratorName": "Custom",
+  "version": "1.0.0",
+  "description": "A meta-decorator that enables user-defined decorator behaviors through explicit rules or instructions. This provides maximum flexibility for creating specialized behaviors not covered by standard decorators.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "rules",
+      "type": "string",
+      "description": "Explicit instructions defining the custom behavior (e.g., 'present all examples in a numbered list with exactly three items')",
+      "required": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Optional name for the custom decorator to reference in documentation or explanations",
+      "required": false
+    },
+    {
+      "name": "priority",
+      "type": "enum",
+      "description": "How to prioritize custom rules relative to other decorators",
+      "enum": ["override", "supplement", "fallback"],
+      "default": "override",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please apply the following custom formatting or behavior rules to your response:",
+    "parameterMapping": {
+      "rules": {
+        "format": "{value}"
+      },
+      "name": {
+        "format": "This set of custom rules is called '{value}'."
+      },
+      "priority": {
+        "valueMap": {
+          "override": "These custom rules should override any conflicting instructions from other decorators.",
+          "supplement": "These custom rules should supplement other decorators, but defer to them in case of direct conflicts.",
+          "fallback": "Apply these custom rules only when no other decorator provides specific guidance on a particular aspect."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic custom formatting rule for paragraph beginnings",
+        "originalPrompt": "Explain how search engines work.",
+        "transformedPrompt": "Please apply the following custom formatting or behavior rules to your response: every paragraph must start with a word that begins with the letter A. These custom rules should override any conflicting instructions from other decorators.\n\nExplain how search engines work."
+      },
+      {
+        "context": "Complex custom behavior with named reference for dual perspectives",
+        "originalPrompt": "Analyze the impact of social media on politics.",
+        "transformedPrompt": "Please apply the following custom formatting or behavior rules to your response: present two contrasting viewpoints on each main point, label them as 'Perspective A' and 'Perspective B', and then provide a synthesis. This set of custom rules is called 'DualPerspective'. These custom rules should supplement other decorators, but defer to them in case of direct conflicts.\n\nAnalyze the impact of social media on politics."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "All",
+        "relationship": "enhances",
+        "notes": "Custom can work with any decorator, with interactions determined by the priority parameter"
+      },
+      {
+        "decorator": "Priority",
+        "relationship": "enhances",
+        "notes": "Priority can be used to establish more fine-grained control over how Custom rules interact with other decorators"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "Follow these custom instructions for your response: {rules}. {name} Apply these custom rules with {priority} priority relative to other formatting guidance.",
+        "notes": "This model handles custom instructions well but benefits from clear guidance about how to resolve conflicts with other decorators"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic custom formatting rule",
+      "usage": "+++Custom(rules=every paragraph must start with a word that begins with the letter A)\nExplain how search engines work.",
+      "result": "Provides an explanation of search engines where every paragraph begins with a word starting with the letter A"
+    },
+    {
+      "description": "Complex custom behavior with named reference",
+      "usage": "+++Custom(name=DualPerspective, rules=present two contrasting viewpoints on each main point, label them as 'Perspective A' and 'Perspective B', and then provide a synthesis, priority=supplement)\nAnalyze the impact of social media on politics.",
+      "result": "Analyzes social media's impact on politics using dual contrasting perspectives for each point, labeled as specified, with synthesis after each point, while still respecting other decorators"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o"
+    ]
+  }
+}

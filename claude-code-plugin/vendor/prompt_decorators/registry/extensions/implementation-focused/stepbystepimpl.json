@@ -1,0 +1,122 @@
+{
+  "decoratorName": "StepByStepImpl",
+  "version": "1.0.0",
+  "description": "Requests a step-by-step implementation approach, with explicitly labeled stages.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Level of explanation and comments",
+      "enum": [
+        "minimal",
+        "moderate",
+        "comprehensive"
+      ],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "steps",
+      "type": "string",
+      "description": "Number of implementation steps",
+      "default": "auto",
+      "required": false
+    },
+    {
+      "name": "output",
+      "type": "enum",
+      "description": "What to include in each step",
+      "enum": [
+        "code-only",
+        "code-with-explanation",
+        "explanation-then-code"
+      ],
+      "default": "code-with-explanation",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide a step-by-step implementation approach with explicitly labeled stages.",
+    "parameterMapping": {
+      "detail": {
+        "valueMap": {
+          "minimal": "Keep explanations and comments minimal, focusing on essential information only.",
+          "moderate": "Provide balanced explanations and comments that clarify the implementation without being excessive.",
+          "comprehensive": "Include detailed explanations and comprehensive comments for each part of the implementation."
+        }
+      },
+      "steps": {
+        "format": "Organize the implementation into {value} distinct steps."
+      },
+      "output": {
+        "valueMap": {
+          "code-only": "Present only the code for each step, with minimal explanation.",
+          "code-with-explanation": "For each step, present the code along with explanations of what it does.",
+          "explanation-then-code": "For each step, first explain the concept or approach, then provide the implementation code."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web Development Implementation",
+        "originalPrompt": "Implement a JWT authentication middleware for Express.js that verifies tokens and extracts user roles.",
+        "transformedPrompt": "Please provide a step-by-step implementation approach with explicitly labeled stages. Include detailed explanations and comprehensive comments for each part of the implementation. For each step, first explain the concept or approach, then provide the implementation code.\n\nImplement a JWT authentication middleware for Express.js that verifies tokens and extracts user roles.",
+        "notes": "This example shows the decorator applied with comprehensive detail and explanation-then-code format."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeQuality",
+        "relationship": "enhances",
+        "notes": "StepByStepImpl works well with CodeQuality to produce well-structured, high-quality implementation code."
+      },
+      {
+        "decorator": "Concise",
+        "relationship": "conflicts",
+        "notes": "StepByStepImpl with detailed explanations conflicts with the Concise decorator's goal of brevity."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Break down the implementation into clearly labeled steps. For each step, {output_style}. Provide {detail_level} explanations.",
+        "notes": "For gpt-4 Turbo, more explicit instructions about the step structure may be needed."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Comprehensive implementation with explanation-first approach",
+      "usage": "+++StepByStepImpl(detail=comprehensive, steps=5, output=explanation-then-code)\nImplement a JWT authentication middleware for Express.js that verifies tokens and extracts user roles.",
+      "result": "The model will provide a 5-step implementation process for JWT authentication middleware, with detailed explanations followed by code for each step."
+    },
+    {
+      "description": "Minimal code-focused implementation",
+      "usage": "+++StepByStepImpl(detail=minimal, output=code-only)\nCreate a React component that fetches and displays user data from an API.",
+      "result": "The model will provide a step-by-step implementation with minimal comments, focusing primarily on the code for each step."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Concise",
+      "OneShot"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

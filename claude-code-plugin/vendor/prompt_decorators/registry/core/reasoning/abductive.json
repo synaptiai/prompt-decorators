@@ -1,0 +1,114 @@
+{
+  "decoratorName": "Abductive",
+  "version": "1.0.0",
+  "description": "Structures the response using abductive reasoning, developing the most likely explanations for observations or phenomena. This decorator emphasizes inference to the best explanation and hypothetical reasoning to address incomplete information.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "hypotheses",
+      "type": "number",
+      "description": "Number of alternative hypotheses or explanations to generate",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "criteria",
+      "type": "array",
+      "description": "Specific criteria to evaluate hypotheses against (e.g., simplicity, explanatory power)",
+      "required": false
+    },
+    {
+      "name": "rank",
+      "type": "boolean",
+      "description": "Whether to explicitly rank hypotheses by likelihood",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please use abductive reasoning to develop the most likely explanations for the observations or phenomena described. Focus on inferring the best explanation from limited information, clearly presenting hypotheses that could account for the available evidence.",
+    "parameterMapping": {
+      "hypotheses": {
+        "format": "Generate exactly {value} distinct alternative hypotheses or explanations that could account for the observations."
+      },
+      "criteria": {
+        "format": "Evaluate each hypothesis against these specific criteria: {value}. For each criterion, explain how well the hypothesis satisfies it."
+      },
+      "rank": {
+        "valueMap": {
+          "true": "Explicitly rank the hypotheses from most to least likely based on how well they explain the observations and meet the evaluation criteria.",
+          "false": "Present the hypotheses without explicit ranking, focusing on the strengths and limitations of each potential explanation."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic abductive reasoning about bee population decline",
+        "originalPrompt": "Why have bee populations been declining globally?",
+        "transformedPrompt": "Please use abductive reasoning to develop the most likely explanations for the observations or phenomena described. Focus on inferring the best explanation from limited information, clearly presenting hypotheses that could account for the available evidence. Generate exactly 3 distinct alternative hypotheses or explanations that could account for the observations. Explicitly rank the hypotheses from most to least likely based on how well they explain the observations and meet the evaluation criteria.\n\nWhy have bee populations been declining globally?"
+      },
+      {
+        "context": "Detailed abductive reasoning about the Fermi Paradox",
+        "originalPrompt": "What might explain the Fermi Paradox?",
+        "transformedPrompt": "Please use abductive reasoning to develop the most likely explanations for the observations or phenomena described. Focus on inferring the best explanation from limited information, clearly presenting hypotheses that could account for the available evidence. Generate exactly 4 distinct alternative hypotheses or explanations that could account for the observations. Evaluate each hypothesis against these specific criteria: [comprehensiveness,simplicity,novelty,testability]. For each criterion, explain how well the hypothesis satisfies it. Explicitly rank the hypotheses from most to least likely based on how well they explain the observations and meet the evaluation criteria.\n\nWhat might explain the Fermi Paradox?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "FindGaps",
+        "relationship": "enhances",
+        "notes": "FindGaps helps identify missing information that could strengthen or challenge the abductive hypotheses"
+      },
+      {
+        "decorator": "Uncertainty",
+        "relationship": "enhances",
+        "notes": "Uncertainty pairs well with Abductive to acknowledge the probabilistic nature of inferential explanations"
+      },
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "Limitations helps clarify the constraints of each abductive hypothesis and the overall analysis"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Develop {hypotheses} possible explanations for this phenomenon. For each explanation: 1) Describe the hypothesis, 2) Connect it to the observed evidence, 3) Evaluate it against {criteria}, 4) Discuss its strengths and limitations. {rank} Present your reasoning clearly, acknowledging that we're working with incomplete information.",
+        "notes": "This model may sometimes need reminders to avoid conflating abductive reasoning with deductive or inductive approaches"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic abductive reasoning with multiple hypotheses",
+      "usage": "+++Abductive\nWhy have bee populations been declining globally?",
+      "result": "Presents observed facts about bee population decline, generates three possible explanations, and identifies the most likely causes based on available evidence"
+    },
+    {
+      "description": "Detailed abductive reasoning with specific evaluation criteria",
+      "usage": "+++Abductive(hypotheses=4, criteria=[comprehensiveness,simplicity,novelty,testability], rank=true)\nWhat might explain the Fermi Paradox?",
+      "result": "Develops four hypotheses explaining the Fermi Paradox, evaluates each against the specified criteria, and ranks them from most to least likely explanation"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

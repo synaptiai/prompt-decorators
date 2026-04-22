@@ -1,0 +1,131 @@
+{
+  "decoratorName": "Tradeoffs",
+  "version": "1.0.0",
+  "description": "Analyzes design tradeoffs across multiple dimensions.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "axes",
+      "type": "enum",
+      "description": "Dimensions to analyze",
+      "enum": [
+        "performance",
+        "cost",
+        "complexity",
+        "maintainability",
+        "security",
+        "time-to-market"
+      ],
+      "default": "performance,cost,complexity,maintainability",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Presentation format",
+      "enum": [
+        "table",
+        "prose",
+        "radar-chart",
+        "decision-matrix"
+      ],
+      "default": "decision-matrix",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "Analysis depth",
+      "enum": [
+        "overview",
+        "detailed",
+        "quantitative"
+      ],
+      "default": "detailed",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Analyze the tradeoffs between different options considering the specified dimensions. Present a balanced assessment that highlights the advantages and disadvantages of each approach.",
+    "parameterMapping": {
+      "axes": {
+        "format": "Analyze the following dimensions: {value}."
+      },
+      "format": {
+        "valueMap": {
+          "table": "Present your analysis in a tabular format with options as rows and dimensions as columns.",
+          "prose": "Present your analysis as a structured prose discussion of each option across the dimensions.",
+          "radar-chart": "Describe how a radar chart would represent these tradeoffs, with each axis representing one dimension.",
+          "decision-matrix": "Create a decision matrix that scores each option across the dimensions, with a final recommendation based on the overall scores."
+        }
+      },
+      "depth": {
+        "valueMap": {
+          "overview": "Provide a high-level overview of the key tradeoffs without detailed analysis.",
+          "detailed": "Provide a thorough analysis with specific examples and reasoning for each dimension.",
+          "quantitative": "Where possible, include quantitative metrics and measurements to support your analysis."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software architecture decision",
+        "originalPrompt": "Compare microservices vs monolithic architecture for our e-commerce platform.",
+        "transformedPrompt": "Analyze the tradeoffs between different options considering the specified dimensions. Present a balanced assessment that highlights the advantages and disadvantages of each approach. Analyze the following dimensions: performance,cost,complexity,maintainability. Create a decision matrix that scores each option across the dimensions, with a final recommendation based on the overall scores. Provide a thorough analysis with specific examples and reasoning for each dimension.\n\nCompare microservices vs monolithic architecture for our e-commerce platform.",
+        "notes": "The decorator adds structure to the comparison by specifying dimensions and format."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Reasoning",
+        "relationship": "enhances",
+        "notes": "Tradeoffs works well with Reasoning to provide more structured analytical thinking."
+      },
+      {
+        "decorator": "Pros",
+        "relationship": "conflicts",
+        "notes": "Tradeoffs provides a more comprehensive analysis than simple pros/cons and should not be used together."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed comparison of the options across multiple dimensions. For each dimension, explain the tradeoffs between the different approaches.",
+        "notes": "Simpler instruction for models with less analytical capability."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Analyzing database hosting options",
+      "usage": "+++Tradeoffs(axes=performance,cost,security,maintainability, format=decision-matrix)\nAnalyze the tradeoffs between using a managed database service versus self-hosted for a financial application.",
+      "result": "A decision matrix comparing managed vs. self-hosted database options across performance, cost, security, and maintainability dimensions, with scores and a final recommendation."
+    },
+    {
+      "description": "Comparing programming languages",
+      "usage": "+++Tradeoffs(axes=performance,complexity,time-to-market, format=table, depth=overview)\nCompare Python, Java, and Rust for developing a new data processing pipeline.",
+      "result": "A table showing a high-level overview of how Python, Java, and Rust compare across performance, complexity, and time-to-market dimensions."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Pros"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "prompt-decorators",
+  "version": "0.1.0",
+  "description": "Automatically enhance prompts with composable, categorized prompt decorators (reasoning, structure, tone, verification, minimal, meta) and an opt-in Haiku-based auto-selector.",
+  "author": {
+    "name": "Daniel Bentes",
+    "email": "promptdecorators@synapti.ai"
+  },
+  "homepage": "https://github.com/synaptiai/prompt-decorators",
+  "repository": "https://github.com/synaptiai/prompt-decorators",
+  "license": "Apache-2.0",
+  "keywords": [
+    "prompts",
+    "decorators",
+    "reasoning",
+    "structure",
+    "enhancement",
+    "prompt-engineering",
+    "auto-decorate"
+  ]
+}

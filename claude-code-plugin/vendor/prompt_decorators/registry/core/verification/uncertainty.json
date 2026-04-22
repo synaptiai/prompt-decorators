@@ -1,0 +1,121 @@
+{
+  "decoratorName": "Uncertainty",
+  "version": "1.0.0",
+  "description": "Explicitly highlights areas of uncertainty in the response. This decorator promotes intellectual honesty by clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "How to format uncertainty indications in the response",
+      "enum": ["inline", "section", "confidence"],
+      "default": "inline",
+      "required": false
+    },
+    {
+      "name": "threshold",
+      "type": "enum",
+      "description": "The threshold for flagging uncertain content",
+      "enum": ["low", "medium", "high"],
+      "default": "medium",
+      "required": false
+    },
+    {
+      "name": "reason",
+      "type": "boolean",
+      "description": "Whether to explain the reason for uncertainty",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please explicitly highlight areas of uncertainty in your response, clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate.",
+    "parameterMapping": {
+      "format": {
+        "valueMap": {
+          "inline": "Mark uncertain statements directly within the text using phrases like 'may be', 'possibly', 'uncertain', or 'subject to debate' as appropriate.",
+          "section": "Include a dedicated section at the end titled 'Areas of Uncertainty' that lists and discusses all uncertain aspects of the topic.",
+          "confidence": "Assign explicit confidence levels (e.g., 'high confidence', 'medium confidence', 'low confidence', 'speculative') to different statements or claims throughout the response."
+        }
+      },
+      "threshold": {
+        "valueMap": {
+          "low": "Flag even slightly uncertain information, being extremely cautious about presenting anything as definitive unless it is very well established.",
+          "medium": "Flag moderately uncertain information while presenting consensus views and well-supported claims with confidence.",
+          "high": "Only flag highly uncertain or speculative information, treating established scientific theories and widespread expert consensus as certain."
+        }
+      },
+      "reason": {
+        "valueMap": {
+          "true": "For each point of uncertainty, briefly explain why it is uncertain (e.g., limited data, conflicting studies, theoretical gaps, etc.).",
+          "false": "Simply mark uncertain information without explaining the reasons for the uncertainty."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Inline uncertainty markers in AGI timeline explanation",
+        "originalPrompt": "Explain the potential timeline for achieving artificial general intelligence.",
+        "transformedPrompt": "Please explicitly highlight areas of uncertainty in your response, clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate. Mark uncertain statements directly within the text using phrases like 'may be', 'possibly', 'uncertain', or 'subject to debate' as appropriate. Flag moderately uncertain information while presenting consensus views and well-supported claims with confidence. Simply mark uncertain information without explaining the reasons for the uncertainty.\n\nExplain the potential timeline for achieving artificial general intelligence."
+      },
+      {
+        "context": "Dedicated uncertainty section with reasoning for fusion energy",
+        "originalPrompt": "What are the environmental impacts of fusion energy?",
+        "transformedPrompt": "Please explicitly highlight areas of uncertainty in your response, clearly indicating what is known with confidence versus what is speculative, unknown, or subject to debate. Include a dedicated section at the end titled 'Areas of Uncertainty' that lists and discusses all uncertain aspects of the topic. Flag even slightly uncertain information, being extremely cautious about presenting anything as definitive unless it is very well established. For each point of uncertainty, briefly explain why it is uncertain (e.g., limited data, conflicting studies, theoretical gaps, etc.).\n\nWhat are the environmental impacts of fusion energy?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Confidence",
+        "relationship": "enhances",
+        "notes": "Confidence and Uncertainty are complementary, with Confidence focusing on quantifying certainty while Uncertainty highlights the unknown"
+      },
+      {
+        "decorator": "FactCheck",
+        "relationship": "enhances",
+        "notes": "FactCheck pairs well with Uncertainty to verify claims while acknowledging limitations in knowledge"
+      },
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "Limitations complements Uncertainty by addressing broader constraints in addition to specific uncertain points"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Be explicit about what is uncertain in your response. Use {format} to mark uncertainty. Apply a {threshold} threshold for identifying uncertain information. {reason} Make sure to differentiate between established facts and more speculative claims.",
+        "notes": "This model sometimes needs stronger prompting to acknowledge uncertainty in topics where it has high confidence"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Inline uncertainty markers in a technical explanation",
+      "usage": "+++Uncertainty\nExplain the potential timeline for achieving artificial general intelligence.",
+      "result": "Explains AGI timelines with inline uncertainty markers highlighting speculative predictions, areas of expert disagreement, and knowledge gaps"
+    },
+    {
+      "description": "Dedicated uncertainty section with detailed reasoning",
+      "usage": "+++Uncertainty(format=section, reason=true, threshold=low)\nWhat are the environmental impacts of fusion energy?",
+      "result": "Provides information about fusion energy's environmental impacts followed by a dedicated section discussing all points of uncertainty with explanations for why each point is uncertain"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

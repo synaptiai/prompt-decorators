@@ -1,0 +1,138 @@
+{
+  "decoratorName": "TechDebtControl",
+  "version": "1.0.0",
+  "description": "Guides how technical debt should be handled during implementation.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "accept",
+      "type": "enum",
+      "description": "Level of acceptable technical debt",
+      "enum": [
+        "none",
+        "minimal",
+        "moderate",
+        "pragmatic"
+      ],
+      "default": "minimal",
+      "required": false
+    },
+    {
+      "name": "document",
+      "type": "enum",
+      "description": "How tech debt should be documented",
+      "enum": [
+        "none",
+        "comments",
+        "todos",
+        "issues",
+        "comprehensive"
+      ],
+      "default": "todos",
+      "required": false
+    },
+    {
+      "name": "tradeoff",
+      "type": "enum",
+      "description": "What can be traded for quality",
+      "enum": [
+        "nothing",
+        "completeness",
+        "performance",
+        "elegance"
+      ],
+      "default": "elegance",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "When implementing this solution, consider the following technical debt guidelines:",
+    "parameterMapping": {
+      "accept": {
+        "valueMap": {
+          "none": "Do not introduce any technical debt. Implement a complete, high-quality solution even if it takes longer.",
+          "minimal": "Minimize technical debt. Only accept small compromises that can be easily addressed later.",
+          "moderate": "Accept a moderate amount of technical debt where necessary to meet deadlines, but keep it manageable.",
+          "pragmatic": "Prioritize shipping working code. Technical debt is acceptable if it helps meet immediate business needs."
+        }
+      },
+      "document": {
+        "valueMap": {
+          "none": "No documentation of technical debt is required.",
+          "comments": "Document technical debt with inline code comments where compromises were made.",
+          "todos": "Use TODO comments to mark areas of technical debt that need future improvement.",
+          "issues": "Create formal issue tickets for each piece of technical debt introduced.",
+          "comprehensive": "Provide comprehensive documentation including inline comments, TODOs, and a separate technical debt register with prioritization."
+        }
+      },
+      "tradeoff": {
+        "valueMap": {
+          "nothing": "Do not trade off any aspect of quality.",
+          "completeness": "It's acceptable to implement a partial solution now and complete it later.",
+          "performance": "Optimize for correctness first; performance optimizations can come later.",
+          "elegance": "Focus on functional correctness over code elegance or perfect architecture."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web development sprint with tight deadline",
+        "originalPrompt": "Implement a file upload feature for our web application.",
+        "transformedPrompt": "When implementing this solution, consider the following technical debt guidelines:\nPrioritize shipping working code. Technical debt is acceptable if it helps meet immediate business needs.\nUse TODO comments to mark areas of technical debt that need future improvement.\nFocus on functional correctness over code elegance or perfect architecture.\n\nImplement a file upload feature for our web application.",
+        "notes": "The decorator sets clear expectations about technical debt tolerance for time-sensitive features."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeQuality",
+        "relationship": "conflicts",
+        "notes": "CodeQuality decorator typically enforces stricter quality standards that may conflict with permissive technical debt settings."
+      },
+      {
+        "decorator": "DeadlineOriented",
+        "relationship": "enhances",
+        "notes": "Works well with DeadlineOriented to balance speed and quality considerations."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "For this implementation, follow these technical debt guidelines: {accept} {document} {tradeoff}",
+        "notes": "Simplified format works better with gpt-4's context handling."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Pragmatic approach for a demo feature",
+      "usage": "+++TechDebtControl(accept=pragmatic, document=todos, tradeoff=elegance)\nImplement a quick solution for the file upload feature we need for the demo next week. Note areas that will need improvement.",
+      "result": "The model will implement a functional file upload solution prioritizing speed over perfection, using TODO comments to mark areas needing improvement, and focusing on functionality over elegant code."
+    },
+    {
+      "description": "High-quality implementation for critical component",
+      "usage": "+++TechDebtControl(accept=none, document=comprehensive, tradeoff=nothing)\nImplement the authentication system for our banking application.",
+      "result": "The model will create a complete, high-quality authentication system with no technical debt, comprehensive documentation, and no quality trade-offs."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "PerfectionistCode"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "decoratorName": "EdgeCases",
+  "version": "1.0.0",
+  "description": "Identifies edge cases and boundary conditions for testing.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Types of edge cases to identify",
+      "enum": [
+        "input-validation",
+        "error-handling",
+        "resource-limits",
+        "concurrency",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    },
+    {
+      "name": "risk",
+      "type": "enum",
+      "description": "Risk level of edge cases to consider",
+      "enum": [
+        "common",
+        "rare",
+        "extreme"
+      ],
+      "default": "common",
+      "required": false
+    },
+    {
+      "name": "output",
+      "type": "enum",
+      "description": "Format of identified edge cases",
+      "enum": [
+        "description",
+        "test-cases",
+        "examples"
+      ],
+      "default": "test-cases",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Identify and analyze edge cases and boundary conditions for the given scenario. Consider potential failures, unexpected inputs, and system limitations.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "input-validation": "Focus on edge cases related to input validation, such as invalid inputs, boundary values, and type mismatches.",
+          "error-handling": "Focus on edge cases related to error handling, such as exception paths, error propagation, and recovery mechanisms.",
+          "resource-limits": "Focus on edge cases related to resource limitations, such as memory constraints, timeout conditions, and storage limits.",
+          "concurrency": "Focus on edge cases related to concurrency issues, such as race conditions, deadlocks, and synchronization problems.",
+          "all": "Consider all types of edge cases including input validation, error handling, resource limitations, and concurrency issues."
+        }
+      },
+      "risk": {
+        "valueMap": {
+          "common": "Focus on common edge cases that are likely to occur in normal usage scenarios.",
+          "rare": "Include rare edge cases that might occur infrequently but could have significant impact.",
+          "extreme": "Consider extreme edge cases, including highly unlikely scenarios that could lead to catastrophic failures."
+        }
+      },
+      "output": {
+        "valueMap": {
+          "description": "Provide detailed descriptions of each edge case, explaining the conditions and potential impacts.",
+          "test-cases": "Format the edge cases as specific test cases that could be implemented to verify system behavior.",
+          "examples": "Present concrete examples demonstrating each edge case in action with expected outcomes."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software testing for a web application",
+        "originalPrompt": "Identify edge cases for a multi-user document editing feature.",
+        "transformedPrompt": "Identify and analyze edge cases and boundary conditions for the given scenario. Consider potential failures, unexpected inputs, and system limitations. Focus on edge cases related to concurrency issues, such as race conditions, deadlocks, and synchronization problems. Include rare edge cases that might occur infrequently but could have significant impact. Format the edge cases as specific test cases that could be implemented to verify system behavior.\n\nIdentify edge cases for a multi-user document editing feature.",
+        "notes": "The decorator adds specific guidance on focusing on concurrency issues with rare risk levels, formatted as test cases."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "TestCases",
+        "relationship": "enhances",
+        "notes": "EdgeCases works well with TestCases decorator, providing more comprehensive test coverage."
+      },
+      {
+        "decorator": "SecurityAnalysis",
+        "relationship": "enhances",
+        "notes": "EdgeCases can complement SecurityAnalysis by identifying boundary conditions that might lead to security vulnerabilities."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Identify edge cases, corner cases, and boundary conditions for the following scenario. Consider what could go wrong, unexpected inputs, and system limitations.",
+        "notes": "Simpler phrasing works better with this model."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Identifying concurrency edge cases for a document editing feature",
+      "usage": "+++EdgeCases(focus=concurrency, risk=rare, output=test-cases)\nIdentify edge cases for a multi-user document editing feature.",
+      "result": "The model will identify rare concurrency-related edge cases for a multi-user document editing feature, formatted as specific test cases that could be implemented."
+    },
+    {
+      "description": "Finding input validation edge cases for a form submission",
+      "usage": "+++EdgeCases(focus=input-validation, risk=common)\nIdentify edge cases for a user registration form.",
+      "result": "The model will identify common input validation edge cases for a user registration form, formatted as test cases (the default output format)."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

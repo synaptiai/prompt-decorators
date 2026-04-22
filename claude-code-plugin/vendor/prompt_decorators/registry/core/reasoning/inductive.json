@@ -1,0 +1,121 @@
+{
+  "decoratorName": "Inductive",
+  "version": "1.0.0",
+  "description": "Structures the response using inductive reasoning, moving from specific observations to broader generalizations and theories. This decorator emphasizes pattern recognition and the derivation of general principles from particular instances.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "examples",
+      "type": "number",
+      "description": "Number of specific examples or observations to include before generalizing",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 10
+      }
+    },
+    {
+      "name": "confidence",
+      "type": "boolean",
+      "description": "Whether to explicitly state the confidence level of the inductive conclusions",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "structure",
+      "type": "enum",
+      "description": "The pattern of inductive reasoning to follow",
+      "enum": ["generalization", "causal", "statistical", "analogical"],
+      "default": "generalization",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances.",
+    "parameterMapping": {
+      "examples": {
+        "format": "Begin with {value} specific, concrete examples or observations before deriving generalizations from them."
+      },
+      "confidence": {
+        "valueMap": {
+          "true": "Explicitly state the confidence level for each inductive conclusion, acknowledging the inherent uncertainty in generalizing from specific cases.",
+          "false": "Present the inductive conclusions without explicitly stating confidence levels."
+        }
+      },
+      "structure": {
+        "valueMap": {
+          "generalization": "Use generalization induction, where common properties among the examples are used to form a general rule or principle.",
+          "causal": "Apply causal induction, focusing on identifying cause-and-effect relationships across the examples to establish causal patterns.",
+          "statistical": "Employ statistical induction, using quantitative patterns and probabilistic reasoning to derive statistical generalizations from the examples.",
+          "analogical": "Utilize analogical induction, where similarities between examples are used to infer that they likely share other properties as well."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic inductive reasoning about successful startups",
+        "originalPrompt": "What factors contribute to successful startups?",
+        "transformedPrompt": "Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances. Begin with 3 specific, concrete examples or observations before deriving generalizations from them. Present the inductive conclusions without explicitly stating confidence levels. Use generalization induction, where common properties among the examples are used to form a general rule or principle.\n\nWhat factors contribute to successful startups?"
+      },
+      {
+        "context": "Causal inductive reasoning about screen time",
+        "originalPrompt": "How does screen time affect child development?",
+        "transformedPrompt": "Please structure your response using inductive reasoning, moving from specific observations or examples to broader generalizations and theories. Focus on pattern recognition and deriving general principles from particular instances. Begin with 5 specific, concrete examples or observations before deriving generalizations from them. Explicitly state the confidence level for each inductive conclusion, acknowledging the inherent uncertainty in generalizing from specific cases. Apply causal induction, focusing on identifying cause-and-effect relationships across the examples to establish causal patterns.\n\nHow does screen time affect child development?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Deductive",
+        "relationship": "conflicts",
+        "notes": "Inductive and Deductive represent opposite reasoning approaches (specific-to-general vs. general-to-specific)"
+      },
+      {
+        "decorator": "Uncertainty",
+        "relationship": "enhances",
+        "notes": "Uncertainty works well with Inductive (especially with confidence=true) to acknowledge the probabilistic nature of inductive conclusions"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can help organize the progression from specific examples to general principles"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Use inductive reasoning to address this question. Start with {examples} specific real-world examples. Analyze these examples to identify patterns. Then use {structure} reasoning to derive general principles or conclusions. {confidence} Make each step in your reasoning explicit and clearly show how you move from specific cases to general insights.",
+        "notes": "This model sometimes needs explicit instruction to avoid jumping directly to conclusions without thoroughly examining specific examples first"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic inductive reasoning from examples to general principles",
+      "usage": "+++Inductive\nWhat factors contribute to successful startups?",
+      "result": "Provides specific examples of successful startups, identifies patterns across them, and derives general principles of startup success"
+    },
+    {
+      "description": "Causal inductive reasoning with confidence levels",
+      "usage": "+++Inductive(examples=5, confidence=true, structure=causal)\nHow does screen time affect child development?",
+      "result": "Presents 5 specific observations about screen time and child development, infers causal relationships, and generalizes with explicit confidence levels for each conclusion"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Deductive"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

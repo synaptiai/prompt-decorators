@@ -1,0 +1,139 @@
+{
+  "decoratorName": "IncrementalBuild",
+  "version": "1.0.0",
+  "description": "Indicates that the code should be built incrementally, with focus on one feature/component at a time.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Current implementation focus",
+      "enum": [
+        "feature",
+        "component",
+        "function",
+        "integration",
+        "refactoring"
+      ],
+      "default": "feature",
+      "required": false
+    },
+    {
+      "name": "dependencies",
+      "type": "enum",
+      "description": "How to handle dependencies",
+      "enum": [
+        "mock",
+        "stub",
+        "implement",
+        "import-existing"
+      ],
+      "default": "stub",
+      "required": false
+    },
+    {
+      "name": "completion",
+      "type": "enum",
+      "description": "Expected completion of this increment",
+      "enum": [
+        "minimal-viable",
+        "functional",
+        "robust",
+        "production-ready"
+      ],
+      "default": "functional",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Implement code incrementally, focusing on one part at a time. Build the solution step by step, ensuring each increment is testable before moving to the next.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "feature": "Focus on implementing a complete feature with all necessary components.",
+          "component": "Focus on building a specific UI or functional component that can be integrated later.",
+          "function": "Focus on implementing a specific function or method with well-defined inputs and outputs.",
+          "integration": "Focus on integrating previously implemented components or features.",
+          "refactoring": "Focus on improving existing code without changing functionality."
+        }
+      },
+      "dependencies": {
+        "valueMap": {
+          "mock": "Use mock objects or functions for all dependencies that aren't the focus of this increment.",
+          "stub": "Create minimal stub implementations for dependencies that return hardcoded values.",
+          "implement": "Implement all dependencies as part of this increment.",
+          "import-existing": "Use existing implementations for dependencies where available."
+        }
+      },
+      "completion": {
+        "valueMap": {
+          "minimal-viable": "Implement only the core functionality needed to demonstrate the concept.",
+          "functional": "Implement a complete solution that works for the main use cases.",
+          "robust": "Implement a solution that handles edge cases and includes error handling.",
+          "production-ready": "Implement a fully tested solution with documentation and optimizations."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web development",
+        "originalPrompt": "Implement a user profile card component that displays basic user information and an avatar.",
+        "transformedPrompt": "Implement code incrementally, focusing on one part at a time. Build the solution step by step, ensuring each increment is testable before moving to the next. Focus on building a specific UI or functional component that can be integrated later. Use mock objects or functions for all dependencies that aren't the focus of this increment. Implement only the core functionality needed to demonstrate the concept.\n\nImplement a user profile card component that displays basic user information and an avatar.",
+        "notes": "The transformation adds specific guidance on how to approach the implementation incrementally."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "TestDriven",
+        "relationship": "enhances",
+        "notes": "TestDriven works well with IncrementalBuild as tests can be written for each increment."
+      },
+      {
+        "decorator": "CompleteSystem",
+        "relationship": "conflicts",
+        "notes": "CompleteSystem expects a full implementation which conflicts with the incremental approach."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Build this code step by step. First focus on {focus} with {completion} level of completeness. For dependencies, use the {dependencies} approach.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Building a component with minimal viable implementation and mocked dependencies",
+      "usage": "+++IncrementalBuild(focus=component, dependencies=mock, completion=minimal-viable)\nImplement the user profile card component that displays basic user information and an avatar.",
+      "result": "The model will implement a minimal viable user profile card component, focusing only on the component itself and using mocks for any dependencies like user data services."
+    },
+    {
+      "description": "Implementing a complete feature with robust implementation",
+      "usage": "+++IncrementalBuild(focus=feature, dependencies=implement, completion=robust)\nCreate a user authentication system with login, registration, and password reset.",
+      "result": "The model will implement a robust user authentication system, including all necessary components and handling edge cases and error conditions."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "CompleteSystem",
+      "MonolithicImplementation"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

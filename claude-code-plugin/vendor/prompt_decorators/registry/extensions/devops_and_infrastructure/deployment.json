@@ -1,0 +1,144 @@
+{
+  "decoratorName": "Deployment",
+  "version": "1.0.0",
+  "description": "Generates deployment approaches for applications and services.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "platform",
+      "type": "enum",
+      "description": "Deployment target",
+      "enum": [
+        "aws",
+        "azure",
+        "gcp",
+        "kubernetes",
+        "heroku",
+        "netlify",
+        "vercel",
+        "on-prem"
+      ],
+      "default": "kubernetes",
+      "required": false
+    },
+    {
+      "name": "strategy",
+      "type": "enum",
+      "description": "Deployment methodology",
+      "enum": [
+        "blue-green",
+        "canary",
+        "rolling",
+        "recreate",
+        "custom"
+      ],
+      "default": "rolling",
+      "required": false
+    },
+    {
+      "name": "environment",
+      "type": "enum",
+      "description": "Target environment",
+      "enum": [
+        "dev",
+        "staging",
+        "production",
+        "multi-region"
+      ],
+      "default": "production",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate a deployment plan for the specified platform, using the appropriate deployment strategy and targeting the specified environment. Include necessary configuration, infrastructure requirements, and implementation steps.",
+    "parameterMapping": {
+      "platform": {
+        "valueMap": {
+          "aws": "For AWS deployment, consider services like ECS, EKS, Lambda, or EC2 based on the application architecture.",
+          "azure": "For Azure deployment, consider services like AKS, App Service, Azure Functions, or Virtual Machines based on the application architecture.",
+          "gcp": "For GCP deployment, consider services like GKE, Cloud Run, Cloud Functions, or Compute Engine based on the application architecture.",
+          "kubernetes": "For Kubernetes deployment, detail the necessary manifests, namespace configuration, and resource requirements.",
+          "heroku": "For Heroku deployment, specify buildpacks, add-ons, and configuration variables needed.",
+          "netlify": "For Netlify deployment, include build settings, environment variables, and any required redirects or functions.",
+          "vercel": "For Vercel deployment, specify project configuration, environment variables, and any required serverless functions.",
+          "on-prem": "For on-premises deployment, detail hardware requirements, networking configuration, and installation procedures."
+        }
+      },
+      "strategy": {
+        "valueMap": {
+          "blue-green": "Implement a blue-green deployment strategy with two identical environments to minimize downtime and risk.",
+          "canary": "Implement a canary deployment strategy, gradually routing traffic to the new version to detect issues early.",
+          "rolling": "Implement a rolling deployment strategy, updating instances incrementally to maintain service availability.",
+          "recreate": "Implement a recreate deployment strategy, terminating the old version before deploying the new one (involves downtime).",
+          "custom": "Implement a custom deployment strategy tailored to the specific requirements of the application and infrastructure."
+        }
+      },
+      "environment": {
+        "valueMap": {
+          "dev": "Target the development environment with appropriate debugging capabilities and minimal resource allocation.",
+          "staging": "Target the staging environment, configured to mirror production for testing purposes.",
+          "production": "Target the production environment with full resource allocation, monitoring, and high availability considerations.",
+          "multi-region": "Target multiple geographic regions for redundancy and reduced latency, with appropriate data replication strategies."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Microservices architecture on Kubernetes",
+        "originalPrompt": "Create a deployment plan for our microservices architecture ensuring zero downtime.",
+        "transformedPrompt": "Generate a deployment plan for the specified platform, using the appropriate deployment strategy and targeting the specified environment. Include necessary configuration, infrastructure requirements, and implementation steps.\n\nFor Kubernetes deployment, detail the necessary manifests, namespace configuration, and resource requirements.\nImplement a blue-green deployment strategy with two identical environments to minimize downtime and risk.\nTarget the production environment with full resource allocation, monitoring, and high availability considerations.\n\nCreate a deployment plan for our microservices architecture ensuring zero downtime.",
+        "notes": "The decorator adds specific guidance for Kubernetes deployment using blue-green strategy in production, which aligns with the zero-downtime requirement."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Architecture",
+        "relationship": "enhances",
+        "notes": "The Architecture decorator can provide context about the application structure that informs the deployment approach."
+      },
+      {
+        "decorator": "Security",
+        "relationship": "enhances",
+        "notes": "The Security decorator can add security considerations to the deployment plan."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed deployment plan for the application with the following specifications:\n- Platform: {platform}\n- Deployment strategy: {strategy}\n- Target environment: {environment}\n\nInclude configuration details, step-by-step implementation instructions, and best practices.",
+        "notes": "Simplified instruction with more explicit structure for models with less context understanding."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Kubernetes blue-green deployment for production",
+      "usage": "+++Deployment(platform=kubernetes, strategy=blue-green, environment=production)\nCreate a deployment plan for our microservices architecture ensuring zero downtime.",
+      "result": "A comprehensive deployment plan for Kubernetes using blue-green deployment strategy in production, with specific manifests, service configurations, and implementation steps to ensure zero downtime."
+    },
+    {
+      "description": "AWS serverless deployment for development",
+      "usage": "+++Deployment(platform=aws, strategy=canary, environment=dev)\nHow should we deploy our Node.js API?",
+      "result": "A deployment plan for AWS serverless services (like Lambda and API Gateway) using a canary deployment approach in the development environment, with appropriate IAM configurations and testing procedures."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

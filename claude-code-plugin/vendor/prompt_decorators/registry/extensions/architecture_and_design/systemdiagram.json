@@ -1,0 +1,141 @@
+{
+  "decoratorName": "SystemDiagram",
+  "version": "1.0.0",
+  "description": "Creates architectural diagrams and visual representations.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "notation",
+      "type": "enum",
+      "description": "Diagram notation system",
+      "enum": [
+        "uml",
+        "c4",
+        "archimate",
+        "informal",
+        "flowchart"
+      ],
+      "default": "c4",
+      "required": false
+    },
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "Detail level of the diagram",
+      "enum": [
+        "context",
+        "container",
+        "component",
+        "code"
+      ],
+      "default": "container",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Diagram emphasis",
+      "enum": [
+        "structure",
+        "behavior",
+        "interaction",
+        "deployment"
+      ],
+      "default": "structure",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create a system diagram that visually represents the architecture or design described. Use clear notation and appropriate level of detail.",
+    "parameterMapping": {
+      "notation": {
+        "valueMap": {
+          "uml": "Use UML (Unified Modeling Language) notation for the diagram.",
+          "c4": "Follow the C4 model notation for the diagram.",
+          "archimate": "Apply ArchiMate notation standards to the diagram.",
+          "informal": "Create an informal, easy-to-understand diagram without strict notation rules.",
+          "flowchart": "Use standard flowchart notation for the diagram."
+        }
+      },
+      "level": {
+        "valueMap": {
+          "context": "Focus on the context level showing the system and its relationships with users and other systems.",
+          "container": "Show containers (applications, data stores, microservices) within the system.",
+          "component": "Break down into components showing the major structural building blocks and their interactions.",
+          "code": "Provide code-level details showing classes, interfaces, and relationships."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "structure": "Emphasize the structural elements and their relationships.",
+          "behavior": "Highlight the behavioral aspects and processes within the system.",
+          "interaction": "Focus on interactions and communications between system elements.",
+          "deployment": "Show the deployment architecture and infrastructure components."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software Architecture Design",
+        "originalPrompt": "Create a system diagram showing how a user authentication service interacts with other system components.",
+        "transformedPrompt": "Create a system diagram that visually represents the architecture or design described. Use clear notation and appropriate level of detail. Follow the C4 model notation for the diagram. Show containers (applications, data stores, microservices) within the system. Focus on interactions and communications between system elements.\n\nCreate a system diagram showing how a user authentication service interacts with other system components.",
+        "notes": "The decorator adds specific instructions about the diagram notation, level, and focus before the original prompt."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeGeneration",
+        "relationship": "enhances",
+        "notes": "Can be used to generate diagrams that complement code generation tasks."
+      },
+      {
+        "decorator": "ArchitecturalPatterns",
+        "relationship": "enhances",
+        "notes": "Works well with architectural pattern recommendations to visualize the suggested patterns."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "Create a system diagram that visually represents the architecture or design described. Use clear notation and appropriate level of detail. The diagram should be described in text format that can be easily converted to a visual representation using tools like PlantUML, Mermaid, or similar diagramming tools.",
+        "notes": "gpt-4o has enhanced capabilities for structured outputs that can be converted to diagrams."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Creating a C4 container diagram showing interactions",
+      "usage": "+++SystemDiagram(notation=c4, level=container, focus=interaction)\nCreate a system diagram showing how a user authentication service interacts with other system components.",
+      "result": "Produces a C4 notation diagram at container level focusing on the interactions between the authentication service and other system components."
+    },
+    {
+      "description": "UML class diagram for a software system",
+      "usage": "+++SystemDiagram(notation=uml, level=code, focus=structure)\nCreate a diagram for a blog system with User, Post, and Comment classes.",
+      "result": "Generates a UML class diagram showing the structure of the blog system classes and their relationships."
+    },
+    {
+      "description": "High-level system context diagram",
+      "usage": "+++SystemDiagram(notation=informal, level=context)\nShow how our e-commerce platform connects to external systems.",
+      "result": "Creates an informal context diagram showing the e-commerce platform and its connections to external systems like payment processors, shipping services, etc."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "gemini-pro"
+    ]
+  }
+}

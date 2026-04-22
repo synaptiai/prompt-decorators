@@ -1,0 +1,110 @@
+{
+  "decoratorName": "Bullet",
+  "version": "1.0.0",
+  "description": "Formats the response as a bulleted list, making information easier to scan and digest. This decorator is ideal for presenting sequential steps, key points, or collections of related items in a clean, concise format.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "The visual marker used for bullet points",
+      "enum": ["dash", "dot", "arrow", "star", "plus"],
+      "default": "dash",
+      "required": false
+    },
+    {
+      "name": "indented",
+      "type": "boolean",
+      "description": "Whether to allow nested, indented bullet points",
+      "default": true,
+      "required": false
+    },
+    {
+      "name": "compact",
+      "type": "boolean",
+      "description": "Whether to keep bullet points short and concise (true) or allow longer, more detailed points (false)",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please format your response as a bulleted list to make the information easy to scan and digest.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "dash": "Use dash markers (- ) for all bullet points.",
+          "dot": "Use dot markers (• ) for all bullet points.",
+          "arrow": "Use arrow markers (→ ) for all bullet points.",
+          "star": "Use star markers (★ ) for all bullet points.",
+          "plus": "Use plus markers (+ ) for all bullet points."
+        }
+      },
+      "indented": {
+        "valueMap": {
+          "true": "Use hierarchical, indented sub-points where appropriate to show relationships between ideas.",
+          "false": "Use a flat list structure with no indentation or sub-points."
+        }
+      },
+      "compact": {
+        "valueMap": {
+          "true": "Keep each bullet point concise - ideally one line per point.",
+          "false": "Allow detailed explanations in each bullet point when necessary."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard dash bullets with indentation",
+        "originalPrompt": "What are the main factors to consider when buying a laptop?",
+        "transformedPrompt": "Please format your response as a bulleted list to make the information easy to scan and digest. Use dash markers (- ) for all bullet points. Use hierarchical, indented sub-points where appropriate to show relationships between ideas. Allow detailed explanations in each bullet point when necessary.\n\nWhat are the main factors to consider when buying a laptop?"
+      },
+      {
+        "context": "Compact star bullets with no indentation",
+        "originalPrompt": "List the benefits of regular exercise.",
+        "transformedPrompt": "Please format your response as a bulleted list to make the information easy to scan and digest. Use star markers (★ ) for all bullet points. Use a flat list structure with no indentation or sub-points. Keep each bullet point concise - ideally one line per point.\n\nList the benefits of regular exercise."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "OutputFormat",
+        "relationship": "conflicts",
+        "notes": "OutputFormat may specify a structure incompatible with bullet points"
+      },
+      {
+        "decorator": "Outline",
+        "relationship": "conflicts",
+        "notes": "Outline has its own structured format that conflicts with bullet points"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "description": "Basic bulleted list of key points",
+      "usage": "+++Bullet\nWhat are the main factors to consider when buying a laptop?",
+      "result": "Presents key laptop purchasing factors as a bulleted list with dash markers"
+    },
+    {
+      "description": "Compact star bullets with nesting disabled",
+      "usage": "+++Bullet(style=star, indented=false, compact=true)\nList the benefits of regular exercise.",
+      "result": "Provides a flat list of concise, star-bulleted points about exercise benefits, with no nested sub-points"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["OutputFormat"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

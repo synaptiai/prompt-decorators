@@ -1,0 +1,115 @@
+{
+  "decoratorName": "Contrarian",
+  "version": "1.0.0",
+  "description": "Generates responses that deliberately challenge conventional wisdom or mainstream perspectives. This decorator encourages critical thinking by presenting counterarguments, alternative interpretations, or challenging established positions on a topic.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "The specific contrarian approach to take",
+      "enum": ["outsider", "skeptic", "devils-advocate"],
+      "default": "devils-advocate",
+      "required": false
+    },
+    {
+      "name": "maintain",
+      "type": "boolean",
+      "description": "Whether to maintain contrarian stance throughout (true) or provide balanced view at the end (false)",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "string",
+      "description": "Optional specific aspect of the topic to focus contrarian analysis on",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please generate a response that deliberately challenges conventional wisdom or mainstream perspectives on this topic to encourage critical thinking.",
+    "parameterMapping": {
+      "approach": {
+        "valueMap": {
+          "outsider": "Adopt the perspective of someone completely outside the field or discipline, questioning fundamental assumptions that insiders might take for granted.",
+          "skeptic": "Take a deeply skeptical stance that questions the evidence, methodology, and logical foundations behind established views.",
+          "devils-advocate": "Present the strongest possible counterarguments to what would normally be considered the most reasonable position."
+        }
+      },
+      "maintain": {
+        "valueMap": {
+          "true": "Maintain the contrarian perspective consistently throughout the entire response without offering a conventional perspective.",
+          "false": "After thoroughly presenting the contrarian perspective, conclude with a brief balanced view that acknowledges the merits of both conventional and contrarian viewpoints."
+        }
+      },
+      "focus": {
+        "format": "Focus your contrarian analysis specifically on the {value} aspect of the topic rather than addressing all dimensions."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic devil's advocate with balanced conclusion on renewable energy",
+        "originalPrompt": "Why is renewable energy considered the future of power generation?",
+        "transformedPrompt": "Please generate a response that deliberately challenges conventional wisdom or mainstream perspectives on this topic to encourage critical thinking. Present the strongest possible counterarguments to what would normally be considered the most reasonable position. After thoroughly presenting the contrarian perspective, conclude with a brief balanced view that acknowledges the merits of both conventional and contrarian viewpoints.\n\nWhy is renewable energy considered the future of power generation?"
+      },
+      {
+        "context": "Maintained skeptical stance focused on methodology of climate models",
+        "originalPrompt": "Discuss the reliability of climate models in predicting future global temperatures.",
+        "transformedPrompt": "Please generate a response that deliberately challenges conventional wisdom or mainstream perspectives on this topic to encourage critical thinking. Take a deeply skeptical stance that questions the evidence, methodology, and logical foundations behind established views. Maintain the contrarian perspective consistently throughout the entire response without offering a conventional perspective. Focus your contrarian analysis specifically on the methodology aspect of the topic rather than addressing all dimensions.\n\nDiscuss the reliability of climate models in predicting future global temperatures."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Balanced",
+        "relationship": "conflicts",
+        "notes": "Contrarian with maintain=true directly conflicts with Balanced's aim for equal perspective representation"
+      },
+      {
+        "decorator": "Debate",
+        "relationship": "enhances",
+        "notes": "Debate can work well with Contrarian to present structured arguments for both conventional and contrarian views"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can help structure the contrarian reasoning in a clear, logical progression"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Challenge the conventional or mainstream view on this topic. Take the role of a {approach} who questions accepted wisdom. Focus particularly on {focus}. Present strong counterarguments and alternative interpretations. {maintain}",
+        "notes": "This model sometimes needs more explicit instruction to maintain a truly challenging stance rather than reverting to conventional views"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic devil's advocate approach with balanced conclusion",
+      "usage": "+++Contrarian\nWhy is renewable energy considered the future of power generation?",
+      "result": "Challenges conventional thinking about renewable energy's dominance, presenting counterarguments and limitations, followed by a balanced perspective"
+    },
+    {
+      "description": "Maintained skeptical contrarian stance focused on a specific aspect",
+      "usage": "+++Contrarian(approach=skeptic, maintain=true, focus=methodology)\nDiscuss the reliability of climate models in predicting future global temperatures.",
+      "result": "Provides a consistently skeptical analysis of climate model methodologies, questioning assumptions, limitations, and historical accuracy throughout the response"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

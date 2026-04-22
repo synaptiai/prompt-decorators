@@ -1,0 +1,134 @@
+{
+  "decoratorName": "PostMortem",
+  "version": "1.0.0",
+  "description": "Creates incident reviews and postmortem documents.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Document structure",
+      "enum": [
+        "timeline",
+        "5-whys",
+        "fishbone",
+        "comprehensive"
+      ],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Analysis emphasis",
+      "enum": [
+        "what-happened",
+        "why",
+        "prevention",
+        "balanced"
+      ],
+      "default": "balanced",
+      "required": false
+    },
+    {
+      "name": "audience",
+      "type": "enum",
+      "description": "Target readers",
+      "enum": [
+        "team",
+        "leadership",
+        "stakeholders",
+        "public"
+      ],
+      "default": "team",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create a detailed postmortem document that analyzes the incident, identifies root causes, and proposes preventive measures.",
+    "parameterMapping": {
+      "format": {
+        "valueMap": {
+          "timeline": "Structure the postmortem as a chronological timeline of events.",
+          "5-whys": "Use the 5 Whys technique to identify the root cause by repeatedly asking why the problem occurred.",
+          "fishbone": "Organize the analysis using a fishbone (Ishikawa) diagram approach to categorize potential causes.",
+          "comprehensive": "Create a comprehensive postmortem covering timeline, root cause analysis, impact assessment, and future prevention."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "what-happened": "Focus primarily on documenting what happened during the incident in detail.",
+          "why": "Emphasize root cause analysis and why the incident occurred.",
+          "prevention": "Concentrate on preventive measures and future safeguards.",
+          "balanced": "Provide balanced coverage of what happened, why it happened, and how to prevent recurrence."
+        }
+      },
+      "audience": {
+        "valueMap": {
+          "team": "Write for the technical team with appropriate technical details.",
+          "leadership": "Format for leadership with executive summary and business impact.",
+          "stakeholders": "Address concerns of all stakeholders with both technical and business perspectives.",
+          "public": "Create a public-facing document that explains the incident without revealing sensitive details."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software development team",
+        "originalPrompt": "Create a postmortem for the database outage we experienced yesterday that caused 45 minutes of downtime.",
+        "transformedPrompt": "Create a detailed postmortem document that analyzes the incident, identifies root causes, and proposes preventive measures. Create a comprehensive postmortem covering timeline, root cause analysis, impact assessment, and future prevention. Provide balanced coverage of what happened, why it happened, and how to prevent recurrence. Write for the technical team with appropriate technical details.\n\nCreate a postmortem for the database outage we experienced yesterday that caused 45 minutes of downtime.",
+        "notes": "The decorator adds structure and guidance for creating a comprehensive postmortem document tailored to the technical team."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "RootCauseAnalysis",
+        "relationship": "enhances",
+        "notes": "RootCauseAnalysis can enhance the 'why' aspect of PostMortem analysis."
+      },
+      {
+        "decorator": "TechnicalDocumentation",
+        "relationship": "enhances",
+        "notes": "TechnicalDocumentation can improve the structure and clarity of the postmortem document."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed postmortem document for the incident. Include what happened, why it happened, and how to prevent it in the future.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic postmortem for a database outage",
+      "usage": "+++PostMortem(format=comprehensive, focus=balanced, audience=team)\nCreate a postmortem for the database outage we experienced yesterday that caused 45 minutes of downtime.",
+      "result": "A comprehensive postmortem document analyzing the database outage, including timeline, root cause analysis, impact assessment, and preventive measures, written for a technical team audience."
+    },
+    {
+      "description": "Executive-focused incident review",
+      "usage": "+++PostMortem(format=timeline, focus=prevention, audience=leadership)\nAnalyze the recent security breach that affected our customer data.",
+      "result": "A timeline-based postmortem focused on prevention strategies, formatted for leadership with executive summary and business impact assessment."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

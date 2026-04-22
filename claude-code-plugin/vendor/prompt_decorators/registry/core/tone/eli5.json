@@ -1,0 +1,96 @@
+{
+  "decoratorName": "ELI5",
+  "version": "1.0.0",
+  "description": "Adapts the response to explain a concept as if to a 5-year-old child. This decorator simplifies complex topics using basic vocabulary, concrete examples, and relatable analogies to make information accessible to non-experts or those new to a subject.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "strictness",
+      "type": "boolean",
+      "description": "Whether to strictly maintain a child-appropriate level of simplicity or allow slightly more complexity when necessary",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please explain this concept as you would to a 5-year-old child. Use simple vocabulary, concrete examples, and relatable analogies.",
+    "parameterMapping": {
+      "strictness": {
+        "valueMap": {
+          "true": "Maintain an extremely simplified approach that a young child would understand, using only basic vocabulary and very concrete analogies. Avoid any technical terms or complex explanations entirely.",
+          "false": "Keep explanations simple and child-friendly, but you may introduce slightly more advanced concepts when absolutely necessary for understanding, as long as they're explained with simple analogies."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic ELI5 explanation of nuclear fusion",
+        "originalPrompt": "Explain how nuclear fusion works.",
+        "transformedPrompt": "Please explain this concept as you would to a 5-year-old child. Use simple vocabulary, concrete examples, and relatable analogies. Keep explanations simple and child-friendly, but you may introduce slightly more advanced concepts when absolutely necessary for understanding, as long as they're explained with simple analogies.\n\nExplain how nuclear fusion works."
+      },
+      {
+        "context": "Strict ELI5 explanation of the internet",
+        "originalPrompt": "How does the internet work?",
+        "transformedPrompt": "Please explain this concept as you would to a 5-year-old child. Use simple vocabulary, concrete examples, and relatable analogies. Maintain an extremely simplified approach that a young child would understand, using only basic vocabulary and very concrete analogies. Avoid any technical terms or complex explanations entirely.\n\nHow does the internet work?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Academic",
+        "relationship": "conflicts",
+        "notes": "ELI5's simplified language directly conflicts with Academic's scholarly approach"
+      },
+      {
+        "decorator": "Professional",
+        "relationship": "conflicts",
+        "notes": "ELI5's child-like language conflicts with Professional's business-oriented language"
+      },
+      {
+        "decorator": "AsExpert",
+        "relationship": "conflicts",
+        "notes": "ELI5 requires beginner-level explanations which conflict with expert-level discourse"
+      },
+      {
+        "decorator": "Analogical",
+        "relationship": "enhances",
+        "notes": "Analogical reasoning works well with ELI5 to create child-friendly analogies"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Explain this in the simplest possible terms, as if talking to a young child. Use words a 5-year-old would know. Compare complex ideas to everyday things like toys, food, or familiar activities. {strictness}",
+        "notes": "This model sometimes needs reminders to maintain the simplified level throughout longer responses"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic explanation of a complex scientific concept",
+      "usage": "+++ELI5\nExplain how nuclear fusion works.",
+      "result": "Explains nuclear fusion using simple language, analogies, and examples a child could understand"
+    },
+    {
+      "description": "Strict simplified explanation of a technical subject",
+      "usage": "+++ELI5(strictness=true)\nHow does the internet work?",
+      "result": "Provides an extremely simplified explanation of the internet using only basic vocabulary and concrete examples appropriate for young children"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["Academic", "Professional", "AsExpert", "Precision", "Tone"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

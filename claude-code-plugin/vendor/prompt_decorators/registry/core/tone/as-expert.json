@@ -1,0 +1,116 @@
+{
+  "decoratorName": "AsExpert",
+  "version": "1.0.0",
+  "description": "Generates responses from the perspective of a specified domain expert or specialist. This decorator provides authoritative content that reflects the knowledge, terminology, and analytical approach of an expert in the specified field.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "The specific field or discipline the expert specializes in",
+      "required": true
+    },
+    {
+      "name": "experience",
+      "type": "enum",
+      "description": "The experience level of the expert",
+      "enum": ["junior", "senior", "leading", "pioneering"],
+      "default": "senior",
+      "required": false
+    },
+    {
+      "name": "technical",
+      "type": "boolean",
+      "description": "Whether to use highly technical language and domain-specific terminology",
+      "default": true,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please respond from the perspective of a domain expert in the specified field, providing authoritative content that reflects expert knowledge, terminology, and analytical approach.",
+    "parameterMapping": {
+      "domain": {
+        "format": "Respond as a specialist in {value}, incorporating field-specific knowledge, methodologies, and frameworks."
+      },
+      "experience": {
+        "valueMap": {
+          "junior": "Adopt the perspective of a junior expert with foundational training and some practical experience in the field.",
+          "senior": "Adopt the perspective of a senior expert with extensive experience and deep knowledge of the field's established principles and practices.",
+          "leading": "Adopt the perspective of a leading authority in the field with comprehensive expertise and recognition for significant contributions.",
+          "pioneering": "Adopt the perspective of a pioneering innovator in the field who is at the cutting edge of new developments and paradigm-shifting approaches."
+        }
+      },
+      "technical": {
+        "valueMap": {
+          "true": "Use domain-specific terminology, technical language, and specialized concepts appropriate for communication between experts in the field.",
+          "false": "Use more accessible language while maintaining accuracy, minimizing technical jargon but preserving the essential expert insights."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Senior neuroscientist explanation of memory formation",
+        "originalPrompt": "Explain how memories are formed in the brain.",
+        "transformedPrompt": "Please respond from the perspective of a domain expert in the specified field, providing authoritative content that reflects expert knowledge, terminology, and analytical approach. Respond as a specialist in neuroscience, incorporating field-specific knowledge, methodologies, and frameworks. Adopt the perspective of a senior expert with extensive experience and deep knowledge of the field's established principles and practices. Use domain-specific terminology, technical language, and specialized concepts appropriate for communication between experts in the field.\n\nExplain how memories are formed in the brain."
+      },
+      {
+        "context": "Pioneering cryptography expert on quantum computing implications",
+        "originalPrompt": "Assess the security implications of quantum computing for current encryption standards.",
+        "transformedPrompt": "Please respond from the perspective of a domain expert in the specified field, providing authoritative content that reflects expert knowledge, terminology, and analytical approach. Respond as a specialist in cryptography, incorporating field-specific knowledge, methodologies, and frameworks. Adopt the perspective of a pioneering innovator in the field who is at the cutting edge of new developments and paradigm-shifting approaches. Use domain-specific terminology, technical language, and specialized concepts appropriate for communication between experts in the field.\n\nAssess the security implications of quantum computing for current encryption standards."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ELI5",
+        "relationship": "conflicts",
+        "notes": "AsExpert (especially with technical=true) directly conflicts with ELI5's simplified approach"
+      },
+      {
+        "decorator": "Academic",
+        "relationship": "enhances",
+        "notes": "Academic complements AsExpert by adding scholarly conventions to expert knowledge"
+      },
+      {
+        "decorator": "Technical",
+        "relationship": "enhances",
+        "notes": "Technical works well with AsExpert to emphasize precision and deep domain terminology"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Adopt the perspective of a {experience} expert in {domain}. Use your specialized knowledge to provide an authoritative response that demonstrates deep expertise. {technical} Make sure to incorporate relevant frameworks, methodologies, and current understandings from the field.",
+        "notes": "This model sometimes needs stronger prompting to maintain consistent expert perspective and appropriate level of technical terminology"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic response as a domain expert",
+      "usage": "+++AsExpert(domain=neuroscience)\nExplain how memories are formed in the brain.",
+      "result": "Provides an explanation of memory formation from the perspective of a senior neuroscientist, using appropriate terminology and references to relevant research"
+    },
+    {
+      "description": "Highly technical response as pioneering expert",
+      "usage": "+++AsExpert(domain=cryptography, experience=pioneering, technical=true)\nAssess the security implications of quantum computing for current encryption standards.",
+      "result": "Delivers a technically sophisticated assessment of quantum computing's encryption impacts from the perspective of a pioneering cryptography expert, using advanced terminology and nuanced analysis"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["ELI5"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

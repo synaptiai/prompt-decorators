@@ -1,0 +1,141 @@
+{
+    "decoratorName": "PerspectiveCascade",
+    "version": "1.0.0",
+    "description": "Systematically explores a topic through a sequence of diverse, interconnected viewpoints, with each perspective building upon previous ones to reveal multidimensional insights",
+    "author": {
+        "name": "Prompt Decorators Working Group",
+        "email": "promptdecoratorspec@synapti.ai",
+        "url": "https://synapti.ai"
+    },
+    "parameters": [
+      {
+        "name": "perspectives",
+        "type": "number",
+        "description": "Number of distinct perspectives to explore in the cascade",
+        "default": 4,
+        "required": false
+      },
+      {
+        "name": "domain",
+        "type": "enum",
+        "description": "Domain-specific perspective set to use",
+        "enum": ["business", "product", "research", "problem-solving", "decision-making", "content-creation", "negotiation", "custom"],
+        "default": "custom",
+        "required": false
+      },
+      {
+        "name": "integrationLevel",
+        "type": "enum",
+        "description": "How tightly to integrate perspectives in the cascade",
+        "enum": ["basic", "moderate", "comprehensive"],
+        "default": "moderate",
+        "required": false
+      },
+      {
+        "name": "interactionStyle",
+        "type": "enum",
+        "description": "How to manage the interaction through perspectives",
+        "enum": ["guided", "autonomous", "hybrid"],
+        "default": "guided",
+        "required": false
+      },
+      {
+        "name": "customPerspectives",
+        "type": "string",
+        "description": "Custom list of perspectives to explore (comma-separated)",
+        "default": "",
+        "required": false
+      }
+    ],
+    "transformationTemplate": {
+      "instruction": "Approach this topic using Perspective Cascading, a method that systematically explores the subject through a sequence of diverse, interconnected viewpoints. Each new perspective should build upon previous ones while introducing novel elements, creating a flowing exploration that reveals insights at the boundaries between different perspectives.",
+      "parameterMapping": {
+        "perspectives": {
+          "valueMap": {
+            "3": "Explore three key perspectives in sequence, ensuring each builds upon previous insights.",
+            "4": "Develop a four-perspective cascade that provides a comprehensive exploration of the topic.",
+            "5": "Create a rich five-perspective cascade that thoroughly examines the topic from multiple angles.",
+            "6": "Implement an extensive six-perspective cascade for maximum insight generation."
+          }
+        },
+        "domain": {
+          "valueMap": {
+            "business": "Use a business-oriented cascade that explores: 1) Operational considerations, 2) Human/stakeholder impacts, 3) Organizational culture implications, 4) Market/competitive positioning.",
+            "product": "Use a product development cascade that explores: 1) User needs and pain points, 2) Technical feasibility and constraints, 3) Market viability and positioning, 4) Future adaptability and scaling.",
+            "research": "Use a research-oriented cascade that explores: 1) Methodological approaches, 2) Theoretical frameworks, 3) Practical implementation considerations, 4) Implications and applications.",
+            "problem-solving": "Use a problem-solving cascade that explores: 1) Problem definition and framing, 2) Causal factors and systems analysis, 3) Solution approaches and evaluation, 4) Implementation and adaptation.",
+            "decision-making": "Use a decision-making cascade that explores: 1) Practical considerations, 2) Ethical dimensions, 3) Strategic alignment, 4) Emotional and intuitive aspects.",
+            "content-creation": "Use a content-creation cascade that explores: 1) Core message and purpose, 2) Audience needs and perspectives, 3) Format and delivery considerations, 4) Engagement and impact potential.",
+            "negotiation": "Use a negotiation-focused cascade that explores: 1) Your interests and priorities, 2) Counterparty perspectives and needs, 3) Contextual factors and constraints, 4) Creative options and integrative solutions.",
+            "custom": "Develop a custom perspective cascade appropriate to the specific topic and context."
+          }
+        },
+        "integrationLevel": {
+          "valueMap": {
+            "basic": "Ensure basic connections between perspectives, highlighting key relationship points.",
+            "moderate": "Create moderate integration with explicit connections and reflections on how each perspective transforms understanding of previous viewpoints.",
+            "comprehensive": "Implement comprehensive integration where perspectives deeply inform each other, with explicit synthesis of insights across the full cascade."
+          }
+        },
+        "interactionStyle": {
+          "valueMap": {
+            "guided": "Guide the user through each perspective with explicit questions to elicit their input before moving to the next perspective.",
+            "autonomous": "Present the full cascade of perspectives with minimal interruption, providing a comprehensive analysis.",
+            "hybrid": "Balance guidance and autonomy by presenting initial perspectives, then pausing for input at key integration points."
+          }
+        }
+      },
+      "placement": "prepend",
+      "compositionBehavior": "accumulate"
+    },
+    "examples": [
+      {
+        "description": "Business strategy exploration",
+        "usage": "+++PerspectiveCascade(domain=business, perspectives=4, integrationLevel=comprehensive)",
+        "result": "Analyzes business strategy through four perspectives (operational, human, cultural, and market) with comprehensive integration between viewpoints"
+      },
+      {
+        "description": "Product development with custom perspectives",
+        "usage": "+++PerspectiveCascade(customPerspectives=technical,financial,ethical,user-experience, integrationLevel=moderate)",
+        "result": "Explores product development through a cascade of technical, financial, ethical, and user experience perspectives with moderate integration"
+      }
+    ],
+    "compatibility": {
+      "requires": [],
+      "conflicts": [],
+      "minStandardVersion": "1.0.0",
+      "maxStandardVersion": "2.0.0",
+      "models": [
+        "claude-3-opus-20240229",
+        "claude-3-sonnet-20240229",
+        "gpt-4o",
+        "gpt-4o-turbo"
+      ]
+    },
+    "implementationGuidance": {
+      "examples": [
+        {
+          "context": "Corporate policy development",
+          "originalPrompt": "Help me develop a sustainability policy for my manufacturing company.",
+          "transformedPrompt": "Approach this topic using Perspective Cascading, a method that systematically explores the subject through a sequence of diverse, interconnected viewpoints. Each new perspective should build upon previous ones while introducing novel elements, creating a flowing exploration that reveals insights at the boundaries between different perspectives. Use a business-oriented cascade that explores: 1) Operational considerations, 2) Human/stakeholder impacts, 3) Organizational culture implications, 4) Market/competitive positioning. Create moderate integration with explicit connections and reflections on how each perspective transforms understanding of previous viewpoints. Guide the user through each perspective with explicit questions to elicit their input before moving to the next perspective.\n\nHelp me develop a sustainability policy for my manufacturing company."
+        }
+      ],
+      "compatibilityNotes": [
+        {
+          "decorator": "DeepDive",
+          "relationship": "enhances",
+          "notes": "DeepDive can be used to explore individual perspectives more thoroughly when needed"
+        },
+        {
+          "decorator": "Socratic",
+          "relationship": "enhances",
+          "notes": "Socratic questioning works well with the guided interaction style to facilitate perspective exploration"
+        },
+        {
+          "decorator": "Debate",
+          "relationship": "conflicts",
+          "notes": "Debate focuses on oppositional perspectives rather than the flowing cascade approach"
+        }
+      ]
+    }
+  }

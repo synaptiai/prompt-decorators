@@ -1,0 +1,112 @@
+{
+  "decoratorName": "Migration",
+  "version": "1.0.0",
+  "description": "Plans migration approaches between system states.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "from",
+      "type": "string",
+      "description": "Current state",
+      "default": "context-dependent",
+      "required": true
+    },
+    {
+      "name": "to",
+      "type": "string",
+      "description": "Target state",
+      "default": "context-dependent",
+      "required": true
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Migration strategy",
+      "enum": [
+        "big-bang",
+        "incremental",
+        "strangler-fig",
+        "parallel-run"
+      ],
+      "default": "incremental",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create a detailed migration plan that addresses the transition from the current state to the target state. Include key considerations, risks, timeline estimates, and resource requirements.",
+    "parameterMapping": {
+      "from": {
+        "format": "The current state is: {value}."
+      },
+      "to": {
+        "format": "The target state is: {value}."
+      },
+      "approach": {
+        "valueMap": {
+          "big-bang": "Use a big-bang migration approach, where the entire system is replaced at once.",
+          "incremental": "Use an incremental migration approach, where components are migrated one by one over time.",
+          "strangler-fig": "Use a strangler-fig migration approach, where the new system gradually replaces the old one.",
+          "parallel-run": "Use a parallel-run migration approach, where both systems operate simultaneously until the migration is complete."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software Architecture Planning",
+        "originalPrompt": "Create a migration plan for transitioning our monolithic e-commerce application to microservices.",
+        "transformedPrompt": "Create a detailed migration plan that addresses the transition from the current state to the target state. Include key considerations, risks, timeline estimates, and resource requirements. The current state is: monolith. The target state is: microservices. Use a strangler-fig migration approach, where the new system gradually replaces the old one.\n\nCreate a migration plan for transitioning our monolithic e-commerce application to microservices.",
+        "notes": "The decorator adds specific migration context and approach guidance to the original prompt."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SystemDesign",
+        "relationship": "enhances",
+        "notes": "Migration works well with SystemDesign as it provides context for the migration planning."
+      },
+      {
+        "decorator": "RiskAnalysis",
+        "relationship": "enhances",
+        "notes": "RiskAnalysis can be used to further elaborate on the risks associated with the migration."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a step-by-step migration plan to move from {from} to {to} using the {approach} approach. Include timeline, risks, and resource needs.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Migration plan for transitioning from monolith to microservices",
+      "usage": "+++Migration(from=monolith, to=microservices, approach=strangler-fig)\nCreate a migration plan for transitioning our monolithic e-commerce application to microservices.",
+      "result": "A detailed migration plan using the strangler-fig pattern to gradually transition from a monolithic architecture to microservices."
+    },
+    {
+      "description": "Database migration planning",
+      "usage": "+++Migration(from=SQL, to=NoSQL, approach=parallel-run)\nHow should we migrate our customer data?",
+      "result": "A migration plan for transitioning from SQL to NoSQL databases using a parallel-run approach, with specific focus on customer data."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

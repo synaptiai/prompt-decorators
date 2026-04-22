@@ -1,0 +1,148 @@
+{
+  "decoratorName": "RootCauseAnalysis",
+  "version": "1.0.0",
+  "description": "Guides a methodical approach to identify the fundamental cause of an issue.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "Analysis depth",
+      "enum": [
+        "surface",
+        "intermediate",
+        "deep",
+        "comprehensive"
+      ],
+      "default": "deep",
+      "required": false
+    },
+    {
+      "name": "method",
+      "type": "enum",
+      "description": "Analysis method",
+      "enum": [
+        "5-whys",
+        "fishbone",
+        "fault-tree",
+        "systematic"
+      ],
+      "default": "systematic",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Investigation approach",
+      "enum": [
+        "elimination",
+        "reproduction",
+        "isolation",
+        "comparison"
+      ],
+      "default": "isolation",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Perform a root cause analysis to identify the fundamental cause of the issue. Focus on methodical investigation rather than symptoms.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "surface": "Conduct a basic analysis to identify immediate causes.",
+          "intermediate": "Investigate beyond immediate causes to identify contributing factors.",
+          "deep": "Perform a thorough analysis to uncover underlying systemic issues.",
+          "comprehensive": "Conduct an exhaustive investigation examining all possible factors and their interactions."
+        }
+      },
+      "method": {
+        "valueMap": {
+          "5-whys": "Use the 5 Whys technique, repeatedly asking why to drill down to the root cause.",
+          "fishbone": "Apply the fishbone (Ishikawa) diagram approach to categorize potential causes.",
+          "fault-tree": "Employ fault tree analysis to identify combinations of events leading to the issue.",
+          "systematic": "Follow a structured, step-by-step approach to eliminate possible causes."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "elimination": "Systematically rule out potential causes until the root cause is identified.",
+          "reproduction": "Attempt to reproduce the issue under controlled conditions to identify triggers.",
+          "isolation": "Isolate components or variables to determine their contribution to the issue.",
+          "comparison": "Compare working and non-working systems to identify differences."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software debugging",
+        "originalPrompt": "Why is my application crashing when multiple users log in simultaneously?",
+        "transformedPrompt": "Perform a root cause analysis to identify the fundamental cause of the issue. Focus on methodical investigation rather than symptoms. Perform a thorough analysis to uncover underlying systemic issues. Follow a structured, step-by-step approach to eliminate possible causes. Isolate components or variables to determine their contribution to the issue.\n\nWhy is my application crashing when multiple users log in simultaneously?",
+        "notes": "The decorator adds structured analysis guidance before the original question."
+      },
+      {
+        "context": "Business process troubleshooting",
+        "originalPrompt": "Help me understand why our order fulfillment process is experiencing delays.",
+        "transformedPrompt": "Perform a root cause analysis to identify the fundamental cause of the issue. Focus on methodical investigation rather than symptoms. Conduct an exhaustive investigation examining all possible factors and their interactions. Use the 5 Whys technique, repeatedly asking why to drill down to the root cause. Systematically rule out potential causes until the root cause is identified.\n\nHelp me understand why our order fulfillment process is experiencing delays.",
+        "notes": "Parameters are set to comprehensive depth, 5-whys method, and elimination approach."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SystematicThinking",
+        "relationship": "enhances",
+        "notes": "RootCauseAnalysis works well with SystematicThinking as both promote structured problem-solving approaches."
+      },
+      {
+        "decorator": "QuickFix",
+        "relationship": "conflicts",
+        "notes": "RootCauseAnalysis focuses on finding underlying causes rather than quick solutions."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze the root cause of this problem systematically. Don't just address symptoms. {depth_instruction} {method_instruction} {approach_instruction}",
+        "notes": "Simplified instruction format for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic root cause analysis for a technical issue",
+      "usage": "+++RootCauseAnalysis()\nWhy does our database connection fail intermittently?",
+      "result": "A systematic analysis using default parameters (deep depth, systematic method, isolation approach) to identify the fundamental cause of database connection issues."
+    },
+    {
+      "description": "Comprehensive analysis using the 5-whys method",
+      "usage": "+++RootCauseAnalysis(depth=comprehensive, method=5-whys, approach=isolation)\nDetermine the root cause of the data inconsistency issue that occurs during concurrent updates.",
+      "result": "An exhaustive investigation using the 5-whys technique and isolation approach to identify the fundamental cause of data inconsistency during concurrent updates."
+    },
+    {
+      "description": "Surface-level analysis for quick troubleshooting",
+      "usage": "+++RootCauseAnalysis(depth=surface, method=fishbone)\nWhy is the customer checkout process failing?",
+      "result": "A basic analysis using the fishbone diagram approach to categorize potential immediate causes of checkout failures."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "QuickFix",
+      "SimpleAnswer"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

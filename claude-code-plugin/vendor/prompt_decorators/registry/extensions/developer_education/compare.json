@@ -1,0 +1,121 @@
+{
+  "decoratorName": "Compare",
+  "version": "1.0.0",
+  "description": "Compares different technologies, approaches, or tools.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "aspects",
+      "type": "string",
+      "description": "Comparison dimensions",
+      "default": "performance,features,ecosystem,learning-curve",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Comparison format",
+      "enum": [
+        "table",
+        "prose",
+        "pros-cons",
+        "decision-matrix"
+      ],
+      "default": "table",
+      "required": false
+    },
+    {
+      "name": "bias",
+      "type": "enum",
+      "description": "Fairness control",
+      "enum": [
+        "neutral",
+        "weighted",
+        "opinionated"
+      ],
+      "default": "neutral",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Compare the following items across multiple dimensions. Provide a thorough analysis that highlights similarities and differences.",
+    "parameterMapping": {
+      "aspects": {
+        "format": "Compare across these specific aspects: {value}."
+      },
+      "format": {
+        "valueMap": {
+          "table": "Present the comparison in a clear, tabular format with items as columns and aspects as rows.",
+          "prose": "Present the comparison as flowing paragraphs that discuss each aspect across all items.",
+          "pros-cons": "For each item, list the pros and cons relative to the alternatives.",
+          "decision-matrix": "Create a decision matrix that scores each item across all aspects, with a final recommendation."
+        }
+      },
+      "bias": {
+        "valueMap": {
+          "neutral": "Maintain a neutral, objective stance throughout the comparison.",
+          "weighted": "Weight the importance of different aspects based on common industry priorities.",
+          "opinionated": "Include your assessment of which option is superior for different use cases."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Technology comparison",
+        "originalPrompt": "Compare React, Vue, and Angular for a new enterprise web application.",
+        "transformedPrompt": "Compare the following items across multiple dimensions. Provide a thorough analysis that highlights similarities and differences. Compare across these specific aspects: performance,ecosystem,learning-curve. Present the comparison in a decision matrix that scores each item across all aspects, with a final recommendation. Maintain a neutral, objective stance throughout the comparison.\n\nCompare React, Vue, and Angular for a new enterprise web application.",
+        "notes": "The decorator adds specific comparison instructions while maintaining the original request."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "DetailLevel",
+        "relationship": "enhances",
+        "notes": "DetailLevel can be used to control the depth of the comparison."
+      },
+      {
+        "decorator": "Audience",
+        "relationship": "enhances",
+        "notes": "Audience can help tailor the comparison to specific knowledge levels."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed comparison of the following items. Analyze their similarities and differences systematically.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Comparing web frameworks with a decision matrix",
+      "usage": "+++Compare(aspects=performance,ecosystem,learning-curve, format=decision-matrix, bias=neutral)\nCompare React, Vue, and Angular for a new enterprise web application.",
+      "result": "A neutral comparison of React, Vue, and Angular across performance, ecosystem, and learning-curve dimensions, presented as a decision matrix with scores and a final recommendation."
+    },
+    {
+      "description": "Comparing database technologies in tabular format",
+      "usage": "+++Compare(aspects=scalability,query-performance,data-types,community-support, format=table)\nCompare PostgreSQL, MongoDB, and MySQL for a high-traffic e-commerce application.",
+      "result": "A tabular comparison of PostgreSQL, MongoDB, and MySQL across the specified aspects, making it easy to see the strengths and weaknesses of each database option."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

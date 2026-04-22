@@ -1,0 +1,121 @@
+{
+  "decoratorName": "Timeline",
+  "version": "1.0.0",
+  "description": "Organizes information in chronological order, highlighting key events or developments over time. This decorator is ideal for historical accounts, project planning, process evolution, or any topic with a temporal dimension.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "granularity",
+      "type": "enum",
+      "description": "The level of time detail to include in the timeline",
+      "enum": ["day", "month", "year", "decade", "century", "era"],
+      "default": "year",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "The presentation format for the timeline",
+      "enum": ["list", "narrative", "table"],
+      "default": "list",
+      "required": false
+    },
+    {
+      "name": "details",
+      "type": "enum",
+      "description": "The level of detail to include for each timeline event",
+      "enum": ["minimal", "moderate", "comprehensive"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please organize your response as a timeline that presents information chronologically, highlighting key events or developments over time.",
+    "parameterMapping": {
+      "granularity": {
+        "valueMap": {
+          "day": "Structure the timeline with day-level precision, including specific dates for events where relevant.",
+          "month": "Structure the timeline with month-level precision, grouping events by month and year.",
+          "year": "Structure the timeline with year-level precision, organizing events by year.",
+          "decade": "Structure the timeline by decades, grouping events into 10-year periods.",
+          "century": "Structure the timeline by centuries, organizing events into 100-year periods.",
+          "era": "Structure the timeline by broad historical eras or epochs, labeling each period appropriately."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "list": "Present the timeline as a chronological list with clear dates/periods and descriptions for each entry.",
+          "narrative": "Present the timeline as a flowing narrative that moves chronologically through time while maintaining clear temporal markers.",
+          "table": "Present the timeline as a table with columns for date/period and description/events."
+        }
+      },
+      "details": {
+        "valueMap": {
+          "minimal": "For each timeline entry, include only the most essential information - key events, dates, and primary actors.",
+          "moderate": "For each timeline entry, include balanced information with important details, context, and significance.",
+          "comprehensive": "For each timeline entry, provide extensive details including background context, significance, consequences, and connections to other events."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Year-level timeline of AI developments",
+        "originalPrompt": "Describe the key developments in artificial intelligence.",
+        "transformedPrompt": "Please organize your response as a timeline that presents information chronologically, highlighting key events or developments over time. Structure the timeline with year-level precision, organizing events by year. Present the timeline as a chronological list with clear dates/periods and descriptions for each entry. For each timeline entry, include balanced information with important details, context, and significance.\n\nDescribe the key developments in artificial intelligence."
+      },
+      {
+        "context": "Detailed narrative of space mission by month",
+        "originalPrompt": "What were the major events of the Apollo 11 mission?",
+        "transformedPrompt": "Please organize your response as a timeline that presents information chronologically, highlighting key events or developments over time. Structure the timeline with month-level precision, grouping events by month and year. Present the timeline as a flowing narrative that moves chronologically through time while maintaining clear temporal markers. For each timeline entry, provide extensive details including background context, significance, consequences, and connections to other events.\n\nWhat were the major events of the Apollo 11 mission?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can complement Timeline by clarifying the sequential nature of chronological events"
+      },
+      {
+        "decorator": "TableFormat",
+        "relationship": "enhances",
+        "notes": "When Timeline uses table format, TableFormat can further refine the presentation with additional formatting options"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a chronological timeline that shows the sequence of events or developments. Include clear time markers ({granularity} level) and organize the information in {format} format. For each entry, provide {details} level of detail.",
+        "notes": "This model sometimes needs more explicit instructions to maintain consistent chronological ordering throughout a response"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic chronological timeline of major events",
+      "usage": "+++Timeline\nDescribe the key developments in artificial intelligence.",
+      "result": "Presents a year-by-year list of important AI milestones and breakthroughs from earliest developments to present day"
+    },
+    {
+      "description": "Detailed narrative timeline with specific date granularity",
+      "usage": "+++Timeline(granularity=month, format=narrative, details=comprehensive)\nWhat were the major events of the Apollo 11 mission?",
+      "result": "Provides a flowing narrative account of the Apollo 11 mission with month/day dates and comprehensive details of each significant event"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

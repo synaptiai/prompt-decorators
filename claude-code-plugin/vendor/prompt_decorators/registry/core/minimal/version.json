@@ -1,0 +1,62 @@
+{
+  "decoratorName": "Version",
+  "version": "1.0.0",
+  "description": "Specifies the version of the Prompt Decorators standard to use. This decorator must be the first in any sequence when used, ensuring proper interpretation of decorators according to the specified standard version.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "standard",
+      "type": "string",
+      "description": "The semantic version of the Prompt Decorators standard to use",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "default": "1.0.0",
+      "required": true
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "The following prompt uses Prompt Decorators standard version {standard}. Please interpret all decorators according to this version's specifications.",
+    "parameterMapping": {
+      "standard": {
+        "format": "The following prompt uses Prompt Decorators standard version {value}. Please interpret all decorators according to this version's specifications."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Version specification",
+        "originalPrompt": "+++Reasoning(depth=comprehensive)\nExplain quantum entanglement",
+        "transformedPrompt": "The following prompt uses Prompt Decorators standard version 1.0.0. Please interpret all decorators according to this version's specifications.\n\n+++Reasoning(depth=comprehensive)\nExplain quantum entanglement"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "All",
+        "relationship": "requires",
+        "notes": "The Version decorator should always be the first in any sequence when used"
+      }
+    ]
+  },
+  "examples": [
+    {
+      "description": "Specify standard version for compatibility",
+      "usage": "+++Version(standard=1.0.0)\n+++Reasoning(depth=comprehensive)\nExplain quantum entanglement",
+      "result": "Ensures decorators are interpreted according to version 1.0.0 of the standard"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

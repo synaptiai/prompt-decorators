@@ -1,0 +1,142 @@
+{
+  "decoratorName": "ErrorDiagnosis",
+  "version": "1.0.0",
+  "description": "Focuses on diagnosing and resolving specific errors or bugs.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "severity",
+      "type": "enum",
+      "description": "Error severity level",
+      "enum": [
+        "minor",
+        "significant",
+        "major",
+        "critical"
+      ],
+      "default": "significant",
+      "required": false
+    },
+    {
+      "name": "persistence",
+      "type": "enum",
+      "description": "Error persistence pattern",
+      "enum": [
+        "intermittent",
+        "consistent",
+        "progressive",
+        "environment-specific"
+      ],
+      "default": "consistent",
+      "required": false
+    },
+    {
+      "name": "analysis",
+      "type": "enum",
+      "description": "Analysis depth",
+      "enum": [
+        "surface",
+        "detailed",
+        "root-cause",
+        "comprehensive"
+      ],
+      "default": "root-cause",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Diagnose the described error or bug with a systematic debugging approach. Identify potential causes and suggest solutions.",
+    "parameterMapping": {
+      "severity": {
+        "valueMap": {
+          "minor": "Treat this as a minor issue that may have limited impact.",
+          "significant": "Approach this as a significant issue that requires careful attention.",
+          "major": "Consider this a major issue with substantial impact on system functionality.",
+          "critical": "Treat this as a critical issue requiring immediate resolution."
+        }
+      },
+      "persistence": {
+        "valueMap": {
+          "intermittent": "Focus on diagnosing this intermittent issue, considering timing patterns and triggering conditions.",
+          "consistent": "Analyze this consistent issue that occurs reliably under specific conditions.",
+          "progressive": "Examine this progressive issue that worsens over time or with increased usage.",
+          "environment-specific": "Investigate this environment-specific issue that only manifests in particular contexts."
+        }
+      },
+      "analysis": {
+        "valueMap": {
+          "surface": "Provide a surface-level analysis identifying the most obvious potential causes.",
+          "detailed": "Conduct a detailed analysis examining multiple factors and their interactions.",
+          "root-cause": "Perform a root-cause analysis to identify the fundamental source of the issue.",
+          "comprehensive": "Deliver a comprehensive analysis covering all aspects including root causes, contributing factors, and systemic implications."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software debugging scenario",
+        "originalPrompt": "The payment processing occasionally fails during high traffic periods. Diagnose the root cause of this intermittent error.",
+        "transformedPrompt": "Diagnose the described error or bug with a systematic debugging approach. Identify potential causes and suggest solutions. Focus on diagnosing this intermittent issue, considering timing patterns and triggering conditions. Consider this a major issue with substantial impact on system functionality. Deliver a comprehensive analysis covering all aspects including root causes, contributing factors, and systemic implications.\n\nThe payment processing occasionally fails during high traffic periods. Diagnose the root cause of this intermittent error.",
+        "notes": "The decorator adds specific guidance for approaching the error diagnosis based on the parameters provided."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SystematicThinking",
+        "relationship": "enhances",
+        "notes": "ErrorDiagnosis works well with SystematicThinking to provide a structured approach to debugging."
+      },
+      {
+        "decorator": "Simplify",
+        "relationship": "conflicts",
+        "notes": "ErrorDiagnosis typically requires detailed analysis which may conflict with simplification approaches."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze and diagnose the described error or bug. Identify likely causes and recommend solutions based on the error characteristics.",
+        "notes": "Simplified instruction for models with less diagnostic capability."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Diagnosing a critical database error",
+      "usage": "+++ErrorDiagnosis(severity=critical, persistence=consistent, analysis=root-cause)\nOur database is consistently returning timeout errors when querying large datasets.",
+      "result": "A systematic diagnosis of the database timeout issue, focusing on identifying the root cause of this critical and consistent problem."
+    },
+    {
+      "description": "Investigating an intermittent UI glitch",
+      "usage": "+++ErrorDiagnosis(severity=minor, persistence=intermittent, analysis=surface)\nUsers occasionally report that the dropdown menu disappears when hovering over it.",
+      "result": "A surface-level analysis of potential causes for the intermittent UI glitch, treating it as a minor issue."
+    },
+    {
+      "description": "Comprehensive analysis of a progressive memory leak",
+      "usage": "+++ErrorDiagnosis(severity=major, persistence=progressive, analysis=comprehensive)\nOur application's memory usage gradually increases until it crashes, usually after several hours of operation.",
+      "result": "A comprehensive analysis of the progressive memory leak, including root causes, contributing factors, and systemic implications, treating it as a major issue."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Simplify",
+      "CreativeWriting"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

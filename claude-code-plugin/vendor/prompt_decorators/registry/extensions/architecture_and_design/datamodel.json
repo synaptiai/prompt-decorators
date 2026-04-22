@@ -1,0 +1,140 @@
+{
+  "decoratorName": "DataModel",
+  "version": "1.0.0",
+  "description": "Designs data models, schemas, and database structures.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "type",
+      "type": "enum",
+      "description": "Database or persistence paradigm",
+      "enum": [
+        "relational",
+        "document",
+        "graph",
+        "key-value",
+        "time-series",
+        "hybrid"
+      ],
+      "default": "context-dependent",
+      "required": false
+    },
+    {
+      "name": "optimization",
+      "type": "enum",
+      "description": "Performance optimization focus",
+      "enum": [
+        "reads",
+        "writes",
+        "storage",
+        "balanced"
+      ],
+      "default": "balanced",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Output format",
+      "enum": [
+        "erd",
+        "schema",
+        "code",
+        "diagram",
+        "ddl"
+      ],
+      "default": "schema",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Design a data model based on the following requirements. Consider appropriate entities, relationships, attributes, and constraints.",
+    "parameterMapping": {
+      "type": {
+        "valueMap": {
+          "relational": "Use relational database design principles with normalized tables, primary keys, and foreign keys.",
+          "document": "Design a document-oriented schema with embedded documents and references where appropriate.",
+          "graph": "Create a graph data model with nodes, relationships, and properties to represent the domain.",
+          "key-value": "Design a key-value storage structure with efficient access patterns.",
+          "time-series": "Develop a time-series data model optimized for temporal data and time-based queries.",
+          "hybrid": "Combine multiple database paradigms in a polyglot persistence architecture."
+        }
+      },
+      "optimization": {
+        "valueMap": {
+          "reads": "Optimize the data model for read-heavy operations, considering denormalization where appropriate.",
+          "writes": "Optimize the data model for write-heavy operations, focusing on insertion and update efficiency.",
+          "storage": "Optimize the data model for storage efficiency, minimizing redundancy and space requirements.",
+          "balanced": "Balance the data model for general-purpose use with reasonable performance across reads, writes, and storage."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "erd": "Present the result as an Entity-Relationship Diagram with entities, relationships, and cardinality.",
+          "schema": "Present the result as a formal schema definition.",
+          "code": "Present the result as implementation code (ORM, schema definition, etc.).",
+          "diagram": "Present the result as a visual diagram with appropriate notation.",
+          "ddl": "Present the result as Data Definition Language (DDL) statements."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Designing a relational database for an e-commerce platform",
+        "originalPrompt": "Design a data model for an e-commerce platform with products, customers, orders, and reviews.",
+        "transformedPrompt": "Design a data model based on the following requirements. Consider appropriate entities, relationships, attributes, and constraints. Use relational database design principles with normalized tables, primary keys, and foreign keys. Optimize the data model for read-heavy operations, considering denormalization where appropriate. Present the result as an Entity-Relationship Diagram with entities, relationships, and cardinality.\n\nDesign a data model for an e-commerce platform with products, customers, orders, and reviews.",
+        "notes": "The decorator adds specific guidance for a relational database optimized for reads and presented as an ERD."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SystemDesign",
+        "relationship": "enhances",
+        "notes": "DataModel works well with SystemDesign to create comprehensive technical specifications."
+      },
+      {
+        "decorator": "CodeImplementation",
+        "relationship": "enhances",
+        "notes": "DataModel can provide the schema design that CodeImplementation can then implement."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed data model with the following specifications. Include all necessary entities, relationships, attributes, and constraints for the domain.",
+        "notes": "More explicit instruction for models with less context understanding."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Designing a relational database schema for a social media platform",
+      "usage": "+++DataModel(type=relational, optimization=reads, format=erd)\nDesign a data model for a social media platform with users, posts, comments, and likes.",
+      "result": "An Entity-Relationship Diagram showing the structure of a relational database optimized for read operations, with entities for users, posts, comments, and likes, including their relationships and attributes."
+    },
+    {
+      "description": "Creating a document database schema for a content management system",
+      "usage": "+++DataModel(type=document, format=schema)\nDesign a data model for a content management system with articles, categories, tags, and users.",
+      "result": "A document schema definition showing collections for articles, categories, tags, and users, with embedded documents and references appropriate for a document database."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}
