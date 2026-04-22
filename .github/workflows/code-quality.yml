@@ -27,7 +27,26 @@ jobs:
           pip install pre-commit mypy pytest pydantic
           pip install -e .
       - name: Run pre-commit
-        run: pre-commit run --all-files
+        run: |
+          set +e
+          pre-commit run --all-files --verbose --show-diff-on-failure 2>&1 | tee /tmp/precommit.log
+          rc=${PIPESTATUS[0]}
+          if [ $rc -ne 0 ]; then
+            # Surface the log as a workflow annotation so it's visible even
+            # without artifact download rights.
+            echo "::group::pre-commit log"
+            cat /tmp/precommit.log
+            echo "::endgroup::"
+            echo "::error title=pre-commit failed::$(tail -5 /tmp/precommit.log | tr '\n' ' ')"
+          fi
+          exit $rc
+      - name: Upload pre-commit log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: precommit-output
+          path: /tmp/precommit.log
+          if-no-files-found: ignore
 
   test-matrix:
     needs: pre-commit
