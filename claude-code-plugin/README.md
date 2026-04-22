@@ -5,7 +5,8 @@ before they reach the model - via a `UserPromptSubmit` hook, a `/decorate`
 slash command, and an opt-in Haiku-powered auto-selector.
 
 Bundles the [`prompt-decorators`](https://github.com/synaptiai/prompt-decorators)
-engine (vendored) and its full 143-decorator catalogue across 14 categories.
+engine (vendored) and its full decorator catalogue (140+ decorators across
+~14 categories at time of writing; run `/decorate list` for current counts).
 
 ## What it does
 
@@ -61,7 +62,7 @@ commands and are not used by this plugin.
 When `auto.mode = on` (or `once_armed = true`), the hook runs a two-pass
 selector before calling the engine:
 
-1. A cheap keyword-based pre-filter narrows the 143-decorator catalogue to
+1. A cheap keyword-based pre-filter narrows the full decorator catalogue to
    ~20 candidates based on which categories the prompt seems to need
    (`reasoning`, `structure`, `verification`, `tone`, etc.).
 2. A small model (Haiku 4.5 by default) picks 0-3 decorator names from the

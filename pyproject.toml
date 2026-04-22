@@ -89,5 +89,7 @@ asyncio_default_fixture_loop_scope = "function"
 [tool.ruff]
 line-length = 88
 target-version = "py311"
+
+[tool.ruff.lint]
 select = ["E", "F", "B", "I"]
 ignore = []

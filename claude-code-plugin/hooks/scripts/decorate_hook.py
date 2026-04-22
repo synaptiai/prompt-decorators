@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import traceback
@@ -29,6 +30,7 @@ from pd_common import (  # noqa: E402
     CFG_ALWAYS_ON,
     CFG_AUTO,
     CFG_DISABLED,
+    CONFIG_PATH,
     LOG_DEBUG,
     MODE_OFF,
     MODE_ON,
@@ -36,6 +38,7 @@ from pd_common import (  # noqa: E402
     ensure_engine_on_path,
     load_config,
     log,
+    redact,
     save_config,
     user_registry_dir,
 )
@@ -122,13 +125,19 @@ def apply_always_on(prompt: str, cfg: dict) -> str:
     return "\n".join(f"+++{d}" for d in to_add) + "\n" + prompt
 
 
-def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str]]:
-    """If auto mode is armed, run the selector and prepend its picks."""
+def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str], bool]:
+    """If auto mode is armed, run the selector and prepend its picks.
+
+    Returns `(new_prompt, names, should_consume_once)`. The caller is
+    responsible for clearing `once_armed` in config - but only after a
+    successful emit, so a late-path failure doesn't silently consume the
+    user's one-shot arm.
+    """
     auto_cfg = cfg.get(CFG_AUTO, {}) or {}
     mode = auto_cfg.get(AUTO_MODE, MODE_OFF)
     once = auto_cfg.get(AUTO_ONCE, False)
     if mode != MODE_ON and not once:
-        return prompt, []
+        return prompt, [], False
 
     try:
         from auto_decorate import select_decorators  # type: ignore
@@ -140,29 +149,38 @@ def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str]]:
             if n not in disabled
         ]
     except Exception as e:  # noqa: BLE001
-        log({"phase": "auto_error", "error": str(e), "tb": traceback.format_exc()})
+        log(
+            {
+                "phase": "auto_error",
+                "error": str(e)[:300],
+                "tb": redact(traceback.format_exc())[:2000],
+            }
+        )
         names = []
 
-    if once:
-        cfg[CFG_AUTO][AUTO_ONCE] = False
-        try:
-            save_config(cfg)
-        except Exception as e:  # noqa: BLE001
-            # save_config can raise OSError (disk), TypeError (unserialisable
-            # value sneaked in), or anything else - swallow and log. Losing a
-            # once_armed clear is preferable to blocking the user's prompt.
-            log(
-                {
-                    "phase": "auto_once_save_error",
-                    "error_type": type(e).__name__,
-                    "error": str(e)[:200],
-                }
-            )
-
     if not names:
-        return prompt, []
+        return prompt, [], False
     prefix = "\n".join(f"+++{n}" for n in names)
-    return f"{prefix}\n{prompt}", names
+    return f"{prefix}\n{prompt}", names, once
+
+
+def _consume_once_armed(cfg: dict) -> None:
+    """Clear the one-shot auto arm. Called only after a successful emit."""
+    cfg[CFG_AUTO][AUTO_ONCE] = False
+    try:
+        save_config(cfg)
+    except Exception as e:  # noqa: BLE001
+        # save_config can raise OSError / TypeError / anything. Losing a
+        # once_armed clear is preferable to blocking the user's prompt
+        # (the whole hook is fail-open). Next prompt will re-fire auto,
+        # which the user will notice and can turn off.
+        log(
+            {
+                "phase": "auto_once_save_error",
+                "error_type": type(e).__name__,
+                "error": str(e)[:200],
+            }
+        )
 
 
 # Forbidden fields in user-supplied decorator JSON. The engine's
@@ -265,18 +283,33 @@ def _main_impl() -> int:
         return 0
 
     prompt: str = event.get("prompt", "")
+
+    # Recursion guard: if the hook is firing from a subprocess we launched
+    # (auto_decorate calling `claude --print`), don't re-apply. Cheap to
+    # check, blocks infinite loops if the user enables auto mode in a
+    # project where `claude --print` re-invokes the same plugin.
+    if os.environ.get("PROMPT_DECORATORS_NESTED") == "1":
+        return 0
+
+    # Ultra-fast path: no sigils possible AND no config file on disk means
+    # nothing could inject a decorator. Skip load_config entirely so the
+    # common case (~99% of prompts for unconfigured users) does zero reads
+    # beyond stdin + one stat.
+    might_have_sigils = _prompt_might_have_sigils(prompt)
+    if not might_have_sigils and not CONFIG_PATH.exists():
+        return 0
+
     cfg = load_config()
 
-    # Fast path: skip all work when the prompt can't possibly contain sigils
-    # AND no config option would inject decorators. Keeps the hot path cheap.
-    if not _prompt_might_have_sigils(prompt) and not _config_is_active(cfg):
+    # Slower fast path: config exists but no sigils and config isn't active.
+    if not might_have_sigils and not _config_is_active(cfg):
         return 0
 
     log(_received_event(prompt, event))
 
     normalised, colon_sigils = normalise_sigil(prompt)
     normalised = apply_always_on(normalised, cfg)
-    normalised, auto_picks = apply_auto(normalised, cfg)
+    normalised, auto_picks, consume_once = apply_auto(normalised, cfg)
 
     if not SIGIL_PLUS_RE.search(normalised):
         log({"phase": "no_decorators", "colon_sigils": colon_sigils})
@@ -286,7 +319,13 @@ def _main_impl() -> int:
     try:
         from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators
     except Exception as e:  # noqa: BLE001
-        log({"phase": "import_error", "error": str(e), "tb": traceback.format_exc()})
+        log(
+            {
+                "phase": "import_error",
+                "error": str(e)[:300],
+                "tb": redact(traceback.format_exc())[:2000],
+            }
+        )
         _emit_import_error_to_stderr(e)
         return 0
 
@@ -296,7 +335,13 @@ def _main_impl() -> int:
     try:
         expanded = apply_dynamic_decorators(normalised)
     except Exception as e:  # noqa: BLE001
-        log({"phase": "apply_error", "error": str(e), "tb": traceback.format_exc()})
+        log(
+            {
+                "phase": "apply_error",
+                "error": str(e)[:300],
+                "tb": redact(traceback.format_exc())[:2000],
+            }
+        )
         return 0
 
     expanded_stripped = expanded.strip()
@@ -324,6 +369,11 @@ def _main_impl() -> int:
         }
     )
     sys.stdout.write(json.dumps(output))
+    # ONLY clear the one-shot auto arm after a successful emit - a late
+    # failure above would otherwise silently consume the user's single
+    # armed prompt.
+    if consume_once:
+        _consume_once_armed(cfg)
     return 0
 
 
@@ -341,7 +391,7 @@ def main() -> int:
                     "phase": "unhandled_error",
                     "error_type": type(e).__name__,
                     "error": str(e)[:500],
-                    "tb": traceback.format_exc()[:2000],
+                    "tb": redact(traceback.format_exc())[:2000],
                 }
             )
         except Exception:  # noqa: BLE001

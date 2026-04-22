@@ -194,6 +194,13 @@ def _call_claude_cli(prompt: str, candidates: list[dict], model: str) -> str | N
     # Pipe on stdin instead of argv: avoids ARG_MAX for large prompts and
     # keeps the user's prompt out of /proc/<pid>/cmdline (visible to other
     # local users).
+    #
+    # Recursion guard: the child `claude --print` might itself load this
+    # plugin if the user has it installed globally. Set
+    # PROMPT_DECORATORS_NESTED=1 so the child hook exits early instead of
+    # re-running the selector on the selector's own input.
+    child_env = os.environ.copy()
+    child_env["PROMPT_DECORATORS_NESTED"] = "1"
     try:
         result = subprocess.run(
             ["claude", "--print", "--model", model],
@@ -202,6 +209,7 @@ def _call_claude_cli(prompt: str, candidates: list[dict], model: str) -> str | N
             text=True,
             timeout=30,
             cwd=str(Path.home()),
+            env=child_env,
         )
     except (OSError, subprocess.SubprocessError) as e:
         # OSError covers FileNotFoundError + PermissionError + EMFILE etc.

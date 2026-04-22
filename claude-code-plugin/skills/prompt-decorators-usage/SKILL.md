@@ -16,8 +16,9 @@ auto-decorate mode.
 - The `prompt-decorators` plugin is installed (the user installed it from
   the Synapti marketplace).
 - The `UserPromptSubmit` hook is wired and active.
-- The 143-decorator catalogue is available - browse with `/decorate list`
-  or `/decorate search <term>`.
+- The decorator catalogue is available - browse with `/decorate list` or
+  `/decorate search <term>`. Counts below reflect the catalogue at the
+  time this skill was written; run `/decorate list` for the current set.
 
 ## Workflow
 
@@ -35,10 +36,11 @@ Use TodoWrite to track these steps when invoked from another workflow:
 Match the user's prompt to one of the catalogue's core categories.
 
 All decorator names below are verified against the vendored registry at
-`claude-code-plugin/vendor/prompt_decorators/registry/core/`. If the
-catalogue grows or a name is ever in doubt, confirm with
-`/decorate search <term>` or `/decorate list <category>` before
-suggesting.
+`claude-code-plugin/vendor/prompt_decorators/registry/core/` **at the
+time this skill was written**. The catalogue grows and names can
+change; if any suggestion below doesn't appear in `/decorate list`, trust
+the CLI over this table and use `/decorate search <term>` or
+`/decorate list <category>` to find the current equivalent.
 
 | Category | Trigger phrases in the prompt | Real decorators (verified) |
 |---|---|---|
@@ -131,7 +133,8 @@ Options:
 ### The user asks "what decorators exist?"
 
 Run `/decorate list` and relay the output. Do not try to memorise the
-catalogue - it's 143 entries across 14 categories and it changes.
+catalogue - it's 100+ entries across more than a dozen categories and it
+changes over time; rely on `/decorate list` for accuracy.
 
 ### The user wants auto-decorate but is worried about cost/latency
 
@@ -175,7 +178,8 @@ Try:
 
 ## References
 
-- Full catalogue: `/decorate list` (143 decorators across 14 categories)
+- Full catalogue: `/decorate list` (run this for current counts; the
+  registry grows)
 - Preview a decorator: `/decorate preview <Name>`
 - Search by keyword: `/decorate search <term>`
 - Inline syntax reference: `claude-code-plugin/README.md`

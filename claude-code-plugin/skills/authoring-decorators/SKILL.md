@@ -157,12 +157,17 @@ the registry.
 ### Step 5: Unit test
 
 Add a test under `claude-code-plugin/tests/test_hook.py` proving the hook
-expands your sigil:
+expands your sigil. Reuse the shared helpers from `tests/conftest.py`:
 
 ```python
+import json
+
+from conftest import make_event, run_hook_subprocess
+
+
 def test_my_new_decorator(tmp_path):
-    out, rc = _run_hook(
-        _event("::ConfidenceIntervals(style=qualitative)\nHow many users do we have?"),
+    out, _, rc = run_hook_subprocess(
+        make_event("::ConfidenceIntervals(style=qualitative)\nHow many users do we have?"),
         env={"PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path)},
     )
     assert rc == 0

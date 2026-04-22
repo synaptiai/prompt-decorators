@@ -1,10 +1,33 @@
 # Claude Code Plugin
 
-The `claude-code-plugin/` subdirectory ships prompt-decorators as an installable
-[Claude Code](https://claude.com/claude-code) plugin. Users prepend a
-`::Name(params)` or `+++Name(params)` line to any prompt and the plugin's
-`UserPromptSubmit` hook expands it into precise instructions using the
-prompt-decorators engine **before** the model sees the prompt.
+The `claude-code-plugin/` subdirectory ships prompt-decorators as an
+installable [Claude Code](https://claude.com/claude-code) plugin. Users
+prepend a `::Name(params)` or `+++Name(params)` line to any prompt and the
+plugin's `UserPromptSubmit` hook expands it into precise instructions using
+the prompt-decorators engine **before** the model sees the prompt.
+
+> **This page is a pointer.** The canonical reference for the plugin — full
+> subcommand list, config schema, security posture, vendoring, sync policy —
+> lives next to the plugin source at
+> [`claude-code-plugin/README.md`](https://github.com/synaptiai/prompt-decorators/blob/main/claude-code-plugin/README.md).
+> This page summarises and links; that README is the source of truth. The
+> authoring guide (how to write a new decorator) and the usage guide (when to
+> suggest one) live as installable skills under
+> [`claude-code-plugin/skills/`](https://github.com/synaptiai/prompt-decorators/tree/main/claude-code-plugin/skills).
+
+## What the plugin does (short version)
+
+- **Inline syntax**: `::Name` or `+++Name` at the start of a prompt line.
+  Mid-line occurrences are ignored (so Rust/C++ paths like
+  `std::collections::HashMap;` don't false-trigger).
+- **`/decorate` slash command**: browse, preview, search, toggle always-on
+  list, control auto-decorate mode.
+- **Auto-decorate** (opt-in): a two-pass selector picks 0-3 decorators per
+  prompt. Can be one-shot, stateful, or off.
+- **User registry override**: personal decorators under
+  `$HOME/.config/prompt-decorators/extensions/` survive vendor re-syncs.
+- **Self-contained**: the engine and decorator registry are vendored into
+  the plugin directory, so no `pip install` is required by end users.
 
 ## Install
 
@@ -15,106 +38,20 @@ From Claude Code:
 /plugin install prompt-decorators
 ```
 
-## Inline syntax
+## Further reading
 
-```text
-::Concise
-::StepByStep(numbered=true)
-Explain how a CPU works.
-```
-
-Both `::Name` (recommended, modern) and `+++Name` (the library's native
-syntax) are recognised **at the start of a line only**. Mid-line occurrences
-— e.g. `use std::collections::HashMap;` in Rust code — are ignored to avoid
-false triggers.
-
-## `/decorate` slash command
-
-| Subcommand | What it does |
-|---|---|
-| `list [category]` | Show the catalogue, optionally filtered |
-| `preview <Name>[(params)]` | Show the instruction text a decorator expands to |
-| `search <term>` | Find decorators by name or description |
-| `enable <Name>` / `disable <Name>` | Toggle a decorator for auto-select eligibility |
-| `always add <Name>` / `always remove <Name>` | Manage the always-on list |
-| `always list` | Show decorators currently applied to every prompt |
-| `auto on` / `auto off` / `auto once` | Control stateful auto-decorate mode |
-| `auto status` / `auto model <id>` | Inspect or change the selector model |
-| `config` / `help` | Print current config or help |
-
-## Auto-decorate
-
-When auto mode is on (or armed for the next prompt via `/decorate auto
-once`), a two-pass selector picks 0-3 decorators:
-
-1. A keyword/category pre-filter narrows the 143-decorator catalogue to ~20
-   candidates.
-2. A fast model (Haiku 4.5 by default) picks from the narrowed list and
-   returns a JSON array of names.
-
-The picks are prepended and expanded via the same engine used for explicit
-sigils. A visible header shows what was applied:
-
-```text
-[auto-decorate: +Outline +Precision +Alternatives]
-
-...expanded instructions here...
-```
-
-The selector calls the Anthropic SDK directly when `ANTHROPIC_API_KEY` is
-set (with prompt caching on the catalogue manifest), and falls back to
-`claude --print` otherwise so the plugin works out of the box.
-
-## Configuration
-
-Persistent config lives at `~/.config/prompt-decorators/config.json` by
-default (override with `PROMPT_DECORATORS_CONFIG_DIR`):
-
-```json
-{
-  "version": 1,
-  "always_on": ["Concise"],
-  "disabled": [],
-  "auto": {
-    "mode": "off",
-    "once_armed": false,
-    "model": "claude-haiku-4-5"
-  }
-}
-```
-
-All fields are managed via `/decorate` subcommands; editing the file
-directly is rarely needed.
-
-## Security & privacy notes
-
-- Logs default to `~/.cache/prompt-decorators/hook.log` with `0o600` perms
-  and `O_NOFOLLOW` to block symlink attacks. Never `/tmp` by default.
-- Prompt content is **not** logged by default. Opt in for debugging with
-  `PROMPT_DECORATORS_LOG_DEBUG=1`.
-- Plain prompts (no sigils, no always-on, no auto) hit a fast path that
-  does zero disk I/O.
-- Config writes are atomic (`tempfile` + `os.replace`) - safe under
-  concurrent `/decorate` invocations.
-
-## How the hook works
-
-The `UserPromptSubmit` hook reads a JSON event on stdin and emits
-`hookSpecificOutput.additionalContext`. Claude Code injects that as a
-`<system-reminder>` adjacent to the user's original prompt - so the
-`::Concise` sigil line stays in the transcript while Claude follows the
-expanded instructions.
-
-Failures (parse errors, unknown decorators, engine exceptions) all fail
-open - the prompt passes through unchanged and an entry is written to the
-log.
-
-## Source and repository layout
-
-The plugin source lives at [`claude-code-plugin/`](https://github.com/synaptiai/prompt-decorators/tree/main/claude-code-plugin)
-in this repo. It vendors the engine and registry into `vendor/` so the
-plugin is self-contained - no `pip install` required by the end user.
-
-The [Synapti marketplace](https://github.com/synaptiai/synapti-marketplace)
-references this directory remotely via a `git-subdir` source entry, so
-plugin updates flow through automatically without duplicating code.
+- **Plugin reference**: [`claude-code-plugin/README.md`](https://github.com/synaptiai/prompt-decorators/blob/main/claude-code-plugin/README.md)
+  — inline syntax, `/decorate` subcommands, auto-decorate internals,
+  configuration, security, full how-it-works.
+- **Usage guidance skill**:
+  [`skills/prompt-decorators-usage/SKILL.md`](https://github.com/synaptiai/prompt-decorators/blob/main/claude-code-plugin/skills/prompt-decorators-usage/SKILL.md)
+  — when and how to suggest decorators for a given prompt.
+- **Authoring skill**:
+  [`skills/authoring-decorators/SKILL.md`](https://github.com/synaptiai/prompt-decorators/blob/main/claude-code-plugin/skills/authoring-decorators/SKILL.md)
+  — how to write a new decorator (naming, schema, testing).
+- **Vendoring and sync policy**:
+  [`claude-code-plugin/VENDORING.md`](https://github.com/synaptiai/prompt-decorators/blob/main/claude-code-plugin/VENDORING.md).
+- **Marketplace entry**: the companion
+  [synapti-marketplace](https://github.com/synaptiai/synapti-marketplace)
+  repo points at this directory via a `git-subdir` source, so plugin
+  updates flow through automatically.

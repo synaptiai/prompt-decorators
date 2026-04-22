@@ -9,6 +9,7 @@ from __future__ import annotations
 import copy
 import json
 import os
+import re
 import sys
 import tempfile
 import time
@@ -161,8 +162,30 @@ def log(event: dict[str, Any]) -> None:
 
 
 def bare_name(sigil: str) -> str:
-    """Strip `(params)` from a decorator sigil to get its bare name."""
-    return sigil.split("(", 1)[0]
+    """Strip `(params)` and `:vX.Y.Z` from a decorator sigil.
+
+    Used for dedup / existence checks - both `Concise` and `Concise:v1` and
+    `Concise(depth=deep)` must collapse to the same key `Concise`.
+    """
+    name = sigil.split("(", 1)[0]
+    name = name.split(":v", 1)[0]
+    return name
+
+
+# Credentials / tokens that sometimes leak into exception messages from
+# upstream libraries. Redact before logging `traceback.format_exc()`.
+_SECRET_PATTERNS = (
+    (re.compile(r"sk-ant-[A-Za-z0-9\-_]{10,}"), "sk-ant-<redacted>"),
+    (re.compile(r"(?i)bearer\s+[A-Za-z0-9\-._~+/=]{10,}"), "Bearer <redacted>"),
+    (re.compile(r"ANTHROPIC_API_KEY=[^\s'\"]+"), "ANTHROPIC_API_KEY=<redacted>"),
+)
+
+
+def redact(text: str) -> str:
+    """Strip Claude / Bearer tokens from log strings."""
+    for pattern, replacement in _SECRET_PATTERNS:
+        text = pattern.sub(replacement, text)
+    return text
 
 
 _REGISTRY_CACHE: list[dict[str, Any]] | None = None
