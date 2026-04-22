@@ -24,8 +24,8 @@ sys.path.insert(0, str(PLUGIN_ROOT / "scripts"))
 
 from pd_common import (  # noqa: E402
     AUTO_MODE,
-    AUTO_ONCE,
     AUTO_MODEL,
+    AUTO_ONCE,
     CFG_ALWAYS_ON,
     CFG_AUTO,
     LOG_DEBUG,
@@ -161,9 +161,7 @@ def main() -> int:
 
     ensure_engine_on_path()
     try:
-        from prompt_decorators.dynamic_decorators_module import (
-            apply_dynamic_decorators,
-        )
+        from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators
     except Exception as e:  # noqa: BLE001
         log({"phase": "import_error", "error": str(e), "tb": traceback.format_exc()})
         _emit_import_error_to_stderr(e)

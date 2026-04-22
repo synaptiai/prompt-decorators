@@ -122,9 +122,7 @@ def cmd_preview(args: list[str]) -> int:
         return 1
     ensure_engine_on_path()
     try:
-        from prompt_decorators.dynamic_decorators_module import (
-            apply_dynamic_decorators,
-        )
+        from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators
     except Exception as e:  # noqa: BLE001
         _print(f"Error loading engine: {e}")
         return 1

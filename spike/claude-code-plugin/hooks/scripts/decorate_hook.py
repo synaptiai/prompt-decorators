@@ -84,9 +84,7 @@ def main() -> int:
         return 0  # pass through unchanged
 
     try:
-        from prompt_decorators.dynamic_decorators_module import (
-            apply_dynamic_decorators,
-        )
+        from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators
     except Exception as e:
         log({"phase": "import_error", "error": str(e), "tb": traceback.format_exc()})
         return 0  # fail open
@@ -94,7 +92,9 @@ def main() -> int:
     # Compute the clean prompt (sigils stripped) so we can detect whether the
     # engine actually injected any instruction text. If expansion just produces
     # the clean prompt, all decorators were unknown — pass through.
-    clean_prompt = re.sub(r"(?m)^\+\+\+[A-Za-z][A-Za-z0-9]*(?:\([^)]*\))?\s*\n?", "", normalised)
+    clean_prompt = re.sub(
+        r"(?m)^\+\+\+[A-Za-z][A-Za-z0-9]*(?:\([^)]*\))?\s*\n?", "", normalised
+    )
 
     try:
         expanded = apply_dynamic_decorators(normalised)
@@ -102,7 +102,10 @@ def main() -> int:
         log({"phase": "apply_error", "error": str(e), "tb": traceback.format_exc()})
         return 0  # fail open
 
-    if expanded.strip() == clean_prompt.strip() or expanded.strip() == normalised.strip():
+    if (
+        expanded.strip() == clean_prompt.strip()
+        or expanded.strip() == normalised.strip()
+    ):
         log({"phase": "no_change_or_unknown"})
         return 0
 
