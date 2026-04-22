@@ -203,10 +203,12 @@ def _call_claude_cli(prompt: str, candidates: list[dict], model: str) -> str | N
             timeout=30,
             cwd=str(Path.home()),
         )
-    except (FileNotFoundError, subprocess.TimeoutExpired) as e:
-        # Don't log the exception repr directly: TimeoutExpired.__str__
-        # embeds the argv list which could leak prompt content on upgrades
-        # that move the prompt back to argv. Log type + message only.
+    except (OSError, subprocess.SubprocessError) as e:
+        # OSError covers FileNotFoundError + PermissionError + EMFILE etc.
+        # SubprocessError covers TimeoutExpired + CalledProcessError. Don't
+        # log the exception repr directly: TimeoutExpired.__str__ embeds the
+        # argv list which could leak prompt content on any regression that
+        # moves the prompt back to argv. Log type only.
         log({"phase": "auto_cli_error", "error_type": type(e).__name__})
         return None
     if result.returncode != 0:
@@ -244,13 +246,21 @@ def select_decorators(prompt: str, model: str | None = None) -> list[str]:
     valid_names = {d["name"] for d in candidates}
     log({"phase": "auto_shortlist", "names": sorted(valid_names)})
 
-    raw = _call_anthropic_sdk(prompt, candidates, model)
+    raw: str | None = None
+    # Wrap the SDK call: anthropic.APIConnectionError / RateLimitError /
+    # AuthenticationError + httpx.ConnectError all bubble out of the SDK
+    # and would otherwise skip the CLI fallback.
+    try:
+        raw = _call_anthropic_sdk(prompt, candidates, model)
+    except Exception as e:  # noqa: BLE001
+        log({"phase": "auto_sdk_error", "error_type": type(e).__name__})
+        raw = None
     if raw is None:
         raw = _call_claude_cli(prompt, candidates, model)
     if not raw:
         return []
     picks = _parse_names(raw, valid_names)
-    log({"phase": "auto_picks", "raw_preview": raw[:200], "picks": picks})
+    log({"phase": "auto_picks", "picks": picks})
     return picks
 
 

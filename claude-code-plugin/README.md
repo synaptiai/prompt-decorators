@@ -156,7 +156,8 @@ the transcript; Claude ignores it and follows the expanded instructions.
 
 Failures in the hook (parse errors, unknown decorators, engine exceptions)
 all fail open - the prompt passes through unchanged and an entry is written
-to `$PROMPT_DECORATORS_LOG` (default `/tmp/pd_hook.log`).
+to `$PROMPT_DECORATORS_LOG` (default
+`$HOME/.cache/prompt-decorators/hook.log`, mode `0o600`, `O_NOFOLLOW`).
 
 ## Development
 

@@ -21,6 +21,7 @@ Subcommands:
 from __future__ import annotations
 
 import json
+import shlex
 import sys
 from pathlib import Path
 from typing import Callable
@@ -305,5 +306,23 @@ def run(argv: list[str]) -> int:
     return handler(rest)
 
 
+def _argv_from_stdin() -> list[str]:
+    """Safely tokenize a single-string argument blob read from stdin.
+
+    `/decorate` invokes us via a quoted heredoc so the shell cannot interpret
+    user-supplied metacharacters; we then shlex-split to get a proper argv.
+    """
+    raw = sys.stdin.read()
+    try:
+        return shlex.split(raw)
+    except ValueError:
+        # Unmatched quotes or similar - fall back to whitespace split to
+        # avoid blocking the user entirely.
+        return raw.split()
+
+
 if __name__ == "__main__":
-    sys.exit(run(sys.argv[1:]))
+    argv = sys.argv[1:]
+    if argv and argv[0] == "--args-from-stdin":
+        argv = _argv_from_stdin()
+    sys.exit(run(argv))

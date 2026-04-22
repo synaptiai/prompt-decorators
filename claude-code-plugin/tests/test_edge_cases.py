@@ -59,16 +59,19 @@ def test_unterminated_sigil_paren_does_not_crash(tmp_path):
 
 
 def test_crlf_line_endings_handled(tmp_path):
-    """`::Concise` sigil at start of a CRLF-terminated line should still work."""
+    """`::Concise` sigil at start of a CRLF-terminated line should still work.
+    Regression check: an earlier version of this test was tautological
+    (only asserted IF output existed), so a regression that produced empty
+    output would silently pass. Now we require both non-empty output AND
+    the expected expansion content.
+    """
     out, _, rc = _run_hook(
         _event("::Concise\r\nIn one sentence, what is recursion?"),
         _base_env(tmp_path),
     )
-    # `(?m)^::` matches despite trailing \r - the \r remains in the captured
-    # text but the library tolerates whitespace after the sigil.
-    data = json.loads(out) if out else {}
-    if data:
-        assert "concise" in data["hookSpecificOutput"]["additionalContext"].lower()
+    assert out != "", "CRLF sigil should still produce hook output"
+    data = json.loads(out)
+    assert "concise" in data["hookSpecificOutput"]["additionalContext"].lower()
 
 
 def test_fast_path_skips_when_no_sigils_and_no_config(tmp_path):

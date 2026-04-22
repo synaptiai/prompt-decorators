@@ -28,9 +28,11 @@ from pd_common import (  # noqa: E402
     AUTO_ONCE,
     CFG_ALWAYS_ON,
     CFG_AUTO,
+    CFG_DISABLED,
     LOG_DEBUG,
     MODE_OFF,
     MODE_ON,
+    bare_name,
     ensure_engine_on_path,
     load_config,
     log,
@@ -76,10 +78,15 @@ def strip_sigils(prompt: str) -> str:
 
 def apply_always_on(prompt: str, cfg: dict) -> str:
     always = cfg.get(CFG_ALWAYS_ON, []) or []
+    disabled = {bare_name(d) for d in (cfg.get(CFG_DISABLED, []) or [])}
     if not always:
         return prompt
     existing = {m.group(1).split("(")[0] for m in SIGIL_PLUS_RE.finditer(prompt)}
-    to_add = [name for name in always if name.split("(")[0] not in existing]
+    to_add = [
+        name
+        for name in always
+        if bare_name(name) not in existing and bare_name(name) not in disabled
+    ]
     if not to_add:
         return prompt
     return "\n".join(f"+++{d}" for d in to_add) + "\n" + prompt
@@ -96,7 +103,12 @@ def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str]]:
     try:
         from auto_decorate import select_decorators  # type: ignore
 
-        names = select_decorators(prompt, model=auto_cfg.get(AUTO_MODEL))
+        disabled = {bare_name(d) for d in (cfg.get(CFG_DISABLED, []) or [])}
+        names = [
+            n
+            for n in select_decorators(prompt, model=auto_cfg.get(AUTO_MODEL))
+            if n not in disabled
+        ]
     except Exception as e:  # noqa: BLE001
         log({"phase": "auto_error", "error": str(e), "tb": traceback.format_exc()})
         names = []
@@ -105,8 +117,17 @@ def apply_auto(prompt: str, cfg: dict) -> tuple[str, list[str]]:
         cfg[CFG_AUTO][AUTO_ONCE] = False
         try:
             save_config(cfg)
-        except OSError as e:
-            log({"phase": "auto_once_save_error", "error": str(e)})
+        except Exception as e:  # noqa: BLE001
+            # save_config can raise OSError (disk), TypeError (unserialisable
+            # value sneaked in), or anything else - swallow and log. Losing a
+            # once_armed clear is preferable to blocking the user's prompt.
+            log(
+                {
+                    "phase": "auto_once_save_error",
+                    "error_type": type(e).__name__,
+                    "error": str(e)[:200],
+                }
+            )
 
     if not names:
         return prompt, []
@@ -133,7 +154,7 @@ def _received_event(prompt: str, event: dict) -> dict:
     return payload
 
 
-def main() -> int:
+def _main_impl() -> int:
     raw = sys.stdin.read()
     try:
         event = json.loads(raw) if raw.strip() else {}
@@ -200,6 +221,28 @@ def main() -> int:
     )
     sys.stdout.write(json.dumps(output))
     return 0
+
+
+def main() -> int:
+    """Outer fail-open guard. A non-zero exit blocks the user's prompt, so
+    any unexpected exception (BrokenPipeError, UnicodeDecodeError on stdin,
+    TypeError from malformed config, etc.) must be logged and swallowed.
+    """
+    try:
+        return _main_impl()
+    except Exception as e:  # noqa: BLE001
+        try:
+            log(
+                {
+                    "phase": "unhandled_error",
+                    "error_type": type(e).__name__,
+                    "error": str(e)[:500],
+                    "tb": traceback.format_exc()[:2000],
+                }
+            )
+        except Exception:  # noqa: BLE001
+            pass
+        return 0
 
 
 if __name__ == "__main__":

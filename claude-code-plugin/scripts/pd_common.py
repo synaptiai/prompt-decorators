@@ -60,6 +60,23 @@ def ensure_engine_on_path() -> None:
         sys.path.insert(0, vendor)
 
 
+def _normalise_list(value: Any, default: list) -> list:
+    """Coerce loaded JSON to a list, dropping non-str entries."""
+    if not isinstance(value, list):
+        return list(default)
+    return [v for v in value if isinstance(v, str)]
+
+
+def _normalise_auto(value: Any) -> dict:
+    """Coerce loaded auto block to the expected dict shape."""
+    base = copy.deepcopy(DEFAULT_CONFIG[CFG_AUTO])
+    if isinstance(value, dict):
+        for k in (AUTO_MODE, AUTO_ONCE, AUTO_MODEL):
+            if k in value:
+                base[k] = value[k]
+    return base
+
+
 def load_config() -> dict[str, Any]:
     if not CONFIG_PATH.exists():
         return copy.deepcopy(DEFAULT_CONFIG)
@@ -67,10 +84,21 @@ def load_config() -> dict[str, Any]:
         data = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return copy.deepcopy(DEFAULT_CONFIG)
+    # Defensive: config.json must be a dict. Malformed values (null, lists,
+    # scalars) would have raised AttributeError in the old code path; guard
+    # so the hook can still fail open with defaults.
+    if not isinstance(data, dict):
+        return copy.deepcopy(DEFAULT_CONFIG)
     merged = copy.deepcopy(DEFAULT_CONFIG)
-    merged.update({k: v for k, v in data.items() if k in DEFAULT_CONFIG})
-    if CFG_AUTO in data and isinstance(data[CFG_AUTO], dict):
-        merged[CFG_AUTO] = {**DEFAULT_CONFIG[CFG_AUTO], **data[CFG_AUTO]}
+    merged[CFG_ALWAYS_ON] = _normalise_list(
+        data.get(CFG_ALWAYS_ON), DEFAULT_CONFIG[CFG_ALWAYS_ON]
+    )
+    merged[CFG_DISABLED] = _normalise_list(
+        data.get(CFG_DISABLED), DEFAULT_CONFIG[CFG_DISABLED]
+    )
+    merged[CFG_AUTO] = _normalise_auto(data.get(CFG_AUTO))
+    if isinstance(data.get(CFG_VERSION), int):
+        merged[CFG_VERSION] = data[CFG_VERSION]
     return merged
 
 
@@ -78,7 +106,7 @@ def save_config(cfg: dict[str, Any]) -> None:
     """Write config atomically: tempfile + os.replace. Prevents corruption on
     concurrent writes (two `/decorate` invocations, or crash mid-write).
     """
-    CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     payload = json.dumps(cfg, indent=2) + "\n"
     fd, tmp = tempfile.mkstemp(
         prefix=".config-", suffix=".tmp", dir=str(CONFIG_PATH.parent)
@@ -112,7 +140,7 @@ def log(event: dict[str, Any]) -> None:
     if os.environ.get("PROMPT_DECORATORS_LOG_DISABLE") == "1":
         return
     try:
-        LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+        LOG_PATH.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
         _rotate_log_if_needed()
         # O_NOFOLLOW blocks symlink games on any shared-dir logs; 0o600 means
         # only the owner can read the logged prompts.
@@ -120,12 +148,15 @@ def log(event: dict[str, Any]) -> None:
         if hasattr(os, "O_NOFOLLOW"):
             flags |= os.O_NOFOLLOW
         fd = os.open(str(LOG_PATH), flags, 0o600)
+        # O_CREAT honours umask, and pre-existing log files keep their old
+        # mode - enforce 0o600 on every open to plug that gap.
         try:
-            with os.fdopen(fd, "a", encoding="utf-8") as f:
-                f.write(json.dumps({"ts": time.time(), **event}) + "\n")
-        except (OSError, TypeError):
-            os.close(fd)
-    except OSError:
+            os.fchmod(fd, 0o600)
+        except OSError:
+            pass
+        with os.fdopen(fd, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"ts": time.time(), **event}) + "\n")
+    except (OSError, TypeError):
         pass
 
 

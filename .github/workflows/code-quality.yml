@@ -20,31 +20,14 @@ jobs:
           cache: 'pip'
       - name: Install dependencies
         run: |
-          set -x
           python -m pip install --upgrade pip
           pip install poetry
           poetry install --with mcp
           # Install required dependencies directly as well, so they're available to pre-commit hooks
           pip install pre-commit mypy pytest pydantic
           pip install -e .
-          pip list | head -40
       - name: Run pre-commit
-        id: pc
-        run: |
-          set +e
-          pre-commit run --all-files --verbose --show-diff-on-failure 2>&1 | tee /tmp/precommit-output.log
-          echo "exit_code=$?" >> "$GITHUB_OUTPUT"
-          echo "===PRECOMMIT_LOG_START==="
-          cat /tmp/precommit-output.log
-          echo "===PRECOMMIT_LOG_END==="
-          exit ${PIPESTATUS[0]}
-      - name: Upload pre-commit log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: precommit-output
-          path: /tmp/precommit-output.log
-          if-no-files-found: ignore
+        run: pre-commit run --all-files
 
   test-matrix:
     needs: pre-commit
