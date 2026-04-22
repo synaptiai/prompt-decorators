@@ -8,7 +8,6 @@ on:
 # Set minimum required permissions
 permissions:
   contents: read  # Only needs read access to repository content
-  pull-requests: write  # Required to post diagnostic PR comments on failure
 
 jobs:
   pre-commit:
@@ -20,53 +19,15 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - name: Install dependencies
-        id: install
         run: |
-          set +e
-          {
-            python -m pip install --upgrade pip
-            pip install poetry
-            poetry install --with mcp
-            pip install pre-commit mypy pytest pydantic
-            pip install -e .
-          } 2>&1 | tee /tmp/install.log
-          rc=${PIPESTATUS[0]}
-          echo "install_rc=$rc" >> "$GITHUB_OUTPUT"
-          exit $rc
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install --with mcp
+          # Install required dependencies directly as well, so they're available to pre-commit hooks
+          pip install pre-commit mypy pytest pydantic
+          pip install -e .
       - name: Run pre-commit
-        id: pc
-        run: |
-          set +e
-          pre-commit run --all-files --verbose --show-diff-on-failure 2>&1 | tee /tmp/precommit.log
-          rc=${PIPESTATUS[0]}
-          echo "precommit_rc=$rc" >> "$GITHUB_OUTPUT"
-          if [ $rc -ne 0 ]; then
-            echo "::error title=pre-commit exit $rc::$(tail -3 /tmp/precommit.log | tr '\n' ' | ')"
-          fi
-          exit $rc
-      - name: Post diagnostic PR comment on failure
-        if: failure() && github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          {
-            echo "## CI diagnostic (temporary, from workflow debug instrumentation)"
-            echo ""
-            echo "pre-commit exit code: \`${{ steps.pc.outputs.precommit_rc }}\`"
-            echo "install exit code: \`${{ steps.install.outputs.install_rc }}\`"
-            echo ""
-            echo "### Install log tail"
-            echo '```'
-            tail -30 /tmp/install.log 2>/dev/null || echo "(no install log)"
-            echo '```'
-            echo ""
-            echo "### Pre-commit full output"
-            echo '```'
-            cat /tmp/precommit.log 2>/dev/null || echo "(no precommit log)"
-            echo '```'
-          } > /tmp/diagnostic.md
-          gh pr comment "$PR_NUMBER" --body-file /tmp/diagnostic.md --repo "$GITHUB_REPOSITORY"
+        run: pre-commit run --all-files
 
   test-matrix:
     needs: pre-commit

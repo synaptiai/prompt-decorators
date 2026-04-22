@@ -47,6 +47,12 @@ repos:
         types: [python]
         exclude: ^(docs/|examples/|scripts/|tests/|demo/|claude-code-plugin/|spike/)
         args: ["--config-file=mypy.ini"]
+        # mypy 1.20.x ships a regression that INTERNAL ERRORs mid-run on
+        # this codebase (see https://github.com/python/mypy/issues). Pin
+        # below that until the upstream bug is fixed.
+        additional_dependencies:
+          - "mypy<1.20"
+          - "pydantic>=2.0.0"
 
       - id: pytest
         name: pytest
