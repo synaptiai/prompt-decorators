@@ -1,4 +1,5 @@
 """Tests for the UserPromptSubmit hook script."""
+
 from __future__ import annotations
 
 import io

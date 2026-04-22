@@ -1,4 +1,5 @@
 """Tests for the auto-decorate selector (pure-logic parts)."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -28,9 +29,7 @@ def test_shortlist_returns_size(auto_module):
 
 def test_shortlist_biases_by_category(auto_module):
     # A comparison prompt should include structure/reasoning decorators.
-    picks = auto_module.shortlist(
-        "Compare REST and GraphQL - pros and cons in a table"
-    )
+    picks = auto_module.shortlist("Compare REST and GraphQL - pros and cons in a table")
     categories = {d["category"] for d in picks}
     assert "structure" in categories or "reasoning" in categories
 

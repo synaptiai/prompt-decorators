@@ -1,4 +1,5 @@
 """Common pytest setup - add plugin script dirs to sys.path and isolate config."""
+
 from __future__ import annotations
 
 import sys

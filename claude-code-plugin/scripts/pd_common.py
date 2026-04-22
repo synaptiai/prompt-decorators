@@ -3,6 +3,7 @@
 Keeps engine bootstrap, config read/write, registry walk, and logging in one
 place so the hook and dispatcher stay short.
 """
+
 from __future__ import annotations
 
 import copy

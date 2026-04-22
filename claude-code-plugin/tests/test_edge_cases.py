@@ -4,6 +4,7 @@ Covers: unterminated sigil parens, CRLF line endings, log file security
 (O_NOFOLLOW refusal to follow symlinks), atomic config write under
 concurrent pressure, and fast-path early exit behaviour.
 """
+
 from __future__ import annotations
 
 import json

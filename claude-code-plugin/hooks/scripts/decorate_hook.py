@@ -9,6 +9,7 @@
 - Emits the expanded instructions as `hookSpecificOutput.additionalContext`
   so they appear adjacent to the user's original message.
 """
+
 from __future__ import annotations
 
 import json
@@ -38,9 +39,7 @@ from pd_common import (  # noqa: E402
 
 # Sigil grammar: name, optional :vX[.Y[.Z]] version, optional (...) params.
 _SIGIL_BODY = (
-    r"[A-Za-z][A-Za-z0-9]*"
-    r"(?::v[0-9]+(?:\.[0-9]+(?:\.[0-9]+)?)?)?"
-    r"(?:\([^)]*\))?"
+    r"[A-Za-z][A-Za-z0-9]*" r"(?::v[0-9]+(?:\.[0-9]+(?:\.[0-9]+)?)?)?" r"(?:\([^)]*\))?"
 )
 SIGIL_COLON_RE = re.compile(rf"(?m)^::({_SIGIL_BODY})")
 SIGIL_PLUS_RE = re.compile(rf"(?m)^\+\+\+({_SIGIL_BODY})")

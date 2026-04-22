@@ -90,6 +90,7 @@ nav:
   - Integrations:
     - Overview: integrations/index.md
     - Model Context Protocol (MCP): integrations/mcp.md
+    - Claude Code Plugin: integrations/claude_code.md
   - Contributing:
     - Guidelines: contributing.md
     - Development Setup: development.md

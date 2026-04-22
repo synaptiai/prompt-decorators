@@ -1,4 +1,5 @@
 """Tests for pd_common config helpers."""
+
 from __future__ import annotations
 
 import json

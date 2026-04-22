@@ -11,6 +11,7 @@ directly (supports prompt caching on the catalogue manifest). Otherwise we
 fall back to `claude --print --model <model>` via subprocess so the plugin
 works out-of-the-box for users already signed into Claude Code.
 """
+
 from __future__ import annotations
 
 import json
@@ -151,9 +152,7 @@ def _manifest(candidates: Iterable[dict]) -> str:
     return "\n".join(lines)
 
 
-def _call_anthropic_sdk(
-    prompt: str, candidates: list[dict], model: str
-) -> str | None:
+def _call_anthropic_sdk(prompt: str, candidates: list[dict], model: str) -> str | None:
     try:
         import anthropic  # type: ignore
     except ImportError:

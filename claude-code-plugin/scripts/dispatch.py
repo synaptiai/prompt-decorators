@@ -17,6 +17,7 @@ Subcommands:
   config                     Dump current plugin config
   help                       Print this message
 """
+
 from __future__ import annotations
 
 import json

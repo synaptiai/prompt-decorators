@@ -1,4 +1,5 @@
 """Tests for the /decorate slash command dispatcher."""
+
 from __future__ import annotations
 
 import json
