@@ -11,9 +11,10 @@ import json
 import subprocess
 import sys
 
+import pytest
 from conftest import HOOK_SCRIPT as HOOK
 from conftest import make_event as _event
-from conftest import run_hook_subprocess
+from conftest import read_log_events, run_hook_subprocess, write_user_decorator
 
 
 def _run_hook(event: dict, env: dict | None = None) -> tuple[str, int]:
@@ -331,22 +332,53 @@ def test_user_registry_rejects_template_format_rce(tmp_path):
     assert out == ""
 
 
-def test_user_registry_rejects_backslash_in_template(tmp_path):
+def test_recursion_guard_short_circuits_hook(tmp_path):
+    """E6 regression (moved from test_redact.py - this is hook behaviour,
+    not a redact test): `PROMPT_DECORATORS_NESTED=1` must make the hook
+    exit 0 with no output even when sigils are present. Protects against
+    infinite recursion when the plugin is installed globally and
+    auto_decorate shells out to `claude --print`."""
+    import os
+
+    event = (
+        '{"hook_event_name":"UserPromptSubmit","prompt":"::StepByStep\\nhello world"}'
+    )
+    proc = subprocess.run(
+        [sys.executable, str(HOOK)],
+        input=event,
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "PROMPT_DECORATORS_NESTED": "1",
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path),
+        },
+        timeout=30,
+    )
+    assert proc.returncode == 0
+    # The nested guard runs before any expansion - no emission.
+    assert proc.stdout == ""
+
+
+def test_user_registry_rejects_template_backslash_rce(tmp_path):
     """Backslashes can be used in escape-sequence attacks that survive
     triple-quote processing inside Python source. Reject conservatively.
+    Named with `_rce` suffix for consistency with sibling regression tests.
     """
     user_reg = tmp_path / "user-ext"
-    user_reg.mkdir()
-    evil = {
-        "decoratorName": "TmplBackslash",
-        "version": "1.0.0",
-        "description": "Backslash breakout attempt.",
-        "transformationTemplate": {
-            "instruction": "safe\\'''injected",
-            "placement": "prepend",
+    write_user_decorator(
+        user_reg,
+        "evil-bs.json",
+        {
+            "decoratorName": "TmplBackslash",
+            "version": "1.0.0",
+            "description": "Backslash breakout attempt.",
+            "transformationTemplate": {
+                "instruction": "safe\\'''injected",
+                "placement": "prepend",
+            },
         },
-    }
-    (user_reg / "evil-bs.json").write_text(json.dumps(evil))
+    )
 
     out, rc = _run_hook(
         _event("::TmplBackslash\nHi"),
@@ -357,6 +389,180 @@ def test_user_registry_rejects_backslash_in_template(tmp_path):
     )
     assert rc == 0
     assert out == ""
+
+
+# -----------------------------------------------------------------------------
+# Log-reason coverage (N4 regression) - the reject-reason strings are the
+# user-visible debugging surface. Assert they surface correctly per kind.
+# -----------------------------------------------------------------------------
+
+
+def _run_and_read_log(tmp_path, user_reg, trigger_prompt):
+    """Run the hook with a user registry + isolated log, return log events."""
+    log_path = tmp_path / "pd.log"
+    _run_hook(
+        _event(trigger_prompt),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+            "PROMPT_DECORATORS_LOG": str(log_path),
+        },
+    )
+    return read_log_events(log_path)
+
+
+def test_user_registry_reject_reason_instruction_triple_quote(tmp_path):
+    """Triple-quote in instruction must surface
+    `unsafe_template_instruction_triple_quote` (distinguishable from
+    backslash payloads so users can debug what fired)."""
+    user_reg = tmp_path / "ext"
+    write_user_decorator(
+        user_reg,
+        "tq.json",
+        {
+            "decoratorName": "TqRejectReason",
+            "version": "1.0.0",
+            "description": "triple-quote in instruction",
+            "transformationTemplate": {"instruction": "safe ''' injected"},
+        },
+    )
+    events = _run_and_read_log(tmp_path, user_reg, "::TqRejectReason\nHi")
+    reasons = [
+        e.get("reason") for e in events if e.get("phase") == "user_registry_rejected"
+    ]
+    assert "unsafe_template_instruction_triple_quote" in reasons
+
+
+def test_user_registry_reject_reason_instruction_backslash(tmp_path):
+    """Backslash in instruction must surface
+    `unsafe_template_instruction_backslash` (so a user with a LaTeX
+    expression knows WHICH character class triggered the rejection)."""
+    user_reg = tmp_path / "ext"
+    write_user_decorator(
+        user_reg,
+        "bs.json",
+        {
+            "decoratorName": "BsRejectReason",
+            "version": "1.0.0",
+            "description": "backslash in instruction",
+            "transformationTemplate": {"instruction": "safe\\n with backslash"},
+        },
+    )
+    events = _run_and_read_log(tmp_path, user_reg, "::BsRejectReason\nHi")
+    reasons = [
+        e.get("reason") for e in events if e.get("phase") == "user_registry_rejected"
+    ]
+    assert "unsafe_template_instruction_backslash" in reasons
+
+
+def test_user_registry_reject_reason_not_a_string(tmp_path):
+    """Non-string instruction hits the `not_a_string` branch of
+    `_is_safe_template_string`. Exercised here via an integer value."""
+    user_reg = tmp_path / "ext"
+    write_user_decorator(
+        user_reg,
+        "intinstr.json",
+        {
+            "decoratorName": "IntInstr",
+            "version": "1.0.0",
+            "description": "integer instead of string",
+            "transformationTemplate": {"instruction": 42},
+        },
+    )
+    events = _run_and_read_log(tmp_path, user_reg, "::IntInstr\nHi")
+    reasons = [
+        e.get("reason") for e in events if e.get("phase") == "user_registry_rejected"
+    ]
+    assert "unsafe_template_instruction_not_a_string" in reasons
+
+
+def test_user_registry_reject_reason_format_triple_quote(tmp_path):
+    """parameterMapping[*].format with triple-quote must tag the specific
+    param name in the reason so users can find the offending field."""
+    user_reg = tmp_path / "ext"
+    write_user_decorator(
+        user_reg,
+        "fmttq.json",
+        {
+            "decoratorName": "FmtTq",
+            "version": "1.0.0",
+            "description": "triple-quote in format",
+            "transformationTemplate": {
+                "instruction": "ok",
+                "parameterMapping": {"mode": {"format": "x ''' y"}},
+            },
+        },
+    )
+    events = _run_and_read_log(tmp_path, user_reg, "::FmtTq\nHi")
+    reasons = [
+        e.get("reason") for e in events if e.get("phase") == "user_registry_rejected"
+    ]
+    assert any(
+        r and r.startswith("unsafe_template_format_triple_quote:mode") for r in reasons
+    )
+
+
+@pytest.mark.parametrize(
+    "bad_key",
+    ["_leading_underscore", "9startsWithDigit", "has-dash", "has space", "", "a.b"],
+)
+def test_user_registry_rejects_param_key_regex_boundaries(tmp_path, bad_key):
+    """Identifier-regex boundary coverage for the param-key allowlist.
+    `[A-Za-z][A-Za-z0-9_]*` specifically rules out leading underscores,
+    leading digits, dashes/dots/spaces, and empty strings. Each must hit
+    the `unsafe_template_param_key` rejection path."""
+    user_reg = tmp_path / f"ext_{abs(hash(bad_key))}"
+    write_user_decorator(
+        user_reg,
+        "bad-key.json",
+        {
+            "decoratorName": "BoundaryKey",
+            "version": "1.0.0",
+            "description": "bad param key",
+            "transformationTemplate": {
+                "instruction": "ok",
+                "parameterMapping": {bad_key: {"format": "{value}"}},
+            },
+        },
+    )
+    events = _run_and_read_log(tmp_path, user_reg, "::BoundaryKey\nHi")
+    reasons = [
+        e.get("reason") for e in events if e.get("phase") == "user_registry_rejected"
+    ]
+    assert "unsafe_template_param_key" in reasons
+
+
+def test_user_registry_accepts_non_dict_param_cfg_silently(tmp_path):
+    """When `parameterMapping["mode"]` is a scalar (not a dict), the
+    `if not isinstance(param_cfg, dict): continue` branch in
+    `_validate_user_template` accepts the decorator without further
+    inspection - the engine itself will later no-op on that param.
+    Verifies the template is NOT rejected in this shape."""
+    user_reg = tmp_path / "ext"
+    write_user_decorator(
+        user_reg,
+        "scalar-cfg.json",
+        {
+            "decoratorName": "OkScalarCfg",
+            "version": "1.0.0",
+            "description": "scalar param cfg",
+            "transformationTemplate": {
+                "instruction": "Start with SENTINEL_OK.",
+                "parameterMapping": {"mode": "scalar-not-dict"},
+            },
+        },
+    )
+    out, rc = _run_hook(
+        _event("::OkScalarCfg\nHi"),
+        env={
+            "PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path / "cfg"),
+            "PROMPT_DECORATORS_USER_REGISTRY": str(user_reg),
+        },
+    )
+    assert rc == 0
+    assert out != "", "decorator should have been accepted and expansion emitted"
+    ctx = json.loads(out)["hookSpecificOutput"]["additionalContext"]
+    assert "SENTINEL_OK" in ctx
 
 
 def test_user_registry_rejects_param_key_rce(tmp_path):

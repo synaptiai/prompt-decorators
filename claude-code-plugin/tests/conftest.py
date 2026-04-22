@@ -37,9 +37,8 @@ def run_hook_subprocess(
 ) -> tuple[str, str, int]:
     """Run the hook script as a subprocess. Returns (stdout, stderr, rc).
 
-    Centralised in conftest so test modules share one definition. `stdin`
-    overrides `json.dumps(event)` when provided - useful for the malformed-
-    JSON fail-open test.
+    `stdin` overrides `json.dumps(event)` when provided - useful for the
+    malformed-JSON fail-open test.
     """
     merged_env = os.environ.copy()
     if env:
@@ -54,6 +53,23 @@ def run_hook_subprocess(
         timeout=30,
     )
     return proc.stdout, proc.stderr, proc.returncode
+
+
+def write_user_decorator(user_reg: Path, filename: str, payload: dict) -> Path:
+    """Drop a decorator JSON under the user-registry dir and return its path."""
+    user_reg.mkdir(parents=True, exist_ok=True)
+    path = user_reg / filename
+    path.write_text(json.dumps(payload))
+    return path
+
+
+def read_log_events(log_path: Path) -> list[dict]:
+    """Parse the hook's JSONL log into a list of event dicts (empty if missing)."""
+    if not log_path.exists():
+        return []
+    return [
+        json.loads(line) for line in log_path.read_text().splitlines() if line.strip()
+    ]
 
 
 @pytest.fixture(autouse=True)
