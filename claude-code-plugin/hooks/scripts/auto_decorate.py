@@ -25,9 +25,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PLUGIN_ROOT = SCRIPT_DIR.parent.parent
 sys.path.insert(0, str(PLUGIN_ROOT / "scripts"))
 
-from pd_common import log, registry_decorators  # noqa: E402
+from pd_common import DEFAULT_MODEL, log, registry_decorators  # noqa: E402
 
-DEFAULT_MODEL = "claude-haiku-4-5"
 MAX_PICKS = 3
 SHORTLIST_SIZE = 20
 
@@ -193,16 +192,32 @@ def _call_claude_cli(prompt: str, candidates: list[dict], model: str) -> str | N
         f"User prompt:\n{prompt}\n\n"
         f"Answer (JSON array of names):"
     )
+    # Pipe on stdin instead of argv: avoids ARG_MAX for large prompts and
+    # keeps the user's prompt out of /proc/<pid>/cmdline (visible to other
+    # local users).
     try:
         result = subprocess.run(
-            ["claude", "--print", "--model", model, selector_input],
+            ["claude", "--print", "--model", model],
+            input=selector_input,
             capture_output=True,
             text=True,
             timeout=30,
-            cwd="/tmp",
+            cwd=str(Path.home()),
         )
     except (FileNotFoundError, subprocess.TimeoutExpired) as e:
-        log({"phase": "auto_cli_error", "error": str(e)})
+        # Don't log the exception repr directly: TimeoutExpired.__str__
+        # embeds the argv list which could leak prompt content on upgrades
+        # that move the prompt back to argv. Log type + message only.
+        log({"phase": "auto_cli_error", "error_type": type(e).__name__})
+        return None
+    if result.returncode != 0:
+        log(
+            {
+                "phase": "auto_cli_nonzero",
+                "rc": result.returncode,
+                "stderr_len": len(result.stderr or ""),
+            }
+        )
         return None
     return result.stdout.strip() or None
 

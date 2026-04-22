@@ -22,25 +22,72 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
-from typing import Iterable
+from typing import Callable
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-PLUGIN_ROOT = SCRIPT_DIR.parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
 from pd_common import (  # noqa: E402
+    AUTO_MODE,
+    AUTO_MODEL,
+    AUTO_ONCE,
+    CFG_ALWAYS_ON,
+    CFG_AUTO,
+    CFG_DISABLED,
+    DEFAULT_MODEL,
+    MODE_OFF,
+    MODE_ON,
+    bare_name,
     ensure_engine_on_path,
     load_config,
     registry_decorators,
+    registry_names,
     save_config,
 )
 
 
-def _print(obj) -> None:
+def _print(obj: str | dict | list) -> None:
     if isinstance(obj, str):
         sys.stdout.write(obj.rstrip() + "\n")
     else:
         sys.stdout.write(json.dumps(obj, indent=2) + "\n")
+
+
+def _require_decorator(name: str) -> bool:
+    if name not in registry_names():
+        _print(f"Unknown decorator '{name}'. Run /decorate list to see options.")
+        return False
+    return True
+
+
+def _mutate_list(
+    cfg_key: str, action: str, name: str, *, verb_add: str, verb_remove: str
+) -> int:
+    """Shared add/remove logic for always_on and disabled lists."""
+    cfg = load_config()
+    current: list[str] = list(cfg.get(cfg_key, []))
+    if action == "add":
+        if not _require_decorator(bare_name(name)):
+            return 1
+        if name in current:
+            _print(f"'{name}' already in {cfg_key} list.")
+            return 0
+        current.append(name)
+        cfg[cfg_key] = current
+        save_config(cfg)
+        _print(f"{verb_add}: {name}")
+        return 0
+    if action == "remove":
+        if name not in current:
+            _print(f"'{name}' not in {cfg_key} list.")
+            return 1
+        current.remove(name)
+        cfg[cfg_key] = current
+        save_config(cfg)
+        _print(f"{verb_remove}: {name}")
+        return 0
+    _print(f"Unknown action '{action}'. Use add|remove|list.")
+    return 2
 
 
 def cmd_list(args: list[str]) -> int:
@@ -51,8 +98,8 @@ def cmd_list(args: list[str]) -> int:
         if not decorators:
             _print(f"No decorators found in category '{category_filter}'.")
             return 1
-    current_cat = None
     lines: list[str] = []
+    current_cat = None
     for d in decorators:
         if d["category"] != current_cat:
             current_cat = d["category"]
@@ -69,11 +116,8 @@ def cmd_preview(args: list[str]) -> int:
         return 2
     sigil = args[0]
     if "(" not in sigil and len(args) > 1:
-        # accept `/decorate preview Name key=value ...`
         sigil = f"{sigil}({','.join(args[1:])})"
-    bare_name = sigil.split("(")[0]
-    if not _decorator_exists(bare_name):
-        _print(f"Decorator '{bare_name}' not found in registry.")
+    if not _require_decorator(bare_name(sigil)):
         return 1
     ensure_engine_on_path()
     try:
@@ -108,52 +152,20 @@ def cmd_search(args: list[str]) -> int:
     return 0
 
 
-def _decorator_exists(name: str) -> bool:
-    return any(d["name"] == name for d in registry_decorators())
-
-
-def _toggle_list(
-    cfg: dict, key: str, action: str, name: str, verb_on: str, verb_off: str
-) -> int:
-    current: list[str] = list(cfg.get(key, []))
-    bare_name = name.split("(")[0]
-    if not _decorator_exists(bare_name):
-        _print(f"Unknown decorator '{bare_name}'. Run /decorate list to see options.")
-        return 1
-    if action == "add":
-        if name in current:
-            _print(f"'{name}' already in {key} list.")
-            return 0
-        current.append(name)
-        cfg[key] = current
-        save_config(cfg)
-        _print(f"{verb_on}: {name}")
-        return 0
-    if action == "remove":
-        if name not in current:
-            _print(f"'{name}' not in {key} list.")
-            return 1
-        current.remove(name)
-        cfg[key] = current
-        save_config(cfg)
-        _print(f"{verb_off}: {name}")
-        return 0
-    _print(f"Unknown action '{action}'. Use add|remove|list.")
-    return 2
-
-
 def cmd_enable(args: list[str]) -> int:
     if not args:
         _print("Usage: /decorate enable <Name>")
         return 2
-    cfg = load_config()
-    disabled: list[str] = list(cfg.get("disabled", []))
     name = args[0]
+    if not _require_decorator(bare_name(name)):
+        return 1
+    cfg = load_config()
+    disabled: list[str] = list(cfg.get(CFG_DISABLED, []))
     if name not in disabled:
         _print(f"'{name}' is not currently disabled.")
         return 0
     disabled.remove(name)
-    cfg["disabled"] = disabled
+    cfg[CFG_DISABLED] = disabled
     save_config(cfg)
     _print(f"Re-enabled: {name}")
     return 0
@@ -163,79 +175,101 @@ def cmd_disable(args: list[str]) -> int:
     if not args:
         _print("Usage: /decorate disable <Name>")
         return 2
-    cfg = load_config()
-    name = args[0]
-    if not _decorator_exists(name):
-        _print(f"Unknown decorator '{name}'.")
-        return 1
-    disabled: list[str] = list(cfg.get("disabled", []))
-    if name in disabled:
-        _print(f"'{name}' already disabled.")
-        return 0
-    disabled.append(name)
-    cfg["disabled"] = disabled
-    save_config(cfg)
-    _print(f"Disabled: {name}")
-    return 0
+    return _mutate_list(
+        CFG_DISABLED,
+        "add",
+        args[0],
+        verb_add="Disabled",
+        verb_remove="Re-enabled",
+    )
 
 
 def cmd_always(args: list[str]) -> int:
     cfg = load_config()
     if not args or args[0] == "list":
-        items = cfg.get("always_on", [])
-        _print(
-            "Always-on decorators:\n  "
-            + ("\n  ".join(items) if items else "(none)")
-        )
+        items = cfg.get(CFG_ALWAYS_ON, [])
+        body = "\n  ".join(items) if items else "(none)"
+        _print(f"Always-on decorators:\n  {body}")
         return 0
     if args[0] in {"add", "remove"} and len(args) >= 2:
-        return _toggle_list(
-            cfg,
-            "always_on",
+        return _mutate_list(
+            CFG_ALWAYS_ON,
             args[0],
             args[1],
-            verb_on="Added to always-on",
-            verb_off="Removed from always-on",
+            verb_add="Added to always-on",
+            verb_remove="Removed from always-on",
         )
     _print("Usage: /decorate always [list|add <name>|remove <name>]")
     return 2
 
 
+_AUTO_ACTIONS: dict[str, Callable[[dict, list[str]], int]] = {}
+
+
+def _auto_status(cfg: dict, _args: list[str]) -> int:
+    auto = cfg.get(CFG_AUTO, {})
+    _print(
+        f"auto.mode={auto.get(AUTO_MODE, MODE_OFF)}  "
+        f"once_armed={auto.get(AUTO_ONCE, False)}  "
+        f"model={auto.get(AUTO_MODEL, DEFAULT_MODEL)}"
+    )
+    return 0
+
+
+def _auto_on(cfg: dict, _args: list[str]) -> int:
+    cfg[CFG_AUTO][AUTO_MODE] = MODE_ON
+    cfg[CFG_AUTO][AUTO_ONCE] = False
+    save_config(cfg)
+    _print("auto-decorate: ON (every prompt will be auto-decorated)")
+    return 0
+
+
+def _auto_off(cfg: dict, _args: list[str]) -> int:
+    cfg[CFG_AUTO][AUTO_MODE] = MODE_OFF
+    cfg[CFG_AUTO][AUTO_ONCE] = False
+    save_config(cfg)
+    _print("auto-decorate: OFF")
+    return 0
+
+
+def _auto_once(cfg: dict, _args: list[str]) -> int:
+    cfg[CFG_AUTO][AUTO_ONCE] = True
+    save_config(cfg)
+    _print("auto-decorate: armed for ONE next prompt")
+    return 0
+
+
+def _auto_model(cfg: dict, args: list[str]) -> int:
+    if not args:
+        _print("Usage: /decorate auto model <model-id>")
+        return 2
+    cfg[CFG_AUTO][AUTO_MODEL] = args[0]
+    save_config(cfg)
+    _print(f"auto-decorate model set to: {args[0]}")
+    return 0
+
+
+_AUTO_ACTIONS.update(
+    {
+        "status": _auto_status,
+        "on": _auto_on,
+        "off": _auto_off,
+        "once": _auto_once,
+        "model": _auto_model,
+    }
+)
+
+
 def cmd_auto(args: list[str]) -> int:
     cfg = load_config()
-    auto = cfg.setdefault("auto", {})
-    if not args or args[0] == "status":
-        _print(
-            f"auto.mode={auto.get('mode', 'off')}  "
-            f"once_armed={auto.get('once_armed', False)}  "
-            f"model={auto.get('model', 'claude-haiku-4-5')}"
-        )
-        return 0
-    action = args[0]
-    if action == "on":
-        auto["mode"] = "on"
-        auto["once_armed"] = False
-        save_config(cfg)
-        _print("auto-decorate: ON (every prompt will be auto-decorated)")
-        return 0
-    if action == "off":
-        auto["mode"] = "off"
-        auto["once_armed"] = False
-        save_config(cfg)
-        _print("auto-decorate: OFF")
-        return 0
-    if action == "once":
-        auto["once_armed"] = True
-        save_config(cfg)
-        _print("auto-decorate: armed for ONE next prompt")
-        return 0
-    if action == "model" and len(args) >= 2:
-        auto["model"] = args[1]
-        save_config(cfg)
-        _print(f"auto-decorate model set to: {args[1]}")
-        return 0
-    _print("Usage: /decorate auto [on|off|once|status|model <id>]")
-    return 2
+    cfg.setdefault(CFG_AUTO, {})
+    if not args:
+        return _auto_status(cfg, [])
+    handler = _AUTO_ACTIONS.get(args[0])
+    if handler is None:
+        _print("Usage: /decorate auto [on|off|once|status|model <id>]")
+        return 2
+    return handler(cfg, args[1:])
 
 
 def cmd_config(_: list[str]) -> int:
@@ -248,7 +282,7 @@ def cmd_help(_: list[str]) -> int:
     return 0
 
 
-DISPATCH: dict[str, callable] = {
+DISPATCH: dict[str, Callable[[list[str]], int]] = {
     "list": cmd_list,
     "preview": cmd_preview,
     "search": cmd_search,
@@ -261,8 +295,7 @@ DISPATCH: dict[str, callable] = {
 }
 
 
-def run(argv: Iterable[str]) -> int:
-    argv = list(argv)
+def run(argv: list[str]) -> int:
     if not argv:
         return cmd_help([])
     cmd, *rest = argv

@@ -1,19 +1,41 @@
 """Shared helpers for the prompt-decorators Claude Code plugin.
 
-Keeps engine bootstrap, config read/write, and logging in one place so the
-hook + dispatcher stay short.
+Keeps engine bootstrap, config read/write, registry walk, and logging in one
+place so the hook and dispatcher stay short.
 """
 from __future__ import annotations
 
+import copy
 import json
 import os
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any
 
 PLUGIN_ROOT = Path(__file__).resolve().parent.parent
 VENDOR_DIR = PLUGIN_ROOT / "vendor"
+
+# Config key constants so typos fail at import instead of silently misreading.
+CFG_VERSION = "version"
+CFG_ALWAYS_ON = "always_on"
+CFG_DISABLED = "disabled"
+CFG_AUTO = "auto"
+AUTO_MODE = "mode"
+AUTO_ONCE = "once_armed"
+AUTO_MODEL = "model"
+MODE_ON = "on"
+MODE_OFF = "off"
+
+DEFAULT_MODEL = "claude-haiku-4-5"
+
+DEFAULT_CONFIG: dict[str, Any] = {
+    CFG_VERSION: 1,
+    CFG_ALWAYS_ON: [],
+    CFG_DISABLED: [],
+    CFG_AUTO: {AUTO_MODE: MODE_OFF, AUTO_ONCE: False, AUTO_MODEL: DEFAULT_MODEL},
+}
 
 DEFAULT_CONFIG_DIR = Path(
     os.environ.get(
@@ -22,14 +44,13 @@ DEFAULT_CONFIG_DIR = Path(
     )
 )
 CONFIG_PATH = DEFAULT_CONFIG_DIR / "config.json"
-LOG_PATH = Path(os.environ.get("PROMPT_DECORATORS_LOG", "/tmp/pd_hook.log"))
 
-DEFAULT_CONFIG: dict[str, Any] = {
-    "version": 1,
-    "always_on": [],
-    "disabled": [],
-    "auto": {"mode": "off", "once_armed": False, "model": "claude-haiku-4-5"},
-}
+# Logs default to the user's cache dir (0o600, O_NOFOLLOW). Never /tmp by
+# default - it's world-readable and symlinkable by other local users.
+DEFAULT_LOG_PATH = Path.home() / ".cache" / "prompt-decorators" / "hook.log"
+LOG_PATH = Path(os.environ.get("PROMPT_DECORATORS_LOG", str(DEFAULT_LOG_PATH)))
+LOG_MAX_BYTES = 5_000_000
+LOG_DEBUG = os.environ.get("PROMPT_DECORATORS_LOG_DEBUG") == "1"
 
 
 def ensure_engine_on_path() -> None:
@@ -40,21 +61,50 @@ def ensure_engine_on_path() -> None:
 
 def load_config() -> dict[str, Any]:
     if not CONFIG_PATH.exists():
-        return json.loads(json.dumps(DEFAULT_CONFIG))
+        return copy.deepcopy(DEFAULT_CONFIG)
     try:
         data = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return json.loads(json.dumps(DEFAULT_CONFIG))
-    merged = json.loads(json.dumps(DEFAULT_CONFIG))
+        return copy.deepcopy(DEFAULT_CONFIG)
+    merged = copy.deepcopy(DEFAULT_CONFIG)
     merged.update({k: v for k, v in data.items() if k in DEFAULT_CONFIG})
-    if "auto" in data and isinstance(data["auto"], dict):
-        merged["auto"] = {**DEFAULT_CONFIG["auto"], **data["auto"]}
+    if CFG_AUTO in data and isinstance(data[CFG_AUTO], dict):
+        merged[CFG_AUTO] = {**DEFAULT_CONFIG[CFG_AUTO], **data[CFG_AUTO]}
     return merged
 
 
 def save_config(cfg: dict[str, Any]) -> None:
+    """Write config atomically: tempfile + os.replace. Prevents corruption on
+    concurrent writes (two `/decorate` invocations, or crash mid-write).
+    """
     CONFIG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    CONFIG_PATH.write_text(json.dumps(cfg, indent=2) + "\n", encoding="utf-8")
+    payload = json.dumps(cfg, indent=2) + "\n"
+    fd, tmp = tempfile.mkstemp(
+        prefix=".config-", suffix=".tmp", dir=str(CONFIG_PATH.parent)
+    )
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(payload)
+        os.replace(tmp, CONFIG_PATH)
+    except Exception:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def _rotate_log_if_needed() -> None:
+    try:
+        size = LOG_PATH.stat().st_size
+    except OSError:
+        return
+    if size > LOG_MAX_BYTES:
+        rotated = LOG_PATH.with_suffix(LOG_PATH.suffix + ".1")
+        try:
+            os.replace(LOG_PATH, rotated)
+        except OSError:
+            pass
 
 
 def log(event: dict[str, Any]) -> None:
@@ -62,10 +112,25 @@ def log(event: dict[str, Any]) -> None:
         return
     try:
         LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
-        with LOG_PATH.open("a", encoding="utf-8") as f:
-            f.write(json.dumps({"ts": time.time(), **event}) + "\n")
+        _rotate_log_if_needed()
+        # O_NOFOLLOW blocks symlink games on any shared-dir logs; 0o600 means
+        # only the owner can read the logged prompts.
+        flags = os.O_WRONLY | os.O_APPEND | os.O_CREAT
+        if hasattr(os, "O_NOFOLLOW"):
+            flags |= os.O_NOFOLLOW
+        fd = os.open(str(LOG_PATH), flags, 0o600)
+        try:
+            with os.fdopen(fd, "a", encoding="utf-8") as f:
+                f.write(json.dumps({"ts": time.time(), **event}) + "\n")
+        except (OSError, TypeError):
+            os.close(fd)
     except OSError:
         pass
+
+
+def bare_name(sigil: str) -> str:
+    """Strip `(params)` from a decorator sigil to get its bare name."""
+    return sigil.split("(", 1)[0]
 
 
 _REGISTRY_CACHE: list[dict[str, Any]] | None = None
@@ -74,9 +139,9 @@ _REGISTRY_CACHE: list[dict[str, Any]] | None = None
 def _walk_registry() -> list[dict[str, Any]]:
     """Walk the vendored registry JSON files and infer category from path.
 
-    The engine itself defaults category to "General" when the JSON doesn't
-    declare one, so we derive it from the directory layout (core/<cat>/ or
-    extensions/<cat>/) which is where the catalogue's structure lives.
+    The engine defaults `category` to "General" when the JSON doesn't declare
+    one (and most don't), so we derive it from the directory layout where the
+    catalogue's taxonomy actually lives.
     """
     import json as _json
 
@@ -96,7 +161,6 @@ def _walk_registry() -> list[dict[str, Any]]:
             name = data.get("decoratorName") or data.get("name")
             if not name:
                 continue
-            # Category is the first directory under the registry root.
             rel_parts = path.relative_to(root).parts
             category = rel_parts[0] if len(rel_parts) > 1 else "other"
             desc = (data.get("description") or "").splitlines()
@@ -110,9 +174,14 @@ def _walk_registry() -> list[dict[str, Any]]:
     return sorted(out, key=lambda x: (x["category"], x["name"]))
 
 
-def registry_decorators(force_reload: bool = False) -> list[dict[str, Any]]:
+def registry_decorators() -> list[dict[str, Any]]:
     """Load the catalogue as plain dicts (name, description, category)."""
     global _REGISTRY_CACHE
-    if _REGISTRY_CACHE is None or force_reload:
+    if _REGISTRY_CACHE is None:
         _REGISTRY_CACHE = _walk_registry()
     return _REGISTRY_CACHE
+
+
+def registry_names() -> set[str]:
+    """Set of all valid decorator names - O(1) lookup for existence checks."""
+    return {d["name"] for d in registry_decorators()}
