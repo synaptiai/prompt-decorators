@@ -42,6 +42,7 @@ from pd_common import (  # noqa: E402
     bare_name,
     ensure_engine_on_path,
     load_config,
+    register_user_decorators,
     registry_decorators,
     registry_names,
     save_config,
@@ -127,6 +128,9 @@ def cmd_preview(args: list[str]) -> int:
     except Exception as e:  # noqa: BLE001
         _print(f"Error loading engine: {e}")
         return 1
+    # Match the hook: user-extension decorators aren't in the engine's
+    # built-in registry, so register them before expansion.
+    register_user_decorators()
     sample = f"+++{sigil}\n<user prompt goes here>"
     expanded = apply_dynamic_decorators(sample)
     _print(f"### Expansion of +++{sigil}\n\n{expanded}")

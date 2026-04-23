@@ -178,6 +178,94 @@ def test_help_returns_zero(dispatch):
     assert "Subcommands" in out or "list" in out
 
 
+# --- user-extension decorator preview ---------------------------------------
+#
+# Regression coverage for #152. The hook registers user-authored decorators
+# from `~/.config/prompt-decorators/extensions/` before expansion; `preview`
+# previously did not, so user decorators always resolved to
+# "Decorator '<Name>' not found in registry" even though `list` and `search`
+# saw them.
+
+
+@pytest.fixture
+def dispatch_with_user_reg(tmp_path, monkeypatch, capsys):
+    from conftest import write_user_decorator
+
+    cfg_dir = tmp_path / "cfg"
+    cfg_dir.mkdir()
+    user_reg = tmp_path / "user_reg"
+    user_reg.mkdir()
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(cfg_dir))
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+
+    import importlib
+
+    import pd_common
+
+    def reload_and_run(args: list[str]) -> tuple[int, str]:
+        # pd_common caches the registry at module level; reload so a user
+        # decorator written mid-test shows up in subsequent dispatcher calls.
+        importlib.reload(pd_common)
+        import dispatch as dispatch_mod
+
+        importlib.reload(dispatch_mod)
+        rc = dispatch_mod.run(args)
+        captured = capsys.readouterr()
+        return rc, captured.out
+
+    def write(filename: str, payload: dict):
+        return write_user_decorator(user_reg, filename, payload)
+
+    return reload_and_run, write, user_reg
+
+
+def test_preview_expands_user_extension_decorator(dispatch_with_user_reg):
+    run, write, _ = dispatch_with_user_reg
+    write(
+        "my-user-decorator.json",
+        {
+            "decoratorName": "MyUserDecorator",
+            "version": "1.0.0",
+            "description": "fixture for user-extension preview test",
+            "transformationTemplate": {
+                "instruction": "Please fixture-instruction placeholder text.",
+            },
+        },
+    )
+    rc, out = run(["preview", "MyUserDecorator"])
+    assert rc == 0, out
+    assert "fixture-instruction" in out
+    assert "not found in registry" not in out
+
+
+def test_preview_interpolates_user_extension_parameters(dispatch_with_user_reg):
+    run, write, _ = dispatch_with_user_reg
+    write(
+        "param-user-decorator.json",
+        {
+            "decoratorName": "ParamUserDecorator",
+            "version": "1.0.0",
+            "description": "param interpolation fixture",
+            "parameters": [
+                {
+                    "name": "depth",
+                    "type": "number",
+                    "description": "fixture depth knob",
+                    "default": 3,
+                    "required": False,
+                }
+            ],
+            "transformationTemplate": {
+                "instruction": "Base fixture instruction.",
+                "parameterMapping": {"depth": {"format": "Depth knob set to {value}."}},
+            },
+        },
+    )
+    rc, out = run(["preview", "ParamUserDecorator(depth=7)"])
+    assert rc == 0, out
+    assert "Depth knob set to 7" in out
+
+
 # --- --args-from-stdin path (security-relevant) -----------------------------
 #
 # These tests run dispatch.py as a subprocess with `--args-from-stdin`, the

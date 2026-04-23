@@ -18,7 +18,6 @@ import re
 import sys
 import traceback
 from pathlib import Path
-from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 PLUGIN_ROOT = SCRIPT_DIR.parent.parent
@@ -40,8 +39,8 @@ from pd_common import (  # noqa: E402
     load_config,
     log,
     redact,
+    register_user_decorators,
     save_config,
-    user_registry_dir,
 )
 
 # Derive sigil regexes from the engine's canonical `DECORATOR_PATTERN` so the
@@ -184,164 +183,6 @@ def _consume_once_armed(cfg: dict) -> None:
         )
 
 
-# Forbidden fields in user-supplied decorator JSON. The engine's
-# `register_decorator` -> `apply` path calls `exec(transform_function, ...)`
-# on the raw string, which would give any user-supplied JSON the ability
-# to run arbitrary Python in the hook process. No core/extensions
-# decorator in the vendored registry uses these fields - they all use
-# `transformationTemplate`, which is a safe string-template path.
-_UNSAFE_USER_FIELDS = ("transform_function", "transformFunction")
-
-
-def _is_safe_template_string(s: Any) -> tuple[bool, str | None]:
-    # Reject strings that can escape the engine's triple-quoted Python
-    # string literals during template->exec rendering.
-    #
-    # The engine builds Python source like ``result = (triple-single-quote){
-    # instruction}(triple-single-quote)`` and then exec()s it. A user-supplied
-    # sequence of three single quotes inside the instruction closes the
-    # string literal and injects arbitrary code. A sequence of three double
-    # quotes does the same against any future variant that switches quote
-    # styles. A backslash can combine with quote characters to engineer
-    # equivalent breakouts via escape-sequence processing inside triple-
-    # quoted literals.
-    #
-    # Benign instructions do not need any of those characters; reject all
-    # three conservatively. Return a reason tag so downstream can emit a
-    # specific `user_registry_rejected` event (helps users distinguish
-    # "used backslash legitimately" vs "attempted triple-quote breakout").
-    if not isinstance(s, str):
-        return False, "not_a_string"
-    if "'''" in s or '"""' in s:
-        return False, "triple_quote"
-    if "\\" in s:
-        return False, "backslash"
-    return True, None
-
-
-# `parameterMapping` keys are interpolated unquoted into Python source via
-# `.format(param=param_name)` at engine `dynamic_decorator.py:125-131`. A key
-# like `foo" and __import__("os").system("id") or "` would break out of the
-# `"{param}"` wrapper without using triple-quote or backslash characters.
-# The engine's own parameter-name grammar accepts only identifier-like
-# strings; enforce that same grammar before registration.
-_SAFE_PARAM_KEY_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*$")
-
-
-def _validate_user_template(data: dict) -> tuple[bool, str | None]:
-    """Validate every exec-reachable value inside a user decorator's
-    `transformationTemplate`. Returns `(safe, reason)`.
-    """
-    tpl = data.get("transformationTemplate")
-    if not isinstance(tpl, dict):
-        return True, None
-    instruction = tpl.get("instruction", "")
-    if instruction:
-        safe, kind = _is_safe_template_string(instruction)
-        if not safe:
-            return False, f"unsafe_template_instruction_{kind}"
-    mapping = tpl.get("parameterMapping")
-    if mapping is None:
-        return True, None
-    if not isinstance(mapping, dict):
-        # List / scalar `parameterMapping` values break the engine at apply
-        # time anyway. Reject explicitly so the user sees why.
-        return False, "unsafe_template_param_mapping_shape"
-    for param_name, param_cfg in mapping.items():
-        if not _SAFE_PARAM_KEY_RE.match(str(param_name)):
-            return False, "unsafe_template_param_key"
-        if not isinstance(param_cfg, dict):
-            continue
-        fmt = param_cfg.get("format")
-        if fmt is not None:
-            safe, kind = _is_safe_template_string(fmt)
-            if not safe:
-                return False, f"unsafe_template_format_{kind}:{param_name}"
-    return True, None
-
-
-def _register_user_decorators() -> None:
-    """Inject user-local decorators into the engine's registry.
-
-    User decorators live under `$PROMPT_DECORATORS_USER_REGISTRY` (or
-    `~/.config/prompt-decorators/extensions/` by default) and survive
-    `vendor/` re-syncs. Without this step, user decorators would appear in
-    `/decorate list` but the hook couldn't actually expand them.
-
-    Security: user JSON is NOT trusted. Rejects outright:
-      - Files declaring `transform_function` / `transformFunction` - the
-        engine's raw exec-a-string-of-Python path.
-      - Files whose `transformationTemplate.instruction` or any
-        `parameterMapping[*].format` contains characters that can escape
-        the engine's triple-quoted string literal and smuggle code into
-        the `exec()` rendering.
-    """
-    user_dir = user_registry_dir()
-    if user_dir is None or not user_dir.exists():
-        return
-    try:
-        from prompt_decorators.core.dynamic_decorator import DynamicDecorator
-    except Exception as e:  # noqa: BLE001
-        log(
-            {
-                "phase": "user_registry_import_error",
-                "error": redact(str(e))[:300],
-            }
-        )
-        return
-    DynamicDecorator.load_registry()
-    loaded = 0
-    rejected = 0
-    for path in user_dir.rglob("*.json"):
-        try:
-            data = json.loads(path.read_text(encoding="utf-8"))
-            if not isinstance(data, dict):
-                rejected += 1
-                log(
-                    {
-                        "phase": "user_registry_rejected",
-                        "file": str(path),
-                        "reason": "not_a_dict",
-                    }
-                )
-                continue
-            unsafe = [k for k in _UNSAFE_USER_FIELDS if k in data]
-            if unsafe:
-                rejected += 1
-                log(
-                    {
-                        "phase": "user_registry_rejected",
-                        "file": str(path),
-                        "reason": "unsafe_field",
-                        "fields": unsafe,
-                    }
-                )
-                continue
-            safe, reason = _validate_user_template(data)
-            if not safe:
-                rejected += 1
-                log(
-                    {
-                        "phase": "user_registry_rejected",
-                        "file": str(path),
-                        "reason": reason,
-                    }
-                )
-                continue
-            DynamicDecorator.register_decorator(data)
-            loaded += 1
-        except Exception as e:  # noqa: BLE001
-            log(
-                {
-                    "phase": "user_registry_load_error",
-                    "file": str(path),
-                    "error_type": type(e).__name__,
-                }
-            )
-    if loaded or rejected:
-        log({"phase": "user_registry_loaded", "count": loaded, "rejected": rejected})
-
-
 def _emit_import_error_to_stderr(exc: Exception) -> None:
     """Engine import failures are a configuration bug worth surfacing loudly
     in addition to the log. Keep stdout clean (would corrupt hook protocol).
@@ -423,7 +264,7 @@ def _main_impl() -> int:
         _emit_import_error_to_stderr(e)
         return 0
 
-    _register_user_decorators()
+    register_user_decorators()
 
     clean = strip_sigils(normalised)
     try:
