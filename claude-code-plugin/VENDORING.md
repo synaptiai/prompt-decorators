@@ -28,6 +28,9 @@ cp -r prompt_decorators claude-code-plugin/vendor/prompt_decorators
 # Strip bytecode that sometimes leaks from editable installs.
 find claude-code-plugin/vendor -type d -name __pycache__ -exec rm -rf {} +
 find claude-code-plugin/vendor -type f -name '*.pyc' -delete
+
+# Stage the refreshed vendor tree — easy to forget after the copy.
+git add claude-code-plugin/vendor/prompt_decorators
 ```
 
 Then run the plugin tests to confirm nothing upstream changed in a way the
@@ -52,10 +55,12 @@ A quick way to see whether the vendored tree has drifted from the
 source-of-truth package:
 
 ```bash
-diff -rq prompt_decorators claude-code-plugin/vendor/prompt_decorators
+diff -rq --exclude='__pycache__' --exclude='*.pyc' \
+  prompt_decorators claude-code-plugin/vendor/prompt_decorators
 ```
 
-The only expected difference is `__pycache__/` entries (never committed).
+This is the same command CI runs in the `vendor-sync-check` job, so a
+clean local diff guarantees CI will pass.
 If any `.py` or `.json` file differs, the vendor needs to be re-synced.
 
 ## Local patches applied to `vendor/`
