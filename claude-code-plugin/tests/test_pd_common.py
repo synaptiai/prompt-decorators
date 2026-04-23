@@ -52,3 +52,52 @@ def test_walk_registry_skips_non_dict_user_json(tmp_path, monkeypatch):
     mod._REGISTRY_CACHE = None
     decorators = mod.registry_decorators()
     assert any(d["name"] == "Concise" for d in decorators)
+
+
+# -----------------------------------------------------------------------------
+# Engine numeric-parameter parsing (cycle-6 vendor patch)
+# -----------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "param_text, expected_value, expected_type",
+    [
+        ("5", 5, int),
+        ("-5", -5, int),
+        ("0", 0, int),
+        ("3.14", 3.14, float),
+        ("-3.14", -3.14, float),
+        ("1e3", 1000.0, float),
+        ("-1e-3", -0.001, float),
+        ("notanumber", "notanumber", str),
+        ("true", True, bool),
+        ("false", False, bool),
+    ],
+)
+def test_numeric_parameter_values_parsed(
+    pd_common, param_text, expected_value, expected_type
+):
+    """Cycle-6 vendor patch: the engine used `.isdigit()` which only
+    matched non-negative non-float ints. After the patch, negatives
+    and floats (and scientific notation) are parsed to their numeric
+    types; non-numeric strings stay as strings. Exercised end-to-end
+    through the engine's public `parse_decorator`.
+    """
+    from prompt_decorators.core.dynamic_decorator import parse_decorator
+
+    name, params = parse_decorator(f"+++BuildOn(reference={param_text})")
+    assert name == "BuildOn"
+    assert "reference" in params
+    actual = params["reference"]
+    assert actual == expected_value
+    assert type(actual) is expected_type
+
+
+def test_parse_decorator_negative_number_direct(pd_common):
+    """Direct regression for the isdigit() -> int()/float() patch:
+    `+++Foo(n=-5)` must parse `n` as the int `-5`, not the string."""
+    from prompt_decorators.core.dynamic_decorator import parse_decorator
+
+    _, params = parse_decorator("+++BuildOn(reference=-42)")
+    assert params["reference"] == -42
+    assert isinstance(params["reference"], int)

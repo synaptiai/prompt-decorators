@@ -58,6 +58,24 @@ diff -rq prompt_decorators claude-code-plugin/vendor/prompt_decorators
 The only expected difference is `__pycache__/` entries (never committed).
 If any `.py` or `.json` file differs, the vendor needs to be re-synced.
 
+## Local patches applied to `vendor/`
+
+A straight `cp -r` from upstream would revert these local fixes. When
+syncing, re-apply each one (or better, land them upstream and then sync):
+
+- **`core/dynamic_decorator.py`** — parameter-value numeric parsing uses
+  `int()` / `float()` with try/except instead of `str.isdigit()` /
+  `str.replace(".", "", 1).isdigit()`. The upstream check rejects
+  negatives and scientific notation (`+++Dec(x=-5)` parsed as the string
+  `"-5"`). The local version delegates to Python's own numeric parsers.
+  Covered by `tests/test_pd_common.py::test_numeric_parameter_values_parsed`
+  and `::test_parse_decorator_negative_number_direct`. Should land
+  upstream as a bug fix.
+
+After each sync, run `cd claude-code-plugin && python3 -m pytest tests/`
+and check that every listed test still passes. Any failure means a
+local patch was reverted.
+
 ## Why not a submodule / editable install
 
 - **Submodule:** adds an extra `git submodule update --init` step to plugin

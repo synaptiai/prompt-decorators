@@ -164,6 +164,7 @@ def _call_anthropic_sdk(prompt: str, candidates: list[dict], model: str) -> str 
     resp = client.messages.create(
         model=model,
         max_tokens=200,
+        timeout=30.0,
         system=[
             {
                 "type": "text",

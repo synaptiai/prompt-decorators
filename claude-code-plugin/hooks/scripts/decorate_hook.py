@@ -369,6 +369,13 @@ def _main_impl() -> int:
         log({"phase": "parse_error", "error": redact(str(e))[:300]})
         return 0
 
+    # Defensive: stdin JSON could be a list, scalar, or null - all valid
+    # JSON but not what UserPromptSubmit is specified to send. Treating
+    # them as dicts would AttributeError on the first `.get(...)` below.
+    if not isinstance(event, dict):
+        log({"phase": "event_not_dict", "type": type(event).__name__})
+        return 0
+
     prompt: str = event.get("prompt", "")
 
     # Recursion guard: if the hook is firing from a subprocess we launched
@@ -468,10 +475,16 @@ def main() -> int:
     """Outer fail-open guard. A non-zero exit blocks the user's prompt, so
     any unexpected exception (BrokenPipeError, UnicodeDecodeError on stdin,
     TypeError from malformed config, etc.) must be logged and swallowed.
+
+    We widen to `BaseException` specifically because a bug or library call
+    chain inside the engine could raise `SystemExit` (e.g. argparse-style
+    exits in an imported module), which doesn't inherit from `Exception`
+    and would otherwise bypass our fail-open guarantee and block the
+    user's prompt with a non-zero exit.
     """
     try:
         return _main_impl()
-    except Exception as e:  # noqa: BLE001
+    except BaseException as e:  # noqa: BLE001
         try:
             log(
                 {
@@ -481,7 +494,7 @@ def main() -> int:
                     "tb": redact(traceback.format_exc())[:2000],
                 }
             )
-        except Exception:  # noqa: BLE001
+        except BaseException:  # noqa: BLE001
             pass
         return 0
 

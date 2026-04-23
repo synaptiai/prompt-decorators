@@ -983,13 +983,19 @@ def parse_decorator(decorator_text: str) -> Tuple[str, Dict[str, Any]]:
                 param_value = True
             elif param_value.lower() == "false":
                 param_value = False
-            elif param_value.isdigit():
-                param_value = int(param_value)
-            elif (
-                param_value.replace(".", "", 1).isdigit()
-                and param_value.count(".") == 1
-            ):
-                param_value = float(param_value)
+            else:
+                # Try int, then float. `.isdigit()` misses negatives and
+                # floats, so `+++Dec(x=-5)` was previously parsed as the
+                # string `"-5"` instead of the integer -5. Delegate to
+                # Python's own numeric parsers which handle signs,
+                # floats, and scientific notation uniformly.
+                try:
+                    param_value = int(param_value)
+                except (TypeError, ValueError):
+                    try:
+                        param_value = float(param_value)
+                    except (TypeError, ValueError):
+                        pass  # keep as string
 
             params[param_name] = param_value
 

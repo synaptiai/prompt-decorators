@@ -112,11 +112,21 @@ def save_config(cfg: dict[str, Any]) -> None:
     fd, tmp = tempfile.mkstemp(
         prefix=".config-", suffix=".tmp", dir=str(CONFIG_PATH.parent)
     )
+    # `mkstemp` returns an open fd. If `os.fdopen` below fails (MemoryError,
+    # OSError) BEFORE the context manager claims the fd, the fd would leak.
+    # Wrap fdopen in its own try so we only ever os.close() a still-owned
+    # fd - calling os.close on an already-closed/reused fd can clobber an
+    # unrelated file descriptor.
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as f:
+        try:
+            writer = os.fdopen(fd, "w", encoding="utf-8")
+        except BaseException:
+            os.close(fd)
+            raise
+        with writer as f:
             f.write(payload)
         os.replace(tmp, CONFIG_PATH)
-    except Exception:
+    except BaseException:
         try:
             os.unlink(tmp)
         except OSError:

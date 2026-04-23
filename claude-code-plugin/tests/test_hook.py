@@ -104,6 +104,45 @@ def test_always_on_decorators(tmp_path):
     assert "concise" in ctx.lower()
 
 
+def test_json_array_event_is_safe(tmp_path):
+    """Cycle-6 regression: stdin JSON is not guaranteed to be a dict. A
+    list (e.g. `[1, 2, 3]`) is valid JSON but would `AttributeError` on
+    `event.get("prompt")`. The hook must fail open instead."""
+    import os
+
+    merged = os.environ.copy()
+    merged["PROMPT_DECORATORS_CONFIG_DIR"] = str(tmp_path)
+    proc = subprocess.run(
+        [sys.executable, str(HOOK)],
+        input="[1, 2, 3]",
+        capture_output=True,
+        text=True,
+        env=merged,
+        timeout=10,
+    )
+    assert proc.returncode == 0
+    assert proc.stdout == ""
+
+
+def test_json_scalar_event_is_safe(tmp_path):
+    """Same invariant as `test_json_array_event_is_safe` but for a JSON
+    scalar (`"oops"`) - hits the same non-dict guard."""
+    import os
+
+    merged = os.environ.copy()
+    merged["PROMPT_DECORATORS_CONFIG_DIR"] = str(tmp_path)
+    proc = subprocess.run(
+        [sys.executable, str(HOOK)],
+        input='"oops"',
+        capture_output=True,
+        text=True,
+        env=merged,
+        timeout=10,
+    )
+    assert proc.returncode == 0
+    assert proc.stdout == ""
+
+
 def test_malformed_event_is_safe(tmp_path):
     import os
 
