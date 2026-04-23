@@ -62,7 +62,7 @@ next sync.
 
         python3 claude-code-plugin/scripts/dispatch.py search <your-candidate-name>
 
-    Exit code 0 + `(matches: 1)` means a collision. Exit code 1 + `No decorators match '...'` means the name is free.
+    Exit code 0 + `(matches: 1)` means a collision. Exit code 1 + `No decorators match '...'` means the name is free. Any other exit code (2, 127, etc.) indicates a script or environment problem, not a collision result — run from the repo root, or use an absolute path to `dispatch.py`.
 
 **Shadowing (intentional but surprising):** a user decorator with the
 same name as a vendored core decorator *replaces* the core one. This is
@@ -151,7 +151,9 @@ Minimal schema:
     ```
 
   Every value in the parameter's `enum` list should have a matching
-  `valueMap` entry — missing keys fall through to the base `instruction`.
+  `valueMap` entry. A missing key is a **silent no-op** — the base
+  `instruction` still renders, but no per-value fragment is appended, and
+  there is no warning. Validate your enum coverage yourself before shipping.
 
 <bad-example>
 - Instruction text that says "please think about X" - too vague.
@@ -163,6 +165,11 @@ Minimal schema:
 
 ### Step 4: Place the file
 
+Filename convention for **both** destinations: lowercase kebab-case
+(`confidence-intervals.json`). The engine reads the `decoratorName` field
+from inside the file, not the filename, but kebab-case matches the rest
+of the registry.
+
 For a **personal** decorator (matches step 1's first row):
 
 ```bash
@@ -171,25 +178,25 @@ For a **personal** decorator (matches step 1's first row):
 # nowhere.
 mkdir -p "$HOME/.config/prompt-decorators/extensions/<your-namespace>"
 
-# Write the decorator JSON (replace path with your editor of choice).
-$EDITOR "$HOME/.config/prompt-decorators/extensions/<your-namespace>/<decorator-name>.json"
+# Create the decorator JSON at:
+#   $HOME/.config/prompt-decorators/extensions/<your-namespace>/<decorator-name>.json
+# using any editor, or a heredoc.
 ```
 
-Override the base directory with `PROMPT_DECORATORS_USER_REGISTRY=/some/path`
-if you want a different location. Once the file lands anywhere under the
-user-registry tree, the `UserPromptSubmit` hook and `/decorate preview`
-both register it via `DynamicDecorator.register_decorator` at runtime - the
-decorator is usable inline (`::YourName`) with no sync step.
+If you've set `PROMPT_DECORATORS_USER_REGISTRY` to override the base
+directory, `mkdir -p` and write the JSON under **that** path instead —
+the hook and `/decorate preview` both scan the override, not
+`$HOME/.config/`. Verify writability with `test -w <path>`.
+
+Once the file lands anywhere under the user-registry tree, the
+`UserPromptSubmit` hook and `/decorate preview` both register it via
+`DynamicDecorator.register_decorator` at runtime — the decorator is
+usable inline (`::YourName`) with no sync step.
 
 For a **contribution** back to the shared catalogue (matches step 1's
 second row), open a PR against `synaptiai/prompt-decorators` adding the
 file under the appropriate `registry/core/<category>/` directory, and
 then re-sync the vendor per `claude-code-plugin/VENDORING.md`.
-
-The `<decorator-name>` in the filename should be lowercase kebab-case
-(`confidence-intervals.json`) - the engine reads the `decoratorName` field
-from inside, not the filename, but kebab-case filenames match the rest of
-the registry.
 
 ### Step 5: Unit test
 
@@ -206,7 +213,14 @@ for personal decorators.
 **Contribution decorator** (step 1's second row):
 
 Add a test under `claude-code-plugin/tests/test_hook.py` proving the hook
-expands your sigil. Reuse the shared helpers from `tests/conftest.py`:
+expands your sigil. This test assumes your decorator JSON is committed
+under the upstream `registry/core/<category>/` and vendored into
+`claude-code-plugin/vendor/prompt_decorators/registry/` (per Step 4), so
+the hook discovers it through the built-in registry walk without any
+per-test `USER_REGISTRY` override. The `conftest.py` autouse fixture
+already isolates config and log paths.
+
+Reuse the shared helpers from `tests/conftest.py`:
 
 ```python
 import json
@@ -214,10 +228,9 @@ import json
 from conftest import make_event, run_hook_subprocess
 
 
-def test_my_new_decorator(tmp_path):
+def test_my_new_decorator():
     out, _, rc = run_hook_subprocess(
         make_event("::ConfidenceIntervals(style=qualitative)\nHow many users do we have?"),
-        env={"PROMPT_DECORATORS_CONFIG_DIR": str(tmp_path)},
     )
     assert rc == 0
     data = json.loads(out)
@@ -225,6 +238,11 @@ def test_my_new_decorator(tmp_path):
     assert "confidence" in ctx.lower()
     assert "qualitative" in ctx.lower()
 ```
+
+If you want to test a decorator that still lives only in a user-extension
+directory (because the contribution PR hasn't landed yet), use the
+`write_user_decorator` + `PROMPT_DECORATORS_USER_REGISTRY` pattern — see
+other tests in `test_hook.py` for examples.
 
 Run the suite:
 
@@ -241,13 +259,32 @@ python3 claude-code-plugin/scripts/dispatch.py search "ConfidenceIntervals"
 # Preview the expansion your users will see.
 python3 claude-code-plugin/scripts/dispatch.py preview ConfidenceIntervals
 
-# Exercise the hook directly.
+# Exercise the hook directly — this is the canonical verification for
+# personal decorators and the most reliable check for contributions too.
 echo '{"hook_event_name":"UserPromptSubmit","prompt":"::ConfidenceIntervals\nHow many users?"}' | \
   python3 claude-code-plugin/hooks/scripts/decorate_hook.py
 ```
 
 The last command should print a JSON object whose `additionalContext`
-field contains your instruction text.
+field contains your instruction text. If `preview` fails with
+`Decorator '...' not found in registry` but the hook smoke-test works,
+trust the hook — it's the runtime path users actually hit.
+
+**If the hook smoke-test produces no `additionalContext`:**
+
+1. Re-run with debug logging: `PROMPT_DECORATORS_LOG_DEBUG=1 echo ... | python3 ...`.
+2. Inspect the log at `~/.cache/prompt-decorators/hook.log` (or whatever
+   `$PROMPT_DECORATORS_LOG` points to). Look for these event phases:
+   - `parse_error` — your decorator JSON is malformed.
+   - `user_registry_rejected` — the security gate refused it; the `reason`
+     field tells you which check tripped (`unsafe_field`,
+     `unsafe_template_instruction_triple_quote`, etc.).
+   - `user_registry_shadow` — your name collides with a vendored core
+     decorator. Rename unless you meant to shadow.
+   - `user_registry_missing` — you set `PROMPT_DECORATORS_USER_REGISTRY`
+     to a path that doesn't exist (likely a typo).
+3. If the hook exits non-zero or prints to stderr, capture the traceback
+   — it's the fastest path to a fix.
 
 ## User Interaction
 
@@ -289,6 +326,10 @@ The decorator is not ready to ship if any of these hold:
   hook smoke-test must produce an `additionalContext` containing the
   instruction text. For a **contribution** decorator, a committed test in
   `claude-code-plugin/tests/test_hook.py` must pass.
+- `~/.cache/prompt-decorators/hook.log` (or `$PROMPT_DECORATORS_LOG`)
+  contains `parse_error`, `user_registry_rejected`, `user_registry_shadow`,
+  or `user_registry_missing` events for your file. All four mean something
+  you control is wrong — treat them as blockers, not warnings.
 - Parameter validation is absent for enum-style params.
 - The file is placed under `claude-code-plugin/vendor/...` - the vendored
   copy is wiped on every upstream sync. Put personal decorators in
