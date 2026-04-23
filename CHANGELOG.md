@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-04-23
+
+### Fixed
+
+- `parse_decorator` now correctly parses negative integers, negative floats,
+  and scientific notation. The previous `.isdigit()` / `.replace(".", "", 1).isdigit()`
+  detection rejected any value containing a sign or an exponent, so
+  `+++Dec(x=-5)` was silently kept as the string `"-5"` instead of the
+  integer `-5`. Delegates to Python's own `int()` / `float()` parsers (#149, #151).
+- Non-finite float literals (`nan`, `inf`, `-inf`, `NaN`, `Infinity`) are
+  now rejected at parse time. Previously `float("nan")` succeeded and a
+  `NaN` value silently bypassed numeric validators because `NaN < bound`
+  is `False` for every bound. `math.isfinite` guards adoption; non-finite
+  literals fall through and hit normal string type-validation (#149, #151).
+- `claude-code-plugin/vendor/prompt_decorators/` is now byte-equivalent to
+  the upstream `prompt_decorators/` tree. Both parser patches have landed
+  upstream, so future `cp -r` syncs no longer require re-application (#149, #151).
+
+### Changed
+
+- Consolidated security bump closing 24 Dependabot alerts across dev and
+  runtime dependencies (#150).
+
 ## [0.10.0] - 2026-04-23
 
 ### Added
