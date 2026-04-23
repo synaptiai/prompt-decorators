@@ -476,15 +476,16 @@ def main() -> int:
     any unexpected exception (BrokenPipeError, UnicodeDecodeError on stdin,
     TypeError from malformed config, etc.) must be logged and swallowed.
 
-    We widen to `BaseException` specifically because a bug or library call
-    chain inside the engine could raise `SystemExit` (e.g. argparse-style
-    exits in an imported module), which doesn't inherit from `Exception`
-    and would otherwise bypass our fail-open guarantee and block the
-    user's prompt with a non-zero exit.
+    We extend `Exception` with `SystemExit` specifically because a bug or
+    library call chain inside the engine could raise `SystemExit` (e.g.
+    argparse-style exits in an imported module), which doesn't inherit
+    from `Exception` and would otherwise bypass our fail-open guarantee
+    and block the user's prompt with a non-zero exit. `KeyboardInterrupt`
+    is deliberately NOT caught so the user can Ctrl-C out of a hung hook.
     """
     try:
         return _main_impl()
-    except BaseException as e:  # noqa: BLE001
+    except (Exception, SystemExit) as e:  # noqa: BLE001
         try:
             log(
                 {
@@ -494,7 +495,7 @@ def main() -> int:
                     "tb": redact(traceback.format_exc())[:2000],
                 }
             )
-        except BaseException:  # noqa: BLE001
+        except Exception:  # noqa: BLE001
             pass
         return 0
 

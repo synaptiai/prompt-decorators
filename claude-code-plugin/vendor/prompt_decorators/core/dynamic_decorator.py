@@ -14,6 +14,7 @@ Typical usage:
 
 import json
 import logging
+import math
 import os
 import re
 from importlib import resources
@@ -989,13 +990,20 @@ def parse_decorator(decorator_text: str) -> Tuple[str, Dict[str, Any]]:
                 # string `"-5"` instead of the integer -5. Delegate to
                 # Python's own numeric parsers which handle signs,
                 # floats, and scientific notation uniformly.
+                #
+                # `float("nan")` / `float("inf")` also succeed here; reject
+                # non-finite values so they stay as strings (NaN compares
+                # False against every bound, silently bypassing validators).
                 try:
                     param_value = int(param_value)
                 except (TypeError, ValueError):
                     try:
-                        param_value = float(param_value)
+                        parsed = float(param_value)
                     except (TypeError, ValueError):
                         pass  # keep as string
+                    else:
+                        if math.isfinite(parsed):
+                            param_value = parsed
 
             params[param_name] = param_value
 

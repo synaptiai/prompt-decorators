@@ -143,6 +143,83 @@ def test_json_scalar_event_is_safe(tmp_path):
     assert proc.stdout == ""
 
 
+def test_systemexit_is_swallowed(tmp_path):
+    """Cycle-6 / O1 regression: a `sys.exit(N)` from inside the hook impl
+    (e.g. a buggy decorator module calling argparse or `sys.exit` at import)
+    must be caught by the outer guard so the user's prompt is not blocked."""
+    import os
+    import textwrap
+
+    harness = textwrap.dedent(
+        """
+        import sys
+        sys.path.insert(0, r"{hook_dir}")
+        import decorate_hook
+
+        def boom():
+            raise SystemExit(7)
+
+        decorate_hook._main_impl = boom
+        rc = decorate_hook.main()
+        assert rc == 0, f"SystemExit must be swallowed, got rc={{rc}}"
+        print("OK")
+        """
+    ).format(hook_dir=str(HOOK.parent))
+
+    merged = os.environ.copy()
+    merged["PROMPT_DECORATORS_CONFIG_DIR"] = str(tmp_path)
+    proc = subprocess.run(
+        [sys.executable, "-c", harness],
+        capture_output=True,
+        text=True,
+        env=merged,
+        timeout=10,
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert "OK" in proc.stdout
+
+
+def test_keyboardinterrupt_not_swallowed(tmp_path):
+    """Cycle-6 / O1 regression: the outer guard must NOT catch
+    `KeyboardInterrupt`. Previously a `BaseException` catch swallowed
+    Ctrl-C, preventing the user from interrupting a hung hook."""
+    import os
+    import textwrap
+
+    harness = textwrap.dedent(
+        """
+        import sys
+        sys.path.insert(0, r"{hook_dir}")
+        import decorate_hook
+
+        def boom():
+            raise KeyboardInterrupt
+
+        decorate_hook._main_impl = boom
+        try:
+            decorate_hook.main()
+        except KeyboardInterrupt:
+            print("PROPAGATED")
+            sys.exit(0)
+        print("SWALLOWED")
+        sys.exit(1)
+        """
+    ).format(hook_dir=str(HOOK.parent))
+
+    merged = os.environ.copy()
+    merged["PROMPT_DECORATORS_CONFIG_DIR"] = str(tmp_path)
+    proc = subprocess.run(
+        [sys.executable, "-c", harness],
+        capture_output=True,
+        text=True,
+        env=merged,
+        timeout=10,
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert "PROPAGATED" in proc.stdout
+    assert "SWALLOWED" not in proc.stdout
+
+
 def test_malformed_event_is_safe(tmp_path):
     import os
 

@@ -101,3 +101,17 @@ def test_parse_decorator_negative_number_direct(pd_common):
     _, params = parse_decorator("+++BuildOn(reference=-42)")
     assert params["reference"] == -42
     assert isinstance(params["reference"], int)
+
+
+@pytest.mark.parametrize("literal", ["nan", "inf", "-inf", "NaN", "Infinity"])
+def test_parse_decorator_rejects_non_finite_floats(pd_common, literal):
+    """Cycle-6 / O2 regression: `float()` accepts 'nan', 'inf', '-inf' and
+    their variants. Non-finite floats bypass numeric validators silently
+    (NaN < X is always False), so they must stay as strings."""
+    from prompt_decorators.core.dynamic_decorator import parse_decorator
+
+    _, params = parse_decorator(f"+++BuildOn(reference={literal})")
+    assert (
+        params["reference"] == literal
+    ), f"{literal!r} must remain a string, not a non-finite float"
+    assert isinstance(params["reference"], str)
