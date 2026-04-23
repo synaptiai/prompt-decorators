@@ -277,6 +277,90 @@ def test_parse_decorator():
         parse_decorator("InvalidSyntax")
 
 
+@pytest.mark.parametrize(
+    "literal, expected_value, expected_type",
+    [
+        # Positive ints (pre-existing behavior preserved)
+        ("5", 5, int),
+        ("0", 0, int),
+        # Negatives — regression: `.isdigit()` returned False, parsed as string
+        ("-5", -5, int),
+        ("-42", -42, int),
+        # Floats — regression: `.isdigit()` after `.replace(".", "")` missed negatives
+        ("3.14", 3.14, float),
+        ("-3.14", -3.14, float),
+        # Scientific notation — regression: rejected outright by isdigit-based checks
+        ("1e3", 1000.0, float),
+        ("-1e-3", -0.001, float),
+        ("2.5e2", 250.0, float),
+        # Non-numeric strings fall through unchanged
+        ("notanumber", "notanumber", str),
+    ],
+)
+def test_parse_decorator_numeric_parameter_values(
+    literal, expected_value, expected_type
+):
+    """parse_decorator must handle negatives, floats, and scientific notation.
+
+    Regression against the pre-patch logic that used `.isdigit()` /
+    `.replace(".", "", 1).isdigit()`, which rejected any value containing
+    a sign or an exponent.
+    """
+    _, params = parse_decorator(f"+++Test(value={literal})")
+    actual = params["value"]
+    assert actual == expected_value
+    assert type(actual) is expected_type
+
+
+@pytest.mark.parametrize(
+    "literal, expected_value, expected_type",
+    [
+        # int() / float() accept these forms that the old .isdigit() logic
+        # rejected. Pin them so any future re-tightening is intentional.
+        ("+5", 5, int),
+        ("1_000", 1000, int),
+        ("1_000.5", 1000.5, float),
+        # Prefix literals: int() with default base=10 rejects 0x/0b/0o, so
+        # these stay as strings and hit downstream type validation.
+        ("0x10", "0x10", str),
+        ("0b10", "0b10", str),
+        ("0o10", "0o10", str),
+    ],
+)
+def test_parse_decorator_widened_numeric_grammar(
+    literal, expected_value, expected_type
+):
+    """Pin the numeric grammar accepted beyond the patch's documented scope.
+
+    The switch from `.isdigit()` to `int()` / `float()` silently widened the
+    grammar to include explicit `+` signs and underscore digit separators.
+    Prefix literals (0x/0b/0o) still fall through as strings. These tests
+    lock the new contract so a future refactor can't accidentally tighten
+    or further widen it without failing CI.
+    """
+    _, params = parse_decorator(f"+++Test(value={literal})")
+    actual = params["value"]
+    assert actual == expected_value
+    assert type(actual) is expected_type
+
+
+@pytest.mark.parametrize("literal", ["nan", "inf", "-inf", "NaN", "Infinity"])
+def test_parse_decorator_rejects_non_finite_floats(literal):
+    """Non-finite floats must stay as strings.
+
+    `float("nan")` / `float("inf")` succeed, so without a `math.isfinite`
+    guard, `+++Foo(n=nan)` would parse `n` as NaN. Numeric validators treat
+    `NaN < bound` as False for every bound, so a NaN would silently pass
+    range checks. Keeping non-finite literals as strings means downstream
+    validation sees a type mismatch and raises a clean error.
+    """
+    _, params = parse_decorator(f"+++Test(value={literal})")
+    assert (
+        params["value"] == literal
+    ), f"{literal!r} must remain a string, not a non-finite float"
+    assert isinstance(params["value"], str)
+
+
 def test_extract_decorators(temp_registry):
     """Test extracting decorators from a prompt string."""
     # Test basic extraction
