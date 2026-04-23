@@ -85,3 +85,29 @@ def _isolated_config(tmp_path, monkeypatch):
     for mod in ("pd_common", "dispatch", "decorate_hook", "auto_decorate"):
         sys.modules.pop(mod, None)
     yield
+
+
+@pytest.fixture(autouse=True)
+def _clean_engine_registry():
+    """Clear the vendored DynamicDecorator._registry between tests.
+
+    The engine's decorator registry is module-level class state. A test that
+    registers a user decorator (e.g. via register_user_decorators or a direct
+    DynamicDecorator.register_decorator call) leaves that name in the
+    registry for every subsequent test. Most tests self-heal because they
+    call load_registry() which clears and reloads, but tests that skip that
+    path can see stale names. Explicit cleanup keeps the default safe.
+
+    Do NOT import the engine if it wasn't already loaded by the test — the
+    import would pick up any pip-installed `prompt_decorators` (if present
+    in site-packages) and cache the wrong module for the remaining session,
+    masking the vendored copy that ensure_engine_on_path is meant to select.
+    """
+    yield
+    engine_mod = sys.modules.get("prompt_decorators.core.dynamic_decorator")
+    if engine_mod is None:
+        return
+    try:
+        engine_mod.DynamicDecorator._registry.clear()
+    except Exception:  # noqa: BLE001
+        pass

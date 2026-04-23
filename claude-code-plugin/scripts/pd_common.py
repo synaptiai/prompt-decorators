@@ -1,7 +1,8 @@
 """Shared helpers for the prompt-decorators Claude Code plugin.
 
-Keeps engine bootstrap, config read/write, registry walk, and logging in one
-place so the hook and dispatcher stay short.
+Keeps engine bootstrap, config read/write, registry walk, logging, and
+user-extension decorator registration in one place so the hook and
+dispatcher stay short.
 """
 
 from __future__ import annotations
@@ -417,10 +418,19 @@ def register_user_decorators() -> None:
         the engine's triple-quoted string literal and smuggle code into
         the `exec()` rendering.
     """
-    user_dir = user_registry_dir()
-    if user_dir is None or not user_dir.exists():
-        return
+    # Engine must be on sys.path whether or not a user dir exists — callers
+    # depend on that side effect to then import the engine themselves.
     ensure_engine_on_path()
+    user_dir = user_registry_dir()
+    if user_dir is None:
+        return
+    if not user_dir.exists():
+        # Default path legitimately may not exist (user hasn't authored any
+        # personal decorators yet). But if they set an override and point it
+        # somewhere absent, that's almost always a typo worth surfacing.
+        if os.environ.get("PROMPT_DECORATORS_USER_REGISTRY"):
+            log({"phase": "user_registry_missing", "path": str(user_dir)})
+        return
     try:
         from prompt_decorators.core.dynamic_decorator import DynamicDecorator
     except Exception as e:  # noqa: BLE001
@@ -434,6 +444,11 @@ def register_user_decorators() -> None:
     DynamicDecorator.load_registry()
     loaded = 0
     rejected = 0
+    # Track names seen in THIS pass so we can flag user-over-user collisions
+    # (two user JSON files declaring the same decoratorName). User-over-
+    # vendored shadows are already logged by _walk_registry; this catches
+    # the otherwise-silent within-extensions case.
+    user_seen: set[str] = set()
     for path in user_dir.rglob("*.json"):
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
@@ -470,14 +485,26 @@ def register_user_decorators() -> None:
                     }
                 )
                 continue
+            name = data.get("decoratorName") or data.get("name")
+            if name and name in user_seen:
+                log(
+                    {
+                        "phase": "user_registry_duplicate",
+                        "file": str(path),
+                        "name": name,
+                    }
+                )
             DynamicDecorator.register_decorator(data)
             loaded += 1
+            if name:
+                user_seen.add(name)
         except Exception as e:  # noqa: BLE001
             log(
                 {
                     "phase": "user_registry_load_error",
                     "file": str(path),
                     "error_type": type(e).__name__,
+                    "error": redact(str(e))[:300],
                 }
             )
     if loaded or rejected:

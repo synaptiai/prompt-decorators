@@ -40,7 +40,6 @@ from pd_common import (  # noqa: E402
     MODE_OFF,
     MODE_ON,
     bare_name,
-    ensure_engine_on_path,
     load_config,
     register_user_decorators,
     registry_decorators,
@@ -120,17 +119,42 @@ def cmd_preview(args: list[str]) -> int:
     sigil = args[0]
     if "(" not in sigil and len(args) > 1:
         sigil = f"{sigil}({','.join(args[1:])})"
-    if not _require_decorator(bare_name(sigil)):
+    name = bare_name(sigil)
+    if not _require_decorator(name):
         return 1
-    ensure_engine_on_path()
+    # Register user-extension decorators first — the function ensures the
+    # engine is on sys.path, so this also bootstraps the engine for the
+    # import below. Both operations can surface errors we want to handle
+    # gracefully instead of bubbling a traceback.
+    try:
+        register_user_decorators()
+    except Exception as e:  # noqa: BLE001
+        _print(f"Error preparing user-extension registry: {e}")
+        return 1
     try:
         from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators
     except Exception as e:  # noqa: BLE001
         _print(f"Error loading engine: {e}")
         return 1
-    # Match the hook: user-extension decorators aren't in the engine's
-    # built-in registry, so register them before expansion.
-    register_user_decorators()
+    # `_require_decorator` passed (name exists in `_walk_registry`'s metadata)
+    # but if registration didn't put it in the engine, the decorator was
+    # rejected by the security gate in `register_user_decorators`. Surface
+    # that rather than silently returning an empty expansion.
+    try:
+        from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+
+        if name not in DynamicDecorator._registry:
+            _print(
+                f"'{name}' is listed in the registry metadata but was "
+                f"rejected by the user-registry security gate. Inspect "
+                f"~/.cache/prompt-decorators/hook.log (or $PROMPT_DECORATORS_LOG) "
+                f"for the 'user_registry_rejected' event and its reason."
+            )
+            return 1
+    except Exception:  # noqa: BLE001
+        # Engine introspection failed — fall through and let
+        # apply_dynamic_decorators raise if it has to.
+        pass
     sample = f"+++{sigil}\n<user prompt goes here>"
     expanded = apply_dynamic_decorators(sample)
     _print(f"### Expansion of +++{sigil}\n\n{expanded}")
