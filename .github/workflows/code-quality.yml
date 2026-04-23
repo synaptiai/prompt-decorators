@@ -85,3 +85,27 @@ jobs:
           poetry install --with mcp
       - name: Check docstrings
         run: python scripts/standardize_docstrings.py prompt_decorators --check
+
+  vendor-sync-check:
+    needs: pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check plugin vendor is in sync with prompt_decorators/
+        run: |
+          if diff -rq \
+              --exclude='__pycache__' \
+              --exclude='*.pyc' \
+              prompt_decorators \
+              claude-code-plugin/vendor/prompt_decorators; then
+            echo "Vendor tree is in sync."
+          else
+            echo ""
+            echo "::error::claude-code-plugin/vendor/prompt_decorators has drifted from prompt_decorators/."
+            echo "Run the sync from claude-code-plugin/VENDORING.md:"
+            echo "  rm -rf claude-code-plugin/vendor/prompt_decorators"
+            echo "  cp -r prompt_decorators claude-code-plugin/vendor/prompt_decorators"
+            echo "  find claude-code-plugin/vendor -type d -name __pycache__ -exec rm -rf {} +"
+            echo "  find claude-code-plugin/vendor -type f -name '*.pyc' -delete"
+            exit 1
+          fi
