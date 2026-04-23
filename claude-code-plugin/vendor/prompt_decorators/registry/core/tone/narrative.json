@@ -1,0 +1,121 @@
+{
+  "decoratorName": "Narrative",
+  "version": "1.0.0",
+  "description": "Structures the response as a story-based delivery with narrative elements. This decorator employs storytelling techniques to make information more engaging, memorable, and contextually rich.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "structure",
+      "type": "enum",
+      "description": "The narrative structure to employ",
+      "enum": ["classic", "nonlinear", "case-study"],
+      "default": "classic",
+      "required": false
+    },
+    {
+      "name": "characters",
+      "type": "boolean",
+      "description": "Whether to include character elements in the narrative",
+      "default": true,
+      "required": false
+    },
+    {
+      "name": "length",
+      "type": "enum",
+      "description": "The relative length of the narrative",
+      "enum": ["brief", "moderate", "extended"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a story-based delivery that uses narrative elements and storytelling techniques to make the information engaging, memorable, and contextually rich.",
+    "parameterMapping": {
+      "structure": {
+        "valueMap": {
+          "classic": "Use a traditional narrative arc with a clear beginning, middle, and end, following a logical progression of setup, conflict/challenge, and resolution.",
+          "nonlinear": "Use a nonlinear narrative structure that may include flashbacks, flash-forwards, or parallel storylines to present the information from multiple temporal perspectives.",
+          "case-study": "Structure the response as a real or hypothetical case study that examines specific situations, decisions, and outcomes to illustrate the key points."
+        }
+      },
+      "characters": {
+        "valueMap": {
+          "true": "Include character elements such as personas, stakeholders, or representative individuals that the audience can relate to and follow throughout the narrative.",
+          "false": "Focus on situations, processes, and outcomes without personifying the narrative through specific characters or personas."
+        }
+      },
+      "length": {
+        "valueMap": {
+          "brief": "Keep the narrative concise and focused, using storytelling elements economically while still conveying the essential information.",
+          "moderate": "Develop the narrative with sufficient detail to engage the reader while maintaining a balanced pace and moderate length.",
+          "extended": "Create a fully developed narrative with rich details, multiple story beats, and thorough exploration of the topic through storytelling."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Classic narrative explanation of the stock market",
+        "originalPrompt": "Explain how the stock market works.",
+        "transformedPrompt": "Please structure your response as a story-based delivery that uses narrative elements and storytelling techniques to make the information engaging, memorable, and contextually rich. Use a traditional narrative arc with a clear beginning, middle, and end, following a logical progression of setup, conflict/challenge, and resolution. Include character elements such as personas, stakeholders, or representative individuals that the audience can relate to and follow throughout the narrative. Develop the narrative with sufficient detail to engage the reader while maintaining a balanced pace and moderate length.\n\nExplain how the stock market works."
+      },
+      {
+        "context": "Brief case study of social media impact without characters",
+        "originalPrompt": "Describe the impact of social media on mental health.",
+        "transformedPrompt": "Please structure your response as a story-based delivery that uses narrative elements and storytelling techniques to make the information engaging, memorable, and contextually rich. Structure the response as a real or hypothetical case study that examines specific situations, decisions, and outcomes to illustrate the key points. Focus on situations, processes, and outcomes without personifying the narrative through specific characters or personas. Keep the narrative concise and focused, using storytelling elements economically while still conveying the essential information.\n\nDescribe the impact of social media on mental health."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Creative",
+        "relationship": "enhances",
+        "notes": "Creative and Narrative work exceptionally well together to produce engaging and imaginative storytelling"
+      },
+      {
+        "decorator": "Academic",
+        "relationship": "conflicts",
+        "notes": "Academic's formal scholarly conventions may conflict with Narrative's story-based approach, though case studies can bridge this gap"
+      },
+      {
+        "decorator": "Timeline",
+        "relationship": "enhances",
+        "notes": "Timeline can complement Narrative by adding clear chronological structure to story-based explanations"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Present this information as a {length} {structure} story. {characters} Use narrative elements like setting, plot development, and thematic threads to explain the concepts. Make the information engaging while ensuring accuracy.",
+        "notes": "This model sometimes needs reminder to maintain factual accuracy while employing narrative techniques"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Classic narrative structure to explain a concept",
+      "usage": "+++Narrative\nExplain how the stock market works.",
+      "result": "Explains the stock market through a classic narrative structure, introducing character elements and following a traditional story arc"
+    },
+    {
+      "description": "Brief case study without character elements",
+      "usage": "+++Narrative(structure=case-study, characters=false, length=brief)\nDescribe the impact of social media on mental health.",
+      "result": "Presents a concise case study narrative about social media's impact on mental health, focusing on situations and outcomes without personified characters"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

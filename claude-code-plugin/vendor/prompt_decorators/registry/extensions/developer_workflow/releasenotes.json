@@ -1,0 +1,134 @@
+{
+  "decoratorName": "ReleaseNotes",
+  "version": "1.0.0",
+  "description": "Creates structured release notes for product updates.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "audience",
+      "type": "enum",
+      "description": "Target reader",
+      "enum": [
+        "users",
+        "developers",
+        "stakeholders",
+        "public"
+      ],
+      "default": "users",
+      "required": false
+    },
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Information depth",
+      "enum": [
+        "high-level",
+        "detailed"
+      ],
+      "default": "detailed",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Release note structure",
+      "enum": [
+        "changelog",
+        "narrative",
+        "categorized",
+        "markdown",
+        "html"
+      ],
+      "default": "categorized",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create structured release notes for the product update. Focus on clarity and organization.",
+    "parameterMapping": {
+      "audience": {
+        "valueMap": {
+          "users": "Target the release notes for end users, focusing on benefits and user-facing changes.",
+          "developers": "Target the release notes for developers, including technical details and API changes.",
+          "stakeholders": "Target the release notes for business stakeholders, emphasizing business impact and strategic value.",
+          "public": "Target the release notes for public consumption, balancing technical details with accessible language."
+        }
+      },
+      "detail": {
+        "valueMap": {
+          "high-level": "Provide a concise overview of major changes without extensive details.",
+          "detailed": "Include comprehensive details about all changes, including minor improvements and fixes."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "changelog": "Structure as a traditional changelog with version numbers and dated entries.",
+          "narrative": "Present as a narrative story highlighting the evolution and improvements.",
+          "categorized": "Organize changes into categories (Features, Improvements, Fixes, etc.).",
+          "markdown": "Format using Markdown syntax for easy integration with documentation systems.",
+          "html": "Format using HTML for web publication with appropriate tags and structure."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software product update",
+        "originalPrompt": "Create release notes for version 2.3.0 which includes new payment methods, performance improvements, and bug fixes.",
+        "transformedPrompt": "Create structured release notes for the product update. Focus on clarity and organization. Target the release notes for end users, focusing on benefits and user-facing changes. Include comprehensive details about all changes, including minor improvements and fixes. Organize changes into categories (Features, Improvements, Fixes, etc.).\n\nCreate release notes for version 2.3.0 which includes new payment methods, performance improvements, and bug fixes.",
+        "notes": "The decorator adds structure and guidance for creating professional release notes tailored to the specified audience and format."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "TechnicalWriting",
+        "relationship": "enhances",
+        "notes": "TechnicalWriting can enhance the clarity and professionalism of the release notes."
+      },
+      {
+        "decorator": "Summarize",
+        "relationship": "conflicts",
+        "notes": "Summarize may contradict the detailed nature of release notes, especially when detail=detailed."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Generate structured release notes for this product update. Organize information clearly for the specified audience.",
+        "notes": "Simpler instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Creating detailed release notes for users in markdown format",
+      "usage": "+++ReleaseNotes(audience=users, detail=detailed, format=markdown)\nCreate release notes for version 2.3.0 which includes new payment methods, performance improvements, and bug fixes.",
+      "result": "Produces comprehensive, user-focused release notes in markdown format, categorizing the new payment methods, performance improvements, and bug fixes."
+    },
+    {
+      "description": "High-level release notes for stakeholders",
+      "usage": "+++ReleaseNotes(audience=stakeholders, detail=high-level, format=narrative)\nCreate release notes for our quarterly update with revenue impact features.",
+      "result": "Generates concise, business-focused release notes in a narrative style, emphasizing strategic value and business impact."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Summarize"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

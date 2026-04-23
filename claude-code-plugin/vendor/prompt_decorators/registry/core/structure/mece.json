@@ -1,0 +1,123 @@
+{
+  "decoratorName": "MECE",
+  "version": "1.0.0",
+  "description": "Structures the response using the Mutually Exclusive, Collectively Exhaustive framework - a principle where categories have no overlaps and cover all possibilities. This decorator ensures comprehensive analysis with clear categorization for decision-making and problem-solving.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "dimensions",
+      "type": "number",
+      "description": "Number of top-level MECE dimensions to use for categorization",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Maximum level of hierarchical breakdown within each dimension",
+      "default": 2,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 3
+      }
+    },
+    {
+      "name": "framework",
+      "type": "enum",
+      "description": "Optional predefined MECE framework to apply",
+      "enum": ["issue tree", "value chain", "business segments", "stakeholders", "custom"],
+      "default": "custom",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response using the Mutually Exclusive, Collectively Exhaustive (MECE) framework, ensuring all categories are distinct with no overlaps (mutually exclusive) and together cover all possible aspects (collectively exhaustive).",
+    "parameterMapping": {
+      "dimensions": {
+        "format": "Organize your analysis into exactly {value} distinct top-level MECE dimensions or categories."
+      },
+      "depth": {
+        "format": "For each top-level dimension, provide a hierarchical breakdown with up to {value} sub-levels of categorization."
+      },
+      "framework": {
+        "valueMap": {
+          "issue tree": "Use an issue tree framework to break down the topic into a hierarchy of questions and sub-questions, ensuring comprehensive coverage of all relevant issues.",
+          "value chain": "Apply a value chain framework to analyze the topic across all activities that add value, from inputs to final outputs/outcomes.",
+          "business segments": "Categorize the analysis using business segments such as products/services, customer segments, geographical regions, and operational functions.",
+          "stakeholders": "Structure the analysis around all relevant stakeholders, ensuring every entity affected by or influencing the topic is considered.",
+          "custom": "Develop a custom MECE framework tailored specifically to this topic, with categories that best fit the subject matter."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "MECE analysis of market expansion factors",
+        "originalPrompt": "What factors should we consider when expanding to a new market?",
+        "transformedPrompt": "Please structure your response using the Mutually Exclusive, Collectively Exhaustive (MECE) framework, ensuring all categories are distinct with no overlaps (mutually exclusive) and together cover all possible aspects (collectively exhaustive). Organize your analysis into exactly 3 distinct top-level MECE dimensions or categories. For each top-level dimension, provide a hierarchical breakdown with up to 2 sub-levels of categorization. Develop a custom MECE framework tailored specifically to this topic, with categories that best fit the subject matter.\n\nWhat factors should we consider when expanding to a new market?"
+      },
+      {
+        "context": "Stakeholder-focused MECE analysis of work week change",
+        "originalPrompt": "Analyze the implications of implementing a four-day work week.",
+        "transformedPrompt": "Please structure your response using the Mutually Exclusive, Collectively Exhaustive (MECE) framework, ensuring all categories are distinct with no overlaps (mutually exclusive) and together cover all possible aspects (collectively exhaustive). Organize your analysis into exactly 4 distinct top-level MECE dimensions or categories. For each top-level dimension, provide a hierarchical breakdown with up to 3 sub-levels of categorization. Structure the analysis around all relevant stakeholders, ensuring every entity affected by or influencing the topic is considered.\n\nAnalyze the implications of implementing a four-day work week."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Prioritize",
+        "relationship": "enhances",
+        "notes": "MECE provides comprehensive categorization, while Prioritize helps rank the identified categories by importance"
+      },
+      {
+        "decorator": "Structured",
+        "relationship": "enhances",
+        "notes": "MECE and Structured work well together to create clearly organized and comprehensive content"
+      },
+      {
+        "decorator": "FindGaps",
+        "relationship": "enhances",
+        "notes": "FindGaps can help verify the 'collectively exhaustive' aspect of a MECE analysis by identifying any missing categories"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a MECE (Mutually Exclusive, Collectively Exhaustive) analysis with {dimensions} main categories that don't overlap and together cover everything about this topic. Use the {framework} approach. For each main category, break it down into {depth} levels of sub-categories. Make sure there are no gaps in your analysis and no overlaps between categories.",
+        "notes": "This model sometimes struggles with maintaining true MECE principles and may need explicit reminders to check for category overlaps or gaps"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic MECE analysis of a business problem",
+      "usage": "+++MECE\nWhat factors should we consider when expanding to a new market?",
+      "result": "Organizes market expansion factors into 3 mutually exclusive, collectively exhaustive categories with no overlaps and full coverage of all considerations"
+    },
+    {
+      "description": "Detailed MECE framework with stakeholder focus",
+      "usage": "+++MECE(dimensions=4, depth=3, framework=stakeholders)\nAnalyze the implications of implementing a four-day work week.",
+      "result": "Provides a 4-dimension MECE analysis of a four-day work week using a stakeholder framework, with up to 3 levels of hierarchical breakdown within each stakeholder category"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

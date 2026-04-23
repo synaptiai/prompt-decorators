@@ -1,0 +1,125 @@
+{
+  "decoratorName": "BestPractices",
+  "version": "1.0.0",
+  "description": "Summarizes best practices for specific technologies or processes.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "for",
+      "type": "string",
+      "description": "Practice domain",
+      "default": "context-dependent",
+      "required": true
+    },
+    {
+      "name": "context",
+      "type": "enum",
+      "description": "Implementation environment",
+      "enum": [
+        "startup",
+        "enterprise",
+        "personal",
+        "open-source"
+      ],
+      "default": "enterprise",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Output structure",
+      "enum": [
+        "list",
+        "detailed",
+        "examples",
+        "cookbook"
+      ],
+      "default": "detailed",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Provide a comprehensive summary of best practices for {for}.",
+    "parameterMapping": {
+      "for": {
+        "format": "Provide a comprehensive summary of best practices for {value}."
+      },
+      "context": {
+        "valueMap": {
+          "startup": "Focus on agile, cost-effective, and scalable approaches suitable for startup environments.",
+          "enterprise": "Emphasize enterprise-grade solutions with focus on security, compliance, and integration with existing systems.",
+          "personal": "Prioritize simplicity, ease of maintenance, and individual productivity.",
+          "open-source": "Consider community standards, contribution guidelines, and collaborative development practices."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "list": "Present the best practices as a concise, numbered list of key points.",
+          "detailed": "Provide detailed explanations for each best practice with rationale and implementation considerations.",
+          "examples": "Include concrete code examples or implementation scenarios for each best practice.",
+          "cookbook": "Structure the response as a step-by-step guide with practical recipes for implementation."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Node.js Development",
+        "originalPrompt": "How should I structure my Node.js project?",
+        "transformedPrompt": "Provide a comprehensive summary of best practices for Node.js project structure. Emphasize enterprise-grade solutions with focus on security, compliance, and integration with existing systems. Provide detailed explanations for each best practice with rationale and implementation considerations.\n\nHow should I structure my Node.js project?",
+        "notes": "The decorator adds specific guidance for the LLM to focus on best practices in the enterprise context with detailed explanations."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeExamples",
+        "relationship": "enhances",
+        "notes": "BestPractices works well with CodeExamples to provide practical implementations of the recommended practices."
+      },
+      {
+        "decorator": "Concise",
+        "relationship": "conflicts",
+        "notes": "When format=detailed or format=cookbook, this conflicts with the Concise decorator's goal of brevity."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Summarize industry best practices for {for} in a {format} format, optimized for {context} environments.",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Getting best practices for Node.js in an enterprise context with examples",
+      "usage": "+++BestPractices(for=node.js, context=enterprise, format=examples)\nProvide best practices for building production-ready Node.js microservices.",
+      "result": "The response will include best practices for Node.js development specifically tailored for enterprise environments, with concrete code examples for each practice."
+    },
+    {
+      "description": "Getting best practices for cloud security as a concise list",
+      "usage": "+++BestPractices(for=\"AWS cloud security\", format=list)\nWhat should I know about securing AWS resources?",
+      "result": "The response will provide a numbered list of key best practices for AWS cloud security."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "ELI5"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

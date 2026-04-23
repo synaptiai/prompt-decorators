@@ -1,0 +1,125 @@
+{
+  "decoratorName": "NegativeSpace",
+  "version": "1.0.0",
+  "description": "Focuses on analyzing what is not explicitly stated, implied, or missing from a topic or question. This decorator explores the 'negative space' by identifying unexplored angles, implicit assumptions, unasked questions, and contextual elements that may have been overlooked.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "The specific aspect of negative space to emphasize",
+      "enum": ["implications", "missing", "unstated", "comprehensive"],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "How deeply to explore the negative space",
+      "enum": ["surface", "moderate", "deep"],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "structure",
+      "type": "enum",
+      "description": "How to present the negative space analysis",
+      "enum": ["before", "after", "integrated", "separate"],
+      "default": "integrated",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please analyze the 'negative space' surrounding this topic - focusing on what is not explicitly stated, implied, or missing. Identify unexplored angles, implicit assumptions, unasked questions, and overlooked contextual elements.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "implications": "Focus primarily on the unstated implications and logical consequences that may not be immediately obvious.",
+          "missing": "Focus primarily on identifying missing elements, overlooked factors, and gaps in the topic or question.",
+          "unstated": "Focus primarily on unstated assumptions, implicit premises, and underlying beliefs that frame the topic.",
+          "comprehensive": "Take a comprehensive approach to negative space, addressing implications, missing elements, unstated assumptions, and other overlooked aspects."
+        }
+      },
+      "depth": {
+        "valueMap": {
+          "surface": "Provide a surface-level exploration of the negative space, identifying the most obvious unstated elements without extensive analysis.",
+          "moderate": "Conduct a moderately deep exploration of the negative space, with substantial attention to important unstated elements and their significance.",
+          "deep": "Perform a deep examination of the negative space, with thorough exploration of subtle, non-obvious unstated elements and their complex interconnections."
+        }
+      },
+      "structure": {
+        "valueMap": {
+          "before": "Present the negative space analysis before addressing the explicit content of the topic.",
+          "after": "First address the explicit content of the topic, then follow with the negative space analysis.",
+          "integrated": "Integrate the negative space analysis throughout your response, addressing both explicit content and unstated elements in parallel.",
+          "separate": "Clearly separate the negative space analysis from the explicit content with distinct sections and headings."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Comprehensive negative space analysis of social media impact",
+        "originalPrompt": "Discuss the impact of social media on society.",
+        "transformedPrompt": "Please analyze the 'negative space' surrounding this topic - focusing on what is not explicitly stated, implied, or missing. Identify unexplored angles, implicit assumptions, unasked questions, and overlooked contextual elements. Take a comprehensive approach to negative space, addressing implications, missing elements, unstated assumptions, and other overlooked aspects. Conduct a moderately deep exploration of the negative space, with substantial attention to important unstated elements and their significance. Integrate the negative space analysis throughout your response, addressing both explicit content and unstated elements in parallel.\n\nDiscuss the impact of social media on society."
+      },
+      {
+        "context": "Deep analysis of missing elements in AI safety approaches",
+        "originalPrompt": "Explain the current approaches to artificial intelligence safety.",
+        "transformedPrompt": "Please analyze the 'negative space' surrounding this topic - focusing on what is not explicitly stated, implied, or missing. Identify unexplored angles, implicit assumptions, unasked questions, and overlooked contextual elements. Focus primarily on identifying missing elements, overlooked factors, and gaps in the topic or question. Perform a deep examination of the negative space, with thorough exploration of subtle, non-obvious unstated elements and their complex interconnections. First address the explicit content of the topic, then follow with the negative space analysis.\n\nExplain the current approaches to artificial intelligence safety."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "BlindSpots",
+        "relationship": "enhances",
+        "notes": "NegativeSpace explores what's missing in the topic itself, while BlindSpots identifies cognitive biases in the analysis"
+      },
+      {
+        "decorator": "FindGaps",
+        "relationship": "enhances",
+        "notes": "NegativeSpace examines unstated aspects of a topic, while FindGaps identifies specific missing elements in a plan or proposal"
+      },
+      {
+        "decorator": "Limitations",
+        "relationship": "enhances",
+        "notes": "Limitations focuses on constraints of a described approach, while NegativeSpace identifies what hasn't been addressed at all"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "For this topic, I want you to think about what's NOT being said or asked. Consider: 1) Unstated {focus} that aren't directly mentioned, 2) Questions that should be asked but aren't, 3) Assumptions that underlie the topic, and 4) Important context that's missing. Explore this {depth}. {structure} This is about identifying the 'negative space' - what's missing from the picture rather than what's in it.",
+        "notes": "This model may need explicit reminders to distinguish between negative space analysis and standard critical thinking analysis"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic comprehensive negative space analysis",
+      "usage": "+++NegativeSpace\nDiscuss the impact of social media on society.",
+      "result": "Provides a discussion of social media's societal impact while integrating analysis of unstated assumptions, overlooked factors, and typically unaddressed implications"
+    },
+    {
+      "description": "Deep negative space analysis focused on missing elements",
+      "usage": "+++NegativeSpace(focus=missing, depth=deep, structure=after)\nExplain the current approaches to artificial intelligence safety.",
+      "result": "First explains current AI safety approaches, then provides a separate deep analysis of missing elements in the discussion, such as unstudied risks, overlooked stakeholders, and neglected scenarios"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

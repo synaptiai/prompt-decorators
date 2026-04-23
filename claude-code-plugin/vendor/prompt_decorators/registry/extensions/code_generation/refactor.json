@@ -1,0 +1,139 @@
+{
+  "decoratorName": "Refactor",
+  "version": "1.0.0",
+  "description": "Improves existing code structure while preserving functionality.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "goal",
+      "type": "enum",
+      "description": "Primary objective of the refactoring",
+      "enum": [
+        "performance",
+        "readability",
+        "maintainability",
+        "security",
+        "testability"
+      ],
+      "default": "maintainability",
+      "required": false
+    },
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "Extent of changes to make",
+      "enum": [
+        "minor",
+        "moderate",
+        "major"
+      ],
+      "default": "moderate",
+      "required": false
+    },
+    {
+      "name": "preserve",
+      "type": "enum",
+      "description": "Aspects that must be preserved",
+      "enum": [
+        "api",
+        "behavior",
+        "both"
+      ],
+      "default": "both",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Refactor the provided code to improve its structure while preserving its functionality. Focus on making the code more maintainable.",
+    "parameterMapping": {
+      "goal": {
+        "valueMap": {
+          "performance": "Refactor the code to optimize for performance. Look for inefficient algorithms, unnecessary computations, and opportunities for caching or parallelization.",
+          "readability": "Refactor the code to improve readability. Focus on clear naming, consistent formatting, and logical organization of code elements.",
+          "maintainability": "Refactor the code to enhance maintainability. Reduce complexity, improve modularity, and ensure the code follows best practices and design patterns.",
+          "security": "Refactor the code to address security concerns. Identify and fix potential vulnerabilities, implement proper input validation, and follow security best practices.",
+          "testability": "Refactor the code to improve testability. Make functions more modular, reduce dependencies, and ensure components can be tested in isolation."
+        }
+      },
+      "level": {
+        "valueMap": {
+          "minor": "Make minimal changes to the code structure while addressing the main issues.",
+          "moderate": "Perform a balanced refactoring that addresses key issues without completely rewriting the code.",
+          "major": "Conduct a comprehensive refactoring that may involve significant restructuring of the code."
+        }
+      },
+      "preserve": {
+        "valueMap": {
+          "api": "Ensure the public API (function signatures, return values, etc.) remains unchanged during refactoring.",
+          "behavior": "Maintain the exact same behavior and output for all inputs, even if the API changes.",
+          "both": "Preserve both the API and behavior of the code during refactoring."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Python function refactoring",
+        "originalPrompt": "Can you help me improve this function?\n\ndef get_user_data(id):\n  data = db.query(\"SELECT * FROM users WHERE id = \" + id)\n  return data",
+        "transformedPrompt": "Refactor the provided code to improve its structure while preserving its functionality. Focus on making the code more maintainable. Perform a balanced refactoring that addresses key issues without completely rewriting the code. Preserve both the API and behavior of the code during refactoring.\n\nCan you help me improve this function?\n\ndef get_user_data(id):\n  data = db.query(\"SELECT * FROM users WHERE id = \" + id)\n  return data",
+        "notes": "The refactoring should address the SQL injection vulnerability while maintaining the function signature and behavior."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CodeReview can be used before Refactor to identify issues that need to be addressed."
+      },
+      {
+        "decorator": "Rewrite",
+        "relationship": "conflicts",
+        "notes": "Rewrite typically creates new code from scratch, while Refactor preserves existing structure and functionality."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Refactor this code to improve its {goal} while making {level} changes and preserving {preserve}. Don't rewrite it completely - focus on structural improvements.",
+        "notes": "More explicit instructions help gpt-4 maintain the refactoring constraints."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Refactoring for performance with moderate changes",
+      "usage": "+++Refactor(goal=performance, level=moderate)\nRefactor this database query function that's causing performance issues.",
+      "result": "The model will refactor the code focusing on performance optimizations while making moderate changes to the structure."
+    },
+    {
+      "description": "Improving code readability while preserving API",
+      "usage": "+++Refactor(goal=readability, preserve=api)\nCan you refactor this legacy code to make it more readable?",
+      "result": "The model will focus on improving naming, formatting, and organization while ensuring the function signatures remain unchanged."
+    },
+    {
+      "description": "Major security refactoring",
+      "usage": "+++Refactor(goal=security, level=major)\nThis authentication code has security issues. Please refactor it.",
+      "result": "The model will perform extensive refactoring to address security vulnerabilities while maintaining the code's core functionality."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Rewrite",
+      "GenerateFromScratch"
+    ],
+    "minStandardVersion": "1.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

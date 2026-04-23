@@ -1,0 +1,135 @@
+{
+  "decoratorName": "Refine",
+  "version": "1.0.0",
+  "description": "Requests improvements to existing code while maintaining core functionality.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Refinement focus area",
+      "enum": [
+        "readability",
+        "performance",
+        "security",
+        "error-handling",
+        "types"
+      ],
+      "default": "readability",
+      "required": false
+    },
+    {
+      "name": "constraints",
+      "type": "enum",
+      "description": "Limitations on changes",
+      "enum": [
+        "preserve-api",
+        "preserve-logic",
+        "preserve-tests",
+        "preserve-all"
+      ],
+      "default": "preserve-api",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Refinement approach",
+      "enum": [
+        "targeted",
+        "comprehensive"
+      ],
+      "default": "targeted",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Refine the provided code while maintaining its core functionality. Focus on improving the code without changing its essential behavior.",
+    "parameterMapping": {
+      "focus": {
+        "valueMap": {
+          "readability": "Improve code readability with better naming, formatting, and structure.",
+          "performance": "Optimize code performance while maintaining the same functionality.",
+          "security": "Enhance security aspects of the code to prevent vulnerabilities.",
+          "error-handling": "Improve error handling to better manage exceptions and edge cases.",
+          "types": "Strengthen type definitions and type safety in the code."
+        }
+      },
+      "constraints": {
+        "valueMap": {
+          "preserve-api": "Maintain the existing API contract (method signatures, return types).",
+          "preserve-logic": "Keep the core business logic intact while improving implementation details.",
+          "preserve-tests": "Ensure all existing tests continue to pass with the refined code.",
+          "preserve-all": "Make minimal changes while still addressing the focus area."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "targeted": "Make focused, specific improvements to address the main issues.",
+          "comprehensive": "Perform a thorough refactoring addressing all aspects of the focus area."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Code refactoring for error handling",
+        "originalPrompt": "Improve error handling in this API controller to handle all edge cases and provide clear error messages.",
+        "transformedPrompt": "Refine the provided code while maintaining its core functionality. Focus on improving the code without changing its essential behavior. Improve error handling to better manage exceptions and edge cases. Maintain the existing API contract (method signatures, return types). Perform a thorough refactoring addressing all aspects of the focus area.\n\nImprove error handling in this API controller to handle all edge cases and provide clear error messages.",
+        "notes": "The decorator adds specific guidance on how to approach the code refinement task."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CodeReview can be used before Refine to identify issues that need refinement."
+      },
+      {
+        "decorator": "Rewrite",
+        "relationship": "conflicts",
+        "notes": "Refine focuses on improving existing code while Rewrite typically creates new implementations."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Improve the following code while keeping its main functionality the same. Focus on {focus} improvements while ensuring {constraints}. Take a {approach} approach to the refinement.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Improving error handling in an API controller",
+      "usage": "+++Refine(focus=error-handling, constraints=preserve-api, approach=comprehensive)\nImprove error handling in this API controller to handle all edge cases and provide clear error messages.",
+      "result": "The model will comprehensively improve error handling in the provided code while maintaining the existing API contract."
+    },
+    {
+      "description": "Making code more readable",
+      "usage": "+++Refine(focus=readability)\nMake this function easier to understand and maintain.",
+      "result": "The model will improve variable names, formatting, and structure while preserving the API and taking a targeted approach (defaults)."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Rewrite",
+      "GenerateFromScratch"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "decoratorName": "Backup",
+  "version": "1.0.0",
+  "description": "Designs backup and recovery strategies.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "criticality",
+      "type": "enum",
+      "description": "Data importance level",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "mission-critical"
+      ],
+      "default": "high",
+      "required": false
+    },
+    {
+      "name": "rpo",
+      "type": "enum",
+      "description": "Recovery Point Objective",
+      "enum": [
+        "minutes",
+        "hours",
+        "days",
+        "custom"
+      ],
+      "default": "hours",
+      "required": false
+    },
+    {
+      "name": "rto",
+      "type": "enum",
+      "description": "Recovery Time Objective",
+      "enum": [
+        "minutes",
+        "hours",
+        "days",
+        "custom"
+      ],
+      "default": "hours",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Design a backup and recovery strategy with the following requirements:",
+    "parameterMapping": {
+      "criticality": {
+        "valueMap": {
+          "low": "The data has low criticality. Basic backup measures are sufficient.",
+          "medium": "The data has medium criticality. Standard backup practices should be implemented.",
+          "high": "The data has high criticality. Robust backup solutions are required.",
+          "mission-critical": "The data is mission-critical. Implement enterprise-grade backup and recovery solutions with redundancy."
+        }
+      },
+      "rpo": {
+        "valueMap": {
+          "minutes": "Recovery Point Objective (RPO): Minutes - Data loss must be limited to minutes or less.",
+          "hours": "Recovery Point Objective (RPO): Hours - Data loss of up to a few hours is acceptable.",
+          "days": "Recovery Point Objective (RPO): Days - Data loss of up to a few days is acceptable.",
+          "custom": "Recovery Point Objective (RPO): Custom - Consider specific business requirements for acceptable data loss."
+        }
+      },
+      "rto": {
+        "valueMap": {
+          "minutes": "Recovery Time Objective (RTO): Minutes - Systems must be restored within minutes after failure.",
+          "hours": "Recovery Time Objective (RTO): Hours - Systems can be down for a few hours during recovery.",
+          "days": "Recovery Time Objective (RTO): Days - Systems can be down for a few days during recovery.",
+          "custom": "Recovery Time Objective (RTO): Custom - Consider specific business requirements for acceptable downtime."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Financial database backup planning",
+        "originalPrompt": "Design a backup and disaster recovery strategy for our financial transaction database.",
+        "transformedPrompt": "Design a backup and recovery strategy with the following requirements:\n\nThe data is mission-critical. Implement enterprise-grade backup and recovery solutions with redundancy.\nRecovery Point Objective (RPO): Minutes - Data loss must be limited to minutes or less.\nRecovery Time Objective (RTO): Minutes - Systems must be restored within minutes after failure.\n\nDesign a backup and disaster recovery strategy for our financial transaction database.",
+        "notes": "For financial systems, the decorator automatically applies the highest levels of protection and fastest recovery times."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "DisasterRecovery",
+        "relationship": "enhances",
+        "notes": "The Backup decorator works well with DisasterRecovery to create comprehensive data protection strategies."
+      },
+      {
+        "decorator": "CloudMigration",
+        "relationship": "enhances",
+        "notes": "Can be used to ensure proper backup strategies are included in cloud migration plans."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed backup and recovery strategy considering these requirements:",
+        "notes": "For smaller models, more explicit instructions about backup components may be needed."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Mission-critical financial system backup strategy",
+      "usage": "+++Backup(criticality=mission-critical, rpo=minutes, rto=minutes)\nDesign a backup and disaster recovery strategy for our financial transaction database.",
+      "result": "Produces a comprehensive backup strategy for financial data with zero data loss tolerance and immediate recovery capabilities."
+    },
+    {
+      "description": "Standard backup for development environment",
+      "usage": "+++Backup(criticality=low, rpo=days, rto=days)\nWhat backup strategy should we use for our development environment?",
+      "result": "Provides a cost-effective backup approach for non-critical development systems."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "decoratorName": "Optimize",
+  "version": "1.0.0",
+  "description": "Optimizes code for specific metrics while respecting constraints.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "for",
+      "type": "enum",
+      "description": "The primary optimization target",
+      "enum": [
+        "speed",
+        "memory",
+        "readability",
+        "size",
+        "network"
+      ],
+      "default": "speed",
+      "required": false
+    },
+    {
+      "name": "constraints",
+      "type": "enum",
+      "description": "Limitations that must be respected",
+      "enum": [
+        "backwards-compatible",
+        "minimal-changes",
+        "no-external-dependencies",
+        "same-api",
+        "none"
+      ],
+      "default": "none",
+      "required": false
+    },
+    {
+      "name": "priority",
+      "type": "enum",
+      "description": "Trade-off preference when optimizations conflict",
+      "enum": [
+        "max-gains",
+        "min-risk",
+        "balanced"
+      ],
+      "default": "balanced",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Optimize the code for {for} while respecting the following constraints: {constraints}. When optimizations conflict, prioritize {priority}.",
+    "parameterMapping": {
+      "for": {
+        "valueMap": {
+          "speed": "execution speed and performance",
+          "memory": "memory usage and efficiency",
+          "readability": "code clarity and maintainability",
+          "size": "code size and compactness",
+          "network": "network efficiency and reduced data transfer"
+        }
+      },
+      "constraints": {
+        "valueMap": {
+          "backwards-compatible": "maintaining backward compatibility",
+          "minimal-changes": "making minimal changes to the original code",
+          "no-external-dependencies": "using no additional external dependencies",
+          "same-api": "preserving the same API interface"
+        }
+      },
+      "priority": {
+        "valueMap": {
+          "max-gains": "maximum optimization gains even if it involves more risk",
+          "min-risk": "minimal risk approaches even if the optimization gains are smaller",
+          "balanced": "a balanced approach between optimization gains and risk"
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Python code optimization",
+        "originalPrompt": "Optimize this image processing function that's consuming too much memory:\n\ndef process_image(image):\n    result = []\n    for x in range(image.width):\n        for y in range(image.height):\n            pixel = image.get_pixel(x, y)\n            result.append(transform_pixel(pixel))\n    return result",
+        "transformedPrompt": "Optimize the code for memory usage and efficiency while respecting maintaining backward compatibility. When optimizations conflict, prioritize minimal risk approaches even if the optimization gains are smaller.\n\nOptimize this image processing function that's consuming too much memory:\n\ndef process_image(image):\n    result = []\n    for x in range(image.width):\n        for y in range(image.height):\n            pixel = image.get_pixel(x, y)\n            result.append(transform_pixel(pixel))\n    return result",
+        "notes": "The decorator prepends specific optimization instructions while preserving the original request."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Explain",
+        "relationship": "enhances",
+        "notes": "Can be combined with Explain to request optimization with explanations of the changes made."
+      },
+      {
+        "decorator": "Refactor",
+        "relationship": "conflicts",
+        "notes": "Both decorators attempt to modify code structure which may lead to conflicting instructions."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Please optimize this code for {for}, making sure to follow these constraints: {constraints}. When there are trade-offs to make, prioritize {priority}.",
+        "notes": "More explicit instruction format works better with this model."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Optimizing code for memory usage with backward compatibility",
+      "usage": "+++Optimize(for=memory, constraints=backwards-compatible, priority=min-risk)\nOptimize this image processing function that's consuming too much memory.",
+      "result": "The model will optimize the code focusing on memory efficiency, while ensuring backward compatibility and taking a conservative approach to changes."
+    },
+    {
+      "description": "Optimizing for speed with default constraints",
+      "usage": "+++Optimize(for=speed)\nMake this sorting algorithm faster.",
+      "result": "The model will focus on improving execution speed with balanced risk approach and no specific constraints."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Refactor"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

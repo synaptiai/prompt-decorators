@@ -1,0 +1,260 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prompt Decorator Schema",
+  "description": "Schema for prompt decorator definitions",
+  "type": "object",
+  "required": ["decoratorName", "version"],
+  "properties": {
+    "decoratorName": {
+      "type": "string",
+      "description": "Name of the decorator"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the decorator (e.g., 1.0.0)",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the decorator's purpose and behavior"
+    },
+    "author": {
+      "type": "object",
+      "description": "Information about the decorator's author",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Author's name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Author's email address",
+          "format": "email"
+        },
+        "url": {
+          "type": "string",
+          "description": "Author's URL",
+          "format": "uri"
+        }
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "description": "List of parameters accepted by the decorator",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Parameter name"
+          },
+          "type": {
+            "type": "string",
+            "description": "Parameter data type",
+            "enum": ["string", "number", "boolean", "array", "object", "enum"]
+          },
+          "description": {
+            "type": "string",
+            "description": "Parameter description"
+          },
+          "required": {
+            "type": "boolean",
+            "description": "Whether the parameter is required",
+            "default": false
+          },
+          "default": {
+            "description": "Default value for the parameter"
+          },
+          "enum": {
+            "type": "array",
+            "description": "Possible values for enum parameters",
+            "items": {
+              "type": "string"
+            }
+          },
+          "min": {
+            "type": "number",
+            "description": "Minimum value for numeric parameters"
+          },
+          "max": {
+            "type": "number",
+            "description": "Maximum value for numeric parameters"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "Regular expression pattern for string parameters"
+          }
+        }
+      }
+    },
+    "transformationTemplate": {
+      "type": "object",
+      "description": "Template for how this decorator transforms prompts",
+      "properties": {
+        "instruction": {
+          "type": "string",
+          "description": "Base instruction text to add to the prompt"
+        },
+        "parameterMapping": {
+          "type": "object",
+          "description": "How parameters modify the base instruction",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "valueMap": {
+                "type": "object",
+                "description": "Maps parameter values to specific instruction additions",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "format": {
+                "type": "string",
+                "description": "Format string for integrating parameter value (e.g., 'with {value} level of detail')"
+              }
+            }
+          }
+        },
+        "placement": {
+          "type": "string",
+          "enum": ["prepend", "append", "replace", "wrap"],
+          "default": "append",
+          "description": "How to place the transformed content relative to the original prompt"
+        },
+        "compositionBehavior": {
+          "type": "string",
+          "enum": ["accumulate", "override", "selective-override"],
+          "default": "accumulate",
+          "description": "How this decorator behaves when composed with others"
+        }
+      },
+      "required": ["instruction"]
+    },
+    "implementationGuidance": {
+      "type": "object",
+      "description": "Guidance for implementing this decorator's behavior",
+      "properties": {
+        "examples": {
+          "type": "array",
+          "description": "Examples of implementation in different contexts",
+          "items": {
+            "type": "object",
+            "properties": {
+              "context": {
+                "type": "string",
+                "description": "Context for this example (e.g., model name, use case)"
+              },
+              "originalPrompt": {
+                "type": "string",
+                "description": "Original prompt before transformation"
+              },
+              "transformedPrompt": {
+                "type": "string",
+                "description": "Prompt after transformation"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Additional implementation notes"
+              }
+            },
+            "required": ["originalPrompt", "transformedPrompt"]
+          }
+        },
+        "compatibilityNotes": {
+          "type": "array",
+          "description": "Notes about compatibility with other decorators",
+          "items": {
+            "type": "object",
+            "properties": {
+              "decorator": {
+                "type": "string",
+                "description": "Name of the related decorator"
+              },
+              "relationship": {
+                "type": "string",
+                "enum": ["enhances", "conflicts", "requires"],
+                "description": "Type of relationship"
+              },
+              "notes": {
+                "type": "string",
+                "description": "Description of the relationship"
+              }
+            },
+            "required": ["decorator", "relationship"]
+          }
+        }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "description": "Examples of using the decorator",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Example description"
+          },
+          "usage": {
+            "type": "string",
+            "description": "Example usage"
+          },
+          "result": {
+            "type": "string",
+            "description": "Expected result"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Sample prompt for the example"
+          },
+          "parameters": {
+            "type": "object",
+            "description": "Parameter values for the example"
+          }
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "description": "Compatibility information",
+      "properties": {
+        "requires": {
+          "type": "array",
+          "description": "Decorators that this decorator requires",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conflicts": {
+          "type": "array",
+          "description": "Decorators that conflict with this decorator",
+          "items": {
+            "type": "string"
+          }
+        },
+        "minStandardVersion": {
+          "type": "string",
+          "description": "Minimum standard version required",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "maxStandardVersion": {
+          "type": "string",
+          "description": "Maximum standard version supported",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "models": {
+          "type": "array",
+          "description": "Models that support this decorator",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "category": {
+      "type": "string",
+      "description": "Category of the decorator"
+    }
+  }
+}

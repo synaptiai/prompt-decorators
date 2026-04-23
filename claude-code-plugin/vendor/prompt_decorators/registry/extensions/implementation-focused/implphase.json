@@ -1,0 +1,134 @@
+{
+  "decoratorName": "ImplPhase",
+  "version": "1.0.0",
+  "description": "Indicates which phase of implementation the AI should focus on, controlling scope and detail level.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "stage",
+      "type": "enum",
+      "description": "Current implementation phase",
+      "enum": [
+        "design",
+        "scaffold",
+        "core",
+        "refinement",
+        "optimization",
+        "documentation"
+      ],
+      "default": "core",
+      "required": false
+    },
+    {
+      "name": "scope",
+      "type": "enum",
+      "description": "Implementation scope boundary",
+      "enum": [
+        "function",
+        "component",
+        "module",
+        "service",
+        "system"
+      ],
+      "default": "component",
+      "required": false
+    },
+    {
+      "name": "iteration",
+      "type": "number",
+      "description": "Implementation iteration number",
+      "default": 1,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Focus on the {stage} phase of implementation for this {scope}, iteration #{iteration}.",
+    "parameterMapping": {
+      "stage": {
+        "valueMap": {
+          "design": "Design phase: Create high-level architecture and design patterns without implementation details.",
+          "scaffold": "Scaffolding phase: Create the basic structure and interfaces without full implementation.",
+          "core": "Core implementation phase: Implement the essential functionality with basic error handling.",
+          "refinement": "Refinement phase: Enhance the implementation with better error handling and edge cases.",
+          "optimization": "Optimization phase: Improve performance, reduce complexity, and enhance efficiency.",
+          "documentation": "Documentation phase: Add comprehensive comments, documentation, and usage examples."
+        }
+      },
+      "scope": {
+        "valueMap": {
+          "function": "Limit implementation to a single function or method.",
+          "component": "Focus on a self-contained component with defined interfaces.",
+          "module": "Implement a complete module with multiple related components.",
+          "service": "Develop a service that may interact with multiple modules.",
+          "system": "Consider the entire system architecture and integration points."
+        }
+      },
+      "iteration": {
+        "format": "This is iteration #{value} of the implementation process."
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web development",
+        "originalPrompt": "Create a user authentication component with login/register forms.",
+        "transformedPrompt": "Focus on the scaffold phase of implementation for this component, iteration #1.\n\nScaffolding phase: Create the basic structure and interfaces without full implementation.\nFocus on a self-contained component with defined interfaces.\nThis is iteration #1 of the implementation process.\n\nCreate a user authentication component with login/register forms.",
+        "notes": "The transformed prompt guides the AI to focus on creating the basic structure without full implementation details."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeStyle",
+        "relationship": "enhances",
+        "notes": "CodeStyle can be used alongside ImplPhase to specify coding conventions for the implementation."
+      },
+      {
+        "decorator": "Language",
+        "relationship": "enhances",
+        "notes": "Language decorator can specify the programming language for the implementation."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "You are working on a {scope} in the {stage} phase (iteration #{iteration}). Focus specifically on this phase and don't try to implement features beyond this scope.",
+        "notes": "More explicit instructions help gpt-4 maintain focus on the specific implementation phase."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Scaffolding a component",
+      "usage": "+++ImplPhase(stage=scaffold, scope=component, iteration=1)\nCreate the initial structure for a user authentication component with login/register forms.",
+      "result": "The AI will focus on creating the basic structure and interfaces for the authentication component without implementing all functionality."
+    },
+    {
+      "description": "Core implementation of a function",
+      "usage": "+++ImplPhase(stage=core, scope=function, iteration=2)\nImplement a password validation function that checks for minimum length, special characters, and numbers.",
+      "result": "The AI will implement the essential functionality of the password validation function with basic error handling."
+    },
+    {
+      "description": "Documentation for a module",
+      "usage": "+++ImplPhase(stage=documentation, scope=module, iteration=1)\nCreate documentation for the user management module including all public APIs.",
+      "result": "The AI will focus on creating comprehensive documentation for the user management module rather than implementing new features."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

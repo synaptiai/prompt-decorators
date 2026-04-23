@@ -1,0 +1,117 @@
+{
+  "decoratorName": "Outline",
+  "version": "1.0.0",
+  "description": "Structures the response as a hierarchical outline with headings and subheadings. This decorator organizes information in a clear, logical structure that highlights relationships between main topics and subtopics.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Maximum nesting level of the outline",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    },
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Numbering or bullet style for the outline",
+      "enum": ["numeric", "bullet", "roman", "alpha", "mixed"],
+      "default": "numeric",
+      "required": false
+    },
+    {
+      "name": "detailed",
+      "type": "boolean",
+      "description": "Whether to include brief explanations under each outline point",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly.",
+    "parameterMapping": {
+      "depth": {
+        "format": "Use a maximum of {value} levels of nesting in the hierarchy."
+      },
+      "style": {
+        "valueMap": {
+          "numeric": "Use numeric notation (1, 1.1, 1.1.1, etc.) for all outline levels.",
+          "bullet": "Use bullet point notation (•, ○, ▪, etc.) for all outline levels.",
+          "roman": "Use Roman numeral notation (I, II, III, etc. for top level, then A, B, C, etc. for second level).",
+          "alpha": "Use alphabetical notation (A, B, C, etc. for top level, then 1, 2, 3, etc. for second level).",
+          "mixed": "Use a mix of notation styles: numbers for level 1, letters for level 2, Roman numerals for level 3, etc."
+        }
+      },
+      "detailed": {
+        "valueMap": {
+          "true": "Include a brief explanation or description under each outline point to provide context.",
+          "false": "Keep the outline concise with headings only, without additional explanations under each point."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard numeric outline",
+        "originalPrompt": "Explain the structure of the United States government.",
+        "transformedPrompt": "Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly. Use a maximum of 3 levels of nesting in the hierarchy. Use numeric notation (1, 1.1, 1.1.1, etc.) for all outline levels. Keep the outline concise with headings only, without additional explanations under each point.\n\nExplain the structure of the United States government."
+      },
+      {
+        "context": "Detailed mixed-style outline",
+        "originalPrompt": "Provide a comprehensive overview of machine learning techniques.",
+        "transformedPrompt": "Please structure your response as a hierarchical outline with headings and subheadings to organize the information clearly. Use a maximum of 5 levels of nesting in the hierarchy. Use a mix of notation styles: numbers for level 1, letters for level 2, Roman numerals for level 3, etc. Include a brief explanation or description under each outline point to provide context.\n\nProvide a comprehensive overview of machine learning techniques."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Bullet",
+        "relationship": "conflicts",
+        "notes": "Bullet and Outline both specify different formatting structures that may conflict"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "Outline can complement StepByStep by providing a structured overview of the steps"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Format your response as an outline with clear hierarchical structure. Use headings and subheadings with consistent formatting for each level.",
+        "notes": "This model may need more explicit instructions about maintaining consistent outline formatting"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Simple numeric outline of a complex topic",
+      "usage": "+++Outline\nExplain the structure of the United States government.",
+      "result": "Presents the US government structure as a numbered outline with up to 3 levels of hierarchy"
+    },
+    {
+      "description": "Detailed outline with mixed notation and deep hierarchy",
+      "usage": "+++Outline(style=mixed, depth=5, detailed=true)\nProvide a comprehensive overview of machine learning techniques.",
+      "result": "Creates a 5-level deep outline using mixed notation (numbers, letters, roman numerals) with brief explanations under each point, covering machine learning techniques"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

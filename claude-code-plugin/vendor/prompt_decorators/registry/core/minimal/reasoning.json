@@ -1,0 +1,88 @@
+{
+  "decoratorName": "Reasoning",
+  "version": "1.0.0",
+  "description": "Modifies the AI's response to provide explicit reasoning paths before reaching conclusions. This decorator encourages the model to show its thought process, making responses more transparent and trustworthy.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "spec@promptdecorators.ai",
+    "url": "https://promptdecorators.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "The level of detail in the reasoning process",
+      "enum": ["basic", "moderate", "comprehensive"],
+      "default": "moderate",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "basic": "Focus on the most important logical steps.",
+          "moderate": "Balance detail with clarity in your reasoning.",
+          "comprehensive": "Provide a very thorough and detailed analysis with multiple perspectives."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation",
+        "originalPrompt": "What are the implications of artificial intelligence for education?",
+        "transformedPrompt": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Provide a very thorough and detailed analysis with multiple perspectives.\n\nWhat are the implications of artificial intelligence for education?"
+      },
+      {
+        "context": "Basic depth implementation",
+        "originalPrompt": "How does compound interest work?",
+        "transformedPrompt": "Please provide detailed reasoning in your response. Show your thought process before reaching a conclusion. Focus on the most important logical steps.\n\nHow does compound interest work?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Concise",
+        "relationship": "conflicts",
+        "notes": "The objectives of comprehensive reasoning and concise responses may contradict each other"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "Combining these decorators produces structured reasoning with clear steps"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Explain your reasoning step by step before giving your final answer. Show your thought process clearly.",
+        "notes": "This model may require more explicit instructions to produce detailed reasoning"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic reasoning for a simple question",
+      "usage": "+++Reasoning(depth=basic)\nWhat is the best programming language for beginners?",
+      "result": "Provides a brief explanation of key factors before recommending a language"
+    },
+    {
+      "description": "Comprehensive analysis of a complex topic",
+      "usage": "+++Reasoning(depth=comprehensive)\nWhat are the implications of quantum computing for cybersecurity?",
+      "result": "Delivers an in-depth analysis covering multiple aspects and their interconnections"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

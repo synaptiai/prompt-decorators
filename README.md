@@ -55,6 +55,7 @@ This project addresses the growing complexity of AI interactions by providing:
 - **🛠️ Core Framework**: A Python implementation with registry-based decorator management
 - **🧩 140+ Decorators**: A comprehensive library of pre-built decorators covering reasoning, formatting, and more
 - **🔌 MCP Server**: Integration with the Model Context Protocol for use with desktop AI applications
+- **🧷 Claude Code Plugin**: A drop-in [Claude Code plugin](./claude-code-plugin/) that expands inline `::Name(params)` sigils into precise instructions before the model sees the prompt. Ships with a `/decorate` slash command, always-on config, and an opt-in Haiku-powered auto-selector.
 - **📚 Extensive Documentation**: API references, guides, and examples for both users and developers
 
 ### Background & Motivation

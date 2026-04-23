@@ -1,0 +1,141 @@
+{
+  "decoratorName": "TechDebt",
+  "version": "1.0.0",
+  "description": "Analyzes technical debt and provides remediation strategies.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "categorization",
+      "type": "enum",
+      "description": "Classification approach",
+      "enum": [
+        "martin-fowler",
+        "severity",
+        "age",
+        "custom"
+      ],
+      "default": "severity",
+      "required": false
+    },
+    {
+      "name": "output",
+      "type": "enum",
+      "description": "Analysis result",
+      "enum": [
+        "identification",
+        "prioritization",
+        "remediation",
+        "comprehensive"
+      ],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "scope",
+      "type": "enum",
+      "description": "Analysis breadth",
+      "enum": [
+        "code",
+        "architecture",
+        "process",
+        "testing",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Analyze the technical debt in the described system or codebase. Identify problematic areas, assess their impact, and provide actionable remediation strategies.",
+    "parameterMapping": {
+      "categorization": {
+        "valueMap": {
+          "martin-fowler": "Categorize technical debt according to Martin Fowler's quadrants (Reckless/Prudent vs. Deliberate/Inadvertent).",
+          "severity": "Categorize technical debt by severity level (Critical, High, Medium, Low).",
+          "age": "Categorize technical debt by age (Legacy, Recent, New).",
+          "custom": "Use a custom categorization approach based on the context provided."
+        }
+      },
+      "output": {
+        "valueMap": {
+          "identification": "Focus on identifying and documenting technical debt without detailed remediation plans.",
+          "prioritization": "Focus on prioritizing technical debt items based on business impact, risk, and effort to fix.",
+          "remediation": "Focus on detailed remediation strategies for the identified technical debt.",
+          "comprehensive": "Provide a comprehensive analysis including identification, prioritization, and remediation strategies."
+        }
+      },
+      "scope": {
+        "valueMap": {
+          "code": "Focus analysis on code-level technical debt (e.g., code smells, duplications, complexity).",
+          "architecture": "Focus analysis on architectural technical debt (e.g., design patterns, component coupling).",
+          "process": "Focus analysis on process-related technical debt (e.g., CI/CD, development workflows).",
+          "testing": "Focus analysis on testing-related technical debt (e.g., test coverage, test quality).",
+          "all": "Analyze all aspects of technical debt across code, architecture, process, and testing."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Code review for a legacy system",
+        "originalPrompt": "Analyze technical debt in our authentication module and suggest a remediation plan.",
+        "transformedPrompt": "Analyze the technical debt in the described system or codebase. Identify problematic areas, assess their impact, and provide actionable remediation strategies. Categorize technical debt by severity level (Critical, High, Medium, Low). Provide a comprehensive analysis including identification, prioritization, and remediation strategies. Focus analysis on code-level technical debt (e.g., code smells, duplications, complexity).\n\nAnalyze technical debt in our authentication module and suggest a remediation plan.",
+        "notes": "The decorator adds specific guidance on how to approach technical debt analysis with severity categorization, comprehensive output, and code-level scope."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "TechDebt can enhance CodeReview by adding specific focus on technical debt aspects."
+      },
+      {
+        "decorator": "RefactorGuide",
+        "relationship": "enhances",
+        "notes": "TechDebt works well with RefactorGuide to provide comprehensive code improvement strategies."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze the technical debt in the described system or codebase. Be specific about problems, their impact, and how to fix them.",
+        "notes": "Simplified instruction for models with less context capacity."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic technical debt analysis with default parameters",
+      "usage": "+++TechDebt\nReview our payment processing service for technical debt.",
+      "result": "Provides a comprehensive analysis of technical debt categorized by severity across all aspects of the payment processing service."
+    },
+    {
+      "description": "Code-focused technical debt analysis with Martin Fowler categorization",
+      "usage": "+++TechDebt(categorization=martin-fowler, scope=code)\nAnalyze technical debt in our authentication module.",
+      "result": "Analyzes code-level technical debt in the authentication module using Martin Fowler's quadrants for categorization."
+    },
+    {
+      "description": "Comprehensive technical debt analysis with custom parameters",
+      "usage": "+++TechDebt(categorization=severity, output=comprehensive, scope=code)\nAnalyze technical debt in our authentication module and suggest a remediation plan.",
+      "result": "Provides a comprehensive analysis of code-level technical debt in the authentication module, categorized by severity, with identification, prioritization, and remediation strategies."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

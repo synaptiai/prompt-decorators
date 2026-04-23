@@ -1,0 +1,134 @@
+{
+  "decoratorName": "BugDiagnosis",
+  "version": "1.0.0",
+  "description": "Diagnoses issues from error messages, logs, or behavioral symptoms.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "from",
+      "type": "enum",
+      "description": "Source of diagnostic information",
+      "enum": [
+        "stacktrace",
+        "behavior",
+        "logs",
+        "core-dump",
+        "screenshot",
+        "reproduction"
+      ],
+      "default": "input-dependent",
+      "required": false
+    },
+    {
+      "name": "depth",
+      "type": "enum",
+      "description": "Thoroughness of analysis",
+      "enum": [
+        "quick",
+        "comprehensive"
+      ],
+      "default": "comprehensive",
+      "required": false
+    },
+    {
+      "name": "output",
+      "type": "enum",
+      "description": "Type of output desired",
+      "enum": [
+        "explanation",
+        "fix",
+        "both"
+      ],
+      "default": "both",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Analyze the provided information and diagnose the bug or issue. Identify the root cause and potential solutions.",
+    "parameterMapping": {
+      "from": {
+        "valueMap": {
+          "stacktrace": "Focus your analysis on the provided stack trace to identify the error source.",
+          "behavior": "Analyze the described unexpected behavior to determine what's causing it.",
+          "logs": "Examine the log entries to identify patterns or anomalies that indicate the issue.",
+          "core-dump": "Analyze the core dump information to identify memory issues or crashes.",
+          "screenshot": "Examine the visual evidence to identify UI/UX issues or rendering problems.",
+          "reproduction": "Analyze the steps to reproduce to identify where the process is failing."
+        }
+      },
+      "depth": {
+        "valueMap": {
+          "quick": "Provide a rapid assessment focusing on the most likely cause and solution.",
+          "comprehensive": "Conduct a thorough analysis considering multiple potential causes and solutions, with detailed explanations."
+        }
+      },
+      "output": {
+        "valueMap": {
+          "explanation": "Focus on explaining what's causing the issue and why it's happening.",
+          "fix": "Focus on providing concrete steps to fix the issue.",
+          "both": "Provide both a detailed explanation of the cause and specific steps to fix the issue."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "JavaScript error diagnosis",
+        "originalPrompt": "I'm getting this error in production - \"TypeError: Cannot read property 'settings' of undefined\" at UserProfile.js:143.",
+        "transformedPrompt": "Analyze the provided information and diagnose the bug or issue. Focus your analysis on the provided stack trace to identify the error source. Conduct a thorough analysis considering multiple potential causes and solutions, with detailed explanations. Provide both a detailed explanation of the cause and specific steps to fix the issue.\n\nI'm getting this error in production - \"TypeError: Cannot read property 'settings' of undefined\" at UserProfile.js:143.",
+        "notes": "The decorator adds specific instructions for analyzing a JavaScript TypeError based on a stack trace."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "BugDiagnosis works well after CodeReview to first review code quality then diagnose specific issues."
+      },
+      {
+        "decorator": "Simplify",
+        "relationship": "conflicts",
+        "notes": "Simplify may reduce the technical details needed for proper bug diagnosis."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "You are a debugging expert. Analyze this error or issue carefully and provide a diagnosis. Look for the root cause and suggest fixes.",
+        "notes": "Less capable models may need more explicit instructions to perform thorough debugging analysis."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Diagnosing a JavaScript TypeError from a stack trace",
+      "usage": "+++BugDiagnosis(from=stacktrace, depth=comprehensive, output=both)\nI'm getting this error in production - \"TypeError: Cannot read property 'settings' of undefined\" at UserProfile.js:143.",
+      "result": "The model will analyze the stack trace, provide a comprehensive explanation of why the TypeError is occurring (likely because an object is undefined when its 'settings' property is being accessed), and suggest specific fixes like adding null checks or ensuring the object is properly initialized."
+    },
+    {
+      "description": "Quick diagnosis of unexpected behavior",
+      "usage": "+++BugDiagnosis(from=behavior, depth=quick, output=fix)\nWhen users click the submit button, the form clears but no confirmation message appears and the data isn't saved.",
+      "result": "The model will provide a quick assessment focusing on the most likely causes for the form submission issue and offer specific code fixes or troubleshooting steps to resolve it."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Simplify"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

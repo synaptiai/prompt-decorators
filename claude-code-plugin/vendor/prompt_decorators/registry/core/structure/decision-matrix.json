@@ -1,0 +1,125 @@
+{
+  "decoratorName": "DecisionMatrix",
+  "version": "1.0.0",
+  "description": "Structures the response as a decision matrix, evaluating options against multiple criteria. This decorator facilitates systematic comparison and selection between alternatives based on weighted or unweighted criteria.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "options",
+      "type": "array",
+      "description": "Specific options or alternatives to evaluate in the matrix",
+      "required": false
+    },
+    {
+      "name": "criteria",
+      "type": "array",
+      "description": "Evaluation criteria to assess each option against",
+      "required": false
+    },
+    {
+      "name": "weighted",
+      "type": "boolean",
+      "description": "Whether to include weights for criteria importance",
+      "default": false,
+      "required": false
+    },
+    {
+      "name": "scale",
+      "type": "enum",
+      "description": "Rating scale to use for evaluations",
+      "enum": ["1-5", "1-10", "qualitative", "percentage"],
+      "default": "1-5",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response as a decision matrix that systematically evaluates options against multiple criteria to facilitate comparison and selection.",
+    "parameterMapping": {
+      "options": {
+        "format": "Evaluate these specific options or alternatives in your matrix: {value}."
+      },
+      "criteria": {
+        "format": "Assess each option against these specific criteria: {value}."
+      },
+      "weighted": {
+        "valueMap": {
+          "true": "Include weight factors for each criterion to reflect their relative importance, and calculate weighted scores for each option.",
+          "false": "Evaluate all criteria with equal importance, without applying weights to the scores."
+        }
+      },
+      "scale": {
+        "valueMap": {
+          "1-5": "Use a 1-5 rating scale for each criterion (where 1 is poor/lowest and 5 is excellent/highest).",
+          "1-10": "Use a 1-10 rating scale for each criterion (where 1 is poor/lowest and 10 is excellent/highest).",
+          "qualitative": "Use qualitative ratings (Poor, Fair, Good, Very Good, Excellent) for each criterion.",
+          "percentage": "Use percentage scores (0-100%) for rating each criterion."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Simple smartphone comparison",
+        "originalPrompt": "What smartphone should I buy?",
+        "transformedPrompt": "Please structure your response as a decision matrix that systematically evaluates options against multiple criteria to facilitate comparison and selection. Use a 1-5 rating scale for each criterion (where 1 is poor/lowest and 5 is excellent/highest). Evaluate all criteria with equal importance, without applying weights to the scores.\n\nWhat smartphone should I buy?"
+      },
+      {
+        "context": "Detailed programming language comparison with weights",
+        "originalPrompt": "Which programming language should I learn next?",
+        "transformedPrompt": "Please structure your response as a decision matrix that systematically evaluates options against multiple criteria to facilitate comparison and selection. Evaluate these specific options or alternatives in your matrix: Python, JavaScript, Go, Rust. Assess each option against these specific criteria: learning curve, performance, ecosystem, job market. Include weight factors for each criterion to reflect their relative importance, and calculate weighted scores for each option. Use a 1-10 rating scale for each criterion (where 1 is poor/lowest and 10 is excellent/highest).\n\nWhich programming language should I learn next?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "TableFormat",
+        "relationship": "enhances",
+        "notes": "TableFormat can provide additional formatting options for the decision matrix presentation"
+      },
+      {
+        "decorator": "Comparison",
+        "relationship": "enhances",
+        "notes": "Comparison works well with DecisionMatrix by providing structure for qualitative comparisons alongside the quantitative matrix"
+      },
+      {
+        "decorator": "OutputFormat",
+        "relationship": "enhances",
+        "notes": "OutputFormat can be used to specify the format for the matrix (e.g., as markdown or CSV)"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a decision matrix comparing {options} against {criteria}. Rate each option-criterion pair using a {scale} scale. {weighted} Include a brief explanation for each rating, and conclude with a recommendation based on the matrix results.",
+        "notes": "This model sometimes needs more explicit instructions about formatting the matrix clearly and providing final scores"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Simple decision matrix for comparing options",
+      "usage": "+++DecisionMatrix\nWhat smartphone should I buy?",
+      "result": "Creates a decision matrix comparing top smartphone options against key purchasing criteria, with 1-5 ratings for each combination"
+    },
+    {
+      "description": "Weighted decision matrix with custom options and criteria",
+      "usage": "+++DecisionMatrix(options=[Python,JavaScript,Go,Rust], criteria=[learning curve,performance,ecosystem,job market], weighted=true, scale=1-10)\nWhich programming language should I learn next?",
+      "result": "Generates a weighted decision matrix comparing the specified programming languages against the given criteria, with weighted scores on a 1-10 scale"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

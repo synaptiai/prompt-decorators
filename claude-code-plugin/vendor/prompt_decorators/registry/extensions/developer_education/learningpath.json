@@ -1,0 +1,127 @@
+{
+  "decoratorName": "LearningPath",
+  "version": "1.0.0",
+  "description": "Creates step-by-step learning roadmaps.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "for",
+      "type": "string",
+      "description": "Learning subject",
+      "default": "context-dependent",
+      "required": true
+    },
+    {
+      "name": "experience",
+      "type": "enum",
+      "description": "Learner starting point",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced",
+        "career-change"
+      ],
+      "default": "beginner",
+      "required": false
+    },
+    {
+      "name": "timeframe",
+      "type": "enum",
+      "description": "Available learning time",
+      "enum": [
+        "week",
+        "month",
+        "quarter",
+        "year",
+        "self-paced"
+      ],
+      "default": "self-paced",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create a structured learning path for {for} with the following characteristics:\n- Tailored for a {experience} level learner\n- Designed to be completed within a {timeframe} timeframe\n- Include specific resources, practice exercises, and milestones\n- Organize content in a logical progression from fundamentals to advanced topics",
+    "parameterMapping": {
+      "for": {
+        "format": "{value}"
+      },
+      "experience": {
+        "valueMap": {
+          "beginner": "complete beginner with no prior knowledge",
+          "intermediate": "learner with basic understanding seeking to deepen knowledge",
+          "advanced": "experienced practitioner looking to master advanced concepts",
+          "career-change": "professional transitioning from another field"
+        }
+      },
+      "timeframe": {
+        "valueMap": {
+          "week": "one week (intensive crash course)",
+          "month": "one month (focused daily learning)",
+          "quarter": "three months (steady consistent progress)",
+          "year": "one year (comprehensive mastery program)",
+          "self-paced": "flexible self-paced schedule"
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Creating a learning path for React",
+        "originalPrompt": "Create a learning roadmap for a junior developer to become proficient in React and its ecosystem.",
+        "transformedPrompt": "Create a structured learning path for React with the following characteristics:\n- Tailored for a beginner level learner\n- Designed to be completed within a quarter timeframe\n- Include specific resources, practice exercises, and milestones\n- Organize content in a logical progression from fundamentals to advanced topics\n\nCreate a learning roadmap for a junior developer to become proficient in React and its ecosystem.",
+        "notes": "The decorator prepends specific instructions for creating a structured learning path with clear parameters."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ExpertLevel",
+        "relationship": "enhances",
+        "notes": "ExpertLevel can be used to specify the expertise level of the content creator, while LearningPath focuses on the learner's experience level."
+      },
+      {
+        "decorator": "Curriculum",
+        "relationship": "conflicts",
+        "notes": "Both decorators aim to structure educational content and may provide conflicting instructions."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed, step-by-step learning path for {for}. The path should be for {experience} level learners and designed to be completed in a {timeframe}. Include specific resources, practice projects, and clear milestones.",
+        "notes": "Simplified instruction with more direct language for models with smaller context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Creating a React learning path for beginners over three months",
+      "usage": "+++LearningPath(for=react, experience=beginner, timeframe=quarter)\nCreate a learning roadmap for a junior developer to become proficient in React and its ecosystem.",
+      "result": "A structured, progressive learning path for React that spans three months, starting with fundamentals and building to advanced concepts, with appropriate resources and milestones for beginners."
+    },
+    {
+      "description": "Creating an advanced machine learning path for experienced practitioners",
+      "usage": "+++LearningPath(for=\"machine learning\", experience=advanced, timeframe=year)",
+      "result": "A comprehensive year-long advanced learning path for machine learning that covers cutting-edge techniques, research papers, and practical implementations for someone already familiar with the basics."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Curriculum"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.5.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "decoratorName": "Antipatterns",
+  "version": "1.0.0",
+  "description": "Identifies common mistakes and how to avoid them.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "domain",
+      "type": "enum",
+      "description": "Problem area",
+      "enum": [
+        "architecture",
+        "code",
+        "database",
+        "process",
+        "security"
+      ],
+      "default": "context-dependent",
+      "required": false
+    },
+    {
+      "name": "severity",
+      "type": "enum",
+      "description": "Issue importance filter",
+      "enum": [
+        "all",
+        "major",
+        "critical"
+      ],
+      "default": "major",
+      "required": false
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Presentation style",
+      "enum": [
+        "examples",
+        "explanation",
+        "refactoring-guide"
+      ],
+      "default": "examples",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Identify common antipatterns and mistakes in the specified domain. Focus on how to recognize these issues and provide guidance on how to avoid or fix them.",
+    "parameterMapping": {
+      "domain": {
+        "valueMap": {
+          "architecture": "Focus on architectural antipatterns such as monolithic systems, tight coupling, and design flaws.",
+          "code": "Focus on code-level antipatterns such as code smells, anti-patterns in programming practices, and implementation issues.",
+          "database": "Focus on database antipatterns such as poor schema design, inefficient queries, and data integrity issues.",
+          "process": "Focus on process antipatterns such as inefficient workflows, communication issues, and development methodology problems.",
+          "security": "Focus on security antipatterns such as insecure coding practices, authentication flaws, and vulnerability patterns."
+        }
+      },
+      "severity": {
+        "valueMap": {
+          "all": "Include all antipatterns regardless of their severity or impact.",
+          "major": "Focus on significant antipatterns that can cause substantial problems but may not be immediately critical.",
+          "critical": "Focus only on the most severe antipatterns that pose immediate risks or significant technical debt."
+        }
+      },
+      "format": {
+        "valueMap": {
+          "examples": "Provide concrete examples of each antipattern with code or design snippets that illustrate the problem.",
+          "explanation": "Provide detailed explanations of each antipattern, including why it's problematic and its potential impacts.",
+          "refactoring-guide": "Structure the response as a step-by-step guide for identifying and refactoring each antipattern."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Database design review",
+        "originalPrompt": "Review my MongoDB schema design.",
+        "transformedPrompt": "Identify common antipatterns in MongoDB schema design. Focus on critical issues that pose immediate risks or significant technical debt. Provide concrete examples of each antipattern with code or design snippets that illustrate the problem. Then review my MongoDB schema design.",
+        "notes": "The decorator adds specific guidance to look for antipatterns before performing the requested review."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "BestPractices",
+        "relationship": "enhances",
+        "notes": "Antipatterns works well with BestPractices, as one identifies what to avoid while the other identifies what to do."
+      },
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "Antipatterns can enhance CodeReview by specifically focusing on problematic patterns."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Identify and explain common antipatterns and mistakes to avoid. For each antipattern, explain: 1) What it is, 2) Why it's problematic, 3) How to identify it, and 4) How to fix or avoid it.",
+        "notes": "More structured instruction helps smaller models organize their response effectively."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Identifying database antipatterns",
+      "usage": "+++Antipatterns(domain=database, severity=critical, format=examples)\nIdentify common antipatterns in MongoDB schema design and how to avoid them.",
+      "result": "The response will identify critical antipatterns in MongoDB schema design with concrete examples of each problem pattern."
+    },
+    {
+      "description": "Security code review",
+      "usage": "+++Antipatterns(domain=security, severity=all, format=refactoring-guide)\nReview this authentication code for potential issues.",
+      "result": "The response will provide a comprehensive refactoring guide for identifying and fixing all security antipatterns in authentication code."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "1.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "claude-instant"
+    ]
+  }
+}

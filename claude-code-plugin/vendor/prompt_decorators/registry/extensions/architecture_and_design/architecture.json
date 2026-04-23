@@ -1,0 +1,151 @@
+{
+  "decoratorName": "Architecture",
+  "version": "1.0.0",
+  "description": "Generates architectural designs based on requirements and constraints.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "style",
+      "type": "enum",
+      "description": "Architectural pattern",
+      "enum": [
+        "microservices",
+        "monolith",
+        "serverless",
+        "event-driven",
+        "layered",
+        "hexagonal",
+        "ddd"
+      ],
+      "default": "requirements-dependent",
+      "required": false
+    },
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Level of design detail",
+      "enum": [
+        "overview",
+        "component",
+        "detailed"
+      ],
+      "default": "component",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Design emphasis",
+      "enum": [
+        "scalability",
+        "maintainability",
+        "performance",
+        "security",
+        "cost",
+        "balanced"
+      ],
+      "default": "balanced",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Generate an architectural design that addresses the requirements and constraints. Consider trade-offs and justify your design decisions.",
+    "parameterMapping": {
+      "style": {
+        "valueMap": {
+          "microservices": "Design using a microservices architecture with loosely coupled, independently deployable services.",
+          "monolith": "Design using a monolithic architecture with a unified codebase and deployment unit.",
+          "serverless": "Design using a serverless architecture with function-as-a-service components.",
+          "event-driven": "Design using an event-driven architecture with asynchronous communication patterns.",
+          "layered": "Design using a layered architecture with clear separation of concerns between layers.",
+          "hexagonal": "Design using a hexagonal (ports and adapters) architecture to separate business logic from external concerns.",
+          "ddd": "Design using Domain-Driven Design principles with bounded contexts and a ubiquitous language."
+        }
+      },
+      "detail": {
+        "valueMap": {
+          "overview": "Provide a high-level architectural overview with major components and their relationships.",
+          "component": "Detail the component-level design including interfaces, responsibilities, and interactions.",
+          "detailed": "Create a detailed design including data structures, APIs, deployment considerations, and implementation guidance."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "scalability": "Optimize the architecture for scalability, ensuring it can handle increasing loads and users.",
+          "maintainability": "Optimize the architecture for maintainability, ensuring it can be easily understood and modified.",
+          "performance": "Optimize the architecture for performance, minimizing latency and maximizing throughput.",
+          "security": "Optimize the architecture for security, protecting against threats and vulnerabilities.",
+          "cost": "Optimize the architecture for cost-efficiency, minimizing resource usage and operational expenses.",
+          "balanced": "Balance all quality attributes including scalability, maintainability, performance, security, and cost."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application architecture",
+        "originalPrompt": "Design an architecture for a video streaming platform that needs to support millions of concurrent users.",
+        "transformedPrompt": "Generate an architectural design that addresses the requirements and constraints. Consider trade-offs and justify your design decisions. Design using a microservices architecture with loosely coupled, independently deployable services. Detail the component-level design including interfaces, responsibilities, and interactions. Optimize the architecture for scalability, ensuring it can handle increasing loads and users.\n\nDesign an architecture for a video streaming platform that needs to support millions of concurrent users.",
+        "notes": "The decorator adds specific architectural guidance focusing on microservices, component-level detail, and scalability optimization."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "SystemDesign",
+        "relationship": "enhances",
+        "notes": "Architecture decorator provides more specific architectural guidance that complements the broader system design approach."
+      },
+      {
+        "decorator": "TechnicalSpecification",
+        "relationship": "enhances",
+        "notes": "Architecture decorator can be used before TechnicalSpecification to establish the high-level design before detailing specifications."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create an architectural design diagram and explanation for the following requirements. Consider the architectural style, level of detail, and focus areas specified.",
+        "notes": "For models with more limited context, simplify the architectural descriptions and focus on key components."
+      },
+      "gpt-4o": {
+        "instruction": "Generate a comprehensive architectural design that addresses the requirements and constraints. Include diagrams, component descriptions, interaction patterns, and justifications for your design decisions.",
+        "notes": "gpt-4o can handle more complex architectural descriptions and provide more detailed diagrams and rationales."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Microservices architecture for a video streaming platform",
+      "usage": "+++Architecture(style=microservices, detail=component, focus=scalability)\nDesign an architecture for a video streaming platform that needs to support millions of concurrent users.",
+      "result": "A component-level microservices architecture optimized for scalability, with separate services for user management, content delivery, recommendation engine, and analytics."
+    },
+    {
+      "description": "Serverless architecture for an e-commerce application",
+      "usage": "+++Architecture(style=serverless, detail=detailed, focus=cost)\nDesign an architecture for an e-commerce platform that processes orders and manages inventory.",
+      "result": "A detailed serverless architecture optimized for cost efficiency, using functions for order processing, inventory updates, and payment handling with appropriate data stores and API gateways."
+    },
+    {
+      "description": "Event-driven architecture for a financial system",
+      "usage": "+++Architecture(style=event-driven, detail=overview, focus=security)\nDesign an architecture for a banking system that handles transactions and account management.",
+      "result": "A high-level overview of an event-driven architecture optimized for security, showing event flows between account management, transaction processing, and notification components with security controls."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "claude-instant"
+    ]
+  }
+}

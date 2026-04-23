@@ -1,0 +1,144 @@
+{
+  "decoratorName": "TechStack",
+  "version": "1.0.0",
+  "description": "Recommends technology combinations based on requirements.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "for",
+      "type": "enum",
+      "description": "Target application type",
+      "enum": [
+        "web",
+        "mobile",
+        "desktop",
+        "iot",
+        "data",
+        "ai",
+        "enterprise"
+      ],
+      "default": "web",
+      "required": true
+    },
+    {
+      "name": "constraints",
+      "type": "enum",
+      "description": "Project limitations",
+      "enum": [
+        "budget",
+        "scale",
+        "team-size",
+        "performance",
+        "security",
+        "timeline"
+      ],
+      "default": "none",
+      "required": false
+    },
+    {
+      "name": "maturity",
+      "type": "enum",
+      "description": "Technology maturity preference",
+      "enum": [
+        "bleeding-edge",
+        "modern-stable",
+        "established",
+        "enterprise-proven"
+      ],
+      "default": "modern-stable",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Recommend a technology stack that is appropriate for the specified requirements. Include specific technologies, frameworks, and tools that work well together. Explain why each component is suitable for the requirements.",
+    "parameterMapping": {
+      "for": {
+        "valueMap": {
+          "web": "Focus on web development technologies, frameworks, and hosting solutions.",
+          "mobile": "Focus on mobile app development frameworks, languages, and deployment platforms.",
+          "desktop": "Focus on desktop application frameworks, languages, and distribution methods.",
+          "iot": "Focus on IoT device programming, connectivity solutions, and data processing.",
+          "data": "Focus on data storage, processing, analysis, and visualization technologies.",
+          "ai": "Focus on AI/ML frameworks, model deployment, and supporting infrastructure.",
+          "enterprise": "Focus on enterprise-grade technologies with strong support and integration capabilities."
+        }
+      },
+      "constraints": {
+        "valueMap": {
+          "budget": "Prioritize cost-effective or open-source solutions that minimize licensing and operational costs.",
+          "scale": "Prioritize technologies that can handle significant growth in users, data, or traffic.",
+          "team-size": "Consider the learning curve and required expertise for the recommended technologies.",
+          "performance": "Emphasize high-performance technologies and optimization strategies.",
+          "security": "Prioritize technologies with strong security features and established security practices.",
+          "timeline": "Recommend technologies that enable rapid development and deployment."
+        }
+      },
+      "maturity": {
+        "valueMap": {
+          "bleeding-edge": "Include cutting-edge technologies that may still be in beta or early adoption phases.",
+          "modern-stable": "Recommend modern technologies that are stable and have good community support.",
+          "established": "Focus on well-established technologies with proven track records.",
+          "enterprise-proven": "Recommend only technologies with enterprise support, extensive documentation, and long-term stability guarantees."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application recommendation",
+        "originalPrompt": "Recommend a technology stack for a B2B SaaS application with emphasis on rapid development and scalability.",
+        "transformedPrompt": "Recommend a technology stack that is appropriate for the specified requirements. Include specific technologies, frameworks, and tools that work well together. Explain why each component is suitable for the requirements. Focus on web development technologies, frameworks, and hosting solutions. Prioritize technologies that can handle significant growth in users, data, or traffic. Recommend modern technologies that are stable and have good community support.\n\nRecommend a technology stack for a B2B SaaS application with emphasis on rapid development and scalability.",
+        "notes": "The decorator adds specific guidance about the type of application, constraints, and technology maturity preferences."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ArchitecturalPattern",
+        "relationship": "enhances",
+        "notes": "TechStack works well with ArchitecturalPattern to provide both high-level architecture and specific technology recommendations."
+      },
+      {
+        "decorator": "CodeGeneration",
+        "relationship": "enhances",
+        "notes": "TechStack can provide context for CodeGeneration to generate code in the appropriate languages and frameworks."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Recommend a technology stack for the following requirements. List specific technologies, frameworks, libraries, and tools that work well together. For each component, briefly explain why it's appropriate for the requirements.",
+        "notes": "More explicit instruction for models with less context understanding."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Web application tech stack for a startup",
+      "usage": "+++TechStack(for=web, constraints=budget, maturity=modern-stable)\nRecommend a technology stack for a B2B SaaS application with emphasis on rapid development and scalability.",
+      "result": "A detailed recommendation of web technologies suitable for a B2B SaaS application, focusing on cost-effective solutions that are modern and stable, with explanations for why each component is appropriate."
+    },
+    {
+      "description": "Enterprise mobile application tech stack",
+      "usage": "+++TechStack(for=mobile, constraints=security, maturity=enterprise-proven)\nWhat technologies should we use for a financial services mobile app that needs to comply with banking regulations?",
+      "result": "A comprehensive recommendation of enterprise-proven mobile technologies with strong security features, suitable for financial services applications with regulatory requirements."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

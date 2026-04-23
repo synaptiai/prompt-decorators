@@ -1,0 +1,143 @@
+{
+  "decoratorName": "CodeStandards",
+  "version": "1.0.0",
+  "description": "Applies coding standards and best practices.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "standard",
+      "type": "enum",
+      "description": "Code standard type",
+      "enum": [
+        "company",
+        "language-specific",
+        "custom",
+        "industry"
+      ],
+      "default": "language-specific",
+      "required": false
+    },
+    {
+      "name": "strictness",
+      "type": "enum",
+      "description": "Enforcement level",
+      "enum": [
+        "recommended",
+        "required",
+        "strict"
+      ],
+      "default": "required",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Areas of emphasis",
+      "enum": [
+        "formatting",
+        "naming",
+        "patterns",
+        "security",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability.",
+    "parameterMapping": {
+      "standard": {
+        "valueMap": {
+          "company": "Apply company-specific coding standards and conventions.",
+          "language-specific": "Follow the idiomatic standards and best practices specific to the programming language.",
+          "custom": "Apply the custom coding standards as specified.",
+          "industry": "Follow industry-standard coding practices and patterns."
+        }
+      },
+      "strictness": {
+        "valueMap": {
+          "recommended": "Apply standards as recommendations, allowing for reasonable exceptions.",
+          "required": "Enforce standards as requirements with minimal exceptions.",
+          "strict": "Strictly enforce all standards with no exceptions."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "formatting": "Focus on code formatting, indentation, and style.",
+          "naming": "Focus on naming conventions for variables, functions, and classes.",
+          "patterns": "Focus on design patterns and architectural standards.",
+          "security": "Focus on security best practices and vulnerability prevention.",
+          "all": "Apply comprehensive standards covering formatting, naming, patterns, and security."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "JavaScript/React development",
+        "originalPrompt": "Refactor this React component to be more efficient.",
+        "transformedPrompt": "Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability. Follow the idiomatic standards and best practices specific to the programming language. Enforce standards as requirements with minimal exceptions. Apply comprehensive standards covering formatting, naming, patterns, and security.\n\nRefactor this React component to be more efficient.",
+        "notes": "The decorator adds specific guidance about JavaScript and React best practices."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "CodeStandards works well with CodeReview by providing specific standards to check against."
+      },
+      {
+        "decorator": "Refactor",
+        "relationship": "enhances",
+        "notes": "CodeStandards can guide refactoring efforts with specific standards."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4o": {
+        "instruction": "Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability. Be specific about which standards you're applying and why.",
+        "notes": "gpt-4o can handle more detailed explanations of standards application."
+      },
+      "gpt-4-turbo": {
+        "instruction": "Apply coding standards and best practices to the code. Follow established conventions for readability and maintainability.",
+        "notes": "Keep instructions more concise for gpt-4."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Applying JavaScript standards to React code",
+      "usage": "+++CodeStandards(standard=language-specific, strictness=required, focus=all)\nApply JavaScript best practices to this React component following Airbnb style guide.",
+      "result": "The model will apply JavaScript-specific best practices to the React component, following required standards across all focus areas."
+    },
+    {
+      "description": "Focusing on security standards",
+      "usage": "+++CodeStandards(standard=industry, strictness=strict, focus=security)\nReview this Node.js API endpoint for security issues.",
+      "result": "The model will strictly apply industry security standards to the Node.js API endpoint code."
+    },
+    {
+      "description": "Using company standards for formatting",
+      "usage": "+++CodeStandards(standard=company, focus=formatting)\nFormat this Python code according to our company standards.",
+      "result": "The model will apply company-specific formatting standards to the Python code with the default required strictness."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

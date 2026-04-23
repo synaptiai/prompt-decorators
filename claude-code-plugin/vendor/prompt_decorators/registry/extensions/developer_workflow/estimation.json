@@ -1,0 +1,141 @@
+{
+  "decoratorName": "Estimation",
+  "version": "1.0.0",
+  "description": "Helps with effort estimation for development tasks.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "method",
+      "type": "enum",
+      "description": "Estimation approach",
+      "enum": [
+        "t-shirt",
+        "fibonacci",
+        "hours",
+        "days"
+      ],
+      "default": "fibonacci",
+      "required": false
+    },
+    {
+      "name": "confidence",
+      "type": "enum",
+      "description": "Estimate type",
+      "enum": [
+        "best-case",
+        "worst-case",
+        "expected",
+        "range"
+      ],
+      "default": "range",
+      "required": false
+    },
+    {
+      "name": "factors",
+      "type": "enum",
+      "description": "Considerations to include",
+      "enum": [
+        "complexity",
+        "risk",
+        "unknowns",
+        "dependencies",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Provide an effort estimation for the development task described. Break down the task into components and explain your reasoning.",
+    "parameterMapping": {
+      "method": {
+        "valueMap": {
+          "t-shirt": "Use t-shirt sizing (XS, S, M, L, XL, XXL) for your estimation.",
+          "fibonacci": "Use Fibonacci sequence points (1, 2, 3, 5, 8, 13, 21, etc.) for your estimation.",
+          "hours": "Estimate the effort in hours of work required.",
+          "days": "Estimate the effort in days of work required."
+        }
+      },
+      "confidence": {
+        "valueMap": {
+          "best-case": "Provide a best-case scenario estimate assuming ideal conditions.",
+          "worst-case": "Provide a worst-case scenario estimate accounting for potential complications.",
+          "expected": "Provide your most realistic expected estimate.",
+          "range": "Provide a range from best-case to worst-case estimates."
+        }
+      },
+      "factors": {
+        "valueMap": {
+          "complexity": "Consider technical complexity in your estimation.",
+          "risk": "Consider risk factors in your estimation.",
+          "unknowns": "Consider unknown factors and learning curves in your estimation.",
+          "dependencies": "Consider dependencies on other systems or teams in your estimation.",
+          "all": "Consider all factors including complexity, risk, unknowns, and dependencies in your estimation."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software development task estimation",
+        "originalPrompt": "Estimate the effort required to implement a new authentication system with social login and MFA support.",
+        "transformedPrompt": "Provide an effort estimation for the development task described. Break down the task into components and explain your reasoning. Use Fibonacci sequence points (1, 2, 3, 5, 8, 13, 21, etc.) for your estimation. Provide a range from best-case to worst-case estimates. Consider all factors including complexity, risk, unknowns, and dependencies in your estimation.\n\nEstimate the effort required to implement a new authentication system with social login and MFA support.",
+        "notes": "The decorator adds specific estimation guidance before the original prompt."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ProjectPlanning",
+        "relationship": "enhances",
+        "notes": "Works well with ProjectPlanning decorator to create comprehensive project plans with effort estimates."
+      },
+      {
+        "decorator": "TechnicalSpecification",
+        "relationship": "enhances",
+        "notes": "Can be combined with TechnicalSpecification to include effort estimates in technical documentation."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Analyze this development task and provide a detailed effort estimation. Break down the components and explain your reasoning for each estimate.",
+        "notes": "More explicit instruction for models with less context understanding."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Fibonacci estimation with confidence range for authentication system",
+      "usage": "+++Estimation(method=fibonacci, confidence=range, factors=all)\nEstimate the effort required to implement a new authentication system with social login and MFA support.",
+      "result": "Provides a structured estimation using Fibonacci points with a range of estimates, considering all relevant factors for implementing an authentication system."
+    },
+    {
+      "description": "T-shirt sizing for a simple feature",
+      "usage": "+++Estimation(method=t-shirt, confidence=expected)\nEstimate the effort to add a dark mode toggle to our web application.",
+      "result": "Provides a t-shirt size estimation (likely S or M) for implementing a dark mode feature with explanation of the expected effort."
+    },
+    {
+      "description": "Hourly estimation focusing on complexity",
+      "usage": "+++Estimation(method=hours, confidence=worst-case, factors=complexity)\nEstimate the effort to refactor our payment processing module.",
+      "result": "Provides an hourly worst-case estimate focusing specifically on the technical complexity aspects of refactoring a payment system."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

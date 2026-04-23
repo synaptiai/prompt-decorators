@@ -1,0 +1,137 @@
+{
+  "decoratorName": "Roadmap",
+  "version": "1.0.0",
+  "description": "Plans development timelines and feature sequencing.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "timeframe",
+      "type": "enum",
+      "description": "Planning horizon",
+      "enum": [
+        "sprint",
+        "quarter",
+        "halfyear",
+        "year"
+      ],
+      "default": "quarter",
+      "required": false
+    },
+    {
+      "name": "focus",
+      "type": "enum",
+      "description": "Roadmap emphasis",
+      "enum": [
+        "features",
+        "technical-debt",
+        "security",
+        "performance",
+        "balanced"
+      ],
+      "default": "balanced",
+      "required": false
+    },
+    {
+      "name": "detail",
+      "type": "enum",
+      "description": "Depth of planning",
+      "enum": [
+        "high-level",
+        "milestones",
+        "detailed"
+      ],
+      "default": "milestones",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Create a development roadmap with the following specifications:",
+    "parameterMapping": {
+      "timeframe": {
+        "valueMap": {
+          "sprint": "Plan for a 2-4 week sprint cycle.",
+          "quarter": "Plan for a 3-month quarterly timeline.",
+          "halfyear": "Plan for a 6-month timeline.",
+          "year": "Plan for a 12-month annual timeline."
+        }
+      },
+      "focus": {
+        "valueMap": {
+          "features": "Prioritize new feature development and enhancements.",
+          "technical-debt": "Focus on addressing technical debt and code quality improvements.",
+          "security": "Emphasize security improvements and vulnerability remediation.",
+          "performance": "Concentrate on performance optimizations and efficiency gains.",
+          "balanced": "Maintain a balanced approach across features, maintenance, security, and performance."
+        }
+      },
+      "detail": {
+        "valueMap": {
+          "high-level": "Provide high-level objectives and general direction.",
+          "milestones": "Include key milestones and deliverables with approximate timelines.",
+          "detailed": "Create a detailed plan with specific tasks, dependencies, and precise timelines."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "override"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Software development planning",
+        "originalPrompt": "Create a product roadmap for our e-commerce platform focusing on enhancing the checkout experience.",
+        "transformedPrompt": "Create a development roadmap with the following specifications:\nPlan for a 3-month quarterly timeline.\nPrioritize new feature development and enhancements.\nInclude key milestones and deliverables with approximate timelines.\n\nCreate a product roadmap for our e-commerce platform focusing on enhancing the checkout experience.",
+        "notes": "The decorator adds specific planning parameters to guide the roadmap creation process."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "ProjectManagement",
+        "relationship": "enhances",
+        "notes": "Roadmap works well with ProjectManagement decorator to create more comprehensive project plans."
+      },
+      {
+        "decorator": "QuickSolution",
+        "relationship": "conflicts",
+        "notes": "Roadmap is focused on structured planning which conflicts with quick, immediate solutions."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a development roadmap with clear timelines and priorities as specified below:",
+        "notes": "Simplified instruction for models with less context handling capability."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Quarterly feature-focused roadmap with milestone planning",
+      "usage": "+++Roadmap(timeframe=quarter, focus=features, detail=milestones)\nCreate a product roadmap for our e-commerce platform focusing on enhancing the checkout experience.",
+      "result": "A 3-month roadmap with feature development emphasis and key milestones for improving an e-commerce checkout experience."
+    },
+    {
+      "description": "Sprint-level technical debt planning",
+      "usage": "+++Roadmap(timeframe=sprint, focus=technical-debt, detail=detailed)\nDevelop a plan to address our authentication service's code quality issues.",
+      "result": "A detailed 2-4 week sprint plan focusing specifically on technical debt remediation for the authentication service."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "QuickSolution",
+      "Brainstorm"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "gemini-pro"
+    ]
+  }
+}

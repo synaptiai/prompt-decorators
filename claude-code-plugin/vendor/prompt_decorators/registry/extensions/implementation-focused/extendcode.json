@@ -1,0 +1,144 @@
+{
+  "decoratorName": "ExtendCode",
+  "version": "1.0.0",
+  "description": "Requests extending or enhancing existing code with new functionality without complete rewrites.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "How to extend the code",
+      "enum": [
+        "add-function",
+        "add-method",
+        "add-feature",
+        "enhance-existing"
+      ],
+      "default": "add-feature",
+      "required": false
+    },
+    {
+      "name": "impact",
+      "type": "enum",
+      "description": "Level of changes to existing code",
+      "enum": [
+        "none",
+        "minimal",
+        "moderate",
+        "significant"
+      ],
+      "default": "minimal",
+      "required": false
+    },
+    {
+      "name": "maintain",
+      "type": "enum",
+      "description": "Aspects to maintain",
+      "enum": [
+        "api",
+        "architecture",
+        "naming",
+        "performance",
+        "all"
+      ],
+      "default": "all",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Extend the existing code with new functionality. Focus on adding to the codebase rather than rewriting it.",
+    "parameterMapping": {
+      "approach": {
+        "valueMap": {
+          "add-function": "Add a new standalone function that implements the requested functionality.",
+          "add-method": "Add a new method to an existing class or object that implements the requested functionality.",
+          "add-feature": "Implement a new feature by extending the existing code structure.",
+          "enhance-existing": "Enhance existing functionality without adding new functions or methods."
+        }
+      },
+      "impact": {
+        "valueMap": {
+          "none": "Make no changes to existing code, only add new code.",
+          "minimal": "Make minimal changes to existing code, focusing on additions rather than modifications.",
+          "moderate": "Make moderate changes to existing code where necessary to support the new functionality.",
+          "significant": "Make significant changes to existing code if needed to properly implement the requested functionality."
+        }
+      },
+      "maintain": {
+        "valueMap": {
+          "api": "Maintain the existing API contracts and interfaces.",
+          "architecture": "Maintain the existing architectural patterns and structure.",
+          "naming": "Maintain the existing naming conventions and style.",
+          "performance": "Maintain the existing performance characteristics.",
+          "all": "Maintain all aspects of the existing code including API, architecture, naming conventions, and performance characteristics."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Adding a method to a user service class",
+        "originalPrompt": "Add a method to this user service class that allows retrieving users by email domain.",
+        "transformedPrompt": "Extend the existing code with new functionality. Focus on adding to the codebase rather than rewriting it. Add a new method to an existing class or object that implements the requested functionality. Make minimal changes to existing code, focusing on additions rather than modifications. Maintain all aspects of the existing code including API, architecture, naming conventions, and performance characteristics.\n\nAdd a method to this user service class that allows retrieving users by email domain.",
+        "notes": "The decorator prepends instructions to maintain code style and minimize changes while adding the requested functionality."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "ExtendCode works well with CodeReview, which can be used to validate that the extensions maintain the specified aspects."
+      },
+      {
+        "decorator": "Refactor",
+        "relationship": "conflicts",
+        "notes": "ExtendCode focuses on adding functionality with minimal changes, while Refactor focuses on restructuring existing code."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Add new functionality to the existing code without rewriting it. Follow the existing code style and patterns. For approach={approach}, impact={impact}, maintain={maintain}.",
+        "notes": "Simpler instruction format works better with gpt-4 Turbo's context window limitations."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Adding a method to a user service class",
+      "usage": "+++ExtendCode(approach=add-method, impact=minimal, maintain=all)\nAdd a method to this user service class that allows retrieving users by email domain.",
+      "result": "Adds a new method to the user service class that follows existing patterns and naming conventions, with minimal changes to existing code."
+    },
+    {
+      "description": "Adding a new feature with moderate changes",
+      "usage": "+++ExtendCode(approach=add-feature, impact=moderate, maintain=architecture)\nAdd pagination support to this API endpoint.",
+      "result": "Implements pagination by extending the existing code with moderate changes while maintaining the architectural patterns."
+    },
+    {
+      "description": "Enhancing existing functionality",
+      "usage": "+++ExtendCode(approach=enhance-existing, impact=minimal, maintain=performance)\nImprove the error handling in this function.",
+      "result": "Enhances the error handling with minimal changes while ensuring performance is not degraded."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [
+      "Refactor",
+      "RewriteCode"
+    ],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "claude-instant"
+    ]
+  }
+}

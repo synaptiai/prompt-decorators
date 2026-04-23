@@ -1,0 +1,112 @@
+{
+  "decoratorName": "TableFormat",
+  "version": "1.0.0",
+  "description": "Structures the AI's response in a tabular format with defined columns. This decorator is ideal for presenting comparative data, lists of items with attributes, or any information that benefits from clear columnar organization.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "columns",
+      "type": "array",
+      "description": "List of column names for the table",
+      "required": true
+    },
+    {
+      "name": "format",
+      "type": "enum",
+      "description": "Format style for the table representation",
+      "enum": ["markdown", "ascii", "csv"],
+      "default": "markdown",
+      "required": false
+    },
+    {
+      "name": "alignment",
+      "type": "enum",
+      "description": "Text alignment within table cells",
+      "enum": ["left", "center", "right"],
+      "default": "left",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please present your response in a tabular format with clearly defined columns to organize the information effectively.",
+    "parameterMapping": {
+      "columns": {
+        "format": "The table should include the following columns: {value}."
+      },
+      "format": {
+        "valueMap": {
+          "markdown": "Format the table using markdown syntax with headers and cell separators (e.g., | Column1 | Column2 |).",
+          "ascii": "Format the table using ASCII characters for borders and separators to create a plain text table.",
+          "csv": "Format the table as comma-separated values (CSV) with each row on a new line and values separated by commas."
+        }
+      },
+      "alignment": {
+        "valueMap": {
+          "left": "Align all text within cells to the left.",
+          "center": "Center all text within cells.",
+          "right": "Align all text within cells to the right."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Markdown table for comparison",
+        "originalPrompt": "Compare TypeScript and JavaScript features.",
+        "transformedPrompt": "Please present your response in a tabular format with clearly defined columns to organize the information effectively. The table should include the following columns: Feature, TypeScript, JavaScript. Format the table using markdown syntax with headers and cell separators (e.g., | Column1 | Column2 |). Align all text within cells to the left.\n\nCompare TypeScript and JavaScript features."
+      },
+      {
+        "context": "CSV table for planets data",
+        "originalPrompt": "List the planets in our solar system with their key characteristics.",
+        "transformedPrompt": "Please present your response in a tabular format with clearly defined columns to organize the information effectively. The table should include the following columns: Planet, Diameter, Distance from Sun, Orbital Period, Number of Moons. Format the table as comma-separated values (CSV) with each row on a new line and values separated by commas. Align all text within cells to the left.\n\nList the planets in our solar system with their key characteristics."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "OutputFormat",
+        "relationship": "conflicts",
+        "notes": "OutputFormat may specify a different structure that conflicts with TableFormat's tabular presentation"
+      },
+      {
+        "decorator": "Bullet",
+        "relationship": "conflicts",
+        "notes": "Bullet's list structure conflicts with TableFormat's tabular organization"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a table with these columns: {columns}. Use {format} formatting and make sure all columns are properly aligned and formatted consistently.",
+        "notes": "This model sometimes needs more explicit instructions to maintain consistent table formatting throughout the response"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Simple comparison table in markdown format",
+      "usage": "+++TableFormat(columns=[Feature, TypeScript, JavaScript])\nCompare TypeScript and JavaScript features.",
+      "result": "Presents a markdown table comparing features of TypeScript and JavaScript with three columns"
+    },
+    {
+      "description": "Detailed CSV table with specific columns",
+      "usage": "+++TableFormat(columns=[Planet, Diameter, Distance from Sun, Orbital Period, Number of Moons], format=csv)\nList the planets in our solar system with their key characteristics.",
+      "result": "Generates a CSV-formatted table containing detailed information about each planet with the specified columns"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": ["OutputFormat"],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

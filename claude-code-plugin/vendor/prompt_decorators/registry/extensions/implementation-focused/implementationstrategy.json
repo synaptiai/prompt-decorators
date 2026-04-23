@@ -1,0 +1,136 @@
+{
+  "decoratorName": "ImplementationStrategy",
+  "version": "1.0.0",
+  "description": "Guides the overall approach to implementing a feature or component.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Implementation methodology",
+      "enum": [
+        "tdd",
+        "bdd",
+        "prototype-first",
+        "interface-first",
+        "standard"
+      ],
+      "default": "standard",
+      "required": false
+    },
+    {
+      "name": "direction",
+      "type": "enum",
+      "description": "Implementation direction",
+      "enum": [
+        "top-down",
+        "bottom-up",
+        "outside-in",
+        "inside-out"
+      ],
+      "default": "top-down",
+      "required": false
+    },
+    {
+      "name": "priority",
+      "type": "enum",
+      "description": "Implementation priority",
+      "enum": [
+        "correctness",
+        "clarity",
+        "performance",
+        "completeness"
+      ],
+      "default": "correctness",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "When implementing this solution, follow a structured approach that emphasizes methodical development.",
+    "parameterMapping": {
+      "approach": {
+        "valueMap": {
+          "tdd": "Use Test-Driven Development (TDD) by writing tests before implementing functionality.",
+          "bdd": "Apply Behavior-Driven Development (BDD) focusing on business requirements and scenarios.",
+          "prototype-first": "Create a working prototype before refining the implementation.",
+          "interface-first": "Define interfaces and contracts before implementing the underlying functionality.",
+          "standard": "Follow standard development practices with a balanced approach."
+        }
+      },
+      "direction": {
+        "valueMap": {
+          "top-down": "Start with high-level components and work down to implementation details.",
+          "bottom-up": "Begin with foundational components and build upward to higher-level functionality.",
+          "outside-in": "Start with external interfaces and work inward toward core functionality.",
+          "inside-out": "Begin with core functionality and expand outward to external interfaces."
+        }
+      },
+      "priority": {
+        "valueMap": {
+          "correctness": "Prioritize correctness and accuracy above all other concerns.",
+          "clarity": "Focus on code clarity and maintainability as the primary goal.",
+          "performance": "Optimize for performance as a key consideration throughout development.",
+          "completeness": "Ensure comprehensive feature coverage before refining implementation."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application development",
+        "originalPrompt": "Implement a user registration system.",
+        "transformedPrompt": "When implementing this solution, follow a structured approach that emphasizes methodical development. Use Test-Driven Development (TDD) by writing tests before implementing functionality. Start with external interfaces and work inward toward core functionality. Prioritize correctness and accuracy above all other concerns.\n\nImplement a user registration system.",
+        "notes": "This transformation guides the implementation toward a TDD approach with outside-in direction and correctness as the priority."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeQuality",
+        "relationship": "enhances",
+        "notes": "ImplementationStrategy works well with CodeQuality to ensure both strategic approach and quality standards."
+      },
+      {
+        "decorator": "ArchitecturalPattern",
+        "relationship": "enhances",
+        "notes": "Can be combined with ArchitecturalPattern to provide both high-level architecture and implementation approach."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Follow these implementation guidelines: approach={approach}, direction={direction}, priority={priority}. When implementing this solution, ensure you follow the specified methodology.",
+        "notes": "Simplified instruction for models with more limited context windows."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "TDD approach with outside-in direction for user registration",
+      "usage": "+++ImplementationStrategy(approach=tdd, direction=outside-in, priority=correctness)\nImplement a user registration system starting with the acceptance tests and working inward to the core functionality.",
+      "result": "The implementation will follow TDD methodology, starting with external interfaces and working inward, with a focus on correctness."
+    },
+    {
+      "description": "Prototype-first approach for a new feature",
+      "usage": "+++ImplementationStrategy(approach=prototype-first, direction=top-down, priority=clarity)\nCreate a dashboard to visualize user analytics.",
+      "result": "The implementation will start with a working prototype, using a top-down approach, with code clarity as the main priority."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

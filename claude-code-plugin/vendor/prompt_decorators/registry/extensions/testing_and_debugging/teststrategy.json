@@ -1,0 +1,144 @@
+{
+  "decoratorName": "TestStrategy",
+  "version": "1.0.0",
+  "description": "Designs comprehensive testing approaches for software components or systems.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "level",
+      "type": "enum",
+      "description": "Testing scope level",
+      "enum": [
+        "unit",
+        "integration",
+        "e2e",
+        "performance",
+        "security"
+      ],
+      "default": "unit",
+      "required": false
+    },
+    {
+      "name": "framework",
+      "type": "enum",
+      "description": "Testing framework to use",
+      "enum": [
+        "jest",
+        "pytest",
+        "junit",
+        "mocha",
+        "cypress"
+      ],
+      "default": "language-appropriate",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Testing methodology",
+      "enum": [
+        "tdd",
+        "bdd",
+        "property",
+        "snapshot"
+      ],
+      "default": "tdd",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Design a testing strategy for the following, considering best practices for software quality assurance.",
+    "parameterMapping": {
+      "level": {
+        "valueMap": {
+          "unit": "Focus on unit testing individual components in isolation.",
+          "integration": "Design integration tests that verify interactions between components.",
+          "e2e": "Create end-to-end tests that validate complete user workflows.",
+          "performance": "Develop performance tests to measure system responsiveness and stability under load.",
+          "security": "Implement security tests to identify vulnerabilities and ensure data protection."
+        }
+      },
+      "framework": {
+        "valueMap": {
+          "jest": "Use Jest as the testing framework.",
+          "pytest": "Implement tests using the pytest framework.",
+          "junit": "Develop tests with the JUnit framework.",
+          "mocha": "Create tests using the Mocha framework.",
+          "cypress": "Build tests with the Cypress framework.",
+          "language-appropriate": "Select an appropriate testing framework based on the implementation language."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "tdd": "Follow Test-Driven Development methodology (write tests before implementation).",
+          "bdd": "Use Behavior-Driven Development with descriptive scenarios that reflect user requirements.",
+          "property": "Implement property-based testing to verify invariants across many generated inputs.",
+          "snapshot": "Utilize snapshot testing to detect unexpected UI or data structure changes."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application testing",
+        "originalPrompt": "Design a testing strategy for an authentication service with database and external API dependencies.",
+        "transformedPrompt": "Design a testing strategy for the following, considering best practices for software quality assurance. Focus on integration tests that verify interactions between components. Use Jest as the testing framework. Use Behavior-Driven Development with descriptive scenarios that reflect user requirements.\n\nDesign a testing strategy for an authentication service with database and external API dependencies.",
+        "notes": "This example shows how the decorator adds specific guidance for integration testing with Jest using BDD methodology."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "CodeReview",
+        "relationship": "enhances",
+        "notes": "TestStrategy works well with CodeReview to ensure both testing strategy and implementation quality."
+      },
+      {
+        "decorator": "ArchitectureDesign",
+        "relationship": "enhances",
+        "notes": "Can be used after ArchitectureDesign to develop tests that validate the architectural requirements."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Create a detailed testing strategy that includes test cases, methodologies, and frameworks for the following scenario:",
+        "notes": "More explicit instruction for models with less context understanding."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Integration testing strategy for an authentication service",
+      "usage": "+++TestStrategy(level=integration, framework=jest, approach=bdd)\nDesign a testing strategy for an authentication service with database and external API dependencies.",
+      "result": "A comprehensive integration testing strategy using Jest and BDD approach, focusing on testing interactions between the authentication service, database, and external APIs."
+    },
+    {
+      "description": "Unit testing strategy with default parameters",
+      "usage": "+++TestStrategy()\nDesign tests for a string manipulation utility library.",
+      "result": "A unit testing strategy using TDD methodology with an appropriate framework for the implementation language, focusing on testing individual functions in isolation."
+    },
+    {
+      "description": "Performance testing for a high-traffic API",
+      "usage": "+++TestStrategy(level=performance, framework=junit)\nCreate tests for a payment processing API that handles 1000 transactions per second.",
+      "result": "A performance testing strategy using JUnit to measure throughput, response time, and stability of the payment API under high load conditions."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "decoratorName": "Alternatives",
+  "version": "1.0.0",
+  "description": "Presents multiple distinct options, approaches, or solutions to a question or problem. This decorator encourages exploring different paths or perspectives rather than providing a single definitive answer.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "count",
+      "type": "number",
+      "description": "Number of alternative options or approaches to generate",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 2,
+        "maximum": 7
+      }
+    },
+    {
+      "name": "diversity",
+      "type": "enum",
+      "description": "How different or varied the alternatives should be from each other",
+      "enum": ["low", "medium", "high"],
+      "default": "medium",
+      "required": false
+    },
+    {
+      "name": "comparison",
+      "type": "boolean",
+      "description": "Whether to include a comparative analysis of the alternatives",
+      "default": false,
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please provide multiple distinct options, approaches, or solutions to this question or problem rather than a single definitive answer.",
+    "parameterMapping": {
+      "count": {
+        "format": "Present exactly {value} different alternatives."
+      },
+      "diversity": {
+        "valueMap": {
+          "low": "Generate alternatives that are variations on the same fundamental approach with different implementations or emphases.",
+          "medium": "Generate alternatives that offer substantively different approaches while still being practical and conventional.",
+          "high": "Generate alternatives that are radically different from each other, exploring unconventional approaches and diverse paradigms."
+        }
+      },
+      "comparison": {
+        "valueMap": {
+          "true": "After presenting all alternatives, include a comparative analysis that evaluates their relative strengths, weaknesses, and suitability for different contexts or priorities.",
+          "false": "Present each alternative independently without explicitly comparing them to each other."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Basic alternative approaches to improving public speaking",
+        "originalPrompt": "How can I improve my public speaking skills?",
+        "transformedPrompt": "Please provide multiple distinct options, approaches, or solutions to this question or problem rather than a single definitive answer. Present exactly 3 different alternatives. Generate alternatives that offer substantively different approaches while still being practical and conventional. Present each alternative independently without explicitly comparing them to each other.\n\nHow can I improve my public speaking skills?"
+      },
+      {
+        "context": "Diverse alternatives for reducing carbon emissions with comparative analysis",
+        "originalPrompt": "What are some ways to reduce carbon emissions in urban areas?",
+        "transformedPrompt": "Please provide multiple distinct options, approaches, or solutions to this question or problem rather than a single definitive answer. Present exactly 5 different alternatives. Generate alternatives that are radically different from each other, exploring unconventional approaches and diverse paradigms. After presenting all alternatives, include a comparative analysis that evaluates their relative strengths, weaknesses, and suitability for different contexts or priorities.\n\nWhat are some ways to reduce carbon emissions in urban areas?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Comparison",
+        "relationship": "enhances",
+        "notes": "When used with comparison=true, the Comparison decorator can provide additional structure to the comparative analysis"
+      },
+      {
+        "decorator": "DecisionMatrix",
+        "relationship": "enhances",
+        "notes": "DecisionMatrix works well with Alternatives to evaluate the different options against criteria"
+      },
+      {
+        "decorator": "Debate",
+        "relationship": "enhances",
+        "notes": "Debate can add dialectical consideration of the pros and cons of different alternatives"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Generate {count} significantly different approaches to address this question. Each approach should be distinct and labeled clearly. Make sure these alternatives are {diversity} in terms of their fundamental strategy. {comparison}",
+        "notes": "This model sometimes needs more explicit instructions about maintaining meaningful differences between alternatives"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic alternative approaches to a problem",
+      "usage": "+++Alternatives\nHow can I improve my public speaking skills?",
+      "result": "Provides three distinct approaches to improving public speaking skills, each with its own methodology and focus"
+    },
+    {
+      "description": "Highly diverse alternatives with comparative analysis",
+      "usage": "+++Alternatives(count=5, diversity=high, comparison=true)\nWhat are some ways to reduce carbon emissions in urban areas?",
+      "result": "Presents five highly diverse approaches to reducing urban carbon emissions, followed by a comparative analysis of their effectiveness, cost, and implementation challenges"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}

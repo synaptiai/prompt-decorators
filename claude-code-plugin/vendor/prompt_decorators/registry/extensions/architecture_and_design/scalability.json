@@ -1,0 +1,136 @@
+{
+  "decoratorName": "Scalability",
+  "version": "1.0.0",
+  "description": "Designs for various dimensions of system scaling.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "dimension",
+      "type": "enum",
+      "description": "Scaling aspect to focus on",
+      "enum": [
+        "users",
+        "data",
+        "transactions",
+        "geographic",
+        "complexity"
+      ],
+      "default": "users",
+      "required": false
+    },
+    {
+      "name": "target",
+      "type": "enum",
+      "description": "Scale magnitude",
+      "enum": [
+        "10x",
+        "100x",
+        "1000x",
+        "all"
+      ],
+      "default": "100x",
+      "required": false
+    },
+    {
+      "name": "approach",
+      "type": "enum",
+      "description": "Scaling strategy",
+      "enum": [
+        "horizontal",
+        "vertical",
+        "hybrid",
+        "cloud-native"
+      ],
+      "default": "horizontal",
+      "required": false
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Design a system architecture that addresses scalability concerns. Consider appropriate scaling strategies and techniques.",
+    "parameterMapping": {
+      "dimension": {
+        "valueMap": {
+          "users": "Focus on scaling to support a growing user base with considerations for authentication, session management, and user experience.",
+          "data": "Focus on scaling data storage and retrieval systems with considerations for database sharding, replication, and data access patterns.",
+          "transactions": "Focus on scaling transaction processing capabilities with considerations for throughput, concurrency, and consistency.",
+          "geographic": "Focus on scaling across geographic regions with considerations for latency, data sovereignty, and regional availability.",
+          "complexity": "Focus on scaling to handle increasing system complexity with considerations for modularity, service boundaries, and technical debt."
+        }
+      },
+      "target": {
+        "valueMap": {
+          "10x": "Design for moderate growth, approximately 10 times current scale.",
+          "100x": "Design for significant growth, approximately 100 times current scale.",
+          "1000x": "Design for massive growth, approximately 1000 times current scale.",
+          "global": "Design for global-scale deployment with virtually unlimited growth potential."
+        }
+      },
+      "approach": {
+        "valueMap": {
+          "horizontal": "Utilize horizontal scaling approaches by adding more machines or instances to distribute load.",
+          "vertical": "Utilize vertical scaling approaches by increasing the resources (CPU, memory, storage) of existing machines.",
+          "hybrid": "Utilize a hybrid scaling approach that combines both horizontal and vertical scaling strategies as appropriate.",
+          "cloud-native": "Utilize cloud-native architectures and services designed specifically for elastic scaling."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Web application architecture",
+        "originalPrompt": "Design a payment processing system that can handle Black Friday-level traffic spikes.",
+        "transformedPrompt": "Design a system architecture that addresses scalability concerns. Consider appropriate scaling strategies and techniques. Focus on scaling transaction processing capabilities with considerations for throughput, concurrency, and consistency. Design for massive growth, approximately 1000 times current scale. Utilize horizontal scaling approaches by adding more machines or instances to distribute load.\n\nDesign a payment processing system that can handle Black Friday-level traffic spikes.",
+        "notes": "The decorator adds specific guidance on transaction scaling for high-volume scenarios using horizontal scaling approaches."
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Performance",
+        "relationship": "enhances",
+        "notes": "Scalability and Performance decorators work well together to create systems that are both scalable and performant."
+      },
+      {
+        "decorator": "Reliability",
+        "relationship": "enhances",
+        "notes": "Scalability and Reliability decorators complement each other for creating robust systems that can scale while maintaining reliability."
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Design a scalable system architecture with the following characteristics: {dimension} scaling to {target} levels using {approach} scaling approaches.",
+        "notes": "Simplified instruction format works better with gpt-4 Turbo's context handling."
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Designing a payment system for high transaction volume",
+      "usage": "+++Scalability(dimension=transactions, target=1000x, approach=horizontal)\nDesign a scalable payment processing system that can handle Black Friday-level traffic spikes.",
+      "result": "A payment processing system design that focuses on transaction scalability, capable of handling 1000x normal load using horizontal scaling techniques appropriate for high-volume payment processing during peak events."
+    },
+    {
+      "description": "Designing a social media platform for global user growth",
+      "usage": "+++Scalability(dimension=users, target=global, approach=cloud-native)\nDesign a social media platform architecture that can grow from regional to worldwide usage.",
+      "result": "A social media platform architecture that focuses on user scalability, designed for global-scale deployment using cloud-native approaches to handle unlimited user growth across different regions."
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4-turbo",
+      "gpt-4o",
+      "claude-3-7-sonnet-latest",
+      "llama-3.2"
+    ]
+  }
+}

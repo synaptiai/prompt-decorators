@@ -1,0 +1,93 @@
+{
+  "decoratorName": "FirstPrinciples",
+  "version": "1.0.0",
+  "description": "Structures the response by breaking down complex topics into their fundamental truths or axioms, then building up from there. This decorator promotes a deeper understanding by examining the most basic elements of a concept before constructing more complex ideas.",
+  "author": {
+    "name": "Prompt Decorators Working Group",
+    "email": "promptdecoratorspec@synapti.ai",
+    "url": "https://synapti.ai"
+  },
+  "parameters": [
+    {
+      "name": "depth",
+      "type": "number",
+      "description": "Level of detail in breaking down to fundamental principles",
+      "default": 3,
+      "required": false,
+      "validation": {
+        "minimum": 1,
+        "maximum": 5
+      }
+    }
+  ],
+  "transformationTemplate": {
+    "instruction": "Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations.",
+    "parameterMapping": {
+      "depth": {
+        "valueMap": {
+          "1": "Provide a basic breakdown with only the most essential fundamental principles.",
+          "2": "Break down the topic into key fundamental principles with moderate detail.",
+          "3": "Provide a thorough analysis of the fundamental principles underlying the topic.",
+          "4": "Break down the topic extensively into detailed fundamental principles and their relationships.",
+          "5": "Provide an extremely comprehensive analysis of all fundamental axioms, exploring their origins and interconnections in depth."
+        }
+      }
+    },
+    "placement": "prepend",
+    "compositionBehavior": "accumulate"
+  },
+  "implementationGuidance": {
+    "examples": [
+      {
+        "context": "Standard implementation with moderate depth",
+        "originalPrompt": "How do electric vehicles work?",
+        "transformedPrompt": "Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations. Provide a thorough analysis of the fundamental principles underlying the topic.\n\nHow do electric vehicles work?"
+      },
+      {
+        "context": "Deep fundamental analysis",
+        "originalPrompt": "What makes machine learning effective?",
+        "transformedPrompt": "Please structure your response using first principles thinking. Break down the topic into fundamental truths or axioms that cannot be reduced further, then build up your explanation from these foundations. Provide an extremely comprehensive analysis of all fundamental axioms, exploring their origins and interconnections in depth.\n\nWhat makes machine learning effective?"
+      }
+    ],
+    "compatibilityNotes": [
+      {
+        "decorator": "Reasoning",
+        "relationship": "enhances",
+        "notes": "FirstPrinciples provides a specific reasoning approach that complements the general Reasoning decorator"
+      },
+      {
+        "decorator": "StepByStep",
+        "relationship": "enhances",
+        "notes": "StepByStep can organize the first principles analysis into clearer sequential steps"
+      }
+    ],
+    "modelSpecificImplementations": {
+      "gpt-4-turbo": {
+        "instruction": "Start by identifying the most basic, fundamental truths about this topic - the axioms that cannot be broken down further. Then build your explanation step by step from these foundations, showing how complex aspects emerge from these simple principles.",
+        "notes": "This model benefits from more explicit instructions about the process of first principles analysis"
+      }
+    }
+  },
+  "examples": [
+    {
+      "description": "Basic first principles analysis of a concept",
+      "usage": "+++FirstPrinciples\nHow do electric vehicles work?",
+      "result": "Breaks down electric vehicles into fundamental principles of electricity, motors, and energy storage before explaining the complete system"
+    },
+    {
+      "description": "Deep first principles analysis with maximum depth",
+      "usage": "+++FirstPrinciples(depth=5)\nWhat makes machine learning effective?",
+      "result": "Provides an extensive breakdown of machine learning starting from mathematical foundations and progressively building up to complex algorithms"
+    }
+  ],
+  "compatibility": {
+    "requires": [],
+    "conflicts": [],
+    "minStandardVersion": "1.0.0",
+    "maxStandardVersion": "2.0.0",
+    "models": [
+      "gpt-4o",
+      "gpt-4-turbo"
+    ]
+  }
+}
