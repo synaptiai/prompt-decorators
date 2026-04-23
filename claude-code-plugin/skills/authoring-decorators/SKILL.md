@@ -27,7 +27,7 @@ Use TodoWrite to track these mandatory steps:
 2. Pick a name and category
 3. Draft the decorator JSON using the schema template
 4. Place the file in the correct directory (per step 1's decision)
-5. Add a unit test proving the hook expands it correctly
+5. Cover the behaviour with a test — committed test for contributions, Step 6 smoke-test for personal
 6. Verify end-to-end via the /decorate CLI
 </required>
 
@@ -52,9 +52,17 @@ next sync.
 **Naming rules**
 - PascalCase (e.g., `ConfidenceIntervals`, not `confidence_intervals`).
 - Single-word preferred; multi-word only when unavoidable.
-- Must not collide with an existing decorator - check first:
+- Must not collide with an existing decorator - check first.
 
-    /decorate search <your-candidate-name>
+    From inside an interactive Claude Code session:
+
+        /decorate search <your-candidate-name>
+
+    Equivalent from a terminal (works without Claude Code):
+
+        python3 claude-code-plugin/scripts/dispatch.py search <your-candidate-name>
+
+    Exit code 0 + `(matches: 1)` means a collision. Exit code 1 + `No decorators match '...'` means the name is free.
 
 **Shadowing (intentional but surprising):** a user decorator with the
 same name as a vendored core decorator *replaces* the core one. This is
@@ -121,6 +129,30 @@ Minimal schema:
   imperative, specific, under 400 chars.
 </good-example>
 
+**`parameterMapping`: pick `format` or `valueMap` per parameter**
+
+- `format` — free-form parameters (`string`, `number`, `boolean`). The
+  `{value}` placeholder is substituted with whatever the user passed.
+
+    ```json
+    "depth": { "format": "Use depth level {value}." }
+    ```
+
+- `valueMap` — enum parameters. Map each declared enum value to a specific
+  instruction fragment; the engine selects one at expansion time.
+
+    ```json
+    "style": {
+      "valueMap": {
+        "numeric":     "Use numeric ranges like 40-60.",
+        "qualitative": "Use labels like 'high confidence' / 'low confidence'."
+      }
+    }
+    ```
+
+  Every value in the parameter's `enum` list should have a matching
+  `valueMap` entry — missing keys fall through to the base `instruction`.
+
 <bad-example>
 - Instruction text that says "please think about X" - too vague.
 - Parameter with no `default` and `required: false` - confusing.
@@ -133,16 +165,21 @@ Minimal schema:
 
 For a **personal** decorator (matches step 1's first row):
 
-```
-$HOME/.config/prompt-decorators/extensions/<your-namespace>/<decorator-name>.json
+```bash
+# Create the namespace dir. The hook discovers decorators by scanning this
+# tree but does NOT auto-create it; without the mkdir, your JSON goes
+# nowhere.
+mkdir -p "$HOME/.config/prompt-decorators/extensions/<your-namespace>"
+
+# Write the decorator JSON (replace path with your editor of choice).
+$EDITOR "$HOME/.config/prompt-decorators/extensions/<your-namespace>/<decorator-name>.json"
 ```
 
-(override the base with `PROMPT_DECORATORS_USER_REGISTRY=/some/path`).
-
-The plugin's `UserPromptSubmit` hook injects every JSON file found under
-this directory into the engine at runtime via
-`DynamicDecorator.register_decorator`, so the decorator is immediately
-usable inline (`::YourName`) without any sync step.
+Override the base directory with `PROMPT_DECORATORS_USER_REGISTRY=/some/path`
+if you want a different location. Once the file lands anywhere under the
+user-registry tree, the `UserPromptSubmit` hook and `/decorate preview`
+both register it via `DynamicDecorator.register_decorator` at runtime - the
+decorator is usable inline (`::YourName`) with no sync step.
 
 For a **contribution** back to the shared catalogue (matches step 1's
 second row), open a PR against `synaptiai/prompt-decorators` adding the
@@ -155,6 +192,18 @@ from inside, not the filename, but kebab-case filenames match the rest of
 the registry.
 
 ### Step 5: Unit test
+
+Testing guidance differs by destination.
+
+**Personal decorator** (step 1's first row):
+
+Do **not** add a committed test. A test referencing a JSON file in your
+`$HOME/.config/` would fail for every other contributor — the file doesn't
+exist on their machine. Rely on the end-to-end smoke test in Step 6 to
+prove your decorator expands correctly; that's the canonical verification
+for personal decorators.
+
+**Contribution decorator** (step 1's second row):
 
 Add a test under `claude-code-plugin/tests/test_hook.py` proving the hook
 expands your sigil. Reuse the shared helpers from `tests/conftest.py`:
@@ -236,7 +285,10 @@ The decorator is not ready to ship if any of these hold:
 - `/decorate search <name>` finds an existing decorator with the same name.
 - The `transformationTemplate.instruction` text is longer than ~500 chars
   (signals the decorator is doing too many things at once - split it).
-- No unit test proves end-to-end expansion.
+- End-to-end expansion is unverified. For a **personal** decorator, Step 6's
+  hook smoke-test must produce an `additionalContext` containing the
+  instruction text. For a **contribution** decorator, a committed test in
+  `claude-code-plugin/tests/test_hook.py` must pass.
 - Parameter validation is absent for enum-style params.
 - The file is placed under `claude-code-plugin/vendor/...` - the vendored
   copy is wiped on every upstream sync. Put personal decorators in
@@ -252,7 +304,7 @@ After a successful authoring session, report:
 
 **File:** `$HOME/.config/prompt-decorators/extensions/<ns>/<name>.json` (personal) OR `synaptiai/prompt-decorators/registry/extensions/<ns>/<name>.json` (contribution)
 **Category:** <category>
-**Test coverage:** `claude-code-plugin/tests/test_hook.py::test_my_new_decorator`
+**Verification:** Step 6 hook smoke-test output (personal) OR `claude-code-plugin/tests/test_hook.py::test_my_new_decorator` (contribution)
 
 **Preview:**
     /decorate preview <Name>
