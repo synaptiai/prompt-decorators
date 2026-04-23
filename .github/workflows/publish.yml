@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
       - name: Verify version consistency
@@ -68,7 +68,7 @@ jobs:
 
       # Store the distribution packages for other jobs to use
       - name: Store the distribution packages
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: python-package-distributions
           path: dist/
@@ -93,7 +93,7 @@ jobs:
     steps:
       # Download the built packages from the previous job
       - name: Download distribution packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: python-package-distributions
           path: dist/
