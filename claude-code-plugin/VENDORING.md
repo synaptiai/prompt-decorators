@@ -60,21 +60,14 @@ If any `.py` or `.json` file differs, the vendor needs to be re-synced.
 
 ## Local patches applied to `vendor/`
 
-A straight `cp -r` from upstream would revert these local fixes. When
-syncing, re-apply each one (or better, land them upstream and then sync):
+As of issue #149 all previously-local patches have landed upstream.
+`vendor/prompt_decorators/` is byte-equivalent to `prompt_decorators/`,
+so a straight `cp -r` sync is safe and no re-application step is needed.
 
-- **`core/dynamic_decorator.py`** — parameter-value numeric parsing uses
-  `int()` / `float()` with try/except instead of `str.isdigit()` /
-  `str.replace(".", "", 1).isdigit()`. The upstream check rejects
-  negatives and scientific notation (`+++Dec(x=-5)` parsed as the string
-  `"-5"`). The local version delegates to Python's own numeric parsers.
-  Covered by `tests/test_pd_common.py::test_numeric_parameter_values_parsed`
-  and `::test_parse_decorator_negative_number_direct`. Should land
-  upstream as a bug fix.
-
-After each sync, run `cd claude-code-plugin && python3 -m pytest tests/`
-and check that every listed test still passes. Any failure means a
-local patch was reverted.
+After each sync, run `cd claude-code-plugin && python3 -m pytest tests/`.
+Any failure means either (a) an upstream change broke plugin behaviour,
+or (b) a new local patch has been introduced and should be documented
+here before committing.
 
 ## Why not a submodule / editable install
 
