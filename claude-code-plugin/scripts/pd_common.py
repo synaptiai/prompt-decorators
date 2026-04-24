@@ -447,8 +447,10 @@ def register_user_decorators() -> None:
     # Track names seen in THIS pass so we can flag user-over-user collisions
     # (two user JSON files declaring the same decoratorName). User-over-
     # vendored shadows are already logged by _walk_registry; this catches
-    # the otherwise-silent within-extensions case.
+    # the otherwise-silent within-extensions case. `user_dup_logged` gates
+    # the log to fire once per name, not once per re-occurrence.
     user_seen: set[str] = set()
+    user_dup_logged: set[str] = set()
     for path in user_dir.rglob("*.json"):
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
@@ -486,7 +488,19 @@ def register_user_decorators() -> None:
                 )
                 continue
             name = data.get("decoratorName") or data.get("name")
-            if name and name in user_seen:
+            if not name:
+                rejected += 1
+                log(
+                    {
+                        "phase": "user_registry_missing_name",
+                        "file": str(path),
+                    }
+                )
+                continue
+            if name in user_seen and name not in user_dup_logged:
+                # Log the first re-occurrence only — N copies of one decorator
+                # would otherwise emit N-1 events and drown useful signal.
+                user_dup_logged.add(name)
                 log(
                     {
                         "phase": "user_registry_duplicate",
@@ -496,8 +510,7 @@ def register_user_decorators() -> None:
                 )
             DynamicDecorator.register_decorator(data)
             loaded += 1
-            if name:
-                user_seen.add(name)
+            user_seen.add(name)
         except Exception as e:  # noqa: BLE001
             log(
                 {
@@ -509,3 +522,29 @@ def register_user_decorators() -> None:
             )
     if loaded or rejected:
         log({"phase": "user_registry_loaded", "count": loaded, "rejected": rejected})
+
+
+def engine_has_decorator(name: str) -> bool | None:
+    """Return whether the engine's runtime registry knows about ``name``.
+
+    ``True`` — the engine can expand this decorator now.
+    ``False`` — the name is absent (most likely rejected by the user-registry
+    security gate even though `_walk_registry` surfaced it in metadata).
+    ``None`` — the engine couldn't be introspected (import failed or the
+    vendored engine's internals were restructured). Callers should treat
+    ``None`` as "let `apply_dynamic_decorators` raise if it needs to"
+    rather than making assumptions.
+
+    The membership check reads the engine's private `_registry` mapping
+    because there is no public membership API; `get_available_decorators`
+    builds heavy schema objects and isn't appropriate for a per-call
+    containment check. We narrow the catch to `(AttributeError, ImportError)`
+    so a future engine rename surfaces as `None` (a diagnostic signal)
+    rather than silently looking like a security rejection.
+    """
+    try:
+        from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+
+        return name in DynamicDecorator._registry
+    except (AttributeError, ImportError):
+        return None

@@ -381,21 +381,56 @@ def test_user_registry_duplicate_name_is_logged(tmp_path, monkeypatch):
     assert dup and dup[0]["name"] == "Twice", events
 
 
-def test_user_registry_load_error_captures_error_string(tmp_path, monkeypatch):
-    """The per-file exception branch must include `error` with redacted
-    str(e), not only the error_type."""
+def test_user_registry_duplicate_log_deduped_across_many_copies(tmp_path, monkeypatch):
+    """Accidentally copy-pasting the same decorator across N files should
+    emit a single duplicate event, not N-1 noisy repeats."""
     import importlib
 
     user_reg = tmp_path / "ext"
     user_reg.mkdir()
-    # A JSON file whose *read* fails would be rare; trigger the except path
-    # by making the JSON shape valid but using an object that breaks during
-    # DynamicDecorator.register_decorator. The simplest reproducer is a
-    # payload the engine can't handle because `transformationTemplate` is
-    # a string instead of a dict.
-    (user_reg / "bad.json").write_text(
-        '{"decoratorName": "Bad", "version": "1.0.0", '
-        '"description": "d", "transformationTemplate": "not-a-dict"}'
+    from conftest import write_user_decorator
+
+    payload = {
+        "decoratorName": "CopyPaste",
+        "version": "1.0.0",
+        "description": "dup across many",
+        "transformationTemplate": {"instruction": "Do X."},
+    }
+    for name in ("a.json", "b.json", "c.json", "d.json"):
+        write_user_decorator(user_reg, name, payload)
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    log_path = tmp_path / "pd.log"
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.register_user_decorators()
+
+    from conftest import read_log_events
+
+    events = read_log_events(log_path)
+    dup = [
+        e
+        for e in events
+        if e.get("phase") == "user_registry_duplicate" and e.get("name") == "CopyPaste"
+    ]
+    assert len(dup) == 1, f"expected exactly one duplicate event, got {len(dup)}"
+
+
+def test_user_registry_missing_name_is_logged(tmp_path, monkeypatch):
+    """A user JSON without `decoratorName` / `name` must emit a
+    `user_registry_missing_name` event so the author sees why it was skipped,
+    rather than failing silently inside the engine."""
+    import importlib
+
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    (user_reg / "unnamed.json").write_text(
+        '{"version": "1.0.0", "description": "no name field", '
+        '"transformationTemplate": {"instruction": "Do X."}}'
     )
 
     monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
@@ -411,12 +446,71 @@ def test_user_registry_load_error_captures_error_string(tmp_path, monkeypatch):
     from conftest import read_log_events
 
     events = read_log_events(log_path)
-    # Either the template validator rejects (good) OR the per-file loader
-    # catches it — in the loader case, we need `error` populated.
+    missing = [e for e in events if e.get("phase") == "user_registry_missing_name"]
+    assert missing, f"expected user_registry_missing_name event, got {events}"
+
+
+def test_user_registry_load_error_captures_error_string(tmp_path, monkeypatch):
+    """Per-file exception branch must include redacted str(e), not only
+    error_type. Deterministic: monkeypatch register_decorator to raise."""
+    import importlib
+
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    from conftest import write_user_decorator
+
+    write_user_decorator(
+        user_reg,
+        "ok.json",
+        {
+            "decoratorName": "WillRaise",
+            "version": "1.0.0",
+            "description": "valid schema, engine mocked to raise",
+            "transformationTemplate": {"instruction": "Do X."},
+        },
+    )
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    log_path = tmp_path / "pd.log"
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.ensure_engine_on_path()
+    from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+
+    def boom(_data: dict) -> None:
+        raise RuntimeError("fixture: load_error_with_details")
+
+    monkeypatch.setattr(DynamicDecorator, "register_decorator", boom)
+    pd_common.register_user_decorators()
+
+    from conftest import read_log_events
+
+    events = read_log_events(log_path)
     loader_errors = [e for e in events if e.get("phase") == "user_registry_load_error"]
-    if loader_errors:
-        assert "error" in loader_errors[0], loader_errors[0]
-        assert loader_errors[0]["error"], "error field must be non-empty"
+    assert loader_errors, f"expected user_registry_load_error event, got {events}"
+    assert loader_errors[0].get("error_type") == "RuntimeError"
+    assert "fixture: load_error_with_details" in loader_errors[0].get("error", "")
+
+
+def test_engine_has_decorator_returns_none_on_introspection_failure(monkeypatch):
+    """engine_has_decorator must return None (not False) when the private
+    `_registry` attribute isn't reachable, so callers can distinguish
+    'rejected by security gate' from 'engine internals changed'."""
+    import importlib
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.ensure_engine_on_path()
+    from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+
+    monkeypatch.delattr(DynamicDecorator, "_registry", raising=False)
+
+    assert pd_common.engine_has_decorator("Anything") is None
 
 
 # --- --args-from-stdin path (security-relevant) -----------------------------

@@ -40,6 +40,7 @@ from pd_common import (  # noqa: E402
     MODE_OFF,
     MODE_ON,
     bare_name,
+    engine_has_decorator,
     load_config,
     register_user_decorators,
     registry_decorators,
@@ -140,21 +141,17 @@ def cmd_preview(args: list[str]) -> int:
     # but if registration didn't put it in the engine, the decorator was
     # rejected by the security gate in `register_user_decorators`. Surface
     # that rather than silently returning an empty expansion.
-    try:
-        from prompt_decorators.core.dynamic_decorator import DynamicDecorator
-
-        if name not in DynamicDecorator._registry:
-            _print(
-                f"'{name}' is listed in the registry metadata but was "
-                f"rejected by the user-registry security gate. Inspect "
-                f"~/.cache/prompt-decorators/hook.log (or $PROMPT_DECORATORS_LOG) "
-                f"for the 'user_registry_rejected' event and its reason."
-            )
-            return 1
-    except Exception:  # noqa: BLE001
-        # Engine introspection failed — fall through and let
-        # apply_dynamic_decorators raise if it has to.
-        pass
+    has = engine_has_decorator(name)
+    if has is False:
+        _print(
+            f"'{name}' is listed in the registry metadata but was "
+            f"rejected by the user-registry security gate. Inspect "
+            f"~/.cache/prompt-decorators/hook.log (or $PROMPT_DECORATORS_LOG) "
+            f"for the 'user_registry_rejected' event and its reason."
+        )
+        return 1
+    # has is None => engine introspection unavailable; fall through and let
+    # apply_dynamic_decorators behave as it will.
     sample = f"+++{sigil}\n<user prompt goes here>"
     expanded = apply_dynamic_decorators(sample)
     _print(f"### Expansion of +++{sigil}\n\n{expanded}")
