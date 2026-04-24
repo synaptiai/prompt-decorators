@@ -304,11 +304,19 @@ trust the hook — it's the runtime path users actually hit.
      `unsafe_template_instruction_triple_quote`, etc.).
    - `user_registry_shadow` — your name collides with a vendored core
      decorator. Rename unless you meant to shadow.
+   - `user_registry_missing` — you set `PROMPT_DECORATORS_USER_REGISTRY`
+     to a path that doesn't exist (likely a typo in the override).
+   - `user_registry_missing_name` — your decorator JSON has no
+     `decoratorName` or `name` field at the top level.
+   - `user_registry_duplicate` — two files in the extensions tree declare
+     the same `decoratorName`; last-file-wins, so one of them is being
+     shadowed.
    - `parse_error` — the hook couldn't parse the incoming prompt event
      (unrelated to your decorator JSON; usually a shell-quoting issue).
-3. If your decorator is missing a `decoratorName` field entirely, it is
-   skipped silently by `_walk_registry` (no log event). Double-check your
-   JSON has `decoratorName` at the top level.
+3. If none of those events appear AND the decorator is missing a
+   `decoratorName` field entirely, it may also be skipped silently by
+   `_walk_registry` (which is lenient on malformed registry entries).
+   Double-check your JSON has `decoratorName` at the top level.
 4. If the hook exits non-zero or prints to stderr, capture the traceback
    — it's the fastest path to a fix.
 
@@ -353,9 +361,10 @@ The decorator is not ready to ship if any of these hold:
   instruction text. For a **contribution** decorator, a committed test in
   `claude-code-plugin/tests/test_hook.py` must pass.
 - `~/.cache/prompt-decorators/hook.log` (or `$PROMPT_DECORATORS_LOG`)
-  contains `user_registry_load_error`, `user_registry_rejected`, or
-  `user_registry_shadow` events for your file. All three mean something
-  you control is wrong — treat them as blockers, not warnings.
+  contains `user_registry_load_error`, `user_registry_rejected`,
+  `user_registry_shadow`, `user_registry_missing`, `user_registry_missing_name`,
+  or `user_registry_duplicate` events for your file. All of these mean
+  something you control is wrong — treat them as blockers, not warnings.
 - Parameter validation is absent for enum-style params.
 - The file is placed under `claude-code-plugin/vendor/...` - the vendored
   copy is wiped on every upstream sync. Put personal decorators in
