@@ -40,8 +40,9 @@ from pd_common import (  # noqa: E402
     MODE_OFF,
     MODE_ON,
     bare_name,
-    ensure_engine_on_path,
+    engine_has_decorator,
     load_config,
+    register_user_decorators,
     registry_decorators,
     registry_names,
     save_config,
@@ -119,14 +120,38 @@ def cmd_preview(args: list[str]) -> int:
     sigil = args[0]
     if "(" not in sigil and len(args) > 1:
         sigil = f"{sigil}({','.join(args[1:])})"
-    if not _require_decorator(bare_name(sigil)):
+    name = bare_name(sigil)
+    if not _require_decorator(name):
         return 1
-    ensure_engine_on_path()
+    # Register user-extension decorators first — the function ensures the
+    # engine is on sys.path, so this also bootstraps the engine for the
+    # import below. Both operations can surface errors we want to handle
+    # gracefully instead of bubbling a traceback.
+    try:
+        register_user_decorators()
+    except Exception as e:  # noqa: BLE001
+        _print(f"Error preparing user-extension registry: {e}")
+        return 1
     try:
         from prompt_decorators.dynamic_decorators_module import apply_dynamic_decorators
     except Exception as e:  # noqa: BLE001
         _print(f"Error loading engine: {e}")
         return 1
+    # `_require_decorator` passed (name exists in `_walk_registry`'s metadata)
+    # but if registration didn't put it in the engine, the decorator was
+    # rejected by the security gate in `register_user_decorators`. Surface
+    # that rather than silently returning an empty expansion.
+    has = engine_has_decorator(name)
+    if has is False:
+        _print(
+            f"'{name}' is listed in the registry metadata but was "
+            f"rejected by the user-registry security gate. Inspect "
+            f"~/.cache/prompt-decorators/hook.log (or $PROMPT_DECORATORS_LOG) "
+            f"for the 'user_registry_rejected' event and its reason."
+        )
+        return 1
+    # has is None => engine introspection unavailable; fall through and let
+    # apply_dynamic_decorators behave as it will.
     sample = f"+++{sigil}\n<user prompt goes here>"
     expanded = apply_dynamic_decorators(sample)
     _print(f"### Expansion of +++{sigil}\n\n{expanded}")

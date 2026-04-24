@@ -283,7 +283,7 @@ def test_malformed_config_fails_open(tmp_path):
 def test_register_user_decorators_skips_malformed_and_missing_keys(
     tmp_path, monkeypatch
 ):
-    """Direct unit test for `_register_user_decorators`:
+    """Direct unit test for `register_user_decorators`:
     - invalid JSON is skipped (not raised)
     - JSON that's not an object is rejected
     - JSON missing `decoratorName` is silently skipped by the engine
@@ -321,7 +321,7 @@ def test_register_user_decorators_skips_malformed_and_missing_keys(
     importlib.reload(decorate_hook)
 
     # Call directly - it must not raise on any of the bad inputs.
-    decorate_hook._register_user_decorators()
+    pd_common.register_user_decorators()
 
     # Confirm the valid one made it into the engine registry.
     from prompt_decorators.core.dynamic_decorator import DynamicDecorator

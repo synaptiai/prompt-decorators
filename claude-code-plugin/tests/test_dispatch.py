@@ -178,6 +178,341 @@ def test_help_returns_zero(dispatch):
     assert "Subcommands" in out or "list" in out
 
 
+# --- user-extension decorator preview ---------------------------------------
+#
+# Regression coverage for #152. The hook registers user-authored decorators
+# from `~/.config/prompt-decorators/extensions/` before expansion; `preview`
+# previously did not, so user decorators always resolved to
+# "Decorator '<Name>' not found in registry" even though `list` and `search`
+# saw them.
+
+
+@pytest.fixture
+def dispatch_with_user_reg(tmp_path, monkeypatch, capsys):
+    from conftest import write_user_decorator
+
+    cfg_dir = tmp_path / "cfg"
+    cfg_dir.mkdir()
+    user_reg = tmp_path / "user_reg"
+    user_reg.mkdir()
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(cfg_dir))
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+
+    import importlib
+
+    import pd_common
+
+    def reload_and_run(args: list[str]) -> tuple[int, str]:
+        # pd_common caches the registry at module level; reload so a user
+        # decorator written mid-test shows up in subsequent dispatcher calls.
+        importlib.reload(pd_common)
+        import dispatch as dispatch_mod
+
+        importlib.reload(dispatch_mod)
+        rc = dispatch_mod.run(args)
+        captured = capsys.readouterr()
+        return rc, captured.out
+
+    def write(filename: str, payload: dict):
+        return write_user_decorator(user_reg, filename, payload)
+
+    return reload_and_run, write, user_reg
+
+
+def test_preview_expands_user_extension_decorator(dispatch_with_user_reg):
+    run, write, _ = dispatch_with_user_reg
+    write(
+        "my-user-decorator.json",
+        {
+            "decoratorName": "MyUserDecorator",
+            "version": "1.0.0",
+            "description": "fixture for user-extension preview test",
+            "transformationTemplate": {
+                "instruction": "Please fixture-instruction placeholder text.",
+            },
+        },
+    )
+    rc, out = run(["preview", "MyUserDecorator"])
+    assert rc == 0, out
+    assert "fixture-instruction" in out
+    assert "not found in registry" not in out
+
+
+def test_preview_interpolates_user_extension_parameters(dispatch_with_user_reg):
+    run, write, _ = dispatch_with_user_reg
+    write(
+        "param-user-decorator.json",
+        {
+            "decoratorName": "ParamUserDecorator",
+            "version": "1.0.0",
+            "description": "param interpolation fixture",
+            "parameters": [
+                {
+                    "name": "depth",
+                    "type": "number",
+                    "description": "fixture depth knob",
+                    "default": 3,
+                    "required": False,
+                }
+            ],
+            "transformationTemplate": {
+                "instruction": "Base fixture instruction.",
+                "parameterMapping": {"depth": {"format": "Depth knob set to {value}."}},
+            },
+        },
+    )
+    rc, out = run(["preview", "ParamUserDecorator(depth=7)"])
+    assert rc == 0, out
+    assert "Depth knob set to 7" in out
+
+
+def test_preview_surfaces_security_rejection(dispatch_with_user_reg):
+    """A user decorator rejected by the security gate is listed in the
+    registry metadata (via `_walk_registry`, which doesn't validate) but
+    never reaches the engine. Before the fix, `preview` expanded to empty;
+    now it tells the user where to look."""
+    run, write, _ = dispatch_with_user_reg
+    write(
+        "unsafe-decorator.json",
+        {
+            "decoratorName": "UnsafeDecorator",
+            "version": "1.0.0",
+            "description": "triggers security rejection",
+            "transformationTemplate": {
+                # Triple quotes attempt to escape the engine's string-literal
+                # rendering — rejected by `_validate_user_template`.
+                "instruction": "Apply '''malicious''' payload.",
+            },
+        },
+    )
+    rc, out = run(["preview", "UnsafeDecorator"])
+    assert rc == 1
+    assert "rejected by the user-registry security gate" in out
+    assert "user_registry_rejected" in out
+
+
+def test_preview_handles_register_failure_gracefully(
+    dispatch_with_user_reg, monkeypatch, capsys
+):
+    """If register_user_decorators raises, cmd_preview must print a graceful
+    error instead of bubbling a traceback."""
+    run, write, _ = dispatch_with_user_reg
+    write(
+        "ok-decorator.json",
+        {
+            "decoratorName": "OkDecorator",
+            "version": "1.0.0",
+            "description": "ok",
+            "transformationTemplate": {"instruction": "Do X."},
+        },
+    )
+    # Trigger the fixture's reload so dispatch/pd_common are fresh.
+    run(["search", "OkDecorator"])
+    # Patch dispatch's imported reference (cmd_preview uses the top-level
+    # import) and call dispatch.run directly so the fixture's reload doesn't
+    # overwrite our stub.
+    import dispatch as dispatch_mod
+
+    def boom() -> None:
+        raise RuntimeError("simulated registry failure")
+
+    monkeypatch.setattr(dispatch_mod, "register_user_decorators", boom)
+    rc = dispatch_mod.run(["preview", "OkDecorator"])
+    out = capsys.readouterr().out
+    assert rc == 1
+    assert "Error preparing user-extension registry" in out
+    assert "simulated registry failure" in out
+
+
+def test_user_registry_missing_env_override_logs(tmp_path, monkeypatch):
+    """PROMPT_DECORATORS_USER_REGISTRY set to a non-existent path should
+    emit a `user_registry_missing` log event so the user can spot typos."""
+    import importlib
+
+    bogus = tmp_path / "does_not_exist"
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(bogus))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    log_path = tmp_path / "pd.log"
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.register_user_decorators()
+
+    from conftest import read_log_events
+
+    events = read_log_events(log_path)
+    assert any(e.get("phase") == "user_registry_missing" for e in events), events
+
+
+def test_user_registry_duplicate_name_is_logged(tmp_path, monkeypatch):
+    """Two user JSON files declaring the same decoratorName should emit a
+    `user_registry_duplicate` log event (user-over-user, not shadow)."""
+    import importlib
+
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    from conftest import write_user_decorator
+
+    payload = {
+        "decoratorName": "Twice",
+        "version": "1.0.0",
+        "description": "dup",
+        "transformationTemplate": {"instruction": "Do X."},
+    }
+    write_user_decorator(user_reg, "a.json", payload)
+    write_user_decorator(user_reg, "b.json", payload)
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    log_path = tmp_path / "pd.log"
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.register_user_decorators()
+
+    from conftest import read_log_events
+
+    events = read_log_events(log_path)
+    dup = [e for e in events if e.get("phase") == "user_registry_duplicate"]
+    assert dup and dup[0]["name"] == "Twice", events
+
+
+def test_user_registry_duplicate_log_deduped_across_many_copies(tmp_path, monkeypatch):
+    """Accidentally copy-pasting the same decorator across N files should
+    emit a single duplicate event, not N-1 noisy repeats."""
+    import importlib
+
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    from conftest import write_user_decorator
+
+    payload = {
+        "decoratorName": "CopyPaste",
+        "version": "1.0.0",
+        "description": "dup across many",
+        "transformationTemplate": {"instruction": "Do X."},
+    }
+    for name in ("a.json", "b.json", "c.json", "d.json"):
+        write_user_decorator(user_reg, name, payload)
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    log_path = tmp_path / "pd.log"
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.register_user_decorators()
+
+    from conftest import read_log_events
+
+    events = read_log_events(log_path)
+    dup = [
+        e
+        for e in events
+        if e.get("phase") == "user_registry_duplicate" and e.get("name") == "CopyPaste"
+    ]
+    assert len(dup) == 1, f"expected exactly one duplicate event, got {len(dup)}"
+
+
+def test_user_registry_missing_name_is_logged(tmp_path, monkeypatch):
+    """A user JSON without `decoratorName` / `name` must emit a
+    `user_registry_missing_name` event so the author sees why it was skipped,
+    rather than failing silently inside the engine."""
+    import importlib
+
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    (user_reg / "unnamed.json").write_text(
+        '{"version": "1.0.0", "description": "no name field", '
+        '"transformationTemplate": {"instruction": "Do X."}}'
+    )
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    log_path = tmp_path / "pd.log"
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.register_user_decorators()
+
+    from conftest import read_log_events
+
+    events = read_log_events(log_path)
+    missing = [e for e in events if e.get("phase") == "user_registry_missing_name"]
+    assert missing, f"expected user_registry_missing_name event, got {events}"
+
+
+def test_user_registry_load_error_captures_error_string(tmp_path, monkeypatch):
+    """Per-file exception branch must include redacted str(e), not only
+    error_type. Deterministic: monkeypatch register_decorator to raise."""
+    import importlib
+
+    user_reg = tmp_path / "ext"
+    user_reg.mkdir()
+    from conftest import write_user_decorator
+
+    write_user_decorator(
+        user_reg,
+        "ok.json",
+        {
+            "decoratorName": "WillRaise",
+            "version": "1.0.0",
+            "description": "valid schema, engine mocked to raise",
+            "transformationTemplate": {"instruction": "Do X."},
+        },
+    )
+
+    monkeypatch.setenv("PROMPT_DECORATORS_USER_REGISTRY", str(user_reg))
+    monkeypatch.setenv("PROMPT_DECORATORS_CONFIG_DIR", str(tmp_path / "cfg"))
+    log_path = tmp_path / "pd.log"
+    monkeypatch.setenv("PROMPT_DECORATORS_LOG", str(log_path))
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.ensure_engine_on_path()
+    from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+
+    def boom(_data: dict) -> None:
+        raise RuntimeError("fixture: load_error_with_details")
+
+    monkeypatch.setattr(DynamicDecorator, "register_decorator", boom)
+    pd_common.register_user_decorators()
+
+    from conftest import read_log_events
+
+    events = read_log_events(log_path)
+    loader_errors = [e for e in events if e.get("phase") == "user_registry_load_error"]
+    assert loader_errors, f"expected user_registry_load_error event, got {events}"
+    assert loader_errors[0].get("error_type") == "RuntimeError"
+    assert "fixture: load_error_with_details" in loader_errors[0].get("error", "")
+
+
+def test_engine_has_decorator_returns_none_on_introspection_failure(monkeypatch):
+    """engine_has_decorator must return None (not False) when the private
+    `_registry` attribute isn't reachable, so callers can distinguish
+    'rejected by security gate' from 'engine internals changed'."""
+    import importlib
+
+    import pd_common
+
+    importlib.reload(pd_common)
+    pd_common.ensure_engine_on_path()
+    from prompt_decorators.core.dynamic_decorator import DynamicDecorator
+
+    monkeypatch.delattr(DynamicDecorator, "_registry", raising=False)
+
+    assert pd_common.engine_has_decorator("Anything") is None
+
+
 # --- --args-from-stdin path (security-relevant) -----------------------------
 #
 # These tests run dispatch.py as a subprocess with `--args-from-stdin`, the
