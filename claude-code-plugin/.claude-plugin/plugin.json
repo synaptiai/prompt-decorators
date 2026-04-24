@@ -1,6 +1,6 @@
 {
   "name": "prompt-decorators",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Automatically enhance prompts with composable, categorized prompt decorators (reasoning, structure, tone, verification, minimal, meta) and an opt-in Haiku-based auto-selector.",
   "author": {
     "name": "Daniel Bentes",

@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-04-24
+
+### Fixed
+
+- `/decorate preview <Name>` now resolves user-extension decorators under
+  `~/.config/prompt-decorators/extensions/` instead of failing with
+  "Decorator not found in registry". The hook's user-registration logic
+  (including the security validators for exec-reachable fields) was
+  extracted from `decorate_hook.py` into a public
+  `pd_common.register_user_decorators()` and called from
+  `dispatch.py::cmd_preview` so preview and hook share one source of
+  truth. Closes #152 (#155).
+
+### Changed
+
+- CI: new `vendor-sync-check` job in `code-quality.yml` fails when
+  `claude-code-plugin/vendor/prompt_decorators/` drifts from the
+  canonical `prompt_decorators/` package. Uses the same `diff -rq`
+  invocation documented in `VENDORING.md` and echoes the resync
+  commands on failure (#154).
+
+### Documentation
+
+- `authoring-decorators` skill revised after first end-to-end run.
+  Step 2 now shows both `/decorate search` and the `dispatch.py search`
+  terminal form; Step 3 contrasts `parameterMapping.format` vs
+  `valueMap` with examples; Step 4 promotes `mkdir -p` into the main
+  command block to close a silent-failure foot-gun; Step 5 splits
+  testing guidance for personal vs contribution decorators. Closes #153
+  (#156).
+
 ## [0.10.1] - 2026-04-23
 
 ### Fixed
