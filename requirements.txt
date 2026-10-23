@@ -12,3 +12,7 @@ importlib-metadata>=6.0.0
 markdown>=3.7
 interrogate>=1.5.0
 pydocstyle>=6.3.0
+# Security floors for transitive dependencies
+certifi>=2026.10.19
+idna>=3.15
+py>=1.10.0
