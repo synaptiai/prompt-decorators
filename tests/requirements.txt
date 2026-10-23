@@ -3,6 +3,8 @@ pytest-cov>=2.12.0
 jsonschema>=4.0.0
 markdown>=3.3.0
 python-dotenv>=0.19.0
+# Security floor for transitive dependency of pytest
+pygments>=2.20.0
 # For real LLM testing (uncomment as needed)
 # openai>=0.27.0
 # anthropic>=0.2.0
