@@ -32,8 +32,8 @@ markdown = "^3.7"
 [tool.poetry.group.dev.dependencies]
 # pytest >=9.0.3 closes CVE-2025-71176
 pytest = ">=9.0.3,<10"
-# black >=26.3.1 closes CVE-2026-32274
-black = ">=26.3.1,<27"
+# black >=26.10.1 closes GHSA-cg8m-r9f2-5wm2
+black = ">=26.10.1,<27"
 isort = "^5.0.0"
 mypy = "^1.0.0"
 pytest-cov = "^4.0.0"
@@ -61,8 +61,8 @@ openai = ">=0.27.0"
 anthropic = ">=0.3.0"
 
 [tool.poetry.group.mcp.dependencies]
-# mcp >=1.23.0 closes CVE-2025-66416
-mcp = {version = ">=1.23.0", python = ">=3.11"}
+# mcp >=1.30.0 closes the 1.x-patched MCP advisories; 2.x is a separate migration
+mcp = {version = ">=1.30.0,<2", python = ">=3.11"}
 
 [tool.black]
 line-length = 88
